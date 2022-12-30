@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="form_department_purchase_report_view" model="ir.ui.view">
+            <field name="name">Салбаруудын худалдан авалтын нэгтгэл тайлан</field>
+            <field name="model">department.purchase.report</field>
+            <field name="arch" type="xml">
+                <form string="Салбаруудын худалдан авалтын нэгтгэл тайлан">
+                    <group>
+                        <group>
+                            <field name="start_date" required="1"/>
+                        </group>
+                        <group>
+                            
+                            <field name="end_date"  required="1"/>
+                        </group>
+                    </group>
+
+                        <notebook>
+                            <page string="Хэлтэс">
+                                <field name="department_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                            </page>
+                        </notebook>
+
+                        <footer>
+                            <button name="export_chart" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/>
+                            or
+                            <button string="Cancel" class="btn-default" special="cancel"/>
+                        </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_department_purchase_report_wizard">
+            <field name="name">Салбаруудын худалдан авалтын нэгтгэл тайлан</field>
+            <field name="res_model">department.purchase.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <!-- <field name="view_id" ref="form_purchase_order_supplier_report_wizard_view"/> -->
+            <field name="target">new</field>
+        </record>
+
+
+
+        <menuitem 
+            name="Салбаруудын худалдан авалтын нэгтгэл тайлан" 
+            id="menu_department_purchase_report_wizard" 
+            parent="nomin_purchase.parent_menu_purchase_report_wizard"
+            action="action_department_purchase_report_wizard" 
+            sequence="106" 
+        />
+    </data>
+</openerp>

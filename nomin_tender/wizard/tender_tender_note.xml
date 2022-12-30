@@ -1,0 +1,131 @@
+<openerp>
+	<data>
+
+		<record id="view_tender_tender_note" model="ir.ui.view">
+			<field name="name">Reason</field>
+			<field name="model">tender.tender.note</field>
+			<field name="arch" type="xml">
+				<form string="Tender cancel reason">
+					<separator string="Tender Cancel Reason" colspan="2"/>
+					<group>
+						<field name="tender_id" invisible="1"/>
+	                    <field name="note" required="1" colspan="4" nolabel="1"/>
+					</group>
+					<footer>
+						<button name="save" string="Save" type="object" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+
+		<record id="view_tender_disabled" model="ir.ui.view">
+			<field name="name">Tender disabled</field>
+			<field name="model">tender.disabled</field>
+			<field name="arch" type="xml">
+				<form string="Tender disabled">
+					<separator string="Tender Disabled Reason" colspan="2"/>
+					<group>
+						<field name="tender_id" invisible="1"/>
+	                    <field name="description" required="1" colspan="4" nolabel="1"/>
+					</group>
+					<footer>
+						<button name="confirm" string="Confirm" type="object" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+
+		<record id="action_tender_tender_note" model="ir.actions.act_window">
+			<field name="name">Reason</field>
+			<field name="res_model">tender.tender.note</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="context">{'record_id' : active_id}</field>
+			<field name="target">new</field>
+		</record>
+
+		<record id="view_tender_tender_request_note" model="ir.ui.view">
+			<field name="name">Reason</field>
+			<field name="model">tender.request.note</field>
+			<field name="arch" type="xml">
+				<form string="Tender contract request reason">
+					<separator string="Tender contract request reason" colspan="2"/>
+					<group>
+						<field name="tender_id" invisible="1"/>
+	                    <field name="note" required="1" colspan="4" nolabel="1"/>
+					</group>
+					<footer>
+						<button name="action_contract_request" string="Илгээх" type="object" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_tender_tender_request_note" model="ir.actions.act_window">
+			<field name="name">Reason</field>
+			<field name="res_model">tender.request.note</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="context">{'record_id' : active_id}</field>
+			<field name="target">new</field>
+		</record>
+		
+		<record id="view_tender_meet_note" model="ir.ui.view">
+			<field name="name">Note</field>
+			<field name="model">tender.meet.note</field>
+			<field name="arch" type="xml">
+				<form string="Tender Meet Cancel">
+					<group>
+						<field name="meet_id" invisible="1"/>
+	                    <field name="note" required="1" colspan="4" nolabel="1"/>
+					</group>
+					<footer>
+						<button name="save_note" string="Save" type="object" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_tender_meet_note" model="ir.actions.act_window">
+			<field name="name">Note</field>
+			<field name="res_model">tender.meet.note</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="context">{'record_id' : active_id}</field>
+			<field name="target">new</field>
+		</record>
+		
+		<record id="view_tender_cancel_note" model="ir.ui.view">
+			<field name="name">Cancel Note</field>
+			<field name="model">tender.cancel.note</field>
+			<field name="arch" type="xml">
+				<form string="Tender Cancelled Note">
+					<group>
+						<field name="tender_id" invisible="1"/>
+	                    <field name="description" required="1" colspan="4" nolabel="1"/>
+					</group>
+					<footer>
+						<button name="save_cancel_note" string="Save" type="object" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+				</form>
+			</field>
+		</record>
+
+		<record id="action_tender_cancel_note" model="ir.actions.act_window">
+			<field name="name">Cancel Note</field>
+			<field name="res_model">tender.cancel.note</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="context">{'record_id' : active_id}</field>
+			<field name="target">new</field>
+		</record>
+		
+	</data>
+</openerp>

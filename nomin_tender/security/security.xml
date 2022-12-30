@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+ 
+	<record model="ir.module.category" id="module_tender_management">
+        <field name="name">Тендер</field>
+        <field name="description">Шаардахаас болон төслөөс тендер зарлаж буй тендерийн бүрдэлд оролцож буй группууд.</field>
+        <field name="sequence">11</field>
+    </record>
+    
+    <!-- Тендерийн хүсэлт үүсгэх хэрэглэгч -->
+    <record id="group_tender_user" model="res.groups">
+        <field name="name">Тендерийн хэрэглэгч</field>
+        <field name="category_id" ref="module_tender_management"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    
+    <!-- Тендер захиалагч салбарын удирдлага -->
+     <record id="group_tender_wanter_manager" model="res.groups">
+        <field name="name">Тендер захиалагч салбарын удирдлага</field>
+        <field name="category_id" ref="module_tender_management"/>
+        <field name="implied_ids" eval="[(4, ref('group_tender_user'))]"/>
+        <!-- <field name="groups" eval="[(4, ref('group_archive_document_manager')),(4, ref('group_archive_document_hr_head_manager'))]"/> -->
+    </record>
+    
+    <!-- Тендер гүйцэтгэгч ажилтан -->
+     <record id="group_tender_branch_manager" model="res.groups">
+        <field name="name">Тендер зарлах салбарын эрхлэгч</field>
+        <field name="category_id" ref="module_tender_management"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    
+    <!-- Тендер батлах удидлагууд -->
+    <record id="group_tender_requist_approval_leaders" model="res.groups">
+        <field name="name">Тендер хүсэлт батлах удирдлагууд</field>
+        <field name="category_id" ref="module_tender_management"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    
+    <!-- Тендер хорооны гишүүд -->
+    <record id="group_tender_committee_members" model="res.groups">
+        <field name="name">Тендерийн хорооны гишүүд</field>
+        <field name="comment">Тендерийн комиссын гишүүд.</field>
+        <field name="category_id" ref="module_tender_management"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    
+    <!-- Тендер нарийн бичиг -->
+    <record id="group_tender_secretary" model="res.groups">
+        <field name="name">Тендерийн нарийн бичиг</field>
+        <field name="comment">Тендерийн хүсэлтүүдийг хүлээн авч боловсруулах, хянах, урсгалд оролцох групп.</field>
+        <field name="category_id" ref="module_tender_management"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    
+    <!-- Тендер хорооны дарга -->
+    <record id="group_tender_manager" model="res.groups">
+        <field name="name">Тендерийн хорооны дарга</field>
+        <field name="comment">Тендерийн үйл ажиллагааг хянах, батлах, тендер зарлах групп.</field>
+        <field name="category_id" ref="module_tender_management"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    
+    <!-- Тендер тохиргооны менежер -->
+    <record id="group_tender_admin" model="res.groups">
+        <field name="name">Тендерийн тохиргооны менежер</field>
+        <field name="comment">Тендерт ашиглагдах тохиргоо, үйл ажиллагаа хариуцсан менежер.</field>
+        <field name="category_id" ref="module_tender_management"/>
+        <field name="implied_ids" eval="[(4, ref('group_tender_secretary'))]"/>
+    </record>
+    
+<!-- Тендерт оролцогч -->
+<!-- <record id="group_tender_portal_user" model="res.groups">
+    <field name="name">Тендерт оролцогч</field>
+    <field name="category_id" ref="module_tender_management"/>
+    <field name="implied_ids" eval="[(4, ref('base.group_portal'))]"/>
+</record> -->
+    
+    <!-- Rule -->
+	<!-- Tender manager rule -->
+	<record id="all_tender_rule" model="ir.rule">
+        <field name="name">All Tender Rule</field>
+        <field ref="model_tender_tender" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('group_tender_admin')),(4, ref('group_tender_manager')),(4, ref('group_tender_secretary')),(4, ref('nomin_base.group_holding_ceo'))]"/>
+    </record>
+    
+    <!-- Tender branch manager rule -->
+    <record id="tender_branch_manager_rule" model="ir.rule">
+        <field name="name">Tender Branch Manager Rule</field>
+        <field ref="model_tender_tender" name="model_id"/>
+        <field name="domain_force">[('respondent_employee_id.user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_tender_branch_manager'))]"/>
+    </record>
+    
+	<!-- Тендер хэрэглэгч -->
+	<!-- <record id="tender_user_rule" model="ir.rule">
+        <field name="name">Тендер - Тендер хэрэглэгч</field>
+        <field ref="model_tender_tender" name="model_id"/>
+        <field name="domain_force">[('sector_id','child_of',user.tender_allowed_departments.ids)]</field>
+        <field name="groups" eval="[(4, ref('nomin_tender.group_tender_user'))]"/>
+    </record> -->
+    	
+	<!-- Тендер хэрэглэгч -->
+	<record id="tender_create_user_rule" model="ir.rule">
+        <field name="name">Тендер - Тендер хэрэглэгч</field>
+        <field ref="model_tender_tender" name="model_id"/>
+        <field name="domain_force">[('user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('nomin_tender.group_tender_user'))]"/>
+    </record>
+		
+    <!-- Тендер Дагагчид -->
+	<record id="tender_followers_nomin_tender" model="ir.rule">
+        <field name="name">Тендер - Дагагчид</field>
+        <field ref="model_tender_tender" name="model_id"/>
+        <field name="domain_force">['|',('message_partner_ids','in',[user.partner_id.id]), ('message_channel_ids.channel_partner_ids', 'in', [user.partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('nomin_tender.group_tender_user')),(4, ref('group_tender_wanter_manager')),(4, ref('group_tender_branch_manager')),(4, ref('group_tender_committee_members')),(4, ref('group_tender_requist_approval_leaders'))]"/>
+    </record>
+
+	<!-- Tender allowed departments rule -->
+    <record id="tender_allowed_department_user_rule" model="ir.rule">
+        <field name="name">Tender allowed departments wanter manager group</field>
+        <field ref="model_tender_tender" name="model_id"/>
+        <field name="domain_force">[('department_id','in',user.tender_allowed_departments.ids)]</field>
+        <field name="groups" eval="[(4, ref('group_tender_wanter_manager'))]"/>
+    </record>
+    
+    <!-- <record id="tender_allowed_department_tender_user_rule" model="ir.rule">
+        <field name="name">Tender allowed departments group</field>
+        <field ref="model_tender_tender" name="model_id"/>
+        <field name="domain_force">[('tender_id.sector_id','in',user.tender_allowed_departments.ids)]</field>
+        <field name="groups" eval="[(4, ref('group_tender_wanter_manager'))]"/>
+    </record> -->
+    
+    <record id="tender_allowed_department_leaders_rule" model="ir.rule">
+        <field name="name">Tender allowed departments leaders group</field>
+        <field ref="model_tender_tender" name="model_id"/>
+        <field name="domain_force">[('department_id','child_of',user.tender_allowed_departments.ids)]</field>
+        <field name="groups" eval="[(4, ref('group_tender_requist_approval_leaders'))]"/>
+    </record>
+    
+	<!-- Тендер хэрэглэгчид бүх ажилтанг харна -->
+	<record id="tender_user_hr_employee_rule" model="ir.rule">
+        <field name="name">Тендер - Тендер хэрэглэгч</field>
+        <field ref="nomin_hr.model_hr_employee" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('nomin_tender.group_tender_user'))]"/>
+    </record>
+    
+<!-- Тендерийн урилга: -->
+	<!-- Tender invitation rule -->
+	<record id="all_tender_invitation_rule" model="ir.rule">
+        <field name="name">Invitation: All Invitation Rule</field>
+        <field ref="model_tender_invitation_guide" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('group_tender_admin')),(4, ref('group_tender_manager')),(4, ref('group_tender_secretary')),(4, ref('nomin_base.group_holding_ceo')),(4, ref('group_tender_committee_members'))]"/>
+    </record>
+    
+	<!-- Tender invitation followers rule -->
+	<record id="tender_invitation_followers_rule" model="ir.rule">
+        <field name="name">Invitation: Followers Rule</field>
+        <field ref="model_tender_invitation_guide" name="model_id"/>
+        <field name="domain_force">[('message_partner_ids','in',[user.partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('group_tender_user')),(4, ref('group_tender_wanter_manager')),(4, ref('group_tender_branch_manager')),(4, ref('group_tender_requist_approval_leaders'))]"/>
+    </record>
+        
+<!-- Тендерийн хугацаа сунгалт: -->
+	<!-- Tender invitation rule -->
+	<record id="all_tender_date_extend_rule" model="ir.rule">
+        <field name="name">Tender Date Extend:All Extend Rule</field>
+        <field ref="model_tender_date_extend" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('group_tender_admin')),(4, ref('group_tender_manager')),(4, ref('group_tender_secretary')),(4, ref('nomin_base.group_holding_ceo')),(4, ref('group_tender_committee_members'))]"/>
+    </record>
+    
+	<!-- Tender date extend followers rule -->
+	<record id="tender_date_extend_followers_rule" model="ir.rule">
+        <field name="name">Tender Date Extend: Followers Rule</field>
+        <field ref="model_tender_date_extend" name="model_id"/>
+        <field name="domain_force">[('message_partner_ids','in',[user.partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('group_tender_user')),(4, ref('group_tender_wanter_manager')),(4, ref('group_tender_branch_manager')),(4, ref('group_tender_requist_approval_leaders'))]"/>
+    </record>
+      
+<!-- Тендерийн хурал: -->
+	<!-- Tender meeting rule -->
+	<record id="all_tender_meeting_rule" model="ir.rule">
+        <field name="name">Tender Meeting: All Meeting Rule</field>
+        <field ref="model_tender_meeting" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('group_tender_admin')),(4, ref('group_tender_manager')),(4, ref('group_tender_secretary')),(4, ref('nomin_base.group_holding_ceo')),(4, ref('group_tender_committee_members'))]"/>
+    </record>
+    
+	<!-- Tender meeting followers rule -->
+	<record id="tender_tender_meeting_followers_rule" model="ir.rule">
+        <field name="name">Tender Meeting: Followers Rule</field>
+        <field ref="model_tender_meeting" name="model_id"/>
+        <field name="domain_force">[('message_partner_ids','in',[user.partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('group_tender_user')),(4, ref('group_tender_wanter_manager')),(4, ref('group_tender_branch_manager')),(4, ref('group_tender_requist_approval_leaders'))]"/>
+    </record>
+      
+<!-- Тендерт оролцогчид: -->
+	<!-- Tender participants -->
+	<record id="all_tender_tender_participants_bid_rule" model="ir.rule">
+        <field name="name">Tender Participants: All Participants Rule</field>
+        <field ref="model_tender_participants_bid" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('group_tender_admin')),(4, ref('group_tender_manager')),(4, ref('group_tender_secretary')),(4, ref('nomin_base.group_holding_ceo')),(4, ref('group_tender_committee_members'))]"/>
+    </record>
+    
+	<!-- Tender date extend followers rule -->
+	<record id="tender_tender_participants_bid_followers_rule" model="ir.rule">
+        <field name="name">Tender Participants: Followers Rule</field>
+        <field ref="model_tender_participants_bid" name="model_id"/>
+        <field name="domain_force">['|',('message_partner_ids','in',[user.partner_id.id]), ('message_channel_ids.channel_partner_ids', 'in', [user.partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('group_tender_user')),(4, ref('group_tender_wanter_manager')),(4, ref('group_tender_branch_manager')),(4, ref('group_tender_requist_approval_leaders'))]"/>
+    </record>
+    
+<!-- Тендерийн үнэлгээ: -->
+	
+	<!-- Tender valuation followers rule -->
+	<!-- <record id="all_tender_valuation_rule" model="ir.rule">
+        <field name="name">Tender Valuation Managers Rule</field>
+        <field ref="model_tender_valuation" name="model_id"/>
+        <field name="domain_force">[('state','in',['draft','approved'])]</field>
+        <field name="groups" eval="[(4, ref('group_tender_manager'))]"/>
+    </record> -->
+    
+	<!-- Tender valuation followers rule -->
+	<!-- <record id="tender_valuation_followers_rule" model="ir.rule">
+        <field name="name">Tender Valuation Followers Rule</field>
+        <field ref="model_tender_valuation" name="model_id"/>
+        <field name="domain_force">[('message_partner_ids','in',[user.partner_id.id]),('state','=','approved')]</field>
+        <field name="groups" eval="[(4, ref('group_tender_committee_members'))]"/>
+    </record> -->
+    
+    <!-- Tender employee valuation -->
+	<!-- <record id="tender_valuation_employee_valuation_commission_rule" model="ir.rule">
+        <field name="name">Tender Valuation: Commission Rule Employee Valuation</field>
+        <field ref="model_tender_valuation_employee_valuation" name="model_id"/>
+        <field name="domain_force">['|',('state','in',['draft','approved']),('employee_id.user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_tender_committee_members')),(4, ref('group_tender_manager'))]"/>
+    </record>
+     -->
+    <!-- Tender employee partner -->
+	<record id="tender_valuation_employee_partner_commission_rule" model="ir.rule">
+        <field name="name">Tender Valuation: Commission Rule Employee Partner</field>
+        <field ref="model_tender_valuation_employee_partner" name="model_id"/>
+        <field name="domain_force">['|',('state','in',['draft','approved']),('employee_id.user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_tender_committee_members')),(4, ref('group_tender_secretary')),(4, ref('group_tender_manager'))]"/>
+    </record>
+    
+	<!-- Tender valuation followers rule -->
+	<record id="tender_valuation_rate_line_managers_rule" model="ir.rule">
+        <field name="name">Tender Valuation: Valuation Line Managers Rule</field>
+        <field ref="model_tender_valuation_rate_line" name="model_id"/>
+        <field name="domain_force">[('state','in',['approved'])]</field>
+        <field name="groups" eval="[(4, ref('group_tender_admin')),(4, ref('group_tender_secretary'))]"/>
+    </record>
+    
+</data>
+</openerp>

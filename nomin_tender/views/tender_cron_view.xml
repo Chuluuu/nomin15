@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+    
+    	<!-- Зарлагдсан тендерийн хаах хугацаа болмогч автомат хаах  -->
+        <record id="ir_cron_tender_close_action" model="ir.cron">
+            <field name="name">Tender close</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'tender.tender'" name="model"/>
+            <field eval="'_tender_alarm'" name="function"/>
+        </record>
+        
+    	<!-- Харилцагчийн бичиг баримт шалгах  -->
+        <!-- <record id="ir_cron_res_partner_documents_action" model="ir.cron">
+            <field name="name">Partner documents</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'res.partner.documents'" name="model"/>
+            <field eval="'partner_document_running'" name="function"/>
+        </record> -->
+        
+    	<!-- Товлогдсон хурлын хугацаа болмогц тендерт оролцогчдын үнийн санал нээлттэй болох төлөв солигдох cron  -->
+        <record id="ir_cron_tender_meeting_action" model="ir.cron">
+            <field name="name">Tender meet</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">2</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'tender.meeting'" name="model"/>
+            <field eval="'running_meet'" name="function"/>
+        </record>
+
+         <record id="ir_cron_tender_meeting_notif_action" model="ir.cron">
+            <field name="name">Tender meeting notifcation</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">2</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'tender.meeting'" name="model"/>
+            <field eval="'meeting_notif'" name="function"/>
+        </record>
+
+        <record id="ir_cron_tender_protocol_notif_action" model="ir.cron">
+            <field name="name">Tender protocol notifcation</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">2</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'tender.protocol'" name="model"/>
+            <field eval="'protocol_notif'" name="function"/>
+        </record>
+
+        <record id="ir_cron_partner_document_expire_action" model="ir.cron">
+            <field name="name">Res partner document expire</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">2</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'res.partner.documents'" name="model"/>
+            <field eval="'check_document_expiredates'" name="function"/>
+        </record>
+        
+   </data>
+</openerp>

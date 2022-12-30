@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_picking_all">
+    <t t-foreach="docs" t-as="o">
+        <t t-call="report.layout">
+            <div class="page l10n_mn_base_report">                
+                 <table width="100%" style="padding: 2px; font-size: 10px">
+                    <tr>
+                        <td align="center" colspan="2" style="vertical-align:top;">
+                            <h3 t-esc="document_name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- <td align="right">Байгууллагын нэр: <t t-esc="o.sector_id.name"/></td> -->
+                    </tr>
+                 </table>              
+                 <table width="100%">
+                     <tr><td width="50%">
+                         <table style="font-size: 10;">
+                             <tr><td>Баримтын дугаар: <b t-field="o.name"/></td></tr>
+                             <tr><td>Огноо : <b t-esc="time.strftime('%Y-%m-%d %H:%M')"/> </td></tr>
+                         </table></td>
+                         <td width="50%">
+                         <table style="font-size: 10;">
+                             <tr><td>Хэнд: <span t-if="o.order_department_id.name"><b t-field="o.order_department_id"/></span></td></tr>
+                             <tr><td>Хаанаас: <span t-if="o.department_id.name"><b t-field="o.department_id"/></span></td></tr>
+                         </table>
+                         </td>
+                     </tr>
+                 </table>
+                 <t t-set="number" t-value="1"/>
+                 <table style="font-size: 10; width:100%;border: 1px solid #000000;">
+                     <tr style="border: 1px solid #000000;">
+                        <th style="width:10px; text-align: center; padding: 0px;border: 1px solid #000000;">№</th>
+                        <th style="text-align: center; padding: 0px;border: 1px solid #000000;">Барааны нэр</th>
+                        <th style="width:70px;text-align: center; padding: 0px;border: 1px solid #000000;">Код</th>
+                        <th style="text-align: center; padding: 0px;border: 1px solid #000000;">Х.Н</th>
+                        <th style="text-align: center; padding: 0px;border: 1px solid #000000;" width="5%">Тоо</th>
+                        <th style="width:60px;text-align: center; padding: 0px;border: 1px solid #000000;">Нэгж үнэ</th>
+                        <th style="width:60px;text-align: center; padding: 0px;border: 1px solid #000000;">Нийт үнэ</th>
+                     </tr>
+                     <tbody style="border: 1px solid #000000;" t-foreach="lines[o.id]" t-as="l">
+                         <tr style="border: 1px solid #000000;">
+                            <td style="text-align: center; padding: 0px;border: 1px solid #000000;" t-esc="number"></td>
+                            <td style="text-align: left;padding: 0px; border: 1px solid #000000;"><span t-esc="l['name']"/></td>
+                            <td style="text-align: left;padding: 0px; border: 1px solid #000000;"><span t-esc="l['code']"/></td>
+                            <td style="text-align: center;padding: 0px; border: 1px solid #000000;"><span t-esc="l['uom']"/></td>
+                            <td style="text-align: right;padding: 0px; border: 1px solid #000000;"><span t-esc="l['qty']"/></td>
+                            <td style="text-align: right; padding: 0px;border: 1px solid #000000;"><span t-esc="l['price']"/> </td>
+                            <td  style="text-align: right;padding: 0px; border: 1px solid #000000;"><span t-esc="l['amount']"/></td>     
+                            <t t-set="number" t-value="number + 1"/>
+                        </tr>
+                    </tbody>
+                </table>
+                <p></p><p></p>
+                <table  style="padding-top: 0px; font-size: 10px;">
+                    <tr>
+                        <td align="left" width="20%">Хүлээлгэн өгсөн эд хариуцагч:</td>
+                        <td align="left" width="45%">............................./............................./............................./</td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="20%">Хүлээн авсан:</td>
+                        <td align="left" width="45%">.........................../............................./............................./</td>
+                        <td align="left" width="30%">Дүн:<span t-esc="amount_total"/></td>
+                    </tr>
+                    <tr>
+                        <td align="left" width="20%">Шалгасан нягтлан бодогч:</td>
+                        <td align="left" width="45%">.........................../............................./............................./</td>
+                    </tr>
+                   <!--  <tr style="font-size: 10px;">
+                        <td align="left" width="15%">/албан тушаал/</td>
+                        <td align="left" width="15%">/нэр татлахгүй/</td>
+                        <td align="left" width="15%">/гарын үсэг/</td>
+                         <td align="left" width="30%"></td>
+                    </tr> -->
+                </table>
+            </div>            
+        </t>
+     </t>
+</template>
+</data>
+</openerp>

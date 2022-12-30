@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+		<record id="view_groups_form_inherit_nomin_base" model="ir.ui.view">
+            <field name="name">res.groups.form.inherit.nomin_base</field>
+            <field name="model">res.groups</field>
+            <field name="inherit_id" ref="base.view_groups_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr='//form/sheet' position="before">
+                    <header>
+		                <button name="action_to_get_group_ids" string="Get group ids" type="object"/>
+                    </header>
+                </xpath>
+            	<xpath expr='//form/sheet/group/field[@name="name"]' position="after">
+		             <field name="group_id" readonly="1"/>
+
+                    <field name="group_type"/>
+                    <field name="type_name"/>
+                    <field name="allowed_resource" attrs="{'invisible': [('group_type','not in',['managerial_role','workflow_role'])]}"/>
+
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="view_res_groups_filter_01" model="ir.ui.view">
+            <field name="name">res.groups.search.inherit</field>
+            <field name="model">res.groups</field>
+            <field name="inherit_id" ref="base.view_groups_search"/>
+            <field name="arch" type="xml">
+               <field name="name" position="after">
+                    <group name="group_by" string="Group By">
+
+                        <filter name="group_type_name" string="Эрхийн төрөл" domain="[]" context="{'group_by': ['type_name']}"/>
+                    </group>
+
+               </field>
+            </field>
+        </record>
+
+
+
+
+        <record id="view_res_groups_tree_inherit" model="ir.ui.view">
+            <field name="name">res.groups.tree</field>
+            <field name="model">res.groups</field>
+            <field name="arch" type="xml">
+
+		        <tree string="HR system access request">
+                
+                    <field name="category_id"/>
+                    <field name="name"/>
+					<field name="allowed_resource"/>
+				</tree>
+             </field>
+        </record> 
+
+
+
+
+
+        <record id="action_res_groups_inherit" model="ir.actions.act_window">
+            <field name="name">Groups</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.groups</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_res_groups_tree_inherit"/>
+            <field name="search_view_id" ref="view_res_groups_filter_01"/>
+            <field name="context">{'search_default_group_type_name': 1}</field>
+            <field name="help">A group is a set of functional areas that will be assigned to the user in order to give them access and rights to specific applications and tasks in the system. You can create custom groups or edit the ones existing by default in order to customize the view of the menu that users will be able to see. Whether they can have a read, write, create and delete access right can be managed from here.</field>
+        </record>
+        <menuitem action="action_res_groups_inherit" id="base.menu_action_res_groups" parent="base.menu_users" groups="base.group_no_one" sequence="3"/>
+
+
+   </data>
+</openerp>

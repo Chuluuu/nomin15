@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data> 
+    	<!-- Төслийн үе шат -->
+    	<record id="assign_project_task_view" model="ir.ui.view">
+            <field name="name">assign.project.task</field>
+            <field name="model">assign.project.task</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+        		<form string="Даалгавар хувиарлах"> 
+        			<group>
+        				<field name="user_id" options="{'no_create': True}" required="1"/>
+        				
+        			</group>
+        			<footer>
+	        			<button name="action_assign" string="Хувиарлах"  class="oe_highlight" type="object"/> or 
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
+    			</form>
+            </field>
+        </record>
+        
+       <record id="action_assign_project_task" model="ir.actions.act_window">
+			<field name="name">Даалгавар хувиарлах</field>
+            <field name="res_model">assign.project.task</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="assign_project_task_view"/>
+            <field name="target">new</field>
+		</record>
+
+        <act_window name="Даалгавар хувиарлах"            
+            res_model="assign.project.task"
+            src_model="project.task"            
+            view_mode="form"
+            target="new"
+            multi="True"
+            key2="client_action_multi"
+            id="action_assign_project_task"/>
+	</data>
+</odoo>

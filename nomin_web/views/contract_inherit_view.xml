@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+        <template id="nomin_contactus_form" name="Бидэнтэй холбогдох" inherit_id="website.contactus" customize_show="True">
+            <xpath expr="//h1" position="replace"/>
+            <xpath expr="//div[@class='row']" position="replace">
+                <div class="content-bg">
+                	<div class="row">
+                		<div class="col-sm-9 col-md-9">
+                			<h3 class="pagetitle">Холбоо барих</h3>
+                			<img src="/nomin_web/static/src/images/banner.jpg"></img>
+		                    <p></p>
+		                    <t t-call="website.company_description"/>
+						</div>
+						<div class="col-sm-3 col-md-3">
+							<!-- <t t-call="nomin_web.nomin_sub_menu_subscribe_test"/> -->
+							<t t-call="nomin_web.nomin_sub_menu_subscribe"/>
+							<t t-call="nomin_web.nomin_sub_menu_suggestion"/>
+							<t t-call="nomin_web.survey_question"/>
+						</div>
+                	</div>
+                </div>
+			</xpath>
+		</template>
+
+    </data>
+</openerp>

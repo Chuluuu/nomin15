@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_skip_purchase_comparison" model="ir.ui.view">
+                <field name="name">Харьцуулалт алгасах</field>
+                <field name="model">skip.purchase.comparison</field>
+                <field name="arch" type="xml">
+                    <form string="skip purchase comparison" >
+                        <group>
+                             <separator string="Харьцуулалт алгасах"/>
+                        </group>
+                        <footer>
+                            <button name="action_skip_comparison" string="Харьцуулалт алгасах" type="object" class="oe_highlight"/>
+                            or
+                            <button string="Cancel" class="oe_link" special="cancel" />
+                        </footer>
+                    </form>
+                </field>
+            </record>
+
+        <act_window name="Харьцуулалт алгасах"
+            context="{'search_default_draft': 1, 'search_default_approved': False}"
+            res_model="skip.purchase.comparison"
+            src_model="purchase.requisition.line"
+            view_mode="form"
+            target="new"
+            multi="True"
+            groups="purchase.group_purchase_user"
+            key2="client_action_multi"
+            id="action_skip_comparison"/>
+
+    </data>
+</openerp>
+

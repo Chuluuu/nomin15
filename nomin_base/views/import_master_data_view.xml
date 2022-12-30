@@ -1,0 +1,165 @@
+<openerp>
+    <data>
+    	<menuitem 
+            id="menu_nomin_import_master_data" name="Import Master Data" parent="nomin_configure"
+            sequence="1" groups="group_user_acces_config_admin"/>
+          
+        <!-- Import Account Tax-->
+    	<record id="import_account_tax_view" model="ir.ui.view">
+            <field name="name">import.account.tax.view</field>
+            <field name="model">import.account.tax</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Import Tax">
+                    <group colspan="4">
+                    	<field name="data"/>
+                    	<field name="sector_id" options="{'no_create': True}"/>
+                    </group>
+                    <group colspan="4" col="6">
+                        <label string="" colspan="2"/>
+                        <button icon="gtk-cancel" special="cancel" string="Close"/>
+                        <button icon="gtk-execute" string="Execute" name="import_data" type="object"/>
+                        <button icon="gtk-execute" string="Update Datas" name="update_data" type="object"/>
+                   </group>
+               </form>
+            </field>
+        </record>
+        <record id="import_account_tax_view_action" model="ir.actions.act_window">
+            <field name="name">Import Tax</field>
+            <field name="res_model">import.account.tax</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="import_account_tax_view"/>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_import_account_tax_view_action" action="import_account_tax_view_action"
+           parent="menu_nomin_import_master_data" sequence="1" icon="terp-idea"/>
+           
+        <!-- Import Analytic Account -->
+    	<record id="import_account_analytic_account_view" model="ir.ui.view">
+            <field name="name">import.account.analytic.account.view</field>
+            <field name="model">import.account.analytic.account</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Import Account Analytic">
+                    <group colspan="4">
+                    	<field name="data"/>
+                    	<field name="sector_id" options="{'no_create': True}"/>
+                    </group>
+                    <group colspan="4" col="6">
+                        <label string="" colspan="2"/>
+                        <button icon="gtk-cancel" special="cancel" string="Close"/>
+                        <button icon="gtk-execute" string="Execute" name="import_data" type="object"/>
+                        <button icon="gtk-execute" string="Import Cashflow" name="import_cashflow" type="object"/>
+                   </group>
+               </form>
+            </field>
+        </record>
+        <record id="import_account_analytic_account_action" model="ir.actions.act_window">
+            <field name="name">Import Account Analytic</field>
+            <field name="res_model">import.account.analytic.account</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="import_account_analytic_account_view"/>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="menu_import_account_analytic_account_action" action="import_account_analytic_account_action"
+           parent="menu_nomin_import_master_data" sequence="1" icon="terp-idea"/>
+        
+   		 <!-- Partner Import -->
+    	<record id="import_res_partner_view" model="ir.ui.view">
+            <field name="name">import.res.partner.view</field>
+            <field name="model">import.res.partner</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Import Res Partner">
+                    <group colspan="4">
+                        <field name="data" colspan="4"/>
+                    </group>
+                    <group colspan="4" col="6">
+                        <label string="" colspan="2"/>
+                        <button icon="gtk-cancel" special="cancel" string="Close"/>
+                        <button icon="gtk-execute" string="Execute" name="import_partner" type="object"/>
+                       <!--  <button icon="gtk-execute" string="Del Partner" name="import_partner1" type="object"/> -->
+                    <button icon="gtk-execute" string="Dans Update" name="dans_update" type="object"/><!--  
+                        <button icon="gtk-execute" string="Bank" name="bank_update" type="object"/>
+                        <button icon="gtk-execute" string="Bank Dans" name="bank_dans_update" type="object"/> -->   
+                   </group>
+               </form>
+            </field>
+        </record>
+        <record id="import_res_partner_view_action" model="ir.actions.act_window">
+            <field name="name">Import Partner</field>
+            <field name="res_model">import.res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="import_res_partner_view"/>
+            <field name="target">new</field>
+        </record>
+        
+<!--         <record id="import_hr_job_view" model="ir.ui.view">
+            <field name="name">import.hr.job.view</field>
+            <field name="model">import.hr.job</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="HR JOB">
+                    <group colspan="4">
+                        <field name="data" colspan="4"/>
+                    </group>
+                    <group colspan="4" col="6">
+                        <label string="" colspan="2"/>
+                        <button icon="gtk-cancel" special="cancel" string="Close"/>
+                        <button icon="gtk-execute" string="Execute" name="import_data" type="object"/>
+                   </group>
+               </form>
+            </field>
+        </record>
+        
+        <record id="import_hr_job_action" model="ir.actions.act_window">
+            <field name="name">HR JOB</field>
+            <field name="res_model">import.hr.job</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="import_hr_job_view"/>
+            <field name="target">new</field>
+        </record> -->
+        
+      <!--  <menuitem id="menu_import_hr_job_action" action="import_hr_job_action"
+           parent="menu_nomin_import_master_data" sequence="2" icon="terp-idea"/> --> 
+           
+<!--          <record id="import_archive_warehouse_view" model="ir.ui.view">
+            <field name="name">import.archive.warehouse.view</field>
+            <field name="model">import.archive.warehouse</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Archive Warehouse">
+                    <group colspan="4">
+                        <field name="data" colspan="4"/>
+                    </group>
+                    <group colspan="4" col="6">
+                        <label string="" colspan="2"/>
+                        <button icon="gtk-cancel" special="cancel" string="Close"/>
+                        <button icon="gtk-execute" string="Execute" name="import_data" type="object"/>
+                   </group>
+               </form>
+            </field>
+        </record>
+        
+        <record id="action_import_archive_warehouse_view" model="ir.actions.act_window">
+            <field name="name">Archive Warehouse</field>
+            <field name="res_model">import.archive.warehouse</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="import_archive_warehouse_view"/>
+            <field name="target">new</field>
+        </record> -->
+        <!-- 
+        <menuitem id="menu_action_import_archive_warehouse_view" action="action_import_archive_warehouse_view"
+           parent="menu_nomin_import_master_data" sequence="3" icon="terp-idea"/> -->
+           
+           
+           
+           
+        
+    </data>
+</openerp>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+    	<!-- Хөрөнгө оруулалтын задаргааны мөр -->
+    	<record id="investment_breakdown_tree" model="ir.ui.view">
+    		<field name="name">investment.breakdown.tree</field>
+    		<field name="model">investment.breakdown</field>
+    		<field name="arch" type="xml">
+    			<tree string="investment breakdown tree">
+    				<field name="name"/>
+    				<field name="amount_total"/>
+    				<field name="control_budget"/>
+    			</tree>
+    		</field>
+    	</record>
+    	
+    	<!-- Хөрөнгө оруулалтын задаргаа -->
+    	<record id="investment_breakdown_form" model="ir.ui.view">
+    		<field name="name">investment.breakdown.form</field>
+    		<field name="model">investment.breakdown</field>
+    		<field name="arch" type="xml">
+    			<form string="Investment">
+    				<group>
+	    				<field name="name"/>
+	    			</group> 
+	    			<group>
+	    				<field name="amount_total"/>
+	    			</group>
+	    			<group>
+	    				<field name="control_budget"/>
+	    			</group>
+    			</form>
+    		</field>
+    	</record>
+    </data>
+</openerp>

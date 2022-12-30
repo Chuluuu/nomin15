@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+      <record id="purchase_purchase_order_portal_tree" model="ir.ui.view">
+            <field name="name">purchase.order.tree</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <tree decoration-bf="message_unread==True" decoration-muted="state=='cancel'" decoration-info="state in ('wait','confirmed')" string="Purchase Order">
+                    <field name="message_unread" invisible="1"/>
+                    <field name="name" string="Reference"/>
+                    <field name="date_order" />
+                    <field name="sector_id"/>
+                    <!-- <field name="purchase_type"/> -->
+                    <field name="partner_id"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="date_planned" invisible="context.get('quotation_only', False)"/>
+                    <field name="amount_untaxed" invisible="1" sum="Total Untaxed amount" string="Untaxed" widget="monetary"/>
+                    <field name="amount_total" invisible="1" sum="Total amount" widget="monetary"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+
+
+    <record model="ir.actions.act_window" id="action_purchase_portal">
+    	<field name="name">Үнийн санал</field>
+    	<field name="res_model">purchase.order</field>
+        <field name="view_type">form</field>
+        <field name="view_id" ref="purchase_purchase_order_portal_tree"/>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="domain">[('state','in',['sent_rfq','back','purchase','done','cancel'])]</field>
+    </record>
+
+    <menuitem name="Худалдан авалт" id="portal_purchase_orders" parent="portal.portal_menu"
+             groups="base.group_portal" sequence="31"/>
+    <menuitem name="Худалдан авалт" id="menu_portal_purchase_orders" parent="nomin_purchase.portal_purchase_orders"
+            action="action_purchase_portal" groups="base.group_portal" sequence="32"/>
+    </data>
+</openerp>

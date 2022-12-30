@@ -1,0 +1,102 @@
+<openerp>
+<data>
+    <record model="ir.ui.view" id="damage_asset_description_from">
+        <field name="name">damage.asset.description.from</field>
+        <field name="model">damage.asset.description</field>
+        <field name="arch" type="xml">
+            <form string="Write your reason">
+                <group colspan="8" col="8">
+                    <group colspan="8" col="8">
+                        <field name="asset_name" readonly="1"/>
+                    </group>
+
+                    <group colspan="8" col="8">
+                        <group colspan="4">
+                            <field name="employee_id" options="{'no_create': True}" readonly="1"/>
+
+                            <field name="asset_id" readonly="1"/>
+                            <field name="product_id" invisible="1"/>
+
+                            <field name="income_cnt" invisible="1"/>
+                            <field name="receive_cnt" invisible="1"/>
+                            <field name="expense_cnt" invisible="1"/>
+                            <field name="transfer_cnt" invisible="1"/>
+                            <field name="department_id" invisible="1"/>
+                            <field name="is_damage_asset" invisible="1"/>
+
+
+                        </group>
+                        <group colspan="4">
+
+                            <field name="qty" readonly="1"/>
+
+                            <field name="counted_qty" readonly="1"/>
+                            <field name="difference" invisible="1" readonly="1"/>
+                            <field name="current_qty" invisible="1" readonly="1"/>
+                            <button name="button_to_handle" type="object" string="Зөрүүг арилгах" class="oe_highlight"
+                            attrs="{'invisible':[('expense','=',0),('income','=',0)]}"/>
+                            
+
+                        </group>
+
+                    
+                        <group colspan="8" invisible="1"> 
+                            <group >
+                                <field name="account_id" readonly="1"/>
+                                <field name="depreciation_account" />
+                                <field name="account_receivable_id"/>
+                                <field name="receivable_income_account_id"/>
+                                
+
+                                <field name="income" invisible="1"/>
+                                <field name="expense" invisible="1"/>
+                                <field name="is_invisible" invisible="1"/>
+                            </group>
+                        </group>
+                        <group> 
+                            <group >
+                            </group>
+                        </group>
+                    </group>
+                    <group colspan="8" col="8">
+                        <group colspan="8" >
+                            <field name="detail_ids" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" >
+                                <tree default_order="employee_id" editable="bottom">
+
+
+                                    <field name="start_date" readonly="1"/> 
+                                    <field name="registry_number" readonly="1"/> 
+
+                                    <field name="amount" invisible="1"/>
+                                    <field name="capitalized_value" readonly="1"/>
+
+                                    <field name="accumulated_depreciation" readonly="1"/>
+                                    <field name="current_value" readonly="1"/>
+                                    <field name="employee_id" invisible="1"/>
+                                    <field name="is_expense" invisible="1"/>
+                                    <field name="asset_state" />
+                                    <field name="damage_description" />
+                                    <field name="damage_desc" />
+                                </tree>
+                            </field>
+                        </group>
+                    </group>								
+                </group>
+                <footer>
+                    <button name="button_to_save" type="object" 
+                            string="Хадгалах" class="oe_highlight"/>
+                    <button special="cancel" string="Болих"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_damage_asset_description"
+                name="Гэмтэл тодорхойлох"
+                res_model="damage.asset.description"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"/>
+                
+</data>
+</openerp> 

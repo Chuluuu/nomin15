@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+        <record id="implemented_tasks_form" model="ir.ui.view">
+            <field name="name">implemented.tasks</field>
+            <field name="model">implemented.tasks</field>
+            <field name="arch" type="xml">
+                <form string="implemented tasks"> 
+                    <group >
+                        <field name="employee_id" string="Захиалагч ажилтан" options="{'no_create': True}"/>
+                        <field name="control_employee_id" string="Хянах ажилтан" options="{'no_create': True}"/>
+                        <field name="confirm_employee_id" string="Батлах ажилтан" options="{'no_create': True}"/>
+						<field name="line_ids" string="Хийгдсэн ажлууд">
+							<tree string="Line ids" editable="bottom">
+								<field name="task" required="1" string="Хийгдсэн ажил"/>
+                                <field name="description" string="Тайлбар"/>                               
+                            </tree>
+							<form string="line_ids">
+								<group>
+									<field name="task"/>
+                                    <field name="description"/>
+								</group>
+							</form>
+                                                            	
+						</field>                                             
+        			</group>      
+                    <footer>
+                        <button name="action_send" class ="oe_highlight" string="Send" type="object" style="background-color:#5DADE2;" />
+                        or
+                        <button string="Cancel" class="btn-default" special="cancel" style="background-color: #5DADE2;"/>  
+                    </footer>              
+                </form>
+            </field>
+        </record>
+        
+
+    </data>
+    <data> 
+        <record id="to_receive_form" model="ir.ui.view">
+            <field name="name">order.page.receive</field>
+            <field name="model">order.page.receive</field>
+            <field name="arch" type="xml">
+                <form string="To receive tasks"> 
+                    <group>     
+                            <field name="order_name" readonly="1" string='Захиалгын нэр'/>
+                            <field name="order_description" readonly="1" string='Зорилт'/>
+                            <field name="cost_type" readonly="1" string='Зардлын төрөл'/>
+
+                            
+                            <field name="line_ids" string="Хийгдсэн ажлууд" >
+                                <tree string="Line ids" editable="bottom" >
+                                    <field name="is_check" string="Хүлээн авах"/>
+                                    <field name="task" required="1" string="Хийгдсэн ажил"/>
+                                    <field name="description" string="Тайлбар"/> 
+                                    <field name="comment" string="Хүлээн авсан ажилтны тайлбар"/>    
+                                    <field name="task_info_id" invisible="1"/>                          
+                                </tree>
+                                <form string="line_ids">
+                                    <group>     
+                                        <field name="is_check"/>                       
+                                        <field name="task"/>
+                                        <field name="description"/>
+                                        <field name="comment"/>
+                                        <field name="task_info_id"/>
+                                    </group>
+                                </form>                                                                                
+                            </field>  
+                             
+                    </group>
+                    <group>
+                        <field name="is_approve"/>
+                        <field name="is_reject"/> 
+                    </group>
+                    <footer>
+                    <button name="to_receive"  string="To receive" type="object" style="background-color:#5DADE2;" />
+                    or
+                    <button string="Cancel" class="btn-default" special="cancel" style="background-color: #5DADE2;"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+
+    </data>
+</openerp>
+

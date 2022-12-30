@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+        <record model="ir.ui.view" id="asset_transfer_request_tree">
+            <field name="name">asset.transfer.request.tree</field>
+            <field name="model">asset.transfer.request</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Request">
+                    <field name="type"/>
+                    <field name="state"/>
+                    <field name="role" />
+                    <field name="create_date"/>
+                    <field name="department_id" />
+                    <field name="receiver_department_id" />
+                    <field name="requested_employee_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="asset_transfer_request_form" model="ir.ui.view">
+            <field name="name">asset.transfer.request.form</field>
+            <field name="model">asset.transfer.request</field>
+            <field name="arch" type="xml">
+                <form string="Transfer">
+                <header>
+
+                     
+
+
+                     <button name="%(action_reason_asker_purchase)d" string="Буцаах" type="action" class="oe_highlight" 
+                        attrs="{'invisible':[('state','in',['draft','returned','approved'])]}"/>
+
+                     <button name="%(action_sender_preparation)d" string="Илгээгчийн дансуудыг бэлтгэх" type="action" class="oe_highlight" 
+                        attrs="{'invisible':['|',('state','not in',['draft','returned']),('role','not in','verifier')]}"/>
+
+                    <button name="%(action_receiver_preparation)d" string="Хүлээн авагчийн дансуудыг бэлтгэх" type="action" class="oe_highlight" 
+                        attrs="{'invisible':['|',('state','not in',['approve']),('role','not in','approver')]}"/>
+
+                     <button name="%(action_prepare_transfer_request)d" string="Өөрийн хөрөнгийг бэлтгэх" type="action" class="oe_highlight" 
+                        attrs="{'invisible':['|',('state','not in',['draft','returned']),('role','not in',['employee','verifier'])]}"/>
+
+                    <!-- <button name="action_resend_" string="Дахин илгээх" type="object" class="oe_highlight" 
+                        groups = "project.group_project_admin"/>
+
+                    <button name="action_reconfirm" string="Дахин батлах" type="object" class="oe_highlight" 
+                        groups = "project.group_project_admin"/> -->
+
+                    <button name="action_delete_waiting_ones" string="Хүлээлэгт бгааг устгах" type="object" class="oe_highlight" 
+                        attrs="{'invisible':['|',('account_from','=',False),('state','not in',['draft','returned'])]}"/>            
+
+
+                    <button name="action_request" string="Илгээх" type="object" class="oe_highlight" 
+                        attrs="{'invisible':['|',('state','not in',['draft','returned']),('type','=',False)]}"
+                        confirm="Are you sure you want to request?"/>
+
+                    <button name="action_verify" string="Хянах" type="object" class="oe_highlight" 
+                        attrs="{'invisible':['|',('state','not in',['verify']),('role','not in','verifier')]}"
+                        confirm="Are you sure you want to verify?"/>
+
+                    <button name="action_approve" string="Батлах" type="object" class="oe_highlight" 
+                        attrs="{'invisible':['|',('state','not in',['approve']),'|',('role','not in','approver'),('receiver_account_payable_id','=',False)]}"/>
+
+                    <button name="action_accept_all" string="Зөвшөөрөх" type="object" class="oe_highlight" 
+                            confirm="Сонгогдсон бүх эд хөрөнгийг хүлээн авахдаа итгэлтэй байна?"
+                            attrs="{'invisible':['|',('state','not in',['accept'])]}"/>
+
+                    <button name="cancel" string="Цуцлах" type="object" class="oe_highlight" 
+                            attrs="{'invisible':[('state','not in',['approved'])]}"/>
+
+                    <button name="get_json" string="json" type="object" class="oe_highlight" />
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,verify,approve,accept,approved"/>
+                </header>
+                <sheet>
+                    <group >
+
+
+                        <group  >
+                            <field name="type" readonly="1"/>
+
+                            
+                            <field name="transfer_date" readonly="1"/>
+                            <field name="department_id" readonly="1" />
+                            <field name="account_from" readonly="1"/>
+                            <field name="sender_account_receivable_id" attrs="{'readonly':[('state','not in',['verify'])]}"/>
+
+                            <field name="sender_profit_account_id" attrs="{'readonly':[('state','not in',['verify'])]}"/>
+                            <field name="sender_loss_account_id" attrs="{'readonly':[('state','not in',['verify'])]}"/>
+
+                            <field name="sender_vat_account_id" attrs="{'readonly':[('state','not in',['verify'])],
+                                'invisible':[('is_same_company','=',True)]}"/>
+
+
+
+
+                            <!-- <field name="sender_profit_account_id" attrs="{ 
+                                                                    'readonly':[('state','not in',['approve'])],
+                                                                    'required':[('total_profit_n_loss_amount','&gt;',0)], 
+                                                                    'invisible':[('total_profit_n_loss_amount','&lt;=',0)]}"/>
+                            <field name="sender_loss_account_id" attrs="{ 
+                                                                    'readonly':[('state','not in',['approve'])],
+                                                                    'required':[('total_profit_n_loss_amount','&lt;',0)], 
+                                                                    'invisible':[('total_profit_n_loss_amount','&gt;=',0)]}"/> -->
+
+
+
+                        </group>
+
+
+                        <group >
+                            
+                            
+                            <field name="requested_date"  invisible="1" />
+                            <field name="requested_employee_id" />
+                            <field name="receiver_department_id" options="{'no_create': True}" readonly="1"/>
+                            <field name="receiver_vat_account_id" options="{'no_create': True}" readonly="1"/>
+                            <field name="receiver_account_payable_id" options="{'no_create': True}" readonly="1"/>
+                            <field name="approved_employee_id" attrs="{'invisible':[('state','not in',['approved'])],
+                                                                        'readonly':[('state','not in',['draft'])]
+                                                                        }"/>
+                            <field name="description" readonly="1"/>
+                            
+                            <field name="returned_reason" attrs="{'invisible':[('state','not in',['returned'])]}"/>
+                            <field name="returned_description" attrs="{'invisible':[('state','not in',['returned'])]}"/>
+                            <field name="total_vat_amount" attrs="{ 'readonly':[('state','not in',['verify'])],
+                                                                    'invisible':[('is_same_company','=',True)]}"/>
+                            <field name="total_sale_price" readonly="1"/>
+
+                            <field name="total_profit_n_loss_amount" readonly="1" attrs="{  
+                                                                    'invisible':[('total_profit_n_loss_amount','=',0)]}"/>
+                            <field name="is_from_unused_assets" readonly="1" attrs="{  
+                                                                    'invisible':[('is_from_unused_assets','=',False)]}"/>
+
+
+
+
+
+                        </group>
+                    </group>
+                    <group colspan="8" col="8">
+
+
+                        <field name="change_line_ids" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" 
+                            attrs="{'invisible':[('role','not in',['employee'])],'readonly':[('state','not in',['draft','returned'])],'required':[('state','not in',['draft','returned'])]}">
+                            <tree default_order="employee_id" editable="bottom"
+                                colors="red:state == 'accept';green:state == 'approve'">
+
+                                <field name="employee_id" options="{'no_create': True}" readonly="1"/>
+                                <field name="account_id" options="{'no_create': True}" invisible="1"/>
+
+                                <field name="asset_id" readonly="1"/>
+                                <field name="product_id" invisible="1"/>
+                                <field name="registry_number" invisible="1"/>
+                                <field name="state" invisible="1"/>
+                                <field name="show_accept_button" invisible="1"/>
+
+
+                                <field name="asset_name" readonly="1"/>
+                                <field name="start_date" readonly="1"/>
+                                
+                                <field name="qty" readonly="1"/>
+                                <field name="amount" readonly="1"/>
+
+                                <field name="receiver_employee_id" options="{'no_create': True}"/>
+                                <field name="receiver_job_id" options="{'no_create': True}" readonly="1"/>
+
+
+                                <field name="warning_type" invisible="1"/>
+                                <button name="action_accept" string="accept" type="object" class="oe_highlight" 
+                                    attrs="{'invisible':[('show_accept_button','=',False)]}"/>
+                            </tree>
+                        </field>
+                        
+
+
+                        <field name="change_line_ids_for_sender" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" 
+                            attrs="{'invisible':[('role','not in',['verifier'])],'readonly':[('state','in',['accept','approve','approved'])],'required':[('state','not in',['draft','returned'])]}">
+                            <tree default_order="employee_id" editable="bottom"
+                                colors="red:state == 'accept';green:state == 'approve'">
+
+                                <field name="employee_id" options="{'no_create': True}" readonly="1"/>
+                                <field name="account_id" options="{'no_create': True}" readonly="1"/>
+
+                                <field name="asset_id" readonly="1"/>
+                                <field name="product_id" invisible="1"/>
+                                <field name="registry_number" invisible="1"/>
+                                <field name="state" invisible="1"/>
+                                <field name="show_accept_button" invisible="1"/>
+                                
+                                <field name="asset_name" readonly="1"/>
+                                <field name="start_date" readonly="1"/>
+                                
+                                <field name="qty" readonly="1"/>
+                                <field name="amount" readonly="1"/>
+                                <field name="capitalized_value" readonly="1"/>
+
+                                <field name="accumulated_depreciation" readonly="1"/>
+                                <field name="current_value" readonly="1"/>
+                                <field name="sale_price" />
+
+
+                                <field name="receiver_employee_id" options="{'no_create': True}"/>
+                                <field name="receiver_job_id" options="{'no_create': True}" readonly="1"/>
+
+
+
+                                <field name="warning_type" invisible="1"/>
+                                <button name="action_accept" string="accept" type="object" class="oe_highlight" 
+                                    attrs="{'invisible':[('show_accept_button','=',False)]}"/>
+                            </tree>
+                        </field>
+
+
+
+                        <field name="change_line_ids_for_receiver" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" 
+                            attrs="{'invisible':[('role','not in',['approver'])],'readonly':[('state','not in',['approve'])],'required':[('state','not in',['draft','returned'])]}">
+                            <tree default_order="employee_id" editable="bottom"
+                                colors="red:warning_type == 'maximum_exceeded';orange:warning_type == 'below_normal';green:warning_type == 'normal'">
+
+                                <field name="employee_id" options="{'no_create': True}" readonly="1"/>
+                                <field name="account_id" options="{'no_create': True}" readonly="1"/>
+
+   
+                                <field name="asset_id" readonly="1"/>
+                                <field name="product_id" invisible="1"/>
+                                <field name="registry_number" invisible="1"/>
+                                <field name="state" invisible="1"/>
+                                <field name="show_accept_button" invisible="1"/>
+                                <field name="asset_name" readonly="1"/>
+                                <field name="start_date" readonly="1"/>
+                                
+                                <field name="qty" readonly="1"/>
+                                <field name="amount" readonly="1"/>
+                                <field name="capitalized_value" readonly="1"/>
+
+                                <field name="accumulated_depreciation" readonly="1"/>
+                                <field name="current_value" readonly="1"/>
+                                <field name="sale_price" readonly="1"/>
+
+                                <field name="receiver_employee_id" options="{'no_create': True}" attrs="{'readonly':[('state','not in',['approve'])]}"/>
+                                <field name="receiver_asset_account_id" options="{'no_create': True}" attrs="{'readonly':[('state','not in',['approve'])]}"/>
+                                <field name="receiver_depreciation_account_id" options="{'no_create': True}" attrs="{'readonly':[('state','not in',['approve'])]}"/>
+                                <field name="receiver_stockkeeper" options="{'no_create': True}" invisible="1"/>
+
+
+                                <field name="warning_type" invisible="1"/>
+                                <button name="action_accept" string="accept" type="object" class="oe_highlight" 
+                                    attrs="{'invisible':[('show_accept_button','=',False)]}"/>                                
+                            </tree>
+                        </field>   
+                        <group colspan="8">
+                            <field name="button_clickers" readonly="1" widget="many2many_tags" />
+                        </group>                     
+                        <div>
+                            <field name="role" readonly="1"/>
+                            <field name="is_same_company" invisible="1"/>
+                            <field name="transaction_id" />
+                            <field name="all_line_employees_are_same" readonly="1"/>
+                            <field name="diamond_json" invisible="1"/>
+                        </div>
+                        <div class="pull-left">
+                            <h3 color="green"> Ногоон өнгө байвал хүн нь хүлээн авсан гэсэн үг</h3>
+                            <h3 color="red"> Улаан өнгө байвал хүн нь хүлээн авч амжаагүй гэсэн үг</h3>
+                        </div> 
+                        
+
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_asset_transfer_request_filter" model="ir.ui.view">
+            <field name="name">asset.transfer.request.filter</field>
+            <field name="model">asset.transfer.request</field>
+            <field name="arch" type="xml">
+                <search string="Search transfer request">
+                    <filter name="group_requested_employee" string="Боловсруулсан ажилтан" domain="[]" context="{'group_by':'requested_employee_id'}"/>
+                    <filter name="group_approved_employee" string="Баталсан ажилтан" domain="[]" context="{'group_by':'approved_employee_id'}"/>
+                    <filter name="group_state" string="Төлөв" domain="[]" context="{'group_by':['type','state']}"/>
+                    <filter string="Энэ сар" name="current_month" domain="[('create_date','&gt;=',(datetime.date.today()+relativedelta(day=1)).strftime('%Y-%m-%d'))]" help="Энэ сар"/>
+                    <filter string="Өнгөрсөн сар" name="prev_month" domain="[('create_date','&gt;=',(datetime.date.today()-relativedelta(months=1)+relativedelta(day=1)).strftime('%Y-%m-%d')),('create_date','&lt;',(datetime.date.today()+relativedelta(day=1)).strftime('%Y-%m-%d'))]" help="Энэ сар"/>
+                    <filter string="Сүүлийн 2 сар" name="last_2_month" domain="[('create_date','&gt;=',(datetime.date.today()-relativedelta(months=1)+relativedelta(day=1)).strftime('%Y-%m-%d'))]" help="Сүүлийн 2 сар"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_asset_transfer_request" model="ir.actions.act_window">
+            <field name="name">Asset transfer request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">asset.transfer.request</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="asset_transfer_request_tree"/>
+            <field name="context">{'search_default_last_2_month': 1, 'search_default_group_state': 2}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new received H.
+              </p>
+            </field>
+        </record>
+
+        <menuitem name="Эд хөрөнгө шилжүүлэх хүсэлт"
+            action="action_asset_transfer_request" 
+            id="menu_asset_transfer_request"
+            parent="menu_stock_requisition_parent" sequence="8"/>
+
+
+
+</odoo>
+
+
+

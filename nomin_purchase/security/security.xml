@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data noupdate="0">
+
+
+    <record id="purchase_order_portal" model="ir.rule">
+        <field name="name">Portal purchase order</field>
+        <field name="model_id" ref="model_purchase_order"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('partner_id','=',user.partner_id.id)]</field>
+        <field name="groups" eval="[(4,ref('base.group_portal'))]"/>
+    </record>
+	
+
+
+
+	<record id="purchase_order_followers" model="ir.rule">
+            <field name="name">Followers see their followed orders</field>
+            <field ref="model_purchase_order" name="model_id"/>
+            <field name="domain_force">['|',('message_channel_ids.channel_partner_ids', 'in', [user.partner_id.id]),('message_partner_ids','=',user.partner_id.id)]</field>
+            <field name="groups" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+    </record>  
+
+
+
+
+    <record id="purchase_order_line_rule_user" model="ir.rule">
+        <field name="name">All purchase order line see </field>
+        <field ref="model_purchase_order_line" name="model_id"/>
+        <field name="domain_force">[('is_rfq_closed','=',False)]</field>
+        <field name="groups" eval="[
+            (4, ref('purchase.group_purchase_user')),
+            ]"/>
+    </record>
+<!-- бүх үнийн санал болон захиалга харах мэргэжилтэн , ахлах менежер -->
+
+    <record id="rule_purchase_order_all_see" model="ir.rule">
+        <field name="name">All purchase order see </field>
+        <field ref="model_purchase_order" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[
+            (4, ref('nomin_purchase_requisition.group_procurement_buyer')),
+            (4, ref('nomin_purchase_requisition.group_supply_import_manager')),
+            ]"/>
+    </record>
+
+<!-- <Агуулахын дүрэм> -->
+
+
+
+
+
+
+
+    <record id="stock_picking_followers" model="ir.rule">
+            <field name="name">Агуулахын дагагч дүрэм</field>
+            <field ref="model_stock_picking" name="model_id"/>
+            <field name="domain_force">[('message_partner_ids','=',user.partner_id.id)]</field>
+            <field name="groups" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+    </record>  
+
+	<!-- Account Invoice -->
+
+    
+    
+	</data>
+</openerp>

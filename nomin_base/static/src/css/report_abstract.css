@@ -1,0 +1,33 @@
+.abstract_report_builder .table-condensed {
+    border: 1px solid #000000;
+}
+.abstract_report_builder .table-condensed th {
+    font-size: 11px;
+    background: #DDDDDD;
+    color: #000000;
+    font-weight: bold;
+    padding: 2px 1px;
+    border: 1px solid #000000;
+    text-align: center;
+}
+.abstract_report_builder .table-condensed td {
+    font-size: 11px;
+    padding: 3px 1px 1px 1px;
+    border: 1px solid #000000;
+}
+
+.abstract_report_builder .table-condensed td div {
+    width: 100%;
+}
+
+.abstract_report_builder .table-condensed td div.number {
+    text-align: right;
+}
+
+.abstract_report_builder .table-condensed td div.color {
+    background: #DDDDDD;
+}
+
+.abstract_report_builder .table-condensed td div.center {
+    text-align: center;
+}

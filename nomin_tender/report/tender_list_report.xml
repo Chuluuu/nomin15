@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_tender_tender_report" model="ir.ui.view">
+            <field name="name">Тендерийн тайлан</field>
+            <field name="model">bidding.list.report</field>
+            <field name="arch" type="xml">
+                <form string="Tender List" >
+                    <group>
+                    	<field name="start_date" required="1"/>
+                    	<field name="end_date" required="1"/>
+                   	</group>
+					<group>
+						<group>
+							<field name="type_ids" widget="many2many_tags"/>
+							<field name="sector_ids" widget="many2many_tags" options="{'no_create': True}"/>
+							<field name="respondent_sector_ids" widget="many2many_tags" options="{'no_create': True}"/>
+							<field name="partner_ids" widget="many2many_tags"/>
+		                </group>
+	                </group>
+	                <group>
+	                	<label for="tender_amount_min" string="Гэрээт ажлын төсөв"/>
+                		<div name="amount_div">
+                            <field name="tender_amount_min" class="oe_inline"/> - 
+                            <field name="tender_amount_max" class="oe_inline"/>
+                        </div>
+					</group>
+					<group>
+						<field name="contract_date_start"/>
+						<field name="contract_date_end"/>
+					</group>
+                    <footer>
+                        <button name="export_tender_report" string="Export" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_tender_details_report">
+            <field name="name">Тендерийн дэлгэрэнгүй тайлан</field>
+            <field name="res_model">bidding.list.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_tender_tender_report"/>
+            <field name="target">new</field>
+        </record>
+		<menuitem id="menu_tender_reports" name="Тайлан"
+            groups="nomin_tender.group_tender_secretary"
+            parent="nomin_tender.root_tender_menu" sequence="5"/>
+        <menuitem
+            id= "menu_tender_details_report"
+        	name = "Тендерийн дэлгэрэнгүй тайлан"
+            parent="nomin_tender.menu_tender_reports"
+            sequence= "7"
+            action="action_tender_details_report"
+        />
+        
+    </data>
+</openerp>
+

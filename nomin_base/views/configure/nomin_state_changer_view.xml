@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="nomin_state_changer_view">
+            <field name="name">Ажлын урсгалын төлөв өөрчлөх</field>
+            <field name="model">nomin.state.changer</field>
+            <field name="arch" type="xml">
+                <form string="Work Service Detail Report">
+                    <group colspan="4">
+                    	<group>
+	                        <field name="select_model"/>
+	                    	<field name="number" />
+                            <field name="is_account_move_delete" attrs="{'invisible':[('select_model','not in',['payment_request','incash'])]}"/>
+                            <field name="active_sequence" />
+                            <field name="sequence" readonly="1" />
+                        </group>
+                        <group>
+	                           <field name="business_plan_state" attrs="{'invisible':[('select_model','!=','business_plan')]}"/>
+                               <field name="nomin_other_state" attrs="{'invisible':[('select_model','!=','other_budget')]}"/>
+                               <field name="payment_request_state" attrs="{'invisible':[('select_model','!=','payment_request')]}"/>
+                                <field name="cost_share_line_state" attrs="{'invisible':[('select_model','!=','incash')]}"/>
+	                    	
+                    	</group>
+                    </group>
+                     
+                    <footer>
+                        <button name="action_set" string="Өөрчлөх" type="object" icon="terp-graph"/>
+                        or
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                        or 
+                        <button name="check_sequence" class ="oe_highlight" string="Дараалал шалгах" type="object" icon="terp-graph"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="nomin_state_changer_action">
+            <field name="name">Ажлын урсгалын төлөв өөрчлөх</field>
+            <field name="res_model">nomin.state.changer</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="nomin_state_changer_view"/>
+            <field name="target">new</field>
+        </record>
+
+      <menuitem action="nomin_state_changer_action"
+            id="nomin_state_changer_menu" parent="menu_request_config"
+            sequence="2"/>
+            
+    </data>
+</openerp>

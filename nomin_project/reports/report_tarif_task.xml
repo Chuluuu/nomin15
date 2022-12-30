@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>  
+    	<template id="nomin_project.report_tarif_task">
+			<t t-call="report.html_container">
+				<t t-call="report.layout">
+					<t t-foreach="tasks" t-as="o">
+						<div class="page">
+							<style>
+								thead {
+				            			background-color: #f1f1c1; 
+				            		 	color:black;
+				            			}
+								tbody {color:black;}
+								tfoot {color:red;}
+								
+								table, th, td {
+				            		font-size : 13px
+								}
+							</style>
+							<h3>
+								<span align="center">Ажил хүлээлгэн өгөх хуудас</span>
+							</h3>
+							<h3>
+								<span align="center">Даалгавар/Тикетийн дугаар # :<span t-if="o.name"><span t-field="o.name"/></span></span>
+							</h3>
+							
+							<br/>
+							<table class="table">
+			                    <tr>
+			                        <td>Захиалсан салбар :<span t-if="o.customer_department"><span t-field="o.customer_department"/></span></td>
+			                        <td>Гүйцэтгэсэн салбар:<span t-if="o.department_id"><span t-field="o.department_id"/></span> </td>
+			                    </tr>
+			                    <tr>
+			                   		<td>Захиалсан ажилтан :<span t-if="o.customer_id"><span t-field="o.customer_id"/></span> </td>
+			                        <td>Гүйцэтгэсэн ажилтан :<span t-if="o.user_id"><span t-field="o.user_id"/></span> </td>
+			                    </tr>
+			                    <tr>
+			                    	<td>Утас :<span t-if="o.phone"><span t-field="o.phone"/></span> </td>
+			                        <td>Товлосон огноо :<span t-if="o.date_deadline"><span t-field="o.date_deadline"/></span> </td>
+			                    </tr>
+			                    <tr> 
+			                    	<td>И-мэйл :<span t-if="o.email"><span t-field="o.email"/></span> </td>
+			                        <td>Хийгдсэн огноо :<span t-if="o.date_deadline"><span t-field="o.date_deadline"/></span> </td>
+			                    </tr>
+			                    <tr> 
+			                        <td>Төсөл :<span t-if="o.project_id"><span t-field="o.project_id"/></span> </td>
+			                        <td>Үнэлгээ :<span t-if="o.total_percent"><span t-field="o.total_percent"/></span></td>
+			                    </tr>
+					        </table>
+					         <table class="table table-l10n_mn-grid" style="width:100%;border: 1px solid #000000;">
+				                <thead>
+				                    <tr>
+				                        <td style="width:3%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2">№</td>
+				                        <td style="width:45%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2">Хийгдсэн ажил</td>
+				                        <td style="width:7%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2">Тоо ширхэг</td>
+				                        <td style="width:10%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2">Тариф</td>
+				                        <td style="width:10%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2">Нийт үнэ</td>
+				                        <td style="width:10%; vertical-align:middle;border: 1px solid #000000;"  align="center" rowspan="2">Тохирсон үнэ</td>
+				                        <td style="width:30%; vertical-align:middle;border: 1px solid #000000;"  align="center" rowspan="2">Тайлбар</td>
+				                    </tr>
+				                </thead>
+				                <t t-set="total_qty" t-value="0"/>
+				                <t t-set="total_price" t-value="0"/>
+				                <t t-set="line_number" t-value="1"/>
+				                <t t-foreach="o.tarif_line" t-as="l" >
+				                	<tbody >
+					                 	<td style="width:3%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2"><span t-esc="line_number"/></td>
+				                        <td style="width:45%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2"><span t-field="l.work_id"/></td>
+				                        <td style="width:7%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2"><span t-field="l.qty"/></td>
+				                        <td style="width:10%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2"><span t-field="l.price"/></td>
+				                        <td style="width:10%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2"><span t-field="l.total_price"/></td>
+				                        <td style="width:10%; vertical-align:middle;border: 1px solid #000000;"  align="center" rowspan="2"><span t-field="l.agreed_price"/></td>
+				                        <td style="width:30%; vertical-align:middle;border: 1px solid #000000;"  align="center" rowspan="2"><span t-field="l.description"/></td>
+	                        			<t t-set="line_number" t-value="line_number + 1"/>
+				                	</tbody >
+				                </t>
+				            </table>
+					        <br/>
+					        <span align="left">Гүйцэтгэсэн</span>
+					        <br/>
+					        <t t-foreach="owner" t-as="e">
+								<span align="left"><span t-field="e.job_id.name"/>: <img class="image" t-att-src="'data:image/png;base64,%s' %e.signature_image" style="height:70px;width:125px;"/> /<span t-field="e.name"/>/</span>
+							</t>
+							<br/>
+							<span align="left">Шалгаж, хүлээн авсан:</span>
+							<br/>
+							<t t-foreach="emp" t-as="y">
+								<span align="left"><span t-field="y.job_id.name"/>: <img class="image" t-att-src="'data:image/png;base64,%s' %y.signature_image" style="height:70px;width:125px;"/> /<span t-field="y.name"/>/</span>
+							</t>
+						</div>
+					</t>
+	         	</t>		      
+	        </t>
+		</template>
+    </data>
+</openerp>

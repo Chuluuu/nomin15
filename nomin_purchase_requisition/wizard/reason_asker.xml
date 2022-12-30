@@ -1,0 +1,29 @@
+<openerp>
+<data>
+    	
+    <record model="ir.ui.view" id="nomin_purchase_requisition_asker_form">
+        <field name="name">nomin.purchase.requisition.asker.from</field>
+        <field name="model">nomin.purchase.requisition.asker</field>
+        <field name="arch" type="xml">
+            <form string="Write your reason">
+                <group>
+                    <field name="reason"/>
+                    <field name="description"/>
+                </group>
+                <footer>
+                    <button name="button_accept" type="object"
+                            string="Accept" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_reason_asker_purchase"
+                name="Write your reason"
+                res_model="nomin.purchase.requisition.asker"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"/>
+</data>
+</openerp>

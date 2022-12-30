@@ -1,0 +1,158 @@
+<openerp>
+<data>
+    	
+    <record model="ir.ui.view" id="sender_preparation_form">
+        <field name="name">sender.preparation.from</field>
+        <field name="model">sender.preparation</field>
+        <field name="arch" type="xml">
+            <form string="Write your reason">
+                <group colspan="8" col="8">
+		            <group colspan="4">
+
+                        
+                        <field name="is_same_company" invisible="1"/>
+                        <field name="transfer_date"/>
+                        <field name="department_id"/>
+                        <field name="type" />
+                        <field name="account_from" domain="[('department_id', '=', department_id)]"/>
+                        <field name="receiver_department_id" />    
+                        <field name="sender_account_receivable_id" domain="[('department_id', '=', department_id)]"/>
+                        <field name="sender_profit_account_id" domain="[('department_id', '=', department_id)]"/>
+                        <field name="sender_loss_account_id" domain="[('department_id', '=', department_id)]"/>
+                        <field name="sender_vat_account_id" attrs="{'invisible':[('is_same_company','=',True)],'required':[('is_same_company','=',False)]}"/>
+
+
+                        <field name="description"/>
+                    </group>
+                </group>
+
+                <footer>
+                    <button name="button_accept" type="object" confirm="Are you sure?"
+                            string="Accept" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_sender_preparation"
+                name="Хөрөнгийг илгээгч дансны цонх"
+                res_model="sender.preparation"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"/>
+
+
+
+
+    	
+    <record model="ir.ui.view" id="receiver_preparation_form">
+        <field name="name">receiver.preparation.from</field>
+        <field name="model">receiver.preparation</field>
+        <field name="arch" type="xml">
+            <form string="Write your reason">
+                <group colspan="8" col="8">
+		            <group colspan="4">
+
+
+
+                        <field name="is_same_company" invisible="1"/>
+                        <!-- <field name="transfer_date" readonly="1"/> -->
+                        <field name="department_id" readonly="1"/>
+                        <field name="type" readonly="1"/>
+<!-- 
+                        <field name="account_from" invisible="1"/> -->
+
+                        <field name="receiver_department_id"/>                       
+                        <field name="account_to" domain="[('department_id','=',receiver_department_id)]"/>
+                        <field name="receiver_depreciation_account_id" domain="[('department_id','=',receiver_department_id)]"/>
+                        <field name="receiver_vat_account_id" attrs="{'invisible':[('is_same_company','=',True)],'required':[('is_same_company','=',False)]}"/>
+                        <!-- <field name="receiver_vat_account_id" options="{'no_create': True}" /> -->
+                        <field name="receiver_account_payable_id" options="{'no_create': True}"  domain="[('department_id','=',receiver_department_id)]" />
+
+                        <field name="employee_id" options="{'no_create': True}" />
+                        <field name="receiver_employee_id" options="{'no_create': True}" />
+
+
+
+                        <field name="description"/>
+                    </group>
+                </group>
+
+                <footer>
+                    <button name="button_accept" type="object" confirm="Are you sure?"
+                            string="Accept" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_receiver_preparation"
+                name="Хөрөнгийг хүлээн авагч дансны цонх"
+                res_model="receiver.preparation"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"/>
+
+
+
+
+
+
+
+    <record model="ir.ui.view" id="prepare_transfer_request_form">
+        <field name="name">prepare.transfer.request.from</field>
+        <field name="model">prepare.transfer.request</field>
+        <field name="arch" type="xml">
+            <form string="Write your reason">
+
+                <group colspan="8" col="8">
+
+                    <!-- <field name="transfer_date"/> -->
+                    <field name="employee_id"
+                            options="{'no_quick_create': True, 'no_create_edit' : True,
+                        'no_create':True}" colspan="8"/>
+                    <field name="job_id" colspan="8" readonly="1"/>
+                    <field name="department_id" colspan="8" options="{ 'no_create':True}"/>
+                    
+                </group>
+                
+                <group colspan="8" col="8">
+                    <field name="type" colspan="8" />
+                    <field name="search_type" colspan="8" />
+                    <field name="search_string" colspan="8"  attrs="{'invisible':[('search_type','in',['all','by_account'])]}"/>
+                    <field name="account_from" colspan="8" attrs="{'invisible':[('search_type','not in','by_account')]}"/>
+                     <label string="Эд хөрөнгүүдийг бүгдийг нь эсвэл ихэнхийг нь" class="oe_inline" colspan="8"/>
+
+                    <field name="receiver_employee_id"
+                            options="{'no_quick_create': True, 'no_create_edit' : True,
+                        'no_create':True}" colspan="8"/>
+                   
+                    <field name="receiver_job_id" colspan="8" readonly="1"/>
+                    <field name="receiver_department_id" colspan="8" readonly="1"/>
+                    <field name="warning_type" invisible="1" colspan="8"/>
+                    <field name="no_customer_selection" invisible="1"/>
+                </group>
+
+
+                <footer>
+                    <button name="button_accept" type="object" confirm="Are you sure?"
+                            string="Accept" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_prepare_transfer_request"
+                name="Хөрөнгийг шилжүүлэх цонх"
+                res_model="prepare.transfer.request"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"/>
+
+
+
+</data>
+</openerp>

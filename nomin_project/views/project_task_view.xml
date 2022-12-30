@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    	<report 
+            string="Ажил хүлээлгэн өгөх хуудас" 
+            id="action_report_tarif_task_view" 
+            model="project.task" 
+            report_type="qweb-pdf"
+            name="nomin_project.report_tarif_task" 
+            file="nomin_project.report_tarif_task"
+        	/>
+    	
+    	<record id="paperformat_tarif_task" model="report.paperformat">
+		    <field name="name">Бараа хүлээлгэн өгөх хуудас</field>
+		    <field name="default" eval="True"/>
+		    <field name="orientation">Portrait</field>
+		    <field name="margin_top">5</field>
+		    <field name="margin_bottom">23</field>
+		    <field name="margin_left">2</field>
+		    <field name="margin_right">2</field>
+		    <field name="header_line" eval="False"/>
+		    <field name="header_spacing">35</field>
+		    <field name="dpi">90</field>
+		</record>
+		
+		<record id="nomin_project.action_report_tarif_task_view" model="ir.actions.report.xml">
+		    <field name="paperformat_id" ref="nomin_project.paperformat_tarif_task" />
+		</record>
+    	<record id="project.view_task_search_form" model="ir.ui.view">
+            <field name="name">project.task.search.form</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+               <search string="Tasks">
+                    <field name="name" string="Tasks"/>
+                    <field name="tag_ids"/>
+                    <field name="partner_id"/>
+                    <field name="project_id"/>
+                    <field name="user_id"/>
+                    <field name="date_deadline"/>
+                    <field name="department_id"/>
+                    <field name="task_state" string="Даалгаврын Tөлөв"/>
+                    <field name="task_type" string="Даалгаврын Tөрөл"/>
+                    <filter string="Хариуцагчид оноох" domain="[('user_id','=',False)]"/>
+                    <filter string="My Tasks" domain="[('user_id','=',uid)]"/>
+                    <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
+                    <separator/>
+                    <filter string="Unread Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/>
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+                        <filter string="Task" context="{'group_by':'name'}"/>
+                        <filter string="Assigned to" name="User" context="{'group_by':'user_id'}"/>
+                        <filter string="Stage" name="Stage" context="{'group_by':'task_state'}"/>
+                        <filter string="Company" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                        <separator/>
+                        <filter string="Last Message" name="group_message_last_post" context="{'group_by':'message_last_post:week'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+    	 <record id="project.view_task_form2" model="ir.ui.view">
+            <field name="name">project.task.form</field>
+            <field name="model">project.task</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <form string="Project">
+                    <header> 
+                    	<field name="task_state" widget="statusbar" string="Төлөв"/>
+                    	<field name="stage_id" widget="statusbar" invisible ="1"/>
+<!--                    	<button name="action_followers" string="dont click" type="object"/-->
+                    	
+                    	<button name="action_circle" string="Даалгавар давтаж үүсгэх" type="object"
+                    	attrs="{'invisible': ['|',('task_type','not in', ('normal')),('task_state','!=','t_new')]}"/>
+                    	<button name="action_cheapen" class="oe_highlight" string="Үнэ тохирох" type="object"
+						attrs="{'invisible': ['|',('task_type', 'not in', ('tariff_task','work_graph','work_task')),('task_state','!=','t_new')]}"/>
+                    	
+						<button name="action_cheapened" class="oe_highlight" string="Үнэ тохирсон" type="object"
+						attrs="{'invisible': ['|',('task_type', 'not in', ('tariff_task','work_graph','work_task')),'|',('task_state','!=','t_cheapen'),('is_customer_id','=',False)]}"/>
+						
+						<button name="action_user" class="oe_highlight" string="Хариуцагчид оноох" type="object" groups="project.group_project_user"
+						attrs="{'invisible': [('is_show_user_button','=',False)]}"/>
+						<button name="action_back_user" class="oe_highlight" string="Хариуцагчид буцаан оноох" type="object" groups="project.group_project_user" attrs="{'invisible': [('task_state','not in', ('t_control','t_confirm','t_evaluate','t_done','t_cancel','t_back'))]}"/>
+						<button name="action_start" class="oe_highlight" string="Эхлэх" type="object" 
+						attrs="{'invisible': ['|',('task_state','!=', 't_user'),('is_user_and_verifier','=',False)]}"/>
+						
+						<button name="action_to_confirm"  class="oe_highlight" string="Батлах шатанд оруулах" type="object" groups="project.group_project_user"
+						attrs="{'invisible': ['|',('task_type', 'not in', ('work_graph')),('task_state','!=','t_start')]}"/>
+						
+						<button name="action_to_evaluate" class="oe_highlight" string="Үнэлэх шатанд оруулах" type="object" groups="project.group_project_user"
+						attrs="{'invisible': [('is_show_evaluate_button','=', False)]}"/>
+						
+						<button name="action_to_control" class="oe_highlight" string="Хянах шатанд оруулах" type="object" groups="project.group_project_user"
+						attrs="{'invisible': ['|',('task_type','in',('work_graph','tariff_task')),('task_state','!=','t_start')]}"/>
+						
+						<button name="action_done" class="oe_highlight" string="Хянах" type="object"
+						attrs="{'invisible': ['|',('task_state','!=', 't_control'),('is_show_done','=', False)]}"/>
+																				
+						<button name="action_confirm" class="oe_highlight" string="Батлах" type="object" 
+						attrs="{'invisible': ['|',('task_type', 'not in', ('work_graph','work_task')),('is_show_confirm_user','=', False)]}"/>
+					
+						<button name="action_evaluate" class="oe_highlight" string="Үнэлэх" type="object"
+						attrs="{'invisible': ['|',('task_type', 'not in', ('tariff_task','work_graph','work_task')),('is_show_rating_user','=', False)]}"/>
+						 
+						<button name="action_cancel" class="oe_highlight" string="Цуцлах" type="object" groups="project.group_project_user"
+						attrs="{'invisible': [('task_state','not in',('t_cheapen','t_cheapened','t_user','t_start','t_back'))]}"/>
+						
+						<button name="action_after" class="oe_highlight" string="Хойшлуулах" type="object" groups="project.group_project_user"
+						attrs="{'invisible': [('task_state','not in',('t_cheapen','t_cheapened','t_user','t_start'))]}"/>
+						
+						<button name="action_back" class="oe_highlight" string="Буцаах" type="object" groups="project.group_project_user"
+						attrs="{'invisible': [('task_state','not in',('t_back'))]}"/>
+						
+						<button name="action_draft" class="oe_highlight" string="Ноорог" type="object" groups="project.group_project_user"
+						attrs="{'invisible': [('task_state','not in',('t_cancel'))]}"/>
+<!--						<button name="action_test" string="Тест" type="object"/-->
+<!--						<button name="trasnlate_date" string="FAST" type="object"/-->
+                    </header>
+                    <sheet string="Task">
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" groups="base.group_user"
+                                class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"
+                                options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <field name="kanban_state" widget="kanban_state_selection"/>
+                    <div class="oe_title">
+<!--                        <h1 class="o_row"-->
+						<h1> 
+                            <field name="priority" widget="priority"/>
+                            <field name="name" placeholder="Даалгаврын нэр..."  attrs="{'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}"/>
+						</h1>
+<!--                        </h1-->
+                    </div>
+                    <group>
+                        <group>
+                            <field name="progress" widget="progressbar" invisible="1"/>
+                            <field name="progress1" widget="progressbar"/>
+                            <field name="flow" attrs="{'readonly': [('task_state', 'in', ('t_new','t_cheapen','t_cheapened','t_user','t_confirm','t_evaluate','t_done','t_cancel'))]}"/>%
+							<field name="is_confirm" invisible="1"/>
+							<field name="is_rating" invisible="1"/>
+							<field name="is_user" invisible="1"/>
+                            
+							<field name="is_user_and_verifier" invisible="1"/>
+							<field name="is_show_rating_user" invisible="1"/>
+							<field name="is_show_confirm_user" invisible="1"/>
+							<field name="is_customer_id" invisible="1"/>
+                            <field name="is_task_user" invisible="1"/>
+							
+<!--							<field name="is_circle_task" invisible="1"/-->
+                            <field name="project_id" context="{'default_use_tasks':1}" attrs="{'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))],'required': True }" options="{'no_create': True}"/>
+                            <field name="project_stage" attrs="{'required': [('project_id', '!=', False)],'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}" options="{'no_create': True}"/>
+	                		<field name="task_verifier" attrs="{'invisible':[('is_task_user','!=',True)],'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}" options="{'no_create': True}"/>
+                            <field name="task_verifier_users" widget = "many2many_tags" attrs="{'invisible':[('is_task_user','=',True)],'required': [('is_task_user', '!=', True),('task_type','in',('work_task','normal'))]}" options="{'no_create': True}"/>
+	                		<field name="department_id" attrs="{'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}" options="{'no_create': True}"/>
+                            <field name="user_id"
+                                options="{'no_create': True}"
+                                on_change="onchange_user_id(user_id, context)" 
+                            	attrs="{ 'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}" 
+                            />
+                            <field name="customer_id" 
+	                			   attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph','tariff_task'))], 'required': [('task_type', 'in', ('work_task','work_graph','tariff_task'))],'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}" options="{'no_create': True}"/>
+                            <field name="customer_department" 
+	                			    attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph','tariff_task'))], 'required': [('task_type', 'in', ('work_task','work_graph','tariff_task'))], 'readonly':[('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}" options="{'no_create': True}"/>
+                            <field name="legend_blocked" invisible="1"/>
+                            <field name="legend_normal" invisible="1"/>
+                            <field name="legend_done" invisible="1"/>
+                            <field name="is_show_user_button" invisible="1"/>
+                            <field name="is_show_evaluate_button" invisible="1"/>
+                            <field name="is_show_done" invisible="1"/>
+                            
+                        </group>
+                        <group>
+<!--                        	<field name="before_task" attrs="{'invisible': [('is_circle_task', '=', False)]}"/-->
+	                		<field name="parent_task" attrs="{'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}" options="{'no_create': True}"/>
+	                		<field name="planned_start_date"/>
+                            <field name="planned_end_date"/>
+<!--	                		<field name="date_start" attrs="{'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}"/-->
+	                		<field name="task_date_start" />
+                            <field name="date_deadline" attrs="{'required': True}" />
+                            <field name="planned_hours" attrs="{'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}"/>
+                            <field name="ticket_id" attrs="{'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}"
+                            	groups="nomin_helpdesk.group_helpdesk_callman,nomin_helpdesk.group_helpdesk_responsible,nomin_helpdesk.group_helpdesk_manager,nomin_helpdesk.group_knowledge_manager"/>
+                            <field name="task_type" attrs="{'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}"/>
+<!--                            <field name="work_graph" domain="['&amp;',('task_type','=', 'work_graph'),('task_state','=','t_done')]" attrs="{'invisible':[('task_type', 'not in', ('work_task'))], 'required': [('task_type', 'in', ('work_task'))]}"/-->
+	                		<field name="controller" widget = "many2many_tags"
+	                				attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph'))], 'required': [('task_type', 'in', ('work_task','work_graph'))], 'readonly':[('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}" options="{'no_create': True}"/>
+	                		<field name="rating_users" widget = "many2many_tags" 
+	                			    attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph','tariff_task'))], 'required': [('task_type', 'in', ('work_task','work_graph','tariff_task'))], 'readonly':[('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}" options="{'no_create': True}"/>
+<!--	                		<field name="task_work_service" widget="many2many_tags"  -->
+<!--	                				attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph','tariff_task'))], 'readonly': [('task_state', 'not in', ('t_new','t_cheapen'))]}" options="{'no_create': True}"/>-->
+<!--	                		<field name="tariff_price"  attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph','tariff_task'))]}"/>-->
+<!--	                		<field name="agreed_price"  attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph','tariff_task'))], 'readonly': [('task_state', 'not in', ('t_new','t_cheapen'))]}"/>-->
+<!--	                		<field name="work_name" attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph'))], 'readonly': [('task_state', 'not in', ('t_new','t_cheapen'))]}"/>-->
+<!--	                		<field name="work_description" attrs="{'invisible':[('task_type','not in', ('work_task','work_graph'))], 'readonly': [('task_state', 'not in', ('t_new','t_cheapen'))]}"/>-->
+							<field name="tarif_line" attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph','tariff_task'))], 'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}">
+								<tree editable="bottom"> 
+									<field name="task_id" invisible="1"/>
+									<field name="work_id" required="1"/>
+									<field name="qty" required="1"/>
+									<field name="price" required="1" readonly="1"/>
+									<field name="total_price" required="1" sum="Нийт"/>
+									<field name="agreed_price" required="1" sum="Нийт"/>
+									<field name="description" required="1"/>	
+								</tree> 
+								<form> 
+									<group>
+										<group>
+											<field name="task_id" invisible="1"/>
+											<field name="work_id"/>
+											<field name="qty"/>
+											<field name="price"/>
+										</group>
+										<group>
+											<field name="total_price"/>
+											<field name="agreed_price"/>
+											<field name="description"/>	
+										</group>
+									</group>
+								</form> 
+							</field>
+                            <field name="tag_ids" widget="many2many_tags" attrs="{'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}" options="{'no_create': True}"/>
+                            <field name="done_date"/> 
+                     	</group>
+                    </group>
+                    <notebook>
+                        <page name="description_page" string="Description" >
+                            <field name="description" type="html" attrs="{'readonly': [('task_state', 'in', ('t_done'))]}"/>
+                            <div class="oe_clear"/>
+                        </page>
+
+                        <page name="Operation" attrs="{'invisible':[('task_type', '!=', 'work_task')], 'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}" string="Ажилбарууд" >
+                            <field name="operation_ids" attrs="{'readonly': [('task_state', 'in', ('t_control','t_confirm','t_evaluate','t_done','t_cancel'))]}">
+                                <tree editable="bottom">
+                                    <field name="name" required="1"/>
+                                    <field name="quantity" required="1"/>
+                                    <field name="uom_id" required="1"/>
+                                    <field name="material_claim" required="1"/>
+                                    <field name="description" required="1"/>
+                                </tree>
+                            </field>
+                            
+                            <button name="%(import_operation_task_view_action)d" attrs="{'invisible': [('task_state', 'in', ('t_control','t_confirm','t_evaluate','t_done','t_cancel'))]}" class="oe_highlight" string="EXCEL татах" type="action"  />
+                            
+                        </page>
+
+                        <page string="Extra Info" invisible="1">
+                            <group col="4">
+                                <group col="2">
+                                    <field name="sequence" groups="base.group_no_one"/>
+                                    <field name="partner_id"/>
+                                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                                </group>
+                                <group col="2">
+                                    <field name="date_assign" groups="base.group_no_one"/>
+                                    <field name="date_last_stage_update" groups="base.group_no_one"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Хянасан түүх">
+                            <field name="verify_user_ids" readonly="1">
+                                <tree>
+                                    <field name="employee_id"/>
+                                    <field name="date"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Баталсан түүх" attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph'))]}" >
+                			<field name="task_users" readonly="1">
+                				<tree string="Rating Employee">
+    								<field name="confirmer"/>
+    								<field name="role"/>
+    								<field name="date"/>
+     								<field name="state"/>
+                				</tree>
+                			</field>
+                		</page>
+                		<page string="Үнэлсэн түүх" attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph','tariff_task'))]}" >
+                			<field name="task_rating_users" readonly="1">
+                				<tree string="Rating Employee">
+    								<field name="confirmer"/>
+    								<field name="role"/>
+    								<field name="percent"/>
+    								<field name="date"/>
+     								<field name="state"/>
+                				</tree>
+                			</field>
+                			<group class="oe_subtotal_footer oe_right">
+                 				<field name="total_percent" readonly="1"  class="oe_subtotal_footer_separator" />
+                 			</group>
+                		</page>
+                        
+                		<page string="Дуусах хугацаа хойшилсон түүх">
+                			<field name="deadline_task" attrs="{'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}">
+                				<tree string="deadline" editable="bottom">
+                					<field name="task_id" invisible="1"/>
+    								<field name="reason_id" options="{'no_create': True}"/>
+    								<field name="description"/>
+    								<field name="count"/>
+                				</tree>
+                				<from>
+                					<group>
+	                					<field name="task_id" invisible="1"/>
+	                					<field name="reason_id"/>
+	    								<field name="description"/>
+	    								<field name="count"/>
+    								</group>
+                				</from>
+                			</field>
+                				<group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+    								<group>
+    									<field name="count_date_deadline"/>
+	    							</group>
+                       			</group>
+                		</page>
+                		<page string = "Хавсралтууд" attrs="{'invisible':[('task_type', 'not in', ('normal','tariff_task'))]}">
+                			<field name="document" attrs="{'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}">
+		                    	<tree string="Files">
+                                    <field name="name"/>
+                                    <field name="datas_fname" string="Файлын нэр"/>
+                                    <field name="datas" filename="datas_fname" string="Файл" readonly="1"/>
+                                    <field name="create_date" readonly="1"/>
+                                </tree> 
+                                <form>
+                                    <label for="name" class="oe_edit_only"/>
+                                    <h1>
+                                        <field name="name"/>
+                                    </h1>
+                                    <group string="Өгөгдөл">
+                                        <field name="type" invisible="1"/>
+                                        <field name="datas" string="Файл" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
+                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+                                    </group>
+                                </form>
+                            </field>
+                		</page>
+                		<page string = "Батлагдсан хавсралтууд" attrs="{'invisible':['|',('task_type', 'not in', ('work_task','work_graph')),('task_state','not in',('t_confirm','t_evaluate','t_done'))]}">
+                			<field name="work_document" attrs="{'readonly': [('task_state', 'in', ('t_evaluate','t_done','t_cancel'))]}">
+		                    	<tree string="Files" delete="false">
+                                    <field name="name"/>
+                                    <field name="datas_fname" string="Файлын нэр"/>
+                                    <field name="datas" filename="datas_fname" string="Файл" readonly="1"/>
+                                    <field name="create_date" readonly="1"/>
+                                </tree> 
+                                <form>
+                                    <label for="name" class="oe_edit_only"/>
+                                    <h1>
+                                        <field name="name"/>
+                                    </h1>
+                                    <group string="Өгөгдөл">
+                                        <field name="type" invisible="1"/>
+                                        <field name="datas" string="Файл" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
+                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+                                    </group>
+                                </form>
+                            </field>
+                		</page>
+                		<page string = "Хавсралтууд" attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph'))]}">
+                			<field name="document_line" attrs="{'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}">
+                				<tree>
+                					<field name="work_confirm_document">
+				                    	<tree string="Files">
+		                                    <field name="name"/>
+		                                    <field name="datas_fname" string="Файлын нэр"/>
+		                                    <field name="datas" filename="datas_fname" string="Файл" readonly="1"/>
+		                                    <field name="create_date" readonly="1"/>
+		                                </tree> 
+		                                <form>
+		                                    <label for="name" class="oe_edit_only"/>
+		                                    <h1>
+		                                        <field name="name"/>
+		                                    </h1>
+		                                    <group string="Өгөгдөл">
+		                                        <field name="type" invisible="1"/>
+		                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}" string="Файл"/>
+		                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+		                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+		                                    </group>
+		                                </form>
+	                                </field>
+	                                 <field name="invisible_botton" invisible ="1"/>
+	                                 <field name="is_confirmed" invisible ="1"/>
+	                               	 <button name="action_confirm" string="Батлах" type="object" attrs="{'invisible':['|',('is_confirmed','!=',False),('invisible_botton','=',False)]}"/>
+                                </tree>
+                                <form> 
+                                	<field name="invisible_botton" invisible ="1"/>
+                                	<field name="is_confirmed" invisible ="1"/>
+                                	<field name="work_confirm_document">
+                                		<tree string="Files">
+		                                    <field name="name"/>
+		                                    <field name="datas_fname" string="Файлын нэр"/>
+		                                    <field name="datas" filename="datas_fname" string="Файл" readonly="1"/>
+		                                    <field name="create_date" readonly="1"/>
+		                                </tree>
+		                                <form>
+		                                    <label for="name" class="oe_edit_only"/>
+		                                    <h1>
+		                                        <field name="name"/>
+		                                    </h1>
+		                                    <group string="Өгөгдөл">
+		                                        <field name="type" invisible="1"/>
+		                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}" string="Файл"/>
+		                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+		                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+		                                    </group>
+		                                </form>
+                                	</field>
+                                </form>
+                            </field>
+                		</page>
+                		<page string="Цагийн хуваарь">
+		                    <field name="timesheet_ids"  context="{'default_account_id' : analytic_account_id, 'default_is_timesheet' : 1}" 
+		                    	attrs="{'readonly': [('task_state', 'in', ('t_new','t_done'))]}">
+		                        <tree editable="bottom" string="Timesheet Activities" default_order="date">
+		                            <field name="date"/>
+		                            <field name="user_id" required="1"/>
+		                            <field name="name" string="Хийгдсэн ажил"/>
+		                            <field name="account_id" string="Төсөл" readonly="1"/>
+		                            <field name="unit_amount" string="Зарцуулсан цаг" sum="Total time" widget="float_time"/>
+		                            <field name="is_timesheet" invisible="1"/>
+		                        </tree>
+		                        <form>
+		                        	<group>
+			                        	<group>
+				                        	<field name="date"/>
+				                            <field name="user_id" required="1"/>
+				                            <field name="name" string="Хийгдсэн ажил"/>
+			                            </group>
+			                            <group>
+				                            <field name="account_id" string="Төсөл" readonly="1"/>
+				                            <field name="unit_amount" string="Зарцуулсан цаг" sum="Total time" widget="float_time"/>
+				                            <field name="is_timesheet" invisible="1"/>
+			                            </group>
+		                            </group>
+		                        </form>
+		                    </field>
+		                    <group>
+		                     <group class="oe_subtotal_footer oe_right" name="project_hours" groups="project.group_time_work_estimation_tasks">
+		                        <field name="effective_hours" widget="float_time" groups="project.group_time_work_estimation_tasks"/>
+		                        <field name="remaining_hours" widget="float_time" class="oe_subtotal_footer_separator" groups="project.group_time_work_estimation_tasks"/>
+		                     </group>
+		                    </group>
+		                </page>
+                    </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="project.view_task_kanban">
+            <field name="name">project.task.kanban</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <kanban  default_group_by="task_state" class="o_kanban_small_column">
+                    <field name="color"/>
+                    <field name="priority"/>
+                    <field name="stage_id" options='{"group_by_tooltip": {"description": "Stage Description", "legend_priority": "Use of stars"}}'/>
+                    <field name="user_id"/>
+                    <field name="user_email"/>
+                    <field name="description"/>
+                    <field name="sequence"/>
+                    <field name="remaining_hours" groups="project.group_time_work_estimation_tasks"/>
+                    <field name="date_deadline"/>
+                    <field name="message_needaction_counter"/>
+                    <field name="tag_ids"/>
+                    <field name="attachment_ids"/>
+                    <field name="displayed_image_id"/>
+                    <field name="active"/>
+                    <field name="legend_blocked"/>
+                    <field name="legend_normal"/>
+                    <field name="legend_done"/>
+                    <field name="task_state"/>
+                    <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+
+                            <div class="o_dropdown_kanban dropdown" groups="base.group_user">
+                                <a class="dropdown-toggle btn" data-toggle="dropdown" href="#" >
+                                    <span class="fa fa-bars fa-lg"/>
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                    <t t-if="widget.editable"><li><a type="set_cover">Set Cover Image</a></li></t>
+                                    <t t-if="widget.editable"><li><a type="edit">Edit Task</a></li></t>
+                                    <t t-if="widget.deletable"><li><a type="delete">Delete</a></li></t>
+                                    <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+                                </ul>
+                            </div>
+                            <div class="oe_kanban_content">
+                                <div>
+                                    <field name="tag_ids"/>
+                                </div>
+                                <div>
+                                    <strong><field name="name"/></strong>
+                                </div>
+                                <div class="text-muted">
+                                    <!-- <field name="project_id" invisible="context.get('default_project_id', False)"/> -->
+                                    <t t-if="record.date_deadline.raw_value and record.date_deadline.raw_value lt (new Date()) and record.task_state.raw_value != 't_done'" t-set="red">oe_kanban_text_red</t>
+                                    <span t-attf-class="#{red || ''}"><i><field name="date_deadline"/></i></span>
+                                </div>
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="priority" widget="priority"/>
+                                    <t t-if="record.message_needaction_counter.raw_value">
+                                        <span class='oe_kanban_mail_new' title='Unread Messages'><i class='fa fa-comments'/><t t-raw="record.message_needaction_counter.raw_value"/></span>
+                                    </t>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <img t-att-src="kanban_image('res.users', 'image_small', record.user_id.raw_value)" t-att-title="record.user_id.value" width="24" height="24" class="oe_kanban_avatar pull-right"/>
+                                    <div class="pull-left" groups="base.group_user">
+                                        <field name="kanban_state" widget="kanban_state_selection"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div t-if="record.displayed_image_id.value">
+                                <field name="displayed_image_id" widget="attachment_image"/>
+                            </div>
+                            <div class="oe_clear"></div>
+                        </div>
+                    </t>
+                    </templates>
+                </kanban>
+            </field>
+         </record>
+    	 <record id="project.view_task_tree2" model="ir.ui.view">
+            <field name="name">project.task.tree</field>
+            <field name="model">project.task</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <tree decoration-bf="message_needaction==True" decoration-danger="date_deadline and (date_deadline&lt;current_date) and task_state!='t_done'" decoration-success="task_state=='t_done'" string="Tasks">
+                    <field name="message_needaction" invisible="1"/>
+                    <field name="sequence" invisible="not context.get('seq_visible', False)"/>
+                    <field name="name" string="Даалгаврын нэр"/>
+                    <field name="task_type" invisible="1"/>
+                    <field name="project_id" invisible="context.get('user_invisible', False)"/>
+                    <field name="user_id" invisible="context.get('user_invisible', False)"/>
+                    <field name="date_deadline"/>
+                    <field name="planned_hours" invisible="1" groups="project.group_time_work_estimation_tasks" />
+                    <field name="date_deadline" invisible="context.get('deadline_visible',True)"/>
+                    <field name="tag_ids"/>
+                    <field name="task_state" string="Төлөв" invisible="context.get('set_visible',False)"/>
+                   	<field name="flow"/>
+                    <field name="stage_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="project.view_task_calendar" model="ir.ui.view">
+            <field name="name">project.task.calendar</field>
+            <field name="model">project.task</field>
+            <field eval="2" name="priority"/>
+            <field name="arch" type="xml">
+                <calendar color="user_id" date_start="date_deadline" string="Tasks">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="project.view_project_task_pivot" model="ir.ui.view">
+            <field name="name">project.task.pivot</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <pivot string="Project Tasks">
+                    <field name="project_id" type="col"/>
+                    <field name="task_state" type="row"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="project.view_project_task_graph" model="ir.ui.view">
+            <field name="name">project.task.graph</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <graph string="Project Tasks">
+                    <field name="project_id"/>
+                    <field name="task_state"/>
+                </graph>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="project_timesheet.view_task_form2_inherited">
+            <field name="name">project.task.form.inherited</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2" />
+            <field name="arch" type="xml">
+                <field name="tag_ids" position="after">
+                    <field name="analytic_account_id" invisible="1"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="project_timesheet.view_task_tree2_inherited" model="ir.ui.view">
+            <field name="name">project.task.tree.inherited</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_tree2" />
+            <field eval="0" name="priority"/>
+            <field eval="0" name="sequence"/>
+            <field name="arch" type="xml">
+                <field name="stage_id" position="after">
+                    <field name="progress" widget="progressbar" invisible="1"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="project.action_view_task" model="ir.actions.act_window">
+            <field name="name">Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">tree,kanban,form,calendar,gantt,pivot,graph</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="project.view_task_search_form"/>
+            <field name="help" type="html">
+                <p>
+                    Odoo's project management allows you to manage the pipeline of your tasks efficiently. You can track progress, discuss on tasks, attach documents, etc.
+                </p>
+            </field>
+        </record>
+        
+        <record id="project_extended_gantt" model="ir.ui.view">
+            <field name="name">project.task.extended.gantt</field>
+            <field name="type">gantt</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <gantt
+		          date_start="task_date_start"
+		          date_stop="date_deadline"
+		          progress="progress"
+		          string="Gantt"
+		          default_group_by="project_id" 
+               />
+            </field>
+        </record>
+        <delete model="ir.ui.menu" id="project.menu_project_task_user_tree" />
+    </data>
+</openerp>

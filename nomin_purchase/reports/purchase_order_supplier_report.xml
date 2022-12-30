@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+ 
+    
+    <record id="form_purchase_order_supplier_report_wizard_view" model="ir.ui.view">
+        <field name="name">Худалдан авалтын тайлан</field>
+        <field name="model">purchase.order.supplier.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Худалдан авалт тайлан">
+                <group>
+                    <group>
+                        <field name="report_type" string="Төрөл"/>
+                        <field name="summary_type" attrs="{'invisible':[('report_type','=','detailed')],'required':[('report_type','!=','detailed')]}"/>
+                        <field name="export_type" attrs="{'invisible':[('report_type','=','detailed')],'required':[('report_type','!=','detailed')]}" />
+                        
+                    </group>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                </group>
+
+                    <notebook>
+                        <page string="Нийлүүлэгч">
+                            <field name="partner_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Нийлүүлэгч ангилал">
+                            <field name="partner_categ_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Бараанууд">
+                            <field name="product_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Барааны ангилал" >
+                            <field name="category_ids" widget="many2many_tags"/>
+                        </page>
+                    </notebook>
+
+                     <footer>
+                        <button name="export_chart" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/>
+                        or
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+            </form>
+        </field>
+    </record>
+
+
+     <record model="ir.actions.act_window" id="action_purchase_order_supplier_report_wizard">
+            <field name="name">Худалдан авалт тайлан</field>
+            <field name="res_model">purchase.order.supplier.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <!-- <field name="view_id" ref="form_purchase_order_supplier_report_wizard_view"/> -->
+            <field name="target">new</field>
+        </record>
+
+
+
+    <menuitem name="Худалдан авалтын тайлан" id="menu_purchase_supplier_report_wizard" parent="nomin_purchase.parent_menu_purchase_report_wizard"
+            action="action_purchase_order_supplier_report_wizard" sequence="2" />
+    </data>
+</openerp>

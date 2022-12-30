@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="view_fingerprint_lottery" model="ir.ui.view">
+            <field name="name">fingerprint.lottery.tree</field>
+            <field name="model">fingerprint.lottery</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree string="Request Configure">
+                    <field name="sector_id"/>
+                    <field name="department_id"/>
+                    <field name="employee_id"/>
+                    <field name="finger_code"/>                    
+                    <field name="create_date"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_fingerprint_lottery_form" model="ir.ui.view">
+            <field name="name">request.config.form</field>
+            <field name="model">fingerprint.lottery</field>
+            <field name="arch" type="xml">
+                <form string="Request Configure">
+                    <group>
+                        <group>
+                             <field name="lastname"/>
+                            <field name="employee_id"/>
+                            <field name="phone"/>
+                            <field name="finger_code"/>
+                            
+                            
+                        </group>
+                        <group>
+                            <field name="job_id"/>
+                            <field name="department_id" options="{'no_create': True}"/>
+                            <field name="sector_id" options="{'no_create': True}"/>
+                            <field name="lottery_number"/>
+                            <field name="create_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Ирсэн зорилго/Асуудал">
+                            
+                            <field name="purpose" placeholder="Ирсэн зорилго" nolabel="1"/>
+                            
+                            <field name="issue" placeholder="Асуудал" nolabel="1"/>
+                        </group>
+                        <group string="Шийдвэрлэсэн тодорхойлолт">                        
+                            <field name="desc" placeholder="Шийдвэрлэсэн тодорхойлолт" nolabel="1"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+       
+        <record id="view_lotter_number_search" model="ir.ui.view">
+            <field name="name">fingerprint.lottery.search</field>
+            <field name="model">fingerprint.lottery</field>
+            <field name="arch" type="xml">
+                <search string="Request Configure">                    
+                    <field name="employee_id"/>
+                   <field name="finger_code"/>
+                   <field name="department_id"/>
+                   <field name="sector_id"/>
+               </search>
+            </field>
+        </record>
+
+        <record id="action_fingerprint_lottery" model="ir.actions.act_window">
+            <field name="name">Хурууны хээний сугалаа</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fingerprint.lottery</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_lotter_number_search"/>
+             <field name="context">{"search_default_object":1}</field>
+        </record>
+		<menuitem action="action_fingerprint_lottery"
+            id="menu_fingerprint_lottery" parent="menuitem_res_users_config_parent"
+            sequence="5"/>
+		
+            
+        
+        
+        
+    </data>
+</odoo>

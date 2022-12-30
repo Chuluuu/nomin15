@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <!-- Merge Opportunities  -->
+        <record model="ir.ui.view" id="action_tender_create_request">
+            <field name="name">action.create.tender.request</field>
+            <field name="model">action.create.tender.request</field>
+            <field name="arch" type="xml">
+                <form string="Tender">
+                    <field name="description" required="1"/>                    
+                    <footer>
+                        <button name="action_tender_request" type="object" string="Илгээх" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="action_tender_create_request_return">
+            <field name="name">action.tender.request</field>
+            <field name="model">action.create.tender.request.return</field>
+            <field name="arch" type="xml">
+                <form string="Tender">
+                    <field name="description" required="1"/>                    
+                    <footer>
+                        <button name="action_tender_return" type="object" string="Буцаах" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+       </data>
+</openerp>

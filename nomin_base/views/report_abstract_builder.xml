@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="abstract_report_builder">
+   
+    <t t-call="report.html_container">
+        <t t-call="report.internal_layout">
+            <div class="page abstract_report_builder">
+                <h2 t-esc="big_title()"/>
+
+                <div class="row" t-foreach="get_titles()" t-as="title">
+                    <div class="col-xs-9">
+                        <strong t-if="len(title.split(':')) > 1" t-esc="title.split(':')[0]"/>:
+                        <span t-if="len(title.split(':')) > 1" t-esc="':'.join(title.split(':')[1:])"/>
+                        <span t-if="len(title.split(':')) == 1">title</span>
+                    </div>
+                </div>
+
+                <br/><br/>
+                <table class="table table-condensed">
+                    <thead>
+                        <t t-set="i" t-value="0"/>
+                        <t t-set="j" t-value="0"/>
+                        <tr t-foreach="get_headers()" t-as="header">
+                            <t t-foreach="header" t-as="th">
+                                <t t-if="th is not None">
+                                <th t-esc="th" t-att-colspan="check_header_colspan(i,j,th)"
+                                    t-att-rowspan="check_header_rowspan(i,j,th)"/>
+                                </t>
+                                <t t-set="j" t-value="j + 1"/>
+                            </t>
+                            <t t-set="i" t-value="i + 1"/>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="get_rows()" t-as="row">
+                            <td t-foreach="row" t-as="col" >
+                                <div t-att-class="check_td_class(col)">
+                                <t t-set="col_rendered" t-value="False"/>
+                                <t t-if="not col_rendered and it_has(col,['bold','center'])">
+                                    <b><c><span t-esc="clear(col)"/></c></b>
+                                    <t t-set="col_rendered" t-value="True"/>
+                                </t>
+                                <t t-if="not col_rendered and it_has(col,['bold'])">
+                                    <b><span t-esc="clear(col)"/></b>
+                                    <t t-set="col_rendered" t-value="True"/>
+                                </t>
+                                <t t-if="not col_rendered and it_has(col,['center'])">
+                                    <c><span t-esc="clear(col)"/></c>
+                                    <t t-set="col_rendered" t-value="True"/>
+                                </t>
+                                <t t-if="not col_rendered">
+                                    <span t-esc="clear(col)"/>
+                                    <t t-set="col_rendered" t-value="True"/>
+                                </t>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </t>
+</template>
+<template id="abstract_report_builder_table_td_bold_center">
+    <b><c><t t-raw="col"/></c></b>
+</template>
+</data>
+</openerp>

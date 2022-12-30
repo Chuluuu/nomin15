@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!--         <record id="view_team_users_form_inherit" model="ir.ui.view">
+                <field name="name">res.users.form.inherit</field>
+                <field name="model">res.users</field>
+                <field name="inherit_id" ref="base.view_users_form"/>
+                <field name="arch" type="xml">
+            <xpath expr="//field[@name='groups_id']" position="after">
+                <field name="hr_allowed_team"/>
+            </xpath>
+                </field>
+        </record> -->
+        
+        <!-- <record id="view_product_form_inherit" model="ir.ui.view">
+                <field name="name">hr.employee.form.inherit</field>
+                <field name="model">hr.employee</field>
+                <field name="inherit_id" ref="nomin_hr.hr_hr_employee_view_form3"/>
+                <field name="arch" type="xml">
+    		<xpath expr="//field[@name='user_id']" position="after">
+    		    <field name="team_id"/>
+    		</xpath>
+                </field>
+        </record> -->
+
+         <record model="ir.ui.view" id="hr_team_form">
+           <field name="name">hr.team.form</field>
+           <field name="model">hr.team</field>
+           <field name="type">form</field>
+           <field name="arch" type="xml">
+        
+           <form string="Welcome text">
+            <header></header>
+            <sheet>
+                <group colspan="2"  col="2">
+                    <group colspan="2">
+                        <field name="name" />
+
+                    </group>
+                    <group colspan="2">
+                            <field name="department_id" options="{'no_create': True}"/>
+                    </group>
+                </group>
+               </sheet>
+               </form>
+           </field>
+       
+        </record>
+
+
+        <record id="hr_team_filter" model="ir.ui.view">
+            <field name="name">hr.team.search</field>
+            <field name="model">hr.team</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                    <field name="department_id"/>
+                    <group name="group_by" string="Group By">
+                        <filter name="filter_department" string="Department" domain="[]" context="{'group_by': 'department_id'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+       <record model="ir.ui.view" id="hr_team_sheet_tree">
+            <field name="name">hr.team.tree</field>
+            <field name="model">hr.team</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Team list">
+                        <field name="name"/>
+                        <field name="department_id"/>
+                    </tree>
+                </field>
+        </record>
+
+    <!--     <record id="open_module_tree_team" model="ir.actions.act_window">
+            <field name="name">Teams</field>
+            <field name="res_model">hr.team</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="hr_team_sheet_tree"/>
+            <field name="search_view_id" ref="hr_team_filter"/> 
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a team.
+              </p>
+            </field>
+        </record>-->
+
+        <!-- <menuitem
+            action="open_module_tree_team"
+            id="menu_hr_team_tree"
+            parent="nomin_base.dash_board_1"
+            sequence="15"/> -->
+    </data>
+</odoo>

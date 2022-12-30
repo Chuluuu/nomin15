@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="report_purchaseorder_document">
+            <t t-call="report.html_container">
+                <!-- <t t-set="o"/> -->
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.layout">
+                        <div class="page">
+                            <div style="font-family: 'Mon Arial';font-size: 10px;">
+<!--                             <div class="oe_structure"/> -->
+<!--                             <div class="row">
+                                <div class="col-xs-6">
+                                    <strong>Shipping address:</strong>
+                                    <div t-if="o.dest_address_id">
+                                        <div t-field="o.dest_address_id"
+                                            t-field-options='{"widget": "contact", "fields": ["address", "name", "phone", "fax"], "no_marker": true, "phone_icons": true}'/>
+                                    </div>
+
+                                    <div t-if="not o.dest_address_id and o.picking_type_id and o.picking_type_id.warehouse_id">
+                                        <span t-field="o.picking_type_id.warehouse_id.name"/>
+                                        <div t-field="o.picking_type_id.warehouse_id.partner_id"
+                                            t-field-options='{"widget": "contact", "fields": ["address", "phone", "fax"], "no_marker": true, "phone_icons": true}'/>
+                                    </div>
+                                </div>
+                                <div class="col-xs-5 col-xs-offset-1">
+                                    <div> <span t-field="o.partner_id"
+                                        t-field-options='{"widget": "contact", "fields": ["address", "name", "phone", "fax"], "no_marker": true, "phone_icons": true}'/>
+                                    </div>
+                                        <p t-if="o.partner_id.vat">VAT: <span t-field="o.partner_id.vat"/></p>
+                                </div>
+                            </div>
+ -->                        <div class="row">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <img class="image" t-att-src="'data:image/png;base64,%s' %o.user_id.company_id.blank_header_image"  style="height:150px;width:935px;"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <h1 t-if="o.state != 'draft'">Батлагдсан Худалдан авалт #<span t-field="o.name"/></h1>
+                            <h1 t-if="o.state == 'draft'">Худалдан авалт #<span t-field="o.name"/></h1>
+                            <br></br>
+                            <strong t-if="o.tender_id">Тендерийн нэр : <span t-field="o.tender_id.name"/>-<span t-field="o.tender_id.desc_name"/></strong>
+                            <p></p>
+<!--                             <div class="row mt32 mb32">
+                                <div t-if="o.name" class="col-xs-3" align="left" >
+                                    <strong>Захиалгын лавлагаа:</strong>
+                                    <p> <span t-field="o.name"/></p>
+                                </div>
+                                <div t-if="o.partner_ref" class="col-xs-3" >
+                                    <strong>Your Order Reference</strong>
+                                    <p> <span t-field="o.partner_ref"/>
+                                    </p>
+                                </div>
+                                <div t-if="o.date_order" class="col-xs-3" align="center">
+                                    <strong>Захиалгын огноо:</strong>
+                                    <p> <span t-field="o.date_order"/>
+                                    </p>
+                                </div>
+                                <div t-if="o.date_order" class="col-xs-3" align="right" >
+                                    <strong>Нийлүүлэгч:</strong>
+                                    <p> <span t-field="o.partner_id.name" />
+                                    </p>
+                                </div>
+                            </div> -->
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th><strong>Захиалгын лавлагаа:</strong></th>
+                                        <th><strong>Захиалгын огноо:</strong></th>
+                                        <th><strong>Нийлүүлэгч:</strong></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.name" align="center"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.date_order"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.partner_id.name"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br>
+                            </br>
+                            <br>
+                            </br>
+                            <br>
+                            </br> 
+                            <br>
+                            </br>
+                            <br>
+                            </br>
+ 
+
+
+
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th><strong>Барааны код</strong></th>
+                                        <th><strong>Барааны нэр</strong></th>
+                                        <th><strong>Тодорхойлолт</strong></th>
+                                        <th><strong>Татварууд</strong></th>
+                                        <th><strong>Огноо</strong></th>
+                                        <th><strong>Тоо хэмжээ</strong></th>
+                                        <th><strong>Нэгж үнэ</strong></th>
+                                        <th><strong>Дэд үнэ</strong></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.order_line" t-as="line">
+                                        <td>
+                                            <span t-field="line.product_id.product_code"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.product_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="', '.join(map(lambda x: x.name, line.taxes_id))"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-field="line.date_planned"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.product_qty"/>
+                                            <span t-field="line.product_uom.name" groups="product.group_uom"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.price_unit"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="line.price_subtotal"
+                                                t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="row" align="right">
+                                <div class="col-xs-4 pull-right">
+                                    <table class="table table-condensed">
+                                        <tr class="border-black">
+                                            <td><strong>Татваргүй дүн</strong></td>
+                                            <td class="text-right">
+                                                <span t-field="o.amount_untaxed"
+                                                    t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Татварууд</td>
+                                            <td class="text-left">
+                                                <span t-field="o.amount_tax"
+                                                    t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                            </td>
+                                        </tr>
+                                        <tr class="border-black">
+                                            <td><strong>Нийт дүн</strong></td>
+                                            <td class="text-left">
+                                                <span t-field="o.amount_total"
+                                                    t-field-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <br>
+                            </br>
+                            <br>
+                            </br>
+                            <br>
+                            </br> 
+                            <br>
+                            </br>
+                            <br>
+                            </br>
+
+<!--                             <table  style="padding-top: 0px;padding-left: 0px;padding-right: 0px;padding-bottom: 0px; font-size: 15px;">
+                                    <tr class="border-black">
+                                                <td align="left" width="100%">
+                                                    <span t-field="o.user_id.job_id.name"/><span>: </span>
+                                                    <span> / </span><span t-field="o.user_id.name"/><span> / </span>
+                                                </td> 
+                                    </tr>
+                            </table> -->
+<!--                             <div class="row">
+                                    <table style="text-transform: uppercase;width:100%;font-size: 15px;">
+                                            <tr style="text-align: center;">
+                                                <td style="width:45%;">
+                                                    <span t-field="o.user_id.job_id.name"/><span>: </span>
+                                                </td>
+                                                <td style="width:25%;">
+                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %o.control_employee.signature_image" style="height:100px;width:176px;"/>
+                                                </td>
+                                                <td style="width:30%;">
+                                                    <span> / </span><span t-field="o.user_id.name"/><span> / </span>
+                                                </td>
+                                            </tr>
+                                    </table>
+                            </div><br/> -->
+
+                            <div class="row">
+                                    <table  style="font-size: 11;font-family: 'Arial';padding-top: 0px;padding-left: 0px;padding-right: 0px;padding-bottom: 0px; font-size: 11px;">
+                    <t t-foreach="employees" t-as="e">
+                        <tr>
+
+                            
+                                     <td align="left" width="80%">
+                                        <span>Баталсан:</span>
+                                        
+                                        <span style="vertical-align:middle;" t-esc="e['employee'].job_id.name"/><span> </span><img class="image" t-att-src="'data:image/png;base64,%s' %e['employee'].signature_image" style="height:50px;width:100px;"/><span> / </span><span t-esc="e['employee'].name"/><span> / </span>
+                                        
+                                          <span t-esc="e['date']"    t-field-options='{"format":"YYYY.MM.dd"}' />
+                                        </td>
+                                                    
+                        </tr>
+                    </t>
+                </table>
+                            </div>
+                            <p t-field="o.notes"/>
+                            <div class="oe_structure"/>
+                        </div>
+                    </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_purchaseorder">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="nomin_purchase.report_purchaseorder_document"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</openerp>

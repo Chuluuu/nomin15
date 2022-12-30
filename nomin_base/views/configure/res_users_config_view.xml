@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="res_users_config_form" model="ir.ui.view">
+            <field name="name">res.users.config</field>
+            <field name="model">res.users.config</field>
+            <field name="arch" type="xml">
+                <form string="Res users">
+                    <sheet>
+                        <group>
+	                        <group>                                
+                                <field name="job_id"  required="1" options="{'no_create_edit': True}"  />
+                                
+	                        </group>
+                        	<group>
+                        		<field name="group_ids" options="{'no_create_edit': True}" required="0" widget="many2many_tags"/>
+                        	</group>
+                        </group>
+                        <notebook>
+                            <page string="Config line" invisible="1">
+                                <field name="line_ids">
+                                <tree >
+                                    <field name="department_id" options="{'no_create_edit': True}"/>
+                                    <field name="allowed_resources" options="{'no_create_edit': True}" widget="many2many_tags" />
+                                    <field name="group_ids" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                                </tree>
+                                <form>
+                                    <group>
+                                        <field name="department_id" options="{'no_create_edit': True}"/>
+                                    </group>
+                                    <group>
+                                        <field name="allowed_resources" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                                    </group>
+                                    <group>
+                                        <field name="group_ids" widget="many2many_tags" options="{'no_create_edit': True}"/>
+                                    </group>
+                                    <group colspan="1" col="2">
+                           
+                                        <separator string="Project Allowed Departments" colspan="2"/>
+                                        <field name="project_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        <separator string="Budget Allowed Departments" colspan="2"/>
+                                        <field name="budget_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        
+                                        <separator string="Payment Request Allowed Departments" colspan="2"/>
+                                        <field name="payment_request_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        
+                                        <separator string="Delivery Allowed Departments" colspan="2"/>
+                                        <field name="delivery_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        <separator string="Hr Allowed Departments" colspan="2"/>
+                                        <field name="hr_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        <separator string="Helpdesk Allowed Departments" colspan="2"/>
+                                        <field name="helpdesk_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        <separator string="Tender Allowed Departments" colspan="2"/>
+                                        <field name="tender_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        <separator string="Archive Allowed Departments" colspan="2"/>
+                                        <field name="archive_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        <separator string="Contract Allowed Departments" colspan="2"/>
+                                        <field name="allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        <separator string="Purchase Allowed Departments" colspan="2"/>
+                                        <field name="purchase_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        <separator string="Asset Lease Allowed Departments" colspan="2"/>
+                                        <field name="asset_lease_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        <separator string="Logistic Allowed Departments" colspan="2"/>
+                                        <field name="logistic_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        <separator string="Loans Request Allowed Departments" colspan="2"/>
+                                        <field name="loans_request_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        <separator string="HR-Allowed Departments" colspan="2"/>
+                                        <field name="salary_see_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                        <separator string="HR-Regulation Departments" colspan="2"/>
+                                        <field name="regulation_confirm_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                                    
+                                    </group>
+                                </form>
+                                </field>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record id="res_users_config_tree" model="ir.ui.view">
+            <field name="name">Хэрэглэгчийн тохиргоо</field>
+            <field name="model">res.users.config</field>
+            <field name="arch" type="xml">
+                <tree string="Config">
+                	<field name="job_id"/>
+                    
+                </tree>
+            </field>
+        </record>
+
+        <record id="res_users_config_filter" model="ir.ui.view">
+            <field name="name">res.users.config</field>
+            <field name="model">res.users.config</field>
+            <field name="arch" type="xml">
+                <search string="Config">
+                    <field name="job_id" string="Нэр"/>
+                    
+                </search>
+             </field>
+        </record>
+        
+        <record id="action_res_users_config" model="ir.actions.act_window">
+            <field name="name">Хэрэглэгчийн тохиргоо</field>
+            <field name="res_model">res.users.config</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="res_users_config_filter"/>
+        </record>
+
+        <record id="to_forbid_config_form" model="ir.ui.view">
+            <field name="name">to.forbid.config</field>
+            <field name="model">to.forbid.config</field>
+            <field name="arch" type="xml">
+                <form string="Res users">
+                    <sheet>
+                        <div >
+                            <h2 >
+                                <div>
+                                    <field name="config_name"/>
+                                </div>
+                            </h2>
+						</div>
+                        <notebook>      
+                            <page string="Хориг">
+                                <field name="line_ids">
+                                    <tree >   
+                                        <field name="job_id" options="{'no_create_edit': True}"/>                         
+                                        <field name="forbidden_resources" options="{'no_create_edit': True}"  widget="many2many_tags"/>                                        
+                                    </tree>
+                                    <form>  
+                                        <group>   
+                                            <group>   
+                                                <field name="job_id"/>   
+                                            </group>   
+                                            <group>              
+                                                <field name="forbidden_resources" options="{'no_create_edit': True}"  widget="many2many_tags" required="0"/>   
+                                            </group>                                         
+                                        </group>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Default групп">
+                                    <group>
+                                        <field name="group_ids" options="{'no_create_edit': True}"  widget="many2many_tags"/>
+                                    </group>
+                            </page>
+                            <page string="Зөвшөөрсөн нөөц">
+                                <group>
+                                    <group>
+                                        <p>Няраваас дээш албан тушаал</p>
+
+                                    </group>
+                                    <group>
+                                        <p>Няраваас доош албан тушаал</p>
+
+                                    </group>
+                                </group>
+
+                                <group>
+                                    <group>
+
+                                        <group>
+                                            <field name="sector_allowed_resources" options="{'no_create_edit': True}"  widget="many2many_tags"/>
+                                            <field name="department_allowed_resources" options="{'no_create_edit': True}"  widget="many2many_tags"/>
+                                        </group>
+                                    </group>
+                                    <group>
+
+                                        <group>
+                                            <field name="sector_allowed_resources_below" options="{'no_create_edit': True}"  widget="many2many_tags"/>
+                                            <field name="department_allowed_resources_below" options="{'no_create_edit': True}"  widget="many2many_tags"/>
+                                        </group>
+                                    </group>
+                                </group>    
+
+
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record id="to_forbid_config_tree" model="ir.ui.view">
+            <field name="name">Хоригийн тохиргоо</field>
+            <field name="model">to.forbid.config</field>
+            <field name="arch" type="xml">
+                <tree string="Config">
+                    <field name="config_name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="to_forbid_config_filter" model="ir.ui.view">
+            <field name="name">to.forbid.config</field>
+            <field name="model">to.forbid.config</field>
+            <field name="arch" type="xml">
+                <search string="Config">
+                    <field name="config_name"/>
+                </search>
+             </field>
+        </record>
+        
+        <record id="action_to_forbid_configuration" model="ir.actions.act_window">
+            <field name="name">Эрхийн ерөнхий тохиргоо</field>
+            <field name="res_model">to.forbid.config</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="to_forbid_config_filter"/>
+        </record>
+        
+        <menuitem 
+            id="menuitem_res_users_config_parent" name="Хэрэглэгчийн тохиргоо" parent="nomin_configure"
+            sequence="1" groups="group_config_manager"/>
+            
+        <menuitem
+            action="action_res_users_config"
+            id="menuitem_res_users_configur_child"
+            parent="menuitem_res_users_config_parent"
+            sequence="1"
+            groups="group_config_manager"/>
+        
+        <menuitem
+            action="action_to_forbid_configuration"
+            id="menuitem_to_forbid_configuration_menu"
+            parent="menuitem_res_users_config_parent"
+            sequence="2"
+            groups="group_config_manager,group_support_assistant"/>
+    </data>
+</openerp>

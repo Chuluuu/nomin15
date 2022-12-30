@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="mystyle" name="My style" inherit_id="website.assets_frontend">
+    <!-- <xpath expr="//link[last()]" position="after">-->
+    <xpath expr="." position="inside">
+		
+		<link href="/nomin_web/static/css/nomin.css" rel="stylesheet" type="text/less"/>
+		<!-- SUBSCRIBE трий бүтэц
+		<link href="/nomin_web/static/css/nomin_tree.css" rel="stylesheet" type="text/less"/>
+		<link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" />
+		 -->
+		<!-- <link href="/nomin_web/static/css/style.css" rel="stylesheet" type="text/less"/>-->
+		<link href="/nomin_web/static/css/responsive.css" rel="stylesheet" type="text/less"/>
+		<link href="/nomin_web/static/css/icons.css" rel="stylesheet" type="text/less"/>
+		<link href="/nomin_web/static/css/website.css" rel="stylesheet" type="text/less"/>
+		<!-- <script type="text/javascript" src="/web/static/lib/jquery/jquery.js" />--><!-- for erp jquery -->
+		
+		<!-- <script type="text/javascript" src="/nomin_web/static/js/plugins.js"></script>-->
+		<script src="/nomin_web/static/js/custom.js" type="text/javascript"></script>
+	    <!-- <script type="text/javascript" src="/nomin_web/static/js/context_tunnel.js"></script>-->
+	    
+        <!-- Datetime Picker -->
+        <link rel="stylesheet" href="/web/static/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css"/>
+        <script type="text/javascript" src="/web/static/lib/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+	</xpath>
+</template>
+</odoo>

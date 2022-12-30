@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template>
+	<div class="col-xs-12 col-sm-8 col-md-9">
+						
+						<ul class="tabs">
+							<li><a href="#details-tab1" class="active">Бараа</a></li>
+							<li><a href="#details-tab2">Ажил үйлчилгээ</a></li>
+							<li><a href="#details-tab3">Барилга байгууламж</a></li>
+							<li><a href="#details-tab4">Зөвлөх үйлчилгээ</a></li>
+						</ul><!-- tabs -->
+						
+						<ul id="detail-tab" class="tabs-content xss-mb">
+							<li id="details-tab1" class="active">
+								<ul class="detail-item">
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#" class="tender-title">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+								</ul>
+							</li><!-- tab content -->
+							
+							<li id="details-tab2">
+								<ul class="detail-item">
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+								</ul>
+							</li><!-- tab content -->
+							
+							<li id="details-tab3">
+								<ul class="detail-item">
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+								</ul>
+							</li><!-- tab content -->
+							
+							<li id="details-tab4">
+								<ul class="detail-item">
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+									<li class="clearfix">
+										<table class="table table-bordered table-striped mb-29">
+										
+											<tr>
+												<td colspan="4">
+													<a href="#">“Макс Групп”,түүний харъяа компаниудын тээвэр зуучийн үйлчилгээг 1 жилээс дээш хугацаанд гүйцэтгэж хамтран ажиллах компани сонгон шалгаруулах</a>
+												</td>
+											</tr>
+											<tr>
+												<td>Захиалагч:</td>
+												<td class="text-bold colored-text">Номин Холдинг ХХК</td>
+												<td>Нийтэлсэн:</td>
+												<td class="text-info">2015-11-09</td>
+											</tr>
+											<tr>
+												<td>Дугаар:</td>
+												<td class="text-info">Ws511047473</td>
+												<td>Эцсийн хугацаа:</td>
+												<td class="text-bold text-danger">2015-11-25</td>
+											</tr>
+			
+										</table>
+									</li>
+								</ul>
+							</li><!-- tab content -->
+
+						</ul><!-- end tabs -->
+						<div class="clear xss-mb"></div>
+					</div>
+		</template>
+</odoo>

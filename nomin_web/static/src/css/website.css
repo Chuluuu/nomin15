@@ -1,0 +1,39 @@
+header a.navbar-brand.logo {
+  padding: 0 15px;
+}
+header a.navbar-brand img {
+  max-height: 50px;
+}
+
+/* Top Header */
+.top-header {
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 16px;
+	background: #ffe92f;
+	color: red;
+}
+.top-header a {
+	color: red;
+	-webkit-transition: all 0.2s ease;
+	transition: all 0.2s ease;
+}
+.top-header a.btn {
+	color: #FFF;
+}
+.top-header-inner {
+	width: 100%;
+	padding: 2px 15px;
+}
+.header-phone {
+	position: relative;
+	float: left;
+	padding-top: 5px;
+	padding-left: 13px;
+}
+.header-phone i {
+	font-size: 14px;
+	position: absolute;
+	left: -7px;
+	top: 7px;
+}

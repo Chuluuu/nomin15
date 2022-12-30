@@ -1,0 +1,22 @@
+# -*- coding: utf-8 -*-
+import project_budget
+import project_v10
+import project_project
+import control_budget
+import rate_project_task
+import rate_project
+import project_task
+import create_project_ticket
+import project_issue
+import utilization_of_budget
+import create_purchase_requisition
+import contract_management
+import tender_inherit
+import import_task
+import import_control_budget
+import circle_task
+import import_operation_task
+import program_order
+import budget_partner_comparison
+import project_project_forecast
+import labor_cost_settings

@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="integration_config_form" model="ir.ui.view">
+            <field name="name">integration.config.form</field>
+            <field name="model">integration.config</field>
+            <field name="arch" type="xml">
+                <form string="Integration Configure">
+                    <sheet>
+                        <group col="4">
+                        	<field name="name"/>
+                            <field name="category"/>
+                            <field name="active" />
+                            <field name="connection_type"/>
+                            <field name="from_server_ips"/>
+                            <field name="integration_type"/>
+                            <field name="update_record_count"/>
+                            <field name="server_ip"/>
+                        </group>
+
+                        
+                        <group colspan="8" col="8">
+						    <group colspan="4">
+							    	<field name="token_url" />
+                                    
+						    </group>
+	                    </group>
+
+                    	 <group col="4">
+                                <field name="url_ids" colspan="4" nolabel="1" >
+						
+								    <tree string="Url" editable="bottom">
+                                        <field name="code" options="{'no_create': True}" />
+                                        <field name="model" options="{'no_create': True}" required = "1"/>
+									    <field name="server_ip" options="{'no_create': True}" />
+                                         
+									
+								    </tree>
+							    </field>
+                         </group> 
+
+                        <group colspan="8" col="8">
+						    <group colspan="4">
+							    	<field name="a1" />
+								    <field name="a2" />
+								    <field name="a3" />
+                                    <field name="a4" />
+                                    
+						    </group>
+	                    </group>
+                    </sheet>
+
+                    <!-- <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div> -->
+                </form>
+            </field>
+        </record>
+        
+        <record id="integration_config_tree" model="ir.ui.view">
+            <field name="name">integration.config.tree</field>
+            <field name="model">integration.config</field>
+            <field name="arch" type="xml">
+                <tree string="Integration Configure">
+                	<field name="name"/>
+                    <field name="server_ip"/>
+                    <field name="from_server_ips"/>
+                    <field name="category"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="integration_config_filter" model="ir.ui.view">
+            <field name="name">integration.config.filter</field>
+            <field name="model">integration.config</field>
+            <field name="arch" type="xml">
+                <search string="Search transfer request">
+                    <!-- <filter name="group_category_id" string="Категори" domain="[]" context="{'group_by':['category']}"/> -->
+                    <filter name="group_category_id" string="Категори" domain="[]" />
+               </search>
+            </field>
+        </record>
+        <record id="integration_config_action" model="ir.actions.act_window">
+            <field name="name">Integration</field>
+            <field name="res_model">integration.config</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_category_id': 1}</field>
+
+        </record>
+        
+        <!-- Calendar sync -->
+        <record id="calendar_sync_config_form" model="ir.ui.view">
+            <field name="name">calendar.sync.config</field>
+            <field name="model">calendar.sync.user</field>
+            <field name="arch" type="xml">
+                <form string="Sync user">
+                    <sheet>
+                        <group col="4">
+                            <field name="name"/>                                                   
+                        </group>
+                        <group>
+                            <field name="line_ids">     
+                                <tree editable="bottom">
+                                    <field name="user_id"/>
+                                    <field name="datetime" readonly="1"/>
+                                    <button name="action_sync" class="oe_highlight" string="Manual sync" type="object" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                    <!-- <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div> -->
+                </form>
+            </field>
+        </record>
+        
+        <record id="calendar_sync_config_tree" model="ir.ui.view">
+            <field name="name">calendar.sync.tree</field>
+            <field name="model">calendar.sync.user</field>
+            <field name="arch" type="xml">
+                <tree string="Integration Configure">
+                    <field name="name"/>                    
+                </tree>
+            </field>
+        </record>
+
+        <record id="calendar_sync_config_action" model="ir.actions.act_window">
+            <field name="name">Sync</field>
+            <field name="res_model">calendar.sync.user</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+
+        <record id="proactive_notification_form" model="ir.ui.view">
+            <field name="name">proactive.notification.form</field>
+            <field name="model">proactive.notification</field>
+            <field name="arch" type="xml">
+                <form string="Proactive notification">
+                    <header>
+                        
+                        <button string="Prepare sync items" name="prepare_sync_items" type="object" class="oe_highlight" />
+                        <button string="Sync prepared items" name="sync_prepared_items" states="need_a_solution" type="object" class="oe_highlight" />
+                        <button string="Cron job" name="cron_job_for_proactive_notifications" 
+                            attrs="{'invisible': ['|',('code','=','notification'),('state','!=','need_a_solution')]}" type="object" class="oe_highlight" />
+                        <field name="state" widget="statusbar"/>
+
+
+                    </header>    
+                    <sheet>
+
+                        <group colspan="8" col="8">
+                            <group colspan="4">
+                                <field name="name" readonly="1"/>
+                                <field name="model"/>
+                                <field name="integration_data_type" />
+                                <field name="active"/>
+                                
+                            
+
+
+                            </group>
+                            <group colspan="4">
+                                <field name="code"/>
+                                <field name="user_id"/>
+                                <field name="state" />
+                                <field name="allow_to_show_json"/>
+                                <field name="cron_trial_period"/>
+                                
+                            
+
+
+                            </group>                              
+                        </group>
+                        <notebook>
+                            <page string="Жагсаалт">
+                                <group colspan="4" col="4">
+                                    <field name="line_ids" >
+                                        <tree colors="red:state == 'open'; green:state == 'paid';" domain="[('state', '=', 'need_a_solution')]">
+                                            <field name="res_id"/>
+                                            <field name="res_id2"/>
+                                            <field name="res_id3"/>
+                                            <field name="state"/>
+                                            <field name="msg"/>
+                                        </tree>
+                                    </field>
+
+
+                                </group> 
+                            </page>
+                            <page string="Domain">
+                                <group colspan="8" col="8">
+                                    <group colspan="4">
+                                        <field name="domain"/>
+                                        <field name="sync_field_name"/>
+                                        <field name="delete_query"/>
+                                    </group>
+                                </group>
+                            </page>                            
+                            <page string="Instant python">
+                                <group colspan="8" col="8">
+                                    <group colspan="4">
+                                        <field name="python"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Python with SQL">
+                                <group colspan="8" col="8">
+                                    <group colspan="4">
+                                        <field name="python_with_sql"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Python for resend button">
+                                <group colspan="8" col="8">
+                                    <group colspan="4">
+                                        <field name="python_for_resend_button"/>
+                                        <field name="python_for_after_resend_button"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                        <group colspan="8" col="8">
+                                <group colspan="4">
+                                    <!-- <field name="a1" />
+                                    <field name="a2" />
+                                    <field name="a3" /> -->
+                                </group>
+                            </group>
+
+                            
+                        </sheet>
+
+                    <!-- <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div> -->
+                </form>
+            </field>
+        </record>
+
+        <record id="proactive_notification_tree" model="ir.ui.view">
+            <field name="name">proactive.notification.tree</field>
+            <field name="model">proactive.notification</field>
+            <field name="arch" type="xml">
+                <tree string="Integration Configuration">
+                    <field name="name"/>
+
+                    <field name="need_a_solution_count"/>
+                    <field name="state" invisible="1"/>
+                    <button string="Шийдэх" class="oe_stat_button"  name="sync_prepared_items" type="object"/>
+                    <field name="button_pressed_date"/>
+                    <field name="completed_count"/>
+                    <field name="total_count"/>
+                    <field name="no_need_count"/>
+                    <field name="model"/>
+                    <field name="user_id"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="proactive_notification_filter" model="ir.ui.view">
+            <field name="name">proactive.notification.filter</field>
+            <field name="model">proactive.notification</field>
+            <field name="arch" type="xml">
+                <search string="Search transfer request">
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="model" />
+                    <field name="user_id" />
+                    <filter name="state" string="Шийдэл хэрэгтэй" domain="[('state','=','need_a_solution')]"  />
+            </search>
+            </field>
+        </record>
+
+
+        <record id="proactive_notification_action" model="ir.actions.act_window">
+            <field name="name">Proactive notification</field>
+            <field name="res_model">proactive.notification</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_state':1}</field>
+
+
+        </record>
+  
+
+
+
+
+        <record id="proactive_line_form" model="ir.ui.view">
+            <field name="name">proactive.line.form</field>
+            <field name="model">proactive.line</field>
+            <field name="arch" type="xml">
+                <form string="Proactive line">
+                    <sheet>
+
+	                    <group colspan="8" col="8">
+		               		<group colspan="4">
+                                <field name="notification_id"/>
+                                <field name="res_id"/>
+                                <field name="res_id2"/>
+                                <field name="res_id3"/>
+                            
+
+
+				          	</group>
+		               		<group colspan="4">
+                                <field name="state"/>
+                                <field name="write_date"/>
+                                <!-- <button name="refresh_button" class="oe_highlight" string="integration" type="object" 
+                                attrs="{'invisible': [('notification_id', '=',False)]}"/> -->
+                                <button name="resend_button" class="oe_highlight" string="Resend" type="object" 
+                                attrs="{'invisible': [('notification_id', '=',False)]}"/>
+                            
+
+
+				          	</group>                              
+				     	</group>
+
+                    	 <group colspan="8" col="8">
+                            <field name="msg"/>
+                         </group> 
+
+                        <field name="json"/>
+			                
+                    </sheet>
+<!-- 
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div> -->
+                </form>
+            </field>
+        </record>
+        
+        <record id="proactive_line_tree" model="ir.ui.view">
+            <field name="name">proactive.line.tree</field>
+            <field name="model">proactive.line</field>
+            <field name="arch" type="xml">
+                <tree string="Integration Configuration">
+
+                    <field name="notification_id"/>
+                    <field name="res_id"/>
+                    <field name="state"/>
+                    <field name="write_date"/>
+                    <!-- <button name="refresh_button" string="integration" type="object" attrs="{'invisible': [('notification_id', '=',False)]}"/> -->
+                    <field name="msg"/>
+
+
+
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="proactive_line_filter" model="ir.ui.view">
+            <field name="name">proactive.line.filter</field>
+            <field name="model">proactive.line</field>
+            <field name="arch" type="xml">
+                <search string="Search transfer request">
+                    <field name="state" />
+                    <field name="res_id" />
+                    <filter name="state" string="Шийдэл хэрэгтэй" domain="[('state','in',['need_a_solution','tried'])]"  />
+                    
+                    <!-- <filter name="group_notification_id" string="Төрөл" domain="[]" context="{'group_by':['notification_id']}"/>
+                    <filter name="group_state" string="Төлөв" domain="[]" context="{'group_by':['state']}"/> -->
+
+                   <filter name="group_notification_id" string="Төрөл" domain="[]" />
+                    <filter name="group_state" string="Төлөв" domain="[]" />
+
+
+               </search>
+            </field>
+        </record>
+
+
+        <record id="proactive_line_action" model="ir.actions.act_window">
+            <field name="name">Proactive line</field>
+            <field name="res_model">proactive.line</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_notification_id': 1,'search_default_state':2}</field>
+
+        </record>
+  
+
+
+
+
+
+		<menuitem 
+            id="measure_menu" name="Хяналтын цонх" web_icon="mw_insurance,static/description/Insurance.png" groups="mw_insurance.group_insurance_user"
+            sequence="5"/>
+
+        <menuitem 
+            id="integration_config_menu" name="Шийдэх зүйлс" parent="measure_menu"
+            sequence="1" />
+            
+        <menuitem
+            name="Интэграц тохиргоо"
+            action="integration_config_action"
+            id="menu_integration_config_action"
+            parent="integration_config_menu"
+            sequence="14"
+            />
+
+
+        <menuitem 
+            id="dash_board_menu" name="Хяналтын Цонх" 
+            sequence="3"/>
+
+        <menuitem 
+            id="dash_board_1" name="Хяналтын Цонх" 
+            parent="dash_board_menu"
+            sequence="1"/>
+
+        <menuitem
+            action="proactive_notification_action"
+            name="Шийдэх зүйлсийн жагсаалт"
+            id="menu_proactive_notification_action"
+            parent="integration_config_menu"
+            sequence="3"/>
+
+
+
+        <menuitem
+            action="proactive_line_action"
+            id="menu_proactive_line_action"
+            parent="integration_config_menu"
+            sequence="7"/>
+
+<!-- 
+        <menuitem
+            action="calendar_sync_config_action"
+            id="menu_calendar_sync_config_action"
+            parent="integration_config_menu"
+            sequence="6"
+            /> -->
+
+
+
+
+
+
+        <!-- <record id="ir_cron_proactive_notification" model="ir.cron">
+            <field name="name">Sync proactive notification</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">20</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'proactive.notification'" name="model"/>
+            <field eval="'_cron_job_for_proactive_notifications'" name="function"/>
+        </record>
+ -->
+
+
+
+
+        <!-- <record id="ir_cron_transactional_data" model="ir.cron">
+            <field name="name">Sync transactional data</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">4</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall"/>
+            <field eval="'proactive.notification'" name="model"/>
+            <field eval="'_cron_job_for_transactional_data_integration'" name="function"/>
+        </record>
+
+
+        <record forcecreate="True" id="ir_cron_google_sync_specied_cals" model="ir.cron">
+            <field name="name">Google Calendar synchronization</field>
+            <field eval="False" name="active" />
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">2</field>
+            <field name="interval_type">minutes</field>
+            <field name="priority" eval="1" />
+            <field name="numbercall">-1</field>
+            <field eval="False" name="doall" />
+            <field eval="'calendar.sync.user'" name="model" />
+            <field eval="'_google_calendar_sync_cron'" name="function" />
+        </record> -->
+    </data>
+</openerp>

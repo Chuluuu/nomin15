@@ -1,0 +1,255 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+  		<record id="view_purchase_category_config_form" model="ir.ui.view">
+  			<field name="name">purchase.category.config</field>
+			<field name="model">purchase.category.config</field>
+			<field name="arch" type="xml">
+				<form string="Purchase category config">
+          <header>
+            <button name="action_change" string="Action change" type="object" invisible="1"/>
+            <button name="action_change_buyer" string="Change employee" type="object"/>
+          </header>
+					<sheet>
+						<group>
+							<group>
+								<field name="name" required="1"/>
+								<field name="user_id" required="1" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create':True}"/>
+                <field name="team_id"  required="1"/>
+                <field name="before_accountant_id" invisible="1"/>
+                <field name="new_accountant_id" invisible="1"/>					
+							</group>
+							<group>
+								<field name="category_ids"  required="1" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create':True}"/>
+								<field name="product_category_ids"  required="1" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create':True}"/>
+								<field name="department_ids"  required="1" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create':True}"/>
+							</group>
+						</group>
+					</sheet>
+					 <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+				</form>
+			</field>
+  		</record>
+
+		<record id="view_purchase_category_config_filter" model="ir.ui.view">
+			<field name="name">purchase.category.config</field>
+			<field name="model">purchase.category.config</field>
+			<field name="arch" type="xml">
+				<search string="Configs">
+					<field name="name" />
+					<field name="user_id" />
+					<field name="category_ids"/>
+					<field name="department_ids"/>
+				</search>
+				</field>
+			</record>
+
+
+
+  		<record id="view_purchase_category_config_tree" model="ir.ui.view">
+  			<field name="name">Барааны хувиарлалтын ангилалын тохиргоо</field>
+  			<field name="model">purchase.category.config</field>
+  			<field name="arch" type="xml">
+  				<tree string="Purcase plan">
+  					<field name="name"/>
+  					<field name="user_id"/>
+            <!-- <field name="before_accountant_id"/> -->
+
+  				</tree>
+  			</field>
+  		</record>
+
+  		<record id="action_purchase_category_config" model="ir.actions.act_window">
+  			<field name="name">Барааны хувиарлалтын ангилалын тохиргоо</field>
+  			<field name="res_model">purchase.category.config</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_type">form</field>
+			<field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="view_purchase_category_config_tree"/>
+		</record>
+      <!-- ASSIGN CATEGORY -->
+
+      <record id="view_assign_category_form" model="ir.ui.view">
+        <field name="name">assign.category</field>
+      <field name="model">assign.category</field>
+      <field name="arch" type="xml">
+        <form string="Purchase category">
+          <sheet>
+            <group>
+              <group>
+                <field name="name" required="1"/>
+                <field name="is_active"/>
+              </group>
+              <group>
+                <field name="product_type" required="1"/>
+                <field name="product_categ_ids" widget="many2many_tags"/>
+              </group>
+            </group>
+          </sheet>
+           <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+        </form>
+      </field>
+      </record>
+
+
+      <record id="view_assign_category_tree" model="ir.ui.view">
+        <field name="name">Ангилал</field>
+        <field name="model">assign.category</field>
+        <field name="arch" type="xml">
+          <tree string="Purcase plan">
+            <field name="name"/>
+          </tree>
+        </field>
+      </record>
+
+      <record id="action_assign_category" model="ir.actions.act_window">
+        <field name="name">Ангилал</field>
+        <field name="res_model">assign.category</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_type">form</field>
+      <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="view_assign_category_tree"/>
+    </record>
+
+    <!-- Харьцуулалт хийх ажилтны тохиргоо -->
+
+		<record id="view_comparison_employee_config_form" model="ir.ui.view">
+			<field name="name">comparison.employee.config</field>
+			<field name="model">comparison.employee.config</field>
+			<field name="arch" type="xml">
+			<form string="Purchase category">
+				<header>
+					<button name="action_change_employee" class="oe_highlight" type="object" string="Change employee"/>
+				</header>
+				<sheet>
+					<xpath expr="/form/sheet/field[@name='image']" position="before"> 
+						<div class="oe_button_box" name="button_box">
+							<button name="toggle_active" type="object"
+									class="oe_stat_button" icon="fa-archive">
+								<field name="active" widget="boolean_button"
+									options='{"terminology": "archive"}'/>
+							</button>
+						</div>
+					</xpath>
+					<group>
+						<group>
+							<field name="name" required="1"/>
+							<field name="user_id" required="1" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create':True}"/>
+						</group>
+						<group>
+							<field name="comparison_value" required="1"/>
+							<field name="category_ids" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create':True}"/>
+							<field name="product_category_ids" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create':True}"/>
+						</group>
+					</group>
+				</sheet>
+
+			</form>
+			</field>
+		</record>
+
+		<record id="view_omparison_employee_config_filter" model="ir.ui.view">
+			<field name="name">Харьцуулалт хийх ажилтны тохиргоо</field>
+			<field name="model">comparison.employee.config</field>
+			<field name="arch" type="xml">
+				<search string="Employees">
+					<field name="name" />
+					<field name="category_ids"/>
+					<filter string="Архивлагдсан" name="inactive" domain="[('active','=',False)]"/>
+					<group expand="0" string="Group By">
+						<filter string="Хэрэглэгч" context="{'group_by':'user_id'}"/>
+					</group>
+				</search>
+				</field>
+			</record>
+
+
+		<record id="view_comparison_employee_config_tree" model="ir.ui.view">
+			<field name="name">Харьцуулалт хийх ажилтны тохиргоо</field>
+			<field name="model">comparison.employee.config</field>
+			<field name="arch" type="xml">
+				<tree string="Comparison employee config">
+					<field name="name"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_comparison_employee_config" model="ir.actions.act_window">
+			<field name="name">Харьцуулалт хийх ажилтны тохиргоо</field>
+			<field name="res_model">comparison.employee.config</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_type">form</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+            <field name="search_view_id" ref="view_omparison_employee_config_filter"/>
+			<field name="view_id" ref="view_comparison_employee_config_tree"/>
+		</record>
+
+
+    ---------------------------------------------------------------------------
+
+     <record id="view_team_registration_form" model="ir.ui.view">
+        <field name="name">team.registration</field>
+		<field name="model">team.registration</field>
+		<field name="arch" type="xml">
+			<form string="Purchase category">
+				<sheet>
+					<group>
+						<group>
+							<field name="name" required="1"/>
+							<field name="code" required="1"/>
+						</group>
+					</group>
+				</sheet>
+				<div class="oe_chatter">
+					<field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+					<field name="message_ids" widget="mail_thread"/>
+				</div>
+			</form>
+		</field>
+      </record>
+
+
+		<record id="view_team_registration_tree" model="ir.ui.view">
+			<field name="name">Багийн бүртгэл</field>
+			<field name="model">team.registration</field>
+			<field name="arch" type="xml">
+				<tree string="Purcase plan">
+					<field name="name"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_team_registration" model="ir.actions.act_window">
+			<field name="name">Ангилал</field>
+			<field name="res_model">team.registration</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_type">form</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_id" ref="view_team_registration_tree"/>
+		</record>
+
+		<menuitem id="menu_team_registration" name="Багийн бүртгэл"
+			parent="purchase.menu_purchase_config"  action="action_team_registration" groups="nomin_purchase_requisition.group_procurement_admin" sequence="3" />
+
+		<menuitem id="menu_assign_category" name="Ангилал" groups="purchase.group_purchase_manager"
+			parent="purchase.menu_purchase_config"  action="action_assign_category" sequence="2" />
+
+		<menuitem id="menu_purchase_category_config" name="Барааны хувиарлалтын ангилалын тохиргоо"
+			parent="purchase.menu_purchase_config"  action="action_purchase_category_config" groups="nomin_purchase_requisition.group_procurement_admin" sequence="1" />
+
+		<menuitem id="menu_comparison_employee_config" name="Харьцуулалт хийх ажилтны тохиргоо"
+			parent="purchase.menu_purchase_config"  action="action_comparison_employee_config" sequence="4" />
+
+
+  	</data>
+ </openerp>

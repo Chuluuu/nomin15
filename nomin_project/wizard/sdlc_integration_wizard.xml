@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data> 
+    	<!-- Төслийн үе шат -->
+    	<record id="sdlc_integration_view" model="ir.ui.view">
+            <field name="name">sdlc.integration.form</field>
+            <field name="model">sdlc.integration</field>
+            <field name="arch" type="xml">
+        		<form > 
+        			<group col="4">
+        				<group colspan="2">
+        					<field name="date_from"/>
+							<field name="type" required="1"/>
+        				</group> 
+						<group colspan="2">
+        					<field name="date_to"/>	        
+							<field name="is_unauthorized" invisible="1"/>		
+							<field name="is_unauthorized_error"	invisible="1"/>
+        				</group> 
+						<group colspan="4">
+						    <div class="pull-left" attrs="{'invisible':['|',('is_unauthorized','=',True),('is_unauthorized_error','=',True)]}">
+                            	<h2 ><font color="blue">http://sdlc.nomin.net/my/access_token цэс рүү ороод API түлхүүр үгээ аван доор хуулж тавина уу. </font></h2>
+                        	</div>
+							<div class="pull-left" attrs="{'invisible':[('is_unauthorized_error','=',False)]}">
+                            	<h2 ><font color="red">Access token хүчингүй болсон байна! http://sdlc.nomin.net/my/access_token цэс рүү ороод API түлхүүр үгээ аван доор хуулж тавина уу. </font></h2>
+                        	</div>
+						</group>
+						<group colspan="4">
+							<field name="access_token" attrs="{'invisible':[('is_unauthorized','=',True)],'required':[('is_unauthorized','=',False)]}"/>
+						</group>
+        			</group>
+					<button name="export_report" class="oe_highlight" string="Татах" attrs="{'invisible':[('type','=','update')]}" type="object" />
+        			<button name="action_update_sdlc" class="oe_highlight" string="SDLC шинэчлэх" attrs="{'invisible':[('type','!=','update')]}" type="object" />
+					<button string="Cancel" class="oe_link" special="cancel" />
+    			</form>
+            </field>
+        </record>
+        
+       <record id="action_sdlc_integration" model="ir.actions.act_window">
+			<field name="name">action.sdlc.integration</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">sdlc.integration</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>	
+			<field name="view_id" ref="sdlc_integration_view"/>		
+			<field name="context">{}</field>
+			<field name="target">new</field>
+		</record>
+
+		<menuitem action="action_sdlc_integration" sequence="99" name="SDLC интеграци" id="sdlc_integration_menu" parent="project.menu_project_management" groups="project.group_program_admin,project.group_project_manager"/>  		
+	</data>
+</odoo>

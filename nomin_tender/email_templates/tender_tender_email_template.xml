@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<openerp>
+    <data>
+        <record id="tender_state_change_followers_email_template" model="mail.template">
+            <field name="name">Тендерийн мэдээлэл</field>
+            <field name="email_from">${(user.company_id.email or '')|safe}</field>
+            <field name="subject">"${ctx["name"]}" дугаартай "${ctx["desc_name"]}" тендер “${ctx["state"]}” төлөвт орлоо.</field>
+            <field name="email_to">${object.email|safe}</field>
+            <field name="lang">${object.lang}</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<p>
+Сайн байна уу?, ${object.name}, </br> Танд энэ өдрийн мэндийг хүргэе.
+</p>
+<p>
+<b>${ctx["name"]} дугаартай "${ctx["desc_name"]}" тендер “${ctx["state"]}” төлөвт орлоо.</b>
+</p>
+<ul>
+    <li>Тендерийн дугаар: <b>${ctx["name"]}</b></li>
+    <li>Тендерийн нэр: <b>${ctx["desc_name"]}</b></li>
+    <li>Тендерийн ангилал: <b>${ctx["type_name"]}</b></li>
+    <li>Тендерийн дэд ангилал: <b>${ctx["child_type"]}</b></li>
+    <li>Товлосон захиалгын огноо: <b>${ctx["ordering_date"]}</b></li>
+    <li>Төлөв: <b>${ctx["state"]}</b></li>
+</ul>
+<p>
+    Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["desc_name"]}</b></a>
+    тендерийн мэдээллийг <b>${ctx["menu_path"]}</b> цонхоор дамжин харна уу. 
+</p>
+
+<pre>
+-- 
+Энэхүү мэйл нь ERP системээс автоматаар илгээгдэж буй тул хариу илгээх шаардлагагүй.
+</pre>
+<p>
+    Баярлалаа,
+</p>
+
+            ]]></field>
+        </record>
+
+        <record id="tender_tender_closed_state_email_template" model="mail.template">
+        	<field name="name">Тендер хаах</field>
+            <field name="email_from">${(user.company_id.email or '')|safe}</field>
+            <field name="subject">${ctx["name"]} дугаартай "${ctx["desc_name"]}" тендерийн материал хүлээн авах хугацаа дууслаа.</field>
+            <field name="email_to">${object.email|safe}</field>
+            <field name="lang">${object.lang}</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<p>
+Сайн байна уу?, <b>${object.name}</b>, Танд энэ өдрийн мэндийг хүргэе.</p>
+<p>
+<b>${ctx["name"]} дугаартай "${ctx["desc_name"]}" тендерийн материал хүлээн авах хугацаа дууслаа. Тендерийг дараагийн төлөвт шилжүүлнэ үү.</b></p>
+<ul>
+    <li>Тендерийн дугаар: <b>${ctx["name"]}</b></li>
+    <li>Тендерийн нэр: <b>${ctx["desc_name"]}</b></li>
+    <li>Тендерийн ангилал: <b>${ctx["type_name"]}</b></li>
+    <li>Тендерийн дэд ангилал: <b>${ctx["child_type"]}</b></li>
+    <li>Товлосон захиалгын огноо: <b>${ctx["ordering_date"]}</b></li>
+    <li>Төлөв: <b>${ctx["state"]}</b></li>
+</ul>
+<p>
+	Та <b><a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["desc_name"]}</b></a></b> 
+	тендерийн мэдээллийг <b>${ctx["menu_path"]}</b> цонхоор дамжин харна уу.
+</p>
+<pre>
+-- 
+Энэхүү мэйл нь ERP системээс автоматаар илгээгдэж буй тул хариу илгээх шаардлагагүй.
+</pre>
+<p>
+    Баярлалаа,
+</p>
+			]]></field>
+        </record>
+        
+    </data>
+</openerp>

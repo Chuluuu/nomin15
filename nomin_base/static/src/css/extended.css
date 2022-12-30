@@ -1,0 +1,26 @@
+
+
+.openerp .oe_form_sheet_width {
+  min-width: 650px;
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+.openerp .oe_popup_search .oe_searchview {
+    float: left;
+    width: 500px;
+}
+
+.openerp .ui-dialog-content .oe_popup_list_pager {
+    float: left;
+    margin: 2px 0 2px 3px;
+}
+
+.openerp .oe_leftbar {
+    width: 18%;
+}
+
+.openerp .oe_secondary_submenu .oe_secondary_submenu li {
+    margin-left: 10px;
+}
+

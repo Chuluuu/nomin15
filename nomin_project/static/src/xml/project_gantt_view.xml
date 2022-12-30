@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="nomin_project.project_forecast_widget">
+          
+            <span t-if='widget.project_id' t-raw="widget.project_id"/>      
+                 
+        
+        
+    	 <div id="embedded-Gantt">
+                
+    </div>
+    </t>
+     
+</templates>

@@ -1,0 +1,956 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		
+		<!-- Tender rate tree view -->
+		<record id="view_tender_rate_tree" model="ir.ui.view">
+            <field name="name">tender.rate.tree</field>
+            <field name="model">tender.rate</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Tender Rate Tree">
+                	<field name="name"/>
+                	<field name="parent_id"/>
+                	<field name="default_max_value"/>
+                	<field name="default_avg_value"/>             	
+                </tree>
+            </field>
+        </record>
+		
+        <!-- Tender rate form view -->
+        <record id="view_tender_rate_form" model="ir.ui.view">
+            <field name="name">tender.rate.form</field>
+            <field name="model">tender.rate</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Tender Rate Form">
+                	<sheet>
+	                	<group col="4">
+		                	<field name="name"/>
+                            <field name="parent_id"/>
+		                	<field name="default_max_value"/>
+		                	<field name="default_avg_value"/>
+	                	</group>
+	                	<notebook>
+	                        <page string="Childs">
+	                            <field name="child_ids" readonly="1" nolabel="1"/>
+	                        </page>
+	                    </notebook>
+                	</sheet>
+					<div class="oe_chatter">
+			            <field name="message_follower_ids" widget="mail_followers"/>
+			            <field name="message_ids" widget="mail_thread"/>
+	             	</div>
+                </form>
+            </field>
+        </record>
+        
+		<!-- Tender type rate max tree view -->
+		<record id="view_tender_type_rate_max_tree" model="ir.ui.view">
+            <field name="name">tender.type.rate.max.tree</field>
+            <field name="model">tender.type.rate.max</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Tender type rate max Tree">
+                	<field name="rate_id"/>
+                	<field name="tender_type_id"/>
+                	<field name="max_value"/>             	
+                </tree>
+            </field>
+        </record>
+		
+        <!-- Tender rate form view -->
+        <record id="view_tender_type_rate_max_form" model="ir.ui.view">
+            <field name="name">tender.type.rate.max.form</field>
+            <field name="model">tender.type.rate.max</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Tender type rate max Form">
+                	<sheet>
+	                	<group col="4">
+		                	<field name="rate_id" required="1"/>
+		                	<field name="tender_type_id" required="1"/>
+		                	<field name="max_value" required="1"/>
+	                	</group>
+                	</sheet>
+					<div class="oe_chatter">
+			            <field name="message_follower_ids" widget="mail_followers"/>
+			            <field name="message_ids" widget="mail_thread"/>
+	             	</div>
+                </form>
+            </field>
+        </record>
+        
+<!--         <record id="view_tender_type_inherit_form" model="ir.ui.view">
+            <field name="name">tender.type.inherit.form</field>
+            <field name="model">tender.type</field>
+	        <field name="type">form</field>
+            <field name="inherit_id" ref="nomin_tender.view_tender_type_form" />
+            <field name="arch" type="xml">
+            	<xpath expr='//field[@name="child_ids"]' position="after">
+                    <page string="Rates">
+					    <field name="rate_max_ids">
+					        <tree editable="bottom">
+					            <field name="rate_id"/>
+					            <field name="max_value" sum="Total"/>
+					        </tree>
+					    </field>
+					</page>
+				</xpath>
+            </field>
+        </record>
+         -->
+		<!-- Тендерийн үнэлгээ жагсаалт-->
+        <record id="view_tender_valuation_tree" model="ir.ui.view">
+            <field name="name">tender.valuation.tree</field>
+            <field name="model">tender.valuation</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Tender Valuation Tree">
+                	<field name="tender_id"/>
+                	<field name="name"/>
+                	<field name="valuation_partner_ids"/>
+                	<field name="valuation_employee_ids"/>
+                	<field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Тендерийн үнэлгээ дэлгэц-->
+        <record id="view_tender_valuation_form" model="ir.ui.view">
+            <field name="name">tender.valuation.form</field>
+            <field name="model">tender.valuation</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Tender Valuation Form">
+                	<header>
+                		<button name="action_confirm" states="draft" string="Allow Valuation" class="btn-primary" type="object" groups="nomin_tender.group_tender_manager"/>
+                		<button name="action_update" states="open" string="Үнийн санал шинэчлэх" class="btn-primary" type="object" groups="nomin_tender.group_tender_secretary"/>
+                		<!-- <button name="action_done" states="open" string="Done Valuation" class="btn-primary" type="object" groups="nomin_tender.group_tender_manager"/> -->
+                		<button name="action_approved" states="completed" string="Approved" class="btn-primary" type="object" groups="nomin_tender.group_tender_manager"/>
+                		<button name="action_back_open" states="completed" string="Action back open" class="btn-primary" type="object" groups="nomin_tender.group_tender_manager"/>
+                		<field name="state" widget="statusbar"/>
+                	</header>
+                	<sheet>
+	                	<label for="name" class="oe_edit_only" string="Valuation Code / Name"/>
+	                    <h1>
+	                        <field name="name" class="oe_inline" placeholder="Valuation Name" style="width: 8em" required="1" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
+	                    </h1>
+	                	<group>
+		                	<field name="tender_id" required="1" readonly="1"/>
+		                	<field name="confirm_date" invisible="1"/>
+                            <field name="is_choose" colspan="2" invisible="1"/>
+	                	</group>
+	                	<notebook>
+	                		<page string="Valuation Partners">
+	                			<separator string="Valuation Partners"/>
+			                	<field name="valuation_partner_ids" colspan="4" nolabel="1" create="false" delete="false">
+			                		<tree string="Valuation Partners" create="false" delete="false" colors="red:(total_value == 0) and state in ('draft','open');blue:(is_win == False) and state in ('draft','open');green:state in ('completed','approved')" default_order="total_value desc">
+			                			<field name="partner_id"/>
+	                                    <field name="participant_id"/>
+			                			<field name="tender_id" invisible="1"/>
+	                                    <field name="tender_valuation_id" invisible="1"/>
+	                                    <field name="employee_partner_ids"/>
+	                                    <field name="total_value" sum="Нийт дүн"/>
+			                            <field name="state" invisible="1"/>
+			                            <field name="is_win" invisible="1"/>
+			                            <field name="is_choose" invisible="1"/>
+			                            <button icon="terp-rating-rated" attrs="{'invisible':['|',('is_win','!=',True),('state','!=','approved')]}"/>
+			                		</tree>
+			                		<form string="Valuations Partner">
+	                                    <group col="4" colspan="4">
+			                				<field name="tender_id" colspan="2" readonly="1"/>
+	                                        <field name="tender_valuation_id" colspan="2" readonly="1"/>
+	    		                			<field name="partner_id" colspan="2" readonly="1"/>
+	    		                			<field name="participant_id" readonly="1"/>
+	                                        <field name="total_value" invisible="1"/>
+	                                    </group>
+                                   		<separator string="Employee Valuations"/>
+                                        <field name="employee_partner_ids" colspan="4" nolabel="1">
+                                        	<tree string="Valuation of Employee" create="false" delete="false">
+				                                <field name="employee_valuation_id" invisible="1"/>
+				                                <field name="employee_id"/>
+					                			<field name="tender_id" invisible="1"/>
+				                                <field name="tender_valuation_id" invisible="1"/>
+				                                <field name="tender_valuation_partner_id"/>
+				                                <field name="partner_id" invisible="1"/>
+				                                <field name="line_ids"/>
+				                                <field name="avg_value" sum="Нийт дүн"/>
+				                                <field name="total_value" sum="Нийт дүн"/>
+					                		</tree>
+					                		<form string="Valuation of Employee">
+					                			<group col="4" colspan="4">
+													<field name="employee_id" colspan="4" readonly="1" required="1"/>
+													<field name="partner_id" colspan="4" readonly="1" required="1"/>
+													<field name="state" colspan="4" invisible="1"/>
+												</group>
+												<separator for="line_ids" string="Rates Valuation line" colspan="4"/>
+												<field name="line_ids" colspan="4">
+													<tree string="Valuation line" create="false" delete="false" editable="false">
+							                			<field name="tender_id" invisible="1"/>
+						                                <field name="tender_valuation_id" invisible="1"/>
+						                                <field name="employee_valuation_id" invisible="1"/>
+						                                <field name="employee_partner_id" invisible="1"/>
+						                                <field name="employee_id" invisible="1"/>
+						                                <field name="tender_valuation_partner_id" invisible="1"/>
+						                                <field name="partner_id" invisible="1"/>
+						                                <field name="rate_id" readonly="1"/>
+						                                <field name="condition" readonly="1" invisible="1"/>
+						                                <field name="max_value" string="Боломжит дээд оноо" sum="Нийт дүн" invisible="0"/>
+						                                <field name="rate_value" sum="Нийт дүн" required="1" attrs="{'readonly': [('state', 'not in', ['open'])], 'required': [('state', 'in', ['open'])]}"/>
+						                                <field name="comment" attrs="{'readonly': [('state', 'not in', ['open'])]}"/>
+						                                <field name="state" invisible="1"/>
+							                		</tree>
+							                		<form string="Valuation line">
+							                			<group>
+							                				<field name="tender_id" invisible="1" required="1"/>
+							                                <field name="tender_valuation_id" invisible="1" required="1"/>
+							                                <field name="employee_valuation_id" invisible="1" required="1"/>
+							                                <field name="employee_partner_id" invisible="1" required="1"/>
+							                                <field name="employee_id" invisible="1" required="1"/>
+							                                <field name="partner_id" invisible="1" required="1"/>
+							                                <field name="max_value" invisible="1" required="1"/>
+															<field name="tender_valuation_partner_id" required="1" readonly="1"/>
+															<field name="rate_id" required="1" readonly="1"/>
+															<label for="rate_value" string="Rate Value"/>
+															<div>
+																<field name="condition" nolabel="1" class="oe_inline"/>
+								                                <field name="rate_value" nolabel="1" class="oe_inline" required="1" attrs="{'readonly': [('state', 'not in', ['open'])], 'required': [('state', 'in', ['open'])]}"/> 
+								                                <label for="condition" string="=&gt; 0,1"/>
+															</div>
+															<field name="state" invisible="1"/>
+															<field name="comment" attrs="{'readonly': [('state', 'not in', ['open'])]}"/>
+														</group>
+							                		</form>
+												</field>
+							                	<group class="oe_subtotal_footer oe_right">
+				                                    <field name="avg_value"/>
+				                                    <field name="total_value"/>
+				                                </group>
+				                                <group col="4" colspan="4">
+				                                
+				                                	<separator for="comment" string="Comment"/>
+				                                	<field name="comment" colspan="4" nolabel="1" attrs="{'required': [('state', 'not in', ['draft'])],'readonly': [('state', 'not in', ['open'])]}"/>
+				                                </group>
+					                		</form>
+                                        </field>
+					                	<group class="oe_subtotal_footer oe_right">
+		                                    <field name="total_value" class="oe_subtotal_footer_separator"/>
+		                                </group>
+                                        
+			                		</form>
+			                	</field>
+			                	
+			                </page>
+			                <page string="Employee Valuations">
+                                <separator string="Employee Valuations"/>
+			                	<field name="valuation_employee_ids" colspan="4" nolabel="1">
+			                		<tree string="Employees Valuations" create="false" delete="false" colors="blue:state in ('draft','open');green:state in ('completed','approved')">
+	                                    <field name="employee_id"/>
+			                			<field name="tender_id"/>
+	                                    <field name="tender_valuation_id" invisible="1"/>
+	                                    <field name="employee_partner_ids"/>
+	                                    <field name="line_ids"/>
+	                                    <field name="state"/>
+			                		</tree>
+			                		<form string="Employees Valuations">
+	                                    <group col="4" colspan="4">
+	    		                			<field name="tender_id" colspan="4" required="1" readonly="1"/>
+	                                        <field name="tender_valuation_id" colspan="4" required="1" readonly="1"/>
+	                                        <field name="employee_id" colspan="4" required="1" readonly="1"/>
+	                                    </group>
+	                                    <notebook>
+	                                    	<page string="Valuations Partner">
+		                                        <separator for="employee_partner_ids" string="Valuations Partner"/>
+		                                        <field name="employee_partner_ids" colspan="4" nolabel="1">
+		                                        	<tree string="Valuations Partner Tree" create="false" delete="false">
+						                                <field name="tender_valuation_partner_id" invisible="1"/>
+						                                <field name="partner_id"/>
+							                			<field name="tender_id" invisible="1"/>
+						                                <field name="tender_valuation_id" invisible="1"/>
+						                                <field name="employee_valuation_id" invisible="1"/>
+						                                <field name="employee_id" invisible="1"/>
+						                                <field name="line_ids"/>
+						                                <field name="avg_value"/>
+						                                <field name="total_value" sum="Total value"/>
+							                		</tree>
+							                		<form string="Valuations Partner Form">
+							                			<group col="4" colspan="4">
+															<field name="employee_id" colspan="2" required="1" readonly="1"/>
+															<field name="partner_id" colspan="2" required="1" readonly="1"/>
+															<field name="state" invisible="1"/>
+														</group>
+														<separator for="line_ids" string="Rates Valuation line" colspan="4"/>
+														<field name="line_ids" colspan="4">
+															<tree string="Valuation line" create="false" delete="false" editable="false">
+									                			<field name="tender_id" invisible="1"/>
+								                                <field name="tender_valuation_id" invisible="1"/>
+								                                <field name="employee_valuation_id" invisible="1"/>
+								                                <field name="employee_partner_id" invisible="1"/>
+								                                <field name="employee_id" invisible="1"/>
+								                                <field name="tender_valuation_partner_id" invisible="1"/>
+								                                <field name="partner_id" invisible="1"/>
+								                                <field name="rate_id" readonly="1"/>
+								                                <field name="max_value" invisible="1"/>
+								                                <field name="condition"/>
+								                                <field name="rate_value" attrs="{'readonly': [('state', 'not in', ['open'])],'required': [('state', 'in', ['open'])]}"/>
+								                                <field name="comment" attrs="{'readonly': [('state', 'not in', ['open'])]}"/>
+								                                <field name="state" invisible="1"/>
+									                		</tree>
+									                		<form string="Valuation line">
+																<group>
+									                				<field name="tender_id" invisible="1" required="1"/>
+									                                <field name="tender_valuation_id" invisible="1" required="1"/>
+									                                <field name="employee_valuation_id" invisible="1" required="1"/>
+									                                <field name="employee_partner_id" invisible="1" required="1"/>
+									                                <field name="employee_id" invisible="1" required="1"/>
+									                                <field name="partner_id" invisible="1" required="1"/>
+									                                <field name="max_value" invisible="1" required="1"/>
+																	<field name="tender_valuation_partner_id" required="1" readonly="1"/>
+																	<field name="rate_id" required="1" readonly="1"/>
+																	<label for="rate_value" string="Rate Value"/>
+																	<div>
+																		<field name="condition" nolabel="1" class="oe_inline"/>
+										                                <field name="rate_value" nolabel="1" class="oe_inline" attrs="{'readonly': [('state', 'not in', ['open'])],'required': [('state', 'in', ['open'])]}"/> 
+										                                <label for="condition" string="=&gt; 0,1"/>
+																	</div>
+																	<field name="state" invisible="1"/>
+																	<field name="comment" attrs="{'readonly': [('state', 'not in', ['open'])]}"/>
+																</group>
+									                		</form>
+														</field>
+									                	<group class="oe_subtotal_footer oe_right">
+						                                    <field name="avg_value"/>
+						                                    <field name="total_value"/>
+						                                </group>
+						                                <group col="4" colspan="4">
+						                                	<separator for="comment" string="Comment"/>
+						                                	<field name="comment" colspan="4" nolabel="1" attrs="{'required': [('state', 'not in', ['draft'])],'readonly': [('state', 'not in', ['open'])]}"/>
+						                                </group>
+							                		</form>
+		                                        </field>
+	                                    	</page>
+	                                    	<page string="Valuation Lines">
+												<separator for="line_ids" string="Rates Valuation line" colspan="4"/>
+		                                        <field name="line_ids" colspan="4">
+													<tree string="Valuation line" create="false" delete="false" editable="false">
+							                			<field name="tender_id" invisible="1"/>
+						                                <field name="tender_valuation_id" invisible="1"/>
+						                                <field name="employee_valuation_id" invisible="1"/>
+						                                <field name="employee_partner_id" invisible="1"/>
+						                                <field name="employee_id" invisible="1"/>
+						                                <field name="tender_valuation_partner_id" invisible="1"/>
+						                                <field name="partner_id" readonly="1"/>
+						                                <field name="rate_id" readonly="1"/>
+						                                <field name="max_value" invisible="1"/>
+						                                <field name="condition"/>
+						                                <field name="rate_value" attrs="{'readonly': [('state', 'not in', ['open'])],'required': [('state', 'in', ['open'])]}"/>
+						                                <field name="comment" attrs="{'readonly': [('state', 'not in', ['open'])]}"/>
+						                                <field name="state" invisible="1"/>
+							                		</tree>
+							                		<form string="Valuation line">
+							                			<group>
+							                				<field name="tender_id" invisible="1" required="1"/>
+							                                <field name="tender_valuation_id" invisible="1" required="1"/>
+							                                <field name="employee_valuation_id" invisible="1" required="1"/>
+							                                <field name="employee_partner_id" invisible="1" required="1"/>
+							                                <field name="employee_id" invisible="1" required="1"/>
+							                                <field name="partner_id" invisible="1" required="1"/>
+							                                <field name="max_value" invisible="1" required="1"/>
+															<field name="tender_valuation_partner_id" required="1" readonly="1"/>
+															<field name="rate_id" required="1" readonly="1"/>
+															<label for="rate_value" string="Rate Value"/>
+															<div>
+																<field name="condition" nolabel="1" class="oe_inline"/>
+								                                <field name="rate_value" nolabel="1" class="oe_inline" required="1" attrs="{'readonly': [('state', 'not in', ['open'])], 'required': [('state', 'in', ['open'])]}"/> 
+								                                <label for="condition" string="=&gt; 0,1"/>
+															</div>
+															<field name="state" invisible="1"/>
+															<field name="comment" attrs="{'readonly': [('state', 'not in', ['open'])]}"/>
+														</group>
+							                		</form>
+												</field>
+	                                    	</page>
+	                                    </notebook>
+			                		</form>
+		                		</field>
+			                </page>
+	                		<page string="Тендерт оролцогчдын үнийн саналын харьцуулалт">
+                                <separator string="Үнийн санал харьцуулалт"/>
+			                	<field name="bidding_line_ids" colspan="4" nolabel="1" readonly="1">
+			                		<tree string="Bidding Line Value">
+			                			<field name="tender_id" invisible="1"/>
+			                			<field name="valuation_id" invisible="1"/>
+	                                    <field name="participant_id"/>
+	                                    <field name="control_budget_amount"/>
+	                                    <field name="amount"/>
+	                                    <field name="diff_amount"/>
+	                                    <field name="diff_percent"/>
+	                                    <field name="warranty"/>
+	                                    <field name="performance_time"/>
+			                		</tree>
+			                		<form string="Bidding Line">
+			                			<field name="tender_id" invisible="1"/>
+			                			<field name="valuation_id" invisible="1"/>
+	                                    <field name="participant_id" colspan="2"/>
+	                                    <field name="control_budget_amount" colspan="2"/>
+	                                    <field name="amount" colspan="2"/>
+	                                    <field name="diff_amount" colspan="2"/>
+	                                    <field name="diff_percent"/>
+	                                    <field name="warranty" colspan="2"/>
+	                                    <field name="performance_time" colspan="2"/>
+			                		</form>
+			                	</field>
+	                		</page>
+	                	</notebook>
+	                	
+                	</sheet>
+					<div class="oe_chatter">
+			            <field name="message_follower_ids" widget="mail_followers"/>
+			            <field name="message_ids" widget="mail_thread"/>
+	             	</div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Тендерийн харилцагчийн нийт үнэлгээний дундаж: Харилцагчийн бүх шинжийн хувьд -->
+        <!-- Тендерт оролцогч: бүх үзүүлэлтийн хувьд нийт үнэлгээ -->
+        <record id="view_tender_valuation_partner_tree" model="ir.ui.view">
+            <field name="name">tender.valuation.partner.tree</field>
+            <field name="model">tender.valuation.partner</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Tender Valuation Partner Tree">
+                    <field name="partner_id"/>
+                	<field name="tender_id"/>
+                    <field name="tender_valuation_id"/>
+                    <!-- <field name="partner_valuation_ids"/> -->
+                   	<field name="employee_partner_ids"/>
+                    <field name="total_value"/>
+                    <field name="state" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_tender_valuation_partner_form" model="ir.ui.view">
+            <field name="name">tender.valuation.partner.form</field>
+            <field name="model">tender.valuation.partner</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Tender Valuation Partner Form">
+                	<sheet>
+	                	<group col="4">
+		                	<field name="tender_id" colspan="2" readonly="1"/>
+                            <field name="tender_valuation_id" colspan="2" readonly="1"/>
+                            <field name="partner_id" colspan="2" readonly="1"/>
+                            <field name="participant_id" readonly="1"/>
+                            <field name="is_win" colspan="2" invisible="1"/>
+                            <field name="is_choose" colspan="2" invisible="1"/>
+                            <fiedl name="is_sent" invisible="1"/>
+                    		<field name="state" invisible="1"/>
+                        </group>
+	                	<separator string="Employees Valuations"/>
+                        <field name="employee_partner_ids" colspan="4">
+                        	<tree string="Valuation of Employee" create="false" delete="false">
+                                <field name="employee_valuation_id" invisible="1"/>
+                                <field name="employee_id"/>
+	                			<field name="tender_id"/>
+                                <field name="tender_valuation_id" invisible="1"/>
+                                <field name="tender_valuation_partner_id" invisible="1"/>
+                                <field name="partner_id" invisible="1"/>
+                                <field name="line_ids"/>
+                                <field name="avg_value" sum="Дундаж нийт дүн"/>
+                                <field name="total_value" sum="Нийт дүн"/>
+	                		</tree>
+	                		<form string="Valuation of Employee">
+	                			<group col="4" colspan="4">
+									<field name="employee_id" colspan="4" readonly="1"/>
+									<field name="partner_id" colspan="4" readonly="1"/>
+									<field name="state" invisible="1"/>
+								</group>
+								<separator for="line_ids" string="Rates Valuation line" colspan="4"/>
+								<field name="line_ids" colspan="4">
+									<tree string="Valuation line" create="false" delete="false" editable="false">
+			                			<field name="tender_id" invisible="1"/>
+		                                <field name="tender_valuation_id" invisible="1"/>
+		                                <field name="employee_valuation_id" invisible="1"/>
+		                                <field name="employee_partner_id" invisible="1"/>
+		                                <field name="employee_id" invisible="1"/>
+		                                <field name="tender_valuation_partner_id" invisible="1"/>
+		                                <field name="partner_id" invisible="1"/>
+		                                <field name="rate_id" readonly="1"/>
+		                                <field name="max_value" sum="Нийт дүн" invisible="0"/>
+		                                <field name="condition" invisible="1"/>
+		                                <field name="rate_value" sum="Нийт дүн" attrs="{'readonly': [('state', 'not in', ['open'])],'required': [('state', 'in', ['open'])]}"/>
+		                                <field name="comment" attrs="{'readonly': [('state', 'not in', ['open'])]}"/>
+		                                <field name="state" invisible="1" />
+			                		</tree>
+			                		<form string="Valuation line">
+			                			<group>
+			                				<field name="tender_id" invisible="1" required="1"/>
+			                                <field name="tender_valuation_id" invisible="1" required="1"/>
+			                                <field name="employee_valuation_id" invisible="1" required="1"/>
+			                                <field name="employee_partner_id" invisible="1" required="1"/>
+			                                <field name="employee_id" invisible="1" required="1"/>
+			                                <field name="partner_id" invisible="1" required="1"/>
+			                                <field name="max_value" invisible="1" required="1"/>
+											<field name="tender_valuation_partner_id" required="1" readonly="1"/>
+											<field name="rate_id" required="1" readonly="1"/>
+											<label for="rate_value" string="Rate Value"/>
+											<div>
+												<field name="condition" nolabel="1" class="oe_inline"/>
+				                                <field name="rate_value" nolabel="1" class="oe_inline" required="1" attrs="{'readonly': [('state', 'not in', ['open'])],'required': [('state', 'in', ['open'])]}"/> 
+				                                <label for="condition" string="=&gt; 0,1"/>
+											</div>
+											<field name="state" invisible="1"/>
+											<field name="comment" attrs="{'readonly': [('state', 'not in', ['open'])]}"/>
+										</group>
+			                		</form>
+								</field>
+			                	<group class="oe_subtotal_footer oe_right">
+			                		<field name="avg_value"/>
+			                		<field name="total_value"/>
+		                		</group>
+                                <group col="4" colspan="4">
+                                	<separator for="comment" string="Comment"/>
+                                	<field name="comment" colspan="4" nolabel="1" attrs="{'required': [('state', 'not in', ['draft'])],'readonly': [('state', 'not in', ['open'])]}"/>
+                                </group>
+	                		</form>
+                        </field>
+	                	<group class="oe_subtotal_footer oe_right">
+	                		<field name="total_value" class="oe_subtotal_footer_separator"/>
+                		</group>
+                		<group col="4" colspan="4">
+                    		<field name="reason" colspan="4" nolabel="1" attrs="{'readonly':[('state','!=','completed')]}"/>
+                		</group>
+	                	
+                    </sheet>
+					<div class="oe_chatter">
+			            <field name="message_follower_ids" widget="mail_followers"/>
+			            <field name="message_ids" widget="mail_thread"/>
+	             	</div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Үнэлэгчдийн бөглөгчдийн визард -->
+        <record id="view_tender_valuation_employee_partner_tree" model="ir.ui.view">
+            <field name="name">tender.valuation.employee.partner.tree</field>
+            <field name="model">tender.valuation.employee.partner</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Tender Valuation Employee Partner Tree">
+                    <field name="employee_id"/>
+                    <field name="tender_id"/>
+                    <field name="tender_valuation_partner_id"/>
+                    <field name="line_ids"/>
+                    <field name="partner_id" invisible="1"/>
+                    <field name="avg_value"/>
+                    <field name="total_value"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_tender_valuation_employee_partner_form" model="ir.ui.view">
+            <field name="name">tender.valuation.employee.partner.form</field>
+            <field name="model">tender.valuation.employee.partner</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Tender Valuation Employee Partner Form">
+                    <sheet>
+                        <group col="4" colspan="4">
+		                	<field name="tender_id" colspan="2" readonly="1" required="1"/>
+                            <field name="tender_valuation_id" colspan="2" readonly="1" required="1"/>                 
+                            <field name="employee_valuation_id" colspan="2" invisible="1" required="1"/>
+                            <field name="employee_id" colspan="2" readonly="1" required="1"/>
+                            <field name="tender_valuation_partner_id" colspan="2" invisible="1" required="1"/>
+                            <field name="partner_id" colspan="2" readonly="1" required="1"/>
+                            <!-- <field name="total_value" colspan="2" readonly="1" required="1"/>
+                            <field name="avg_value" colspan="2" readonly="1" required="1"/> -->
+                    		<field name="state" invisible="1"/>
+                        </group>
+						<separator for="line_ids" string="Rates Valuation line" colspan="4"/>
+                		<field name="line_ids" colspan="4">
+							<tree string="Valuation line" create="false" delete="false" editable="false">
+	                			<field name="tender_id" invisible="1"/>
+                                <field name="tender_valuation_id" invisible="1"/>
+                                <field name="employee_valuation_id" invisible="1"/>
+                                <field name="employee_partner_id" invisible="1"/>
+                                <field name="employee_id" invisible="1"/>
+                                <field name="tender_valuation_partner_id" invisible="1"/>
+                                <field name="partner_id" invisible="1"/>
+                                <field name="rate_id" readonly="1"/>
+                                <field name="max_value" sum="Нийт дүн" invisible="0"/>
+                                <field name="condition" invisible="1"/>
+                                <field name="rate_value" sum="Нийт дүн" attrs="{'readonly': [('state', 'not in', ['open'])],'required': [('state', 'in', ['open'])]}"/>
+                                <field name="comment" attrs="{'readonly': [('state', 'not in', ['open'])]}"/>
+                                <field name="state" invisible="1" />
+	                		</tree>
+	                		<form string="Valuation line">
+	                			<group>
+	                				<field name="tender_id" invisible="1" required="1"/>
+	                                <field name="tender_valuation_id" invisible="1" required="1"/>
+	                                <field name="employee_valuation_id" invisible="1" required="1"/>
+	                                <field name="employee_partner_id" invisible="1" required="1"/>
+	                                <field name="employee_id" invisible="1" required="1"/>
+	                                <field name="partner_id" invisible="1" required="1"/>
+	                                <field name="max_value" invisible="1" required="1"/>
+									<field name="tender_valuation_partner_id" required="1" readonly="1"/>
+									<field name="rate_id" required="1" readonly="1"/>
+									<label for="rate_value" string="Rate Value"/>
+									<div>
+										<field name="condition" nolabel="1" class="oe_inline"/>
+		                                <field name="rate_value" nolabel="1" class="oe_inline" required="1" attrs="{'readonly': [('state', 'not in', ['open'])], 'required': [('state', 'in', ['open'])]}"/> 
+		                                <label for="condition" string="=&gt; 0,1"/>
+									</div>
+									<field name="state" invisible="1"/>
+									<field name="comment" attrs="{'readonly': [('state', 'not in', ['open'])]}"/>
+								</group>
+	                		</form>
+						</field>
+	                	<group class="oe_subtotal_footer oe_right">
+	                		<field name="avg_value"/>
+	                		<field name="total_value"/>
+                		</group>
+                		<separator for="comment" string="Comment" colspan="2"/>
+                        <field name="comment" colspan="4" attrs="{'required': [('state', 'not in', ['draft'])],'readonly': [('state', 'not in', ['open'])]}"/>
+                    </sheet>
+					<div class="oe_chatter">
+			            <field name="message_follower_ids" widget="mail_followers"/>
+			            <field name="message_ids" widget="mail_thread"/>
+	             	</div>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Ажилтны үнэлгээний хэсэг -->
+        <record id="view_tender_valuation_employee_valuation_tree" model="ir.ui.view">
+            <field name="name">tender.valuation.employee.valuation.tree</field>
+            <field name="model">tender.valuation.employee.valuation</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Tender Valuation Partner User Tree">
+                    <field name="employee_id"/>
+                    <field name="tender_id"/>
+                    <field name="tender_valuation_id"/>
+                    <field name="employee_partner_ids"/>
+                    <field name="line_ids"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+         <record id="view_tender_valuation_employee_valuation_filter" model="ir.ui.view">
+            <field name="name">tender.valuation.employee.valuation</field>
+            <field name="model">tender.valuation.employee.valuation</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                    <!-- <field name="name" filter_domain="[('name','ilike',self)]"/> -->
+                    <field name="employee_id"/>
+                    <field name="tender_id"/>
+                    <field name="tender_valuation_id"/>
+                    <field name="state"/>
+                    <filter string="My Orders" domain="[('user_id','=',uid)]" name="my_delivery_filter"/>
+                    <separator/>
+                    
+                    <group expand="0" string="Group By">
+                        <filter name="employee_id" string="Комиссын гишүүн" domain="[]" context="{'group_by':'employee_id'}"/>
+                        <filter name="tender_id" string="Тендер" domain="[]" context="{'group_by':'tender_id'}"/>
+                        <filter name="state" string="Төлөв" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+        
+        <record id="view_tender_valuation_employee_valuation_form" model="ir.ui.view">
+            <field name="name">tender.valuation.employee.valuation.form</field>
+            <field name="model">tender.valuation.employee.valuation</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Tender Valuation Employee Valuation Form" create="false">
+                	<header>
+                		<button name="action_complete" string="Илгээх" type="object" class="btn-primary" attrs="{'invisible':['|',('is_in_commission','=',False),('state','!=','open')]}"/>
+                		<field name="state" widget="statusbar"/>
+                	</header>
+                    <sheet>
+                        <group>
+		                	<field name="tender_id" readonly="1"/>        
+                            <field name="tender_valuation_id" readonly="1"/>
+                            <field name="is_in_commission" invisible="1"/>
+                            <field name="name" invisible="1"/>
+                        </group>
+                        <notebook>
+	                		<page string="Valuations Partner">
+                            	<field name="employee_partner_ids">
+                            		<tree string="Valuation of Employee" create="false" delete="false" colors="blue:state in ('draft','open');green:state in ('completed','approved')">
+		                                <field name="partner_id"/>
+		                                <field name="tender_valuation_partner_id" invisible="1"/>
+			                			<field name="tender_id" invisible="1"/>
+		                                <field name="tender_valuation_id" invisible="1"/>
+		                                <field name="employee_valuation_id" invisible="1"/>
+		                                <field name="employee_id" invisible="1"/>
+		                                <field name="line_ids"/>
+		                                <field name="comment" invisible="1"/>
+		                                <field name="avg_value" sum="Дундаж нийт дүн"/>
+		                                <field name="total_value" sum="Нийт дүн" />
+		                                <field name="state" invisible="1"/>
+			                		</tree>
+			                		<form string="Valuation of Employee">
+			                			<group col="4" colspan="4">
+											<field name="employee_id" colspan="4" readonly="1"/>
+											<field name="partner_id" colspan="4" readonly="1"/>
+											<field name="state" invisible="1"/>
+										</group>
+										<separator for="line_ids" string="Rates Valuation line" colspan="4"/>
+										<field name="line_ids" colspan="4">
+											<tree string="Valuation line" create="false" delete="false" editable="false">
+					                			<field name="tender_id" invisible="1"/>
+				                                <field name="tender_valuation_id" invisible="1"/>
+				                                <field name="employee_valuation_id" invisible="1"/>
+				                                <field name="employee_partner_id" invisible="1"/>
+				                                <field name="employee_id" invisible="1"/>
+				                                <field name="tender_valuation_partner_id" invisible="1"/>
+				                                <field name="partner_id" invisible="1"/>
+				                                <field name="rate_id" required="1" readonly="1"/>
+				                                <field name="max_value" invisible="0" sum="Нийт дүн"/>
+				                                <field name="condition" invisible="1" />
+				                                <field name="rate_value" sum="Нийт дүн" required="1" attrs="{'readonly':[('state', 'not in', ['open'])],'required':[('state', 'in', ['open'])]}"/>
+				                                <field name="comment" attrs="{'readonly':[('state', 'not in', ['open'])]}"/>
+				                                <field name="state" invisible="1"/>
+					                		</tree>
+					                		<form string="Valuation line">
+					                			<group>
+					                				<field name="tender_id" invisible="1" required="1"/>
+					                                <field name="tender_valuation_id" invisible="1" required="1"/>
+					                                <field name="employee_valuation_id" invisible="1" required="1"/>
+					                                <field name="employee_partner_id" invisible="1" required="1"/>
+					                                <field name="employee_id" invisible="1" required="1"/>
+					                                <field name="partner_id" invisible="1" required="1"/>
+					                                <field name="max_value" invisible="0" required="1"/>
+													<field name="tender_valuation_partner_id" required="1" readonly="1"/>
+													<field name="rate_id" required="1" readonly="1"/>
+													<label for="rate_value" string="Rate Value"/>
+													<div>
+														<field name="condition" nolabel="1" class="oe_inline"/>
+						                                <field name="rate_value" nolabel="1" class="oe_inline" required="1" attrs="{'readonly': [('state', 'not in', ['open'])],'required':[('state', 'in', ['open'])]}"/> 
+						                                <label for="condition" string="=&gt; 0,1"/>
+													</div>
+													<field name="state" invisible="1"/>
+													<field name="comment" attrs="{'readonly': [('state', 'not in', ['open'])]}"/>
+												</group>
+					                		</form>
+										</field>
+					                	<group class="oe_subtotal_footer oe_right">
+		                                    <field name="avg_value"/>
+		                                    <field name="total_value"/>
+		                                </group>
+		                                <group col="4" colspan="4">
+		                                	<separator for="comment" string="Comment"/>
+		                                	<field name="comment" colspan="4" nolabel="1" attrs="{'required': [('state', 'not in', ['draft'])],'readonly': [('state', 'not in', ['draft','open'])]}"/>
+		                                </group>
+			                		</form>
+                            	</field>
+			                </page>
+	                		<page string="Valuation Lines">
+                            	<field name="line_ids">
+                            		<tree string="Valuation line" create="false" delete="false" editable="false">
+			                			<field name="tender_id" invisible="1"/>
+		                                <field name="tender_valuation_id" invisible="1"/>
+		                                <field name="employee_valuation_id" invisible="1"/>
+		                                <field name="employee_partner_id" invisible="1"/>
+		                                <field name="employee_id" invisible="1"/>
+		                                <field name="tender_valuation_partner_id" invisible="1"/>
+		                                <field name="partner_id" readonly="1"/>
+		                                <field name="rate_id" readonly="1"/>
+		                                <field name="max_value" invisible="0"/>
+		                                <field name="condition" sum="Нийт дүн"/>
+		                                <field name="rate_value" sum="Нийт дүн" attrs="{'readonly':[('state', 'not in', ['open'])],'required': [('state', 'in', ['open'])]}"/>
+		                                <field name="comment" attrs="{'readonly':[('state', 'not in', ['open'])]}"/>
+		                                <field name="state"/>
+			                		</tree>
+			                		<form string="Valuation line">
+			                			<group>
+			                				<field name="tender_id" invisible="1"/>
+			                                <field name="tender_valuation_id" invisible="1"/>
+			                                <field name="employee_valuation_id" invisible="1"/>
+			                                <field name="employee_partner_id" invisible="1"/>
+			                                <field name="employee_id" invisible="1"/>
+			                                <field name="partner_id" invisible="1"/>
+			                                <field name="max_value" invisible="1"/>
+											<field name="tender_valuation_partner_id" readonly="1"/>
+											<field name="rate_id" readonly="1"/>
+											<label for="rate_value" string="Rate Value"/>
+											<div>
+												<field name="condition" nolabel="1" class="oe_inline"/>
+				                                <field name="rate_value" nolabel="1" class="oe_inline" attrs="{'readonly':[('state', 'not in', ['open'])],'required': [('state', 'in', ['open'])]}"/> 
+				                                <label for="condition" string="=&gt; 0,1"/>
+											</div>
+											<field name="comment" attrs="{'readonly': [('state', 'not in', ['open'])]}"/>
+											<field name="state" invisible="1"/>
+										</group>
+			                		</form>
+                            	</field>
+			                </page>
+	                		<!-- <page string="Valuation">		                    	
+                            	<widget type="tender_valuation" attrs="{'readonly': [['state', 'in', ['completed']]]}">
+                            	</widget>
+			                </page> -->
+	                	</notebook>
+	                	<group col="4">
+                            <field name="employee_id" colspan="2" readonly="1"/>
+	                	</group>
+                    </sheet>
+					<div class="oe_chatter">
+			            <field name="message_follower_ids" widget="mail_followers"/>
+			            <field name="message_ids" widget="mail_thread"/>
+	             	</div>
+                </form>
+            </field>
+        </record>
+	
+		<!-- Үнэлэгчийн нэг бүрчлэн өгч байгаа оноо: ХАмгийн дэлгэрэнгүй оноо. Тайланд ашиглана. -->
+        <record id="view_tender_valuation_rate_line_tree" model="ir.ui.view">
+            <field name="name">tender.valuation.rate.line.tree</field>
+            <field name="model">tender.valuation.rate.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Tender Valuation Partner User Tree" >
+                    <field name="tender_id"/>
+                    <field name="tender_valuation_id"/>
+                    <field name="employee_partner_id" invisible="1"/>
+                	<field name="employee_id"/>
+                    <field name="tender_valuation_partner_id" invisible="1"/>
+                    <field name="partner_id"/>
+                	<field name="rate_id"/>             	
+                    <field name="condition"/>
+                    <field name="rate_value"/>
+                    <field name="max_value" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_tender_valuation_rate_line_form" model="ir.ui.view">
+            <field name="name">tender.valuation.rate.line.form</field>
+            <field name="model">tender.valuation.rate.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Tender Valuation Partner Rate Form">
+                	<sheet>
+	                	<group col="4">
+                            <field name="tender_id" colspan="2" readonly="1" required="1"/>
+                            <field name="tender_valuation_id" colspan="2" readonly="1" required="1"/>
+                            <field name="employee_valuation_id" colspan="2" invisible="1"/>
+                            <field name="employee_partner_id" colspan="2" invisible="1"/>
+                            <field name="tender_valuation_partner_id" colspan="2" invisible="1"/>
+                            <field name="employee_id" colspan="2" readonly="1" required="1"/>
+                            <field name="partner_id" colspan="2" readonly="1" required="1"/>
+                            <field name="rate_id" readonly="1" required="1"/>
+                            <field name="rate_name" readonly="1"/>
+                            <field name="max_value" readonly="1" required="1"/>
+                            <label for="rate_value" string="Rate Value"/>
+                            <div>
+                                <field name="condition" nolabel="1" class="oe_inline"/>
+                                <field name="rate_value" nolabel="1" class="oe_inline" attrs="{'readonly':[('state', 'not in', ['open'])],'required': [('state', 'in', ['open'])]}"/> 
+                                <label for="condition" string="=&gt; 0,1"/>
+                            </div>
+	                		<field name="state" colspan="2" invisible="1"/>
+	                	</group>
+	                	<notebook>
+	                		<page string="Comment">
+	                			<field name="comment" colspan="4" attrs="{'readonly':[('state', 'not in', ['open'])]}"/>
+	                		</page>
+	                	</notebook>
+                	</sheet>
+					<div class="oe_chatter">
+			            <field name="message_follower_ids" widget="mail_followers"/>
+			            <field name="message_ids" widget="mail_thread"/>
+	             	</div>
+                </form>
+            </field>
+        </record>
+		        
+        <record model="ir.actions.act_window" id="tender_rate_list_menu_action">
+            <field name="name">Tender Rate</field>
+            <field name="res_model">tender.rate</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="tender_type_rate_max_menu_action">
+            <field name="name">Tender Type Rate Max</field>
+            <field name="res_model">tender.type.rate.max</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="tender_valuation_list_menu_action">
+            <field name="name">Tender Valuation</field>
+            <field name="res_model">tender.valuation</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record model="ir.actions.act_window" id="tender_valuation_partner_list_menu_action">
+            <field name="name">Tender Valuation Partner</field>
+            <field name="res_model">tender.valuation.partner</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record model="ir.actions.act_window" id="tender_valuation_employee_partner_list_menu_action">
+            <field name="name">Tender Valuation Employee Partner</field>
+            <field name="res_model">tender.valuation.employee.partner</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record model="ir.actions.act_window" id="tender_valuation_employee_valuation_list_menu_action">
+            <field name="name">Employee Valuation</field>
+            <field name="res_model">tender.valuation.employee.valuation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{"tender_id":1,"employee_id":1,"state":1}</field>
+            <field name="search_view_id" ref="view_tender_valuation_employee_valuation_filter"/>
+        </record>
+        <record model="ir.actions.act_window" id="tender_valuation_rate_line_list_menu_action">
+            <field name="name">Tender Valuation Partner Rate Line</field>
+            <field name="res_model">tender.valuation.rate.line</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem 
+            id="tender_rate_list_menu" 
+            name="Tender Rate Register" 
+            parent="tender_setting_menu" sequence="2"
+            groups="group_tender_admin,group_tender_secretary,group_tender_manager" action="tender_rate_list_menu_action"/>
+        <menuitem 
+            id="tender_type_max_rate_list_menu" 
+            name="Tender Type Rate Max" 
+            parent="tender_setting_menu" sequence="3"
+            groups="group_tender_admin,group_tender_secretary,group_tender_manager" action="tender_type_rate_max_menu_action"/>
+        <menuitem 
+            id="tender_valuation_list_menu" 
+            name="Tender Valuation" 
+            parent="tender_valuation_menu" sequence="1"
+            groups="group_tender_committee_members,group_tender_admin,group_tender_secretary,group_tender_manager" action="tender_valuation_list_menu_action"/>
+        <menuitem 
+            id="tender_valuation_partner_list_menu" 
+            name="Valuation of rates of partner" 
+            parent="tender_valuation_menu" sequence="2"
+            groups="group_tender_secretary,group_tender_admin" action="tender_valuation_partner_list_menu_action"/>
+        <!-- <menuitem 
+            id="tender_valuation_partner_rate_list_menu" 
+            name="Average of per rate of partner" 
+            parent="tender_valuation_menu" sequence="3"
+            groups="" action="tender_valuation_partner_rate_list_menu_action"/> -->
+        <menuitem 
+            id="tender_valuation_employee_partner_list_menu" 
+            name="Valuation of Partners of Employee" 
+            parent="tender_valuation_menu" sequence="5"
+            groups="group_tender_secretary,group_tender_admin" action="tender_valuation_employee_partner_list_menu_action"/>
+        <menuitem 
+            id="tender_valuation_employee_valuation_list_menu" 
+            name="Valuation of Employee" 
+            parent="tender_valuation_menu" sequence="4"
+            groups="group_tender_committee_members,group_tender_admin,group_tender_secretary,group_tender_manager" action="tender_valuation_employee_valuation_list_menu_action"/>
+        <menuitem 
+            id="tender_valuation_rate_line_list_menu" 
+            name="Value of per rate of tender" 
+            parent="tender_valuation_menu" sequence="6"
+            groups="group_tender_secretary,group_tender_admin" action="tender_valuation_rate_line_list_menu_action"/>
+
+	</data>
+</openerp>
+    

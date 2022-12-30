@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <!-- <template id="budget_proposal" customize_show="True" inherit_id="nomin_web.my_account" name="">
+        
+        <xpath expr="//ul/ul" position="inside">
+            <li><a href="/quotations"><span class="fa fa-chevron-right" aria-hidden="true"></span>Зарлагдсан үнийн саналууд</a></li>
+        </xpath>
+    </template> -->
+    <template id="website_budget_quotations_menu" customize_show="True" inherit_id="website.layout" name="Quotations">
+        <xpath expr="//ul[@id='top_menu']/li" position="before">
+            <li class="divider" groups="base.group_portal"/>
+            <li groups="base.group_portal">
+                <a t-attf-href="/quotations">
+                    <b>Үнийн санал</b>
+                </a>
+            </li>
+        </xpath>
+    </template>
+    <!-- <record id="website_budget_propsal_menu" model="website.menu">
+            <field name="name">Зарлагдсан үнийн саналууд</field>
+            <field name="url" >/quotations</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="new_window" >False</field>
+            <field name="groups" ref="base.group_portal"></field>			
+            <field name="sequence" type="int">4</field>
+    </record> -->
+
+
+    <template id="nomin_project.budgetlist" name="Зарлагдсан үнийн саналууд">
+        <div class="row">
+            <div class="col-sm-9 col-md-9">
+                <h4>Шүүлтийн төрөл</h4>
+                
+                <!-- <t t-call="nomin_web.search_form"/> -->
+                <hr/><h3 class="pagetitle">Зарлагдсан үнийн саналууд</h3>
+                
+                <t t-foreach="budgets" t-as="budget">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-condensed">
+                            <thead>
+                                <tr>
+                                    <td colspan="4" >									
+                                    <a t-attf-href="/quot_detail/#{ slug(budget) }/" class="tender-title"><t t-esc="budget.desc_name"></t></a>
+                                    <!-- <a t-attf-href="/tender_detail/#{ slug(budget) }/" class="tender-title"><t t-esc="budget.desc_name"></t></a> -->
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Захиалагч</td>
+                                    <td>Дугаар</td>
+                                    <td>Зарлагдсан хугацаа</td>
+                                    <td>Эцсийн хугацаа</td>
+                                </tr>
+                                <tr>
+                                    <td class="colored-text" t-if="budget.employee_id.parent_department"><t t-esc="budget.employee_id.parent_department.company_id.name"></t></td>
+                                    <td class="colored-text" t-if="not budget.employee_id.parent_department">Захиалагч олдсонгүй</td>
+                                    <td class="text-info"><t t-esc="budget.name"/></td>
+                                    <td class="text-info"><span class="user-date" t-esc="budget.date_start"/></td>
+                                    <td class="text-danger"><span class="user-date" t-esc="budget.date_end"/></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align:center">
+                                        Төлөв:
+                                    </td>
+                                    <td colspan="2" class="text-center">
+                                        <t t-if="budget.state in ['end_quotation','comparison','management','winner']">
+                                            <span class="label label-danger">Баримт бичиг хүлээн авч дууссан</span>
+                                        </t>
+                                        <t t-if="budget.state=='quotation'">
+                                            <span class="label label-success">Баримт бичиг хүлээн авч байна</span>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+                <div class="products_pager">
+                    <t t-call="website.pager"/>
+                </div>
+                        
+            </div>
+                    
+            
+        </div>
+</template>
+<template id="nomin_project.budget_list" name="Зарлагдсан үнийн саналууд">
+    <t t-call="website.layout" >
+        <div id="wrap" class="oe_structure oe_empty">
+            <div class="container">
+                <div class="content-bg">
+                    <t t-call="nomin_project.budgetlist"/>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>
+<template id="nomin_project.quot_detail" name="Үнийн саналын дэлгэрэнгүй">
+    <t t-call="website.layout">
+        <div id="wrap" class="oe_structure oe_empty">
+        <div class="container">
+        <div class="content-bg">
+            <div class="row">
+                <div class="col-sm-9 col-md-9">
+                    <div class="row">
+                        <div class="col-sm-9 col-md-9 col-xs-12">
+                            <h3><t t-esc="budget.desc_name" /></h3> 
+                        </div>
+                        <div class="col-sm-3 col-md-3 hidden-xs" style="margin-top:30px; margin-bottom:30px; text-align:right; padding-right:0px; padding-left: 0px;">
+                            <t t-if="budget.state in ['end_quotation','comparison','management','winner']"><span class="label label-danger">Баримт бичиг хүлээн авч дууссан</span></t>
+                            <t t-if="budget.state == 'quotation'"><span class="label label-success">Баримт бичиг хүлээн авч байна</span></t>
+                            
+                        </div>
+                        <div class="col-xs-12 visible-xs m-state">
+                            <t t-if="budget.state in ['end_quotation','comparison','management','winner']"><span class="label label-danger">Баримт бичиг хүлээн авч дууссан</span></t>
+                            <t t-if="budget.state == 'quotation'"><span class="label label-success">Баримт бичиг хүлээн авч байна</span></t>							
+                        </div>
+                    </div>
+                    <div class="row hidden-xs">
+                        <div class="col-sm-12 col-md-12" style="padding-right: 0px;">
+                            <ul class="nav nav-tabs">
+                              <li role="presentation" class="active" style="margin-left: -2px;"><a data-toggle="tab" href="#details-tab01">Үнийн саналын урилга</a></li>
+                              <t t-if="website.user_id != user_id">
+                                  <li role="presentation"><a data-toggle="tab" href="#details-tab02">Мэдээлэл</a></li>
+                                  <li role="presentation"><a data-toggle="tab" href="#details-tab03">Үр дүн</a></li>
+                              </t>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row visible-xs" style="margin-left: -30px; margin-right: -17px;">
+                        <div class="col-xs-12">
+                            <ul class="nav nav-tabs">
+                              <li role="presentation" class="active" style="margin-left: -2px;width: 100px;"><a data-toggle="tab" href="#details-tab01">Үнийн саналын урилга</a></li>
+                              <t t-if="website.user_id != user_id">
+                                  <li role="presentation"><a data-toggle="tab" href="#details-tab02" style="height:51px;">Мэдээлэл</a></li>
+                                  <li role="presentation"><a data-toggle="tab" href="#details-tab03" style="height:51px;">Үр дүн</a></li>
+                              </t>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ul id="detail-tab" class="tabs-content">
+                            <li id="details-tab01" class="active">
+                                <h3 class="text-center">ҮНИЙН САНАЛЫН УРИЛГА</h3>
+                                <div class="blog-content">
+                                    <t t-raw='budget.invitation_template'/>
+                                </div>
+                            </li>
+                            
+                            <li id="details-tab02">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="row">
+                                        <div class="table-responsive">
+                                        <table class="table table-hover table-striped">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-right"><b>Захиалагч</b></td>
+                                                    <td class="text-left" t-if="budget.employee_id.parent_department" width="70%"><t t-esc='budget.employee_id.parent_department.company_id.name'/></td>
+                                                    <td class="text-left" t-if="not budget.employee_id.parent_department" width="70%">Захиалагч олдсонгүй</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-right"><b>Дугаар</b></td>
+                                                    <td class="text-left" width="70%"><t t-esc='budget.name'/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-right"><b>Зарласан огноо</b></td>
+                                                    <td class="text-left"><span class="user-date" t-esc="budget.date_start"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-right"><b>Эцсийн хугацаа</b></td>
+                                                    <td class="text-left"><span class="user-date" t-esc="budget.date_end"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-right"><b>Тендерийн ангилал</b></td>
+                                                    <td class="text-left"><t t-esc='budget.type_id.name'/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-right"><b>Дэд ангилал</b></td>
+                                                    <td class="text-left"><t t-esc='budget.child_type_id.name'/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-right"><b>Баталгаат хугацаатай эсэх</b></td>
+                                                    <td class="text-left" t-if="budget.is_verify"> 
+                                                        <t t-esc='str(budget.confirmed_time) + " сар"'/>
+                                                    </td>
+                                                    <td class="text-left" t-if="not budget.is_verify">
+                                                        Баталгаат хугацаа шаардлагагүй
+                                                    </td>
+                                                    
+                                                </tr>
+
+                                                <!-- <tr>
+                                                    <td class="text-right"><b>Гүйцэтгэлийн баталгаа</b></td>
+                                                    <td class="text-left" t-if="not budget.is_performance_percent">
+                                                        Гүйцэтгэлийн хугацаа шаардлагагүй.
+                                                    </td>
+                                                    <td class="text-left" t-if="budget.is_performance_percent">
+                                                        <t t-esc='budget.performance_percent'/>
+                                                    </td>
+                                                </tr> -->
+                                                <tr>
+                                                    <td class="text-right"><b>Дэлгэрэнгүй</b></td>
+                                                    <td class="text-left"><t t-raw='budget.description'/></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <t t-if="budget.state == 'quotation'">									
+                                            <t t-if="user_type!=3">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-condensed">
+                                                        <thead>
+                                                            <tr style="text-align: center;">
+                                                                <td>Хавсралтууд</td>
+                                                                <td>Татах</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <t t-if="budget.task_graph_id">
+                                                                <t t-foreach="budget.task_graph_id.work_document" t-as="document_id">
+                                                                    <tr>
+                                                                        <td class="text-info"><t t-esc="document_id.name"/></td>																
+                                                                        <td><a target="_top" t-attf-href="/quotation/#{ slug(document_id) }/download" title="Татах" id="download">
+                                                                        
+                                                                            <i class="fa fa-download fa-2x"></i>
+                                                                        </a></td>
+                                                                    </tr>
+                                                                </t>
+                                                            </t>
+                                                            <t t-if="budget.document_ids">
+                                                                <t t-foreach="budget.document_ids" t-as="document_id">
+                                                                    <tr>
+                                                                        <td class="text-info"><t t-esc="document_id.name"/></td>																
+                                                                        <td>
+                                                                        <a target="_top" t-attf-href="/quotation/#{slug(document_id)}/download" title="Татах" id="download">
+                                                                            <i class="fa fa-download fa-2x"></i>
+                                                                        </a></td>
+                                                                    </tr>
+                                                                </t>
+                                                            </t>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </t>
+                                        </t>
+                                        <t >
+                                                <a class="btn btn-primary" t-if="budget.state == 'quotation'" type="button" t-attf-href="/quotation/create/#{ slug(budget) }/" >Үнийн санал оруулах</a>
+                                        </t>
+                                    
+                                    </div>
+                                </div>
+                            </li>
+                            <li id="details-tab03">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="row">
+                                        <h3 t-if="not budget_partner_id" class="text-center">Та үнийн санал илгээгээгүй байна !</h3>
+
+                                        <t t-if="budget_partner_id">	
+                                            <h3 t-if="budget.state in ['quotation','end_quotation','comparison','management']" class="text-center">Та үнийн санал илгээсэн байна. Шалгаруулалтын үр дүнг хүлээнэ үү.</h3>
+                                            <h3 t-if="budget.state in ['winner'] and not budget_partner_id.is_winner" class="text-center">Уучлаарай таны явуулсан үнийн санал шалгараагүй байна.</h3>
+                                            <h3 t-if="budget.state in ['winner'] and budget_partner_id.is_winner" class="text-center">Таны явуулсан үнийн санал шалгарсан байна. Баяр хүргэе!</h3>
+                                        </t>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                            
+                        </ul>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        </div>
+        </div>
+    </t>
+</template>
+
+<template id="nomin_project.create_my_quotation" name="Үнийн санал оруулах">
+    <t t-call="website.layout" >
+        <div id="content_wrapper">
+            <div class="container">
+              <div class="content-bg">
+                <div class="row">
+                <div class="col-sm-9 col-md-9">
+                    <h3 class="pagetitle">Үнийн саналын бичиг баримт </h3>
+                    <form action="/quotation/save/" method="post" class="s_website_form form-horizontal container-fluid" enctype="multipart/form-data">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>					
+                        <input type="hidden" name="budget_partner_id" t-att-value="budget_partner_id.id"/>
+                        <input type="hidden" name="budget" t-att-value="budget.id"/>
+                        <div class="form-group required">
+                            <label class="col-md-3 col-sm-4 control-label" for="cost"> Үнийн санал</label>
+                            <div class="col-md-7 col-sm-8">
+                                <t t-if="budget_partner_id and budget_partner_id.document_id">
+                                    <a t-att-href="'/mydoc/download?attachment_id=%i' % budget_partner_id.document_id.id"> <t t-esc="budget_partner_id.document_id.datas_fname"/></a>
+                                    <t t-if="budget.state == 'quotation'"><input type="file" name="cost" accept=".pdf" class="form-control"/></t>
+                                </t>
+
+                                <t t-if="not budget_partner_id or not budget_partner_id.document_id">								
+                                    <t t-if="budget.state == 'quotation'"><input type="file" name="cost" accept=".pdf" class="form-control"  required="1"/></t>
+                                </t>
+                                <t t-if="budget.state != 'quotation'"><input type="file" name="cost" accept=".pdf" readonly="" class="form-control"  /></t>
+                                <!-- <t t-if='budget.t_partner_cost_id'>
+                                    <t t-foreach="part_tenders.t_partner_cost_id" t-as="cost">
+                                        <a t-att-href="'/mydoc/download?attachment_id=%i' % cost['id']"><t t-esc="cost['datas_fname']"/></a>
+                                    </t>
+                                   </t> -->
+                            </div>
+                        </div>
+                        <div class="form-group required">
+                            <label class="col-md-3 col-sm-4 control-label" for="cost"> Нийт үнийн дүн</label>
+                            <div class="col-md-7 col-sm-8">
+                                <t t-if="budget.state == 'quotation'"><input type="float" t-att-value="budget_partner_id.price_amount" name="total_amount"  class="form-control"  required="1"/></t>
+                                <t t-if="budget.state != 'quotation'"><input type="float" t-att-value="budget_partner_id.price_amount" name="total_amount" readonly="" class="form-control"  /></t>
+                                
+                            </div>
+                        </div>                        
+                        
+                        
+                        <hr/>
+                        
+                        <div class="form-group">
+                            <div class="col-md-offset-3 col-sm-offset-4 col-sm-8 col-md-7">
+                                <t t-if="budget.state == 'quotation'"><button class="btn btn-primary btn-md" type="submit">Хадгалах</button></t>
+                                <t t-if="budget.state == 'quotation'"><a t-attf-href="/quot_detail/#{ slug(budget) }" class="btn btn-default" type="button">Болих</a></t>
+                            </div>
+                            
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <t t-call="nomin_web.my_account"/>
+                </div>
+            
+                </div>
+            </div>
+        </div>
+        </div>
+
+    </t>
+    <script type="text/javascript">
+    <![CDATA[
+    
+        function value_mandatory(event)
+            {
+                if(event.target.value==0)
+                    event.target.value="";
+            }
+            
+        var a;
+          function calculate(event)
+            {
+                if(event.target.className=="unitprice")
+                    {a=Number(event.target.value)*Number(event.target.parentNode.previousSibling.childNodes[0].value);
+                        event.target.parentNode.nextSibling.innerHTML=a;
+                        event.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.innerHTML=Number(event.target.parentNode.nextSibling.nextSibling.nextSibling.childNodes[0].value)+a;
+                    }
+                    
+                if(event.target.className=="quantity")
+                    {a=Number(event.target.value)*Number(event.target.parentNode.nextSibling.childNodes[0].value);
+                        event.target.parentNode.nextSibling.nextSibling.innerHTML=a;
+                        event.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerHTML=Number(event.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.childNodes[0].value)+a;
+                    }
+                    
+                if(event.target.className=="otherexpense")
+                    {
+                        event.target.parentNode.nextSibling.innerHTML=Number(event.target.value)+Number(event.target.parentNode.previousSibling.previousSibling.innerHTML)+Number(event.target.parentNode.previousSibling.childNodes[0].value);
+                    }
+                    
+                if(event.target.className=="materialexpense")
+                    {
+                        event.target.parentNode.nextSibling.nextSibling.innerHTML= Number(event.target.value)+Number(event.target.parentNode.previousSibling.innerHTML)+Number(event.target.parentNode.nextSibling.childNodes[0].value);
+                    }
+                    
+                    total_sum();
+            }
+            
+        var numberx=1;
+        function add_task()
+            {
+                $("#tasktable").append('<tr><td>'+numberx+'</td><td><input name="workx'+numberx+'"></input></td><td><input class="quantity" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="hemjeex'+numberx+'" style="width: 60px;"></input></td><td><input class="unitprice" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="negjunex'+numberx+'" style="width: 60px;"></input></td><td class="totalcost">0</td><td><input class="materialexpense" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="materialx'+numberx+'" style="width: 60px;"></input></td><td><input class="otherexpense" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="busadzardalx'+numberx+'" style="width: 60px;"></input></td><td class="totalsum">0</td><td><button type="button" id=x'+numberx+' onclick="remove_row(event, false); return false;" class="deletex">Устгах</button></td></tr>' );
+                numberx++;
+            }
+            
+        function remove_row(event, bolen)
+            {
+                    if(bolen)
+                    {
+                    for(var i=Number(event.target.id); i<=document.getElementsByClassName("delete").length; i++)
+                        {
+                            document.getElementById(i+1).parentNode.parentNode.childNodes[0].childNodes[0].name="hiddn"+i;
+                            document.getElementById(i+1).parentNode.parentNode.childNodes[0].childNodes[1].innerHTML=i;
+                            document.getElementById(i+1).parentNode.parentNode.childNodes[1].childNodes[0].name="work"+i;
+                            document.getElementById(i+1).parentNode.parentNode.childNodes[2].childNodes[0].name="hemjee"+i;
+                            document.getElementById(i+1).parentNode.parentNode.childNodes[3].childNodes[0].name="negjune"+i;
+                            document.getElementById(i+1).parentNode.parentNode.childNodes[5].childNodes[0].name="material"+i;
+                            document.getElementById(i+1).parentNode.parentNode.childNodes[6].childNodes[0].name="busadzardal"+i;
+                            document.getElementById(i+1).parentNode.parentNode.childNodes[8].childNodes[0].id=i;
+                        }
+                            
+                    }
+                    else
+                    {
+                    for(var i=Number(event.target.id.split("x")[1]); i<document.getElementsByClassName("deletex").length; i++)
+                        {
+                            document.getElementById("x"+(i+1)).parentNode.parentNode.childNodes[0].innerHTML=i;
+                            document.getElementById("x"+(i+1)).parentNode.parentNode.childNodes[1].childNodes[0].name="workx"+i;
+                            document.getElementById("x"+(i+1)).parentNode.parentNode.childNodes[2].childNodes[0].name="hemjeex"+i;
+                            document.getElementById("x"+(i+1)).parentNode.parentNode.childNodes[3].childNodes[0].name="negjunex"+i;
+                            document.getElementById("x"+(i+1)).parentNode.parentNode.childNodes[5].childNodes[0].name="materialx"+i;
+                            document.getElementById("x"+(i+1)).parentNode.parentNode.childNodes[6].childNodes[0].name="busadzardalx"+i;
+                            document.getElementById("x"+(i+1)).parentNode.parentNode.childNodes[8].childNodes[0].id="x"+i;
+                        }
+                        numberx--;
+                    }
+                document.getElementById("tasktable").removeChild(event.target.parentNode.parentNode);
+                total_sum();
+            }
+            
+        var b;
+        function total_sum()
+            {
+                a=document.getElementsByClassName("totalsum")
+                b=Number(a[0].innerHTML);
+                for(var i=1; i<a.length; i++)
+                    {
+                        b+=Number(a[i].innerHTML);
+                    }
+                $("#totalvalue").html(b.toLocaleString()+"₮");
+            }
+     ]]>	
+    </script>
+</template>
+
+<template id="nomin_project.quotation_thanks" >
+        <t t-call="website.layout">
+          <div id="wrap">
+            <div class="oe_structure"/>
+            <div class="container">
+                <h1>Баярлалаа!</h1>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="alert alert-success">
+                            Үнийн санал системд амжилттай хадгалагдлаа.                                 
+                            Баярлалаа.
+                            <button type="button" class="close" data-dismiss="alert">&amp;times;</button>
+                        </div>                            
+                    </div>
+                </div>
+            </div>
+            <div class="oe_structure"/>
+          </div>
+        </t>
+</template>
+</odoo>

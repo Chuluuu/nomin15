@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <!-- Merge Opportunities  -->
+        <record model="ir.ui.view" id="purchase_order_merge_form">
+            <field name="name">purchase.order.merge.form</field>
+            <field name="model">purchase.order.merge</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Merge">
+                    <field name="basic_id" required="1"/>
+                    <separator string="Merged by Purchase"/>
+                    <field name="follow_ids" colspan="4" nolabel="1"/>
+                    <footer>
+                        <button name="action_merge" type="object" string="Merge" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--  Merge leads/opportunities action -->
+    <!--     <record model="ir.actions.act_window" id="purchase_order_merge_act">
+            <field name="name">Purchase Order Merge</field>
+            <field name="res_model">purchase.order.merge</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="purchase_order_merge_form"/>
+            <field name="target">new</field>
+        </record>
+
+        <act_window id="action_purchase_order_merge"
+            multi="True"
+            key2="client_action_multi" name="Purchase Order Merge"
+            res_model="purchase.order.merge" src_model="purchase.order"
+            view_mode="form" target="new" view_type="form"
+            />
+ -->
+    </data>
+</openerp>

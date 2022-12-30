@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <!-- Work Service -->
+        
+        <record id="view_work_service_time_tree" model="ir.ui.view">
+            <field name="name">work.service.time.tree</field>
+            <field name="model">work.service.time</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree string="Work Range">
+                    <field name="name"/>
+                    <field name="worktime"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_work_service_time_form" model="ir.ui.view">
+            <field name="name">work.service.time.form</field>
+            <field name="model">work.service.time</field>
+            <field name="arch" type="xml">
+                <form string="Work Range">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">                            
+                        <button name="toggle_active" type="object" 
+                                class="oe_stat_button" icon="fa-archive">
+<!--                             <field name="active" widget="boolean_button"
+                                options='{"terminology": "archive"}'/> -->
+                        </button>
+                        
+                    </div>  
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="worktime"/>
+                        </group>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+        </record>
+       
+        <record id="view_work_service_time_filter" model="ir.ui.view">
+            <field name="name">work.service.time.list.select</field>
+            <field name="model">work.service.time</field>
+            <field name="arch" type="xml">
+                <search string="Work Range">
+                    <field name="name"/>
+                    <field name="worktime"/>
+               </search>
+            </field>
+        </record>
+
+        <record id="action_work_service_time" model="ir.actions.act_window">
+            <field name="name">Work Range</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">work.service.time</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_work_service_time_filter"/>
+        </record>
+        
+        
+        <!-- Work Service Measurement-->
+        
+        <record id="view_work_service_measurement_tree" model="ir.ui.view">
+            <field name="name">work.service.measurement.tree</field>
+            <field name="model">work.service.measurement</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree string="Work Range">
+                    <field name="name"/>
+                    <field name="measurement"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_work_service_measurement_form" model="ir.ui.view">
+            <field name="name">work.service.measurement.form</field>
+            <field name="model">work.service.measurement</field>
+            <field name="arch" type="xml">
+                <form string="Work Range">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">                            
+                        <button name="toggle_active" type="object" 
+                                class="oe_stat_button" icon="fa-archive">
+                        </button>
+                        
+                    </div>  
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="measurement"/>
+                        </group>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+        </record>
+       
+        <record id="view_work_service_measurement_filter" model="ir.ui.view">
+            <field name="name">work.service.measurement.list.select</field>
+            <field name="model">work.service.measurement</field>
+            <field name="arch" type="xml">
+                <search string="Work Range">
+                    <field name="name"/>
+                    <field name="measurement"/>
+               </search>
+            </field>
+        </record>
+
+        <record id="action_work_service_measurement" model="ir.actions.act_window">
+            <field name="name">Work Range</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">work.service.measurement</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_work_service_measurement_filter"/>
+        </record>
+        
+        
+        <record id="view_work_service_tree" model="ir.ui.view">
+            <field name="name">work.service.tree</field>
+            <field name="model">work.service</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree string="Work Service">
+                    <field name="name"/>
+                    <field name="time_id"/>
+                    <field name="measurement"/>
+                    <field name="amount"/>
+                    <field name="department_id"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_work_service_form" model="ir.ui.view">
+            <field name="name">work.service.form</field>
+            <field name="model">work.service</field>
+            <field name="arch" type="xml">
+                <form string="Work Service">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">                            
+                        <button name="toggle_active" type="object" 
+                                class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"
+                                options='{"terminology": "archive"}'/>
+                        </button>
+                    </div>
+                    <field name="name" colspan="4"/>
+                    <group>
+                        <group>
+                            <field name="time_id"/>
+                            <field name="amount"/>
+                        </group>
+                        <group>
+                            <field name="measurement" options="{'no_create': True}"/>
+                            <field name="department_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+<!--                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/-->
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+       
+        <record id="view_work_service_filter" model="ir.ui.view">
+            <field name="name">work.service.list.select</field>
+            <field name="model">work.service</field>
+            <field name="arch" type="xml">
+                <search string="Work Service">
+                    <field name="name"/>
+                    <field name="time_id"/>
+                    <field name="measurement"/>
+                    <field name="department_id"/>
+                    <field name="amount" string="Amount More" filter_domain="[('amount','&gt;=',self)]"/>
+                    <field name="amount" string="Amount Less" filter_domain="[('amount','&lt;=',self)]"/>
+                    <filter string="Archived" domain="[('active','=',False)]" name="in_active_filter"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Time Range" name="time_id" domain="[]" context="{'group_by':'time_id'}"/>
+                        <filter string="Department" name="department_id" domain="[]" context="{'group_by':'department_id'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+        <record id="action_work_service" model="ir.actions.act_window">
+            <field name="name">Work Service</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">work.service</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_work_service_filter"/>
+        </record>
+    </data>
+</openerp>

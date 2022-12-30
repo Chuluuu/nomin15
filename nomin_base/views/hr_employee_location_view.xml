@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        
+        <record id="view_employee_location_tree" model="ir.ui.view">
+            <field name="name">hr.employee.location.tree</field>
+            <field name="model">hr.employee.location</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Location">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_employee_location_form" model="ir.ui.view">
+            <field name="name">hr.employee.location.form</field>
+            <field name="model">hr.employee.location</field>
+            <field name="arch" type="xml">
+                <form string="Employee Location">
+                    <group>
+                        <field name="name"/>
+                        <field name="country_state_code"  required="1"/>
+                        <field name="parent_location"/>
+                        <field name="zangia_id"/>
+                    </group>
+                    <newline/>
+                    <group string="Employee Location" colspan="4" col="1">
+                        <field name="line_ids" nolabel="1"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+        
+        <record id="hr_employee_location_line_tree" model="ir.ui.view">
+        	<field name="name">hr.employee.location.line.tree</field>
+        	<field name="model">hr.employee.location.line</field>
+        	<field name="arch" type="xml">
+        		<tree string="Employee Location" editable="top">
+	        	
+                    <field name="name"/>
+                    <field name="emp_loc_id" invisible="1"/>
+                    <field name="state_loc_code" required="1"/>
+        		</tree>
+        	</field>
+        </record>
+        
+        
+        <record id="action_open_employee_location_view" model="ir.actions.act_window">
+            <field name="name">Employee Location</field>
+            <field name="res_model">hr.employee.location</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+ 		
+		
+        
+        
+        <!-- <menuitem action="action_hr_contract_1" id="hr_menu_contract_1" parent="hr.menu_human_resources_configuration" name="Contracts" sequence="4" groups="base.group_hr_manager"/> -->
+        <menuitem action="action_open_employee_location_view"
+                  id="menu_employee_location_view"
+                  name="Employee Location"
+                  parent="hr.menu_human_resources_configuration" 
+                  groups="nomin_base.group_config_manager"
+                  sequence="31"/>
+        
+    </data>
+</openerp>

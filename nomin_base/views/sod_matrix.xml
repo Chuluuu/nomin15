@@ -1,0 +1,1164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+
+		<menuitem 
+            id="model_sod_menu" name="SOD дизайнер" 
+            parent="measure_menu"
+			sequence="5"/>
+
+
+		<record model="ir.ui.view" id="sod_workflow_name_form">
+	        <field name="name">sod.workflow.name.form</field>
+	        <field name="model">sod.workflow.name</field>
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	            <form string="Sod workflow name">
+	            	<header>
+
+					
+	            	</header>
+					<sheet>
+		               	<group colspan="8"  col="8">
+			                <group colspan="4">		
+                                <field name="name"/>
+								<field name="code"/>
+								<field name="has_follower" />
+								<field name="skip_workflow"/>
+								<field name="is_config_allowed_resource"/>
+				          	</group>
+
+			                <group colspan="4">		
+                                <field name="type"/>
+								<field name="allowed_resources" widget="many2many_tags" options="{'no_create': True}"/>
+								<field name="group_id" attrs="{'invisible':[('type','not in',['search_in_group','search_in_department_group'])]}"/>
+				          	</group>
+							  
+							  
+			            </group>
+						<field name="line_ids" attrs="{'invisible':[('type','!=','search_in_dynamic_group')]}">
+
+							<tree string="Мөр" editable="bottom">
+								<field name="id"/>
+								<field name="department_ids" widget="many2many_tags" />
+								<field name="group_id" />
+							</tree>
+
+							<form>
+								<group>
+									<group>
+										<field name="name_id"/>
+										
+									</group>
+								</group>
+								<group>
+									<field name="id"/>
+									<field name="department_ids" widget="many2many_tags"/>
+									<field name="group_id"/>
+								</group>
+								<field name="group_ids"/>
+							</form>
+
+						</field>
+
+						<field name="line_ids_for_users" attrs="{'invisible':[('type','!=','get_users_related_to_department')]}">
+
+							<tree string="Мөр" editable="bottom">
+								<field name="id"/>
+								<field name="department_ids" widget="many2many_tags" />
+								<field name="user_ids" widget="many2many_tags"/>
+							</tree>
+
+							<form>
+								<group>
+									<group>
+										<field name="id"/>
+										<field name="department_ids" widget="many2many_tags"/>
+										<field name="user_ids" widget="many2many_tags"/>
+									</group>
+								</group>								
+				
+							</form>
+
+						</field>
+
+
+						<field name="line_ids_for_hierarchy" attrs="{'invisible':[('type','!=','hierarchy_level_up')]}">
+
+							<tree string="Мөр" >
+								<field name="id"/>
+								<field name="department_ids" widget="many2many_tags" />
+								<field name="group_id" />
+								<field name="group_ids" widget="many2many_tags"/>
+							</tree>
+
+							<form>
+								<group>
+									<group>
+										<field name="id"/>
+										<field name="department_ids" widget="many2many_tags"/>
+										
+									</group>
+								</group>
+								
+								<group>
+									<field name="group_id" invisible="1"/>
+								</group>
+
+								<field name="group_ids">
+									<tree string="Мөр" editable="bottom">
+										<field name="id"/>
+										<field name="level_number"/>
+										<field name="group_id" />
+										
+										<field name="department_id" />
+										<field name="exclude" />
+									</tree>
+
+									<form>
+										<group>
+											<group>
+												<field name="level_number" required="1"/>
+											</group>
+											<group>
+												<field name="id"/>
+												<field name="group_id" required="1"/>
+												<field name="department_id" />
+											</group>
+										</group>
+									</form>
+								</field>
+
+
+							</form>
+
+						</field>
+						<group>
+							<field name="user_ids" widget="many2many_tags" attrs="{'invisible':[('type','!=','get_one_user')]}"/>	
+						</group>
+						
+						<field name="department_id"/>
+
+  						<notebook>
+							<page string="Ажилтан" >
+                                <group colspan="8"  col="8">
+									
+									<group colspan="4">	
+                                        <field name="employee_id"/>
+									</group>
+									
+									<group colspan="4">	
+									
+										<!-- <field name="user_id" attrs="{'required':[('type','in',['hierarchy_level_up'])]}"/>	 -->
+                                    
+									</group>
+									
+									<button name="test_button_for_employees" string="Урсгал шалгах (Ажилтан)" type="object" class="oe_highlight" />
+								
+								</group>
+                            </page>
+
+                            <page string="Хэрэглэгч" >
+							 	<group colspan="8"  col="8">
+									
+									
+									<group colspan="4">	
+										<field name="i_m_support_user" />
+										<field name="user_id" attrs="{'required':[('type','in',['hierarchy_level_up'])]}"/>
+                                         		
+									</group>
+									
+									<group colspan="4">	
+                                   
+                                        <!-- <field name="department_id"/> -->
+								
+									</group>
+	
+									<button name="test_button" string="Урсгал шалгах" type="object" class="oe_highlight" />
+                          		
+								  </group>
+	
+                            </page>
+                        </notebook>
+        
+
+		            	<!-- <group colspan="8"  col="8" >
+			                <group colspan="4" >		
+                                <field name=""/>
+								<field name="user_id" attrs="{'required':[('type','in',['hierarchy_level_up'])]}"/>
+								<field name="employee_id"/>
+				          	</group>
+
+			                <group colspan="4">		
+                                
+								<button name="test_button" string="Урсгал шалгах" type="object" class="oe_highlight" />
+								<button name="test_button_for_employees" string="Урсгал шалгах (Ажилтан)" type="object" class="oe_highlight" />
+								
+				          	</group>
+							
+							  
+			            </group> -->
+
+
+
+					<group >
+						<field name="sod_msg" readonly="1"/>
+						<!-- <field name="button_clickers" readonly="1" widget="many2many_tags"/>  -->
+                                   
+					</group>
+		            </sheet>
+					<!-- <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers"/> 
+		                <field name="message_ids" widget="mail_thread"/>  
+	               	</div> -->
+	            </form>
+	        </field>
+	    </record>
+
+		<record model="ir.ui.view" id="sod_workflow_name_tree">
+		    <field name="name">sod.workflow.name.tree</field>
+		    <field name="model">sod.workflow.name</field>
+		    <field name="type">tree</field>
+		    <field name="arch" type="xml">
+		        <tree string="Sod workflow name">
+					<field name="name"/>
+					<field name="code"/>
+					<field name="type"/>
+				</tree>
+		    </field>
+		</record>
+	   
+		<record id="view_workflow_name_filter" model="ir.ui.view">
+			<field name="name">sod.workflow.name.select</field>
+			<field name="model">sod.workflow.name</field>
+			<field name="arch" type="xml">
+				<search string="Filter by">
+					<field name="type" string="Төрөл"/>
+					
+					<group expand="0" name="group_by" string="Group By">
+						<filter string="Төрөл" name="group_type" context="{'group_by':'type'}"/>
+				   	</group> 
+				</search>
+				
+			</field>
+		</record>
+
+
+
+
+ 		<record id="action_sod_workflow_name" model="ir.actions.act_window">
+	        <field name="name">Sod workflow name</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">sod.workflow.name</field>
+	        <!-- <field name="view_type">form</field> -->
+	        <field name="view_mode">tree,form</field>
+	        <field name="context">{
+	        	'search_default_group_type': 1}</field>
+	        <field name="view_id" ref="sod_workflow_name_tree"/>
+			<field name="search_view_id" ref="view_workflow_name_filter"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to define a new received .
+	          </p>
+	        </field>
+	    </record>   
+
+
+
+
+
+
+
+		<record model="ir.ui.view" id="sod_activity_name_form">
+	        <field name="name">sod.activity.name.form</field>
+	        <field name="model">sod.activity.name</field>
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	            <form string="Sod workflow name">
+	            	<header>
+
+					
+	            	</header>
+					<sheet>
+		               	<group colspan="8"  col="8">
+			                <group colspan="4">		
+                                <field name="name"/>
+				          	</group>
+							  
+			            </group>
+		            </sheet>
+	            </form>
+	        </field>
+	    </record>
+
+		<record model="ir.ui.view" id="sod_activity_name_tree">
+		    <field name="name">sod.activity.name.tree</field>
+		    <field name="model">sod.activity.name</field>
+		    <field name="type">tree</field>
+		    <field name="arch" type="xml">
+		        <tree string="Sod workflow name">
+                                <field name="name"/>
+				</tree>
+		    </field>
+		</record>
+
+
+
+
+
+	   
+ 		<record id="action_sod_activity_name" model="ir.actions.act_window">
+	        <field name="name">Sod activity name</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">sod.activity.name</field>
+	        <!-- <field name="view_type">form</field> -->
+	        <field name="view_mode">tree,form</field>
+	        <!-- <field name="context">{
+	        	'search_default_group_rotation': 1}</field> -->
+	        <field name="view_id" ref="sod_activity_name_tree"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to define a new received .
+	          </p>
+	        </field>
+	    </record>   
+
+        <!-- <menuitem action="action_sod_activity_name" id="sod_activity_name_menu"
+            name="Үйлдлийн нэр" parent="model_sod_menu" sequence="14"/> -->
+
+
+
+
+
+
+
+
+
+
+
+		<record model="ir.ui.view" id="sod_activity_form">
+	        <field name="name">sod.activity.form</field>
+	        <field name="model">sod.activity</field>
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	            <form string="Sod activity">
+	            	<header>
+
+					
+	            	</header>
+					<sheet>
+		               	<group colspan="8"  col="8">
+			                <group colspan="4">		
+								
+                                <field name="name"/>
+								<field name="type"/>
+				          	</group>
+			            </group>
+		            </sheet>
+					<!-- <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers"/> 
+		                <field name="message_ids" widget="mail_thread"/>  
+	               	</div> -->
+	            </form>
+	        </field>
+	    </record>
+
+		<record model="ir.ui.view" id="sod_activity_tree">
+		    <field name="name">sod.activity.tree</field>
+		    <field name="model">sod.activity</field>
+		    <field name="type">tree</field>
+		    <field name="arch" type="xml">
+		        <tree string="Sod activity">
+                    			
+                                <field name="name"/>
+								<field name="type"/>
+				</tree>
+		    </field>
+		</record>
+	   
+ 		<record id="action_sod_activity" model="ir.actions.act_window">
+	        <field name="name">Sod activitye</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">sod.activity</field>
+	        <!-- <field name="view_type">form</field> -->
+	        <field name="view_mode">tree,form</field>
+	        <!-- <field name="context">{
+	        	'search_default_group_rotation': 1}</field> -->
+	        <field name="view_id" ref="sod_activity_tree"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to define a new received .
+	          </p>
+	        </field>
+	    </record>   
+
+        <!-- <menuitem action="action_sod_activity" id="sod_activity_menu"
+            name="Үйлдлийн жагсаалт" parent="model_sod_menu" sequence="8"/> -->
+
+
+		<record model="ir.ui.view" id="sod_designer_form">
+	        <field name="name">sod.designer.form</field>
+	        <field name="model">sod.designer</field>
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	            <form string="Hr  Sheet">
+	            	<header>
+						<!-- <button name="action_send" string="Илгээх" type="object" class="oe_highlight" 
+							attrs="{'invisible':[('state','not in',['draft'])]}"
+							confirm="Are you sure to send?"/>
+
+						<button name="create_default" string="Default-г үүсгэх" type="object" class="oe_highlight" 
+							attrs="{'invisible':[('state','not in',['draft'])]}"/>
+
+
+						<button name="action_cancel" string="Цуцлах" type="object" class="oe_highlight" 
+							attrs="{'invisible':[('state','not in',['set'])]}"
+							confirm="Are you sure to send?"/>
+
+
+						<button name="action_return" string="Буцаах" type="object" class="oe_highlight" 
+							attrs="{'invisible':[('state','not in',['requested','approved'])]}"
+							confirm="Are you sure to return?"/>
+
+
+						<button name="action_set" string="Хянах" type="object" class="oe_highlight" 
+							attrs="{'invisible':[('state','not in',['approved'])]}"
+							confirm="Are you sure to set?"
+							groups="nomin_base.group_support_assistant"/>
+
+
+						<button name="action_approve" string="Батлах" type="object" class="oe_highlight" 
+							attrs="{'invisible':[('state','not in',['requested'])]}"
+							confirm="Are you sure to confirm?"
+							groups="base.group_hr_manager"/>   -->
+
+	            		<field name="state" widget="statusbar" statusbar_visible="draft,cancel,verify,approve,codes_created" nolabel="1"/>
+
+	            	</header>
+					<sheet>
+
+		               	<group colspan="8"  col="8">
+		               		<group colspan="8">
+	                    	</group>
+		               		<group colspan="4">
+							    <field name="module_name"/>
+								<field name="model_name"/>
+							   	<field name="menu_type"/>
+								<field name="menu_name"/>
+								<field name="parent_menu"/>
+				          	</group>
+			                <group colspan="4">
+								<field name="employee_id" readonly="1"/>
+								<field name="verify_employee_id"/>
+								<field name="approve_employee_id"/>
+								<field name="admin_group_id"/>
+								<field name="menu_dominant_group_id"/>
+								<field name="personal_group_id"/>
+
+				          	</group>
+							
+			            </group>
+
+                              	<field name="field_ids" >
+                                    <tree string="Мөр" >
+
+										<field name="field_name" />
+                                        <field name="field_name_in_english"/>		
+										<field name="field_type"/>
+										<field name="has_default_value"/>
+										<field name="location"/>
+										<field name="has_attrs"/>
+										<field name="group_by"/>
+										<field name="filter_by"/>	
+										<field name="search_by"/>
+										<field name="create_date" readonly="1"/>
+										<field name="managerial_group_id" />
+										<field name="state" invisible="1"/>
+
+                                    </tree>
+
+									<form>
+										<group>
+											<group>
+												<field name="field_name" />
+												<field name="field_name_in_english"/>
+											</group>
+											<group>
+												<field name="field_type"/>
+												<field name="location"/>
+												
+											</group>
+										</group>
+										<field name="managerial_group_id" widget="many2many_tags"/>
+										<group>
+											<field name="python" placeholder="Python code"/>
+										</group>
+
+									</form>
+
+
+
+								</field>
+
+
+
+
+
+
+
+								<field name="matrix_ids" >
+                                    <tree string="Мөр" >
+
+										<field name="duty_id" />
+										<field name="duty_description"/>
+										<field name="crud"/>	
+										
+										<field name="role_id"/>
+
+                                    </tree>
+
+									<form>
+										<group>
+											<group>
+												<field name="duty_id" />
+												<field name="duty_name"/>
+											</group>
+											<group>
+												<field name="duty_description"/>
+												<field name="role_id"/>
+												
+											</group>
+										</group>
+										<!-- <field name="managerial_group_id" widget="many2many_tags"/> -->
+										<group>
+
+										</group>
+
+									</form> 
+
+
+
+								</field>
+
+
+
+
+                              	<field name="state_ids" >
+                                    <tree string="Мөр" >
+										<field name="id" />
+										<field name="name_id" />
+										<field name="code" />
+										<field name="type"/>
+										<field name="sequence" />
+										<field name="state_ids" widget="many2many_tags"/>
+
+										<field name="state" invisible="1"/>
+										<field name="create_date"/>
+										<!-- <field name="line_ids" widget="many2many_tags"/> -->
+										
+                                    </tree>
+
+									<form>
+										<group>
+											<group>
+												<field name="sequence" />
+												<field name="code" />
+												<field name="type"/>												
+											</group>
+											<group>
+												<field name="id" />
+												<field name="name_id" />
+												<field name="create_date" invisible="1"/>
+												<field name="employee_id" readonly="1"/>
+											</group>
+
+										</group>
+	
+
+												<group>
+													<field name="python" placeholder="Python code"/>
+												</group>
+
+												<field name="workflow_ids" readonly="1">
+													<tree string="Мөр" editable="bottom">
+
+														<field name="workflow_name" />
+														<field name="code"/>		
+														<field name="activity_id"/>
+
+													</tree>
+													<form>
+														<group>
+															<group>
+																<field name="workflow_name" />
+																<field name="create_date"/>
+															</group>
+														</group>
+
+
+																
+													</form>
+												</field>
+
+
+												<group>
+													<field name="python_for_activity" placeholder="Python code" invisible="1"/>
+												</group>
+
+												<field name="state_ids">
+													<tree string="Мөр" >		
+														<field name="name_id" />
+													</tree>
+												</field>
+												<!-- <field name="line_ids" /> -->
+												
+									</form>
+                                </field>
+								
+
+
+
+
+                              	<field name="workflow_ids" >
+                                    <tree string="Мөр" editable="bottom">
+
+										<field name="workflow_name" />
+                                        <field name="code"/>	
+										<field name="type"/>	
+										<field name="activity_id"/>
+										<field name="custom_number" />
+										<field name="custom_name" />
+										<field name="create_date"/>
+
+                                    </tree>
+									<form>
+										<group>
+											<group>
+												<field name="workflow_name" />
+												<field name="create_date"/>
+											</group>
+
+										</group>
+	
+									</form>
+
+								</field>
+
+								<!--====================-->
+
+								<field name="element_ids" >
+									<tree string="Мөр" >
+										<!-- <field name="id" /> -->
+										<field name="name" />
+										<field name="code" />
+										<field name="sequence" />
+										<field name="reference_ids" widget="many2many_tags"/>
+										<field name="create_date"/>
+										
+									</tree>
+
+									<form>
+										<group>
+											<group>
+												<field name="sequence" />
+												<field name="code" />											
+											</group>
+											<group>
+												<field name="id" />
+												<field name="name" />
+												<field name="create_date"/>
+											</group>
+
+										</group>
+
+
+
+												<field name="reference_ids">
+													<tree string="Мөр" editable="bottom">
+
+														<field name="name" />
+														<field name="category_id"/>		
+														<field name="code"/>
+
+													</tree>
+													<form>
+														<group>
+															<group>
+																<field name="name" />
+																<field name="create_date"/>
+															</group>
+														</group>
+
+
+																
+													</form>
+												</field>
+												
+									</form>
+								</field>
+
+
+
+								<field name="category_ids" >
+									<tree string="Мөр" >
+										<!-- <field name="id" /> -->
+										<field name="name" />
+										<field name="code" />
+										<field name="sequence" />
+										<field name="reference_ids" widget="many2many_tags"/>
+										<field name="create_date"/>
+										
+									</tree>
+
+									<form>
+										<group>
+											<group>
+												<field name="sequence" />
+												<field name="code" />											
+											</group>
+											<group>
+												<field name="id" />
+												<field name="name" />
+												<field name="create_date"/>
+											</group>
+
+										</group>
+
+
+
+												<field name="reference_ids" >
+													<tree string="Мөр" editable="bottom">
+
+														<field name="name" />
+														<field name="element_id"/>		
+														<field name="code"/>
+
+													</tree>
+													<form>
+														<group>
+															<group>
+																<field name="name" />
+																<field name="create_date"/>
+															</group>
+														</group>
+
+
+																
+													</form>
+												</field>
+												
+									</form>
+								</field>
+
+
+
+
+	
+
+						<group colspan="9" col="7">
+							<group colspan="1">
+
+			                </group>
+			            </group>
+			            <group colspan="8">
+						</group>
+
+		            </sheet>
+		            <!-- <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers"/> 
+		                <field name="message_ids" widget="mail_thread"/>  
+	               	</div> -->
+	            </form>
+	        </field>
+	    </record>
+
+
+
+
+
+		<record model="ir.ui.view" id="hr_system_access_request_tree">
+		    <field name="name">sod.designer.tree</field>
+		    <field name="model">sod.designer</field>
+		    <field name="type">tree</field>
+		    <field name="arch" type="xml">
+		        <tree string="HR system access request">
+					<field name="employee_id" />
+					<field name="create_date" />
+					<field name="approve_employee_id"/>
+					
+					
+				</tree>
+		    </field>
+		</record>
+	   
+
+		<record id="view_sod_designer_filter" model="ir.ui.view">
+			<field name="name">sod.designer.select</field>
+			<field name="model">sod.designer</field>
+			<field name="arch" type="xml">
+				<search string="Filter by">
+
+					<field name="menu_type" string="диза"/>
+
+					<group expand="0" name="group_by" string="Group By">
+						<filter string="Mенюний төрөл" name="group_menu_type" context="{'group_by':'menu_type'}"/>
+				   	</group> 
+				</search>
+			</field>
+		</record>
+
+
+
+
+ 		<record id="action_sod_designer" model="ir.actions.act_window">
+	        <field name="name">SOD designer</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">sod.designer</field>
+	        <!-- <field name="view_type">form</field> -->
+	        <field name="view_mode">tree,form</field>
+	        <!-- <field name="context">{'search_default_group_menu_type': 1}</field> -->
+	        <field name="view_id" ref="hr_system_access_request_tree"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to define a new received.
+	          </p>
+	        </field>
+	    </record>   
+
+        <!-- <menuitem action="action_sod_designer" id="sod_designer_menu"
+            name="SOD дизайнер" parent="model_sod_menu" sequence="5" groups="group_config_manager"/> -->
+        <menuitem action="action_sod_designer" id="sod_designer_menu"
+            name="SOD дизайнер" parent="model_sod_menu" sequence="5" />
+		<menuitem action="action_sod_workflow_name" id="sod_workflow_name_menu"
+            name="Урсгалын тохиргоо" parent="model_sod_menu" sequence="14"/>
+
+
+
+
+		<record model="ir.ui.view" id="sod_state_name_form">
+	        <field name="name">sod.state.name.form</field>
+	        <field name="model">sod.state.name</field>
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	            <form string="Sod state name">
+	            	<header>
+
+					
+	            	</header>
+					<sheet>
+		               	<group colspan="8"  col="8">
+			                <group colspan="4">		
+								<field name="code"/>
+                                <field name="name"/>
+								<field name="workflow_is_allowed"/>
+								<field name="type"/>
+				          	</group>
+			            </group>
+		            </sheet>
+					<!-- <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers"/> 
+		                <field name="message_ids" widget="mail_thread"/>  
+	               	</div> -->
+	            </form>
+	        </field>
+	    </record>
+
+		<record model="ir.ui.view" id="sod_state_name_tree">
+		    <field name="name">sod.state.name.tree</field>
+		    <field name="model">sod.state.name</field>
+		    <field name="type">tree</field>
+		    <field name="arch" type="xml">
+		        <tree string="Sod state name">
+								
+                                <field name="name"/>
+								<field name="code"/>
+								<field name="type"/>
+								<field name="workflow_is_allowed"/>
+				</tree>
+		    </field>
+		</record>
+	   
+ 		<record id="action_sod_state_name" model="ir.actions.act_window">
+	        <field name="name">Sod state name</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">sod.state.name</field>
+	        <!-- <field name="view_type">form</field> -->
+	        <field name="view_mode">tree,form</field>
+	        <!-- <field name="context">{
+	        	'search_default_group_rotation': 1}</field> -->
+	        <field name="view_id" ref="sod_state_name_tree"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to define a new received HR system access request.
+	          </p>
+	        </field>
+	    </record>   
+
+        <menuitem action="action_sod_state_name" id="sod_state_name"
+            name="Төлөвийн тохиргоо" parent="model_sod_menu" sequence="12"/>
+
+
+
+
+		<record model="ir.ui.view" id="sod_state_form">
+	        <field name="name">sod.state.form</field>
+	        <field name="model">sod.state</field>
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	            <form string="SOD ">
+	            	<header>
+						<!-- <button name="action_send" string="Илгээх" type="object" class="oe_highlight" 
+							attrs="{'invisible':[('state','not in',['draft'])]}"
+							confirm="Are you sure to send?"/> -->
+
+						
+	            		<field name="state" widget="statusbar" statusbar_visible="draft,cancel,requested,approved,set" nolabel="1"/>
+
+	            	</header>
+					<sheet>
+
+		               	<group colspan="8"  col="8">
+		               		<group colspan="8">
+	                    	</group>
+		               		<group colspan="4">
+							   	<field name="designer_id" />
+								<field name="name_id" />									
+				          	</group>
+			                <group colspan="4">
+
+				          	</group>
+							
+			            </group>
+
+
+
+						<group colspan="9" col="7">
+							<group colspan="1">
+
+			                </group>
+			            </group>
+			            <group colspan="8">
+						</group>Үйлдэл
+
+		            </sheet>
+		            <!-- <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers"/> 
+		                <field name="message_ids" widget="mail_thread"/>  
+	               	</div> -->
+	            </form>
+	        </field>
+	    </record>
+
+
+		<record model="ir.ui.view" id="sod_state_tree">
+		    <field name="name">sod.state.tree</field>
+		    <field name="model">sod.state</field>
+		    <field name="type">tree</field>
+		    <field name="arch" type="xml">
+		        <tree string="HR system access request">
+					<field name="designer_id" />								
+					<field name="name_id" />
+				
+				</tree>
+		    </field>
+		</record>
+	   
+
+
+
+
+		<record id="view_sod_state_filter" model="ir.ui.view">
+			<field name="name">sod.state.select</field>
+			<field name="model">sod.state</field>
+			<field name="arch" type="xml">
+				<search string="Filter by">
+					<field name="designer_id" string="диза"/>
+					<field name="name_id" string="Нэрээр нь"/>
+					
+					<group expand="0" name="group_by" string="Group By">
+						<filter string="Mенюний нэрээр" name="group_designer_id" context="{'group_by':'designer_id'}"/>
+				   	</group> 
+				</search>
+			</field>
+		</record>
+
+
+ 		<record id="action_sod_state" model="ir.actions.act_window">
+	        <field name="name">SOD state</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">sod.state</field>
+	        <!-- <field name="view_type">form</field> -->
+	        <field name="view_mode">tree,form</field>
+	        <field name="context">{'search_default_group_designer_id': 1}</field>
+			<field name="search_view_id" ref="view_sod_state_filter"/>
+	        <field name="view_id" ref="sod_state_tree"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to define a new received
+	          </p>
+	        </field>
+	    </record>   
+
+        <menuitem action="action_sod_state" id="sod_state_menu"
+            name="SOD state" parent="model_sod_menu" sequence="7" />
+
+
+
+
+
+
+		<record model="ir.ui.view" id="sod_matrix_form">
+	        <field name="name">sod.matrix.form</field>
+	        <field name="model">sod.matrix</field>
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	            <form string="SOD ">
+	            	<header>
+
+
+
+	            	</header>
+					<sheet>
+
+		               	<group colspan="8"  col="8">
+		               		<group colspan="8">
+	                    	</group>
+		               		<group colspan="4">
+							   	<field name="duty_id" />
+
+				          	</group>
+			                <group colspan="4">
+								<field name="duty_name" />
+
+				          	</group>
+							
+			            </group>
+
+
+
+						<group colspan="9" col="7">
+							<group colspan="1">
+
+			                </group>
+			            </group>
+			            <group colspan="8">
+							<field name="duty_description" />
+						</group>
+
+		            </sheet>
+
+	            </form>
+	        </field>
+	    </record>
+
+
+
+
+
+
+
+
+		<record model="ir.ui.view" id="sod_matrix_tree">
+		    <field name="name">sod.matrix.tree</field>
+		    <field name="model">sod.matrix</field>
+		    <field name="type">tree</field>
+		    <field name="arch" type="xml">
+		        <tree string="HR system access request">
+					<field name="duty_name" />
+					<field name="duty_description"/>									
+
+					
+				</tree>
+		    </field>
+		</record>
+	   
+
+	   
+
+ 		<record id="action_sod_matrix" model="ir.actions.act_window">
+	        <field name="name">SOD matrix</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">sod.matrix</field>
+
+	        <field name="view_mode">tree,form</field>
+
+	        <field name="view_id" ref="sod_matrix_tree"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to define a new received HR system access request.
+	          </p>
+	        </field>
+	    </record>   
+
+        <menuitem action="action_sod_matrix" id="sod_matrix_menu"
+            name="SOD матрикс" parent="model_sod_menu" sequence="8" />
+
+
+			
+
+
+
+		<record model="ir.ui.view" id="sod_field_name_form">
+	        <field name="name">sod.field.name.form</field>
+	        <field name="model">sod.field.name</field>
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	            <form string="Sod workflow name">
+	            	<header>
+
+					
+	            	</header>
+					<sheet>
+		               	<group colspan="8"  col="8">
+			                <group colspan="4">		
+                                <field name="name"/>
+								<field name="name_in_english"/>
+								<field name="field_type"/>
+				          	</group>
+			            </group>
+		            </sheet>
+					<!-- <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers"/> 
+		                <field name="message_ids" widget="mail_thread"/>  
+	               	</div> -->
+	            </form>
+	        </field>
+	    </record>
+
+		<record model="ir.ui.view" id="sod_field_name_tree">
+		    <field name="name">sod.field.name.tree</field>
+		    <field name="model">sod.field.name</field>
+		    <field name="type">tree</field>
+		    <field name="arch" type="xml">
+		        <tree string="Sod workflow name">
+                                <field name="name"/>
+								<field name="name_in_english"/>
+								<field name="field_type"/>
+				</tree>
+		    </field>
+		</record>
+	   
+ 		<record id="action_sod_field_name" model="ir.actions.act_window">
+	        <field name="name">Sod workflow name</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">sod.field.name</field>
+	        <!-- <field name="view_type">form</field> -->
+	        <field name="view_mode">tree,form</field>
+	        <!-- <field name="context">{
+	        	'search_default_group_rotation': 1}</field> -->
+	        <field name="view_id" ref="sod_field_name_tree"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to define a new received .
+	          </p>
+	        </field>
+	    </record>   
+
+        <menuitem action="action_sod_field_name" id="sod_field_name_menu"
+            name="Талбарын тохиргоо" parent="model_sod_menu" sequence="9"/>
+
+
+   	</data>
+</odoo>

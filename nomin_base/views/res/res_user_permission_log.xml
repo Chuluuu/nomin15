@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="res_users_permission_log_form" model="ir.ui.view">
+            <field name="name">res.users.permission.log.form</field>
+            <field name="model">res.users.permission.log</field>
+            <field name="arch" type="xml">
+                <form string="User permission - Log" create="false" edit="false" delete="false">
+                    <sheet>
+                        <group>
+                            <field name="create_uid"/>
+                            <field name="user_id"/>
+                            <field name="create_date"/>
+                            <field name="log_type"/>
+                            <field name="action"/>
+                            <field name="department_ids" attrs="{'invisible':[('log_type','==','group')]}"/>
+                            <field name="group_ids" attrs="{'invisible':[('log_type','!=','group')]}"/>
+                            
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="res_users_permission_log_tree" model="ir.ui.view">
+            <field name="name">res.users.permission.log.tree</field>
+            <field name="model">res.users.permission.log</field>
+            <field name="arch" type="xml">
+                <tree string="User permission - Log" create="false" edit="false" delete="false">
+                    <field name="create_uid"/>
+                    <field name="user_id"/>
+                    <field name="log_type"/>
+                    <field name="action"/>
+                    <field name="department_ids" attrs="{'invisible':[('log_type','==','group')]}"/>
+                    <field name="group_ids" attrs="{'invisible':[('log_type','!=','group')]}"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="res_users_permission_log_filter" model="ir.ui.view">
+            <field name="name">User permission - Log</field>
+            <field name="model">res.users.permission.log</field>
+            <field name="arch" type="xml">
+                <search string="Add Followers">
+                    <field name="user_id"/>
+                    <field name="create_uid"/>
+                    <filter string="Энэ сар" name="current_month" domain="[('create_date','&gt;=',(datetime.date.today()+relativedelta(day=1)).strftime('%Y-%m-%d'))]" help="Энэ сар"/>
+                    <!-- <field name="old_user_id" string="Old User"/>
+                    <field name="old_user_department_id" />
+                    <filter string="Unconfirmed" domain="[('state','in',['draft'])]" name="unconfirmed"/>
+                    <filter string="Important Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/> -->
+                </search>
+             </field>
+        </record>
+
+        <record id="res_users_permission_log_open" model="ir.actions.act_window">
+            <field name="name">User permission - Log</field>
+            <field name="res_model">res.users.permission.log</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="res_users_permission_log_filter"/>
+            <field name="context">{"search_default_current_month":1}</field>
+            <field name="view_id" ref="res_users_permission_log_tree"/>
+        </record>
+		
+        <menuitem
+            action="res_users_permission_log_open"
+            id="menu_res_users_permission_log_open"
+            parent="base.menu_users"
+            sequence="1"
+            groups="base.group_user"/>
+
+   </data>
+</openerp>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+		<record id="view_company_form_nomin_base" model="ir.ui.view">
+            <field name="name">view.company.form.nomin_base</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+            <data>
+                <xpath expr='//field[@name="email"]' position="after">
+                    <field name="domain_name"/>
+            		<field name="partner_code"/>
+                    <field name="ticket_email"/>
+                    <field name="location_id" required="1"/>
+            	</xpath>
+                <xpath expr='//field[@name="partner_id"]' position="replace">
+                    <field name="partner_id" />                    
+                </xpath>
+            	<xpath expr='//notebook/page[@name="report"]' position="inside">
+		             <group string="Blank Header Image">
+		             		<field name="blank_header_image" widget='image' class="oe_avatar" options='{"preview_image": "blank_header_image_medium", "size": [40, 180]}'/>
+                     </group>
+                     <group string="Blank Header English Image">
+		             		<field name="blank_header_en_image" widget='image' class="oe_avatar" options='{"preview_image": "blank_header_en_image_medium", "size": [40, 180]}'/>
+                     </group>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Түүх">
+                        <field name="company_history_ids" readonly = "0" >
+                            <tree string="company history" >
+                                <field name="company_id" invisible = "1" />
+                                <field name="start_date" />
+                                <field name="end_date" />
+                                <field name="name" />
+                            </tree>
+                            <form string="company history">
+                                <group>
+                                    <field name="company_id" invisible = "1" />
+                                    <field name="start_date" readonly = "1" />
+                                    <field name="end_date" readonly = "1"/>
+                                    <field name="name" readonly = "1"/>
+                                </group>
+                            </form>
+                        </field>
+                    </page>
+                </xpath>
+            </data>
+            </field>
+        </record>
+   </data>
+</openerp>

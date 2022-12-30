@@ -1,0 +1,1223 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* nomin_purchase
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c-20160514\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-21 02:14+0000\n"
+"PO-Revision-Date: 2021-04-21 02:14+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: nomin_purchase
+#: model:mail.template,body_html:nomin_purchase.purchase_mail_template
+msgid "\n"
+"<p>\n"
+"Сайн байна уу, ${object.name}, </br>\n"
+"</p>\n"
+"<p>\n"
+"<b>${ctx[\"department\"]}</b> хэлтэсийн <a href=\"${ctx[\"base_url\"]}/web?db=${ctx[\"db_name\"]}#id=${ctx[\"id\"]}&view_type=form&model=${ctx[\"model\"]}&action=${ctx[\"action_id\"]}\"><b>${ctx[\"name\"]}</b></a>\n"
+" дугаартай баримтыг <b>${ctx[\"sender\"]}</b> <b>${ctx[\"state\"]}</b> төлөвт орууллаа.\n"
+"</p>\n"
+"<p>\n"
+"    Та системийн дараах цэснээс энэхүү баримтыг олох боломжтой.\n"
+"   \n"
+"</p>\n"
+"<ul>\n"
+"    <li><b>${ctx[\"menu_path\"]}</b></li>\n"
+"    <li><b>Тайлбар: ${ctx[\"description\"]}</b></li>\n"
+"</ul>\n"
+"\n"
+"<p>\n"
+"    Та <a href=\"${ctx[\"base_url\"]}/web?db=${ctx[\"db_name\"]}#id=${ctx[\"id\"]}&view_type=form&model=purchase.order&action=${ctx[\"action_id\"]}\"><b>${ctx[\"name\"]}</b></a> \n"
+"</p>\n"
+"<p>\n"
+"    Баярлалаа,\n"
+"</p>\n"
+"\n"
+"<pre>\n"
+"-- \n"
+"Odoo Автомат Имэйл\n"
+"\n"
+"</pre>\n"
+"            "
+msgstr "\n"
+"<p>\n"
+"Сайн байна уу, ${object.name}, </br>\n"
+"</p>\n"
+"<p>\n"
+"<b>${ctx[\"department\"]}</b> хэлтэсийн <a href=\"${ctx[\"base_url\"]}/web?db=${ctx[\"db_name\"]}#id=${ctx[\"id\"]}&view_type=form&model=${ctx[\"model\"]}&action=${ctx[\"action_id\"]}\"><b>${ctx[\"name\"]}</b></a>\n"
+" дугаартай баримтыг <b>${ctx[\"sender\"]}</b> <b>${ctx[\"state\"]}</b> төлөвт орууллаа.\n"
+"</p>\n"
+"<p>\n"
+"    Та системийн дараах цэснээс энэхүү баримтыг олох боломжтой.\n"
+"   \n"
+"</p>\n"
+"<ul>\n"
+"    <li><b>${ctx[\"menu_path\"]}</b></li>\n"
+"    <li><b>Тайлбар: ${ctx[\"description\"]}</b></li>\n"
+"</ul>\n"
+"\n"
+"<p>\n"
+"    Та <a href=\"${ctx[\"base_url\"]}/web?db=${ctx[\"db_name\"]}#id=${ctx[\"id\"]}&view_type=form&model=purchase.order&action=${ctx[\"action_id\"]}\"><b>${ctx[\"name\"]}</b></a> \n"
+"</p>\n"
+"<p>\n"
+"    Баярлалаа,\n"
+"</p>\n"
+"\n"
+"<pre>\n"
+"-- \n"
+"Odoo Автомат Имэйл\n"
+"\n"
+"</pre>\n"
+"            "
+
+#. module: nomin_purchase
+#: model:mail.template,body_html:nomin_purchase.purchase_order_alert_mail_template
+msgid "\n"
+"<p>\n"
+"Сайн байна уу, ${object.name}, Таньд энэ өдрийн мэнд хүргье !</br>\n"
+"</p>\n"
+"<p>\n"
+"<b>${ctx[\"subject\"]}</b> \n"
+"</p>\n"
+"<ul>\n"
+"    <li><b>Захиалгын дугаар: ${ctx[\"name\"]}</b></li>\n"
+"    <li><b>Салбар : ${ctx[\"sector\"]}</b></li>\n"
+"    <li><b>Хэлтэс : ${ctx[\"department\"]}</b></li>\n"
+"</ul>\n"
+"<p>\n"
+"    Та захиалгын мэдэгдэл цонхоор дамжин харна уу <a href=\"${ctx[\"base_url\"]}/web?db=${ctx[\"db_name\"]}#id=${ctx[\"id\"]}&view_type=form&model=purchase.order&action=${ctx[\"action_id\"]}\"><b>${ctx[\"name\"]}</b></a> \n"
+"</p>\n"
+"<p>\n"
+"    Баярлалаа,\n"
+"</p>\n"
+"\n"
+"<pre>\n"
+"-- \n"
+"Odoo Автомат Имэйл\n"
+"\n"
+"</pre>\n"
+"            "
+msgstr "\n"
+"<p>\n"
+"Сайн байна уу, ${object.name}, Таньд энэ өдрийн мэнд хүргье !</br>\n"
+"</p>\n"
+"<p>\n"
+"<b>${ctx[\"subject\"]}</b> \n"
+"</p>\n"
+"<ul>\n"
+"    <li><b>Захиалгын дугаар: ${ctx[\"name\"]}</b></li>\n"
+"    <li><b>Салбар : ${ctx[\"sector\"]}</b></li>\n"
+"    <li><b>Хэлтэс : ${ctx[\"department\"]}</b></li>\n"
+"</ul>\n"
+"<p>\n"
+"    Та захиалгын мэдэгдэл цонхоор дамжин харна уу <a href=\"${ctx[\"base_url\"]}/web?db=${ctx[\"db_name\"]}#id=${ctx[\"id\"]}&view_type=form&model=purchase.order&action=${ctx[\"action_id\"]}\"><b>${ctx[\"name\"]}</b></a> \n"
+"</p>\n"
+"<p>\n"
+"    Баярлалаа,\n"
+"</p>\n"
+"\n"
+"<pre>\n"
+"-- \n"
+"Odoo Автомат Имэйл\n"
+"\n"
+"</pre>\n"
+"            "
+
+#. module: nomin_purchase
+#: model:mail.template,subject:nomin_purchase.purchase_order_alert_mail_template
+msgid "${ctx[\"subject\"]}"
+msgstr "${ctx[\"subject\"]}"
+
+#. module: nomin_purchase
+#: model:mail.template,subject:nomin_purchase.purchase_mail_template
+msgid "${ctx[\"subject\"]} ${user.company_id.name}"
+msgstr "${ctx[\"subject\"]} ${user.company_id.name}"
+
+#. module: nomin_purchase
+#: selection:purchase.order.report.wizard,year_id:0
+msgid "2010"
+msgstr "2010"
+
+#. module: nomin_purchase
+#: selection:purchase.order.report.wizard,year_id:0
+msgid "2011"
+msgstr "2011"
+
+#. module: nomin_purchase
+#: selection:purchase.order.report.wizard,year_id:0
+msgid "2012"
+msgstr "2012"
+
+#. module: nomin_purchase
+#: selection:purchase.order.report.wizard,year_id:0
+msgid "2013"
+msgstr "2013"
+
+#. module: nomin_purchase
+#: selection:purchase.order.report.wizard,year_id:0
+msgid "2014"
+msgstr "2014"
+
+#. module: nomin_purchase
+#: selection:purchase.order.report.wizard,year_id:0
+msgid "2015"
+msgstr "2015"
+
+#. module: nomin_purchase
+#: selection:purchase.order.report.wizard,year_id:0
+msgid "2016"
+msgstr "2016"
+
+#. module: nomin_purchase
+#: selection:purchase.order.report.wizard,year_id:0
+msgid "2017"
+msgstr "2017"
+
+#. module: nomin_purchase
+#: selection:purchase.order.report.wizard,year_id:0
+msgid "2018"
+msgstr "2018"
+
+#. module: nomin_purchase
+#: selection:purchase.order.report.wizard,year_id:0
+msgid "2019"
+msgstr "2019"
+
+#. module: nomin_purchase
+#: selection:purchase.order.report.wizard,year_id:0
+msgid "2020"
+msgstr "2020"
+
+#. module: nomin_purchase
+#: selection:purchase.order.report.wizard,year_id:0
+msgid "2021"
+msgstr "2021"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_active_sequence
+msgid "Active sequence"
+msgstr "Дараалал"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_line_additional_desc
+msgid "Additional description"
+msgstr "Нэмэлт тодорхойлолт"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_order_form_inherit1
+msgid "An administrator can set up default Terms and conditions in your Company settings."
+msgstr "An administrator can set up default Terms and conditions in your Company settings."
+
+#. module: nomin_purchase
+#: selection:purchase.performance.report.wizard,state:0
+#: selection:purchase.requisition.order.report,state:0
+msgid "Assigned"
+msgstr "Assigned"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.view_purchase_order_inherit_form
+msgid "Back to supply"
+msgstr "Back to supply"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_barter_percentage
+msgid "Barter percentage"
+msgstr "Бартерийн хувь"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.form_purchase_order_report_wizard_view
+#: model:ir.ui.view,arch_db:nomin_purchase.form_purchase_order_supplier_report_wizard_view
+#: model:ir.ui.view,arch_db:nomin_purchase.form_purchase_requisition_receive_report_wizard_view
+#: model:ir.ui.view,arch_db:nomin_purchase.view_purchase_order_cancel
+#: model:ir.ui.view,arch_db:nomin_purchase.view_stock_picking_seperate_form
+msgid "Cancel"
+msgstr "Цуцлах"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_is_carriage
+msgid "Carriage"
+msgstr "Тээврийн зардал багтсан эсэх"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard_year_id
+msgid "Choose year"
+msgstr "Сонгож харуулах жил"
+
+#. module: nomin_purchase
+#: model:ir.actions.act_window,help:nomin_purchase.action_purchase_order_line
+msgid "Click to create a quotation that will be converted into a purchase order."
+msgstr "Click to create a quotation that will be converted into a purchase order."
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_priority_comparison_day
+msgid "Comparison day"
+msgstr "Харьцуулалт биелүүлэх хоног"
+
+#. module: nomin_purchase
+#: code:addons/nomin_purchase/models/purchase.py:529
+#, python-format
+msgid "Compose Email"
+msgstr "Compose Email"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_confirmed_date
+msgid "Confirmed date"
+msgstr "Дууссан огноо"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_contract_id
+msgid "Contract"
+msgstr "Гэрээ"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_cost_of_assembling
+msgid "Cost of assembling"
+msgstr "Угсралтын зардалтай эсэх"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_cancel_create_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_evaluation_indicators_create_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard_create_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_create_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_receive_report_wizard_create_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_requisition_line_order_line_create_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_out_line_create_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_requisition_line_create_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_create_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_line_create_uid
+msgid "Created by"
+msgstr "Үүсгэгч"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_is_created_in_sent
+msgid "Created in sent"
+msgstr "Created in sent"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_cancel_create_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_evaluation_indicators_create_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard_create_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_create_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_receive_report_wizard_create_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_requisition_line_order_line_create_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_out_line_create_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_requisition_line_create_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_create_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_line_create_date
+msgid "Created on"
+msgstr "Үүсгэсэн"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_related_currency_id
+msgid "Currency"
+msgstr "Валют"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard_end_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_end_date
+msgid "Date end"
+msgstr "Дуусах огноо"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard_start_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_start_date
+msgid "Date start"
+msgstr "Эхлэх огноо"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_delivery_condition
+msgid "Delivery condition"
+msgstr "Хүргэлтийн нөхцөл"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_delivery_cost
+msgid "Delivery cost"
+msgstr "Хүргэлтийн үнэ"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_delivery_term
+msgid "Delivery term /day/"
+msgstr "Нийлүүлэх хугацаа /хоног/"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard_department_ids
+msgid "Department"
+msgstr "Хэлтэс"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_performance_report_wizard_department_ids
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_requisition_order_report_department_ids
+msgid "Departments"
+msgstr "Хэлтсүүд"
+
+#. module: nomin_purchase
+#: selection:purchase.order.supplier.report.wizard,report_type:0
+msgid "Detailed"
+msgstr "Дэлгэрэнгүй"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_is_direct
+msgid "Direct"
+msgstr "Шууд"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_postage_amount
+msgid "Direct expense"
+msgstr "Шууд зардал"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_cancel_display_name
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_evaluation_indicators_display_name
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard_display_name
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_display_name
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_receive_report_wizard_display_name
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_requisition_line_order_line_display_name
+#: model:ir.model.fields,field_description:nomin_purchase.field_report_nomin_purchase_report_picking_all_display_name
+#: model:ir.model.fields,field_description:nomin_purchase.field_report_nomin_purchase_report_purchaseorder_document_display_name
+#: model:ir.model.fields,field_description:nomin_purchase.field_report_nomin_purchase_report_rfq_display_name
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_out_line_display_name
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_requisition_line_display_name
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_display_name
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_line_display_name
+msgid "Display Name"
+msgstr "Дэлгэцийн Нэр"
+
+#. module: nomin_purchase
+#: selection:purchase.performance.report.wizard,state:0
+#: selection:purchase.requisition.order.report,state:0
+msgid "Done"
+msgstr "Done"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_mail_compose_message
+msgid "Email composition wizard"
+msgstr "Имэйл үүсгэх харилцах цонх"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_expense_total
+msgid "Expense total"
+msgstr "Зардлын нийт дүн"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.form_purchase_order_report_wizard_view
+#: model:ir.ui.view,arch_db:nomin_purchase.form_purchase_order_supplier_report_wizard_view
+#: model:ir.ui.view,arch_db:nomin_purchase.form_purchase_requisition_receive_report_wizard_view
+msgid "Export"
+msgstr "Экспорт"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_export_type
+msgid "Export type"
+msgstr "Гаргах бүлэг"
+
+#. module: nomin_purchase
+#: code:addons/nomin_purchase/models/purchase.py:649
+#, python-format
+msgid "Followup "
+msgstr "Followup "
+
+#. module: nomin_purchase
+#: selection:purchase.order,rfq_delivery_condition:0
+#: selection:purchase.order,rfq_installation_condition:0
+msgid "Free"
+msgstr "Үнэгүй"
+
+#. module: nomin_purchase
+#: selection:stock.picking,order_type:0
+msgid "From warehouse"
+msgstr "From warehouse"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.view_purchase_order_inherit_form
+msgid "Get processed"
+msgstr "Get processed"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.view_purchase_order_line_filter
+msgid "Group By"
+msgstr "Бүлэглэх"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_order_form_inherit1
+msgid "History"
+msgstr "Түүх"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_history_emp
+msgid "History employee"
+msgstr "History employee"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_cancel_id
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_evaluation_indicators_id
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard_id
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_id
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_receive_report_wizard_id
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_requisition_line_order_line_id
+#: model:ir.model.fields,field_description:nomin_purchase.field_report_nomin_purchase_report_picking_all_id
+#: model:ir.model.fields,field_description:nomin_purchase.field_report_nomin_purchase_report_purchaseorder_document_id
+#: model:ir.model.fields,field_description:nomin_purchase.field_report_nomin_purchase_report_rfq_id
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_out_line_id
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_requisition_line_id
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_id
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_line_id
+msgid "ID"
+msgstr "ID"
+
+#. module: nomin_purchase
+#: code:addons/nomin_purchase/wizard/stock_picking_seperate.py:191
+#, python-format
+msgid "INV:"
+msgstr "INV:"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.view_purchase_order_inherit_form
+msgid "If a purchase order is done, you cannot modify it manually anymore. You will not be able to receive invoices anymore for this purchase order."
+msgstr "If a purchase order is done, you cannot modify it manually anymore. You will not be able to receive invoices anymore for this purchase order."
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.view_purchase_order_inherit_form
+msgid "Incoming Shipments"
+msgstr "Ирж буй хүргэлтүүд"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_installation_condition
+msgid "Installation condition"
+msgstr "Угсралт, суурилуулалтын нөхцөл"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_installation_cost
+msgid "Installation cost"
+msgstr "Угсралтын үнэ"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_summary_type
+msgid "Interval type"
+msgstr "Интервал төрөл"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_order_form_inherit1
+msgid "Invoices and Incoming Shipments"
+msgstr "Нэхэмжлэлүүд болон Ирж буй хүргэлтүүд"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_is_open_date
+msgid "Is RFQ opening day"
+msgstr "RFQ нээх өдөр мөн эсэх"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_is_in
+msgid "Is in"
+msgstr "Is in"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_is_in_approve
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_is_in_confirm
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_is_in_sent
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_is_in_verify
+msgid "Is in sent"
+msgstr "Is in sent"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_is_out
+msgid "Is out"
+msgstr "Is out"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_line_is_portal
+msgid "Is portal"
+msgstr "Is portal"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_cancel___last_update
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_evaluation_indicators___last_update
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard___last_update
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard___last_update
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_receive_report_wizard___last_update
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_requisition_line_order_line___last_update
+#: model:ir.model.fields,field_description:nomin_purchase.field_report_nomin_purchase_report_picking_all___last_update
+#: model:ir.model.fields,field_description:nomin_purchase.field_report_nomin_purchase_report_purchaseorder_document___last_update
+#: model:ir.model.fields,field_description:nomin_purchase.field_report_nomin_purchase_report_rfq___last_update
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_out_line___last_update
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_requisition_line___last_update
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate___last_update
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_line___last_update
+msgid "Last Modified on"
+msgstr "Сүүлийн засвар хийсэн огноо"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_cancel_write_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_evaluation_indicators_write_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard_write_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_write_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_receive_report_wizard_write_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_requisition_line_order_line_write_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_out_line_write_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_requisition_line_write_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_line_write_uid
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_write_uid
+msgid "Last Updated by"
+msgstr "Сүүлийн засвар хийсэн"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_cancel_write_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_evaluation_indicators_write_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard_write_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_write_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_receive_report_wizard_write_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_requisition_line_order_line_write_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_out_line_write_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_requisition_line_write_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_line_write_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_write_date
+msgid "Last Updated on"
+msgstr "Сүүлийн засвар хийсэн огноо"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_length_of_warranty
+msgid "Length of warranty"
+msgstr "Баталгаат хугацаатай эсэх (сараар)"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_requisition_line_line_id
+msgid "Line number"
+msgstr "Мөрийн дугаар"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_loan_term
+msgid "Loan term"
+msgstr "Зээлийн хугацаа"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_equipment_amount
+msgid "Machine expense"
+msgstr "Машин механизмын зардал"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_line_market_price
+msgid "Market price"
+msgstr "Зах зээлийн үнэ"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_line_market_price_total
+msgid "Market subtotal"
+msgstr "Зах зээлийн дэд дүн"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_market_price_total
+msgid "Market total price"
+msgstr "Зах зээлийн нийт дүн"
+
+#. module: nomin_purchase
+#: selection:purchase.order.supplier.report.wizard,summary_type:0
+msgid "Month"
+msgstr "Сар"
+
+#. module: nomin_purchase
+#: selection:purchase.order,is_carriage:0
+msgid "No"
+msgstr "No"
+
+#. module: nomin_purchase
+#: selection:purchase.order,rfq_delivery_condition:0
+msgid "No delivery"
+msgstr "Хүргэлтгүй"
+
+#. module: nomin_purchase
+#: code:addons/nomin_purchase/models/stock_picking_type.py:171
+#, python-format
+msgid "No products to return (only lines in Done state and not fully returned yet can be returned)!"
+msgstr "No products to return (only lines in Done state and not fully returned yet can be returned)!"
+
+#. module: nomin_purchase
+#: selection:purchase.order,delivery_condition:0
+#: selection:purchase.order,installation_condition:0
+#: selection:purchase.order,vat_condition:0
+msgid "Not required"
+msgstr "Шаардлагагүй"
+
+#. module: nomin_purchase
+#: model:ir.actions.act_window,name:nomin_purchase.action_purchase_order_cancel
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_cancel_note
+msgid "Note"
+msgstr "Тэмдэглэгээ"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_order_form_inherit1
+msgid "Notes"
+msgstr "Тэмдэглэл"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_rfq_department_id
+msgid "Order department"
+msgstr "Захиалагч хэлтэс"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_requisition_line_order_line_order_line_id
+msgid "Order line"
+msgstr "Захиалгын мөр"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_other_amount
+msgid "Other expense"
+msgstr "Бусад зардал"
+
+#. module: nomin_purchase
+#: selection:purchase.order,rfq_delivery_condition:0
+#: selection:purchase.order,rfq_installation_condition:0
+msgid "Paid"
+msgstr "Төлбөртэй"
+
+#. module: nomin_purchase
+#: selection:purchase.order.supplier.report.wizard,export_type:0
+msgid "Partner"
+msgstr "Харилцагч"
+
+#. module: nomin_purchase
+#: selection:purchase.order.supplier.report.wizard,export_type:0
+msgid "Partner category"
+msgstr "Харилцагчийн ангилал"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_partner_expense_total
+msgid "Partner total expense"
+msgstr "Харилцагч зардал орсон нийт дүн"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_performance_report_wizard_end_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_requisition_order_report_end_date
+msgid "Performance date end"
+msgstr "Дуусах огноо"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_performance_report_wizard_start_date
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_requisition_order_report_start_date
+msgid "Performance date start"
+msgstr "Performance date start"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_department_id
+msgid "Performer department"
+msgstr "Гүйцэтгэгч хэлтсүүд"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_sector_id
+msgid "Performer sector"
+msgstr "Гүйцэтгэгч салбар"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_line_purchase_date_planned
+msgid "Planned date"
+msgstr "Товолсон огноо"
+
+#. module: nomin_purchase
+#: code:addons/nomin_purchase/models/stock_picking_type.py:268
+#, python-format
+msgid "Please specify at least one non-zero quantity."
+msgstr "Please specify at least one non-zero quantity."
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_is_portal_user
+msgid "Portal User"
+msgstr "Portal User"
+
+#. module: nomin_purchase
+#: selection:purchase.order.supplier.report.wizard,export_type:0
+msgid "Product"
+msgstr "Бараа"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard_category_ids
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_category_ids
+msgid "Product category"
+msgstr "Барааны ангилал"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard_product_ids
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_product_ids
+msgid "Products"
+msgstr "Бараанууд"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.view_purchase_priority_tree
+msgid "Purcase priority"
+msgstr "Purcase priority"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_purchase_order
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_purchase_order_portal_tree
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_purchase_order_tree
+#: model:ir.ui.view,arch_db:nomin_purchase.view_purchase_order_inherit_form
+msgid "Purchase Order"
+msgstr "Худалдан авах захиалга"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_purchase_order_line
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_order_form_inherit1
+msgid "Purchase Order Line"
+msgstr "Захиалгын мөр"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_order_form_inherit1
+msgid "Purchase Order Lines"
+msgstr "Худалдан авалтын захиалгын мөр"
+
+#. module: nomin_purchase
+#: model:ir.actions.act_window,name:nomin_purchase.action_purchase_order_line
+msgid "Purchase Orders"
+msgstr "Худалдан авах захиалгууд"
+
+#. module: nomin_purchase
+#: model:ir.ui.menu,name:nomin_purchase.menu_purchase_priority
+msgid "Purchase Priority menu"
+msgstr "Худалдан авалтын урьтамж тохиргоо"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_request_history_order_id
+msgid "Purchase order"
+msgstr "Худалдан авалт захиалга"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_purchase_order_report_wizard
+#: model:ir.model,name:nomin_purchase.model_purchase_order_supplier_report_wizard
+#: model:ir.model,name:nomin_purchase.model_purchase_receive_report_wizard
+msgid "Purchase order report wizard"
+msgstr "Purchase order report wizard"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_line_purchase_line_order_ids
+msgid "Purchase order request summary"
+msgstr "Худалдан авалт шаардахын нэгтгэл"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_purchase_priority
+#: model:ir.ui.view,arch_db:nomin_purchase.view_purchase_priority_form
+msgid "Purchase priority"
+msgstr "Урьтамж"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_requisition_line_order_line_requisition_line_id
+msgid "Purchase requisition line number"
+msgstr "Шаардахын мөрийн дугаар"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_requisition_line_product_qty
+msgid "Qty"
+msgstr "Тоо ширхэг"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_rfq_barter_percentage
+msgid "RFQ barter percentage"
+msgstr "Үнийн санал бартерийн хувь"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_rfq_delivery_condition
+msgid "RFQ delivery condition"
+msgstr "Үнийн санал хүргэлтийн нөхцөл"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_rfq_delivery_term
+msgid "RFQ delivery term /day/"
+msgstr "Үнийн санал нийлүүлэх хугацаа /хоног/"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_rfq_postage_amount
+msgid "RFQ direct expense"
+msgstr "Үнийн санал шууд зардал"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_rfq_installation_condition
+msgid "RFQ installation condition"
+msgstr "Үнийн санал угсралт, суурилуулалтын нөхцөл"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_rfq_loan_term
+msgid "RFQ loan term"
+msgstr "Үнийн санал зээлийн хугацаа"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_rfq_equipment_amount
+msgid "RFQ machine expense"
+msgstr "Үнийн санал машин механизмын зардал"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_rfq_other_amount
+msgid "RFQ other expense"
+msgstr "Үнийн санал бусад зардал"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_rfq_return_condition
+msgid "RFQ return condition"
+msgstr "Үнийн санал буцаалтын нөхцөл"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_rfq_carriage_amount
+msgid "RFQ transportation expense"
+msgstr "Үнийн санал тээврийн зардал"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_rfq_warranty_period
+msgid "RFQ warranty period /day/"
+msgstr "Үнийн санал баталгаат хугацаа /хоног/"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_requisition_line_receive_qty
+msgid "Receive qty"
+msgstr "Хүлээлгэн өгөх тоо хэмжээ"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_purchase_order_portal_tree
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_purchase_order_tree
+msgid "Reference"
+msgstr "Дугаар"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_request_history
+msgid "Request History"
+msgstr "Хүсэлтийн түүх"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.view_purchase_order_inherit_form
+msgid "Request for Quotation"
+msgstr "Үнийн санал"
+
+#. module: nomin_purchase
+#: selection:purchase.order,delivery_condition:0
+#: selection:purchase.order,installation_condition:0
+#: selection:purchase.order,vat_condition:0
+msgid "Required"
+msgstr "Шаардлагатай"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_requisition_line_requisition_line_id
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_line_requisition_line_ids
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_requisition_ids
+msgid "Requisition line"
+msgstr "Шаардахын мөр"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_line_requisition_id
+msgid "Requisition number"
+msgstr "Шаардахын дугаар"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_stock_return_picking
+msgid "Return Picking"
+msgstr "Бэлтгэлтийн Буцаалт"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_return_condition
+msgid "Return condition"
+msgstr "Буцаалтын нөхцөл"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_report_wizard_save
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_save
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_receive_report_wizard_save
+msgid "Save to document storage"
+msgstr "Save to document storage"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.view_purchase_order_line_filter
+msgid "Search Purchase Order"
+msgstr "Худалдан авалтын захиалга хайх"
+
+#. module: nomin_purchase
+#: selection:purchase.order.supplier.report.wizard,summary_type:0
+msgid "Season"
+msgstr "Улирал"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_line_sector_id
+msgid "Sector"
+msgstr "Салбар"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_order_form_inherit1
+msgid "Set date to all order lines"
+msgstr "Set date to all order lines"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_history_lines
+msgid "State history"
+msgstr "Төлвийн түүх"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_stock_move
+msgid "Stock Move"
+msgstr "Нөөцийн хөдөлгөөн"
+
+#. module: nomin_purchase
+#: selection:purchase.order.supplier.report.wizard,report_type:0
+msgid "Summary"
+msgstr "Хураангуй"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_partner_ids
+msgid "Supplier"
+msgstr "Нийлүүлэгч"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_partner_categ_ids
+msgid "Supplier category"
+msgstr "Нийлүүлэгчийн ангилал"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_tax_amount
+msgid "Tax amount"
+msgstr "НӨАТатвар"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_rfq_date_term
+msgid "The Quotation valid date"
+msgstr "Үнийн саналын хүчинтэй хугацаа"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_order_form_inherit1
+msgid "This changes the scheduled date of all order lines to the given date"
+msgstr "This changes the scheduled date of all order lines to the given date"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_time_of_delivery
+msgid "Time of delivery"
+msgstr "Нийлүүлэх хугацаа (хоногоор)"
+
+#. module: nomin_purchase
+#: selection:stock.picking,order_type:0
+msgid "To warehouse"
+msgstr "Хүлээн авах агуулах"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_purchase_order_portal_tree
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_purchase_order_tree
+msgid "Total Untaxed amount"
+msgstr "Нийт татваргүй хэмжээ"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_total_amount
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_purchase_order_portal_tree
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_purchase_order_tree
+msgid "Total amount"
+msgstr "Бүгд дүн"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_stock_picking
+msgid "Transfer"
+msgstr "Шилжүүлэх"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_carriage_amount
+msgid "Transportation expense"
+msgstr "Тээвэрлэлтийн зардал"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_supplier_report_wizard_report_type
+msgid "Type"
+msgstr "Төрөл"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_untax_amount
+msgid "Untax amount"
+msgstr "Татваргүй дүн"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_purchase_order_portal_tree
+#: model:ir.ui.view,arch_db:nomin_purchase.purchase_purchase_order_tree
+msgid "Untaxed"
+msgstr "Татваргүй"
+
+#. module: nomin_purchase
+#: model:ir.actions.act_window,help:nomin_purchase.action_purchase_order_line
+msgid "Use this menu to search within your purchase orders by\n"
+"                references, vendor, products, etc. For each purchase order,\n"
+"                you can track the related discussion with the vendor, control\n"
+"                the products received and control the vendor bills."
+msgstr "Use this menu to search within your purchase orders by\n"
+"                references, vendor, products, etc. For each purchase order,\n"
+"                you can track the related discussion with the vendor, control\n"
+"                the products received and control the vendor bills."
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_user_id
+msgid "User"
+msgstr "Хэрэглэгч"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_vat_condition
+msgid "VAT condition"
+msgstr "НӨАТ төлөгч байхыг шаардах эсэх"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_vat_amount
+msgid "VAT value"
+msgstr "НӨАТатвар"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.view_purchase_order_line_filter
+msgid "Vendor"
+msgstr "Нийлүүлэгч"
+
+#. module: nomin_purchase
+#: code:addons/nomin_purchase/models/purchase.py:98
+#: code:addons/nomin_purchase/models/purchase.py:146
+#: code:addons/nomin_purchase/models/purchase.py:383
+#: code:addons/nomin_purchase/models/purchase.py:390
+#: code:addons/nomin_purchase/models/purchase.py:567
+#, python-format
+msgid "Warning !"
+msgstr "Анхааруулга !"
+
+#. module: nomin_purchase
+#: code:addons/nomin_purchase/models/purchase.py:40
+#: code:addons/nomin_purchase/models/purchase.py:70
+#: code:addons/nomin_purchase/models/stock_picking_type.py:49
+#, python-format
+msgid "Warning!"
+msgstr "Warning!"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_line_warranty
+msgid "Warranty date"
+msgstr "Баталгаат хугацаа"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_warranty_period
+msgid "Warranty period /day/"
+msgstr "Баталгаат хугацаа /хоног/"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_stock_picking_seperate_line_wizard_id
+msgid "Wizard"
+msgstr "Визард"
+
+#. module: nomin_purchase
+#: model:ir.model.fields,field_description:nomin_purchase.field_purchase_order_request_id
+msgid "Workflow config"
+msgstr "Урсгал тохиргоо"
+
+#. module: nomin_purchase
+#: selection:purchase.order.supplier.report.wizard,summary_type:0
+msgid "Year"
+msgstr "Жил"
+
+#. module: nomin_purchase
+#: selection:purchase.order,is_carriage:0
+msgid "Yes"
+msgstr "Тийм"
+
+#. module: nomin_purchase
+#: code:addons/nomin_purchase/models/purchase.py:383
+#, python-format
+msgid "You don't have purchase requisition request configure !"
+msgstr "You don't have purchase requisition request configure !"
+
+#. module: nomin_purchase
+#: code:addons/nomin_purchase/models/purchase.py:70
+#: code:addons/nomin_purchase/models/stock_picking_type.py:49
+#, python-format
+msgid "You don't have related department. Please contact administrator."
+msgstr "You don't have related department. Please contact administrator."
+
+#. module: nomin_purchase
+#: code:addons/nomin_purchase/models/stock_picking_type.py:241
+#, python-format
+msgid "You have manually created product lines, please delete them to proceed"
+msgstr "You have manually created product lines, please delete them to proceed"
+
+#. module: nomin_purchase
+#: code:addons/nomin_purchase/models/stock_picking_type.py:144
+#, python-format
+msgid "You may only return one picking at a time!"
+msgstr "You may only return one picking at a time!"
+
+#. module: nomin_purchase
+#: code:addons/nomin_purchase/models/stock_picking_type.py:154
+#, python-format
+msgid "You may only return pickings that are Done!"
+msgstr "You may only return pickings that are Done!"
+
+#. module: nomin_purchase
+#: selection:purchase.order,is_VAT:0
+msgid "ebarimt-гүй хувь хүн"
+msgstr "ebarimt-гүй хувь хүн"
+
+#. module: nomin_purchase
+#: selection:purchase.order,is_VAT:0
+msgid "ebarimt-тай хувь хүн"
+msgstr "ebarimt-тай хувь хүн"
+
+#. module: nomin_purchase
+#: model:ir.ui.view,arch_db:nomin_purchase.form_purchase_order_report_wizard_view
+#: model:ir.ui.view,arch_db:nomin_purchase.form_purchase_order_supplier_report_wizard_view
+#: model:ir.ui.view,arch_db:nomin_purchase.form_purchase_requisition_receive_report_wizard_view
+msgid "or"
+msgstr "эсвэл"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_purchase_order_cancel
+msgid "purchase.order.cancel"
+msgstr "purchase.order.cancel"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_purchase_order_evaluation_indicators
+msgid "purchase.order.evaluation.indicators"
+msgstr "purchase.order.evaluation.indicators"
+
+#. module: nomin_purchase
+#: model:ir.actions.act_window,name:nomin_purchase.action_purchase_priority
+msgid "purchase.priority"
+msgstr "Урьтамж"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_purchase_requisition_line_order_line
+msgid "purchase.requisition.line.order.line"
+msgstr "purchase.requisition.line.order.line"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_report_nomin_purchase_report_picking_all
+msgid "report.nomin_purchase.report_picking_all"
+msgstr "report.nomin_purchase.report_picking_all"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_report_nomin_purchase_report_purchaseorder_document
+msgid "report.nomin_purchase.report_purchaseorder_document"
+msgstr "report.nomin_purchase.report_purchaseorder_document"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_report_nomin_purchase_report_rfq
+msgid "report.nomin_purchase.report_rfq"
+msgstr "report.nomin_purchase.report_rfq"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_stock_picking_out_line
+msgid "stock.picking.out.line"
+msgstr "stock.picking.out.line"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_stock_picking_requisition_line
+msgid "stock.picking.requisition.line"
+msgstr "stock.picking.requisition.line"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_stock_picking_seperate
+msgid "stock.picking.seperate"
+msgstr "stock.picking.seperate"
+
+#. module: nomin_purchase
+#: model:ir.model,name:nomin_purchase.model_stock_picking_seperate_line
+msgid "stock.picking.seperate.line"
+msgstr "stock.picking.seperate.line"
+
+#. module: nomin_purchase
+#: model:ir.actions.report.xml,name:nomin_purchase.action_report_purchase_rfq
+msgid "Үнийн санал (RFQ)"
+msgstr "Үнийн санал (RFQ)"
+

@@ -1,0 +1,773 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <!-- <report 
+            string="expense_asset_report" 
+            id="action_expense_asset_report_view" 
+            model="fixed.asset.counting" 
+            name="nomin_purchase_requisition.expense_asset_report" 
+            file="nomin_purchase_requisition.expense_asset_report"
+        /> -->
+            <!-- report_type="qweb-html" -->
+
+        <report 
+            string="Үнсэн хөрөнгийн тооллогын АКТ" 
+            id="action_report_fixed_assets" 
+            model="fixed.asset.counting" 
+            report_type="qweb-pdf"
+            name="nomin_purchase_requisition.report_fixed_assets" 
+            file="nomin_purchase_requisition.report_fixed_assets" 
+        />
+        <record id="paperformat_fixed_assets" model="report.paperformat">
+            <field name="name">Үнсэн хөрөнгийн тооллогын АКТ</field>
+            <field name="default" eval="True"/>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">23</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">35</field>
+            <field name="dpi">90</field>
+        </record>
+        
+        <record id="nomin_purchase_requisition.action_report_fixed_assets" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="nomin_purchase_requisition.paperformat_fixed_assets" />
+        </record>
+
+        <record model="ir.ui.view" id="fixed_asset_counting_tree">
+            <field name="name">fixed.asset.counting.tree</field>
+            <field name="model">fixed.asset.counting</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Request">
+                    <field name="counted" />
+                    <field name="completed" />
+                    <field name="count_of_owners" />
+                    <field name="count_of_rows" />
+                    <field name="count_of_prepared_rows" />
+                    <field name="count_of_assets" />
+                    <field name="qty" />
+                    <field name="difference" />
+                    <field name="create_date"/>
+                    <field name="description"/>
+                    <field name="requested_employee_id"/>
+                    <field name="department_id" />
+                    <field name="state"/>
+                    <field name="role" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="fixed_asset_counting_form" model="ir.ui.view">
+            <field name="name">fixed.asset.counting.form</field>
+            <field name="model">fixed.asset.counting</field>
+            <field name="arch" type="xml">
+                <form string="Transfer">
+                <header>
+
+                     
+
+                     <button name="action_get_asset_type" string="Хөрөнгийн бүлгийг шинэчлэх" type="object" class="oe_highlight" 
+                        attrs="{'invisible':['|',('state','not in',['draft','returned']),('role','not in','verifier')]}"/>
+
+                     <button name="reverse" string="Буцаах" type="object" class="oe_highlight" 
+                        groups="nomin_base.group_branch_account_user,nomin_base.group_financial_account_user"
+                        attrs="{'invisible':[('state','not in',['verify','verified'])]}"/>
+
+                     <!-- <button name="cancel" string="Цуцлах" type="object" class="oe_highlight" 
+                        attrs="{'invisible':[('state','not in',['verified',])]}"/> -->
+
+                     <button name="%(action_asset_preparation)d" string="Хөрөнгийн үлдэгдэл татах" type="action" class="oe_highlight" 
+                        attrs="{'invisible':['|',('state','not in',['draft','returned'])]}"/>
+
+
+                    <button name="action_request" string="Тоолох" type="object" class="oe_highlight" 
+                        attrs="{'invisible':['|',('state','not in',['draft','returned']),('start_date','=',False)]}"
+                        confirm="Татахыг хүссэн хөрөнгүүд чинь бүрэн бэлтгэгдсэн үү?"/>
+
+
+
+                    <button name="action_complete_counting" string="Тооллого хийгдсэн" type="object" class="oe_highlight" 
+                        attrs="{'invisible':[('state','not in',['count'])]}"
+                        confirm="Хэрэв ямар нэг дутсан хөрөнгөний талаарх мэдээлэл бөглөөгүй тохиолдолд шууд дууссан төлөвт очно. Дутсан хөрөнгөний мэдээлэл бөглөж амжаагүй бол цуцлах дарах хэрэгтэй!!!"/>
+
+                    <button name="action_verify" string="Дуусгах" type="object" class="oe_highlight" 
+                        groups="nomin_base.group_branch_account_user,nomin_base.group_financial_account_user"
+                        attrs="{'invisible':[('state','not in',['verify'])]}"
+                        confirm="Та бүх суутгалын гүйлгээнүүдээ зөв бэлтгэсэн гэдэгтээ итгэлтай байна уу?"/>
+
+
+                    <button name="filter_assets" string="Шүүлтүүр" type="object" class="oe_highlight"
+                        attrs="{'invisible':[('state','not in',['count','verify'])]}"/>
+                    <button name="unfilter_assets" string="Шүүлтийг болих" type="object" class="oe_highlight"
+                        attrs="{'invisible':[('state','not in',['count','verify'])]}"/>
+                    <button name="filter_few_assets" string="Тоолоогүй 30-г шүүлтүүрдэх" type="object" class="oe_highlight"
+                        attrs="{'invisible':[('state','not in',['count'])]}"/>
+                    <button name="filter_while_complete_counting" string="Зарлагадах хөрөнгийг шүүх" type="object" class="oe_highlight"
+                        attrs="{'invisible':[('state','not in',['verify'])]}"/>
+                    <!-- <button name="button_to_handle" type="object" string="Зөрүүг арилгах" class="oe_highlight"/> -->
+
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,count,verify,verified"/>
+                </header>
+                <sheet>
+                    <group >
+
+
+                        <group>
+                            
+                            <field name="name" readonly="1"/>
+							<label for="name" string="Үргэлжлэх хугацаа"/>
+                            <div>
+                                <div>
+                                    <field name="start_date" class="oe_inline" attrs="{'readonly':[('state','in',['draft','verified'])]}"/>
+                                    <label string="-" class="oe_inline" />
+                                    <field name="end_date" class="oe_inline" attrs="{'readonly':[('state','in',['draft','verified'])]}"/>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <field name="type" readonly="1"/>
+                            <field name="department_id" readonly="1" />
+                            
+                            <field name="filter_options" readonly="1"/>
+
+                            <field name="location" readonly="1" attrs="{'invisible':[('filter_options','not in',['location'])]}"/>
+                            <field name="account_from" readonly="1" attrs="{'invisible':[('filter_options','in',['owner'])]}"/>
+                            <field name="employee_id" readonly="1" attrs="{'invisible':[('filter_options','not in',['owner'])]}"/>
+                            <field name="asset_type" readonly="1" attrs="{'invisible':[('filter_options','not in',['asset_type'])]}"/>
+                            <field name="asset_code" attrs="{'invisible':[('state','in',['draft','returned','verified'])]}"/>
+                        </group>
+
+
+                        <group >
+                            
+                            
+                            <field name="requested_date"  invisible="1" />
+                            <field name="requested_employee_id" readonly="1"/>
+                            <field name="count_of_owners" readonly="1"/>
+                            <field name="count_of_rows" readonly="1"/>
+                            <field name="count_of_assets" readonly="1"/>
+                            <field name="qty" readonly="1"/>
+                            <field name="difference" readonly="1"/>
+
+                            <field name="approved_employee_id" attrs="{'invisible':[('state','not in',['approved'])],
+                                                                        'readonly':[('state','not in',['draft'])],
+                                                                        'required':[('state','in',['approved'])]}"/>
+                            
+                            
+                            <field name="returned_reason" attrs="{'invisible':[('state','not in',['returned'])]}"/>
+                            <field name="returned_description" attrs="{'invisible':[('state','not in',['returned'])]}"/>
+
+
+                            <field name="description" readonly="1"/>
+                            <field name="counted" invisible="1" />
+                            <field name="completed" invisible="1"/> 
+                        </group>
+                        <group colspan="4">
+                            <group >
+                                    <field name="employee_ids" widget="many2many_tags" attrs="{'invisible':[('state','in',['draft','returned','verified'])]}"/>
+                            </group>
+                        </group>
+                        <div>
+                            <button name="action_expense" string="Хөрөнгө дутагдлын баримт" type="object" attrs="{'invisible': [('state', 'not in', ('verify','verified'))]}" style="margin-right:15px"/>
+                            <button name="action_income" string="ОРЛОГЫН БАРИМТ" type="object" attrs="{'invisible': [('state', 'not in', ('verify','verified'))]}" style="margin-right:15px"/>
+                            <button name="action_transfer" string="Үндсэн хөрөнгийн хөдөлгөөний баримт" type="object" attrs="{'invisible': [('state', 'not in', ('verify','verified'))]}" style="margin-right:15px"/>
+                            <button name="action_damage_asset" string="Гэмтэлтэй хөрөнгийн жагсаалт" type="object" attrs="{'invisible': [('state', 'not in', ('verify','verified'))]}" style="margin-right:15px"/> 
+                        </div>
+                    </group>
+
+                    <notebook>
+                    <page string="Хөрөнгүүд">
+
+
+                        <group colspan="8" col="8">
+
+
+
+                            <field name="change_line_ids" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" 
+                                attrs="{'invisible':[('state','not in',['draft','returned'])]}">
+
+                                <tree default_order="employee_id" editable="bottom"
+                                    colors="red:state == 'accept';green:state == 'approve'">
+
+                                    <field name="employee_id" options="{'no_create': True}" readonly="1"/>
+                                    <field name="department_id" options="{'no_create': True}" invisible="1"/>
+                                    <field name="account_id" options="{'no_create': True}" readonly="1"/>
+                                    
+
+                                    <field name="asset_id" readonly="1"/>
+                                    <field name="product_id" invisible="1"/>
+                                    <!-- <field name="registry_number" invisible="1"/> -->
+                                    <field name="state" invisible="1"/>
+                                    <field name="show_accept_button" invisible="1"/>
+
+
+                                    <field name="asset_name" readonly="1"/>
+                                    
+                                    
+                                    <field name="qty" readonly="1" sum="qty"/>
+                                    <field name="amount" readonly="1" sum="amount" />
+                                    <field name="solution" invisible="1"/>
+                                    <field name="backup_id" invisible="1"/>
+
+                                </tree>
+
+                                <form>
+                                    <group>
+                                        <group>
+
+                                            <field name="product_id" invisible="1"/>
+
+                                            
+
+
+                                        </group>
+                                    </group>								
+                    
+                                </form>
+
+
+                            </field>
+                            
+
+
+                            <field name="change_line_ids_for_counting" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" 
+                                attrs="{'invisible':[('state','in',['draft','returned'])]}">
+                                <tree  editable="bottom"
+                                     delete="false">
+                                    <field name="id" options="{'no_create': True}" readonly="1"/>
+                                    <field name="state" options="{'no_create': True}" invisible="1"/>
+                                    <field name="employee_id" options="{'no_create': True}" readonly="1"/>
+                                    <field name="department_id" options="{'no_create': True}" invisible="1"/>
+                                    <field name="account_id" options="{'no_create': True}" invisible="1"/>
+                                    <field name="depreciation_account" options="{'no_create': True}" invisible="1"/>
+                                    <field name="account_receivable_id" options="{'no_create': True}" invisible="1"/>
+                                    <field name="account_receivable_id_from_employee" options="{'no_create': True}" invisible="1"/>
+                                    <field name="vat_account" options="{'no_create': True}" invisible="1"/>
+                                    
+                                    <field name="profit_account_id" options="{'no_create': True}" invisible="1"/>
+                                    <field name="loss_account_id" options="{'no_create': True}" invisible="1"/>
+                                    <field name="receivable_income_account_id" options="{'no_create': True}" invisible="1"/>
+
+
+
+                                    <field name="asset_id" readonly="1"/>
+                                    <field name="product_id" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="show_accept_button" invisible="1"/>
+                                    
+                                    <field name="asset_name" readonly="1"/>
+                                    <field name="amount" readonly="1" sum="amount"/>
+                                    <field name="qty" readonly="1" sum="qty"/>
+                                    <field name="expense_cnt" invisible="1"/>
+
+                                    <field name="counted_qty" attrs="{'readonly':[('state','!=','count')]}" sum="counted_qty"/>
+                                    <field name="difference" readonly="1" sum="difference"/>
+                                    <field name="has_difference" invisible="1"/>
+
+
+
+                                    <button name="%(action_asset_solution)d" string="Зөрүүг шийдэх" type="action" class="oe_highlight" 
+                                        attrs="{'invisible':['|',('state','!=','count'),'|',('difference','=',0),('is_invisible','!=',0)]}"/>
+                                    <button name="%(action_asset_disposal)d" string="Зарлагадах" type="action" class="oe_highlight" 
+                                        attrs="{'invisible':['|',('state','!=','verify'),('difference', '&gt;',-1)]}"/>
+                                    <button name="%(action_damage_asset_description)d" string="Гэмтэл тодорхойлох" type="action" class="oe_highlight" 
+                                    />
+                                    <!-- <button name="button_to_handle" type="object" string="Зөрүүг арилгах" class="oe_highlight"
+                                        attrs="{'invisible':['|',('state','!=','count'),'|',('difference','=',0),'|',('is_invisible','!=',0),('expense','=',0),('income','=',0)]}"/> -->
+
+                                    <field name="solution" invisible="1"/>
+                                    <field name="income" readonly="1" sum="income"/>
+                                    <field name="expense" readonly="1" sum="expense"/>
+                                    <field name="is_invisible" invisible="1"/>
+                                    <field name="current_qty" readonly="1" sum="current_qty"/>
+                                    <field name="filter_by30s" invisible="1"/>
+
+
+                                </tree>
+
+                                <form>
+                                    <group colspan="8" col="8">
+                                        <field name="asset_name" readonly="1"/>
+                                    </group>
+
+                                    <group colspan="8" col="8">
+
+
+
+                                        <group colspan="4">
+                                            <field name="employee_id" options="{'no_create': True}" readonly="1"/>
+
+                                            <field name="asset_id" readonly="1"/>
+                                            <field name="product_id" invisible="1"/>
+                                            <field name="income_cnt" />
+                                            <field name="receive_cnt" />
+                                            <field name="expense_cnt" />
+                                            <field name="transfer_cnt" invisible="1"/>
+                                            <field name="total_amt" invisible="1"/>
+                                        </group>
+                                        <group colspan="4">
+                                            
+                                        
+                                            <field name="qty" readonly="1"/>
+
+                                            <field name="counted_qty" />
+                                            <field name="difference" readonly="1"/>
+                                            <field name="current_qty" readonly="1"/>
+                                            <field name="account_move_id" readonly="1"/>
+                                            <field name="account_move_id_for_accountant" readonly="1"/>
+
+                                        </group>
+                                        <group colspan="7">
+
+
+                                            <field name="account_id" readonly="1"/>
+                                            <field name="depreciation_account" readonly="1"/>
+                                            <field name="account_receivable_id" readonly="1"/>
+                                            <field name="receivable_income_account_id" readonly="1"/>
+                                            <field name="account_receivable_id_from_employee" readonly="1"/>
+                                            <field name="vat_account" />
+                                            <field name="profit_account_id" />
+                                            <field name="loss_account_id" />
+
+
+                                        </group>
+                                        <group >
+
+
+                                        </group>
+
+                                    </group>
+
+                                    <group>
+
+
+                                        <field name="detail_ids" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" >
+                                            <tree default_order="employee_id" editable="bottom">
+
+
+                                                <field name="start_date" readonly="1"/>
+                                                
+                                                <field name="registry_number" readonly="1"/> 
+                                                
+                                                <field name="amount" readonly="1"/>
+                                                <field name="capitalized_value" readonly="1"/>
+
+                                                <field name="accumulated_depreciation" readonly="1"/>
+                                                <field name="current_value" readonly="1"/>
+                                                <field name="sale_price" />
+                                                <field name="employee_id" />
+                                                <field name="is_expense" />
+                                                <field name="asset_state" />
+                                                <field name="damage_description" />
+                                                <field name="damage_desc"/>
+                                                
+
+                                            </tree>
+                                            <form>
+                                                <group>
+                                                    <group >
+                                                        <field name="start_date" readonly="1"/>
+                                                        <field name="registry_number" readonly="1"/> 
+                                                        <field name="employee_id" />
+                                                        <field name="is_expense" />
+                                                        <field name="damage_description" readonly="1"/>
+                                                        <field name="damage_desc" readonly="1"/>
+                                                        
+                                                        <field name="asset_state" readonly="1"/>
+                                                    
+                                                    </group>
+                                                    <group >
+                                                        <field name="amount" readonly="1"/>
+                                                        <field name="capitalized_value" readonly="1"/>
+
+                                                        <field name="accumulated_depreciation" readonly="1"/>
+                                                        <field name="current_value" readonly="1"/>
+                                                        <field name="sale_price" readonly="1"/>
+                                                        <field name="account_move_id" readonly="1"/>
+                                                        <field name="account_move_id_for_accountant" readonly="1"/>
+
+                                                    
+                                                    </group>
+                                                    <field name="amount_ids" readonly="1">
+
+                                                        <tree  editable="bottom">
+
+                                                            <field name="partner_id" />
+                                                            <field name="charge_amount"/> 
+                                                        </tree>
+                                                    </field>
+
+                                                </group>
+                                            </form>
+                                        </field>
+
+
+                                        <!-- <field name="transfer_ids" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" invisible="1">
+                                            <tree default_order="department_id" editable="bottom">
+
+                                                <field name="department_id" readonly="1"/>
+                                                
+                                                <field name="receiver_department_id" readonly="1"/> 
+                                                
+                                                <field name="request_id" readonly="1"/>
+
+                                            </tree>
+
+                                        </field> -->
+
+                                            <field name="diamond_json" />
+                                            <field name="transaction_id" readonly="1"/>
+                                    </group>								
+                    
+                                </form>
+
+                            </field>
+                        </group>
+                    </page>
+                    <page string="Хөрөнгийн хөдөлгөөнүүд">
+                        <group>
+                        
+                            <field name="transfers" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" >
+                                <tree default_order="department_id" editable="bottom">
+
+                                    <field name="department_id" readonly="1"/>
+                                    
+                                    <field name="receiver_department_id" readonly="1"/> 
+                                    
+                                    <field name="id" readonly="1"/>
+                                    <field name="request_id" readonly="1"/>
+
+                                </tree>
+
+                            </field>
+
+                            <div>
+                                <field name="role" readonly="1"/>
+                                <!-- <field name="transaction_id" /> -->
+                                <field name="json_data" /> 
+                                <field name="all_line_employees_are_same" readonly="1"/>
+                            </div>
+                            <!-- <div class="pull-left">
+                                <h3 color="green"> Ногоон өнгө байвал хүн нь хүлээн авсан гэсэн үг</h3>
+                                <h3 color="red"> Улаан өнгө байвал хүн нь хүлээн авч амжаагүй гэсэн үг</h3>
+                            </div>  -->
+
+                        </group>
+                    </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_fixed_asset_counting_filter" model="ir.ui.view">
+            <field name="name">fixed.asset.counting.filter</field>
+            <field name="model">fixed.asset.counting</field>
+            <field name="arch" type="xml">
+                <search string="Search transfer request">
+                    <filter name="group_requested_employee" string="Боловсруулсан ажилтан" domain="[]" context="{'group_by':'requested_employee_id'}"/>
+                    <!-- <filter name="group_approved_employee" string="Баталсан ажилтан" domain="[]" context="{'group_by':'approved_employee_id'}"/> -->
+                    <filter name="group_department_id" string="Салбар" domain="[]" context="{'group_by':['department_id']}"/>
+                    <filter name="group_name" string="Тооллого" domain="[]" context="{'group_by':['name','state']}"/>
+                    <filter string="Энэ сар" name="current_month" domain="[('create_date','&gt;=',(datetime.date.today()+relativedelta(day=1)).strftime('%Y-%m-%d'))]" help="Энэ сар"/>
+                    <filter string="Өнгөрсөн сар" name="prev_month" domain="[('create_date','&gt;=',(datetime.date.today()-relativedelta(months=1)+relativedelta(day=1)).strftime('%Y-%m-%d')),('create_date','&lt;',(datetime.date.today()+relativedelta(day=1)).strftime('%Y-%m-%d'))]" help="Энэ сар"/>
+                    <filter string="Сүүлийн 18 сар" name="last_2_month" domain="[('create_date','&gt;=',(datetime.date.today()-relativedelta(years=2)).strftime('%Y-%m-%d'))]" help="Сүүлийн 18 сар"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_fixed_asset_counting" model="ir.actions.act_window">
+            <field name="name">Fixed asset counting</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fixed.asset.counting</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="fixed_asset_counting_tree"/>
+            <field name="context">{'search_default_last_2_month': 1, 'search_default_group_department_id': 2,'search_default_group_name': 3}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new received H.
+              </p>
+            </field>
+        </record>
+
+        <menuitem name="Эд хөрөнгийн тооллого"
+            action="action_fixed_asset_counting" 
+            id="menu_fixed_asset_counting"
+            parent="menu_stock_requisition_parent" sequence="9"/>
+
+
+
+
+
+        <record model="ir.ui.view" id="fixed_asset_counting_line_tree">
+            <field name="name">fixed.asset.counting.line.tree</field>
+            <field name="model">fixed.asset.counting.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Request">
+                
+                    <field name="id" options="{'no_create': True}" readonly="1"/>
+                    <field name="state" options="{'no_create': True}" invisible="1"/>
+                    <field name="employee_id" options="{'no_create': True}" readonly="1"/>
+                    <field name="department_id" options="{'no_create': True}" invisible="1"/>
+                    <field name="account_id" options="{'no_create': True}" invisible="1"/>
+                    <field name="depreciation_account" options="{'no_create': True}" invisible="1"/>
+                    <field name="account_receivable_id" options="{'no_create': True}" invisible="1"/>
+                    <field name="account_receivable_id_from_employee" options="{'no_create': True}" invisible="1"/>
+                    <field name="vat_account" options="{'no_create': True}" invisible="1"/>
+                    
+                    <field name="profit_account_id" options="{'no_create': True}" invisible="1"/>
+                    <field name="loss_account_id" options="{'no_create': True}" invisible="1"/>
+                    <field name="receivable_income_account_id" options="{'no_create': True}" invisible="1"/>
+
+
+
+                    <field name="asset_id" readonly="1"/>
+                    <field name="product_id" invisible="1"/>
+                    <field name="state" invisible="1"/>
+                    <field name="show_accept_button" invisible="1"/>
+                    
+                    <field name="asset_name" readonly="1"/>
+                    <field name="amount" readonly="1" sum="amount"/>
+                    <field name="qty" readonly="1" sum="qty"/>
+                    <field name="expense_cnt" invisible="1"/>
+
+                    <field name="counted_qty" attrs="{'readonly':[('state','!=','count')]}" sum="counted_qty"/>
+                    <field name="difference" readonly="1" sum="difference"/>
+                    <field name="has_difference" invisible="1"/>
+                    <field name="connection_state" options="{'no_create': True}"/>
+
+
+
+                    <button name="%(action_asset_solution)d" string="Зөрүүг шийдэх" type="action" class="oe_highlight" 
+                        attrs="{'invisible':['|',('state','!=','count'),'|',('difference','=',0),('is_invisible','!=',0)]}"/>
+                    <button name="%(action_asset_disposal)d" string="Зарлагадах" type="action" class="oe_highlight" 
+                        attrs="{'invisible':['|',('state','!=','verify'),('difference', '&gt;',-1)]}"/>
+                    <button name="%(action_damage_asset_description)d" string="Гэмтэл тодорхойлох" type="action" class="oe_highlight" 
+                        attrs="{'invisible':[('state','!=','count')]}"/>
+
+                    <!-- <button name="button_to_handle" type="object" string="Зөрүүг арилгах" class="oe_highlight"
+                        attrs="{'invisible':['|',('state','!=','count'),'|',('difference','=',0),'|',('is_invisible','!=',0),('expense','=',0),('income','=',0)]}"/> -->
+
+                    <field name="solution" invisible="1"/>
+                    <field name="income" readonly="1" sum="income"/>
+                    <field name="expense" readonly="1" sum="expense"/>
+                    <field name="is_invisible" invisible="1"/>
+                    <field name="current_qty" readonly="1" sum="current_qty"/>
+                    <field name="filter_by30s" invisible="1"/>
+
+
+
+
+                </tree>
+            </field>
+        </record>
+
+        <record id="fixed_asset_counting_line_form" model="ir.ui.view">
+            <field name="name">fixed.asset.counting.line.form</field>
+            <field name="model">fixed.asset.counting.line</field>
+            <field name="arch" type="xml">
+                <form string="Transfer">
+                <header>
+                    <button string="Connect" name="action_connect_transactions" type="object"/>
+                </header>
+                <sheet>
+                    <group colspan="8" col="8">
+                        <field name="asset_name" readonly="1"/>
+                    </group>
+
+                    <group colspan="8" col="8">
+
+
+
+                        <group colspan="4">
+                            <field name="employee_id" options="{'no_create': True}" readonly="1"/>
+
+                            <field name="asset_id" readonly="1"/>
+                            <field name="product_id" invisible="1"/>
+                            <field name="income_cnt" />
+                            <field name="receive_cnt" />
+                            <field name="expense_cnt" />
+                            <field name="transfer_cnt" invisible="1"/>
+                            <field name="total_amt" invisible="1"/>
+                            <field name="is_damage_asset" invisible="1"/>
+                        </group>
+                        <group colspan="4">
+                            
+                        
+                            <field name="qty" readonly="1"/>
+
+                            <field name="counted_qty" />
+                            <field name="difference" readonly="1"/>
+                            <field name="current_qty" readonly="1"/>
+                            <field name="account_move_id" readonly="1"/>
+                            <field name="account_move_id_for_accountant" readonly="1"/>
+
+                        </group>
+                        <group colspan="7">
+
+
+                            <field name="account_id" readonly="1"/>
+                            <field name="depreciation_account" readonly="1"/>
+                            <field name="account_receivable_id" readonly="1"/>
+                            <field name="receivable_income_account_id" readonly="1"/>
+                            <field name="account_receivable_id_from_employee" readonly="1"/>
+                            <field name="vat_account" />
+                            <field name="profit_account_id" />
+                            <field name="loss_account_id" />
+
+
+                        </group>
+                        <group >
+                        </group>
+
+                    </group>
+
+                    <group>
+
+
+                        <field name="detail_ids" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" >
+                            <tree default_order="employee_id" editable="bottom">
+
+
+                                <field name="start_date" readonly="1"/>
+                                
+                                <field name="registry_number" readonly="1"/> 
+                                
+                                <field name="amount" readonly="1"/>
+                                <field name="capitalized_value" readonly="1"/>
+
+                                <field name="accumulated_depreciation" readonly="1"/>
+                                <field name="current_value" readonly="1"/>
+                                <field name="sale_price" />
+                                <field name="employee_id" />
+                                <field name="is_expense" />
+                                <field name="asset_state" />
+                                <field name="damage_description" />
+                                <field name="damage_desc"/>
+                                
+
+                            </tree>
+                            <form>
+                                <group>
+                                    <group >
+                                        <field name="start_date" readonly="1"/>
+                                        <field name="registry_number" readonly="1"/> 
+                                        <field name="employee_id" />
+                                        <field name="is_expense" />
+                                        <field name="damage_description" readonly="1"/>
+                                        <field name="damage_desc" readonly="1"/>
+                                        
+                                        <field name="asset_state" readonly="1"/>
+                                    
+                                    </group>
+                                    <group >
+                                        <field name="amount" readonly="1"/>
+                                        <field name="capitalized_value" readonly="1"/>
+
+                                        <field name="accumulated_depreciation" readonly="1"/>
+                                        <field name="current_value" readonly="1"/>
+                                        <field name="sale_price" readonly="1"/>
+                                        <field name="account_move_id" readonly="1"/>
+                                        <field name="account_move_id_for_accountant" readonly="1"/>
+
+                                    
+                                    </group>
+                                    <field name="amount_ids" readonly="1">
+
+                                        <tree  editable="bottom">
+
+                                            <field name="partner_id" />
+                                            <field name="charge_amount"/> 
+                                        </tree>
+                                    </field>
+
+                                </group>
+                            </form>
+                        </field>
+
+
+                        <!-- <field name="transfer_ids" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" invisible="1">
+                            <tree default_order="department_id" editable="bottom">
+
+                                <field name="department_id" readonly="1"/>
+                                
+                                <field name="receiver_department_id" readonly="1"/> 
+                                
+                                <field name="request_id" readonly="1"/>
+
+                            </tree>
+
+                        </field> -->
+
+
+                    </group>								
+
+                </sheet>
+
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_fixed_asset_counting_line_filter" model="ir.ui.view">
+            <field name="name">fixed.asset.counting.line.filter</field>
+            <field name="model">fixed.asset.counting.line</field>
+            <field name="arch" type="xml">
+                <search string="Search Timesheet">
+					<!-- <field name="description" string="Гүйлгээний утга"/>
+                    <field name="amount" string="Мөнгөн дүн"/>
+                    <field name="transaction_date" string="Огноо"/> -->
+					<group>
+						
+						<filter name="group_state" string='Төлөв' domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="group_connection_state" string='Холболт' domain="[]" context="{'group_by':'connection_state'}"/>
+						<filter string="Сүүлийн 40 хоног" name="current_month" domain="[('create_date','>',(datetime.date.today()-relativedelta(days=40)).strftime('%Y-%m-%d'))]" help="Энэ сар"/>
+					</group>
+				</search>
+            </field>
+        </record>
+
+
+
+        <record id="action_fixed_asset_counting_line" model="ir.actions.act_window">
+            <field name="name">Fixed asset type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fixed.asset.counting.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="fixed_asset_counting_line_tree"/>
+            <field name="context">{ 'search_default_group_state': 1,'search_default_group_connection_state': 2,'search_default_current_month': 3}</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new received H.
+              </p>
+            </field>
+        </record>
+
+        <menuitem name="Тооллогын диамонд холболт"
+            action="action_fixed_asset_counting_line" 
+            id="menu_fixed_asset_counting_line"
+            parent="menu_stock_requisition_parent" sequence="10"/>
+
+
+
+
+
+
+
+
+</odoo>
+
+
+

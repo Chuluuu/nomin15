@@ -1,0 +1,508 @@
+<openerp>
+<data>
+    	
+    <record model="ir.ui.view" id="asset_preparation_form">
+        <field name="name">asset.preparation.from</field>
+        <field name="model">asset.preparation</field>
+        <field name="arch" type="xml">
+            <form string="Write your reason">
+                <div class="pull-left" >
+                    <h3 ><font color="Red">Тооллого эхэлсэн огноог заавал зөв бөглөх хэрэгтэй. Яг энэ огноогоор өгөгдөлөө татдаг байгаа шүү!!!</font></h3> 
+                </div>            
+                <group colspan="8" col="8">
+
+		            <group colspan="4">
+
+
+                        <field name="department_id"/>
+                        <field name="type" />
+                        <label for="start_date" string="Үргэлжлэх хугацаа"/>
+                            <div>
+                                <div>
+                                    <field name="start_date" class="oe_inline" />
+                                    <label string="-" class="oe_inline" />
+                                    <field name="end_date" class="oe_inline" />
+
+                                </div>
+
+                            </div>
+                        <field name="filter_options" />
+                        <field name="location" attrs="{'invisible':[('filter_options','not in',['location'])],'required':[('filter_options','in',['location'])]}"/>
+                        <field name="account_from" domain="[('department_id', '=', department_id)]" attrs="{'invisible':[('filter_options','in',['owner','code'])],'required':[('filter_options','not in',['owner','code'])]}"/>
+                        <field name="employee_id" attrs="{'invisible':[('filter_options','not in',['owner'])],'required':[('filter_options','in',['owner'])]}"/>
+                        <field name="asset_type" attrs="{'invisible':[('filter_options','not in',['type'])],'required':[('filter_options','in',['type'])]}"/>
+                        <field name="asset_code" attrs="{'invisible':[('filter_options','not in',['code'])],'required':[('filter_options','in',['code'])]}"/>
+                        
+                        <!-- <field name="receiver_department_id" />    
+                        <field name="sender_account_receivable_id" domain="[('department_id', '=', department_id)]"/>
+                        <field name="sender_profit_account_id" domain="[('department_id', '=', department_id)]"/>
+                        <field name="sender_loss_account_id" domain="[('department_id', '=', department_id)]"/>
+                        <field name="sender_vat_account_id" attrs="{'invisible':[('is_same_company','=',True)],'required':[('is_same_company','=',False)]}"/> -->
+
+
+                        <field name="description"/>
+                    </group>
+                </group>
+
+                <footer>
+                    <button name="button_accept" type="object" 
+                            string="Accept" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_asset_preparation"
+                name="Хөрөнгүүдийг бэлтгэх цонх"
+                res_model="asset.preparation"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"/>
+
+
+
+
+    	
+    <record model="ir.ui.view" id="asset_solution_form">
+        <field name="name">asset.solution.from</field>
+        <field name="model">asset.solution</field>
+        <field name="arch" type="xml">
+            <form string="Write your reason">
+                <group colspan="8" col="8">
+                    <group colspan="8" col="8">
+                        <field name="asset_name" readonly="1"/>
+                    </group>
+
+                    <group colspan="8" col="8">
+                        <group colspan="4">
+                            <field name="employee_id" options="{'no_create': True}" readonly="1"/>
+
+                            <field name="asset_id" readonly="1"/>
+                            <field name="product_id" invisible="1"/>
+
+                            <field name="income_cnt" />
+                            <field name="receive_cnt" />
+                            <field name="expense_cnt" invisible="1"/>
+                            <field name="transfer_cnt" invisible="1"/>
+                            <field name="department_id" invisible="0"/>
+
+
+                        </group>
+                        <group colspan="4">
+
+                            <field name="qty" readonly="1"/>
+
+                            <field name="counted_qty" readonly="1"/>
+                            <field name="difference" readonly="1"/>
+                            <field name="current_qty" readonly="1"/>
+                            <button name="button_to_handle" type="object" string="Зөрүүг арилгах" class="oe_highlight"
+                            attrs="{'invisible':[('expense','=',0),('income','=',0)]}"/>
+                            
+
+                        </group>
+
+                    
+                        <group colspan="7"> 
+                            <group >
+                                <field name="account_id" readonly="1"/>
+                                <field name="depreciation_account" />
+                                <field name="account_receivable_id"/>
+                                <field name="receivable_income_account_id"/>
+                                
+
+                                <field name="income" invisible="1"/>
+                                <field name="expense" invisible="1"/>
+                                <field name="is_invisible" invisible="1"/>
+                            </group>
+                        </group>
+                        <group> 
+                            <group >
+                            </group>
+                        </group>
+                    </group>
+                    <group colspan="8" col="8">
+                        <group colspan="8" >
+                            <field name="detail_ids" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" >
+                                <tree default_order="employee_id" editable="bottom">
+
+
+                                    <field name="start_date" readonly="1"/> 
+                                    <field name="registry_number" readonly="1"/> 
+
+                                    <field name="amount" invisible="1"/>
+                                    <field name="capitalized_value" readonly="1"/>
+
+                                    <field name="accumulated_depreciation" readonly="1"/>
+                                    <field name="current_value" readonly="1"/>
+                                    <field name="employee_id" />
+                                    <field name="is_expense"/>
+                                    <field name="asset_state" />
+                                    <field name="damage_description" />
+                                    <field name="damage_desc" />
+                                    <!-- <field name="damage_desc" /> -->
+                                    
+                                    
+
+                                </tree>
+
+                                      <!-- <form>
+                                            <group>
+                                                <group >
+                                                    <field name="start_date" readonly="1"/>
+                                                    <field name="registry_number" readonly="1"/> 
+                                                    <field name="employee_id" />
+                                                    <field name="is_expense" />
+                                                    <field name="damage_description" readonly="1"/>
+                                                    <field name="asset_state" readonly="1"/>
+                                                
+                                                </group>
+                                                <group >
+                                                    <field name="amount" readonly="1"/>
+                                                    <field name="capitalized_value" readonly="1"/>
+
+                                                    <field name="accumulated_depreciation" readonly="1"/>
+                                                    <field name="current_value" readonly="1"/>
+                                                    <field name="sale_price" readonly="1"/>
+                                                    
+                                                    
+
+
+                                                
+                                                </group>
+                                                <field name="amount_ids">
+                                                    <tree default_order="employee_id" editable="bottom">
+
+
+                                                        <field name="partner_id" />
+                                                        
+                                                        <field name="charge_amount"/> 
+
+
+                                                    </tree>
+                                                
+                                                 </field >
+
+                                            </group>
+                                        </form>
+ -->
+
+                            </field>
+
+                            <!-- <field name="transfer_ids" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" >
+                                <tree default_order="department_id" editable="bottom">
+
+                                    <field name="department_id" readonly="1"/>
+                                    
+                                    <field name="receiver_department_id" readonly="1"/> 
+                                    
+                                    <field name="request_id" readonly="1"/>
+
+                                </tree>
+
+                            </field> -->
+
+                        </group>
+
+                    </group>								
+
+                </group>
+
+
+
+
+
+                <footer>
+                    <button name="button_to_save" type="object" 
+                            string="Хадгалах" class="oe_highlight"/>
+                    <button special="cancel" string="Болих"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_asset_solution"
+                name="Зөрүүг шийдэх цонх"
+                res_model="asset.solution"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"/>
+
+
+
+
+
+    <record model="ir.ui.view" id="asset_transaction_form">
+        <field name="name">asset.transaction.from</field>
+        <field name="model">asset.transaction</field>
+        <field name="arch" type="xml">
+            <form string="Write your reason">
+                <group colspan="8" col="8">
+
+
+
+                    <group>
+                        <group>
+                            <field name="employee_id" options="{'no_create': True}" readonly="1"/>
+
+                            <!-- <field name="asset_id" readonly="1"/> -->
+                            <!-- <field name="product_id" invisible="1"/> -->
+                            <!-- <field name="asset_name" readonly="1"/> -->
+                            <field name="income_cnt" />
+                            <field name="receive_cnt" />
+                            <field name="expense_cnt" invisible="1"/>
+                            <field name="transfer_cnt" invisible="1"/>
+                        </group>
+                        <group>
+
+                            <field name="qty" readonly="1"/>
+
+                            <field name="counted_qty" readonly="1"/>
+                            <field name="difference" readonly="1"/>
+                            <field name="current_qty" readonly="1"/>
+
+                        </group>
+
+                    </group>								
+
+                </group>
+
+
+
+
+
+                <footer>
+                    <button name="button_accept" type="object" confirm="Are you sure?"
+                            string="Accept" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_asset_transaction"
+                name="Зөрүүг шийдэх цонх"
+                res_model="asset.transaction"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"/>
+
+
+
+<!-- 
+    <record model="ir.ui.view" id="insert_amounts_form">
+        <field name="name">insert.amounts.form</field>
+        <field name="model">insert.amounts</field>
+        <field name="arch" type="xml">
+            <form string="Write your reason">
+                <group colspan="8" col="8">
+
+
+
+                    <group>
+                        <group>
+                            <field name="start_date" readonly="1"/> 
+                            <field name="registry_number" readonly="1"/> 
+                            <field name="amount" readonly="1"/>
+                            <field name="capitalized_value" readonly="1"/>
+
+                           
+                        </group>
+                        <group>
+
+                            <field name="accumulated_depreciation" readonly="1"/>
+                            <field name="current_value" readonly="1"/>
+                            <field name="sale_price" />
+
+
+                        </group>
+
+                    </group>								
+
+                </group>
+
+
+
+
+
+                <footer>
+                    <button name="button_save" type="object" confirm="Are you sure?"
+                            string="Save" class="oe_highlight"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_insert_amounts"
+                name="Дүн оруулах цонх"
+                res_model="insert.amounts"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"/>
+ -->
+
+
+    <record model="ir.ui.view" id="asset_disposal_form">
+        <field name="name">asset.disposal.from</field>
+        <field name="model">asset.disposal</field>
+        <field name="arch" type="xml">
+            <form string="Write your reason">
+                <group colspan="8" col="8">
+
+
+                    <group colspan="8" col="8">
+                        <field name="asset_name" readonly="1"/>
+                    </group>
+
+                    <group colspan="8" col="8">
+                        <group colspan="4">
+                            <field name="employee_id" options="{'no_create': True}" readonly="1"/>
+                            <field name="department_id" invisible="0"/>
+
+                            <field name="asset_id" readonly="1"/>
+                            <field name="product_id" invisible="1"/>
+                            
+
+                            <field name="income_cnt" invisible="1"/>
+                            <field name="receive_cnt" invisible="1"/>
+                            <field name="expense_cnt" invisible="1"/>
+                            <field name="transfer_cnt" invisible="1"/>
+                        </group>
+                        <group colspan="4" >
+                            
+                            
+                            
+                            <field name="total_amt" readonly="1"/>
+                            <field name="profit_or_loss_amount" readonly="1"/>
+                            
+
+                            <!-- <field name="counted_qty" readonly="1"/>
+                            <field name="difference" readonly="1"/>
+                            <field name="current_qty" readonly="1"/> -->
+                            
+
+                        </group>
+                    </group>
+                    <group colspan="7"> 
+                        <group>             
+                            <field name="account_id" readonly="1"/>
+                            <field name="depreciation_account" />
+                            <field name="account_receivable_id"/>
+                            <field name="receivable_income_account_id"/>
+                            <field name="account_receivable_id_from_employee"/>
+                            <field name="vat_account" />
+                            <field name="profit_account_id" />
+                            <field name="loss_account_id" />
+                         </group>
+                    </group>
+                    <group > 
+                        <group>             
+                         </group>
+                    </group>
+                    <group colspan="8" col="8">
+                    
+
+
+                        <field name="detail_ids" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" >
+                            <tree default_order="employee_id" >
+                                <field name="start_date" readonly="1"/> 
+                                <field name="registry_number" readonly="1"/> 
+                                <field name="amount" readonly="1"/>
+                                <field name="capitalized_value" readonly="1"/>
+
+                                <field name="accumulated_depreciation" readonly="1"/>
+                                <field name="current_value" readonly="1"/>
+                                <field name="sale_price" readonly="1"/>
+                                <!-- <field name="account_move_id" invisible="1"/> -->
+                                <field name="account_move_id_for_accountant" invisible="1"/>
+                            </tree>
+
+                            <form>
+                                <group colspan="8" col="8">
+                                    <group colspan="4" >
+                                        <field name="start_date" readonly="1"/>
+                                        <field name="registry_number" readonly="1"/> 
+                                        <field name="damage_description" readonly="1"/>
+                                        
+                                        <field name="asset_state" readonly="1"/>
+                                    </group>
+                                    <group colspan="4" >
+                                        <field name="amount" readonly="1"/>
+                                        <field name="capitalized_value" readonly="1"/>
+
+                                        <field name="accumulated_depreciation" readonly="1"/>
+                                        <field name="current_value" readonly="1"/>
+                                        <field name="sale_price" readonly="1"/>
+                                    </group>
+                                </group>
+                                <group colspan="8" col="8">
+                                    <field name="amount_ids">
+                                        <tree editable="bottom">
+                                            <field name="partner_id" />
+                                            <field name="charge_amount"/> 
+                                        </tree>
+                                    
+                                    </field >
+                                </group>
+                                <!-- <footer>
+                                    <button name="button_accept" type="object" 
+                                            string="Accept1" class="oe_highlight"/>
+                                    <button special="cancel1" string="Cancel"/>
+                                </footer> -->
+                            </form>
+
+
+                        </field>
+
+                        <!-- <field name="transfer_ids" default_focus="1" nolabel="1"  colspan="8" options="{'no_create': True}" >
+                            <tree default_order="department_id" editable="bottom">
+
+                                <field name="department_id" readonly="1"/>
+                                
+                                <field name="receiver_department_id" readonly="1"/> 
+                                
+                                <field name="request_id" readonly="1"/>
+
+                            </tree>
+
+                        </field> -->
+
+
+
+                    </group>								
+
+                </group>
+
+                <footer>
+                    <button name="button_accept" type="object" 
+                            string="Зарлагын гүйлгээ хийх" class="oe_highlight"/>
+                    <!-- <button name="expense_button" type="object" confirm="Are you sure?"
+                            string="Зарлагын гүйлгээ хийх" class="oe_highlight"/> -->
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window id="action_asset_disposal"
+                name="Үрэгдсэн хөрөнгийг зарлагадах цонх"
+                res_model="asset.disposal"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</data>
+</openerp> 

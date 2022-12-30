@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="project_status_report_form">
+            <field name="name">project.status.report.form</field>
+            <field name="model">project.status.report</field>
+            <field name="arch" type="xml">
+                <form string="Төслийн явцын тайлан">
+                    <group>
+                        <field name="project_id"/>
+                    </group>
+                    <footer>
+                        <button name="export_chart" class ="oe_highlight" string="Татах" type="object" icon="terp-graph"  context="{'xls_export':1}"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_project_status_report">
+            <field name="name">Төслийн явцын тайлан</field>
+            <field name="res_model">project.status.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="project_status_report_form"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+            id= "menu_project_status_report"
+        	name = "Төслийн явцын тайлан"
+            parent="nomin_project.menu_project_reports"
+            sequence= "9"
+            action="action_project_status_report"
+        />
+    </data>
+</openerp>

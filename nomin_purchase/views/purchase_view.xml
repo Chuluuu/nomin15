@@ -1,0 +1,549 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    <report 
+    string="Худалдан авах захиалга дэлгэрэнгүй" 
+    id="action_purchase_order_report" 
+    model="purchase.order" 
+    report_type="qweb-pdf"
+    name="nomin_purchase.report_purchaseorder_document" 
+    file="nomin_purchase.report_purchaseorder_document" 
+    />
+     <record id="purchase.view_purchase_order_filter" model="ir.ui.view">
+            <field name="name">request.quotation.select</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <search string="Search Purchase Order">
+                    <field name="name" string="Reference"/>
+                    <field name="partner_id" operator="child_of"/>
+                    <field name="product_id"/>
+                    <field name="create_uid"/>
+                    <filter name="draft" string="Quotations" domain="[('state','in',('draft','sent','to approve'))]"/>
+                    <filter name="approved" string="Purchase Orders" domain="[('state','in',('purchase','done'))]"/>
+                    <separator/>
+                    <filter name="not_invoiced" string="Not Invoiced" domain="[('invoice_status','=', 'to invoice')]" help="Purchase orders that include lines not invoiced."/>
+                    <filter name="invoiced" string="Invoiced" domain="[('invoice_status','=', 'invoiced')]" help="Purchase orders that include lines not invoiced."/>
+                    <filter string="New Mail" name="message_unread" domain="[('message_unread','=',True)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Vendor" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Салбар" name="sector" domain="[]" context="{'group_by':'sector_id'}"/>
+                        <filter string="Хэлтэс" name="department" domain="[]" context="{'group_by':'department_id'}"/>
+                        <filter string="Хариуцагч" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Төлөв" name="state" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Order Date" domain="[]" context="{'group_by':'date_order'}"/>
+                        <!-- FORWARDPORT UP TO SAAS-10 -->
+                    </group>
+                </search>
+            </field>
+        </record>
+    	
+
+        <record id="purchase_purchase_order_tree" model="ir.ui.view">
+            <field name="name">purchase.order.tree</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <tree decoration-bf="message_unread==True" decoration-muted="state=='cancel'" decoration-info="state in ('wait','confirmed')" string="Purchase Order">
+                    <field name="message_unread" invisible="1"/>
+                    <field name="name" string="Reference"/>
+                    <field name="date_order" />
+                    <field name="sector_id"/>
+                    <!-- <field name="department_id"/> -->
+                    <!-- <field name="purchase_type"/> -->
+                    <field name="partner_id"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="date_planned" invisible="context.get('quotation_only', False)"/>
+                    <!-- <field name="origin"/> -->
+                    <field name="amount_untaxed" invisible="1" sum="Total Untaxed amount" string="Untaxed" widget="monetary"/>
+                    <field name="amount_total" invisible="1" sum="Total amount" widget="monetary"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+
+    	<record id="purchase.purchase_rfq" model="ir.actions.act_window">
+            <field name="name">Requests for Quotation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_id" ref="purchase_purchase_order_tree"/>
+            <field name="context">{'search_default_group_state':1}</field>
+            <field name="domain">[('state','in',('draft','sent_rfq','back','comparison_created','cancel', 'confirmed'))]</field>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+            <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a request for quotation.
+              </p><p>
+                The quotation contains the history of the discussion/negotiation
+                you had with your vendor. Once confirmed, a request for
+                quotation is converted into a purchase order.
+              </p><p>
+                Most propositions of purchase orders are created automatically
+                by Odoo based on inventory needs.
+              </p>
+            </field>
+        </record>
+    	
+
+        <record id="purchase.purchase_form_action" model="ir.actions.act_window">
+            <field name="name">Purchase Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_id" ref="purchase_purchase_order_tree"/>
+            <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+            <field name="context">{'search_default_todo':1, 'show_purchase': True}</field>
+            <field name="domain">[('state','not in',('draft','sent_rfq','back','comparison_created','cancel', 'confirmed'))]</field>
+            <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a quotation that will be converted into a purchase order. 
+              </p><p>
+                Use this menu to search within your purchase orders by
+                references, vendor, products, etc. For each purchase order,
+                you can track the related discussion with the vendor, control
+                the products received and control the vendor bills.
+              </p>
+            </field>
+        </record>
+    	
+
+        <record id="view_purchase_order_line_filter" model="ir.ui.view">
+            <field name="name">request.quotation.select</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <search string="Search Purchase Order">
+                    
+                    
+                    <group expand="0" string="Group By">
+                        <filter string="Vendor" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Бараа" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter string="Захиалгын дугаар" domain="[]" context="{'group_by':'order_id'}"/>
+                        <filter string="Төлөв" domain="[]" context="{'group_by':'state'}"/>
+                        <!-- <filter string="Order Date" domain="[]" context="{'group_by':'date_order'}"/> -->
+                        <!-- FORWARDPORT UP TO SAAS-10 -->
+                    </group>
+                </search>
+            </field>
+        </record>
+       <record id ="purchase_purchase_order_line_tree" model="ir.ui.view">
+            <field name="name">Захиалгын мөр</field>
+            <field name="model">purchase.order.line</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="product_id"/>
+                    <field name="name"/>
+                    <field name="product_qty"/>
+                    <field name="price_unit"/>
+                    <field name="price_subtotal" sum="Нийт"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+       </record>
+        <record id="action_purchase_order_line" model="ir.actions.act_window">
+            <field name="name">Purchase Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order.line</field>
+            <field name="view_id" ref="purchase_purchase_order_line_tree"/>
+            <!-- <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
+            <field name="context">{'search_default_todo':1, 'show_purchase': True}</field>
+            <field name="domain">[('state','not in',('draft','sent_rfq','back','comparison_created','cancel', 'confirmed'))]</field> -->
+            <field name="search_view_id" ref="view_purchase_order_line_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a quotation that will be converted into a purchase order. 
+              </p><p>
+                Use this menu to search within your purchase orders by
+                references, vendor, products, etc. For each purchase order,
+                you can track the related discussion with the vendor, control
+                the products received and control the vendor bills.
+              </p>
+            </field>
+        </record>
+                
+    	
+    	
+			<record id="view_purchase_order_inherit_form" model="ir.ui.view">
+			<field name="name">purchase.order.form</field>
+			<field name="model">purchase.order</field>
+			<field name="inherit_id" ref="purchase.purchase_order_form"/>
+			<field name="arch" type="xml">
+
+
+				<xpath expr="//header/button[@name='action_rfq_send']" position="replace">
+                    <button name="action_processed" states="sent" string="Get processed" type="object" class="oe_highlight"/>
+                    <button name="action_back_supply" states="sent" string="Back to supply" type="object" class="oe_highlight"/>
+				</xpath>
+				
+				
+				
+				<xpath expr="//header" position="replace">
+					<header>
+						<button name="action_send" class="oe_highlight" type="object" string="Илгээх" attrs="{'invisible':[('is_in_sent','=',False)]}"/>
+						<!-- RFQ SEND FUNCTION -->
+						<button name="action_rfq_send" groups="purchase.group_purchase_user" states="draft" string="Үнийн санал мэйл-ээр илгээх" type="object" context="{'send_rfq':True}" class="oe_highlight"/>
+						<button name="action_rfq_send" groups="purchase.group_purchase_user" states="sent" string="Үнийн санал мэйл-ээр  илгээх" type="object" context="{'send_rfq':True}"/>
+	                    <button name="print_quotation" string="Үнийн санал хэвлэх" type="object" states="draft" class="oe_highlight" groups="base.group_user"/>
+                    	<button name="print_quotation" string="Үнийн санал хэвлэх" type="object" states="sent" groups="base.group_user"/>
+                        <button name="print_quotation" string="Үнийн санал хэвлэх" type="object" states="sent_rfq" groups="base.group_user"/>
+                    	<button name="action_rfq_back" type="object" states="sent_rfq" string="Үнийн санал илгээх" class="oe_highlight" />
+                        <button name="action_cancel" class="oe_highlight" states="sent_rfq" string="Цуцлах" groups="base.group_user"/>
+                         <button name="action_verify" class="oe_highlight" type="object" string="Хянасан" attrs="{'invisible':[('is_in_verify','=',False)]}"/>
+                         <button name="action_cancel" class="oe_highlight" type="object" string="Цуцлах" attrs="{'invisible':[('is_in_verify','=',False)]}"/>
+                         <button name="action_approve" class="oe_highlight" type="object" string="Зөвшөөрөх" attrs="{'invisible':[('is_in_approve','=',False)]}"/>
+                         <button name="action_cancel" class="oe_highlight" type="object" string="Цуцлах" attrs="{'invisible':[('is_in_approve','=',False)]}"/>
+                         <button name="action_confirm" class="oe_highlight" type="object" string="Батлах" attrs="{'invisible':[('is_in_confirm','=',False)]}"/>
+                         <button name="action_cancel" class="oe_highlight" type="object" string="Цуцлах" attrs="{'invisible':[('is_in_confirm','=',False)]}"/>
+
+                         <button name="action_view_picking" groups="purchase.group_purchase_user" string="Барааг хүлээн авах" type="object" attrs="{'invisible': ['|', ('state','not in', ('purchase','done')), ('picking_count', '=', 0)]}"/>
+                        
+                         <button name="action_payment_request"  
+                        class="oe_highlight" type="object" groups="purchase.group_purchase_user" string="Төлбөрийн хүсэлт" attrs="{'invisible':['|',('payment_request_id','!=',False),('state','!=','purchase')]}"/> 
+
+                        <button name="button_done" groups="purchase.group_purchase_user" type="object" string="Дууссан төлөвт оруулах" states="purchase"
+                          help="If a purchase order is done, you cannot modify it manually anymore. You will not be able to receive invoices anymore for this purchase order."/>
+                      <!--   <button name="create_contract" groups="purchase.group_purchase_user" class="oe_highlight" type="object" string="Гэрээ үүсгэх" attrs="{'invisible':['|',('contract_id','!=',False),('state','!=','purchase')]}" /> -->
+                    	<field name="state" widget="statusbar" statusbar_visible="draft,sent,sent_rfq,back,purchase,done" readonly="1"/>
+                    </header>
+				</xpath>
+
+  				<xpath expr="//field[@name='partner_id']" position="replace">
+                       <field name="partner_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+				</xpath>
+				
+				<xpath expr="//field[@name='date_order']" position="replace">
+                       <field name="date_order"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                        <field name="rfq_date_term" attrs="{'readonly':[('state','not in',['draft','sent_rfq'])]}"/>
+                       
+				</xpath>
+				<xpath expr="//field[@name='origin']" position="replace">
+                       <field name="origin" groups="purchase.group_purchase_user" attrs="{'invisible': [('origin','=',False)]}"/>
+                </xpath>
+				
+				<xpath expr="//field[@name='partner_ref']" position="replace">
+                       <field name="partner_ref" string="Нийлүүлэгчийн дугаар" attrs="{'readonly':[('state','!=','draft')]}"/>
+				</xpath>
+				
+				
+				<xpath expr="//sheet/div[1]" position="replace">
+				    <div class="oe_button_box" name="button_box" attrs="{'invisible': [('state', 'not in', ('purchase', 'done', 'cancel'))]}">
+                        <button type="object"
+                            name="action_view_picking"
+                            class="oe_stat_button"
+                            groups="purchase.group_purchase_user"
+                            icon="fa-truck">
+                            <field name="picking_count" widget="statinfo" string="Тээвэрлэлт" help="Incoming Shipments"/>
+                        </button>
+                        <button type="object"  name="action_view_invoice"
+                            class="oe_stat_button"
+                            groups="purchase.group_purchase_user"
+                            icon="fa-pencil-square-o">
+                            <field name="invoice_count" widget="statinfo" string="Нэхэмжлэлүүд"/>
+                        </button> 
+                    </div>
+                    
+                </xpath>
+				
+                <xpath expr="//sheet/div[2]" position="replace">
+                    <div class="oe_title">
+                        <label string="Request for Quotation " attrs="{'invisible': [('state','not in',('draft','sent','bid'))]}"/>
+                        <label string="Purchase Order " attrs="{'invisible': [('state','in',('draft','sent','bid'))]}"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                </xpath>	
+						
+				
+			  	<xpath expr="//sheet/group/group/field[@name='currency_id']" position="replace">
+                    <field name="currency_id" attrs="{'readonly':[('state','!=','draft')]}" groups="purchase.group_purchase_user"/>
+                    <field name="related_currency_id" readonly="1" attrs="{'invisible':[('is_portal_user','=',False)]}"  options="{'no_open': True}"/>
+                    <field name="payment_request_id" readonly="1" attrs="{'invisible':[('payment_request_id','=',False)]}"/>
+                    <field name="rfq_department_id" invisible="1"/>
+                    <field name="is_portal_user" invisible="1"/>
+                    <field name="is_created_in_sent" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//sheet/group/group/field[@name='company_id']" position="replace">
+                    <field name="is_rfq_closed" groups="purchase.group_purchase_user" attrs="{'readonly':[('state','!=','draft')]}"/>
+                    <field name="is_open_date" invisible="1"/>
+                    <field name="rfq_close_date" groups="purchase.group_purchase_user"  attrs="{'required':[('is_rfq_closed','=',True)],'invisible':[('is_rfq_closed','=',False)],'readonly':[('state','!=','draft')]}"/>
+                    <field name="rfq_open_date" groups="purchase.group_purchase_user" attrs="{'required':[('is_rfq_closed','=',True)],'invisible':[('is_rfq_closed','=',False)],'readonly':[('state','!=','draft')]}"/>
+                    <field name="company_id" groups="purchase.group_purchase_user" readonly="1" required="1"/>
+			  		<field name="sector_id" groups="purchase.group_purchase_user" readonly="1" required="1"/>
+					<field name="department_id" groups="purchase.group_purchase_user" readonly="1"  required="1"/>
+					<field name="user_id"  groups="purchase.group_purchase_user" readonly="1" required="1"/>
+					<!-- BOOLEAN fields -->
+					  	<field name="is_in_sent" invisible="1"/>
+	                    <field name="is_in_approve" invisible="1"/>
+	                    <field name="is_in_verify" invisible="1"/>
+	                    <field name="is_in_confirm" invisible="1"/>
+	                    <field name="active_sequence" invisible="1"/>
+				</xpath>
+
+
+
+ 			</field>       
+		</record>
+
+    <record model="ir.ui.view" id="purchase_order_form_inherit1">
+        <field name="name">purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase_requisition.purchase_order_form_inherit"/>
+        <field name="arch" type="xml">
+           
+             <xpath expr="//form/sheet/notebook" position="replace">
+                <notebook>
+                 <page string="Бараанууд">
+                            <field name="order_line" context="{'default_sector_id': sector_id}" attrs="{'readonly':['&amp;','|',('state','not in',['comparison_created']),('is_created_in_sent','=',False),('state','not in',['draft','sent_rfq'])]}" >
+                                <tree string="Purchase Order Lines" editable="bottom">
+                                    <field name="product_id" attrs="{'readonly':[('is_portal','=',True)]}" context="{'partner_id': parent.partner_id}"/>
+                                    <field name="is_portal" invisible="1"/>
+                                    <field name="name" attrs="{'readonly':[('is_portal','=',True)]}" required="0" />
+                                    <field name="additional_desc" attrs="{'readonly':[('state','not in',['draft','sent_rfq'])]}"/>
+                                    <field name="is_rfq_closed" invisible="1"/>
+                                    <field name="date_planned" string="Нийлүүлэх хугацаа" invisible="1"/>
+                                    <field name="sector_id" invisible="1" context="{'default_sector_id': 'sector_id'}" />
+                                    <field name="company_id" invisible="1" groups="base.group_multi_company" options="{'no_create': True}"/>
+                                    <field name="account_analytic_id" invisible="1" context="{'default_partner_id':parent.partner_id}" groups="purchase.group_analytic_accounting"/>
+                                    <field name="product_qty" attrs="{'readonly':[('is_portal','=',True)]}" />
+                                    <field name="warranty" attrs="{'readonly':[('is_portal','=',True)],'invisible':[('is_portal','=',True)]}" groups="purchase.group_purchase_user"/>
+                                    <field name="qty_received" invisible="not context.get('show_purchase', False)"/>
+                                    <field name="qty_invoiced" invisible="not context.get('show_purchase', False)"/>
+                                    <field name="product_uom" groups="product.group_uom"/>
+                                    <field name="price_unit"/>
+                                    <field name="state" invisible="1"/>
+                                    <field name="market_price" groups="purchase.group_purchase_user"/>
+                                    <field name="market_price_total" groups="purchase.group_purchase_user" widget="monetary"/>
+                                    <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use','=','purchase'),('department_id','=',sector_id)]" context="{'default_type_tax_use': 'purchase'}" groups="purchase.group_purchase_user"/>
+                                    <field name="price_subtotal" widget="monetary"/>
+
+                                </tree>
+                                <form string="Purchase Order Line">
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="product_id"
+                                                       context="{'partner_id': parent.partner_id}"/>
+                                                <label for="product_qty"/>
+                                                <div>
+                                                    <field name="product_qty" class="oe_inline"/>
+                                                    <span class="oe_inline">&#160;</span>
+                                                    <field name="product_uom" groups="product.group_uom" class="oe_inline"/>
+                                                </div>
+                                                <field name="price_unit"/>
+                                            </group>
+                                            <group>
+                                                <field name="taxes_id" widget="many2many_tags" domain="[('type_tax_use', '=', 'purchase')]" groups="purchase.group_purchase_user"/>
+                                                <field name="date_planned" widget="date" invisible="1"/>
+                                                
+                                                <field name="account_analytic_id" colspan="2" groups="purchase.group_analytic_accounting"/>
+                                                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                                            </group>
+                                        </group>
+                                        <notebook>
+                                        <page string="Notes">
+                                            <field name="name"/>
+                                        </page><page string="Invoices and Incoming Shipments" groups="purchase.group_purchase_user">
+                                            <field name="invoice_lines"/>
+                                            <field name="move_ids"/>
+                                        </page>
+
+                                        <page string="Худалдан авалт шаардахын дугаар" groups="purchase.group_purchase_user">
+                                            <field name="purchase_line_order_ids">
+                                                <tree>
+                                                    <field name="requisition_line_id"/>
+                                                </tree>
+                                            </field>
+                                        </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+
+                            <group name="cost_info" col="3" string="Үнийн мэдээлэл /төг/">
+                                <group>
+                                    <field name="delivery_condition" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    <field name="installation_condition" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    <field name="vat_condition" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                </group>
+                                <group>
+                                    <field name="rfq_delivery_condition" attrs="{'invisible':['|',('delivery_condition','!=','required')], 'required':[('delivery_condition','=','required'),('state','in',['sent_rfq','comparison_created'])]}"/>
+                                    <field name="rfq_installation_condition" attrs="{'invisible':['|',('installation_condition','!=','required')], 'required':[('installation_condition','=','required'),('state','in',['sent_rfq','comparison_created'])]}"/>
+                                    <field name="is_VAT" attrs="{'invisible':['|',('vat_condition','!=','required')], 'required':[('vat_condition','=','required'),('state','in',['sent_rfq','comparison_created'])]}"/>
+                                </group>
+                                <group>
+                                    <field name="delivery_cost" attrs="{'invisible':['|',('rfq_delivery_condition','!=','paid')], 'required':[('rfq_delivery_condition','=','paid'),('state','in',['sent_rfq','comparison_created'])]}"/>
+                                    <field name="installation_cost" attrs="{'invisible':['|',('rfq_installation_condition','!=','paid')], 'required':[('rfq_installation_condition','=','paid'),('state','in',['sent_rfq','comparison_created'])]}"/>
+                                    <field name="vat_amount" attrs="{'invisible':['|',('is_VAT','!=','has_VAT')], 'required':[('is_VAT','=','has_VAT'),('state','in',['sent_rfq','comparison_created'])]}"/>
+                                </group>
+                            </group>
+                            <group name="delivery_condition" col="2" string="Нийлүүлэх нөхцөл">
+                                <group>
+                                    <field name="delivery_term" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    <field name="warranty_period" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    <field name="return_condition" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                </group>
+                                <group>
+                                    <field name="rfq_delivery_term" attrs="{'readonly':['&amp;','|',('state','not in',['comparison_created']),('is_created_in_sent','=',False),('state','not in',['draft','sent_rfq'])], 'required':[('state','in',['sent_rfq','comparison_created'])]}"/>
+                                    <field name="rfq_warranty_period" attrs="{'readonly':['&amp;','|',('state','not in',['comparison_created']),('is_created_in_sent','=',False),('state','not in',['draft','sent_rfq'])], 'required':[('state','in',['sent_rfq','comparison_created'])]}"/>
+                                    <field name="rfq_return_condition" attrs="{'readonly':['&amp;','|',('state','not in',['comparison_created']),('is_created_in_sent','=',False),('state','not in',['draft','sent_rfq'])], 'required':[('state','in',['sent_rfq','comparison_created'])]}"/>
+                                </group>
+                            </group>
+                            <group name="payment_condition" col="2" string="Төлбөрийн нөхцөл">
+                                <group>
+                                    <field name="loan_term" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    <field name="barter_percentage" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                </group>
+                                <group>
+                                    <field name="rfq_loan_term" attrs="{'readonly':['&amp;','|',('state','not in',['comparison_created']),('is_created_in_sent','=',False),('state','not in',['draft','sent_rfq'])], 'required':[('state','in',['sent_rfq','comparison_created'])]}"/>
+                                    <field name="rfq_barter_percentage" attrs="{'readonly':['&amp;','|',('state','not in',['comparison_created']),('is_created_in_sent','=',False),('state','not in',['draft','sent_rfq'])], 'required':[('state','in',['sent_rfq','comparison_created'])]}"/>
+                                </group>
+                            </group>
+
+                            <!-- <group invisible="1">
+                                <group>
+                                    <field name="length_of_warranty" attrs="{'readonly':[('state','not in',['draft','sent_rfq'])], 'required':[('state','in','sent_rfq')]}"/>
+                                    <field name="is_carriage" attrs="{'readonly':[('state','not in',['draft','sent_rfq'])], 'required':[('state','in','sent_rfq')]}"/>
+                                    <field name="is_VAT" attrs="{'readonly':[('state','not in',['draft','sent_rfq'])], 'required':[('state','in','sent_rfq')] }"/>
+                                    <field name="cost_of_assembling" attrs="{'readonly':[('state','not in',['draft','sent_rfq'])], 'required':[('state','in','sent_rfq')]}"/>
+                                    <field name="time_of_delivery" attrs="{'readonly':[('state','not in',['draft','sent_rfq'])], 'required':[('state','in','sent_rfq')]}"/>
+                                </group>
+                                <group>
+                                    <field name="equipment_amount"  groups="purchase.group_purchase_user" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    <field name="carriage_amount" groups="purchase.group_purchase_user" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    <field name="postage_amount" groups="purchase.group_purchase_user" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                    <field name="other_amount" groups="purchase.group_purchase_user" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                </group>
+                            </group>
+                            <group invisible="1">
+                                <group>
+                                    <field name="rfq_equipment_amount"  attrs="{'readonly':[('state','not in',['draft','sent_rfq'])], 'required':[('state','in','sent_rfq')]}"/>
+                                    <field name="rfq_carriage_amount"  attrs="{'readonly':[('state','not in',['draft','sent_rfq'])], 'required':[('state','in','sent_rfq')]}"/>
+                                    <field name="rfq_postage_amount"  attrs="{'readonly':[('state','not in',['draft','sent_rfq'])], 'required':[('state','in','sent_rfq')]}"/>
+                                    <field name="rfq_other_amount"  attrs="{'readonly':[('state','not in',['draft','sent_rfq'])], 'required':[('state','in','sent_rfq')]}"/>
+                                </group>
+                            </group> -->
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="untax_amount" attrs="{'invisible':[('is_open_date','=',False)]}" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="tax_amount" attrs="{'invisible':[('is_open_date','=',False)]}" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_untaxed" attrs="{'invisible':[('is_open_date','=',False)]}" widget="monetary" options="{'currency_field': 'currency_id'}" invisible="1"/>
+                                <field name="amount_tax" attrs="{'invisible':[('is_open_date','=',False)]}" widget="monetary" options="{'currency_field': 'currency_id'}" invisible="1"/>
+                                <div class="oe_subtotal_footer_separator oe_inline">
+                                    <!-- <label for="amount_total" invisible="1"/> -->
+                                    <label for="total_amount"/>
+                                </div>
+                                <!-- <field name="amount_total" attrs="{'invisible':[('is_open_date','=',False)]}" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/> -->
+                                <field name="total_amount" attrs="{'invisible':[('is_open_date','=',False)]}" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="market_price_total" groups="purchase.group_purchase_user" attrs="{'invisible':[('is_open_date','=',False)]}" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="expense_total" groups="purchase.group_purchase_user" attrs="{'invisible':[('is_open_date','=',False)]}" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="partner_expense_total"  attrs="{'invisible':[('is_open_date','=',False)]}" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                            <field name="notes" class="oe_inline" placeholder="An administrator can set up default Terms and conditions in your Company settings."/>
+                            <div class="oe_clear"/>
+                        </page>
+             
+             
+                        <page string="Төлвийн түүх" groups="purchase.group_purchase_user">
+                                <div class="pull-left">
+                                  <label for="request_id"  class="oe_inline" />
+                                  <field name="request_id" attrs="{'readonly':[('state','!=','draft')]}" required="1" options="{'no_create': True}" /> 
+                                </div>
+    
+
+                                <field name="history_lines" nolabel="1" colspan="4" readonly="1">
+                                    <tree string="History">
+                                        <field name="user_id" />
+                                        <field name="date" />
+                                        <field name="type" />
+                                        <field name="order_id"/>
+                                        <!-- <field name="comment" /> -->
+                                    </tree>
+                                    <form string="History">
+                                        <field name="order_id"/>
+                                        <field name="user_id" />
+                                        <field name="date" />
+                                        <field name="type" />
+                                        <!-- <field name="comment" /> -->
+                                    </form>
+                                </field>
+
+                        </page>
+
+                        <page string="Үзүүлэлтүүд" groups="purchase.group_purchase_user" >
+                            
+
+                            <field name="indicator_lines"  nolabel="1" colspan="4" >
+                                <tree string="Үзүүлэлтүүд"  editable="bottom">
+                                    
+                                    <field name="indicator_id" required="1"/>
+                                    <field name="description"  />
+                                </tree>
+                                <form string="Үзүүлэлтүүд">
+                                    <field name="indicator_id"/>
+                                    <field name="description"/>
+                                </form>
+                            </field>
+
+                        </page>
+                
+                    <page string="Хүргэлтүүд болон Нэхэмжлэлүүд" groups="purchase.group_purchase_user" >
+                        <group>
+                            <group>
+                                <label for="date_planned"/>
+                                <div>
+                                    <field name="date_planned" required="1" attrs="{'readonly': [('state', 'not in', ('draft', 'sent'))]}"/>
+                                    <button name="action_set_date_planned" context="{'date_planned': date_planned}" type="object"
+                                        states="draft,sent"
+                                        string="Set date to all order lines"
+                                        help="This changes the scheduled date of all order lines to the given date"
+                                        class="fa fa-calendar o_icon_button oe_edit_only"/>
+                                </div>
+                                <field name="picking_type_id" domain="[('code','=','incoming')]" options="{'no_create': True}" groups="stock.group_locations"/>
+                                <field name="dest_address_id" groups="stock.group_locations" attrs="{'invisible': [('default_location_dest_id_usage', '!=', 'customer')], 'required': [('default_location_dest_id_usage', '=', 'customer')]}"/>
+                                <field name="default_location_dest_id_usage" invisible="1"/>
+                                <field name="incoterm_id"/>
+                            </group>
+                            <group>
+                                <field name="invoice_status"/>
+                                <field name="payment_term_id" options="{'no_open': True, 'no_create': True}" attrs="{'readonly': [('invoice_status','=', 'invoiced')]}"/>
+                                <field name="fiscal_position_id" attrs="{'readonly': [('invoice_status','=', 'invoiced')]}" />
+                                <field name="date_approve" groups="base.group_no_one"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+                </xpath>
+                
+
+        </field>
+    </record>
+		<!-- 		<menuitem id="menu_procurement_management" name="Purchase"
+            parent="base.menu_purchase_root" sequence="1" />
+ -->
+        <!--Supplier menu-->
+<!--         <menuitem id="base.menu_procurement_management_supplier_name" name="Vendors"
+            parent="menu_procurement_management"
+			
+            action="base.action_partner_supplier_form" sequence="15"/>
+
+        <menuitem id="menu_purchase_config" name="Configuration" parent="base.menu_purchase_root" sequence="100" groups="group_purchase_manager,base.group_configuration"/>
+
+        <menuitem
+            id="menu_purchase_config_pricelist" name="Pricelists"
+            parent="menu_purchase_config" sequence="20" groups="base.group_no_one"/>	
+		 -->
+		    <!--      <menuitem action="purchase.purchase_rfq" id="purchase.menu_purchase_rfq"
+            parent="purchase.menu_procurement_management"
+            groups="nomin_purchase_requisition.group_procurement_buyer,nomin_base.group_department_chief,nomin_base.group_department_chief1,nomin_base.group_business_development_chief,nomin_base.group_department_manager,nomin_base.group_division_chief,nomin_base.group_nomin_branch_economist,nomin_base.group_department_senior_manager,nomin_base.group_financial_account_user,nomin_purchase_requisition.group_supply_import_manager,nomin_base.group_president,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_nyrav_department,capitalLease.group_regular_accountant"
+            sequence="0"/>
+           <menuitem action="purchase.purchase_form_action" id="purchase.menu_purchase_form_action" parent="purchase.menu_procurement_management"
+           	          groups="nomin_purchase_requisition.group_procurement_buyer,nomin_base.group_department_chief,nomin_base.group_department_chief1,nomin_base.group_business_development_chief,nomin_base.group_department_manager,nomin_base.group_division_chief,nomin_base.group_nomin_branch_economist,nomin_base.group_department_senior_manager,nomin_base.group_financial_account_user,nomin_purchase_requisition.group_supply_import_manager,nomin_base.group_president,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_nyrav_department,capitalLease.group_regular_accountant"
+           sequence="6"/>
+
+            <menuitem id="purchase.menu_purchase_control" name="Хяналт" groups="nomin_purchase_requisition.group_procurement_buyer,nomin_base.group_department_chief,nomin_base.group_department_chief1,nomin_base.group_business_development_chief,nomin_base.group_department_manager,nomin_base.group_division_chief,nomin_base.group_nomin_branch_economist,nomin_base.group_department_senior_manager,nomin_base.group_financial_account_user,nomin_purchase_requisition.group_supply_import_manager,nomin_base.group_president,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_nyrav_department,capitalLease.group_regular_accountant" parent="base.menu_purchase_root" sequence="4"/>
+            <menuitem action="stock.action_receipt_picking_move" id="purchase.menu_action_picking_tree_in_move"
+            parent="purchase.menu_purchase_control" groups="nomin_purchase_requisition.group_procurement_admin" sequence="11"/>
+
+            <menuitem id="menut_purchase_order_line" name="Захиалгын мөр" groups="nomin_purchase_requisition.group_procurement_admin" parent="purchase.menu_procurement_management" action="action_purchase_order_line" sequence="7" /> -->
+    </data>
+</openerp>

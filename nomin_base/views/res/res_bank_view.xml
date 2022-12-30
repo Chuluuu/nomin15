@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    	 <record id="base.view_partner_bank_form" model="ir.ui.view">
+            <field name="name">res.partner.bank.form</field>
+            <field name="model">res.partner.bank</field>
+            <field name="arch" type="xml">
+                <form string="Bank account">
+                	<sheet>
+                		<h1>
+	                        <field name="acc_number" class="oe_inline" placeholder="Дансны дугаар" style="width: 6em"/> -
+	                        <field name="bank_id" class="oe_inline" placeholder="Банк"/>
+	                    </h1>
+	                     <div class="oe_button_box" name="button_box">
+	                        <button name="toggle_active" type="object"
+	                                class="oe_stat_button" icon="fa-archive">
+	                            <field name="active" widget="boolean_button"
+	                                options='{"terminology": "archive"}'/>
+	                        </button>
+	                    </div>
+	                    <group col="4">
+	                        <field name="partner_id" domain="[('active','=',True)]"/>
+	                        <field name="currency_id" groups="base.group_multi_currency" options="{'no_create': True}"/>
+	                        <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+	                        <field name="bank_account_name"/>
+		            		<field name="department_id" options="{'no_create': True}"/>
+		            		<field name="rule_department_id" options="{'no_create': True}"/>
+		            		<field name="account_id" domain="[('internal_type', '=', 'liquidity'), ('department_id', '=', department_id)]"/>
+		            		<field name="swift_code"/>
+		            		<field name="is_nes_sync"/>
+                            <field name="iban_number"/>
+                            <field name="correspondent_bank"/>
+	                    </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        
+        <record id="res_partner_bank_tree_nomin_base" model="ir.ui.view">
+            <field name="name">res.partner.bank.tree.nomin.base</field>
+            <field name="model">res.partner.bank</field>
+            <field name="inherit_id" ref="base.view_partner_bank_tree"/>
+            <field name="arch" type="xml">
+            <data>
+                <xpath expr='//field[@name="company_id"]' position="before">
+            		<field name="department_id"/>
+            		<field name="account_id"/>
+            	</xpath>
+            </data>
+            </field>
+        </record>
+        
+       <record id="base.view_res_bank_form" model="ir.ui.view">	
+            <field name="name">res.bank.form</field>
+            <field name="model">res.bank</field>
+            <field name="arch" type="xml">
+                <form string="Bank">
+                    <group col="4">
+                        <field name="name"/>
+                        <field name="bic"/>
+                    </group>
+                    <group>
+                        <group string="Address">
+                            <label for="street" string="Address"/>
+                            <div class="o_address_format">
+                                <field name="street" placeholder="Street..." class="o_address_street"/>
+                                <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                <field name="city" placeholder="City" class="o_address_city"/>
+                                <field name="state" class="o_address_state" placeholder="State" options='{"no_open": True}'/>
+                                <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                <field name="country" placeholder="Country" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                            </div>
+                        </group>
+                        <group string="Communication">
+                            <field name="phone"/>
+                            <field name="fax"/>
+                            <field name="email" widget="email"/>
+                            <field name="active"/>
+                            <field name="is_nes_sync"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        
+    </data>
+</openerp>

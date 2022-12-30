@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- Захиалгын ерөнхий тайлан татах -->
+        <record model="ir.ui.view" id="order_plan_report_form">
+            <field name="name">order.plan.report.form</field>
+            <field name="model">order.plan.report</field>
+            <field name="arch" type="xml">
+                <form string="Захиалгын ерөнхий тайлан">
+                    <group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="department_id" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="end_date"/>
+                            <field name="project_manager_id"/>
+                            <field name="project_state_name"/>
+                        </group>
+                        
+                    </group>
+                   
+                    <footer>
+                        <button name="export_report" string="Export" type="object" icon="terp-graph"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="order_plan_report">
+            <field name="name">Захиалгын ерөнхий тайлан</field>
+            <field name="res_model">order.plan.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="order_plan_report_form"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem name="Захиалгын ерөнхий тайлан" id="menu_order_plan_export" parent="project.menu_project_management" 
+            action="order_plan_report" groups="project.group_program_admin" sequence="17" />
+            
+    </data>
+</openerp>

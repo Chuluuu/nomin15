@@ -1,0 +1,1528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+
+  	<report 
+            string="Захиалгын хүсэлт" 
+            id="action_order_request_report_view" 
+            model="order.page" 
+            report_type="qweb-pdf"
+            name="nomin_project.order_request_report" 
+            file="nomin_project.order_request_report"
+          />
+      
+  	<record id="paperformat_order_request" model="report.paperformat">
+        <field name="name">	ПРОГРАМ ХАНГАМЖИЙН ЗАХИАЛГЫН ХУУДАС</field>
+        <field name="default" eval="True"/>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">23</field>
+        <field name="margin_left">2</field>
+        <field name="margin_right">2</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+    
+    <record id="nomin_project.action_order_request_report_view" model="ir.actions.report.xml">
+        <field name="paperformat_id" ref="nomin_project.paperformat_order_request" />
+    </record>
+
+	<!-- akt -->
+	<report 
+            string="Хүлээлцэх акт" 
+            id="action_order_request_act_report_view" 
+            model="order.page" 
+            report_type="qweb-pdf"
+            name="nomin_project.order_request_act_report" 
+            file="nomin_project.order_request_act_report"
+          />
+      
+  	<record id="paperformat_order_request_act" model="report.paperformat">
+        <field name="name">Хүлээлцэх акт</field>
+        <field name="default" eval="True"/>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">23</field>
+        <field name="margin_left">2</field>
+        <field name="margin_right">2</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+    
+    <record id="nomin_project.action_order_request_act_report_view" model="ir.actions.report.xml">
+        <field name="paperformat_id" ref="nomin_project.paperformat_order_request_act" />
+    </record>
+
+		<!-- Program Order -->
+		
+		<record model="ir.ui.view" id="order_page_form">
+	        <field name="name">order.page.form</field>
+	        <field name="model">order.page</field>
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	            <form string="ПХ-ийн захиалга өгөх">
+	            	<header>	
+						                    
+            		 	<button name="action_to_approve_cost" string="Зардал батлуулах" attrs="{'invisible':['|',('cost_types','not in','payment'),'|',('state','!=','allocated'),('is_inlist','=',False)]}"
+	            		 	type="object" help="Approve cost"/>
+
+	            		<button name="action_to_approve_cost_in" string="Дотоод зардал батлуулах" attrs="{'invisible':['|',('cost_types','in','payment'),'|',('state','!=','allocated'),('is_inlist','=',False)]}"
+	            		 	type="object" help="Approve cost"/>
+
+						<button name="skip_state" string="Төлөв шилжүүлэх" attrs="{'invisible':['|',('state','!=','allocated'),('is_project_manager','=',False)]}"
+	            		 	type="object" help="Skip state"/>
+						
+						<button name="order_recovery" string="Захиалга сэргээх" attrs="{'invisible':['|',('state','!=','archived'),('is_project_manager','=',False)]}"
+	            		 	type="object" help="Order recovery"/>
+
+	            		<button name="action_to_send" string="Илгээх" type="object" help="Send" attrs="{'invisible':['|',('state','!=','draft'),('is_employee','=',False)]}"/>
+	
+
+	            		<button name="action_to_confirm" string="Зөвшөөрөх" attrs="{'invisible':['|',('show_control_button','=',False),('state','!=','control')]}"
+	            		 	type="object" help="Confirm"/> 
+
+	            		<button name="action_to_approved1" string="Батлагдсан руу буцаах" attrs="{'invisible':['|',('is_project_manager','=',False),('state','not in','slow_up')]}"
+	            		 	type="object" help="Retrieve"/> 		
+
+	            		<button name="action_to_draft" string="Ноорог руу буцаах"  attrs="{'invisible':['|',('is_project_manager','=',False),('state','!=','approved1')]}"
+	            		  confirm="Ноорог төлөв рүү оруулахдаа итгэлтэй байна уу?"	type="object" help="Retrieve"/>
+
+						<button name="action_confirmed" string="Хүсэлт батлах" attrs="{'invisible':['|',('show_confirm_button','=',False),('state','!=','confirmed')]}"
+						 	type="object" help="Confirm" />
+
+	            		<button name="action_to_done_cost" string="Зардал батлах" attrs="{'invisible':['|',('show_confirm_button','=',False),'|',('state','!=','approve_cost'),('cost_types','!=','payment')]}"
+	            			type="object" help="Approve1" />
+
+
+	            		<button name="action_to_done_cost_in" string="Дотоод зардал батлах" attrs="{'invisible':['|',('is_project_manager','=',False),'|',('state','!=','approve_cost'),('cost_types','=','payment')]}"
+	            			type="object" help="Approve1" />
+
+
+	            		<button name="back_to_allocated" string="Хуваарилагдсан руу буцаах" confirm="Хуваарилагдсан руу оруулахдаа итгэлтэй байна уу?" type="object" help="Back to allocated" attrs="{'invisible':['|',('is_inlist','=',False),('state','!=','approve_cost')]}" />
+	            		 	      
+
+	            		<button name="action_to_allocate_sys_admin"  string="Хуваарилах" attrs="{'invisible':['|',('is_system_senior','=',False),'|',('request_type','in',[1,17,2,3,16]),('state','!=','approved1')]}"
+	            		 	type="object" help="Allocate"/>
+
+	         
+	            		<button name="action_to_allocate"  string="Хуваарилах" attrs="{'invisible':['|',('is_project_manager','=',False),('state','!=','approved1')]}"
+	            		 	type="object" help="Allocate"/>
+
+
+	            		<button name="action_to_done"  string="Дуусгах" attrs="{'invisible':['|',('is_list','=',False),('state','not in','allocated')]}"
+	            		 	type="object" help="Done"/>
+						
+						<button name="training_done"  string="Дуусгах" attrs="{'invisible':['|',('is_training_manager','=',False),('state','not in','allocated')]}"
+	            		 	type="object" help="Done"/>
+
+						<button name="action_to_done1"  string="Дуусгах" attrs="{'invisible':['|',('is_system_admin','=',False),('state','not in','approved1')]}"
+	            		 	type="object" help="Done"/>
+						
+						<button name="action_done"  string="Дуусгах" attrs="{'invisible':['|',('is_system_quality_assurance','=',False),('state','not in','approved1')]}"
+	            		 	type="object" help="Done"/>
+
+
+    		 		    <button name="action_to_estimate" string="Хянуулах" attrs="{'invisible':['|',('is_inlist','=',False),'|',('state','!=','cost_done'),('is_handover','=',True)]}"
+	            		 	type="object" help="Estimate"/>
+
+	            
+
+	            		<button name="action_to_approve" string="Хянасан"  attrs="{'invisible':['|',('is_project_manager','=',False),('state','!=','estimated')]}" 
+	            			type="object" help="Control" />
+
+	          
+						<button name="action_handover" string="Хүлээлгэн өгөх" attrs="{'invisible':['|',('state','!=','cost_done'),'|',('is_handover','=',False),('senior_manager','=',False)]}" type="object" help="Handover"/>
+						
+						<button name="action_handover" string="Хүлээлгэн өгөх" attrs="{'invisible':['|',('state','!=','cost_done'),'|',('is_handover','=',False),('is_inlist','=',False)]}" type="object" help="Handover"/>
+							 
+	
+						<button name="to_receive" string="Хүлээн авах" attrs="{'invisible':['|',('state','!=','handover'),('is_confirm_user','=',False)]}"
+	            		 	type="object" help="Handover"/>
+
+
+						<button name="action_to_reject" string="Татгалзах" attrs="{'invisible':[('state','in',['rejected','done','draft'])]}"
+	            			type="object" help="Reject" />
+
+	            		<button name="action_to_slow_up" string="Хойшлуулах" attrs="{'invisible':['|',('state','not in',['allocated','approved1']),('is_inlist','=',False)]}"
+	            			type="object" help="Slow up" />
+
+	            		<button name="action_to_stop" string="Зогссон төлөвт оруулах"  attrs="{'invisible':['|',('state','not in',['allocated','cost_done']),'|',('is_inlist','=',False),('request_type','!=',1)]}"
+	            		 	type="object" help="Project stop"/>
+
+	            		<button name="action_to_allocated" string="Хуваарилагдсан руу буцаах"  attrs="{'invisible':['|',('is_project_manager','=',False),('state','not in','stop')]}"
+	            		 	type="object" help="Project stop"/>
+
+	            		<button name="action_to_order_done" string="Дуусгах"  attrs="{'invisible':['|',('show_done_button','=',False),('state','!=','approved')]}"
+	            		 	type="object" help="Retrieve"/>
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,allocated,approve_cost,cost_done,approved1" nolabel="1"/>
+                        
+	            	</header>
+	            	<sheet>	           
+	               			<div class="pull-left">
+			                    <label for="name" class="oe_edit_only oe_inline"/>
+			                    <h1>
+			                        <field name="name" readonly="1"/>
+			                    </h1>
+                        		<h3 attrs="{'invisible':[('state','!=','draft')]}"><font color="blue">Таны хүсэлт хянагдаагүй, батлагдаагүй тохиолдолд хийгдэж эхлэхгүй болохыг анхаарна уу! </font></h3>
+			                </div>
+					
+              		 	<group colspan="8" col="8">
+               				<group colspan="4">
+               					<group>
+								<field name="previous_state" invisible="1"/>
+								<field name="is_confirm_user" invisible="1"/>
+								<field name="state_sequence" invisible="1"/>
+								
+               					<field name="show_control_button" invisible="1"/>
+								<field name="is_employee" invisible="1"/>
+               					<field name="show_confirm_button" invisible="1"/>
+               					<field name="show_done_button" invisible="1"/>
+           						<field name="is_project_manager" invisible="1"/>
+								<field name="is_manager_of_the_project" invisible="1"/>
+           						<field name="is_inlist" invisible="1"/>
+								<field name="senior_manager" invisible="1"/>
+           						<field name="is_list" invisible="1"/>
+								<field name="is_training_manager" invisible="1"/>
+           						<field name="is_system_admin" invisible="1"/>
+           						<field name="is_system_senior" invisible="1"/>
+								<field name="is_system_quality_assurance" invisible="1"/>
+              					<field name="request_type"  attrs="{'required':[('state','=','draft')],'readonly':[('state','!=','draft')]}" options="{'no_create': True}"/>
+               					<field name="request_rating" attrs="{'required':[('state','=','draft')],'readonly':[('state','!=','draft')]}"/>	
+               					<field name="dedication" attrs="{'invisible':[('request_type','!=',5)]}"/>
+		            			<field name="is_control" attrs="{'readonly':[('state','!=','draft')]}"/>								
+               					<field name="control_employee_id" options="{'no_create': True}" attrs="{'required':[('state','=','draft'),('is_control','=',False)],'invisible':[('is_control','=',True)],'readonly':[('state','not in','draft')]}" />
+		            			<field name="confirm_employee_id" options="{'no_create': True}" attrs="{'readonly':[('state','not in','draft')],'required':[('state','=','draft')]}"/>
+               					<field name="start_date" readonly="1"/> 
+               					<field name="assigned_date" readonly="1" attrs="{'invisible':[('state','in',['draft','control','confirmed','approved1'])]}"/>
+								<field name="project_progress_percentage" widget="progressbar" attrs="{'invisible':[('request_type','!=',1)],'readonly':['|',('state', 'not in', ['allocated','approve_cost','cost_done','estimated']),('is_manager_of_the_project','=',False)], 'required':[('state', 'in', ['approve_cost','cost_done'])]}"/>
+								<field name="project_started_date" attrs="{'invisible':[('request_type','!=',1)],'readonly':['|',('state', 'not in', ['allocated','approve_cost','cost_done','estimated']),('is_manager_of_the_project','=',False)], 'required':[('state', 'in', ['approve_cost','cost_done'])]}"/>
+								<field name="project_finished_date" attrs="{'invisible':[('request_type','!=',1)],'readonly':['|',('state', 'not in', ['allocated','approve_cost','cost_done','estimated']),('is_manager_of_the_project','=',False)], 'required':[('state', 'in', ['approve_cost','cost_done'])]}"/>
+								<field name="handover_date" readonly="1" invisible="1"/>
+								<field name="review_date" readonly="1"  invisible="1"/>
+   						        <field name="rejection_reason"  attrs="{'invisible':[('state','in',['draft','done'])],'readonly':[('state','in',['draft','rejected','slow_up','done','approved'])]}"/>
+   						      
+   						        <field name = "accountant_id" options="{'no_create': True}"  attrs="{'invisible':['|',('state','not in',['approved','done','estimated']),('request_type','!=',1)],'required':[('state','in','estimated')],'readonly':[('state','!=','estimated')]}"/>
+   						        <field name = "accountant_description" attrs="{'invisible':['|',('state','not in',['approved','done']),('request_type','!=',1)],'required':[('state','in','approved')],'readonly':[('state','not in','approved')]}"/>
+								
+            					      			 	 
+                            	</group>								
+                            <group>
+							   
+								<field name="employee_id" options="{'no_create': True}" attrs="{'readonly':[('state','!=','draft')]}"/>                         	
+                                <field name="company_id" options="{'no_create': True}" readonly="1"/>
+                                <field name="department_id" options="{'no_create': True}" readonly="1" />	            			
+								<!-- <field name="job_id" options="{'no_create': True}" readonly="1"/> -->
+								<field name="job" options="{'no_create': True}" readonly="1"/>								
+								<field name="telephone" options="{'no_create': True}" readonly="1"/>
+								<field name="email" options="{'no_create': True}" readonly="1"/>
+								<field name="is_cost_approved" attrs="{'readonly':['|',('state','!=','allocated'),('is_project_manager','=',False)],'invisible':[('state','!=','allocated')]}"/>
+								<field name="cost_approved_fully" attrs="{'readonly':['|',('state','!=','allocated'),('is_project_manager','=',False)],'invisible':[('state','!=','allocated')]}"/>	               					 
+								<field name="confirmed_employee_id" invisible="1" />		
+               					<field name="confirmed_date" invisible="1" readonly="1" attrs="{'invisible':[('state','in',['draft','control','confirmed'])]}"/>  
+								<field name="is_confirm" attrs="{'invisible':['|',('state','in',['draft','control','confirmed','approved1']),('is_project_manager','=',False)],'readonly':[('state','!=','allocated')]}"/>
+								<field name="description" attrs="{'invisible':[('is_invisible','=',False)]}"/>
+								<field name="is_invisible" invisible="1"/>
+								<field name="approve_employee_id"  options="{'no_create': True}" 
+								attrs="{'invisible':['|',('is_confirm','=',False),('state','in',['draft','control','confirmed','approved1'])],'readonly':[('state','not in','allocated')]}"/>			
+								<field name="is_handover" attrs="{'readonly':[('state','!=','cost_done')],'invisible':[('state','in',['draft','control','confirmed','approved1','allocated','stop','rejected','slow_up'])]}"/>
+		          			</group>	
+
+							           
+			            	</group>
+							
+					</group>
+
+
+
+						
+						
+
+			    	    <notebook attrs="{'invisible':[('request_type','!=',5)]}" >
+                            <page string="Техникийн үзүүлэлт"  >
+                            	<field name="technical_info_choose" />    
+
+                                <h3 attrs="{'invisible':['|',('state','!=','draft'),('technical_info_choose','=','batch')]}"><font color="blue">Та үнийн дүнгийн мэдээллээ үнэн зөв оруулна уу! </font></h3> 
+                                          
+                               	<field name="technical_infos" context="{'id2':id}" attrs="{'invisible':[('technical_info_choose','=','batch')]}">		            
+			            			<form string="Техникийн үзүүлэлт" >			            		
+				                    	 		<field name="indicator_name"/>
+				                    	 		<field name="performance" />
+				                    	 		<field name="reference"/>
+				                    	 		<field name="price"/>
+				                    	 		<field name="saved" invisible="1"/>
+	                                </form>			            			
+		                        		<tree string="performance order new line" editable="bottom" >
+				                    	 		<field name="indicator_name" options="{'no_create': True}"/>
+				                    	 		<field name="performance" options="{'no_create': True}" />
+				                    	 		<field name="reference"/>
+				                    	 		<field name="price"/>	
+				                    	 		<field name="saved" invisible="1"/>
+				                    	</tree>
+		                        </field>
+
+		                    
+		                        <field name="choose_batch" attrs="{'invisible':[('technical_info_choose','=','other')]}" options="{'no_create': True}"/>
+                               
+                            </page>    
+		          
+			            
+                            <page string="Мэдээлэл нөөцлөлт">
+                           		<field name="backing_info">
+
+	                            	<form>			            		
+			                    	 		<field name="backingup"/>
+			                    	 		<field name="backing_way"/>
+			                    	 		<field name="backing_time"/>
+                                            <field name="backing_frequency"/>
+						          			<field name="unit_amount1" widget="float_time" />
+					          				<field name="unit_amount1a" widget="float_time"/>
+			                    	 		<field name="reference"/>
+	                                </form>			            			
+		                        		<tree string="information back up new line" editable="bottom">
+			                    	 		<field name="backingup"/>
+			                    	 		<field name="backing_way"/>	
+                    	 		         	<field name="backing_time" />
+                                            <field name="backing_frequency"/>    			    
+						          			<field name="unit_amount1" widget="float_time" />
+					          				<field name="unit_amount1a" widget="float_time"/>
+			                    	 		<field name="reference"/>	
+				                    	</tree>
+			                    </field>
+                            </page>
+
+
+			            </notebook>
+                                           	
+                           	<field name="internet_infos" attrs="{'invisible':[('request_type','!=',2)]}">
+	                			<form string="Интернэтийн мэдээлэл" >			            		
+			                    	 		<field name="name" />
+			                    	 		<field name="requirement"/>
+			                    	 		<field name="date_from"/>
+                                            <field name="date_to"/>
+                                            <field name="number_of_days_temp" /> 
+			                    	 		<field name="ip_address"/>
+			                    	 		<field name="reference"/>
+                                </form>			            			
+	                        		<tree string="Internet info new line" editable="bottom">
+			                    	 		<field name="name" />
+			                    	 		<field name="requirement"/>	
+                    	 		         	<field name="date_from" />
+                                            <field name="date_to"/>
+                                            <field name="number_of_days_temp" /> 
+			                    	 		<field name="ip_address"/>
+			                    	 		<field name="reference"/>	
+			                    	</tree>
+	                        </field>     
+
+
+                           	<field name="access_info" attrs="{'invisible':[('request_type','!=',11)]}">
+
+
+	                			<form string="NAT мэдээлэл" >			            		
+			                    	<field name="nat_name"/>
+			                    	<field name="nat_requirement" required="1"/>
+			                    	<field name="nat_environment"/>
+			                    	<field name="port"/>
+			                    	<field name="source"/>
+			                    	<field name="destination_ip"/>
+			                    	<field name="date"/>
+
+                                </form>			            			
+                        		<tree string="NAT info new line" editable="bottom">
+	                    	 		<field name="nat_name"/>
+	                    	 		<field name="nat_requirement" required="1"/>
+			                    	<field name="nat_environment"/>
+			                    	<field name="port"/>
+			                    	<field name="source"/>
+			                    	<field name="destination_ip"/>
+			                    	<field name="date"/>
+        				        </tree>
+	                        </field> 
+
+                           	<field name="pat_access_info" attrs="{'invisible':[('request_type','!=',13)]}">
+
+
+	                			<form string="PAT мэдээлэл" >			            		
+			                    	<field name="nat_name"/>
+			                    	<field name="nat_requirement" required="1"/>
+			                    	<field name="nat_environment"/>
+			                    	<field name="source"/>
+			                    	<field name="source_port"/>
+			                    	<field name="destination_ip"/>
+			                    	<field name="destination_port"/>
+			                    	<field name="date"/>
+
+                                </form>			            			
+                        		<tree string="PAT info new line" editable="bottom">
+	                    	 		<field name="nat_name"/>
+	                    	 		<field name="nat_requirement" required="1"/>
+	                    	 		<field name="nat_environment"/>
+			                    	<field name="source"/>
+			                    	<field name="source_port"/>
+			                    	<field name="destination_ip"/>
+			                    	<field name="destination_port"/>
+			                    	<field name="date"/>
+        				        </tree>
+	                        </field> 
+
+                           	<field name="server_net_info" attrs="{'invisible':[('request_type','!=',12)]}">
+
+
+	                			<form string="NAT мэдээлэл" >			            		
+			                    	<field name="name"/>
+			                    	<field name="nat_requirement" required="1"/>
+			                    	<field name="port"/>
+			                    	<field name="server_ip"/>
+			                    	<field name="date"/>
+			                    	<field name="reference"/>
+
+                                </form>			            			
+                        		<tree string="NAT info new line" editable="bottom">
+	                    	 		<field name="name"/>
+	                    	 		<field name="nat_requirement" required="1"/>
+			                    	<field name="port"/>
+			                    	<field name="server_ip"/>
+			                    	<field name="date"/>
+			                    	<field name="reference"/>
+        				        </tree>
+	                        </field> 	                        
+
+  
+
+
+	                        <field name="vpn_infos" attrs="{'invisible':[('request_type','!=',3)]}">
+	                			<form string="VPN мэдээлэл" >			            		
+			                    	 		<field name="requirement"/>
+			                    	 		<field name="date_from"/>
+                                            <field name="date_to"/>
+                                            <field name="number_of_days_temp"/> 
+                                            <field name="reference"/>                                                                 
+	
+                                </form>			            			
+	                        		<tree string="VPN new line" editable="bottom">
+			                    	 		<field name="requirement"/>	
+                    	 		         	<field name="date_from" />
+                                            <field name="date_to"/>
+                                            <field name="number_of_days_temp"/> 
+                                            <field name="reference"/>                                                  
+						         						              
+			                    	</tree>
+	                        </field>         
+	                   
+	                        <field name="vpn_out_infos" attrs="{'invisible':[('request_type','!=',4)]}">
+	                			<form string="VPN мэдээлэл">	            		
+					       					<field name="partner_id" />
+					       					<field name="user_name"/>
+					       					<field name="user_phone"/>
+					       					<field name="user_mail"/>
+                      	 		         	<field name="date_from" />
+                                            <field name="date_to"/>
+                                            <field name="number_of_days_temp"/>                                                             
+						          			<field name="unit_amount1" widget="float_time" />
+						          			<field name="unit_amount1a" widget="float_time"/>
+					       					<field name="ip_address"/>
+					       					<field name="reference"/>
+
+
+                                </form>			            			
+	                        		<tree string="Vpn out new line" editable="bottom">
+						          			<field name="partner_id" />
+						          			<field name="user_name"/>
+					       					<field name="user_phone"/>
+					       					<field name="user_mail"/>
+			                         		<field name="date_from" />
+                                            <field name="date_to"/>
+                                            <field name="number_of_days_temp"/>           	 	                                                 
+						          			<field name="unit_amount1" widget="float_time" />
+						          			<field name="unit_amount1a" widget="float_time" />						
+						          			<field name="ip_address"/>
+						          			<field name="reference"/>
+
+			                    	</tree>
+	                        </field>  
+                            <group colspan="4"  >
+									<field name="system_quality_assurance" options="{'no_create':True}" attrs="{'required':[('state','=','approved1'),('request_type','=',16)],'invisible':['|',('request_type','not in',[16,17]),('state','not in',['approved1','allocated','done'])]}"/>
+									<field name="training_manager_id" options="{'no_create':True}" attrs="{'invisible':['|',('request_type','!=',17),('state','not in',['approved1','allocated','done'])],'required':[('state','=','approved1'),('request_type','=',17)]}"/>
+								    <field name="system_admin_id" options="{'no_create':True}" attrs="{'required':[('state','in','approved1'),('request_type','not in',[1,16,17,15])],'invisible':['|',('request_type','in',[1,16,17,15]),('state','not in',['allocated','approved1','done'])],'readonly':[('state','not in','approved1')]}"/> 
+                                    <field name="description_admin" attrs="{'invisible':['|',('request_type','in',[1,17]),('state','not in',['approved1','allocated','done'])],'required':[('request_type','not in',[1,16,17]),('state','in','approved1')],'readonly':[('state','!=','approved1')]}"/>
+                                    <field name="description_admin1"  attrs="{'invisible':['|',('request_type','in',[1,16]),('state','in',['approved1','control','done','draft'])],'required':[('request_type','not in',[1,16]),('state','in','allocated')],'readonly':[('state','not in',['allocated','approved1'])]}"/> 
+									
+						       
+
+                             </group>
+
+	                        <field name="server_access_infos" attrs="{'invisible':[('request_type','!=',6)]}">
+	                			<form string="VPN мэдээлэл">	            		
+					       					<field name="partner_id" />
+					       					<field name="user_name"/>
+					       					<field name="user_position"/>
+					       					<field name="user_phone"/>
+					       					<field name="user_mail"/>
+                      	 		         	<field name="date_from" />
+                                            <field name="date_to"/>
+                                            <field name="number_of_days_temp"/>                                                             
+						          			<field name="unit_amount1" widget="float_time" />
+						          			<field name="unit_amount1a" widget="float_time"/>
+					       					<field name="ip_address"/>
+					       					<field name="reference"/>
+
+
+                                </form>			            			
+	                        		<tree string="Server access info" editable="bottom">
+						          			<field name="partner_id" />
+						          			<field name="user_name"/>
+						          			<field name="user_position"/>
+					       					<field name="user_phone"/>
+					       					<field name="user_mail"/>
+			                         		<field name="date_from" />
+                                            <field name="date_to"/>
+                                            <field name="number_of_days_temp"/>           	 	                                                 
+						          			<field name="unit_amount1" widget="float_time" />
+						          			<field name="unit_amount1a" widget="float_time" />						
+						          			<field name="ip_address"/>
+						          			<field name="reference"/>
+
+			                    	</tree>
+	                        </field> 
+
+			            <notebook>
+
+			            	<page string='Order info' attrs="{'invisible':[('request_type','!=',1)]}">
+
+		              		 	<group colspan="8" col="8" attrs="{'invisible':[('request_type','!=',1)]}">
+               						<group colspan="4" >
+
+											      					
+		               					<!-- 
+										<field name="date" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
+		           						<field name="order_name" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}" />
+				               			<field name="order_offer" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}" />
+				               			<field name="difficulty" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>		               	
+		               					<field name="purpose" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
+		               					<field name="result" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
+										 -->
+
+										<field name="date" attrs="{'required':[('request_type','in',(1,15)),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
+										<field name="job_selection" attrs="{'invisible':[('request_type','not in',15)]}"/>
+		           						<field name="order_name" attrs="{'required':[('request_type','=',1),('state','in','draft')]}" />
+				               			<field name="order_offer" attrs="{'invisible':[('request_type','in',15)],'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}" />
+				               			<field name="difficulty" attrs="{'invisible':[('request_type','in',15)],'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}" />		               	
+		               					<field name="purpose" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
+		               					<field name="result" attrs="{'invisible':[('request_type','in',15)],'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
+										<field name="location" attrs="{'invisible':[('request_type','not in',15)]}" />
+
+_
+
+
+
+		               				   <field name="req_file" options="{'no_open': True}" attrs="{'readonly':[('state','!=','draft')]}">
+			                                <tree string="Files">
+			                                    <field name="datas_fname"/>
+			                                    <field name="datas" filename="datas_fname" readonly="1" invisible="1"/>
+			                                </tree> 
+			                                <form>
+			                                    <label for="name" class="oe_edit_only"/>
+			                                    <h1>
+			                                        <field name="name"/>
+			                                    </h1>
+			                                    <group string="Data">
+			                                        <field name="type" invisible="1"/>
+			                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
+			                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+			                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+			                                    </group>
+			                                    <group groups="base.group_no_one" string="History">
+			                                        <label for="create_uid" string="Creation"/>
+			                                        <div name="creation_div">
+			                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
+			                                            <field name="create_date" readonly="1" class="oe_inline"/>
+			                                        </div>
+			                                    </group>
+			                                </form>     
+			                            </field>
+			            		
+		          					</group>    
+
+			            		</group> 
+			            	</page>
+
+		                    <page string='Project info' attrs="{'invisible':[('request_type','!=',1)]}">
+		                    	<group colspan="8" col="8">
+		                    		<group colspan="4">	                    			
+
+				                    		<field name="project_senior_manager_id" options="{'no_create': True}" attrs="{'invisible':[('is_project_manager','=',False),('state','in',['draft','send','control','confirmed','approved1'])],'readonly':[('state','not in','approved1')]}" />
+											<!-- <field name="senior_manager_id"  options="{'no_create': True}" attrs="{'required':[('request_type','in',1),('state','=','approved1')],'invisible':[('is_project_manager','=',False),('state','in',['draft','send','control','confirmed','approved1'])],'readonly':[('state','not in','approved1')]}" />  -->
+
+								            <field name="project_manager_id"  options="{'no_create': True}"  attrs="{'invisible':[('is_project_manager','=',False),('state','in',['draft','send','confirmed','control','approved1'])]}" /> 
+
+								            <!-- <field name="cost_type"  attrs="{'invisible':['|',('state','in',['draft','control','confirmed']),('request_type','!=',1)]}"/>						    		 -->
+											<field name="cost_types" string="Зардлын төрөл"   attrs="{'invisible':['|',('state','in',['draft','control','confirmed']),('request_type','!=',1)],'readonly':['|',('is_project_manager','=',False),('state','not in',['approved1','allocated'])]}"/>			
+	                            	</group>
+	                            	<group colspan="4">
+	                            		<field name="project_state_name" options="{'no_create': True}" attrs="{'invisible':['|',('state','in',['draft','send','confirmed','control','approved1']),('request_type','not in',1)],'required':[('state','in','allocated'),('request_type','in',1)]}"/>
+	                            	</group>
+	                            	<group colspan="8">
+
+		                            		<field name="annex_file" options="{'no_open': True}" attrs="{'invisible':[('state','in',['draft','send','control','confirmed','rejected','approved1'])],'readonly':[('state','not in',['allocated','cost_done'])]}">
+				                                <tree string="Files">
+				                                    <field name="name" />
+				                                    <field name="datas_fname"/>
+				                                    <field name="datas" filename="datas_fname" readonly="1" invisible="1"/>
+				                                    <field name="create_date"/>
+				                                </tree> 
+				                                <form>
+				                                    <label for="name" class="oe_edit_only"/>
+				                                    <h1>
+				                                        <field name="name"/>
+				                                    </h1>
+				                                    <group string="Data">
+
+				                                        <field name="type" invisible="1"/>
+				                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
+				                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+				                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+				                                    </group>
+				                                    <group groups="base.group_no_one" string="History">
+				                                        <label for="create_uid" string="Creation"/>
+				                                        <div name="creation_div">
+				                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
+				                                            <field name="create_date" readonly="1" class="oe_inline"/>
+				                                        </div>
+				                                    </group>
+			                                	</form>    
+	                            			</field>
+
+	                            	</group>
+	                            </group>
+
+		                    </page>
+
+
+			            	<page string='Plan info' attrs="{'invisible':['|',('state','in',['draft','control','confirmed','approved1','slow_up','rejected']),('request_type','!=',1)]}">
+				            	<field name="plan_info">
+		                			<form string="Plan information">	            		
+						       					<field name="year_id" invisible="1"/>
+						       					<field name="month_id" />
+						       					<field name="plan_name"/>
+							          			<field name="first_week"/>
+							          			<field name="second_week"/>
+							          			<field name="third_week"/>
+							          			<field name="fourth_week"/>
+
+	                                </form>			            			
+		                        		<tree string="Plan info" editable="bottom">
+						       					<field name="year_id" />
+						       					<field name="month_id" />							     
+							          			<field name="plan_name"/>
+							          			<field name="first_week"/>
+							          			<field name="second_week"/>
+							          			<field name="third_week"/>
+							          			<field name="fourth_week"/>
+							          			
+				                    	</tree>
+		                        </field> 
+
+		                    </page>
+
+							<page string="Өөрчлөлтийн мэдээлэл" attrs="{'invisible':[('request_type','!=',51)]}">
+								<group >
+									<group>
+										<field name="change_name"/>
+										<field name="change_description"/>
+										<field name="change_result"/>
+										<field name="change_system_name"/>
+										<field name="system_lists" widget="many2many_tags" options="{'no_quick_create': True, 'no_create_edit' : True,
+                                'no_create':True}"/>
+									</group>
+									<group>
+										<field name="impact_organization"/>
+										<field name="effect_of_not_allowing_change"/>
+										<field name="interruption_registration_period"/>
+										<field name="location_modification_system"/>
+										
+									</group> 			
+								</group>	
+							
+							</page>
+							<page string="Бизнест учрах эрсдэл болон нөлөөлөл" attrs="{'invisible':[('request_type','!=',51)]}">
+								<group >
+									<group attrs="{'required':[('state','=','draft')]}">
+										<field name="determine_degree_importance" />
+										<field name="influence_customers_clients"/>
+										<field name="influence_information_technology_resources"/>
+										<field name="difficulty_implementing_change"/>
+										
+									</group>
+									<group attrs="{'required':[('state','=','draft')]}">										
+										<field name="technical_impact"/>
+										<field name="safety"/>
+										<field name="impact_service_contracts"/>
+										<field name="rate" readonly="1"/>
+										<field name="risk_level" readonly="1" attrs="{'invisible':[('rate','=',0)]}"/>
+										<field name ="approve_request_date" readonly="1" attrs="{'invisible':['|',('rate','=',0),('request_type','!=',51)]}"/>
+										<field name ="implementation_period" readonly="1" attrs="{'invisible':['|',('rate','=',0),('request_type','!=',51)]}"/>
+									</group> 			
+								</group>	
+							
+							</page>
+
+							<!-- <page string='System list' attrs="{'invisible':[('request_type','!=',51)]}">
+				            	<field name="system_line_ids">
+		                			<form string="Plan information">	            		
+										<field name="system_name" />					       					
+
+	                                </form>			            			
+		                        		<tree string="Plan info" editable="bottom">
+											<field name="system_name" />						       					
+							          			
+				                    	</tree>
+		                        </field> 
+
+		                    </page> -->
+
+							<page string="Ажил үйлчилгээ" attrs="{'invisible':[('request_type','not in',[16,17,18])],'required':[('request_type','in',[16,17]),('state','=','draft')],'readonly':[('state','!=','draft')]}" >     
+								<field name="line_ids">
+									<tree >
+										
+												<field name="category_id" required="1"  options="{'no_quick_create': True, 'no_create_edit' : True,
+                                'no_create':True}"/>
+												<field name="service_id" options="{'no_quick_create': True, 'no_create_edit' : True,
+                                'no_create':True}" />
+												<!-- <field name ="employee_name" />
+												<field name ="product_category" />
+												<field name ="add_right" />
+												<field name ="reason" />
+												<field name ="department_id" /> -->
+												
+
+									</tree>
+									<form >
+										
+                        				<group>
+	                        				<group>
+	                        				
+												<field name="category_id" required="1"  options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}"/>
+												<field name="service_id" options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}" />
+
+												<field name ="category_ids" widget="many2many_tags" invisible="1"/>
+											</group>
+											<group>
+												<field name="is_new_vacancy" attrs="{'invisible':[('latin_name','!=','nomin_program_create_role')]}"/>
+												<field name ="employee_name" attrs="{'invisible':['|',('is_new_vacancy','=','no'),('latin_name','!=','nomin_program_create_role')]}"/>
+												<field name ="product_category" attrs="{'invisible':[('latin_name','!=','nomin_program_create_role')]}"/>
+												<field name ="add_role" attrs="{'invisible':[('latin_name','not in',['erp_add_role','loyalty_add_role','nomin_program_add_role','nomin_program_create_role'])]}" />
+												<field name ="sub_role" attrs="{'invisible':[('latin_name','not in',['erp_sub_role','loyalty_sub_role','nomin_program_sub_role'])]}" />
+												<field name ="reason" attrs="{'invisible':[('latin_name','in',['training','nomin_program_create_role','tariff_task'])]}"/>
+												<field name ="department_ids" widget="many2many_tags" options="{'no_create':True}" attrs="{'invisible':[('latin_name','not in',['nomin_program_add_department','nomin_program_create_role'])]}"/>
+												<field name="latin_name" invisible="1"/>
+												<field name="explanation" attrs="{'invisible':[('latin_name','not in',['tariff_task','training'])]}"/>
+												<field name="crud" attrs="{'invisible':[('latin_name','not in','base')]}" />
+												<field name="is_install_program" attrs="{'invisible':[('latin_name','not in','install_program')]}" />
+											</group>
+									
+										</group>
+										
+									</form>
+                             	
+								</field>
+ 
+							</page>
+
+		                    <page string="Cost information" attrs="{'invisible':['|',('state','in',['draft','control','confirmed','slow_up','rejected']),('request_type','not in',[1,17])]}">
+		                    	<field name="cost_info" attrs="{'required':[('state','in','allocated'),('request_type','in',1,17)],'readonly':[('state','not in',['allocated','approved1'])]}">
+				          		<form>
+				          			<group>
+				          				<group>
+					       					<field name="position_name"/>		       				
+					       					<field name="rate" readonly="1"/>	
+					       					<field name="time_info"/>   
+					       					<field name="total" readonly="1"/>	
+					       					<field name="cost_reference"/>
+			       						</group>
+			       					</group>		
+			       					
+				          		</form>	
+				          		<tree string="Cost info" editable="bottom">
+				          			<field name="position_name" required="1" options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}"/>		       				
+                                	<field name="rate" readonly="1"/>
+									<field name="time_info"/>
+                                	<field name="total" readonly="1"/>
+                                	<field name="cost_reference"/>
+
+				          		</tree>
+				          		</field>	
+
+				          		<group>  
+				          			<field name="time_cost_info"/>	
+				          			
+				          		</group>        			
+							</page> 
+
+							<page  string="Хийгдсэн ажлууд" attrs="{'invisible':['|',('state','in',['draft','control','confirmed','approved1','slow_up','rejected']),('request_type','!=',1)]}">
+		                    	<group>
+								<field name="is_receive" readonly="1"/>
+								</group>
+								<field name="task_info" readonly="1">
+									<form>
+										<group>
+											<group>
+												<field name="is_check"/>
+												<field name="implemented_task"/>		       				
+												<field name="explanation"/>
+												<field name="comment"/>	
+												
+											</group>
+										</group>		
+										
+									</form>	
+									<tree string="Implemented task" editable="bottom">
+										<field name="is_check" readonly="1"/>
+										<field name="implemented_task" string="Хийгдсэн ажил" />
+										<field name="explanation"/>
+										<field name="comment" string="Хүлээн авсан ажилтны тайлбар" readonly="1"/>
+
+									</tree>
+				          		</field>	     			
+							</page>
+
+					
+							<page  string="Participants"  attrs="{'invisible':['|',('state','in',['draft','control','confirmed','approved1','slow_up','rejected']),('request_type','!=',1)]}">
+								<group colspan="4" col="4" string="Зардал батлах ажилтнууд">
+		                    		<group colspan="2">
+										<field name="confirmed_employee_id"/>
+										<field name="confirmed_date1" readonly="1"/>	
+										<field name="confirmed_user_ids2" widget="many2many_tags" readonly="1" string="Зардал баталсан ажилтан"/>
+									</group>
+									<group colspan="2" attrs="{'invisible':[('is_confirm','=',False)]}">
+										<field name="confirmed_employee_id2" />
+										<field name="confirmed_date2" invisible="1"/>	
+											
+									</group>
+																							
+								</group>
+
+								<group colspan="6" col="6" string="Хүлээн авах ажилтнууд">
+		                    		<group colspan="2">
+										<field name="receive_employee_id1"/>
+										<field name="receive_date1" invisible="1"/>	
+										<field name="receive_employee_id2"/>
+										<field name="receive_employee_id3"/>
+									</group>
+									<group>
+										<field name="confirmed_user_ids" widget="many2many_tags" readonly="1" string="Хүлээн авсан ажилтан"/>
+									</group>
+									<!-- <group colspan="2">
+										<field name="receive_employee_id2"/>
+										<field name="receive_date2" invisible="1"/>		
+											
+									</group>
+									<group colspan="2">
+										<field name="receive_employee_id3"/>
+										<field name="receive_date3" invisible="1"/>	
+											
+									</group>														 -->
+								</group>
+												
+												
+									
+							</page>   
+                         		
+						
+<!-- 
+	            			<page string="Time plan" attrs="{'invisible':['|',('state','in',['draft','control','confirmed','approved1','slow_up','rejected']),('request_type','!=',1)]}">
+	            				<group>
+			       					<field name="project_manager_time" attrs="{'readonly':[('state','not in','cost_done')]}"/>		       				
+			       					<field name="senior_programmer_time" attrs="{'readonly':[('state','not in','cost_done')]}"/>	     					
+			       					<field name="junior_programmer_time" attrs="{'readonly':[('state','not in','cost_done')]}"/>		       				
+				          			<field name="programm_tester_time" attrs="{'readonly':[('state','not in','cost_done')]}"/>
+				          		</group>			          			
+							</page>    -->
+
+		          
+			            	<page string="Төлвийн түүх">
+	                        	<group col="2">
+	                        		<group>	                        			
+										<separator string="Сонгогдсон урсгал"  colspan="4" />
+										<field name="request_id" readonly="1"/>
+										<field name="logged_in_employee_id" readonly='1' invisible="1"/>
+
+
+	                        		</group>
+	                        		<group>
+	                        			<separator string="Дараагийн батлах хэрэглэгчид"  colspan="4"/>
+										<field name="confirm_user_ids" string="Confirm users" widget="many2many_tags" readonly="1"/>
+										<field name="engineer_ids" string="Engineer" widget="many2many_tags" readonly="1" attrs="{'invisible':[('request_type','!=',15)]}"/>
+										<field name="leave_flow" invisible="1"/>
+										<field name="sequence" invisible="1"/> 
+	                        		</group>	
+	                        	</group>											                    
+                            
+	            			</page>
+
+			            </notebook>       			
+			  
+		       		</sheet>
+					<div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	               	</div>
+	            </form>
+	        </field>
+	    </record>
+
+        <record model="ir.ui.view" id="order_page_tree">
+		    <field name="name">order.page.tree</field>
+		    <field name="model">order.page</field>
+		    <field name="type">tree</field>
+		    <field name="arch" type="xml">
+		        <tree string="ПХ-ийн захиалга өгөх" colors="black:state == 'draft';blue:state == 'send';grey:state == 'confirmed';">
+		        	<field name="name" />					
+	                <field name="department_id"/>
+	                <field name="employee_id"/>
+	                <field name="order_name"/>
+	                <field name="start_date"/>
+	                <field name="assigned_date"/>
+					<!-- Bumaa test field -->
+					<field name="project_started_date"/>
+					<field name="project_finished_date"/>
+	                <field name="confirmed_date" invisible="1"/>
+	                <field name="request_type"/>
+	                <field name="project_manager_id"/>
+	                <field name="system_admin_id"/>
+	                <field name="state"/>
+				</tree>
+		    </field>
+		</record>
+	   
+        <record id="view_order_page_filter" model="ir.ui.view">
+            <field name="name">order.page.search</field>
+            <field name="model">order.page</field>
+            <field name="arch" type="xml">
+                <search string="Search Order Page"> 
+					<field name="name"/> 
+                    <field name="state"/>
+                    <field name="project_manager_id"/>
+                    <field name="project_state_name"/>
+                    <field name="order_name"/>
+					<field name="request_type"/>
+					<filter string="Archived" name="inactive" domain="[('state','=','archived')]"/> 
+                    <group expand="0" name="group_by" string="Group By">
+						<filter name="group_name"  string="Захиалгын дугаар" domain="" context="{'group_by':'name'}"/>
+                    	<filter name="group_state" string="Төлөв" domain="[('state','!=','archived')]" context="{'group_by':'state_sequence'}"/>
+                    	<filter name="group_project_manager_id" string="Төслийн менежер" domain="" context="{'group_by':'project_manager_id'}"/>
+                    	<filter name="group_project_state"  string="Захиалгын явц" domain="" context="{'group_by':'project_state_name'}"/>
+                    	<filter name="group_order_name"  string="Захиалгын нэр" domain="" context="{'group_by':'order_name'}"/>
+						<filter name="group_request_type"  string="Хүсэлтийн төрөл" domain="" context="{'group_by':'request_type'}"/>
+                    </group>           
+                </search>
+            </field>
+        </record>
+    
+		<record id="action_order_page" model="ir.actions.act_window">
+	        <field name="name"> МТС-д захиалга өгөх</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">order.page</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="context">{'search_default_group_state': 1}</field>
+            <field name="search_view_id" ref="view_order_page_filter"/>
+	        <field name="view_id" ref="order_page_tree"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to define a new program ordering.
+	          </p>
+	        </field>
+	    </record>
+
+
+
+		<record id="action_to_archived" model="ir.ui.view">
+			<field name="name">order.archived.form</field>
+			<field name="model">order.archived</field>
+			<field name="arch" type="xml">
+				<form>
+					<group class="oe_footer">
+						<button name="action_archived" string="Archived" type="object" icon="gtk-apply" groups="project.group_program_admin"/>
+						<button special="cancel" string="Cancel" type="object" icon="gtk-cancel"/>
+					</group>
+				</form>
+			</field>
+		</record>
+		<act_window name="Архивлах"
+				res_model="order.archived"
+				src_model="order.page"
+				view_mode="form"
+				view_id = "action_to_archived"
+				target="new"
+				multi="True"
+				key2="client_action_multi"
+				id="action_to_archived_form_id"
+				groups="project.group_program_admin"/>
+
+
+
+
+
+        <record model="ir.ui.view" id="job_name_form">
+            <field name="name">job.name.form</field>
+            <field name="model">job.name</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Hr Branch Location">
+                    <header>
+                    </header>
+                    <sheet>
+                        <group colspan="8"  col="8">
+                            <group colspan="8">
+                            </group>
+                            <group colspan="4">                                                          
+                                <field name="name" attrs="{'readonly':[('is_senior_manager','=',False)]}"/>
+								<field name="is_select" attrs="{'readonly':[('is_senior_manager','=',False)]}"/>
+                            </group>
+                            <group colspan="4">                                                          
+                                <field name="rate" attrs="{'readonly':[('is_senior_manager','=',False)]}"/>
+								<field name="is_senior_manager" invisible="1"/>
+
+                            </group>
+                            <group colspan="4">
+                            </group>
+                        </group>
+                    </sheet>
+					<div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	               	</div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_job_name_filter" model="ir.ui.view">
+            <field name="name">job.name.search</field>
+            <field name="model">job.name</field>
+            <field name="arch" type="xml">
+                <search string="Search HR branch location">
+                    <filter string="New HR branch location" help="Draft HR branch locations"/>
+                    <filter string="Send HR branch location" help="Draft HR branch locations"/>
+                    <field name="name" string="HR branch location"/>
+                    <group expand="0" name="group_by" string="Group By">
+                        <filter name="group_name" string="name" domain="" context="{'group_by':'name'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="job_name_tree">
+            <field name="name">job.name.tree</field>
+            <field name="model">job.name</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="server_info">
+                    <field name="name"/> 
+                    <field name="rate"/> 
+					<field name="is_select"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_job_name" model="ir.actions.act_window">
+            <field name="name">Серверийн мэдээлэл</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">job.name</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_job_name_filter"/>
+            <field name="view_id" ref="job_name_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new server information.
+              </p>
+            </field>
+        </record> 
+
+      
+
+
+
+        <record model="ir.ui.view" id="hr_performance_form">
+            <field name="name">pr.spec.dt.form</field>
+            <field name="model">pr.spec.dt</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Hr Branch Location">
+                    <header>
+                    </header>
+                    <sheet>
+                        <group colspan="8"  col="8">
+                            <group colspan="8">
+                            </group>
+                            <group colspan="4">                                                          
+                                <field name="name"/>
+                            </group>
+                            <group colspan="4">
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_performance_filter" model="ir.ui.view">
+            <field name="name">pr.spec.dt.search</field>
+            <field name="model">pr.spec.dt</field>
+            <field name="arch" type="xml">
+                <search string="Search HR branch location">
+                    <filter string="New HR branch location" help="Draft HR branch locations"/>
+                    <filter string="Send HR branch location" help="Draft HR branch locations"/>
+                    <field name="name" string="HR branch location"/>
+                    <group expand="0" name="group_by" string="Group By">
+                        <filter name="group_name" string="name" domain="" context="{'group_by':'name'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="performance_information_tree">
+            <field name="name">pr.spec.dt.tree</field>
+            <field name="model">pr.spec.dt</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="server_info">
+                    <field name="name"/> 
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_performance_information" model="ir.actions.act_window">
+            <field name="name">Серверийн мэдээлэл</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pr.spec.dt</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_performance_filter"/>
+            <field name="view_id" ref="performance_information_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new server information.
+              </p>
+            </field>
+        </record> 
+   		
+        <record model="ir.ui.view" id="hr_branch_location_form">
+            <field name="name">pr.spec.form</field>
+            <field name="model">pr.spec</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Hr Branch Location">
+                    <header>
+                    </header>
+                    <sheet>
+                        <group colspan="8"  col="8">
+                            <group colspan="8">
+                            </group>
+                            <group colspan="4">
+                           		<field name="performance_name"/>                        
+                           		<field name="name"/> 
+                            </group>
+                            <group colspan="4">
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hr_branch_location_filter" model="ir.ui.view">
+            <field name="name">pr.spec.search</field>
+            <field name="model">pr.spec</field>
+            <field name="arch" type="xml">
+                <search string="Search HR branch location">
+                    <field name="performance_name" string="HR branch location"/>
+                    <group expand="0" name="group_by" string="Group By">
+                        <filter name="group_performance_name" string="performance_name" domain="" context="{'group_by':'performance_name'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="hr_branch_location_tree">
+            <field name="name">pr.spec.tree</field>
+            <field name="model">pr.spec</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="server">
+                    <field name="performance_name"/>                  
+                    <field name="name"/>  
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_hr_branch_location" model="ir.actions.act_window">
+            <field name="name">Серверийн мэдээлэл</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">pr.spec</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+<!--              <field name="context">{'search_default_group_parent_department':1,'search_default_group_department':2}</field>
+ -->        <field name="context">{'search_default_group_performance_name': 1}</field>
+            <field name="search_view_id" ref="view_hr_branch_location_filter"/>
+            <field name="view_id" ref="hr_branch_location_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new server information.
+              </p>
+            </field>
+        </record> 
+
+ 		<record id="view_hr_net_information_filter" model="ir.ui.view">
+            <field name="name">net.spec.search</field>
+            <field name="model">net.spec</field>
+            <field name="arch" type="xml">
+                <search string="Search HR branch location">
+                    <filter string="New HR branch location" help="Draft HR branch locations"/>
+                    <filter string="Send HR branch location" help="Draft HR branch locations"/>
+                    <field name="name" string="HR branch location"/>
+                
+               </search>
+            </field>
+        </record>
+
+		<record model="ir.ui.view" id="hr_net_information_form">
+	            <field name="name">net.spec.form</field>
+	            <field name="model">net.spec</field>
+	            <field name="type">form</field>
+	            <field name="arch" type="xml">
+	                <form string="Hr Branch Location">
+	                    <header>
+	                    </header>
+	                    <sheet>
+	                        <group colspan="8"  col="8">	                        
+	                            <group colspan="4">
+	                                <field name="name"/>                      
+	                            </group>	                           
+	                        </group>
+	                    </sheet>
+	                </form>
+	            </field>
+	    </record>
+
+		<record model="ir.ui.view" id="hr_net_information_tree">
+            <field name="name">net.spec.tree</field>
+            <field name="model">net.spec</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="internet information">
+                    <field name="name"/>      
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_hr_net_information" model="ir.actions.act_window">
+            <field name="name">Сувгийн нэр</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">net.spec</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_name': 1}</field>
+            <field name="search_view_id" ref="view_hr_net_information_filter"/>
+            <field name="view_id" ref="hr_net_information_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new received internet information.
+              </p>
+            </field>
+        </record> 
+
+
+        <record id="view_hr_backing_up_filter" model="ir.ui.view">
+            <field name="name">backing.up.search</field>
+            <field name="model">backing.up</field>
+            <field name="arch" type="xml">
+                <search string="Search HR branch location">
+                    <filter string="New HR branch location" help="Draft HR branch locations"/>
+                    <filter string="Send HR branch location" help="Draft HR branch locations"/>
+                    <field name="name" string="HR branch location"/>
+                
+               </search>
+            </field>
+        </record>
+
+		<record model="ir.ui.view" id="hr_backing_up_form">
+	            <field name="name">backing.up.form</field>
+	            <field name="model">backing.up</field>
+	            <field name="type">form</field>
+	            <field name="arch" type="xml">
+	                <form string="Hr Branch Location">
+	                    <header>
+	                    </header>
+	                    <sheet>
+	                        <group colspan="8"  col="8">	                        
+	                            <group colspan="4">
+	                                <field name="name"/>                      
+	                            </group>	                           
+	                        </group>
+	                    </sheet>
+	                </form>
+	            </field>
+	    </record>
+
+		<record model="ir.ui.view" id="backing_up_tree">
+            <field name="name">backing.up.tree</field>
+            <field name="model">backing.up</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="backing_up ">
+                    <field name="name"/>      
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_backing_up" model="ir.actions.act_window">
+            <field name="name">Нөөцлөх мэдээллийн төрөл </field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">backing.up</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+<!--             <field name="context">{'search_default_group_backingup': 1}</field>
+ -->            <field name="search_view_id" ref="view_hr_backing_up_filter"/>
+            <field name="view_id" ref="backing_up_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new received backing up information.
+              </p>
+            </field>
+        </record> 
+
+ 		<record id="view_nat_pat_access_information_filter" model="ir.ui.view">
+            <field name="name">nat.pat.access.search</field>
+            <field name="model">nat.pat.access</field>
+            <field name="arch" type="xml">
+                <search string="Search HR branch location">
+                    <field name="name" string="HR branch location"/>
+                
+               </search>
+            </field>
+        </record>
+
+		<record model="ir.ui.view" id="nat_pat_access_information_form">
+	            <field name="name">nat.pat.access.form</field>
+	            <field name="model">nat.pat.access</field>
+	            <field name="type">form</field>
+	            <field name="arch" type="xml">
+	                <form string="NAT Access">
+	                    <header>
+	                    </header>
+	                    <sheet>
+	                        <group colspan="8"  col="8">	                        
+	                            <group colspan="4">
+	                                <field name="name"/>                      
+	                            </group>	                           
+	                        </group>
+	                    </sheet>
+	                </form>
+	            </field>
+	    </record>
+
+		<record model="ir.ui.view" id="nat_pat_access_information_tree">
+            <field name="name">nat.pat.access.tree</field>
+            <field name="model">nat.pat.access</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="NAT access information">
+                    <field name="name"/>      
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_nat_pat_access_information" model="ir.actions.act_window">
+            <field name="name">Сувгийн нэр</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">nat.pat.access</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_name': 1}</field>
+            <field name="search_view_id" ref="view_nat_pat_access_information_filter"/>
+            <field name="view_id" ref="nat_pat_access_information_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new nat access information.
+              </p>
+            </field>
+        </record> 
+
+ 		<record id="view_project_state_information_filter" model="ir.ui.view">
+            <field name="name">project.state.name.search</field>
+            <field name="model">project.state.name</field>
+            <field name="arch" type="xml">
+                <search string="Search HR branch location">
+                    <field name="name" string="HR branch location"/>
+                
+               </search>
+            </field>
+        </record>
+
+		<record model="ir.ui.view" id="project_state_information_form">
+	            <field name="name">project.state.name.form</field>
+	            <field name="model">project.state.name</field>
+	            <field name="type">form</field>
+	            <field name="arch" type="xml">
+	                <form string="NAT Access">
+	                    <header>
+	                    </header>
+	                    <sheet>
+	                        <group colspan="8"  col="8">	                        
+	                            <group colspan="4">
+	                                <field name="name"/>                      
+	                            </group>	                           
+	                        </group>
+	                    </sheet>
+	                </form>
+	            </field>
+	    </record>
+
+		<record model="ir.ui.view" id="project_state_information_tree">
+            <field name="name">project.state.name.tree</field>
+            <field name="model">project.state.name</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Project state information">
+                    <field name="name"/>      
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_project_state_information" model="ir.actions.act_window">
+            <field name="name">Төлвийн нэр</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">project.state.name</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_name': 1}</field>
+            <field name="search_view_id" ref="view_project_state_information_filter"/>
+            <field name="view_id" ref="project_state_information_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new project state name.
+              </p>
+            </field>
+        </record> 
+
+        <record model="ir.ui.view" id="batch_name_form">
+            <field name="name">batch.name.form</field>
+            <field name="model">batch.name</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Hr Branch Location">
+                    <header>
+                    </header>
+                    <sheet>
+                        <group colspan="8"  col="8">
+                            <group colspan="8">
+                            </group>
+                            <group colspan="4">                                                          
+                                <field name="name"/>
+                            </group>
+                            <group colspan="4">
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="batch_name_filter" model="ir.ui.view">
+            <field name="name">batch.name.search</field>
+            <field name="model">batch.name</field>
+            <field name="arch" type="xml">
+                <search string="Search HR branch location">
+                    <filter string="New HR branch location" help="Draft HR branch locations"/>
+                    <filter string="Send HR branch location" help="Draft HR branch locations"/>
+                    <field name="name" string="HR branch location"/>
+                    <group expand="0" name="group_by" string="Group By">
+                        <filter name="group_name" string="name" domain="" context="{'group_by':'name'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="batch_name_tree">
+            <field name="name">batch.name.tree</field>
+            <field name="model">batch.name</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="server_info">
+                    <field name="name"/> 
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_batch_name_information" model="ir.actions.act_window">
+            <field name="name">Серверийн мэдээлэл</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">batch.name</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="batch_name_filter"/>
+            <field name="view_id" ref="batch_name_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new server information.
+              </p>
+            </field>
+        </record> 
+
+		<record id="view_work_service_form_order_page_field_inherit" model="ir.ui.view">
+            <field name="name">work.service.form.inherit</field>
+            <field name="model">work.service</field>
+            <field name="inherit_id" ref="nomin_base.view_work_service_form"/>
+            <field name="arch" type="xml">
+                <field name="department_id" position="before">
+                    <field name="latin_name"/>
+                </field>
+            </field>
+        </record>
+
+                  
+	    <menuitem action="action_order_page" sequence="16" name="МТС-д захиалга өгөх" id="program_order_page_menu" parent="project.menu_project_management" groups="base.group_user"/>  		
+
+
+        <menuitem action="action_hr_branch_location" id="hr_indicator_menu" groups="project.group_system_senior"
+            name="Үзүүлэлт " parent="project.menu_project_management" sequence="18"/>
+
+   
+		<menuitem action="action_hr_net_information" id="hr_internet_information_menu"  groups="project.group_system_senior"
+            name="Сувгийн мэдээлэл" parent="project.menu_project_management" sequence="20"/>
+
+
+		<menuitem action="action_backing_up" id="information_back_up_menu" groups="project.group_system_senior"
+            name="Нөөцлөх мэдээллийн төрөл" parent="project.menu_project_management" sequence="22"/>
+
+
+		<menuitem action="action_performance_information" id="performance_information_menu_menu" groups="project.group_system_senior"
+            name="Үзүүлэлтийн нэр" parent="project.menu_project_management" sequence="24"/>
+
+
+       <menuitem action="action_job_name" id="job_name_menu" groups="project.group_program_admin"
+            name="Цагийн тарифын мэдээлэл" parent="project.menu_project_management" sequence="28"/>
+
+		<menuitem action="action_batch_name_information" id="batch_name_menu_menu" groups="project.group_system_senior"
+            name="Багцын нэр" parent="project.menu_project_management" sequence="26"/>
+
+		<menuitem action="action_nat_pat_access_information" id="nat_access_information_menu"  groups="project.group_system_senior"
+            name="NAT PAT" parent="project.menu_project_management" sequence="21"/>
+
+		<menuitem action="action_project_state_information" id="project_state_information_menu"  groups="project.group_program_admin"
+            name="Төлвийн нэр" parent="project.menu_project_management" sequence="23"/>
+
+
+   	</data>
+</openerp>
+   	

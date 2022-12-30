@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>  
+    	<template id="nomin_purchase_requisition.report_fixed_assets">
+			<t t-call="report.html_container">
+				<t t-call="report.layout">
+					<t t-foreach="fixed_asset_id" t-as="o">
+						<div class="page">
+							<style>
+								thead {
+				            			background-color: #f1f1c1; 
+				            		 	color:black;
+				            			}
+								tbody {color:black;}
+								tfoot {color:red;}
+								
+								table, th, td, div {
+				            		font-size : 10px
+								}
+							</style>
+							<h4 style="width:100%;" align="center" >
+								ҮНДСЭН ХӨРӨНГИЙН ТООЛЛОГЫН АКТ 
+							</h4>
+							<table class="table" style="width:300px" >
+								<tr>
+									<td>Салбарын код:</td>
+									<td style="border: 1px solid #000000;"><span t-if="o.department_id"><span t-field="o.department_id.nomin_code"/></span></td>
+								</tr>
+								<tr>
+									<td>Салбарын нэр:</td>
+									<td style="border: 1px solid #000000;"><span t-if="o.department_id"><span t-field="o.department_id.name"/></span></td>
+								</tr>
+								<tr>
+									<td>Салбарын байршил</td>
+									<td style="border: 1px solid #000000;"></td>
+								</tr>
+								<tr>
+									<td>Дансны нэр:</td>
+									<td style="border: 1px solid #000000;"><span t-if="o.account_from"><span t-field="o.account_from.name"/></span></td>
+								</tr>
+								<tr>
+									<td>Дансны код:</td>
+									<td style="border: 1px solid #000000;"><span t-if="o.account_from"><span t-field="o.account_from.code"/></span></td>
+								</tr>
+							</table>
+							<div style="font-weight: bold;margin-left:30px">
+								1.Тооллогын дүн
+							</div>
+					        <table class="table table-l10n_mn-grid" style="width:100%;border: 1px solid #000000;">
+				                <thead>
+				                    <tr>
+				                        <td style="width:3%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2">д/д</td>
+				                        <td style="width:10%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2">Хөрөнгийн бүлгийн нэр</td>
+				                        <td style="width:10%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2">Эд хариуцагч</td>
+				                        <td style="width:7%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2">Байвал зохих тоо ширхэг</td>
+				                        <td style="width:7%; vertical-align:middle;border: 1px solid #000000;" align="center" rowspan="2">Тоолсон хөрөнгийн тоо ширхэг</td>
+				                        <td style="width:13%; vertical-align:middle;border: 1px solid #000000;"  align="center" rowspan="2">Тоолсон хөрөнгийн анхны өртөг</td>
+				                        <td style="width:10%; vertical-align:middle;border: 1px solid #000000;"  align="center" rowspan="2">Хуримтлагдсан элэгдэл</td>
+				                        <td style="width:10%; vertical-align:middle;border: 1px solid #000000;"  align="center" rowspan="2">Үлдэгдэл өртөг</td>
+				                        <td style="width:5%; vertical-align:middle;border: 1px solid #000000;"  align="center" rowspan="2">Дутсан хөрөнгийн тоо ширхэг</td>
+										<td style="width:5%; vertical-align:middle;border: 1px solid #000000;"  align="center" rowspan="2">Илүүдсэн хөрөнгийн тоо ширхэг</td>
+				                        <td style="width:10%; vertical-align:middle;border: 1px solid #000000;"  align="center" rowspan="2">Дутсан хөрөнгийн дүн</td>
+				                        <td style="width:10%; vertical-align:middle;border: 1px solid #000000;"  align="center" rowspan="2">Илүүдсэн хөрөнгийн дүн</td>
+				                    </tr>
+				                </thead>
+				                <t t-set="total_qty" t-value="0"/>
+				                <t t-set="total_current_qty" t-value="0"/>
+				                <t t-set="total_amount" t-value="0"/>
+				                <t t-set="total_accumulated_depreciation" t-value="0"/>
+				                <t t-set="total_current_value" t-value="0"/>
+				                <t t-set="sum_expense" t-value="0"/>
+				                <t t-set="sum_income" t-value="0"/>
+				                <t t-set="expense_total" t-value="0"/>
+				                <t t-set="income_total" t-value="0"/>
+				                <t t-set="line_number" t-value="1"/>
+				                <t t-foreach="owners" t-as="l" >
+									<tbody >
+										<tr>
+											<td style="width:3%; vertical-align:middle;border: 1px solid #000000;" align="center" ><span t-esc="line_number"/></td>
+											<td style="width:10%; vertical-align:middle;border: 1px solid #000000;" align="center" ><span t-if="o.account_from"><span t-field="o.account_from.name"/></span></td>
+											<td style="width:10%; vertical-align:middle;border: 1px solid #000000;" align="center" >
+												<span t-esc="owners[l]['employee_last_name'][0]"/>.
+												<span t-esc="owners[l]['employee_name']"/></td>
+											<td style="width:7%; vertical-align:middle;border: 1px solid #000000;" align="center" ><span t-esc="owners[l]['qty']"/></td>
+											<td style="width:7%; vertical-align:middle;border: 1px solid #000000;" align="center" ><span t-esc="owners[l]['current_qty']"/></td>
+											<td style="width:13%; vertical-align:middle;border: 1px solid #000000;'num_format': '#,##0.00';"  align="right" ><span t-esc="'{0:,.2f}'.format(owners[l]['amount'])"/></td>
+											<td style="width:10%; vertical-align:middle;border: 1px solid #000000;'num_format': '#,##0.00';"  align="right" ><span t-esc="'{0:,.2f}'.format(owners[l]['accumulated_depreciation'])"/></td>
+											<td style="width:13%; vertical-align:middle;border: 1px solid #000000;'num_format': '#,##0.00';"  align="right" ><span t-esc="'{0:,.2f}'.format(owners[l]['current_value'])"/></td>
+											<td style="width:5%; vertical-align:middle;border: 1px solid #000000;"  align="center" ><span t-esc="owners[l]['expense']"/></td>
+											<td style="width:5%; vertical-align:middle;border: 1px solid #000000;"  align="center" ><span t-esc="owners[l]['income']"/></td>
+											<td style="width:10%; vertical-align:middle;border: 1px solid #000000;'num_format': '#,##0.00';"  align="right"><span t-esc="'{0:,.2f}'.format(owners[l]['expense_total'])"/></td>
+											<td style="width:10%; vertical-align:middle;border: 1px solid #000000;'num_format': '#,##0.00';"  align="right"><span t-esc="'{0:,.2f}'.format(owners[l]['income_total'])"/></td>
+											<t t-set="total_qty" t-value="total_qty + owners[l]['qty']"/>
+											<t t-set="total_current_qty" t-value="total_current_qty + owners[l]['current_qty']"/>
+											<t t-set="total_amount" t-value="total_amount + owners[l]['amount']"/>
+											<t t-set="total_accumulated_depreciation" t-value="total_accumulated_depreciation + owners[l]['accumulated_depreciation']"/>
+											<t t-set="total_current_value" t-value="total_current_value + owners[l]['current_value']"/>
+											<t t-set="sum_expense" t-value="sum_expense + owners[l]['expense']"/>
+											<t t-set="sum_income" t-value="sum_income + owners[l]['income']"/>
+											<t t-set="expense_total" t-value="expense_total + owners[l]['expense_total']"/>
+											<t t-set="income_total" t-value="income_total + owners[l]['income_total']"/>
+											<t t-set="line_number" t-value="line_number + 1"/>
+										</tr>
+									</tbody >
+								</t>
+								<tr>
+									<td colspan="3" style=" vertical-align:middle;border: 1px solid #000000;" align="center" >Нийт:</td>
+									<td style="width:7%; vertical-align:middle;border: 1px solid #000000;" align="center" ><span t-esc="total_qty"/></td>
+									<td style="width:7%; vertical-align:middle;border: 1px solid #000000;" align="center" ><span t-esc="total_current_qty"/></td>
+									<td style="width:13%; vertical-align:middle;border: 1px solid #000000;'num_format': '#,##0.00';"  align="right" ><span t-esc="'{0:,.2f}'.format(total_amount)"/></td>
+									<td style="width:10%; vertical-align:middle;border: 1px solid #000000;'num_format': '#,##0.00';"  align="right" ><span t-esc="'{0:,.2f}'.format(total_accumulated_depreciation)"/></td>
+									<td style="width:13%; vertical-align:middle;border: 1px solid #000000;'num_format': '#,##0.00';"  align="right" ><span t-esc="'{0:,.2f}'.format(total_current_value)"/></td>
+									<td style="width:5%; vertical-align:middle;border: 1px solid #000000;"  align="center" ><span t-esc="sum_expense"/></td>
+									<td style="width:5%; vertical-align:middle;border: 1px solid #000000;"  align="center" ><span t-esc="sum_income"/></td>
+									<td style="width:10%; vertical-align:middle;border: 1px solid #000000;'num_format': '#,##0.00';"  align="right"><span t-esc="'{0:,.2f}'.format(expense_total)"/></td>
+									<td style="width:10%; vertical-align:middle;border: 1px solid #000000;'num_format': '#,##0.00';"  align="right"><span t-esc="'{0:,.2f}'.format(income_total)"/></td>
+								</tr>
+								<tr>
+								
+								</tr>
+				            </table>
+							<br/>
+							<div style="margin-left:30px">
+								төрлийн _______ ширхэг _________ төгрөгийн дутагдал, ______ нэр төрлийн _______ ширхэг _________ төгрөгийн илүүдэл 
+								гарсныг энэхүү комиссын актаар баталгаажуулав.
+							</div>
+							<br/>
+							<div>
+								ҮҮНЭЭС:
+							</div><br/>
+							<div>Хөдөлмөрийн тухай хуулийн 132, 135,136 дугаар зүйл, ажилтантай байгуулсан Хөдөлмөрийн гэрээ, заалтын дагуу эд хариуцагч болох
+								Эд хөрөнгийн бүрэн хариуцлагын гэрээний холбогдох </div>
+							<br/>
+							<div>А. _________________         </div>
+							<div>B. _________________         </div>
+							<div>C. _________________         </div>
+							<div>D. _________________         </div>
+							<br/>
+							<div>Ажлын байрны тодорхойлолтод заасан үүрэгтэй хайнга хандаж, ажил олгогчийн үнэ бүхий барааг үрэгдүүлсэн, дутагдуулсан байх тул
+ 								хариуцлага ногдуулах зарчимыг баримтлан, ажилтанд _________ төгрөгийг хариуцуулж авлага үүсгэв.</div>
+							<div style="font-weight: bold;margin-left:30px">
+								2. Эд хариуцагчийн тайлбар
+							</div>
+							<div>................................................................................................................................................................................................................................................................................................................</div>
+							<div>................................................................................................................................................................................................................................................................................................................</div><br/>
+							<div style="font-weight: bold;margin-left:50px">...................................................................................................................................................................................................................................................................................</div>
+							<br/>
+							<div style="font-weight: bold;margin-left:30px">
+								3. Удирдлагын тайлбар
+							</div>
+							<div>...............................................................................................................................................................................................................................................................................................................</div>
+							<div>..................................................................................................................................................................................................................................................................................................................</div><br/>
+							<div style="margin-left:50px">...............................................................................................................................................................................................................................................................</div>
+							<br/>
+							<div style="font-weight: bold;margin-left:30px">
+								4. Тооллогын актны иж бүрдэл
+							</div>
+							<table class="table table-l10n_mn-grid" style="width:50%;border: 1px solid #000000;">
+								<tr>
+									<td style="width:3%; vertical-align:middle;border: 1px solid #000000;" align="center" >д/д</td>
+									<td style="width:32%; vertical-align:middle;border: 1px solid #000000;" align="left" >Актны иж бүрдэл</td>
+									<td style="width:15%; vertical-align:middle;border: 1px solid #000000;" align="center" >Хуудасны тоо</td>
+								</tr>
+				                <tr>
+									<td style="width:3%; vertical-align:middle;border: 1px solid #000000;" align="center" >1</td>
+									<td style="width:32%; vertical-align:middle;border: 1px solid #000000;" align="left" >Тооллогын тооцоо бодсон акт</td>
+									<td style="width:15%; vertical-align:middle;border: 1px solid #000000;" align="center" ></td>
+								</tr>
+								<tr>
+									<td style="width:3%; vertical-align:middle;border: 1px solid #000000;" align="center" >2</td>
+									<td style="width:32%; vertical-align:middle;border: 1px solid #000000;" align="left" >Гэмтэлтэй хөрөнгийн жагсаалт</td>
+									<td style="width:15%; vertical-align:middle;border: 1px solid #000000;" align="center" ></td>
+								</tr>
+								<tr>
+									<td style="width:3%; vertical-align:middle;border: 1px solid #000000;" align="center" >3</td>
+									<td style="width:32%; vertical-align:middle;border: 1px solid #000000;" align="left" >Эд хариуцагчийн карт</td>
+									<td style="width:15%; vertical-align:middle;border: 1px solid #000000;" align="center" ></td>
+								</tr>
+								<tr>
+									<td style="width:3%; vertical-align:middle;border: 1px solid #000000;" align="center" >4</td>
+									<td style="width:32%; vertical-align:middle;border: 1px solid #000000;" align="left" >Зурагтай файл</td>
+									<td style="width:15%; vertical-align:middle;border: 1px solid #000000;" align="center" ></td>
+								</tr>
+								<tr>
+									<td style="width:3%; vertical-align:middle;border: 1px solid #000000;" align="center" >5</td>
+									<td style="width:32%; vertical-align:middle;border: 1px solid #000000;" align="left" >Хөдөлгөөний баримт</td>
+									<td style="width:15%; vertical-align:middle;border: 1px solid #000000;" align="center" ></td>
+								</tr>
+								<tr>
+									<td style="width:3%; vertical-align:middle;border: 1px solid #000000;" align="center" >6</td>
+									<td style="width:32%; vertical-align:middle;border: 1px solid #000000;" align="left" >Орлогын баримт</td>
+									<td style="width:15%; vertical-align:middle;border: 1px solid #000000;" align="center" ></td>
+								</tr>
+								<tr>
+									<td style="width:3%; vertical-align:middle;border: 1px solid #000000;" align="center" >7</td>
+									<td style="width:32%; vertical-align:middle;border: 1px solid #000000;" align="left" >Зарлагын баримт</td>
+									<td style="width:15%; vertical-align:middle;border: 1px solid #000000;" align="center" ></td>
+								</tr>
+								<tr>
+									<td style="width:3%; vertical-align:middle;border: 1px solid #000000;" align="center" ></td>
+									<td style="width:32%; vertical-align:middle;border: 1px solid #000000;" align="left" >Нийт</td>
+									<td style="width:15%; vertical-align:middle;border: 1px solid #000000;" align="center" ></td>
+								</tr>
+				            </table>
+							
+
+							<h4 style="width:100%;font-weight: bold;" align="center" >
+								ТООЛЛОГЫН КОМИСС 
+							</h4>
+							<table style="display: inline-block" align="left">
+							<tr>
+								<tr>
+									<th align="right" colspan="3">ТООЛСОН</th>
+								</tr>
+								<tr>
+									<td align="left" >............................./</td>
+									<td align="left" >............................./</td>
+									<td align="left" >............................./</td>
+								</tr>
+								<tr>
+									<td align="left" ></td>
+									<td align="left" >гарын үсэг</td>
+									<td align="left" >нэр</td>
+								</tr>
+								<tr>
+									<td align="left" >............................./</td>
+									<td align="left" >............................./</td>
+									<td align="left" >............................./</td>
+								</tr>
+								<tr>
+									<td align="left" ></td>
+									<td align="left" >гарын үсэг</td>
+									<td align="left" >нэр</td>
+								</tr>
+							</tr>
+							</table>
+
+							<table style="display: inline-block;margin-right:15%" align="right">
+								<tr>
+									<tr>
+										<th align="right" colspan="3">ЭД ХАРИУЦАГЧ</th>
+									</tr>
+									<t t-foreach="owners" t-as="l" >
+										<tr>
+											<td align="left" >............................./</td>
+											<td align="left" >............................./</td>
+											<td align="left" >............................./</td>
+										</tr>
+										<tr>
+											<td align="left" >нэр</td>
+											<td align="left" >албан тушаал</td>
+											<td align="left" >гарын үсэг</td>
+										</tr>
+									</t>
+								</tr>
+							</table>
+						</div>
+					</t>
+	         	</t>		      
+	        </t>
+		</template>
+    </data>
+</openerp>

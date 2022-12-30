@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+		
+        <record id="view_purchase_requisition_line_state_history" model="ir.ui.view">
+            <field name="name">purchase.requisition.line.state.history.form</field>
+            <field name="model">purchase.requisition.line.state.history</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <form  string="Purchase Requisition Line State History">
+                    <field name="user_id"/>
+                    <field name="date"/>
+					<field name="state"/>             
+                </form>
+            </field>
+        </record>
+
+
+
+        <record id="view_crm_helpdesk_inherit1" model="ir.ui.view">
+            <field name="name">inherit.crm.helpdesk.form</field>
+            <field name="model">crm.helpdesk</field>
+            <field name="inherit_id" ref="nomin_helpdesk.view_helpdesk_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[2]" position="after">
+                	<page string="Холбоотой худалдан авалт">
+                        <field name="requisition_ids" readonly="1">
+                            <tree string="Шаардахууд">
+                                <field name="name"/>
+                                <field name="user_id"/>
+                                <field name="state" string='Төлөв'/>
+                            </tree>
+                        </field>
+                   	</page>
+                </xpath> 
+            </field>
+        </record>
+		
+	</data>
+</openerp>
+
+
+

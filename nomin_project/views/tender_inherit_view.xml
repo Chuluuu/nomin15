@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+    	<!-- Төслийн үе шат -->
+    	<record id="view_tender_form" model="ir.ui.view">
+            <field name="name">inherit.tender.form</field>
+            <field name="model">tender.tender</field>
+            <field name="inherit_id" ref="nomin_tender.view_tender_form"/>
+            <field name="arch" type="xml">
+        		<xpath expr="//notebook" position="inside">
+                   	<page string="Budget">
+						<group>
+							<group>
+	                   			<separator string="Project" colspan="2" nolable="1"/>
+								<field name="project_id" colspan="2" attrs="{'readonly':[('state','not in',['draft','bids'])],'required':[('state','in',['bids'])]}" options="{'no_create': True}"/>
+							</group>
+							<group>
+								<separator string="Control Budget" colspan="2" nolable="1"/>
+								<field name="is_created_from_budget" invisible="1"/>
+	                   			<field name="control_budget_id" colspan="2" attrs="{'readonly':['|',('state','not in',['draft','bids']),('is_created_from_budget','=',True)]}" options="{'no_create': True}"/>
+	                   			<field name="total_budget_amount" groups="project.group_project_confirmer" attrs="{'invisible':[('state','not in',['in_selection','finished'])],'readonly':[('state','not in',['draft'])]}"/>
+	                   			<field name="control_budget_verifier" colspan="2" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+	                   			<field name="control_budget_state" colspan="2" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+							</group>
+							<group>
+								<separator string="Ажлын даалгавар" colspan="2" nolable="1"/>
+	                   			<field name="work_task_id" colspan="2" domain="[('task_type','=','work_task')]" attrs="{'readonly':[('state','not in',['draft','bids'])],'required':[('state','in',['bids'])]}" options="{'no_create': True}"/>
+	                   			<field name="work_task_verifier" colspan="2"  attrs="{'readonly':[('state','not in',['draft'])]}"/>
+	                   			<field name="work_task_state" colspan="2"  attrs="{'readonly':[('state','not in',['draft'])]}"/>
+	                   			<!-- <field name="work_task_document_id" colspan="2" attrs="{'readonly':[('state','not in',['draft','bids','allow'])]}"/> -->
+	                   			<!-- <field name="task_document_id" colspan="2" attrs="{'readonly':[('state','not in',['draft'])]}">
+	                   				<tree string="Files">
+	                                    <field name="name"/>
+	                                    <field name="datas_fname"/>
+	                                    <field name="datas" filename="datas_fname" readonly="1"/>
+	                                    <field name="create_date" readonly="1"/>
+	                                </tree>
+	                                <form>
+	                                    <label for="name" class="oe_edit_only"/>
+	                                    <h1>
+	                                        <field name="name"/>
+	                                    </h1>
+	                                    <group string="Data">
+	                                        <field name="type" invisible="1"/>
+	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
+	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+	                                    </group>
+	                                    <group groups="base.group_no_one" string="History">
+	                                        <label for="create_uid" string="Creation"/>
+	                                        <div name="creation_div">
+	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
+	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
+	                                        </div>
+	                                    </group>
+	                                </form>
+	                   			</field> -->
+							</group>
+							<group>
+								<separator string="Ажлын Зураг" colspan="2" nolable="1"/>
+	                   			<field name="work_graph_id" colspan="2" domain="[('task_type','=','work_graph'),('task_state','in',['t_confirm','t_done'])]" attrs="{'readonly':[('state','not in',['draft','bids'])]}" options="{'no_create': True}"/>
+	                   			<field name="work_graph_verifier" colspan="2" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+	                   			<field name="work_graph_state" colspan="2" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+	                   			<!-- <field name="graph_document_id" colspan="2" attrs="{'readonly':[('state','not in',['draft'])]}">
+	                   				<tree string="Files">
+	                                    <field name="name"/>
+	                                    <field name="datas_fname"/>
+	                                    <field name="datas" filename="datas_fname" readonly="1"/>
+	                                    <field name="create_date" readonly="1"/>
+	                                </tree>
+	                                <form>
+	                                    <label for="name" class="oe_edit_only"/>
+	                                    <h1>
+	                                        <field name="name"/>
+	                                    </h1>
+	                                    <group string="Data">
+	                                        <field name="type" invisible="1"/>
+	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
+	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+	                                    </group>
+	                                    <group groups="base.group_no_one" string="History">
+	                                        <label for="create_uid" string="Creation"/>
+	                                        <div name="creation_div">
+	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
+	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
+	                                        </div>
+	                                    </group>
+	                                </form>
+	                   			</field> -->
+							</group>
+						</group>
+					</page>
+                </xpath> 
+            </field>
+        </record>
+	</data>
+</openerp>

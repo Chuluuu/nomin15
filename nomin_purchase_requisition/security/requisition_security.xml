@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+   <!-- purchase group -->
+
+	<record model="ir.module.category" id="purchase_category_od">
+            <field name="name">Худалдан авалт</field>
+            <field name="sequence">14</field>
+    </record>
+  <!--   <record id="group_proc_planner" model="res.groups">
+        <field name="name">Захиалагч</field>
+        <field name="comment">Хэлтсийн бараа захиалга шивэх ажилтны дүр</field>
+       	<field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record> -->
+   
+ <!-- 	<record id="group_order_manager" model="res.groups">
+        <field name="name">Захиалга төлөвлөлтийн менежер</field>
+        <field name="comment">ХА хүсэлтийг хуваарилах ажилтан</field>
+        <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record> -->
+    
+    
+ 	<record id="group_procurement_buyer" model="res.groups">
+        <field name="name">Худалдан авалтын ажилтан</field>
+        <field name="comment">ХА-ийг гүйцэтгэх ажилтан</field>
+        <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record>
+    
+ 	<record id="group_haaa_head" model="res.groups">
+        <field name="name">ХААА-ны дарга</field>
+        <field name="comment">ХААА-ны дарга</field>
+        <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record>
+ 	<record id="group_haaa_director" model="res.groups">
+        <field name="name">ХААА-ны гүйцэтгэх захирал</field>
+        <field name="comment">ХААА-ны гүйцэтгэх захирал</field>
+        <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record>
+ 	<record id="group_supply_import_manager" model="res.groups">
+        <field name="name">Хангамж импортын менежер</field>
+        <field name="comment">Хангамж импортын менежер</field>
+        <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record>
+    <record id="group_comparison_confirmer" model="res.groups">
+        <field name="name">Харьцуулалт батлагч</field>
+        <field name="comment">Харьцуулалт батлах ажилтан</field>
+        <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record>
+<!--  	<record id="group_nyrav" model="res.groups">
+        <field name="name">Нярав</field>
+        <field name="comment">Нярав</field>
+        <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record> -->
+ 	<record id="group_nyrav_department" model="res.groups">
+        <field name="name">Салбарын нярав</field>
+        <field name="comment">Салбарын нярав</field>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record>
+ 	<record id="group_complex_manager" model="res.groups">
+        <field name="name">Иж бүрдүүлэлтийн менежер</field>
+        <field name="comment">Иж бүрдүүлэлтийн менежер</field>
+        <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record>
+    
+ <!-- 	<record id="group_purchase_requisition_user" model="res.groups">
+        <field name="name">Хэрэглэгч</field>
+        <field name="comment">Хэрэглэгч</field>
+        <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record> -->
+    
+<!--     <record id="group_purchase_choose_budget" model="res.groups">
+    	<field name="name">Худалдан авалт төсөв сонгох</field>
+    	<field name="comment">Худалдан авалт төсөв сонгох эрх бүхий хүмүүс сонгоно.</field>
+    	<field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record> -->
+
+    <record id="group_purchase_decide_sent_to_supply" model="res.groups">
+        <field name="name">Хангамж руу илгээх эсэх шийдэх</field>
+        <field name="comment">Худалдан авалт хангамж руу илгээх.</field>
+        <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record>
+
+    <record id="group_procurement_admin" model="res.groups">
+        <field name="name">Худалдан авалтын Админ</field>
+        <field name="comment">ХА-ийг хянах админ</field>
+        <field name="implied_ids" eval="[(4, ref('nomin_purchase_requisition.group_procurement_buyer'))]"/>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record>
+
+    <record id="group_goods_supplier" model="res.groups">
+        <field name="name">Барааг ХААА-д нийлүүлэгч</field>
+        <field name="comment">Барааг ХААА-д нийлүүлэгч</field>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record>
+
+
+    <record id="group_cycle_counter" model="res.groups">
+        <field name="name">Tоологч</field>
+        <field name="comment">Бараа ба хөрөнгийг тоологч</field>
+        <field name="category_id" ref="nomin_purchase_requisition.purchase_category_od"/>
+    </record>
+
+
+
+
+
+   <record id="purchase_order_user" model="ir.rule">
+        <field name="name">User purchase order</field>
+        <field name="model_id" ref="model_purchase_order"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4,ref('nomin_purchase_requisition.group_procurement_buyer'))]"/>
+    </record>
+
+    <record id="purchase_order_allowed_department_rule" model="ir.rule">
+        <field name="name">Planner purchase order rule</field>
+        <field ref="model_purchase_order" name="model_id"/>
+        <field name="domain_force">[('department_id','in',user.purchase_allowed_departments.ids)]</field>
+        <field name="groups" eval="[
+                (4, ref('nomin_base.group_department_chief')),
+                (4, ref('nomin_base.group_department_chief1')),
+                (4, ref('nomin_base.group_business_development_chief')),
+                (4, ref('nomin_base.group_department_manager')),
+                (4, ref('nomin_base.group_division_chief')),
+                (4, ref('nomin_base.group_nomin_branch_economist')),
+                (4, ref('nomin_purchase_requisition.group_complex_manager')),
+                (4, ref('nomin_base.group_department_senior_manager')),
+                (4, ref('nomin_base.group_financial_account_user')),
+                (4, ref('nomin_purchase_requisition.group_supply_import_manager')),
+            (4, ref('nomin_base.group_president')),
+            (4, ref('nomin_purchase_requisition.group_haaa_head')),
+            (4, ref('nomin_purchase_requisition.group_haaa_director')),
+            (4, ref('nomin_purchase_requisition.group_procurement_admin')),
+                        (4, ref('capitalLease.group_regular_accountant')),
+            (4, ref('nomin_purchase_requisition.group_nyrav_department')),
+
+            ]"/>
+    </record>
+
+     <record id="purcahse_order_allowed_deparments" model="ir.rule">
+            <field name="name">Allowed purchase order</field>
+            <field ref="model_purchase_order" name="model_id"/>
+            <field name="domain_force">[('sector_id','in',user.purchase_allowed_departments.ids)]</field>
+            <field name="groups" eval="[(4,ref('purchase.group_purchase_user'))]"/>
+    </record>
+
+    <record id="purchase_order_all" model="ir.rule">
+        <field name="name">All purchase order see </field>
+        <field ref="model_purchase_order" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[
+            (4, ref('nomin_purchase_requisition.group_procurement_admin')),
+            ]"/>
+    </record>
+
+
+<record id="purchase_order_line_rule_admin" model="ir.rule">
+        <field name="name">All purchase order line see </field>
+        <field ref="model_purchase_order_line" name="model_id"/>
+        <field name="domain_force">[('is_rfq_closed','=',True)]</field>
+        <field name="groups" eval="[
+            (4, ref('nomin_purchase_requisition.group_procurement_admin')),
+            ]"/>
+    </record>
+
+
+    <record id="stock_move_all" model="ir.rule">
+        <field name="name">All stock move see </field>
+        <field ref="stock.model_stock_move" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[
+            (4, ref('nomin_purchase_requisition.group_procurement_admin')),
+            ]"/>
+    </record>
+
+    <record id="stock_picking_all" model="ir.rule">
+        <field name="name">All stock picking see </field>
+        <field ref="stock.model_stock_picking" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[
+            (4, ref('nomin_purchase_requisition.group_procurement_admin')),
+            ]"/>
+    </record>
+
+    <record id="stock_picking_allowed_department_rule" model="ir.rule">
+        <field name="name">Агуулах зөвшөөрөгдсөн хэлтэсээрээ харах</field>
+        <field ref="stock.model_stock_picking" name="model_id"/>
+        <field name="domain_force">[('department_id','in',user.purchase_allowed_departments.ids)]</field>
+        <field name="groups" eval="[
+                (4, ref('nomin_base.group_department_chief')),
+                (4, ref('purchase.group_purchase_user')),
+                (4, ref('nomin_base.group_department_chief1')),
+                (4, ref('nomin_base.group_business_development_chief')),
+                (4, ref('nomin_base.group_department_manager')),
+                (4, ref('nomin_base.group_division_chief')),
+                (4, ref('nomin_base.group_nomin_branch_economist')),
+                (4, ref('nomin_purchase_requisition.group_complex_manager')),
+                (4, ref('nomin_base.group_department_senior_manager')),
+                (4, ref('nomin_base.group_financial_account_user')),
+                (4, ref('nomin_purchase_requisition.group_supply_import_manager')),
+            (4, ref('nomin_base.group_president')),
+            (4, ref('nomin_purchase_requisition.group_haaa_head')),
+            (4, ref('nomin_purchase_requisition.group_haaa_director')),
+            (4, ref('nomin_purchase_requisition.group_procurement_admin')),
+            (4, ref('capitalLease.group_regular_accountant')),
+            (4, ref('nomin_purchase_requisition.group_nyrav_department')),
+            ]"/>
+    </record>
+
+    <record id="stock_picking_type_allowed_department_rule" model="ir.rule">
+        <field name="name">Агуулах зөвшөөрөгдсөн хэлтэсээрээ харах</field>
+        <field ref="stock.model_stock_picking_type" name="model_id"/>
+        <field name="domain_force">[('warehouse_id.department_of_id','in',user.purchase_allowed_departments.ids)]</field>
+        <field name="groups" eval="[
+                (4, ref('nomin_base.group_department_chief')),
+                (4, ref('purchase.group_purchase_user')),
+                (4, ref('nomin_base.group_department_chief1')),
+                (4, ref('nomin_base.group_business_development_chief')),
+                (4, ref('nomin_base.group_department_manager')),
+                (4, ref('nomin_base.group_division_chief')),
+                (4, ref('nomin_base.group_nomin_branch_economist')),
+                (4, ref('nomin_purchase_requisition.group_complex_manager')),
+                (4, ref('nomin_base.group_department_senior_manager')),
+                (4, ref('nomin_base.group_financial_account_user')),
+                (4, ref('nomin_purchase_requisition.group_supply_import_manager')),
+            (4, ref('nomin_base.group_president')),
+            (4, ref('nomin_purchase_requisition.group_haaa_head')),
+            (4, ref('nomin_purchase_requisition.group_haaa_director')),
+            (4, ref('nomin_purchase_requisition.group_procurement_admin')),
+            (4, ref('capitalLease.group_regular_accountant')),
+            (4, ref('nomin_purchase_requisition.group_nyrav_department')),
+            ]"/>
+    </record>
+    
+    <record id="account_invoice_purchase_employee_rule" model="ir.rule">
+        <field name="name">ХА-н ажилтан - Зөвшөөрөгдсөн салбараар</field>
+        <field ref="account.model_account_invoice" name="model_id"/>
+        <field name="domain_force">[('department_id','in',user.purchase_allowed_departments.ids)]</field>
+        <field name="groups" eval="[(4, ref('nomin_purchase_requisition.group_procurement_buyer')),
+                                    (4, ref('nomin_purchase_requisition.group_haaa_head')),
+                                    (4, ref('nomin_purchase_requisition.group_haaa_director')),
+                                    (4, ref('nomin_purchase_requisition.group_complex_manager')),
+                                    (4, ref('nomin_purchase_requisition.group_nyrav_department'))
+                                    ]"/>
+    </record>
+
+   <record id="purchase_comparison_user" model="ir.rule">
+        <field name="name">User purchase comparison</field>
+        <field name="model_id" ref="nomin_comparison.model_purchase_comparison"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[('user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4,ref('nomin_purchase_requisition.group_procurement_buyer'))]"/>
+    </record>
+
+    <record id="purchase_comparison_allowed_department_rule" model="ir.rule">
+        <field name="name">Planner purchase order rule</field>
+        <field ref="nomin_comparison.model_purchase_comparison" name="model_id"/>
+        <field name="domain_force">[('department_id','in',user.purchase_allowed_departments.ids)]</field>
+        <field name="groups" eval="[
+                (4, ref('nomin_base.group_department_chief')),
+                (4, ref('nomin_base.group_department_chief1')),
+                (4, ref('nomin_base.group_business_development_chief')),
+                (4, ref('nomin_base.group_department_manager')),
+                (4, ref('nomin_base.group_division_chief')),
+                (4, ref('nomin_base.group_nomin_branch_economist')),
+                (4, ref('nomin_base.group_department_senior_manager')),
+                (4, ref('nomin_purchase_requisition.group_complex_manager')),
+                (4, ref('nomin_base.group_financial_account_user')),
+                (4, ref('nomin_purchase_requisition.group_supply_import_manager')),
+            (4, ref('nomin_base.group_president')),
+            (4, ref('nomin_purchase_requisition.group_haaa_head')),
+            (4, ref('nomin_purchase_requisition.group_haaa_director')),
+            (4, ref('nomin_purchase_requisition.group_procurement_admin')),
+            ]"/>
+    </record>
+
+     <record id="purcahse_order_allowed_deparments" model="ir.rule">
+            <field name="name">Allowed purchase order</field>
+            <field ref="model_purchase_order" name="model_id"/>
+            <field name="domain_force">[('sector_id','in',user.purchase_allowed_departments.ids)]</field>
+            <field name="groups" eval="[(4,ref('purchase.group_purchase_user'))]"/>
+    </record>
+
+    <record id="purchase_comparison_all" model="ir.rule">
+        <field name="name">All purchase order see </field>
+        <field ref="nomin_comparison.model_purchase_comparison" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[
+            (4, ref('nomin_purchase_requisition.group_procurement_admin')),
+            ]"/>
+    </record>
+        
+
+    <record id="asset_transfer_request_allowed_department_rule" model="ir.rule">
+        <field name="name">Нягталан зөвшөөрөгдсөн хэлтэсээрээ харах</field>
+        <field ref="model_asset_transfer_request" name="model_id"/>
+        <field name="domain_force">['|',('department_id','in',user.purchase_allowed_departments.ids)
+                                        ,('receiver_department_id','in',user.purchase_allowed_departments.ids)]</field>
+        <field name="groups" eval="[
+                (4, ref('nomin_base.group_branch_account_user')),
+                (4, ref('nomin_base.group_financial_account_user')),
+            ]"/>
+    </record>
+
+
+    <record id="asset_transfer_request_employee_rule" model="ir.rule">
+        <field name="name">Ажилтан өөрийн илгээсэнг харах</field>
+        <field ref="model_asset_transfer_request" name="model_id"/>
+        <field name="domain_force">[('requested_employee_id.user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+
+    <record id="asset_transfer_request_employee_followers" model="ir.rule">
+        <field name="name">Followers see their followed </field>
+        <field ref="model_asset_transfer_request" name="model_id"/>
+        <field name="domain_force">['|',('message_partner_ids','in',[user.partner_id.id]), ('message_channel_ids.channel_partner_ids', 'in', [user.partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+
+    <record id="fixed_asset_counting_allowed_department_rule" model="ir.rule">
+        <field name="name">Нягтлан зөвшөөрөгдсөн хэлтэсээрээ харах</field>
+        <field ref="model_fixed_asset_counting" name="model_id"/>
+        <field name="domain_force">[('department_id','in',user.financial_sod_allowed_departments.ids)]</field>
+        <field name="groups" eval="[
+                (4, ref('nomin_base.group_branch_account_user')),
+                (4, ref('nomin_base.group_financial_account_user')),
+            ]"/>
+    </record>
+
+    <record id="fixed_asset_counting_cycle_counter_rule" model="ir.rule">
+        <field name="name"> Тоологч харах</field>
+        <field ref="model_fixed_asset_counting" name="model_id"/>
+        <field name="domain_force">[(1 ,'=', 1)]</field>
+        <field name="groups" eval="[
+                (4, ref('group_cycle_counter')),
+            ]"/>
+    </record>
+
+
+
+    <record id="account_account_cycle_counter_rule1" model="ir.rule">
+        <field name="name"> Тоологч данс харах</field>
+        <field ref="account.model_account_account" name="model_id"/>
+        <field name="domain_force">[(1 ,'=', 1)]</field>
+        <field name="groups" eval="[(4, ref('nomin_purchase_requisition.group_cycle_counter'))]"/>
+    </record>
+
+
+</data>
+</openerp>

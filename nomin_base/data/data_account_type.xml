@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <!-- account.account.type -->
+        <record model="account.account.type" id="data_account_type_receivable_diamond">
+          <field name="name">Авлага Диамонд</field>
+          <field name="type">receivable</field>
+          <field name="main_account_types_id">RCV</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_who_receivable_income_tax">
+          <field name="name">Хүн амын орлогын албан татварын авлага</field>
+          <field name="type">receivable</field>
+          <field name="main_account_types_id">ARHAOT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_receivable_income_tax">
+          <field name="name">Орлогын татварын авлага</field>
+          <field name="type">receivable</field>
+          <field name="main_account_types_id">ARITX</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+       <record model="account.account.type" id="data_account_type_manual_after_settlement">
+          <field name="name">Дараа тооцооны авлага</field>
+          <field name="type">receivable</field>
+          <field name="main_account_types_id">RCVAFT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_interest_receivable">
+          <field name="name">Хүүгийн авлага</field>
+          <field name="type">receivable</field>
+          <field name="main_account_types_id">RCVINT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>        
+        <record model="account.account.type" id="data_account_type_bad_debt_reserve">
+          <field name="name">Найдваргүй авлагын нөөц</field>
+          <field name="type">receivable</field>
+          <field name="main_account_types_id">RCVNAV</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_receivable_tuslahgui">
+          <field name="name">Авлага /Туслахгүй/</field>
+          <field name="type">receivable</field>
+          <field name="main_account_types_id">RCVNON</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_tax_receivable">
+          <field name="name">НӨТ авлага</field>
+          <field name="type">receivable</field>
+          <field name="main_account_types_id">RCVVAT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        
+        <record model="account.account.type" id="data_account_type_vat_payable_clearance">
+          <field name="name">Нөат-ын өглөгийн клиринг</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">APVATCLEARING</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_after_settlement_payable">
+          <field name="name">Дараа тооцооны өглөг</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">PBLAFT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_short_liabilities_payable1">
+          <field name="name">Богино хугацаат өглөг</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">PBLEXT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_income_taxes_payable">
+          <field name="name">Хүн амын орлогын албан татварын өглөг</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">PBLHAOT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_interest_payable">
+          <field name="name">Хүүгийн өглөг</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">PBLINT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_income_tax_payable">
+          <field name="name">Орлогын татварын өглөг</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">PBLITX</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+         <record model="account.account.type" id="data_account_type_long_liabilities_payable">
+          <field name="name">Урт хугацаат өглөг</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">PBLLTP</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_long_debt_allowances_payable">
+          <field name="name">Урт хугацаат өглөгийн хасагдуулга</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">PBLLTU</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_payable_tuslahgui">
+          <field name="name">Өглөг /Туслахгүй/</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">PBLNON</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_excise_tax_payable">
+          <field name="name">Онцгой албан татварын өглөг</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">PBLOAT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_wage_payable">
+          <field name="name">Цалингийн өглөг</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">PBLPRL</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+         <record model="account.account.type" id="data_account_type_social_insurance_contributions_payable">
+          <field name="name">Нийгмийн даатгалын шимтгэлийн өглөг</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">PBLSIT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>       
+        <record model="account.account.type" id="data_account_type_noat_payable">
+          <field name="name">НӨТ өглөг</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">PBLVAT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+        <record model="account.account.type" id="data_account_type_short_liabilities_payable">
+          <field name="name">Богино хугацаат өглөгийн хасагдуулга</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">RATREVLSS</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+        <record model="account.account.type" id="data_account_type_sale_order_income">
+          <field name="name">Борлуулалтын орлого</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">SLSINC</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+       	<record model="account.account.type" id="data_account_type_account_asset">
+          <field name="name">Үндсэн хөрөнгө</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">ASTAST</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+       	<record model="account.account.type" id="data_account_type_intangible_assets">
+          <field name="name">Биет бус хөрөнгө</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">ASTINT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>         
+       	<record model="account.account.type" id="data_account_type_long_investment">
+          <field name="name">Урт хугацаат хөрөнгө оруулалт</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">ASTLTI</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>           
+       	<record model="account.account.type" id="data_account_type_valuation_allowances">
+          <field name="name">Үнэлгээний хасагдуулга /УХХО/</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">ASTLTU</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>  
+       	<record model="account.account.type" id="data_account_type_sector_estimates">
+          <field name="name">Салбар хоорондын тооцоо</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">AVZBTB</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+       	<record model="account.account.type" id="data_account_type_inventory_cost_difference">
+          <field name="name">Бараа материалын өртөгийн зөрүү</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">CSTCOSTADJ</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+       	<record model="account.account.type" id="data_account_type_cost_of_sales">
+          <field name="name">Борлуулсан бүтээгдэхүүний өртөг</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">CSTSLS</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+       	<record model="account.account.type" id="data_account_type_cost_of_service">
+          <field name="name">Үзүүлсэн ажил үйлчилгээний өртөг</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">CSTWAS</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+       	<record model="account.account.type" id="data_account_type_contacts_interest_income">
+          <field name="name">Харилцахын хүүгийн орлого</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">CUSACCINT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        
+      	<record model="account.account.type" id="data_account_type_depreciation_diamond">
+          <field name="name">Хуримтлагдсан элэгдэл Диамонд</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">DEPRECIATION</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        
+       	<record model="account.account.type" id="data_account_type_prepaid_expenses_incurred">
+          <field name="name">Урьдчилж гарсан зардал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">EXPADV</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+       	<record model="account.account.type" id="data_account_type_deducting_losses_fixed_asset_disposal">
+          <field name="name">Үндсэн хөрөнгө данснаас хассаны гарз</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">EXPASSETOUT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+       	<record model="account.account.type" id="data_account_type_general_administrative_expenses">
+          <field name="name">Ерөнхий удирдлагын зардал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">EXPMAN</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>        
+       	<record model="account.account.type" id="data_account_type_expenses_for_sales">
+          <field name="name">Борлуулалтаар гарах зардал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">EXPMNS</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+       	<record model="account.account.type" id="data_account_type_other_expenses">
+          <field name="name">Бусад зардал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">EXPOTH</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+               	<record model="account.account.type" id="data_account_type_tatan_awalt_expenses">
+          <field name="name">Татан авалтын зардал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">EXPSHP</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+       	<record model="account.account.type" id="data_account_type_unfinished_production_direct_materials">
+          <field name="name">Дуусаагүй үйлдвэрлэл /Шууд материал/</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">EXPWMAT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>        
+       	<record model="account.account.type" id="data_account_type_unfinished_production_cost_direct_materials_change_speculation">
+          <field name="name">Дуусаагүй үйлдвэрлэл /Шууд материал өртөг бодолтоор өөрчлөгдөхгүй/</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">EXPWMATU</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>        
+       	<record model="account.account.type" id="data_account_type_unfinished_production_direct_labor">
+          <field name="name">Дуусаагүй үйлдвэрлэл /Шууд хөдөлмөр/</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">EXPWP</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+       	<record model="account.account.type" id="data_account_type_unfinished_production_overhead">
+          <field name="name">Дуусаагүй үйлдвэрлэл /Нэмэгдэл зардал/</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">EXPWPA</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+       	<record model="account.account.type" id="data_account_type_unfinished_production_consolidated_cost">
+          <field name="name">Дуусаагүй үйлдвэрлэл /Нэгтгэл зардал/</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">EXPWPC</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>        
+      	<record model="account.account.type" id="data_account_type_gain_after_deducting_capital_account">
+          <field name="name">Үндсэн хөрөнгө данснаас хассаны олз</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">INCASSETOUT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>       
+      	<record model="account.account.type" id="data_account_type_main_asset_sale_gain">
+          <field name="name">Үндсэн хөрөнгө худалдсаны ашиг</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">INCAST</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+      	<record model="account.account.type" id="data_account_type_extraordinary_income">
+          <field name="name">Онцгой шинжтэй орлого</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">INCEXO</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_other_diamond_income">
+          <field name="name">Бусад орлого Диамонд</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">INCOTH</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+      	<record model="account.account.type" id="data_account_type_non_operating_income">
+          <field name="name">Үйл ажиллагааны бус орлого</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">INCWAS</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+      	<record model="account.account.type" id="data_account_type_consolidated_accounts_income_and_expenditure">
+          <field name="name">Орлого зарлагын нэгдсэн данс</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">IOACON</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+      	<record model="account.account.type" id="data_account_type_national_accounts">
+          <field name="name">Дотоодын данс</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">LOCACC</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>         
+       	<record model="account.account.type" id="data_account_type_inventory_adjustment_accounts">
+          <field name="name">Бараа материалын тохируулах данс</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">MATADJ</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>        
+      	<record model="account.account.type" id="data_account_type_inventory">
+          <field name="name">Бараа материал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">MATMAT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+      	<record model="account.account.type" id="data_account_type_packing">
+          <field name="name">Сав баглаа боодол</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">MATPAC</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>                 
+      	<record model="account.account.type" id="data_account_type_inventory_valuation_allowances">
+          <field name="name">Материалын үнэлгээний хасагдуулга</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">MATRPP</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+      	<record model="account.account.type" id="data_account_type_supply_materials">
+          <field name="name">Хангамжинд байгаа материал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">MATSUP</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+      	<record model="account.account.type" id="data_account_type_short_term_investments">
+          <field name="name">Богино хугацаат хөрөнгө оруулалт</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">MNTSTI</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+      	<record model="account.account.type" id="data_account_type_valuation_allowances_bhho">
+          <field name="name">Үнэлгээний хасагдуулга /БХХО/</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">MNTSTU</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        <record model="account.account.type" id="data_account_type_cash_and_bank_diamond">
+          <field name="name">Касс дахь бэлэн мөнгө Диамонд</field>
+          <field name="type">liquidity</field>
+          <field name="main_account_types_id">MNYCSH</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+		<record model="account.account.type" id="data_account_type_way_carrying_cash">
+          <field name="name">Замд яваа бэлэн мөнгө</field>
+          <field name="type">liquidity</field>
+          <field name="main_account_types_id">MNYCSHONROAD</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+       	<record model="account.account.type" id="data_account_type_bank_diamond">
+          <field name="name">Банкин дахь харилцах Диамонд</field>
+          <field name="type">liquidity</field>
+          <field name="main_account_types_id">MNYPAY</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+		<record model="account.account.type" id="data_account_type_asset_purchase_expense">
+          <field name="name">Үндсэн хөрөнгө худалдсаны алдагдал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OUTAST</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+		<record model="account.account.type" id="data_account_type_extraordinary_costs">
+          <field name="name">Онцгой шинжтэй зардал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OUTEXO</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+		<record model="account.account.type" id="data_account_type_non_operating_expenses">
+          <field name="name">Үйл ажиллагааны бус зардал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OUTEXP</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+		<record model="account.account.type" id="data_account_type_income_tax_expense">
+          <field name="name">Орлогын татварын зардал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OUTINT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+		<record model="account.account.type" id="data_account_type_shareholder">
+          <field name="name">Хувь нийлүүлэгч</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OWNACC</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+ 		<record model="account.account.type" id="data_account_type_retained_earnings">
+          <field name="name">Хуримтлагдсан ашиг</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OWNACMPFT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+		<record model="account.account.type" id="data_account_type_property_owners">
+          <field name="name">Эзэмшигчдийн өмч</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OWNCAP</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>        
+		<record model="account.account.type" id="data_account_type_period_profit">
+          <field name="name">Тайлант үеийн ашиг</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OWNCURPFT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>        
+		<record model="account.account.type" id="data_account_type_additional_paid_in_capital">
+          <field name="name">Нэмж төлөгдсөн капитал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OWNNTC</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>        
+ 		<record model="account.account.type" id="data_account_type_other_property">
+          <field name="name">Бусад өмч</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OWNOTH</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>                       
+		<record model="account.account.type" id="data_account_type_treasury_stock">
+          <field name="name">Халаасны хувьцаа</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OWNPCK</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+		<record model="account.account.type" id="data_account_type_revaluation">
+          <field name="name">Дахин үнэлгээний нэмэгдэл</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OWNREV</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+		<record model="account.account.type" id="data_account_type_debenture">
+          <field name="name">Хувьцаа</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OWNSTK</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+		<record model="account.account.type" id="data_account_type_share_capital">
+          <field name="name">Хувьцаат капитал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">OWNSTKCAP</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+       	<record model="account.account.type" id="data_account_type_payable_diamond">
+          <field name="name">Өглөг Диамонд</field>
+          <field name="type">payable</field>
+          <field name="main_account_types_id">PBL</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+
+		<record model="account.account.type" id="data_account_type_unearned_income">
+          <field name="name">Урьдчилж орсон орлого</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">PBLPREPAID</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record> 
+
+		<record model="account.account.type" id="data_account_type_revaluation_loss">
+          <field name="name">Ханшийн тэгшитгэлийн алдагдал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">PBLPREPAID</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+ 		<record model="account.account.type" id="data_account_type_revaluation_gain">
+          <field name="name">Ханшийн тэгшитгэлийн ашиг</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">RATREVPRT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+ 		<record model="account.account.type" id="data_account_type_loss_from_exchange_rate_differences">
+          <field name="name">Валютын ханшийн зөрүүний бодит алдагдал</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">RATXCHLSS</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+ 		<record model="account.account.type" id="data_account_type_real_benefit_exchange_rate">
+          <field name="name">Валютын ханшийн зөрүүний бодит ашиг</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">RATXCHPRT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+
+ 		<record model="account.account.type" id="data_account_type_prepaid_settlement">
+          <field name="name">Урьдчилж төлсөн тооцоо</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">RCVPMT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+        
+ 		<record model="account.account.type" id="data_account_type_sales_discounts">
+          <field name="name">Борлуулалтын хөнгөлөлт</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">SLSPRO</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+ 		<record model="account.account.type" id="data_account_type_sales_returns_and_losses">
+          <field name="name">Борлуулалтын буцаалт,хорогдол</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">SLSRET</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+ 		<record model="account.account.type" id="data_account_type_system_revenues_not_the_type_account">
+          <field name="name">Системийн орлого (дансны төрөл биш)</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">SYSINC</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+ 		<record model="account.account.type" id="data_account_type_system_costs_not_the_type_account">
+          <field name="name">Системийн зардал (дансны төрөл биш)</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">SYSOUT</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+ 		<record model="account.account.type" id="data_account_type_temporary_account">
+          <field name="name">Түр данс</field>
+          <field name="type">other</field>
+          <field name="main_account_types_id">TMPACC</field>
+          <field name="include_initial_balance" eval="True"/>
+        </record>
+    </data>
+</openerp>
+

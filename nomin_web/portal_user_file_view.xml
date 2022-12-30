@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+		<!-- Surveys -->
+		<menuitem name="Poll" id="menu_website_survey_root" sequence="42" parent="website.menu_website_configuration"/>
+		
+		<record id="view_survey_question_form" model="ir.ui.view">
+            <field name="name">question.survey.form</field>
+            <field name="model">question.survey</field>
+            <field name="arch" type="xml">
+                <form string="Poll" create="false">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="website_publish_button"
+                                    type="object" icon="fa-globe">
+                                <field name="is_publish" widget="website_button"/>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title" style="width: 70%;">
+                            <label for="question" string="Question Name" class="oe_edit_only"/>
+                            <h1><field name="question" colspan="4" placeholder="Question Name" required="1" attrs="{'readonly': [('is_publish', '==', True)]}"/></h1>
+                            <group>
+                                <group>
+                                    <field name="published_date" readonly="1"/>
+                                </group>
+                            </group>
+                        </div>
+                        <notebook>
+                            <page string="Answer Types">
+                                <field name="label_ids" attrs="{'readonly': [('is_publish', '==', True)]}">
+                                	<tree editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="label_name" string="Choices"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Answers">
+                                <field name="answer_ids" attrs="{'readonly': [('is_publish', '==', True)]}">
+                                	<tree editable="bottom">
+                                        <field name="question_id" invisible="1"/>
+                                        <field name="answer_id" invisible="1"/>
+                                        <field name="ans_name"/>
+                                        <field name="date_create"/>
+                                        <field name="token" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_survey_question_tree" model="ir.ui.view">
+            <field name="name">question.survey.tree</field>
+            <field name="model">question.survey</field>
+            <field name="arch" type="xml">
+                <tree string="Poll" create="false">
+                    <field name="question"/>
+                    <field name="is_publish"/>
+                    <field name="published_date"/>
+                </tree>
+            </field>
+        </record>		
+		
+        <record id="action_survey_question_menu" model="ir.actions.act_window">
+            <field name="name">Poll</field>
+            <field name="res_model">question.survey</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem action="action_survey_question_menu" id="nomin_survey_question_menu" parent="menu_website_survey_root" sequence="1"/>
+        
+<template id="nomin_web.survey_question" name="Questions">
+        
+	    	<script type="text/javascript" src="/nomin_web/static/src/js/survey.js"/>
+			   <div class="blockItem">
+			     <h4 class="block-title">
+			       Санал асуулга<span></span>
+			     </h4>
+			
+			     <div class="tabContents">
+			       <div id="news-latest-single" class="tab-content">
+			        <t t-foreach="survey_question" t-as="question">
+			           <div class="poll-title">
+							<t t-esc="question.question"/>
+			           </div>
+						<!-- <p style="font-family: 'Mon Arial';font-size: 15px;">
+							<t t-if="question.label_ids">
+							<t t-foreach="question.label_ids" t-as="label">
+				                <label t-att-class="' bg-success ' if quizz_correction and label.quizz_mark > 0.0 else ''">
+				                    <input type="radio" t-att-name="prefix" t-att-value='label.id' />
+				                    <span t-esc='label.label_name'/>
+				                </label>
+							</t>
+							</t>
+						</p> -->
+						<!-- <form class="nospace" id="poll"> -->                      
+						<form role="form" method="post" class="js_surveyform" t-att-name="'%s' % (question.id)" t-att-data-submit="'/question/submit/%s' % (slug(question))" t-att-data-result="'/question/result/%s' % (slug(question))">
+                    		<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+								<div class="row js_radio">
+						            <div t-foreach='question.label_ids' t-as='label' t-attf-class="col-md-12">
+						                <label t-att-class="' bg-success ' if quizz_correction and label.quizz_mark > 0.0 else ''">
+						                    <input type="radio" name="label_answer" t-att-name="prefix" t-att-value='label.id'/>
+						                    <span t-field='label.label_name'/>
+						                </label>
+						            </div>
+						        </div>
+					        
+					        <div class="poll-buttons">
+					        	<button type="submit" class="btn btn-primary" name="button_submit" value="finish">Санал өгөх</button>
+					        	<!-- <button type="button" class="btn" name="button_result" value="result">Үр дүн</button> -->
+					           <!--  <input type="button" class="btn btn-primary" onclick="submitPoll(0, 5);" value="Санал өгөх"/> -->
+					            <a href="#" data-id="1" class="btn pollresult" >Үр дүн</a>
+					        </div>
+                        </form>
+					</t>
+			       </div>
+			       
+			     </div>
+			     <div class="modal fade" id="AJAXErrorModal" role="dialog" aria-labelledby="AJAXErrorModal" aria-hidden="true" >
+		            <div class="modal-dialog">
+		                <div class="modal-content">
+		                    <div class="modal-header">
+		                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&amp;times;</button>
+		                        <h4 class="modal-title">Анхааруулга</h4>
+		                    </div>
+		                    <div class="modal-body"><p>Дахин ачааллана уу</p></div>
+		                    <div class="modal-footer"><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div>
+		                </div>
+		            </div>
+		        </div>
+		         <div class="modal fade myModal1">
+		        
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&amp;times;</span><span class="sr-only">Close</span></button>
+								<h4 class="modal-title">Санал асуулга</h4>
+							</div>
+							<div class="modal-body"> 
+								<!-- <t t-esc="question_dict"/> -->
+								<t t-foreach="question_dict" t-as="question">
+									<div class="poll-title">
+										<t t-esc="question_dict[question]['question']"/>
+						           </div>
+						           <hr/>
+						           <!-- <div class="row">
+						           		<div class= "col-md-10">
+						           			<ul t-foreach="answer_dict[question]['answers']" t-as="answer_text">
+						           				<li><t t-esc="answer_text"/></li>
+						           			</ul>
+						           		</div>
+						           		<div class= "col-md-2">
+						           			<ul t-foreach="answer_dict[question]['count']" t-as="count_qty">
+						           				<li><t t-esc="count_qty"/></li>
+						           			</ul>
+						           		</div>
+						           </div> -->
+						           
+						           
+								   <!-- <table cellspacing="0" cellpadding="0" >
+	
+								      <caption align="top"><br></br></caption>
+								      <tbody>
+								      		<t t-set="i" t-value="0"/>
+								      		<t t-foreach="answer_dict" t-as="answer">
+								      		<t t-foreach="answer_dict[question]['answers']" t-as="answer_text">								      			
+							      				<tr>
+													<td class="first" width="50%"><t t-esc="answer_text"/></td>
+												</tr>								      			
+								      		</t>
+								      		<t t-foreach="answer_dict[question]['count']" t-as="count_qty">
+								      		<tr>
+												<td class="first" width="50%"><t t-esc="count_qty"/></td>
+											</tr>
+											</t>
+										</t>
+								      </tbody>
+								  </table> -->
+						           
+								   <table class="table table-condensed table-striped" style="border-style: hidden;">
+	
+								      <!-- <caption align="top"><br></br></caption> -->
+								      <tr>
+								      	<td>
+								      		<table style="border-style: hidden;">
+										      	<t t-if="answer_dict">
+										      		<t t-foreach="answer_dict[question]['answers']" t-as="answer_text">								      			
+									      				<tr>
+															<td class="text-left"><t t-esc="answer_text"/></td>
+														</tr>								      			
+										      		</t>
+												</t>
+								      		</table>
+							      		</td>
+							      		<td>
+								      		<table style="border-style: hidden;">
+										      	<t t-if="answer_dict">
+										      		<t t-foreach="answer_dict[question]['count']" t-as="count_qty">
+									      				<tr>
+															<td class="text-left">
+															<!-- <t t-foreach="sum_dict[question]['answered']" t-as="sum"> -->
+															<!-- <t t-esc="answer_dict[question]['count']"/>
+															<t t-esc="sum_dict[question]['answered']"/> -->
+															<span t-esc="round(count_qty*100.0/(sum_dict[question]['answered'] or 1),2)"></span> %
+															<!-- </t> -->
+															</td>
+														</tr>
+										      		</t>
+												</t>
+								      		</table>
+								      	</td>
+								      </tr>
+								  </table>
+								</t>
+							</div>
+							<div class="modal-footer">
+						        <button class="btn" data-dismiss="modal" aria-hidden="true">Хаах</button>
+						    </div>
+						</div>
+					</div>
+			    </div>
+			   </div>
+			<script type="text/javascript">
+			<![CDATA[
+			      // sanal asuulga
+				  $(".pollresult").click(function(e){
+					// alert("Амжилттай")
+				      id = 'myModal' + $(this).data("id");
+				      $('.' + id).appendTo("body");
+	                        function show_modal(){
+	                          $('.'  + id).modal();
+	                        }
+	                        
+	                        // Set the delay function time in milliseconds
+	                        window.setTimeout(show_modal, 10);
+				  });
+				
+			]]>
+		    </script>
+			<!-- <div class = "jumbotron">
+				
+	   			<t t-if="survey_question">
+	   			<t t-if="survey_question.is_publish == True">
+					<t t-foreach="survey_question" t-as="question">
+						
+						
+					</t>
+				</t>
+				
+				</t>
+		   </div> -->
+</template>
+<template id="assets_frontend_result" inherit_id="website.assets_frontend" name="Survey Results assets">
+	        <xpath expr="." position="inside">
+	            <script src="/web/static/lib/nvd3/d3.v3.js"></script>
+	            <script src="/web/static/lib/nvd3/nv.d3.js"></script>
+	            <script type="text/javascript" src="/nomin_web/static/src/js/survey_result.js" />
+	            <link href="/web/static/lib/nvd3/nv.d3.css" rel="stylesheet" type="text/css"></link>
+	            <link href="/nomin_web/static/src/css/survey_result.css" rel="stylesheet" type="text/css"></link>
+	        </xpath>
+</template>
+        
+<template id="result" name="Survey Result">
+            <div class="container js_surveyresult">
+                <!-- <t t-call="survey.back" />
+                <div class="jumbotron mt32">
+                    <h1><span t-field="survey.title" /> <span style="font-size:1.5em;" class="fa fa-bar-chart-o pull-right "/></h1>
+                    <div t-field="survey.description" class="oe_no_empty" />
+                </div>
+                <div class="panel panel-default hidden-print">
+                    <div class="panel-heading"><span class="fa fa-filter"></span>  Filters <span t-if="filter_display_data" class="pull-right text-primary clear_survey_filter"><i class="fa fa-times"></i> Clear All Filters</span></div>
+                    <div class="panel-body">
+                        <span t-if="filter_finish == True">
+                            <span class="label label-default only_left_radius filter-all">All surveys</span><span class="label label-primary only_right_radius filter-finished">Finished surveys</span>
+                        </span>
+                        <span t-if="filter_finish == False">
+                            <span class="label label-primary only_left_radius filter-all">All surveys</span><span class="label label-default only_right_radius filter-finished">Finished surveys</span>
+                        </span>
+                        <span t-foreach="filter_display_data" t-as="filter_data">
+                            <span class="label label-primary only_left_radius"><i class="fa fa-filter"></i></span><span class="label label-primary no_radius" t-esc="filter_data['question_text']"></span><span class="label label-success only_right_radius" t-esc="' > '.join(filter_data['labels'])"></span>
+                        </span>
+                    </div>
+                </div> -->
+                <!-- <div t-foreach="survey_dict['page_ids']" t-as='page_ids'>
+                    <t t-set="page" t-value="page_ids['page']"/>
+                    <h1 class="mt16" t-field='page.title'></h1>
+                    <div t-field="page.description" class="oe_no_empty" />
+                    <hr/> -->
+                    <div t-foreach="page_ids['question_ids']" t-as='question_ids' class="mt16">
+                        <t t-set="input_summary" t-value="question_ids['input_summary']"/>
+                        <t t-set="question" t-value="question_ids['question']"/>
+                        <t t-set="graph_data" t-value="question_ids['graph_data']"/>
+                        <t t-set="prepare_result" t-value="question_ids['prepare_result']"/>
+                        <h4>
+                            <b>Question </b>
+                            <span t-field='question.question'></span>
+                            <t t-if="question.type == 'matrix'">
+                                <small><span class="label label-default">Matrix: <span t-field='question.matrix_subtype'/></span></small>
+                            </t>
+                            <t t-if="question.type in ['simple_choice', 'multiple_choice']">
+                                <small><span t-field='question.type' class="label label-default"></span></small>
+                            </t>
+                            <span class="pull-right">
+                                <span class="label label-success"><span t-esc="input_summary['answered']"></span> Answered</span>
+                                <span class="label label-danger"><span t-esc="input_summary['skipped']"></span> Skipped</span>
+                            </span>
+                        </h4>
+                        <t t-if="input_summary['answered'] != 0">
+                            <t t-if="question.description">
+                                <div class="text-muted oe_no_empty" t-field="question.description" />
+                            </t>
+                            <t t-if="question.type in ['textbox', 'free_text', 'datetime']">
+                                <t t-call="survey.result_text"></t>
+                            </t>
+                            <t t-if="question.type in ['simple_choice', 'multiple_choice']">
+                                <t t-call="survey.result_choice"></t>
+                            </t>
+                            <t t-if="question.type == 'matrix'">
+                                <t t-call="survey.result_matrix"></t>
+                            </t>
+                            <t t-if="question.type == 'numerical_box'">
+                                <t t-call="survey.result_number"></t>
+                            </t>
+                        </t>
+                        <t t-if="input_summary['answered'] == 0">
+                            <h2 style="padding-top:30px;padding-bottom:30px;text-align:center;" class="text-muted">Sorry, No one answered this question.</h2>
+                        </t>
+                    </div>
+                <!-- </div> -->
+            </div>
+</template>
+		<!-- Portal users file -->
+		<menuitem name="Portal User File" id="menu_website_portal_file_root" sequence="40" parent="website.menu_website_configuration"/>
+		
+		<record id="view_portal_user_file_form" model="ir.ui.view">
+            <field name="name">portal.user.file.form</field>
+            <field name="model">portal.user.file</field>
+            <field name="arch" type="xml">
+                <form string="Portal User File">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="website_publish_button"
+                                    type="object" icon="fa-globe">
+                                <field name="is_publish" widget="website_button"/>
+                            </button>
+                        </div>
+                        <!-- <field name="image" widget="image" class="oe_avatar" options='{"preview_image": "image_thumb"}' readonly="1"/> -->
+                        <div class="oe_title">
+                            <div class="oe_edit_only">
+                                <label for="name" string="Name"/>
+                            </div>
+                            <h1>
+                                <field name="name" default_focus="1" placeholder="Name" required="1"/>
+                            </h1>
+                            <group>
+                                <group>
+                                    <field name="file_id" required="1"/>
+                                    <field name="published_date" readonly="1"/>
+                                </group>
+                            </group>
+                        </div>
+                        <notebook>
+                            <page string="Description">
+                                <field name="description"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_portal_user_file_tree" model="ir.ui.view">
+            <field name="name">portal.user.file.tree</field>
+            <field name="model">portal.user.file</field>
+            <field name="arch" type="xml">
+                <tree string="Portal User File">
+                    <field name="name"/>
+                    <field name="published_date"/>
+                    <field name="is_publish"/>
+                </tree>
+            </field>
+        </record>		
+		
+        <record id="action_portal_file_upload" model="ir.actions.act_window">
+            <field name="name">Portal User File</field>
+            <field name="res_model">portal.user.file</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem action="action_portal_file_upload" id="nomin_portal_file_upload_menu" parent="menu_website_portal_file_root" sequence="1"/>
+        
+        
+        
+<template id="nomin_web.portal_register_file" name="Харилцагч бүртгүүлэх файл">
+	<t t-call="website.layout" >
+		<div id="content_wrapper">
+			<div class = "container">
+			<div class="content-bg">
+				<!-- <h1>Welcome to NOMIN !</h1> -->
+				<t t-if="not portal_files">
+					<div class="text-primary">Анхаар ! Мэдээлэл алга байна.</div>
+				</t>
+	   			<t t-if="portal_files">
+		   			<t t-if="portal_files.is_publish == True">
+						<t t-foreach="portal_files" t-as="portal_file">
+							<h3 class="pagetitle"><t t-esc="portal_file.name"/></h3>
+							<div style="text-align:center; padding:30px 0;">
+								<t t-if="portal_file.file_id">
+										<!-- <t t-esc="portal_file"/> -->
+										<!-- <a t-att-href="'/portal/download?attachment_id=%i' % file['id']"><t t-esc="file['datas_fname']"/></a> -->
+										<!-- <a class = "btn btn-primary btn-lg" role = "button" t-att-href="'/portal/download?attachment_id=%i' % file['id']">Бүртгэлийн маягт татах</a> -->
+									<a class="btn btn-primary btn-lg" role = "button" target="_top" t-attf-href="/register/file/#{ slug(portal_file) }/download" title="Бүртгэлийн маягт татах" id="download">Бүртгэлийн маягт татах</a>
+								</t>
+							</div>
+							<t t-esc="portal_file.description"/>
+						</t>
+					</t>
+					<t t-if="portal_files.is_publish != True">
+						<div class="text-info">Анхаар ! Нийтлэгдсэн файл байхгүй байна.</div>
+					</t>
+				</t>
+			</div>
+       		<br/><br/><br/><br/>
+			   
+			</div>
+		</div>
+	</t>
+</template>
+		
+		<menuitem name="Suggestion" id="menu_website_tender_suggestion_root" sequence="41" parent="website.menu_website_configuration"/>
+		
+		<record id="view_suggestion_document_form" model="ir.ui.view">
+            <field name="name">tender.suggestion.form</field>
+            <field name="model">tender.suggestion</field>
+            <field name="arch" type="xml">
+                <form string="Suggestion Document">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="website_publish_button"
+                                    type="object" icon="fa-globe">
+                                <field name="is_publish" widget="website_button"/>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <div class="oe_edit_only">
+                                <label for="name" string="Name"/>
+                            </div>
+                            <h1>
+                                <field name="name" default_focus="1" placeholder="Name" required="1"/>
+                            </h1>
+                            <group>
+                                <group>
+                                    <field name="suggestion_image" widget='image' class="oe_avatar" options='{"preview_image": "suggestion_image_medium", "size": [400, 200]}'/>
+                                    <field name="published_date" readonly="1"/>
+                                </group>
+                            </group>
+                        </div>
+                        <notebook>
+                            <page string="Description">
+                                <field name="description"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_suggestion_document_tree" model="ir.ui.view">
+            <field name="name">tender.suggestion.tree</field>
+            <field name="model">tender.suggestion</field>
+            <field name="arch" type="xml">
+                <tree string="Suggestion Document">
+                    <field name="name"/>
+                    <field name="published_date"/>
+                    <field name="is_publish"/>
+                </tree>
+            </field>
+        </record>		
+		
+        <record id="action_tender_suggestion_menu" model="ir.actions.act_window">
+            <field name="name">Suggestion Document</field>
+            <field name="res_model">tender.suggestion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem action="action_tender_suggestion_menu" id="nomin_tender_suggestion_menu" parent="menu_website_tender_suggestion_root" sequence="1"/>
+
+<!-- Дэлгэрэнгүй -->
+<template id="suggestion_details">
+	<div class="row">
+		<div class="col-md-9 col-sm-9">
+			<h3 style="font-size: 24px;color: #1660AB;padding: 0;margin: 0 0 10px;font-family: 'Roboto Condensed';" t-if="currsuggest.name"><t t-esc="currsuggest.name"/></h3>
+			<span style="font-size: 14px;color: #ccc;font-family: 'Roboto Condensed';" t-if="currsuggest.published_date"><t t-esc="currsuggest.published_date"/></span><hr/>
+			<img t-att-src="'data:image/png;base64,%s' %currsuggest.suggestion_image"/>
+			<t t-raw="currsuggest.description"/>
+		</div>
+		<div class="col-md-3 col-sm-3">
+			<t t-call="nomin_web.nomin_sub_menu_exchange"/>
+			<t t-call="nomin_web.nomin_sub_menu_subscribe"/>
+			<t t-call="nomin_web.nomin_sub_menu_suggestion"/>
+			<t t-call="nomin_web.survey_question"/>
+		</div>
+	</div>
+</template>
+
+<!-- Зөвлөгөөний жагсаалт -->
+<template id="nomin_web.suggestion_list">
+		<div class="col-md-9 col-sm-9">
+			<div class="table-responsive">
+				<table class="table table-condensed table-striped" style="font-size: 85%;">
+					<t t-foreach="nominsuggestion" t-as="suggestion">
+						<tbody>
+							<tr>
+								<td>
+									<div class="media">
+							            <a class="pull-left" t-attf-href="/suggestion/#{ slug(suggestion) }" target="_self">
+							            	<img style="height: 78px; width: 118px;" t-att-src="'data:image/png;base64,%s' %suggestion.suggestion_image"/>
+						            	</a>
+							            <div class="media-body">
+							              <h4 style="margin: 0 0 5px;line-height: 1.1;text-align: justify; color: #333;"><t t-esc="suggestion.name"/></h4>
+							              <!-- <t t-raw="suggestion.description"/> -->
+						              	</div>
+							        </div>
+								</td>
+							</tr>
+							<tr>
+							    <td>
+							        <span style="float:right;"><a class="button_gray" t-attf-href="/suggestion/#{ slug(suggestion) }" target="_self">Дэлгэрэнгүй</a></span>
+							    </td>
+							</tr>
+						</tbody>
+					</t>
+				</table>
+			</div>
+			<div class="products_pager">
+				<t t-call="website.pager"/>
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-3 hidden-xs">
+			<t t-call="nomin_web.nomin_sub_menu_exchange"/>
+			<t t-call="nomin_web.nomin_sub_menu_subscribe"/>
+			<t t-call="nomin_web.nomin_sub_menu_suggestion"/>
+			<t t-call="nomin_web.survey_question"/>
+		</div>
+</template>
+
+<template id="nomin_web.tender_current_suggestion" name="Зөвлөгөө дэлгэрэнгүй">
+	<t t-call="website.layout" >
+		<div id="content_wrapper">
+			<div class="container">
+			<div class="content-bg">
+				
+				<t t-if="currsuggest">
+					<t t-call="nomin_web.suggestion_details"/>
+				</t>
+				
+			</div>
+			</div>
+		</div>
+	</t>
+</template>
+       
+<template id="nomin_web.tender_suggestion_document" name="Зөвлөгөө">
+	<t t-call="website.layout" >
+		<div id="content_wrapper">
+			<div class = "container">
+			<div class="content-bg">
+				<div class = "row">
+					<t t-if="not nominsuggestion">
+						<div class="text-primary">Анхаар ! Мэдээлэл алга байна.</div>
+					</t>
+		   			<t t-if="nominsuggestion">
+		   				<t t-call="nomin_web.suggestion_list"/>
+		   			</t>
+			   </div>
+			</div>
+			</div>
+		</div>
+	</t>
+</template>
+		
+    </data>
+</openerp>

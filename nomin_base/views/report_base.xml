@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- vim:fdn=3:
+-->
+<openerp>
+<data>
+    <template id="assets_backend" name="nomin_base assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <!-- <script type="text/javascript" src="/nomin_base/static/src/js/dates.js"></script> -->
+            <link rel="stylesheet" href="/nomin_base/static/src/css/extended.css"/>
+            <!-- <link rel="stylesheet" href="/l10n_mn_report_base/static/src/css/report_abstract.css"/> -->
+            <!--  -->
+        </xpath>
+    </template>
+    <template id="report.style" name="style">
+        body {
+            color: #000 !important;
+            word-wrap: break-word;
+        }
+        .border-black td {
+            border-top: 1px solid black !important;
+        }
+        .table-condensed > thead > tr > th {
+            border-bottom: 1px solid black !important;
+        }
+        .table-condensed > tbody > tr {
+            page-break-inside: avoid !important;
+        }
+        .zero_min_height {
+            min-height: 0px !important;
+        }
+
+        /* All PDF Report Base Styles */
+
+        .l10n_mn_base_report .table-l10n_mn-header {
+            width: 100%;
+            border: none;
+            border-collapse: collapse;
+        }
+        
+        .l10n_mn_base_report .table-l10n_mn-header tr td {
+            font-size: 9px;
+            padding: 0px;
+        }
+        
+        .l10n_mn_base_report .table-l10n_mn-footer {
+            width: 90%;
+            margin: auto;
+        }
+        
+        .l10n_mn_base_report .table-l10n_mn-footer tr td {
+            font-size: 9px;
+            padding: 2px;
+        }
+        
+        .l10n_mn_base_report h2 {
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        
+        .l10n_mn_base_report h3 {
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 2px;
+        }
+        
+        .l10n_mn_base_report p {
+            margin-top: 1px;
+            margin-bottom: 0;
+            font-size: 9px;
+        }
+        
+        .l10n_mn_base_report p.small {
+            font-style: italic;
+            text-align: justify;
+            font-size: 8px;
+        }
+        
+        .l10n_mn_base_report b {
+            font-weight: bold;
+        }
+        
+        .l10n_mn_base_report .table-l10n_mn-grid {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #000000;
+        }
+        
+        .l10n_mn_base_report .table-l10n_mn-grid th {
+            font-size: 9px;
+            background: #DDDDDD;
+            color: #000000;
+            font-weight: bold;
+            padding: 2px 1px;
+            text-align: center;
+            border: 1px solid #000000;
+        }
+        
+        .l10n_mn_base_report .table-l10n_mn-grid tbody tr td {
+            font-size: 10px;
+            padding: 2px 1px;
+            border: 1px solid #000000;
+        }
+        
+        .l10n_mn_base_report .table-l10n_mn-grid tfoot tr td {
+            font-size: 10px;
+            background: #DDDDDD;
+            color: #000000;
+            padding: 2px 1px;
+            border: 1px solid #000000;
+            text-align: center;
+        }
+        
+        .l10n_mn_base_report .border {
+            border:1px solid #000000;
+        }
+        
+        .l10n_mn_base_report h2.title {
+            font-size: 17px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .l10n_mn_base_report h2.title span {
+            font-size: 17px;
+            font-weight: bold;
+        }
+        
+        .l10n_mn_base_report strong {
+            font-size: 13px;
+        }
+        
+        .l10n_mn_base_report div.row {
+            padding-bottom: 6px;
+            pading-top: 4px;
+        }
+        
+        .l10n_mn_base_report .text-right {
+            text-align: right;
+            letter-spacing: 1px;
+        }
+        
+        .l10n_mn_base_report .table-l10n_mn-grid td.noborder {
+            border: none;
+        }
+        
+        
+        
+        
+        .abstract_report_builder .table-condensed {
+            border: 1px solid #000000;
+            border-collapse: collapse;
+        }
+        .abstract_report_builder .table-condensed th {
+            font-size: 11px;
+            background: #DDDDDD;
+            color: #000000;
+            font-weight: bold;
+            padding: 2px 1px;
+            border: 1px solid #000000;
+            text-align: center;
+        }
+        .abstract_report_builder .table-condensed td {
+            font-size: 11px;
+            padding: 3px 1px 1px 1px;
+            border: 1px solid #000000;
+        }
+        
+        .abstract_report_builder .table-condensed td div {
+            width: 100%;
+        }
+        
+        .abstract_report_builder .table-condensed td div.number {
+            text-align: right;
+        }
+        
+        .abstract_report_builder .table-condensed td div.color {
+            background: #DDDDDD;
+        }
+        
+        .abstract_report_builder .table-condensed td div.center {
+            text-align: center;
+        }
+    </template>  
+</data>
+</openerp>

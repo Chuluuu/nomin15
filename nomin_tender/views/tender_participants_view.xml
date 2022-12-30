@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+    	<record id="view_tender_participants_bid_filter" model="ir.ui.view">
+            <field name="name">tender.participants.bid.select</field>
+            <field name="model">tender.participants.bid</field>
+            <field name="arch" type="xml">
+                <search string="Search participants of tender">
+                    <field name="name"/>
+                    <field name="tender_id"/>
+                    <field name="partner_id"/>
+                    <field name="document_id"/>
+                    <group string="Group By..." expand="0" name="groupby">
+                        <filter string="Current tender" context="{'group_by':'tender_id'}" name="tender"/>
+                        <filter string="Current partner" context="{'group_by':'partner_id'}" name="partner"/>
+                        <filter string="Current document" context="{'group_by':'document_id'}" name="document"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+		<!-- <record id="view_tender_filter" model="ir.ui.view">
+            <field name="name">tender.participants.bid.select</field>
+            <field name="model">tender.participants.bid</field>
+            <field name="arch" type="xml">
+                <search string="Search Tender Participants category">
+                    <field name="name" />
+                    <group expand="0" string="Group By">
+                    	<filter string="Current tender" name="tender" domain="[]" context="{'group_by':'tender_id'}"/>
+                    	<filter string="Current partner" name="partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record> -->
+		
+		<record id="view_tender_participants_bid_tree" model="ir.ui.view">
+            <field name="name">Tender participants bid tree</field>
+            <field name="model">tender.participants.bid</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Participants bid tree">
+                    <field name="name"/>
+                    <field name="tender_id"/>
+                    <field name="partner_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+        <!-- Tender partner history -->
+        <record id="view_tender_history_tree" model="ir.ui.view">
+            <field name="name">tender.partner.history.tree</field>
+            <field name="model">tender.partner.history</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Tender history partner" editable="bottom">
+                	<field name="partner_id"/>
+                	<field name="tender_id"/>
+                	<field name="is_selected"/>
+                	<!-- <field name="name"/> -->
+                	<field name="note"/>
+                	<field name="date"/>
+                	<!-- <field name="state"/> -->
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_tender_participants_bid_form" model="ir.ui.view">
+            <field name="name">Tender participants bid form</field>
+            <field name="model">tender.participants.bid</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Partner bid form">
+                	<header>
+                		<button name="action_send" states="draft" string="Илгээх" class="btn-primary" type="object" groups="nomin_tender.group_tender_secretary"/>
+                		<field name="state" widget="statusbar" statusbar_visible="draft,sent,open_document,open_cost,close"/>
+                	</header>
+                	<sheet>
+                	<label for="name" class="oe_edit_only"/>
+                    <h1>
+                        <field name="name" class="oe_inline" style="width: 8em" readonly="1"/>
+                    </h1>
+                	<separator string="Participants Bid Document"/>
+	                	<group col="4">
+                			<field name="tender_id" required="1" domain="[('state','in',['published', 'bid_expire'])]" options="{'no_create': True}" attrs="{'readonly':[('state','!=','draft')]}"/>
+                			<field name="partner_id" required="1" options="{'no_create': True}" attrs="{'readonly':[('state','!=','draft')]}"/>
+                			<field name="document_id" options="{'no_create': True}" attrs="{'readonly':[('state','not in',['draft','sent'])]}"/>
+                			<field name="execute_time" attrs="{'invisible':[('state','not in',['open_cost','close'])],'readonly':[('state','in',['close'])]}"/>
+                			<field name="datetime" readonly="1"/>
+                			<field name="warranty_time" attrs="{'invisible':[('state','not in',['open_cost','close'])],'readonly':[('state','in',['close'])]}"/>
+						</group>
+						<notebook>
+							<page string="Bidding" attrs="{'invisible':[('state','not in',['open_cost','close'])],'readonly':[('state','in',['open_cost','close'])]}">
+							<separator string="Bidding"/>
+								<group>
+									<field name="t_partner_cost_id" colspan="2" attrs="{'readonly':[('state','not in',['open_cost'])]}"/>
+		                			<field name="t_partner_schedule_id" colspan="2" attrs="{'readonly':[('state','not in',['open_cost'])]}"/>
+								</group>
+							</page>
+							<page string="Technical" attrs="{'invisible':[('state','not in',['open_document','open_cost','close'])],'readonly':[('state','in',['open_document','open_cost','close'])]}">
+							<separator string="Technical"/>
+								<group>
+									<field name="t_partner_technical_id" colspan="2" attrs="{'readonly':[('state','not in',['open_document','open_cost'])]}"/>
+		                			<field name="t_partner_worklist_id" colspan="2" attrs="{'readonly':[('state','not in',['open_document','open_cost'])]}"/>
+	                			</group>
+							</page>
+							<page string="Tender require" attrs="{'invisible':[('state','not in',['open_document','open_cost','close'])],'readonly':[('state','in',['open_document','open_cost','close'])]}">
+							<separator string="Tender requirement"/>
+								<group>
+		                			<field name="t_partner_require_id" colspan="2" attrs="{'readonly':[('state','not in',['open_document','open_cost'])]}"/>
+									<field name="t_partner_proxy_id" colspan="2" attrs="{'readonly':[('state','not in',['open_document','open_cost'])]}"/>
+		                			<field name="t_partner_license_id" colspan="2" attrs="{'readonly':[('state','not in',['open_document','open_cost'])]}"/>
+		                			<field name="t_partner_alternative_id" colspan="2" attrs="{'readonly':[('state','not in',['open_document','open_cost'])]}"/>
+	                			</group>
+							</page>
+							<page string="Үнийн саналын задаргаа" attrs="{'invisible':[('state','not in',['open_cost','close'])],'readonly':[('state','not in',['open_cost'])]}">
+							<separator string="Work task line"/>
+								<field name="task_ids" nolable="1" context="{'tender_id':tender_id, 'partner_id':partner_id}" colspan="4" attrs="{'readonly':[('state','not in',['open_cost'])]}">
+	                				<tree string="Work task line" nolabel="1" editable="bottom">
+	                					<field name="name" required="1"/>
+			                			<field name="qty" required="1"/>
+			                			<field name="unit_price" required="1"/>
+			                			<field name="amount" readonly="1"/>
+			                			<field name="costs_of_materials"/>
+			                			<field name="other_costs"/>
+			                			<field name="line_total_amount"/>
+			                			<field name="tender_id" invisible="1"/>
+			                			<field name="partner_id" invisible="1"/>
+			                			<field name="task_id" invisible="1"/>
+	                				</tree>
+	                			</field>
+	                			<group class="oe_subtotal_footer oe_right">
+                                    <field name="amount_total" class="oe_subtotal_footer_separator"/>
+                                </group>
+							</page>
+
+                            <page string="Хяналтын төсөв" attrs="{'invisible':[('state','not in',['open_cost','close'])],'readonly':[('state','not in',['open_cost'])]}">
+                                <separator string="Хяналтын төсөв"/>
+                                <group>
+                                    <field string="Хяналтын төсөв" name="t_partner_control_budget_id"  attrs="{'readonly':[('state','not in',['open_cost'])]}"/>
+                                </group>
+                            </page>
+						</notebook>
+					</sheet>
+					<div class="oe_chatter">
+			            <field name="message_follower_ids" widget="mail_followers"/>
+			            <field name="message_ids" widget="mail_thread"/>
+	             	</div>
+                </form>
+            </field>
+        </record>
+                  
+       <!-- Tender history form -->
+       <!--  <record id="view_tender_history_form" model="ir.ui.view">
+            <field name="name">tender.partner.history.form</field>
+            <field name="model">tender.partner.history</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Tender history">
+                	<header>
+                        <field name="state" widget="statusbar"/>
+                	</header>
+                    <group col="4">
+                        <field name="name"/>
+                        <field name="partner_id"/>
+                        <field name="tender_id"/>
+                        <field name="is_selected"/>
+                        <field name="date"/>
+                    </group>
+                    <notebook>
+                        <page string="Note">
+                            <field name="note" readonly="1" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record> -->
+
+        
+		<record model="ir.actions.act_window" id="tender_partner_bid_action">
+            <field name="name">Partner bids</field>
+	        <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tender.participants.bid</field>
+	        <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+	        <field name="view_id" ref="view_tender_participants_bid_tree"/>
+	        <field name="context">{'search_default_tender':1}</field>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to define a new participants bid of tender documents.
+	          </p>
+	        </field>
+        </record>
+		
+        <record model="ir.actions.act_window" id="action_tender_partner_history">
+            <field name="name">Tender partner history</field>
+            <field name="res_model">tender.partner.history</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+		
+    	<!-- <menuitem id="tender_partner_bids_menu" name="Tender Participants Bid" sequence="5"
+							parent="tender_documents_menu" groups="group_tender_secretary,group_tender_manager"
+							action="tender_partner_bid_action"/> -->
+						    
+		<!-- <menuitem id="tender_participants_bid_menu" name="Participants Works"
+							parent="tender_documents_menu" groups="group_tender_secretary,group_tender_manager"
+							action="participants_work_task_action"/> -->
+		
+    </data>
+</openerp>

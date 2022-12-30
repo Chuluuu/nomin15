@@ -1,0 +1,769 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<menuitem id="menu_purchase_requisition" name="Purchase Requisition" parent="base.menu_purchase_root"
+			sequence="0" groups="purchase.group_purchase_user"/>
+			
+		  <record id="view_purchase_requisition_filter_nomin_filter" model="ir.ui.view">
+            <field name="name">purchase.requisition.filter</field>
+            <field name="model">purchase.requisition</field>
+         <!--    <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_filter"></field>  -->
+            <field name="arch" type="xml">
+                <search string="Search Purchase requisition">
+                    <field name="name" string="Шаардахын дугаар"/>
+                    <field name="user_id"/>
+                    <field name="department_id"/>
+                    <field name="sector_id"/>
+                    <field name="create_date"/>
+                    <field name="schedule_date"/>
+                    <field name="ordering_date"/>
+                    <field name="location"/>
+                    <field name="state"/>
+                    <field name="line_ids"/>
+                    <field name="confirm_user_ids"/>
+                    <field name="exclusive" />
+                	<filter context="{'group_by':'sector_id'}" domain="[]" icon="terp-personal" name="group_sec"
+							string="Sector"/>		
+                    <filter name="draft" string="New" domain="[('state','=','draft')]" help="New Call for Tenders"/>
+                    
+                    <filter string="Confirmed" domain="[('state','=','confirmed')]" help="Call for Tenders in negotiation"/>
+                    
+                    <separator/>
+                    
+                   
+                    
+                    <group expand="0" string="Group By">
+                        <filter string="Responsible" domain="[]" context="{'group_by':'user_id'}"/>
+                        <filter string="Source" domain="[]" context="{'group_by':'origin'}"/>
+                        <filter string="Урьтамж" domain="[]" context="{'group_by':'priority'}"/>
+                        <filter string="Хүлээн авах байршил" domain="[]" context="{'group_by':'location'}"/>
+                        <filter string="Хэлтэс" domain="[]" context="{'group_by':'department_id'}"/>
+						<filter context="{'group_by':'state'}" domain="[]" icon="terp-stock_effects-object-colorize"
+						name="group_status" string="Status"/>
+                        
+                        <filter string="Ordering Date" domain="[]" context="{'group_by':'ordering_date'}"/>
+                        <!-- <filter string="End Month" domain="[]" context="{'group_by':'date_end'}"/> -->
+                    </group>
+                </search>
+            </field>
+        </record>	
+			
+		<delete id="purchase_requisition.menu_purchase_requisition_pro_mgt" model="ir.ui.menu"/>
+	<!-- 	<record id="view_purchase_requisition_filter_custom1" model="ir.ui.view">
+			<field name="name">purchase.requisition.filter.custom1</field>
+			<field name="model">purchase.requisition</field>
+			<field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_filter"/>
+			<field name="arch" type="xml">
+				<xpath expr="//search/group/filter[@string='Status']">
+				</xpath>
+			</field>
+		</record> -->
+		
+		<record id="view_purchase_requsition_tree" model="ir.ui.view">
+			<field name="name">purchase.requsition</field>
+			<field name="model">purchase.requisition</field>
+			<field name="arch" type="xml">
+				<tree string="Purchase requisition tree" colors="grey:change_color=='grey';red:change_color=='red';">
+					<field name="name" string="Шаардахын дугаар" />
+					<field name="department_id"/>
+					<field name="sector_id"/>
+					<field name="user_id"/>
+					<field name="priority"/>
+					<field name="create_date"/>
+					<field name="ordering_date"/>
+					<field name="location"/>
+					<field name="exceed_days"/>
+					<field name="amount" sum="Sum amount"/>
+					<field name="allowed_amount"/>
+					<field name="confirmed_date"/>
+					<field name="state"/>					
+					<field name="change_color" invisible="1"/>
+				</tree>
+			</field>
+		</record>
+		<record id="view_purchase_requisition_pivot" model="ir.ui.view">
+            <field name="name">purchase.requisition.pivot</field>
+            <field name="model">purchase.requisition</field>
+            <field name="arch" type="xml">
+                <pivot string="Purchase Requisition">
+                    <field name="state" type="col"/>
+                    <field name="department_id" type="row"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_purchase_requisition_graph" model="ir.ui.view">
+            <field name="name">purchase.requisition.graph</field>
+            <field name="model">purchase.requisition</field>
+            <field name="arch" type="xml">
+                <graph string="Purchase Requisition">
+                    <field name="state"/>
+                    <field name="sector_id"/>
+                </graph>
+            </field>
+        </record>
+		<record id="purchase_requisition.action_purchase_requisition" model="ir.actions.act_window">
+			<field name="name">Purchase Requisitions</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">purchase.requisition</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,pivot,graph</field>
+			<field name="view_id" ref="view_purchase_requsition_tree"/>
+			<field name="context">{'search_default_group_status': 1}</field>
+			
+			<field name="search_view_id" ref="view_purchase_requisition_filter_nomin_filter"/>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">Click to start a new purchase requisition process.</p>
+				<p>
+					In a purchase requisition (or purchase tender), you can record the A purchase requisition
+					is the step before a request for quotation. products you need to buy and trigger
+					the creation of RfQs to suppliers. After the negotiation, once you have reviewed
+					all the supplier's offers, you can validate some and cancel others.
+				</p>
+			</field>
+		</record>
+		
+		<menuitem action="purchase_requisition.action_purchase_requisition" id="menu_purchase_requisition_pro_mgt" parent="menu_purchase_requisition" sequence="1" groups="purchase.group_purchase_user"/>
+
+		
+			<record id="view_purchase_requisition_inherit_form_cust" model="ir.ui.view">
+			<field name="name">purchase.requisition.form</field>
+			<field name="model">purchase.requisition</field>
+			<field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+			<field name="arch" type="xml">
+			<xpath expr="//header/button[@name='cancel_requisition']" position="replace"/>
+			<xpath expr="//header/button[@name='sent_suppliers']" position="replace">
+
+
+					
+
+	               	<button name="action_send" class="oe_highlight" type="object" string="Send" attrs="{'invisible':[('is_in_sent','=',False)]}"/>
+	               	<!-- <button name="action_get_val" class="oe_highlight" type="object" /> -->
+	               	 
+
+	               <!-- 	 <button name="action_update" class="oe_highlight" type="object" string="UPDATE" groups="nomin_purchase_requisition.group_procurement_admin"/> -->
+
+					<button name="action_approve" class="oe_highlight" string="Approve" type="object" attrs="{'invisible':[('is_in_approve','=',False)]}"/>
+					<button name="action_reject" class="oe_highlight" string="Reject" type="object" attrs="{'invisible':[('is_in_approve','=',False)]}"/>
+					<button name="action_verify" class="oe_highlight" string="Verified" type="object" attrs="{'invisible':[('is_in_verify','=',False)]}"/>
+					<button name="action_reject" class="oe_highlight" string="Reject" type="object" attrs="{'invisible':[('is_in_verify','=',False)]}"/>
+			
+
+			 		
+
+			 		<button name="action_send" groups="nomin_purchase_requisition.group_supply_import_manager" class="oe_highlight" type="object" string="Send" attrs="{'invisible':[('state','!=','sent_to_supply_manager')]}" />
+
+			 		
+			 		<button name="action_reject" groups="nomin_purchase_requisition.group_supply_import_manager" class="oe_highlight" type="object" string="Буцаах" attrs="{'invisible':[('state','!=','sent_to_supply_manager')]}"/> 
+			 		
+			 		<button name="action_confirm" class="oe_highlight" string="Confirm1" attrs="{'invisible':[('is_in_confirm','=',False)]}" type="object" />
+					<button name="action_reject" class="oe_highlight" string="Reject"  type="object"  attrs="{'invisible':[('is_in_confirm','=',False)]}"/> 
+					<!-- <button name="action_purchase_flow" class="oe_highlight" string="Худалдан авалтаар явуулах"  type="object" groups="nomin_base.group_holding_ceo" attrs="{'invisible':[('is_in_confirm','=',False)]}"/> -->
+
+					<button name="zzzzzzzzz" invisible="1" class="oe_highlight" string="Түр товч (битгий дар)" type="object" groups="project.group_project_admin"/>
+
+<!--                		<button name="action_reject" class="oe_highlight" type="object" string="Reject" attrs="{'invisible':['|',('is_in_sent','=',False),('state','=','draft')]}"/> -->
+
+<!--               		<button name="action_cancel" invisible="1" class="oe_highlight" type="object" string="Cancel" attrs="{'invisible':[('state','in',['draft','canceled'])]}"/> -->
+              		<!-- <button name="action_sent_to_supply" groups="nomin_purchase_requisition.group_purchase_decide_sent_to_supply" 
+              		class="oe_highlight" type="object" string="Хангамж руу илгээх" attrs="{'invisible':['|',('payment_request_id','!=',False),('state','!=','confirmed')]}"/>  -->
+              		<!-- <button name="action_direct_purchase" groups="nomin_purchase_requisition.group_purchase_decide_sent_to_supply"  
+              		class="oe_highlight" type="object" string="Худалдан авах захиалга" attrs="{'invisible':['|',('payment_request_id','!=',False),('state','!=','confirmed')]}"/>  -->
+              		<button name="action_payment_request" groups="nomin_purchase_requisition.group_purchase_decide_sent_to_supply"  
+              			class="oe_highlight" type="object" string="Payment request" attrs="{'invisible':['|',('payment_request_id','!=',False),('state','!=','confirmed')]}"/> 
+
+              		<button name="action_to_reject" groups="nomin_purchase_requisition.group_purchase_decide_sent_to_supply"  
+              			class="oe_highlight" type="object"  string="Буцаах" attrs="{'invisible':['|',('payment_request_id','!=',False),('state','!=','confirmed')]}"/> 
+						<button name="set_to_done"  class="oe_highlight" type="object" string="Дууссан төлөвт оруулах" invisible="1"
+					attrs="{'invisible':[('state','not in',['confirmed','assigned','purchased'])]}"/>
+              		<!-- <button name="action_approve1" invisible="1" class="oe_highlight" string="Approve1"  type="object"/> -->
+					<!-- <button name="action_fulfil_request" class="oe_highlight" string="Батлах"  type="object"  attrs="{'invisible':[('is_in_sent_supply','=',False)]}" groups="nomin_purchase_requisition.group_haaa_head"/> -->
+					<!-- <button name="action_retrive_request" class="oe_highlight" string="Retrive request"  type="object"  attrs="{'invisible':[('is_in_sent_supply','=',False)]}"  groups="nomin_purchase_requisition.group_haaa_head"/> -->
+					<!-- <button name="action_tender_request" class="oe_highlight" string="Тендер үүсгэх хүсэлт"  type="object"  attrs="{'invisible':[('is_in_sent_supply','=',False)]}" /> -->
+					<!-- <button name="action_create_tender" class="oe_highlight" string="Тендер үүсгэх"  type="object"  attrs="{'invisible':[('state','not in',['tender_request'])]}" groups="nomin_base.group_holding_ceo"/> -->
+					<!-- <button name="action_return_product" class="oe_highlight" string="Хангамж руу буцаах"  type="object"  attrs="{'invisible':[('state','not in',['tender_request'])]}" groups="nomin_base.group_holding_ceo"/> -->
+					<!-- <button name="action_fulfill" class="oe_highlight" string="Fulfill"  type="object" attrs="{'invisible':[('is_in_fullfil','=',False)]}"  /> -->
+					<!-- <button name="action_retrived" class="oe_highlight" string="Буцаах"  type="object"  attrs="{'invisible':[('is_in_fullfil','=',False)]}"/> -->
+
+	                <button name="action_to_assign" class="oe_highlight" string="Assign"  type="object"  attrs="{'invisible':[('state','!=','fulfill')]}" groups="nomin_purchase_requisition.group_supply_import_manager"/>
+						 
+				</xpath>
+<!--				<xpath expr="//header/button[@name='tender_reset']" position="replace"-->
+<!--				<xpath expr="//header/button[@name='open_product_line']" position="replace"-->
+<!--				<xpath expr="//header/button[@name='cancel_requisition']" position="replace"/>-->
+<!--				<xpath expr="//sheet/div/button[@name='open_product_line']" position="replace"/>-->
+
+<!--				<xpath expr="//sheet/div/h1/label[@string=',']" position="replace"/>-->
+<!--				<xpath expr="//sheet/div/h1/field[@name='origin']" position="replace"/>-->
+				<xpath expr="//sheet/div/h1" position="replace">
+					<h1>
+						<field class="oe_inline" name="name" string="Purchase Requisition Reference" readonly="1"/>
+					</h1>
+				</xpath>
+				<xpath expr="//header/field[@name='state']" position="replace">
+				
+					<field name="state" statusbar_colors="{&quot;draft&quot;:&quot;blue&quot;}" statusbar_visible="draft,sent,approved,confirmed"
+						widget="statusbar"/>
+				</xpath>
+				
+<!-- 				<xpath expr="//sheet/div" position="after">
+					<div class="pull-right">
+                          <label for="request_id"  class="oe_inline" />
+                          <field name="request_id" required="1" options="{'no_create': True}" attrs="{'readonly':[('state','!=','draft')]}"/> 
+                    </div>
+				</xpath> -->
+				
+				<xpath expr="//sheet/group/group/field[@name='user_id']" position="replace">
+					<field name="user_id" options="{'no_create': True}" readonly="1"/>
+					
+					<field name="is_in_sent" invisible="1"/>
+					<field name="is_sent_user" invisible="1"/>
+       				<field name="is_in_approve" invisible="1"/>
+       				<field name="is_in_confirm" invisible="1"/>
+					<field name="is_in_close" invisible="1"/>
+       				<field name="is_in_group" invisible="1" />	
+       				<!-- <field name="is_in_sent_supply" invisible="1" />	 -->
+       				<!-- <field name="is_in_fullfil" invisible="1" />	 -->
+       				<field name="is_in_verify" invisible="1"/>
+       				<field name="auto_change_state" invisible="1"/>
+       				<field name="is_purchase" invisible="1"/>
+				</xpath>
+				
+				<xpath expr="//sheet/group/group/field[@name='exclusive']" position="replace">
+					<field name="exclusive" invisible="1"/>			
+				</xpath>
+				<xpath expr="//sheet/group/group/field[@name='multiple_rfq_per_supplier']" position="replace">
+					<field name="multiple_rfq_per_supplier" invisible="1"/>			
+				</xpath>
+				<xpath expr="//sheet/group/group/field[@name='account_analytic_id']" position="replace">
+					<field name="account_analytic_id" invisible="1"/>			
+				</xpath>
+
+
+				<xpath expr="//sheet/group/group/field[@name='date_end']" position="replace">
+					<field name="date_end" invisible="1"/>			
+					<field name="exceed_days" readonly="1" invisible="1"/>
+					<field name="exceed_days_1" readonly="1"/>	
+				</xpath>
+				
+				<xpath expr="//sheet/group/group/field[@name='ordering_date']" position="replace">	
+					<field name="supply_date" attrs="{'readonly':[('state','in',['draft','sent','approved','verified','next_confirm_user','confirmed','tender_created','retrive_request','rfq_created','assigned','retrived','rejected','canceled','sent_to_supply_manager','done'])]}"/>
+					<field name="ordering_date" readonly="1" invisible="1"/>
+					<field name="ordering_date_new" readonly="1"/>	
+				</xpath>
+
+				<xpath expr="//sheet/group/group/field[@name='company_id']" position="replace">
+				</xpath>	
+				<xpath expr="//sheet/group/group/field[@name='user_id']" position="after">
+					<field name="department_id" readonly="1"  attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}"  required="1"/>
+					<field name="sector_id"  readonly="1" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}" required="1"/>
+					<field name="company_id"  readonly="1" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}" required="1"/>
+				
+                        				
+				</xpath>
+				<xpath expr="//sheet/group/group/field[@name='multiple_rfq_per_supplier']" position="after">
+					<div colspan="2">
+						<br />
+						<label for="goods_description" style="font-weight:bold;"/>
+						<div>
+						</div>
+						<field name="goods_description" nolabel="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+						<div>
+						</div>
+						<label for="comment"  string='Бараа материалын зориулалт' style="font-weight:bold;"/>
+						<div>
+						</div>
+						<field name="comment" nolabel="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+						<div>
+						</div>
+						<label for="source_of_goods"  style="font-weight:bold;"/>
+						<div>
+						</div>
+						<field name="source_of_goods" nolabel="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+					</div>
+				</xpath>
+				<xpath expr="//sheet/group/group/field[@name='origin']" position="before">
+					<field name="create_date" readonly="1"/>
+					<field name="confirmed_date" readonly="1"/>
+					<field name="payment_request_id" readonly="1" attrs="{'invisible':[('payment_request_id','=',False)]}"/>
+					<field name="priority" options="{'no_create': True}" readonly="1" invisible="1"/>
+					<field name="priority_id" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}" required="1"/>
+					
+<!-- 					<field name="priority" options="{'no_create': True}" readonly="1" attrs="{'invisible':[('priority_id','=',True)]}"/>
+					<field name="priority_id" attrs="{'readonly':[('state','!=','draft')],'invisible':[('priority','=',True)]}" options="{'no_create': True}" required="1"/>
+ -->					<field name="tender_id" readonly="1" attrs="{'invisible':[('tender_id','=',False)]}"/>
+					<field name="helpdesk_id" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}" />
+					<field name="project_id" domain="[('is_parent_project', '=',False)]" groups="project.group_project_user" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}" />
+					<field name="task_id" groups="project.group_project_user" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}" />
+					<field name="control_budget_id" groups="project.group_project_user" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}" />
+						<field name="material_amount" readonly="1" attrs="{'invisible':[('control_budget_id','=',False)]}"/>
+						<field name="equipment_amount" readonly="1" attrs="{'invisible':[('control_budget_id','=',False)]}"/>
+						<field name="carriage_amount" readonly="1" attrs="{'invisible':[('control_budget_id','=',False)]}"/>
+						<field name="postage_amount" readonly="1" attrs="{'invisible':[('control_budget_id','=',False)]}"/>
+						<field name="other_amount" readonly="1" attrs="{'invisible':[('control_budget_id','=',False)]}"/>
+						
+					<field name="is_in_control_budget" invisible="1"/>
+					<field name="control_selection"  invisible="1" />
+					<field name="contract_id" groups="nomin_contract.group_contract_user" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}"/>
+				</xpath>
+				<xpath expr="//sheet/group/group/field[@name='origin']" position="after">
+					<field name="location" required="1" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}"/>
+					<field name="product_list_type" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}"/>
+					<field name="product_list" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}"/>
+					<field name="is_new_requisition"  readonly="1"/> 
+				</xpath>
+				<xpath expr="//sheet/group/group/field[@name='picking_type_id']" position="replace">
+						<field name="picking_type_id" widget="selection" invisible="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+						<field name="warehouse_id" widget="selection" invisible="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+				</xpath>
+
+				<xpath expr="//sheet/notebook/page/field/tree/field[@name='product_id']" position="replace">
+					<field name="product_id" on_change="onchange_product_id(product_id)"/>
+				</xpath>
+				<xpath expr="//sheet/notebook/page/field/tree/field[@name='product_id']" position="after">
+					<field name="product_uom_id"/>
+				</xpath>
+
+				<field name="line_ids" position="replace" >
+					<field name="line_ids" context="{'default_schedule_date': schedule_date,'control_budget_id':control_budget_id,'product_list_type':product_list_type,'is_new_requisition':is_new_requisition}" 
+						attrs="{'invisible':[('state','=','assigned')]}">
+						<tree string="Products">
+							<field name="category_id" options="{'no_create': True}"  attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager'])]}"/>
+							<!-- <field name="assign_cat" options="{'no_create': True}" required="1" attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager'])]}"/> -->
+							<field name="product_type" invisible="1" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" required="1"/>
+							<field name="product_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" />
+							<field name="product_desc" options="{'no_create': True}" required="1"/>
+							<field name="product_price"/>
+							<field name="product_qty"/>
+							<field name="amount"/>
+							<field name="partner_id"/>
+							<field name="deliver_product_id" options="{'no_create': True}"/>
+							<field name="supplied_quantity"/>
+							<field name="supplied_amount"/>
+							<field name="received_qty"/>
+							<field name="product_uom_id" options="{'no_create': True}" groups="product.group_uom"/>
+							<field name="schedule_date" context="{'default_schedule_date': schedule_date}"/>
+							<field name="allowed_date"/>
+								<!-- <field name="account_analytic_id" groups="purchase.group_analytic_accounting"/> -->
+							<field name="buyer" readonly="1" />
+							<field name="accountant_id" readonly="1" invisible="1"/>
+							<field name="accountant_ids" readonly="1" invisible="1"/>
+
+							<field name="state" readonly="1" />
+							<field name="comparison_user_id" readonly="1"/>
+							<field name="comparison_id" readonly="1"/>
+							<field name="comparison_state" readonly="1"/>
+							<field name="c_budget_type" invisible="1" readonly="1"/>
+							<field name="is_buyer" invisible="1"/>
+							<field name="is_user" invisible="1"/>
+							<field name="is_skip_user" invisible="1"/>
+							<field name="is_accountant" invisible="1"/>
+							<field name="is_comparison_user" invisible="1"/>
+							<field name="is_receive_user" invisible="1"/>
+							<button name="action_sent_nybo" class="oe_highlight" attrs="{'invisible':['|',('is_user','!=',True),('state','not in',['assigned','purchased','rfq_created','ready'])]}" string="Нягтлан бодогчид илгээх" type="object" />
+							<button name="action_done" class="oe_highlight" attrs="{'invisible':['|',('is_accountant','!=',True),('state','not in',['sent_nybo'])]}" string="Дуусгах" type="object" />
+							<button name="action_user_return" class="oe_highlight" attrs="{'invisible':['|',('is_receive_user','!=',True),('state','not in',['done'])]}" string="Хувиарласан төлөвт буцаах" type="object" />
+							<button name="action_skip_comparison" class="oe_highlight" attrs="{'invisible':['|',('state','not in',['compare']),('is_comparison_user','=',False)]}" string="Харьцуулалт алгасах" type="object" />
+							<button name="action_skip_comparison" class="oe_highlight" attrs="{'invisible':[('is_buyer','=',False)]}" string="Харьцуулалт алгасах" type="object" />
+							<button name="action_skip_comparison" class="oe_highlight" attrs="{'invisible':[('is_skip_user','!=',True)]}" string="Харьцуулалт алгасах" type="object" />
+							
+						</tree>
+						<!-- <form string="Products">
+							<header>
+								<field name="state" statusbar_colors="{&quot;draft&quot;:&quot;blue&quot;}" statusbar_visible="draft" widget="statusbar"/>
+							</header>
+							<group>
+								<group>  
+									<field name="is_user" invisible="1"/>
+									<field name="is_buyer" invisible="1"/>
+									<field name="is_accountant" invisible="1"/>
+									<field name="is_skip_user" invisible="1"/>
+									<field name="is_comparison_user" invisible="1"/>
+									<field name="is_receive_user" invisible="1"/>
+									<field name="received_qty" invisible="1"/>
+									<field name="is_in_supply_chiefs" invisible="1"/>
+									<field name="is_control" invisible="1"/>
+									<field name="is_in_supply_manager" invisible="1"/>
+									<field name="product_type"  invisible="1" attrs="{'readonly':[('state','not in',['draft'])],'required':[('product_id','=',False)]}"/>
+									<field name="c_budget_type" attrs="{'readonly':[('state','not in',['draft'])],'invisible':[('is_control','=',False)],'required':[(('is_control','!=',False))]}"/>
+									<field name="product_id" attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager'])]}" options="{'no_create': True}" />
+									<field name="category_id"  attrs="{'readonly':[('state','not in',['draft'])]}"/>
+									<field name="assign_cat" options="{'no_create': True}" required="1" attrs="{'readonly':[('state','not in',['draft','assigned','sent_to_supply_manager'])]}"/>
+									<field name="product_mark"/>
+									<field name="product_price" readonly="1"/>
+									<field name="product_qty" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
+									<field name="allowed_qty" attrs="{'readonly':[('is_in_supply_chiefs','=',False)]}"/>
+									<field name="allowed_amount" readonly="1"/>
+									<field name="amount" readonly="1"/>
+									<field name="purchase_user_ids" invisible="1" widget="many2many_tags" />
+									<field name="product_uom_id" options="{'no_create': True}" attrs="{'readonly':[('state','not in',['draft'])]}" />
+									<field name="supplied_quantity" invisible="1"/>
+									<field name="supplied_amount" invisible="1"/>
+									<field name="comparison_user_id" readonly="1"/>
+									<field name="comparison_id" readonly="1"/>
+									<field name="comparison_state" readonly="1"/>
+									<field name="sap_account_assignment_category" invisible="1" required="0"/>
+									<field name="is_skip_user" invisible="1"/>
+									<field name="comparison_date_end" readonly="1"/>
+								</group>
+								<group>  
+									<field name="schedule_date" context="{'default_schedule_date': schedule_date}" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" />
+									<field name="allowed_date" attrs="{'readonly':[('is_in_supply_chiefs','=',False)]}"/>     
+                                  	<field name="allowed_date" attrs="{'readonly':[('is_in_supply_chiefs','=',False)]}"/>     
+									<field name="allowed_date" attrs="{'readonly':[('is_in_supply_chiefs','=',False)]}"/>     
+									<field name="country" attrs="{'readonly':[('state','not in',['draft'])],'invisible':[('product_type','in',['electric_material','plumbing_material','cooling_material'])]}"/>
+									<field name="brand" options="{'no_create': True}" />
+                                    <field name="brand" options="{'no_create': True}" />
+									<field name="brand" options="{'no_create': True}" 
+										attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])],
+										'invisible':[('product_type','not in',
+										['computer_equip','electronic_equip','paper_book','spare','vehicle','cleaing_material','construct_material','electric_material','transport_equip','plumbing_material','cooling_material'])]
+									,'required':[('product_id','=',False),('product_type','in',['computer_equip','spare','transport_equip','vehicle','electronic_equip','paper_book','cleaing_material','construct_material','electric_material','plumbing_material','cooling_material'])]}"/>
+									<field name="purpose" options="{'no_create': True}"
+										attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])],
+										'invisible':[('product_type','not in',['other_asset','spare','paper_book','transport_equip','plumbing_material','cleaing_material','other_product','construct_material','print_order'])]
+										,'required':[('product_id','=',False),('product_type','in',['other_asset','spare','paper_book','transport_equip','plumbing_material','cleaing_material','other_product','construct_material','print_order'])]}"/>
+									<field name="material" options="{'no_create': True}" attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])],'invisible':[('product_type','not in',['furniture','other_asset','other_product','construct_material','work_clothes','print_order',])],
+									'required':[('product_id','=',False),('product_type','in',['furniture','other_asset',
+									'work_clothes',
+									'construct_material',
+									'other_product',
+									'print_order',])]}"/>
+
+									<field name="color" options="{'no_create': True}" attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])],'invisible':[('product_type','not in',[
+										'furniture',
+										'paper_book',
+										'work_clothes'])],
+									'required':[('product_id','=',False),('product_type','in',[
+									'furniture',
+									'paper_book',
+									'work_clothes'])]}"/>
+									<field name="the_size" options="{'no_create': True}" attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])],
+									'invisible':[('product_type','in',[
+									'computer_equip',
+									'vehicle',
+									'cleaing_material',
+									'paper_book',
+									'other_product',
+									'electric_material',
+									])],
+									'required':[('product_id','=',False),('product_type','not in',[
+									'paper_book',
+									'cleaing_material',
+									
+									'vehicle',
+									'other_product',
+									'computer_equip',
+									'electric_material',
+									])]}"/>
+
+									<field name="attachment_id"  widget="many2many_binary"
+									attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])],
+										'invisible':[('product_type','not in',['work_clothes'])],
+										}"/> 
+								
+									<field name="rating" 
+										attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])],'required':[('product_id','=',False)]}" />
+									<field name="account_analytic_id" invisible="1" groups="purchase.group_analytic_accounting"/>
+									<field name="company_id" options="{'no_create': True}" groups="base.group_multi_company" widget="selection"/>
+									<field name="buyer" attrs="{'readonly':['|',('is_in_supply_manager','=',False),('state','not in',['assigned'])]}" options="{'no_create': True}" />
+									<field name="accountant_ids" readonly="1" widget="many2many_tags"/>
+									<field name="date_start" readonly="1" />
+									<field name="date_end" readonly="1" />
+									<field name="comparison_date" readonly="1"/>
+									<field name="reg_file" />
+
+									<field name="partner_id"/>
+									<field name="deliver_product_id"/>
+								</group>
+
+							</group>
+							<group  colspan="4" attrs="{'invisible':[('state','not in',['assigned','sent_to_supply_manager','sent_nyabo','ready','done'])]}"> 
+								<group  colspan="4" attrs="{'invisible':[('state','not in',['assigned','sent_to_supply_manager','sent_nyabo','ready','done'])]}"> 
+									<group  colspan="4" attrs="{'invisible':[('state','not in',['assigned','sent_to_supply_manager','sent_nyabo','ready','done'])]}"> 
+										<field name="supplied_quantities" nolabel="1" context="{'id2':id}">
+											<tree string="Supplied Quantities" editable="bottom">
+												<field name="create_date" readonly="1"/>
+												<field name="user_id" readonly="1"/>
+												<field name="partner_id"/>
+												<field name="supplied_product_price" required="1"/>
+												<field name="supplied_product_quantity" required="1" sum="Total supplied_product_quantity"/> 
+														<field name="supplied_product_quantity" required="1" sum="Total supplied_product_quantity"/> 
+												<field name="supplied_product_quantity" required="1" sum="Total supplied_product_quantity"/> 
+												<field name="supplied_amount" readonly="1" sum="Total supplied_amount"/>
+											</tree>
+										</field>
+									</group> 	
+								</group> 	
+							</group> 	
+							<notebook>
+								<page string="Тодорхойлолт">
+									<label for="product_desc" string="Тодорхойлолт (Барааны ерөнхий нэршил болон зориулалт шаардлагыг бичих)" style="display:block"/>
+									<field name="product_desc" attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager'])]}" options="{'no_create': True}" required="1"/>
+								</page>
+								<page string="Түүх">
+									<field name="state_history_ids" nolabel="1">
+										<tree string="State History" create="false"  edit="false" delete="false">
+											<field name="user_id"/>
+											<field name="order_id"/>
+											<field name="date"/>
+											<field name="state"/>
+										</tree>
+									</field>
+								</page>
+							</notebook>
+						</form> -->
+					</field>
+					<field name="line_ids_1" context="{'default_schedule_date': schedule_date,'control_budget_id':control_budget_id}" attrs="{'invisible':[('state','!=','assigned')]}">
+						<tree string="Products" editable="bottom">
+							<!-- <field name="assign_cat" options="{'no_create': True}"  attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager'])]}"/> -->
+							<field name="category_id" options="{'no_create': True}"  attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager'])]}"/>
+							<field name="product_type" invisible="1" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" />
+							<field name="product_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" />
+							<field name="product_desc" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" />
+							<field name="product_price" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+							<field name="product_qty" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+							<field name="amount" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+							<field name="partner_id" attrs="{'readonly':[('state','!=','ready')]}"/>
+							<field name="deliver_product_id" attrs="{'readonly':[('state','!=','ready')]}"/>
+							<field name="supplied_price" readonly="1"/>
+							<field name="supplied_quantity" attrs="{'readonly':[('state','!=','ready')]}"/>
+							<field name="supplied_amount" readonly="1"/>
+							<field name="supplied_partner_count"/>
+							<field name="received_qty" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+							<field name="product_uom_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" groups="product.group_uom"/>
+							<field name="schedule_date" attrs="{'readonly':[('state','not in',['draft'])]}" context="{'default_schedule_date': schedule_date}"/>
+							<field name="allowed_date" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+								<!-- <field name="account_analytic_id" groups="purchase.group_analytic_accounting"/> -->
+							<field name="buyer" readonly="1" />
+							<field name="accountant_id" readonly="1" invisible="1"/>
+							<field name="accountant_ids" readonly="1" invisible="1"/>
+	
+							<field name="state" readonly="1" />
+							<field name="comparison_user_id" readonly="1"/>
+							<field name="comparison_id" readonly="1"/>
+							<field name="comparison_state" readonly="1"/>
+							<field name="c_budget_type" invisible="1" readonly="1"/>
+							<field name="is_buyer" invisible="1"/>
+							<field name="is_user" invisible="1"/>
+							<field name="is_skip_user" invisible="1"/>
+							<field name="is_accountant" invisible="1"/>
+							<field name="is_comparison_user" invisible="1"/>
+							<field name="is_receive_user" invisible="1"/>
+							<button name="action_sent_nybo" class="oe_highlight" attrs="{'invisible':['|',('is_user','!=',True),('state','not in',['assigned','purchased','rfq_created','ready'])]}" string="Нягтлан бодогчид илгээх" type="object" />
+							<button name="action_done" class="oe_highlight" attrs="{'invisible':['|',('is_accountant','!=',True),('state','not in',['sent_nybo'])]}" string="Дуусгах" type="object" />
+							<button name="action_user_return" class="oe_highlight" attrs="{'invisible':['|',('is_receive_user','!=',True),('state','not in',['done'])]}" string="Хувиарласан төлөвт буцаах" type="object" />
+							<button name="action_skip_comparison" class="oe_highlight" attrs="{'invisible':['|',('state','not in',['compare']),('is_comparison_user','=',False)]}" string="Харьцуулалт алгасах" type="object" />
+							<button name="action_skip_comparison" class="oe_highlight" attrs="{'invisible':[('is_buyer','=',False)]}" string="Харьцуулалт алгасах" type="object" />
+							<button name="action_skip_comparison" class="oe_highlight" attrs="{'invisible':[('is_skip_user','!=',True)]}" string="Харьцуулалт алгасах" type="object" />
+							<button name="action_purchase_line_open" string="Харилцагч нэмэх" attrs="{'invisible':[('state','!=','ready')]}" type="object" class="oe_highlight"/>
+						</tree>
+						<!-- <form string="Products">
+							<header>
+								<field name="state" statusbar_colors="{&quot;draft&quot;:&quot;blue&quot;}" statusbar_visible="draft" widget="statusbar"/>
+							</header>
+							<group>
+								<group>  
+									<field name="is_user" invisible="1"/>
+									<field name="is_buyer" invisible="1"/>
+									<field name="is_accountant" invisible="1"/>
+									<field name="is_skip_user" invisible="1"/>
+									<field name="is_comparison_user" invisible="1"/>
+									<field name="is_receive_user" invisible="1"/>
+									<field name="received_qty" invisible="1"/>
+									<field name="is_in_supply_chiefs" invisible="1"/>
+									<field name="is_control" invisible="1"/>
+									<field name="is_in_supply_manager" invisible="1"/>
+									<field name="product_type"  invisible="1" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+									<field name="c_budget_type" attrs="{'readonly':[('state','not in',['draft'])],'invisible':[('is_control','=',False)]}"/>
+									<field name="product_id" attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager'])]}" options="{'no_create': True}" />
+									<field name="category_id" attrs="{'invisible':[('is_new_requisition','=',False)]}"/>
+									<field name="assign_cat" options="{'no_create': True}" 
+										attrs="{'readonly':[('state','not in',['draft','assigned','sent_to_supply_manager'])],'invisible':[('is_new_requisition','=',True)]}"/>
+									<field name="product_mark"/>
+									<field name="product_price" readonly="1"/>
+									<field name="product_qty" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/>
+									<field name="allowed_qty" attrs="{'readonly':[('is_in_supply_chiefs','=',False)]}"/>
+									<field name="allowed_amount" readonly="1"/>
+									<field name="amount" readonly="1"/>
+									<field name="purchase_user_ids" invisible="1" widget="many2many_tags" />
+									<field name="product_uom_id" options="{'no_create': True}" attrs="{'readonly':[('state','not in',['draft'])]}" />
+									<field name="supplied_quantity" invisible="1"/>
+									<field name="supplied_amount" invisible="1"/>
+									<field name="comparison_user_id" readonly="1"/>
+									<field name="comparison_id" readonly="1"/>
+									<field name="comparison_state" readonly="1"/>
+									<field name="is_skip_user" invisible="1"/>
+									<field name="comparison_date_end" readonly="1"/>
+								</group>
+								<group>  
+									<field name="schedule_date" context="{'default_schedule_date': schedule_date}" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" />
+									<field name="allowed_date" attrs="{'readonly':[('is_in_supply_chiefs','=',False)]}"/>     
+									<field name="allowed_date" attrs="{'readonly':[('is_in_supply_chiefs','=',False)]}"/>     
+									<field name="allowed_date" attrs="{'readonly':[('is_in_supply_chiefs','=',False)]}"/>     
+									<field name="country" attrs="{'readonly':[('state','not in',['draft'])],'invisible':[('product_type','in',['electric_material','plumbing_material','cooling_material'])]}"/>
+									<field name="brand" options="{'no_create': True}" />
+									<field name="brand" options="{'no_create': True}" />
+									<field name="brand" options="{'no_create': True}" 
+										attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])],
+										'invisible':[('product_type','not in',
+										['computer_equip','electronic_equip','paper_book','spare','vehicle','cleaing_material','construct_material','electric_material','transport_equip','plumbing_material','cooling_material'])]}"/>
+									<field name="purpose" options="{'no_create': True}"
+										attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])],
+										'invisible':[('product_type','not in',['other_asset','spare','paper_book','transport_equip','plumbing_material','cleaing_material','other_product','construct_material','print_order'])]}"/>
+									<field name="material" options="{'no_create': True}" attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])],'invisible':[('product_type','not in',['furniture','other_asset','other_product','construct_material','work_clothes','print_order',])]}"/>
+									<field name="color" options="{'no_create': True}" attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])],'invisible':[('product_type','not in',[
+										'furniture',
+										'paper_book',
+										'work_clothes'])]}"/>
+									<field name="the_size" options="{'no_create': True}" attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])],
+									'invisible':[('product_type','in',[
+									'computer_equip',
+									'vehicle',
+									'cleaing_material',
+									'paper_book',
+									'other_product',
+									'electric_material',
+									])]}"/>
+	
+									<field name="attachment_id"  widget="many2many_binary"
+									attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])],
+										'invisible':[('product_type','not in',['work_clothes'])],
+										}"/> 
+								
+									<field name="rating" 
+										attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager','assigned'])]}" />
+									<field name="account_analytic_id" invisible="1" groups="purchase.group_analytic_accounting"/>
+									<field name="company_id" options="{'no_create': True}" groups="base.group_multi_company" widget="selection"/>
+									<field name="buyer" attrs="{'readonly':['|',('is_in_supply_manager','=',False),('state','not in',['assigned'])]}" options="{'no_create': True}" />
+									<field name="accountant_ids" readonly="1" widget="many2many_tags"/>
+									<field name="date_start" readonly="1" />
+									<field name="date_end" readonly="1" />
+									<field name="comparison_date" readonly="1"/>
+									<field name="reg_file" />
+	
+									<field name="category_id" invisible="1" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+									<field name="partner_id"/>
+									<field name="deliver_product_id"/>
+								</group>
+	
+							</group>
+							<group  colspan="4" attrs="{'invisible':[('state','not in',['assigned','sent_to_supply_manager','sent_nyabo','ready','done'])]}"> 
+								<group  colspan="4" attrs="{'invisible':[('state','not in',['assigned','sent_to_supply_manager','sent_nyabo','ready','done'])]}"> 
+									<group  colspan="4" attrs="{'invisible':[('state','not in',['assigned','sent_to_supply_manager','sent_nyabo','ready','done'])]}"> 
+										<field name="supplied_quantities" nolabel="1" context="{'id2':id}">
+											<tree string="Supplied Quantities" editable="bottom">
+												<field name="create_date" readonly="1"/>
+												<field name="user_id" readonly="1"/>
+												<field name="partner_id"/>
+												<field name="supplied_product_price" />
+												<field name="supplied_product_quantity" sum="Total supplied_product_quantity"/> 
+												<field name="supplied_product_quantity" sum="Total supplied_product_quantity"/> 
+												<field name="supplied_product_quantity" sum="Total supplied_product_quantity"/> 
+												<field name="supplied_amount"  sum="Total supplied_amount"/>
+											</tree>
+										</field>
+									</group> 	
+								</group> 	
+							</group> 	
+							<notebook>
+								<page string="Тодорхойлолт">
+									<label for="product_desc" string="Тодорхойлолт (Барааны ерөнхий нэршил болон зориулалт шаардлагыг бичих)" style="display:block"/>
+									<field name="product_desc" attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager'])]}" options="{'no_create': True}" required="1"/>
+								</page>
+								<page string="Түүх">
+									<field name="state_history_ids" nolabel="1">
+										<tree string="State History" create="false"  edit="false" delete="false">
+											<field name="user_id"/>
+											<field name="order_id"/>
+											<field name="date"/>
+											<field name="state"/>
+										</tree>
+									</field>
+								</page>
+							</notebook>
+						</form> -->
+					</field>
+				</field>
+				
+					
+<!-- 				<div class="oe_chatter">
+	                <field name="message_follower_ids" widget="mail_followers"/>
+	                <field name="message_ids" widget="mail_thread"/>
+	        	</div> -->
+				<xpath expr="//form/sheet/notebook/page[1]" position="after">
+						<page string="State History">
+								<div class="pull-left">
+			                      <label for="request_id"  class="oe_inline" />
+			                      <field name="request_id" required="1"  options="{'no_create': True}" /> 
+			                    </div>
+								<separator string="Батлах хэрэглэгчид"  colspan="4"/>
+								<field name="confirm_user_ids" string="Батлах хэрэглэгчид" widget="many2many_tags" readonly="1"/>
+								<separator string="Төлвийн түүх"  colspan="4"/>
+				                <field name="history_lines" nolabel="1" colspan="4" readonly="1">
+	                                <tree string="History">
+	                                    <field name="user_id" />
+	                                    <field name="date" />
+	                                    <field name="type" />
+	                                    <!-- <field name="comment" /> -->
+	                                </tree>
+	                                <form string="History">
+	                                    <field name="user_id" />
+	                                    <field name="date" />
+	                                    <field name="type" />
+	                                    <!-- <field name="comment" /> -->
+	                                </form>
+	                            </field>
+	                            <separator string="Approve User" invisible="1" colspan="4"/>
+	                            <!-- <field name="active_user_ids" nolabel="1" colspan="4" readonly="1"/> -->
+	                            <field name="state_history_ids" invisible="1">
+	                            	<tree string="Approve user"  editable="false">
+	                            		<field name="sequence"/>
+	                            		<field name="name"/>
+	                            		<field name="type"/>
+	                            		<field name="user_id"/>
+	                            		<field name="group_id"/>
+	                            		<field name="state"/>
+	                            	</tree>
+	                            </field>
+	            			</page>
+				</xpath>
+				<xpath expr="//field[@name='line_ids_1']" position="after">
+					<group class="oe_subtotal_footer oe_right">
+						
+						<field name="allowed_amount" widget='monetary'  />
+                          <field name="amount"   widget='monetary'  />
+                      </group>
+				</xpath>
+
+				 <xpath expr="//form/sheet/notebook/page/button" position="replace">
+				 	<!-- <field name="purchase_ids" readonly="1"/> -->
+        	     </xpath>
+
+				 <xpath expr="//field[@name='purchase_ids']" position="replace">
+				 	<field name="purchase_ids" readonly="1"/>
+        	     </xpath>
+				<xpath expr="//separator" position="replace">
+        	     </xpath>
+        	     <xpath expr="//separator" position="replace">
+        	     	<separator string="Тодорхойлолт">
+        	     	</separator>
+        	     </xpath>
+				<!--xpath expr="//sheet/notebook/page/div/button[@string='Request a Quotation']" position="before"-->
+		<!-- 		<xpath expr="//sheet/notebook/page/button[@='']" position="before">
+                    <button name="select_all" states="req_sent_to_order_manager" string="Select All" groups="nomin_purchase_requisition.group_order_manager" type="object"/>
+                    <button name="select_not_assigned" states="req_sent_to_order_manager" string="Select Not Assigned" groups="nomin_purchase_requisition.group_order_manager" type="object"/>
+                    <button name="deselect_all" states="req_sent_to_order_manager" string="Deselect All" groups="nomin_purchase_requisition.group_order_manager" type="object"/>
+                    <button name="%(action_purchase_requisition_assign)d" type="action"
+                        string="Assign" icon="gtk-execute"
+                        groups="nomin_purchase_requisition.group_order_manager"  
+                        attrs="{'invisible': ['|',('line_ids','=',False),('state', 'not in', ['req_sent_to_order_manager'])]}"/>
+	            </xpath>
+		 -->
+			</field>
+
+		</record>
+
+	
+	</data>
+</openerp>

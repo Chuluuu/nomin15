@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+ 
+    
+    <record id="for_product_import_export_view" model="ir.ui.view">
+        <field name="name">Барааны мэдээлэл экселээс засах</field>
+        <field name="model">product.import.export</field>
+        <field name="arch" type="xml">
+            <form string="Барааны мэдээлэл засах">
+                
+                    <group>
+                        <group>
+                            <field name="is_import" />
+                            <field name="data" attrs="{'invisible':[('is_import','=',False)],'required':[('is_import','!=',False)]}"/>
+                            <field name="is_passed" invisible="1"/>
+                        </group>
+                    </group>
+                
+
+                     <footer>
+                        <button name="action_export" attrs="{'invisible':[('is_import','=',True)]}" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/>
+                        <button name="action_check" attrs="{'invisible':[('is_import','=',False)]}" class ="oe_highlight" string="Шалгах" type="object" icon="terp-graph"/>
+                    <button name="action_update" attrs="{'invisible':['|',('is_import','=',False),('is_passed','=',False)]}" class ="oe_highlight" string="Оруулах" type="object" icon="terp-graph"/>
+                        or
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+            </form>
+        </field>
+    </record>
+
+
+     <record model="ir.actions.act_window" id="action_product_import_export">
+            <field name="name">Барааны мэдээлэл экселээс засах</field>
+            <field name="res_model">product.import.export</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <!-- <field name="view_id" ref="form_purchase_order_supplier_report_wizard_view"/> -->
+            <field name="target">new</field>
+        </record>
+
+
+
+    <menuitem name="Барааны мэдээлэл экселээс засах" id="menu_product_import_export" parent="nomin_purchase.parent_menu_purchase_report_wizard"
+            action="action_product_import_export" sequence="99" />
+    </data>
+</openerp>

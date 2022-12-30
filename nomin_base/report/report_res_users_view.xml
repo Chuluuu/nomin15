@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+    
+    <record id="form_report_res_users" model="ir.ui.view">
+        <field name="name">Эрхийн тохиргооны тайлан</field>
+        <field name="model">report.res.users</field>
+        <field name="arch" type="xml">
+            <form string="Эрхийн тохиргооны тайлан">
+
+                    <group>
+                        <group>
+                            <field name="report_type" required="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                    <page string="Албан тушаал">
+                        <field name="job_ids" options="{'no_create': True}" widget="many2many_tags"/>
+                    </page>
+                    <page string="Грүпп">
+                        <field name="group_ids" options="{'no_create': True}" widget="many2many_tags"/>
+                    </page>
+                    
+                </notebook>
+
+                     <footer>
+                        <button name="export_chart" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/>
+                        or
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+            </form>
+        </field>
+    </record>
+
+
+     <record model="ir.actions.act_window" id="action_report_res_users">
+            <field name="name">Эрхийн тохиргооны тайлан</field>
+            <field name="res_model">report.res.users</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <!-- <field name="view_id" ref="form_purchase_order_supplier_report_wizard_view"/> -->
+            <field name="target">new</field>
+        </record>
+
+
+
+    <menuitem name="Эрхийн тохиргооны тайлан" id="menu_report_res_users" parent="menuitem_res_users_config_parent"
+            action="action_report_res_users" sequence="2" />
+    </data>
+</openerp>

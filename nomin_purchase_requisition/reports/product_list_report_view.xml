@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- Барааны бүлэг гүйцэтгэлийн тайлан татах -->
+        <record model="ir.ui.view" id="product_registration_report_form">
+            <field name="name">product.registration.report.form</field>
+            <field name="model">product.registration.report</field>
+            <field name="arch" type="xml">
+                <form string="Барааны бүлэг гүйцэтгэлийн тайлан">
+                    <group>
+                        <group>
+                            <field name="categ_ids" widget="many2many_tags" required="1"/>
+                            <field name="state" required="1"/>
+                        </group>
+                        <group>
+                            <field name="start_date" required="1"/>
+                            <field name="end_date" required="1"/>
+                        </group>
+                        
+                    </group>
+                   
+                    <footer>
+                        <button name="export_report" string="Export" type="object" icon="terp-graph"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="product_registration_report">
+            <field name="name">Барааны бүлэг гүйцэтгэлийн тайлан</field>
+            <field name="res_model">product.registration.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="product_registration_report_form"/>
+            <field name="target">new</field>
+        </record>
+        
+    <menuitem name="Барааны бүлэг гүйцэтгэлийн тайлан" id="menu_product_registration_export" parent="nomin_purchase.parent_menu_purchase_report_wizard"
+            action="product_registration_report" sequence="102" />
+            
+    </data>
+</openerp>

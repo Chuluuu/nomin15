@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="form_purchase_requisition_order_report_view" model="ir.ui.view">
+            <field name="name">Худалдан авалтын хураангуй тайлан/Захиалагч ажилтан/</field>
+            <field name="model">purchase.requisition.order.report</field>
+            <field name="arch" type="xml">
+                <form string="Худалдан авалтын хураангуй тайлан/Захиалагч ажилтан/">
+                    <group>
+                        <group>
+                            <field name="user_ids" widget="many2many_tags" required="1"/>
+                            <field name="department_ids" widget="many2many_tags" options="{'no_create': True}" required="1"/>
+                            <field name="state" required="1"/>
+                        </group>
+
+                        <group>
+                            <field name="start_date" required="1"/>
+                            <field name="end_date" required="1"/>
+                        </group>
+                      
+                    </group>
+
+                         <footer>
+                            <button name="export_report" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/>
+                            or
+                            <button string="Cancel" class="btn-default" special="cancel"/>
+                        </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_purchase_requisition_order_report">
+            <field name="name">Худалдан авалтын хураангуй тайлан/Захиалагч ажилтан/</field>
+            <field name="res_model">purchase.requisition.order.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="form_purchase_requisition_order_report_view"/>
+            <field name="target">new</field>
+        </record>
+
+        
+        
+        <menuitem name="Худалдан авалтын хураангуй тайлан/Захиалагч ажилтан/" id="menu_purchase_requisition_order_report" parent="nomin_purchase.parent_menu_purchase_report_wizard"
+            action="action_purchase_requisition_order_report" sequence="104" />
+            
+    </data>
+</openerp>

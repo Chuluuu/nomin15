@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+		<record id="purchase_tender_config_form" model="ir.ui.view">
+			<field name="name">purchase.tender.config.form</field>
+			<field name="model">purchase.tender.config</field>
+			<field name="arch" type="xml">
+				<form string="Purchase tender config" class="oe_form_configuration" create="false" delete="false">
+				<sheet>
+					<group>
+						<group>
+							<field name="name" required="1"/>
+							<field name="amount" required="1"/>
+						</group>
+						<group>
+							<field name="type" required="1"/>
+							<field name="is_active"/>
+						</group>
+					</group>
+				</sheet>
+				<div class="oe_chatter">
+		            <field name="message_follower_ids" widget="mail_followers"/>
+		            <field name="message_ids" widget="mail_thread"/>
+             	</div>
+				</form>
+			</field>
+		</record>
+		
+		<record id="purchase_tender_config_tree" model="ir.ui.view">
+			<field name="name">purchase.tender.config.tree</field>
+			<field name="model">purchase.tender.config</field>
+			<field name="arch" type="xml">
+				<tree string="Purchase tender config" create="false" delete="false">
+					<field name="name" />
+					
+					<field name="amount"/>
+					<field name="type"/>
+					<field name="is_active"/>
+				</tree>
+			</field>
+		</record>		
+		
+		<record id="action_purchase_tender_config"  model="ir.actions.act_window">
+			<field name="name">Үнийн дүнгийн тохиргоо</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">purchase.tender.config</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="purchase_tender_config_tree"/>
+			<field name="context">{}</field>
+		</record>
+		
+		<menuitem id="menu_purchase_tender_config" action="action_purchase_tender_config" name="Purchase requisition amount config" groups="group_tender_secretary,group_tender_admin" parent="tender_setting_menu"/>
+		
+		<record id="tender_form" model="ir.ui.view">
+			<field name="name">name</field>
+			<field name="model">tender.tender</field>
+			<field name="inherit_id" ref="nomin_tender.view_tender_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='user_id']" position="after">
+					<field name="requisition_id" attrs="{'invisible': [('requisition_id', '=', False)],'readonly': [('requisition_id', '!=', False)]}" options="{'no_create': True}"/>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</openerp>

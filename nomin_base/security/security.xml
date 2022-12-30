@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+    
+<!--    НББГ ын ахлах нягтлан - Adivser
+    НББГ ын ахлах нягтлангууд - ok
+    БҮ салбарын ахлах нягтлан - Нягтлан бодогчоор явна
+    Салбарын тооцооны нягтлан - ok
+    Салбарын эдийн засагч - ok
+    БҮС-ийн салбаруудын эрхлэгч - Салбарын эрхлэгч - ok
+    Бүх салбарын гүйцэтгэх захирал - Салбарын гүйцэтгэх захирал - ok
+    Бүх газруудын захирал - Газрын захирал - ok
+    Бүх салбарын бизнес эрхэлсэн захирал - Бизнес эрхэлсэн захирал- ok
+    БХГ-н эдийн засагч - БХГ-ийн эдийн засагч- ok
+    БХГ-н захирал - БХГ-ийн захирал- ok
+    Холдингийн гүйцэтгэх захирал - Холдингийн гүйцэтгэх захирал- ok
+    Бүх хүн - Төлбөр хүсэгч - ok
+    Нягтлан бодох бүртгэлийн газрын захирал - Нягтлан бодох бүртгэлийн газрын захирал- ok
+    Импортын компанийн импорт менежерүүд, бусад эрх тохируулсан хүмүүс - Бусад төсөв боловсруулагч- ok
+	-->
+
+
+
+
+
+
+
+<data noupdate="0">
+
+	<record model="ir.module.category" id="module_category_time_management">
+        <field name="name">Цаг Бүртгэл</field>
+        <field name="description">Цаг Бүртгэл</field>
+        <field name="sequence">5</field>
+    </record>
+
+
+   	<record model="ir.module.category" id="nomin_holding_groups_lead">
+            <field name="name">Номин Холдинг - Удирдлага</field>
+            <field name="sequence">17</field>
+    </record>
+
+    <!-- <record id="group_support_assistant" model="res.groups">
+        <field name="name">Системийн чанар баталгаажуулагч</field>
+        <field name="comment">Тойрох дээр ажиллах ажилтан байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_technical"/>
+    </record>
+
+    <record id="it_support_group" model="res.groups">
+        <field name="name">IT Инженер</field>
+        <field name="comment">Тойрох дээр ажиллах ажилтан байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_technical"/>
+    </record> -->
+    
+   <record model="ir.module.category" id="nomin_holding_groups_manager">
+            <field name="name">Номин Холдинг - Менежер</field>
+            <field name="sequence">18</field>
+    </record>
+
+    <record id="group_tsh_manager" model="res.groups">
+        <field name="name">Цаг зохицуулагч менежер</field>
+        <field name="comment">Цагтай ажиллах удирдлагын ажилтан байна</field>
+        <field name="category_id" ref="module_category_time_management"/>
+        
+    </record>
+
+    <record id="group_boss" model="res.groups">
+        <field name="name">Удирдагч</field>
+        <field name="comment">Номин Холдинг ХХК-д ямар нэгэн удирдах алба хашдаг ажилтан байна</field>
+        <field name="implied_ids" eval="[(4, ref('group_tsh_manager'))]"/>
+    </record>
+    
+	<record id="group_president" model="res.groups">
+        <field name="name">Ерөнхийлөгч</field>
+        <field name="comment">Номин Холдинг ХХК-ын Ерөнхийлөгч</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_lead"/>
+        <field name="implied_ids" eval="[(4, ref('group_boss'))]"/>
+    </record>
+
+    <record id="group_holding_ceo" model="res.groups">
+        <field name="name">Холдинг Гүйцэтгэх захирал</field>
+        <field name="comment">Номин Холдинг ХХК-ын Гүйцэтгэх захирал байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_lead"/>
+        <field name="implied_ids" eval="[(4, ref('group_boss'))]"/>
+    </record>
+
+    <record id="group_division_chief" model="res.groups">
+        <field name="name">Газрын захирал</field>
+        <field name="comment">Номин Холдинг ХХК-ын Газрын захиралууд байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_lead"/>
+        <field name="implied_ids" eval="[(4, ref('group_boss'))]"/>
+    </record>
+    <record id="group_department_chief" model="res.groups">
+        <field name="name">Салбарын Гүйцэтгэх захирал</field>
+        <field name="comment">Салбаруудын гүйцэтгэх захирал байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_lead"/>
+        <field name="implied_ids" eval="[(4, ref('group_boss'))]"/>
+    </record>
+    <record id="group_business_chief" model="res.groups">
+        <field name="name">Бизнес хариуцсан захирал</field>
+        <field name="comment">Номин Холдинг ХХК-ын Бизнес хариуцсан захирал байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_lead"/>
+        <field name="implied_ids" eval="[(4, ref('group_boss'))]"/>
+    </record>
+
+    <record id="group_financial_business_chief" model="res.groups">
+        <field name="name">Санхүүгийн Бизнес эрхэлсэн захирал</field>
+        <field name="comment">Номин Холдинг ХХК-ын Санхүүгийн Бизнес эрхэлсэн захирал байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_lead"/>
+    </record>
+	<record id="group_department_chief1" model="res.groups">
+        <field name="name">Албаны дарга</field>
+        <field name="comment">Номин Холдинг ХХК-ын Албадуудын дарга байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_lead"/>
+        <field name="implied_ids" eval="[(4, ref('group_tsh_manager'))]"/>
+    </record>
+
+    <record id="group_financial_devision_chief" model="res.groups">
+        <field name="name">НББГ-ын захирал</field>
+        <field name="comment">Номин Холдинг ХХК-ын НББГ-ын захирал байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_lead"/>
+    </record>
+    <record id="group_business_development_chief" model="res.groups">
+        <field name="name">СУГ-ын захирал</field>
+        <field name="comment">Номин Холдинг ХХК-ын СУГ-ын захирал байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_lead"/>
+    </record>
+    <record id="group_business_development_dep_chief" model="res.groups">
+        <field name="name">СУГ-ын албаны дарга</field>
+        <field name="comment">Номин Холдинг ХХК-ын СУГ-ын албаны дарга байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_lead"/>
+    </record>
+
+    <record id="group_branch_manager" model="res.groups">
+        <field name="name">Салбарын эрхлэгч</field>
+        <field name="comment">Салбаруудын эрхлэгч байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_manager"/>
+        <field name="implied_ids" eval="[(4, ref('group_boss'))]"/>
+    </record>
+
+    <record id="group_business_development_manager" model="res.groups">
+        <field name="name">БХХ Менежер</field>
+        <field name="comment">БХХ Менежер</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_manager"/>
+        <field name="implied_ids" eval="[(4, ref('group_boss'))]"/>
+    </record>
+
+    <record id="group_project_user" model="res.groups">
+        <field name="name">Төсөл хэрэглэгч</field>
+        <field name="comment"></field>
+    </record>    
+
+    <record id="group_project_manager" model="res.groups">
+        <field name="name">Төслийн удирдагч</field>
+        <field name="comment">Төслийн удирдагч</field>
+        <field name="implied_ids" eval="[(4, ref('group_project_user'))]"/>
+    </record>
+
+
+    <record id="group_branch_senior" model="res.groups">
+        <field name="name">Салбарын ахлах эсвэл зохион байгуулагч</field>
+        <field name="comment">Салбаруудын ахлах буюу 3Б байна</field>
+        <field name="implied_ids" eval="[(4, ref('group_tsh_manager'))]"/>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_manager"/>
+    </record>
+    <record id="group_department_manager" model="res.groups">
+        <field name="name">Салбарын менежер</field>
+        <field name="comment">Салбаруудын менежерүүд байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_manager"/>
+    </record>
+    <record id="group_department_senior_manager" model="res.groups">
+        <field name="name">Салбарын ахлах менежер</field>
+        <field name="comment">Салбаруудын  ахлах менежерүүд байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_manager"/>
+    </record>
+    <record id="group_region_manager" model="res.groups">
+        <field name="name">БҮС менежер</field>
+        <field name="comment">Номин Холдинг ХХК-ын БҮС менежер</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_manager"/>
+    </record>
+    <record id="group_business_development_economist" model="res.groups">
+        <field name="name">СУГ-ын эдийн засагч</field>
+        <field name="comment">Номин Холдинг ХХК-ын СУГ-ын эдийн засагч байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_manager"/>
+    </record>
+	<record id="group_nomin_branch_economist" model="res.groups">
+        <field name="name">Бизнесийн эдийн засагч</field>
+        <field name="comment">Номин Холдинг ХХК-ын Салбаруудын эдийн засагч байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_manager"/>
+    </record>
+    
+	<record model="ir.module.category" id="nomin_holding_groups_acount">
+            <field name="name">Номин Холдинг - Санхүү</field>
+            <field name="sequence">19</field>
+    </record>
+   <record id="group_financial_account_user" model="res.groups">
+        <field name="name">НББГ-н ахлах нягтлангууд</field>
+        <field name="comment">Номин Холдинг ХХК-ын НББГ ын ахлах нягтлангууд байна</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_acount"/>
+    </record>
+   <record id="group_branch_account_user" model="res.groups">
+        <field name="name">Салбарын тооцооны нягтлан</field>
+        <field name="comment">Номин Холдинг ХХК-ын Салбарын тооцооны нягтлан байна</field>
+        <field name="implied_ids" eval="[(4, ref('group_tsh_manager'))]"/>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_acount"/>
+    </record>
+	
+	<record model="ir.module.category" id="nomin_holding_groups_technical">
+            <field name="name">Номин Холдинг - Техник тохиргоо</field>
+            <field name="sequence">20</field>
+    </record>
+    <record id="group_partner_nomin_admin" model="res.groups">
+        <field name="name">Харилцагчийн мэдээлэл засах</field>
+        <field name="comment">Харилцагчийн мэдээлэл үүсгэх, засах, устгах эрх бүхий групп. Мөн Салбар дээр байгаа номин код гэсэн талбарыг солино.</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_technical"/>
+    </record>
+
+    <record id="group_res_partner" model="res.groups">
+        <field name="name">Харилцагчийн регистрийн дугаар харах</field>
+        <field name="comment">Харилцагчийн р/д харах боломжтой ажилтан</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_technical"/>
+    </record>
+    
+    <record id="group_user_acces_config_admin" model="res.groups">
+        <field name="name">Хэрэглэгчийн тодорхой талбаруудыг харах, засах</field>
+        <field name="comment">Хэрэглэгчийн тодорхой талбаруудыг харах, засах хэрэглэгч нар байна.</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_technical"/>
+    </record>
+    
+    <record id="group_user_acces_product_product" model="res.groups">
+        <field name="name">Барааны мэдээлэл үүсгэх</field>
+        <field name="comment">Барааны мэдээлэл үүсгэх,засах,устгах.</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_technical"/>
+    </record>
+    <record id="group_budget_amendment_create" model="res.groups">
+        <field name="name">Төсөв тодотголт үүсгэх</field>
+        <field name="comment">Номин Холдинг ХХК-ын Төсөв тодотгох эрх</field>
+        <field name="category_id" ref="nomin_base.nomin_holding_groups_technical"/>
+    </record>
+
+    <record id="group_proactive_notifiaction" model="ir.rule">
+        <field name="name">Proactive notification</field>
+        <field ref="model_proactive_notification" name="model_id"/>
+        <field name="domain_force">[('user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_proactive_notifiaction_group_tsh_manager" model="ir.rule">
+        <field name="name">Proactive notification</field>
+        <field ref="model_proactive_notification" name="model_id"/>
+        <field name="domain_force">[('user_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_tsh_manager'))]"/>
+    </record>
+
+<!-- 
+    <record id="proactive_notification_followers" model="ir.rule">
+        <field name="name">Followers see their followed ...</field>
+        <field ref="model_proactive_notification" name="model_id"/>
+        <field name="domain_force">['|',('message_partner_ids','in',[user.partner_id.id]), ('message_channel_ids.channel_partner_ids', 'in', [user.partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record> -->
+
+
+
+    <record id="group_proactive_line" model="ir.rule">
+        <field name="name">Proactive line</field>
+        <field ref="model_proactive_line" name="model_id"/>
+        <field name="domain_force">[('notification_id.user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+
+    <record id="group_proactive_line_group_tsh_manager" model="ir.rule">
+        <field name="name">Proactive line</field>
+        <field ref="model_proactive_line" name="model_id"/>
+        <field name="domain_force">[('notification_id.user_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('group_tsh_manager'))]"/>
+    </record>
+    <!---->
+</data>
+</openerp>

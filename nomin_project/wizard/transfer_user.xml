@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+    	<!-- Төслийн үе шат -->
+    	<record id="transfer_user_view" model="ir.ui.view">
+            <field name="name">transfer.user.form</field>
+            <field name="model">transfer.user</field>
+            <field name="arch" type="xml">
+        		<form string="Ацаглах"> 
+        			<group>
+        				<group>
+        					<field name="employee"/>
+	        				<field name="project_id" invisible="1"/>
+        				</group> 
+        			</group>
+        			<button name="transfer_action" string="Ацаглах" type="object" />
+					<button string="Cancel" class="oe_link" special="cancel" />
+    			</form>
+            </field>
+        </record>
+        
+       <record id="action_transfer_user" model="ir.actions.act_window">
+			<field name="name">action.transfer.user</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">transfer.user</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="context">{'record_id' : active_id}</field>
+			<field name="target">new</field>
+		</record>
+	</data>
+</openerp>

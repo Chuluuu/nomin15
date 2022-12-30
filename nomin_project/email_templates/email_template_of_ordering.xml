@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<openerp>
+    <data>
+        <record id="email_template_of_ordering" model="mail.template">
+            <field name="name">Хүсэлт уламжлах мэдэгдэл</field>
+            <field name="email_from">${ctx['process_employee']}</field>
+            <field name="subject">${ctx['email_title']}</field>
+            <field name="email_to">${ctx['email_to']}</field>
+           <!--  <field name="id">${ctx['id']}</field> -->
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<p>
+Сайн байна уу, Таньд энэ өдрийн мэнд хүргэе!</br>
+</p>
+<p>
+ERP системд <b>${ctx['department_id']}</b> салбар (хэлтэс) дэх <b>${ctx['name']}</b> дугаартай <b>${ctx['order_name']}</b> нэртэй захиалга <b>${ctx['states']}</b> төлөвт орлоо.
+</p>
+
+<ul>
+
+    <li>Ажилтан: <b>${ctx['process_employee']}</b></li>
+    <li>Захиалгын төрөл: <b>${ctx['request']}</b></li>
+    <li>Хүсэлт өгсөн огноо: <b>${ctx['requested_date']}</b></li>
+</ul>
+<p>
+    Баярлалаа,
+<р/>
+    <b>${ctx['process_employee']}</b>
+    <p>
+                Та <a href="${ctx["base_url"]}/web#id=${ctx['id']}&view_type=form&model=${ctx["model"]}&menu_id=${ctx['menu']}&action=${ctx["action"]}"><b>${ctx['request']}</b></a> холбоосоор орно уу! 
+    </p>
+
+
+<pre>
+    -- 
+    Odoo ERP Автомат Имэйл
+
+</pre>
+            ]]></field>
+        </record>
+    </data>
+</openerp>
+
+

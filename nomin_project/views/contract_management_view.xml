@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+    	<!-- Төслийн үе шат -->
+    	<record id="view_contract_management_inherit" model="ir.ui.view">
+            <field name="name">inherit.contract.management.form</field>
+            <field name="model">contract.management</field>
+            <field name="inherit_id" ref="nomin_contract.view_contract_management_form"/>
+            <field name="arch" type="xml">
+        		<xpath expr="//notebook/page[5]" position="inside">
+        			 <field name="issue_ids">
+                        <tree string="Project issue">
+                            <field name="name"/>
+                            <field name="user_id"/>
+                            <field name="date"/>
+                            <field name="date_deadline"/>
+                            <field name="checker"/>
+                            <field name="description"/>
+                        </tree>
+                    </field>
+                </xpath> 
+            </field>
+        </record>
+        <record id="view_crm_helpdesk_inherit" model="ir.ui.view">
+            <field name="name">inherit.crm.helpdesk.form</field>
+            <field name="model">crm.helpdesk</field>
+            <field name="inherit_id" ref="nomin_helpdesk.view_helpdesk_form"/>
+            <field name="arch" type="xml">
+        		<xpath expr="//notebook/page[3]" position="after">
+        			<page string="Холбоотой ажлууд">
+        				<field name="task_ids" readonly="1">
+	                        <tree string="Даалгавар">
+	                            <field name="name"/>
+	                            <field name="flow"/>
+	                            <field name="project_id"/>
+	                            <field name="department_id" options="{'no_create': True}"/>
+	                            <field name="task_verifier"/>
+	                            <field name="user_id"/>
+	                            <field name="task_date_start"/>
+	                            <field name="date_deadline"/>
+	                            <field name="task_state" string='Төлөв'/>
+	                        </tree>
+	                    </field>
+                    </page>
+                </xpath> 
+            </field>
+        </record>
+	</data>
+</openerp>

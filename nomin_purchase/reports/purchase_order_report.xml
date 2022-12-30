@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+    <record id="form_purchase_order_report_wizard_view" model="ir.ui.view">
+        <field name="name">Худалдан авалт тайлан</field>
+        <field name="model">purchase.order.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Худалдан авалт тайлан">
+                <group>
+                    <group>
+                        <field name="start_date" required="1"/>
+                        
+                    </group>
+                    <group>
+                            <field name="end_date" required="1"/>
+                            <field name="year_id" required="1"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Хэлтэс">
+                        <field name="department_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    </page>
+                    <page string="Бараанууд">
+                        <field name="product_ids" widget="many2many_tags"/>
+                    </page>
+                    <page string="Барааны ангилал">
+                        <field name="category_ids" widget="many2many_tags"/>
+                    </page>
+                </notebook>
+
+                     <footer>
+                        <button name="export_report" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/>
+                        or
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+            </form>
+        </field>
+    </record>
+
+     <record model="ir.actions.act_window" id="action_purchase_order_report_wizard">
+            <field name="name">Худалдан авалт тайлан</field>
+            <field name="res_model">purchase.order.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="form_purchase_order_report_wizard_view"/>
+            <field name="target">new</field>
+        </record>
+
+   <menuitem name="Тайлан" id="parent_menu_purchase_report_wizard" parent="base.menu_purchase_root"
+              sequence="5"/>
+
+    <menuitem name="Худалдан авалтын захиалгын тайлан" id="menu_purchase_report_wizard" parent="nomin_purchase.parent_menu_purchase_report_wizard"
+            action="action_purchase_order_report_wizard" sequence="1" />
+
+
+
+    </data>
+</openerp>

@@ -1,0 +1,6 @@
+header a.navbar-brand.logo {
+  padding: 0 6px;
+}
+header a.navbar-brand img {
+  max-height: 150px;
+}

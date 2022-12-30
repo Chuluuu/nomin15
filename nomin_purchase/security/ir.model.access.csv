@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_purchase_order_evaluation_indicators_user,purchase indicators,model_purchase_order_evaluation_indicators,purchase.group_purchase_user,1,1,1,1
+access_purchase_stock_picking_out_line,purchase line,model_stock_picking_out_line,purchase.group_purchase_user,1,1,1,1
+access_purchase_order_portal,purchase order portal user,model_purchase_order,base.group_portal,1,1,0,0
+access_purchase_order_line_portal,purchase order portal user,model_purchase_order_line,base.group_portal,1,1,0,0
+access_request_history_portal,purchase order portal user,model_request_history,base.group_portal,1,1,1,0
+access_purchase_order_evaluation_indicators_portal,purchase order portal user,model_purchase_order_evaluation_indicators,base.group_portal,1,1,0,0
+access_request_config_purchase_line,purchase order portal user,nomin_base.model_request_config_purchase_line,base.group_portal,1,0,0,0
+
+access_purchase_requisition_line_order_line,purchase_requisition_line_order_line,model_purchase_requisition_line_order_line,,1,0,0,0
+
+
+

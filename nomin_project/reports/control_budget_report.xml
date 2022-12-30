@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>  
+    	<template id="nomin_project.control_budget_report">
+			<t t-call="report.html_container">
+				<t t-call="report.layout">
+					<t t-foreach="budgets" t-as="o">
+							<div class="page">
+								<table class="table" style="padding-left:40px"> 
+									<td style="font-size:16px" align="center">ТӨСӨВТ ӨРТГИЙН НЭГДСЭН ТОВЧОО</td>
+								</table>
+								<table>
+									<tr>
+										<td>Төсвийн дугаар:<span t-if="o.budget_code"><b t-field="o.budget_code"/></span></td>
+										<td align="right" style="padding-left:25px">Батлагдсан огноо:<span t-if="o.confirm_date"><span t-field="o.confirm_date"/></span></td>
+									</tr>
+									<tr style="margin-top:20px">
+										<td>Зардал гаргах салбар:/<span t-if="o.m_department_id"><span t-field="o.m_department_id"/></span>/</td>
+									</tr>
+									<tr style="margin-top:30px">
+										<td>Төслийн нэр:<span t-if="o.project_id"><b t-field="o.project_id"/></span></td>
+									</tr>
+									<tr>
+										<td>Төсвийн нэр:<span t-if="o.name"><b t-field="o.name"/></span></td>
+									</tr>
+								</table>
+								<br/>
+								<table class="table table-l10n_mn-grid" style="width:100%;border: 1px solid #000000;">
+									<thead>
+										<tr>
+											<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>№</b></td>
+											<td style="width:60%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Зардлын нэр</b></td>
+											<td style="width:35%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Бүгд өртөг / төгрөг /</b></td>
+										</tr>
+									</thead>
+									<tbody> 
+										<t t-if="o.labor_cost != 0">
+											<tr>
+												<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center">1</td>
+												<td style="width:60%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center">Ажиллах хүчний зардал /үндсэн/</td>
+												<td style="width:35%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><span t-esc="'{0:,.2f}'.format(o.labor_cost)"/></td>
+											</tr>
+										</t> 
+										<t t-if="o.material_cost != 0">
+											<tr>
+												<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center">2</td>
+												<td style="width:60%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center">Материалын зардал</td>
+												<td style="width:35%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><span t-esc="'{0:,.2f}'.format(o.material_cost)"/></td>
+											</tr> 
+										</t>
+										<t t-if="o.carriage_cost != 0">
+											<tr>
+												<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center">3</td>
+												<td style="width:60%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center">Тээврийн зардал</td>
+												<td style="width:35%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><span t-esc="'{0:,.2f}'.format(o.carriage_cost)"/></td>
+											</tr> 
+										</t>
+										<t t-if="o.equipment_cost != 0">
+											<tr>
+												<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center">4</td>
+												<td style="width:60%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center">Машин механизмын зардал</td>
+												<td style="width:35%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><span t-esc="'{0:,.2f}'.format(o.equipment_cost)"/></td>
+											</tr> 
+										</t>
+										<t t-if="o.postage_cost != 0">
+											<tr>
+												<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center">5</td>
+												<td style="width:60%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center">Шууд зардал</td>
+												<td style="width:35%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><span t-esc="'{0:,.2f}'.format(o.postage_cost)"/></td>
+											</tr> 
+										</t>
+										<t t-if="o.other_cost != 0">
+											<tr>
+												<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center">6</td>
+												<td style="width:60%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center">Бусад зардал</td>
+												<td style="width:35%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><span t-esc="'{0:,.2f}'.format(o.other_cost)"/></td>
+											</tr>
+										</t>
+										<tr>
+											<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"></td>
+											<td style="width:60%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Нийт</b></td>
+											<td style="width:35%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b t-esc="'{0:,.2f}'.format(o.sub_total)"/></td>
+										</tr>
+									</tbody>
+								</table>
+								<span align="left" style="font-size:14px">Төсөв гаргасан:</span><br/>
+								<table style="margin-left:30px;font-size:14px">
+									<t t-foreach="emp" t-as="l"> 
+										<tr>
+											<td style="padding-left:30px;" ><span t-field="l.department_id.name"/>-н Төсөвчин: </td>
+											<td style="padding-left:30px;"><img class="image" t-att-src="'data:image/png;base64,%s' %l.signature_image" style="height:70px;width:125px;"/> </td>
+											<td style="padding-left:30px;"><span t-esc="l.last_name[:1]"/>.<span t-field="l.name"/></td>
+											<td style="padding-left:30px;">/Огноо:  <span t-field="o.date"/>/</td>
+										</tr>
+									</t>
+								</table>
+								<span align="left" style="font-size:14px">Баталсан:</span>
+								<table style="margin-left:30px;font-size:14px">
+									<t t-foreach="o.budget_users" t-as="e">
+										<tr>
+											<td style="padding-left:30px;"><span t-field="e.confirmer.department_id.name"/>-н <span t-field="e.confirmer.job_id.name"/>: </td>
+											<td style="padding-left:30px"><img class="image" t-att-src="'data:image/png;base64,%s' %e.confirmer.signature_image" style="height:70px;width:125px;"/></td>
+											<td style="padding-left:30px;"><span t-esc="e.confirmer.last_name[:1]"/>.<span t-field="e.confirmer.name"/>/  Огноо:  <span t-field="e.date"/>/</td>
+										</tr>
+										<br/>
+									</t>
+								</table>
+							</div>
+            			<!-- <t t-call="report.external_layout"> -->
+							<div class="page">
+								<table>
+									<tr>
+										<table class="table">
+											<td><span t-if="o.name"><span t-field="o.name"/></span>-н зардлын задаргаа</td>
+										</table>
+										<table>
+											<tr>
+												<td>Төсвийн дугаар:<span t-if="o.budget_code"><b t-field="o.budget_code"/></span></td>
+											</tr> 
+											<tr>
+												<td>Огноо:<span t-if="o.confirm_date"><span t-field="o.confirm_date"/></span></td>
+											</tr>
+										</table>
+									</tr>
+									<br/>
+									<t t-if="o.material_line_ids">
+										<tr> 
+											<span>Зардлын төрөл: <b>Материалын зардал</b></span>
+											<table class="table table-l10n_mn-grid" style="width:100%;border: 1px solid #000000;"> 
+												<thead>
+													<tr>
+														<td style="background-color: #D5D8DC ;width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>№</b></td>
+														<td style="background-color: #D5D8DC ;width:10%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Барааны код</b></td>
+														<td style="background-color: #D5D8DC ;width:30%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Барааны нэр</b></td> 
+														<td style="background-color: #D5D8DC ;width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Хэмжих нэгж</b></td>
+														<td style="background-color: #D5D8DC ;width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Тоо</b></td>
+														<td style="background-color: #D5D8DC ;width:10%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Нэгжийн үнэ</b></td>
+														<td style="background-color: #D5D8DC ;width:10%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Нийт үнэ</b></td>
+														<!-- <td style="background-color: #D5D8DC ;width:20%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Зардал гаргах салбар</b></td> -->
+														<!-- <td style="background-color: #D5D8DC ;width:10%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Тайлбар</b></td> -->
+													</tr>
+												</thead>
+												<t t-set="line_number" t-value="1"/>
+												<tbody> 
+													<t t-foreach="o.material_line_ids" t-as="m">
+														<tr>
+															<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="line_number"/></td>
+															<td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="m.product_id.product_code"/></td>
+															<t t-if="o.is_old2 == True">
+																<td style="width:30%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="m.product_id.name"/></td> 
+															</t>
+															<t t-if="o.is_old2 == False">
+																<td style="width:30%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="m.product_name"/></td> 
+															</t>
+															<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="m.product_uom.name"/></td>
+															<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="'{0:,.1f}'.format(m.product_uom_qty)"/></td>
+															<td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="'{0:,.2f}'.format(m.price_unit)"/></td>
+															<td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="'{0:,.2f}'.format(m.material_total)"/></td>
+															<!-- <td style="width:20%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="m.department_id.name"/></td> -->
+															<!-- <td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="m.name"/></td> -->
+															<t t-set="line_number" t-value="line_number + 1"/>
+														</tr>
+													</t>
+													<tr>
+														<td style="width:65%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center" colspan="6"><b>Нийт</b></td>
+														<td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><b t-field="o.material_cost"/></td>
+														<!-- <td style="width:30%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center" colspan="2"></td> -->
+													</tr>
+												</tbody>
+											</table>
+										</tr>
+									</t>
+									<t t-if="o.labor_line_ids">
+										<tr> 
+											<span>Зардлын төрөл: <b>Ажиллах хүчний зардал</b></span>
+											<table class="table table-l10n_mn-grid" style="width:100%;border: 1px solid #000000;"> 
+												<thead>
+													<tr>
+														<td style="background-color: #D5D8DC ;width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>№</b></td>
+														<!-- <td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Ажлын код</b></td> -->
+														<td style="background-color: #D5D8DC ;width:30%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Ажлын нэр</b></td> 
+														<td style="background-color: #D5D8DC ;width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Хэмжих нэгж</b></td>
+														<td style="background-color: #D5D8DC ;width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Тоо</b></td>
+														<td style="background-color: #D5D8DC ;width:10%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Нэгжийн үнэ</b></td>
+														<td style="background-color: #D5D8DC ;width:10%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Дүн</b></td>
+														<td style="background-color: #D5D8DC ;width:10%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Ажиллах хүчний зардал</b></td>
+														<!-- <td style="background-color: #D5D8DC ;width:20%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Зардал гаргах салбар</b></td> -->
+														<!-- <td style="background-color: #D5D8DC ;width:10%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Тайлбар</b></td> -->
+													</tr>
+												</thead>
+												<t t-set="line_number" t-value="1"/>
+												<tbody> 
+													<t t-foreach="o.labor_line_ids" t-as="l">
+														<tr>
+															<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="line_number"/></td>
+															<t t-if="o.is_old == True">
+																<td style="width:30%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="l.product_id.name"/></td> 
+																<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="l.product_uom"/></td>
+															</t>
+															<t t-if="o.is_old == False">
+																<td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="l.product_name"/></td>
+																<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="l.product_uom"/></td>
+															</t>
+															<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="'{0:,.1f}'.format(l.product_uom_qty)"/></td>
+															<td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="'{0:,.2f}'.format(l.price_unit)"/></td>
+															<td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="'{0:,.2f}'.format(l.labor_total)"/></td>
+															<td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="'{0:,.2f}'.format(l.labor_cost_basic)"/></td>
+															<!-- <td style="width:20%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="l.department_id.name"/></td> -->
+															<!-- <td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="l.name"/></td> -->
+															<t t-set="line_number" t-value="line_number + 1"/>
+														</tr>
+													</t>
+													<tr>
+														<td style="width:65%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center" colspan="6"><b>Нийт</b></td>
+														<td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><b t-esc="'{0:,.2f}'.format(o.labor_cost)"/></td>
+														<!-- <td style="width:30%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center" colspan="2"></td> -->
+													</tr>
+												</tbody>
+											</table>
+										</tr>
+									</t>
+									<t t-if="o.equipment_line_ids">
+										<tr> 
+											<span>Зардлын төрөл: <b>Машин механизмын зардал</b></span>
+											<table class="table table-l10n_mn-grid" style="width:100%;border: 1px solid #000000;"> 
+												<thead>
+													<tr>
+														<td style="background-color: #D5D8DC ;width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>№</b></td>
+														<td style="background-color: #D5D8DC ;width:35%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Нэр</b></td>
+														<!-- <td style="background-color: #D5D8DC ;width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Хэмжих нэгж</b></td> -->
+														<td style="background-color: #D5D8DC ;width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Тоо</b></td>
+														<td style="background-color: #D5D8DC ;width:10%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Нэгж үнэ</b></td>
+														<td style="background-color: #D5D8DC ;width:10%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Дүн</b></td>
+														<!-- <td style="background-color: #D5D8DC ;width:30%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Зардал гаргах салбар</b></td> -->
+													</tr>
+												</thead>
+												<t t-set="line_number" t-value="1"/>
+												<tbody> 
+													<t t-foreach="o.equipment_line_ids" t-as="e">
+														<tr>
+															<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="line_number"/></td>
+															<td style="width:35%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="e.name"/></td>
+															<!-- <td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="e.product_uom.name"/></td> -->
+															<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="'{0:,.1f}'.format(e.product_uom_qty)"/></td>
+															<td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="'{0:,.2f}'.format(e.price_unit)"/></td>
+															<td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="'{0:,.2f}'.format(e.equipment_total)"/></td>
+															<!-- <td style="width:30%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="e.department_id.name"/></td> -->
+															<t t-set="line_number" t-value="line_number + 1"/>
+														</tr>
+													</t>
+													<tr>
+														<td style="width:60%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center" colspan="4"><b>Нийт</b></td>
+														<td style="width:10%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><b t-esc="'{0:,.2f}'.format(o.equipment_cost)"/></td>
+														<!-- <td style="width:30%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"></td> -->
+													</tr>
+												</tbody>
+											</table>
+										</tr>
+									</t>
+									<t t-if="o.carriage_line_ids">
+										<tr> 
+											<span>Зардлын төрөл: <b>Тээврийн зардал</b></span>
+											<table class="table table-l10n_mn-grid" style="width:100%;border: 1px solid #000000;"> 
+												<thead>
+													<tr>
+														<td style="background-color: #D5D8DC ;width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>№</b></td>
+														<td style="background-color: #D5D8DC ;width:45%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Нэр</b></td>
+														<td style="background-color: #D5D8DC ;width:20%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Үнэ</b></td>
+														<!-- <td style="background-color: #D5D8DC ;width:30%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Зардал гаргах салбар</b></td> -->
+													</tr>
+												</thead>
+												<t t-set="line_number" t-value="1"/>
+												<tbody> 
+													<t t-foreach="o.carriage_line_ids" t-as="c">
+														<tr>
+															<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="line_number"/></td>
+															<td style="width:45%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="c.name"/></td>
+															<td style="width:20%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="'{0:,.2f}'.format(c.price)"/></td>
+															<!-- <td style="width:30%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="c.department_id.name"/></td> -->
+															<t t-set="line_number" t-value="line_number + 1"/>
+														</tr>
+													</t>
+													<tr>
+														<td style="width:50%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center" colspan="2"><b>Нийт</b></td>
+														<td style="width:20%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><b t-esc="'{0:,.2f}'.format(o.carriage_cost)"/></td>
+														<!-- <td style="width:30%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"></td> -->
+													</tr>
+												</tbody>
+											</table>
+										</tr>
+									</t>
+									<t t-if="o.postage_line_ids">
+										<tr> 
+											<span>Зардлын төрөл: <b>Шууд зардал</b></span>
+											<table class="table table-l10n_mn-grid" style="width:100%;border: 1px solid #000000;"> 
+												<thead>
+													<tr>
+														<td style="background-color: #D5D8DC ;width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>№</b></td>
+														<td style="background-color: #D5D8DC ;width:55%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Нэр</b></td>
+														<td style="background-color: #D5D8DC ;width:10%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Үнэ</b></td>
+														<!-- <td style="background-color: #D5D8DC ;width:30%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Зардал гаргах салбар</b></td> -->
+													</tr>
+												</thead>
+												<t t-set="line_number" t-value="1"/>
+												<tbody> 
+													<t t-foreach="o.postage_line_ids" t-as="p">
+														<tr>
+															<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="line_number"/></td>
+															<td style="width:45%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="p.name"/></td>
+															<td style="width:20%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="'{0:,.2f}'.format(p.price)"/></td>
+															<!-- <td style="width:30%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="p.department_id.name"/></td> -->
+															<t t-set="line_number" t-value="line_number + 1"/>
+														</tr>
+													</t>
+													<tr>
+														<td style="width:50%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center" colspan="2"><b>Нийт</b></td>
+														<td style="width:20%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><b t-esc="'{0:,.2f}'.format(o.postage_cost)"/></td>
+														<!-- <td style="width:30%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"></td> -->
+													</tr>
+												</tbody>
+											</table>
+										</tr>
+									</t>
+									<t t-if="o.other_cost_line_ids">
+										<tr> 
+											<span>Зардлын төрөл: <b>Бусад зардал</b></span>
+											<table class="table table-l10n_mn-grid" style="width:100%;border: 1px solid #000000;"> 
+												<thead>
+													<tr>
+														<td style="background-color: #D5D8DC ;width:5%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>№</b></td>
+														<td style="background-color: #D5D8DC ;width:45%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Нэр</b></td>
+														<td style="background-color: #D5D8DC ;width:20%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Үнэ</b></td>
+														<!-- <td style="background-color: #D5D8DC ;width:30%; vertical-align:middle;border: 1px solid #000000;font-size:12px" align="center"><b>Зардал гаргах салбар</b></td> -->
+													</tr>
+												</thead>
+												<t t-set="line_number" t-value="1"/>
+												<tbody> 
+													<t t-foreach="o.other_cost_line_ids" t-as="z">
+														<tr>
+															<td style="width:5%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="line_number"/></td>
+															<td style="width:45%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="z.name"/></td>
+															<td style="width:20%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-esc="'{0:,.2f}'.format(z.price)"/></td>
+															<!-- <td style="width:30%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><span t-field="z.department_id.name"/></td> -->
+															<t t-set="line_number" t-value="line_number + 1"/>
+														</tr>
+													</t>
+													<tr>
+														<td style="width:50%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center" colspan="2"><b>Нийт</b></td>
+														<td style="width:20%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"><b t-esc="'{0:,.2f}'.format(o.other_cost)"/></td>
+														<!-- <td style="width:30%; vertical-align:middle;border: 1px solid #000000;font-size:10px" align="center"></td> -->
+													</tr>
+												</tbody>
+											</table>
+										</tr>
+									</t>
+								</table>
+							</div>
+						<!-- </t> -->
+					</t>
+	         	</t>
+	        </t>
+			<!-- <ul class="list-inline">
+				<li>Page:</li>
+				<li><span class="page"/></li>
+				<li>/</li>
+				<li><span class="topage"/></li>
+			</ul> -->
+		</template>
+    </data>
+</openerp>

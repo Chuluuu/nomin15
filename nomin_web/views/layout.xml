@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="nomin_show_sign_in" customize_show="True" inherit_id="website.show_sign_in" name="Nomin Show Sign In">
+	    <xpath expr="//li[@groups='base.group_public']" position="replace"></xpath>
+	    <xpath expr="//li[@groups='base.group_public']" position="replace">
+	    	<li groups="base.group_public">
+	            <a t-attf-href="/web/login">
+	                <b>Нэвтрэх</b>
+	            </a>
+	        </li>
+	    </xpath>
+	</template>
+	
+	<!-- xs deer Topbar-iig gardag bolgoh -->
+	<template id="nomin_user_navbar" inherit_id="website.user_navbar" groups="base.group_user">
+	    <xpath expr="//nav[@id='oe_main_menu_navbar']" position="attributes">
+	    	<attribute name="class">navbar navbar-inverse</attribute>
+	    </xpath>
+	</template>
+	
+	<!-- login page responsive -->
+	<template id="nomin_login_layout" inherit_id="website.login_layout" name="Website Login Layout">
+	    <xpath expr="t" position="replace">
+	        <t t-call="website.layout">
+	            <div class="container visible-xs">
+	            	<div class="content-bg">
+	            		<div class="row" t-raw="0"/>
+	            	</div>
+	            </div>
+	            <div class="oe_website_login_container hidden-xs" t-raw="0"/>
+	        </t>
+	    </xpath>
+	</template>
+	
+	<template id="search_all_form" name="Search All Form">
+		<form class="form_search" id="search_all_form" role="search" t-attf-action="/allresults" method="get">
+			<div class="input-group">
+				<input type="search" name="search" class="form-control" placeholder="вэбсайтаас хайх ..." t-att-value="search or ''"/>
+				<span class="input-group-btn">
+			       <button class="btn btn-default hidden-xs hidden-sm" type="submit"><img src="/nomin_web/static/img/glyphicon-search.png" class="glyphicon-search"/></button>
+			       <button class="btn btn-primary visible-xs visible-sm" type="submit" style="padding-top: 12px;"><span class="fa fa-search msearch-btn"></span></button>
+				</span>
+	    	</div>
+    	</form>
+	</template>
+	
+	<template id="nomin_header" inherit_id = "website.layout" name ="Nomin Header">
+		<xpath expr="//div[@id='wrapwrap']/header" position="replace">
+			<header id="header">
+                    <div class="large-header">
+                    	<div class="row">
+	                    	<div class="container">
+                                <div class="col-xs-7 col-md-3 logo-wrapper m-logo-wrapper">
+	                                <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+                                </div>
+	                  			<div class="col-xs-1 col-md-5 hidden-sm hidden-xs">
+	                  			   <img src="/nomin_web/static/img/header-not.png" class="garchig"/>
+	                  			</div>
+	                            <div class="col-xs-3 col-md-4 pull-right tools" align="right">
+									<div class="row">
+										<div class="hidden-xs hidden-sm">
+									    	<t t-call="nomin_web.search_all_form"/>
+										</div>
+										<ul class="m-submenu visible-xs visible-sm">
+								        	<li class="m-search">
+								        		<a href="#" class="search-open"><span class="fa fa-search msearch-btn"></span></a>
+								        	</li>
+								        	<li>
+								        		<t t-if="website.user_id == user_id">
+													<a href="/register/"><i class="icon icon icon-user-add mi"></i></a>
+												</t>
+								        	</li>
+								        </ul>
+				                        <div class="header-register hidden-xs hidden-sm">
+											<t t-if="website.user_id == user_id">
+												<!-- href="/web/partner/search"  -->
+												<a href="/web/partner/search" class=""><i class="icon icon icon-user-add mi"></i>Харилцагчийн бүртгэл</a>
+											</t>
+										</div>
+										<div class="mobile-menu-wrapper hidden-lg hidden-md">
+											<div class="slicknav_menu">
+												<button type="button" class="navbar-toggle slicknav_btn" data-toggle="collapse" data-target=".navbar-top-collapse">
+				                                    <span class="sr-only">Toggle navigation</span>
+				                                    <span class="icon-bar"></span>
+				                                    <span class="icon-bar"></span>
+				                                    <span class="icon-bar"></span>
+				                                </button>
+											</div>
+										</div>
+									</div>
+						        </div>
+	                      </div>
+					</div>
+				</div>
+				<div class="m-search-bar hidden">
+           			<t t-call="nomin_web.search_all_form"/>
+		        </div>
+	          </header>
+	          
+	          <div class="mainmenu">
+				 <div class="navbar navbar-default navbar-static-top">
+					  <div class="container">
+						<div class="collapse navbar-collapse navbar-top-collapse">
+							
+							<ul class="nav navbar-nav sf-menu hidden-xs hidden-sm" id="top_menu">
+								<t t-foreach="website.menu_id.child_id" t-as="submenu">
+									<t t-call="website.submenu"/>
+								</t>
+								<li class="dropdown" t-ignore="true" t-if="website.user_id != user_id">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+										<b>
+											<span t-esc="(len(user_id.name)&gt;25) and (user_id.name[:23]+'...') or user_id.name"/>
+										</b>
+									</a>
+									<ul id="o_logout" class="dropdown-menu js_usermenu" role="menu">
+										<li><a t-attf-href="/my/tender" role="menuitem">Миний бүртгэл</a></li>
+										<li groups="base.group_portal"><a t-attf-href="/web" role="menuitem">Систем</a></li>
+										<li id="o_logout"><a t-attf-href="/web/session/logout?redirect=/" role="menuitem">Гарах</a></li>
+									</ul>
+								</li>
+							</ul>
+							
+							<ul class="slicknav_nav visible-xs visible-sm" style="display:block;" aria-hidden="false" role="menu">
+								<t t-foreach="website.menu_id.child_id" t-as="submenu">
+									<t t-call="website.submenu"/>
+								</t>
+								<li class="dropdown" t-ignore="true" t-if="website.user_id != user_id">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+										<b>
+											<span t-esc="(len(user_id.name)&gt;25) and (user_id.name[:23]+'...') or user_id.name"/><span class="slicknav_arrow">▼</span>
+										</b>
+									</a>
+									<ul class="dropdown-menu js_usermenu" role="menu" style="font-size: 13px;margin-left: 20px;">
+										<li><a t-attf-href="/my/tender" role="menuitem">Миний бүртгэл</a></li>
+										<li id="o_logout"><a t-attf-href="/web/session/logout?redirect=/" role="menuitem">Гарах</a></li>
+									</ul>
+								</li>
+								<li groups="base.group_public">
+						            <a t-attf-href="/web/login">
+						                <b>Нэвтрэх</b>
+						            </a>
+						        </li>
+							</ul>
+							
+						</div>
+					  </div>
+					</div>
+			  </div>
+     
+             <t t-if="'Шинээр зарлагдсан тендерүүд'!=additional_title">
+             <div id="page_title">
+              	<div class="container-custom clearfix">
+					<div class="container">
+						<div class="page-name"></div>
+						
+						<div class="breadcrumb clearfix"> 
+							<t t-if="'Homepage'!=additional_title">
+								<a href="/">Нүүр хуудас</a>
+								<span class="current-page">
+									<t t-if="additional_title">
+										<t t-esc="additional_title"/>
+									</t>
+								</span>
+							</t>
+						</div>
+					</div>
+				</div>
+			</div>
+			</t>
+      </xpath>
+ </template>
+ 
+	<template id="nomin_web.searchresults" name="Result List">
+			<div class="row">
+				<div class="col-sm-9 col-md-9">
+					<h3 class="pagetitle">Хайлт: <t t-esc="search"/></h3>
+					<div class="tabContents">
+						<div id="news-latest" class="tab-content">
+						<t t-foreach="tenders" t-as="tender">
+							<ul class="news-list" style="margin-left:-40px; margin-top:20px;">
+								<li>
+	                                <a t-attf-href="/tender_detail/#{ slug(tender) }">
+	                                <span class="t"><t t-esc="tender.desc_name"/></span>
+	                                <span class="d">
+	                                	<!-- <span t-field="tender.published_date" t-field-options='{"format":"YYYY"}'/> оны
+										<span t-field="tender.published_date" t-field-options='{"format":"MM"}'/> сарын
+										<span t-field="tender.published_date" t-field-options='{"format":"dd"}'/> өдөр -->
+	                                	<span class="user-date" t-esc="tender.published_date"/>
+	                                	<!-- <span t-field="tender.published_date" t-field-options='{"format":"YYYY-MM-dd hh:mm"}'/> -->
+	                                	<!-- <t t-esc="tender.create_date"/> -->
+	                                	<!-- <t t-set="tender.invitation_id.invitation_detail.split(1-50)"/> -->
+	                                	<!-- <t t-raw="tender.invitation_id.invitation_detail.split(' ')[0] or False"/> -->
+	                                	
+	                                </span>
+	                                <div class="invitation_details" t-esc="tender.invitation_id.invitation_detail.split('\n')[0][:350] or False"></div>
+	                               </a>
+	                            </li>
+							</ul>
+						</t>
+						<div class="products_pager">
+							<t t-call="website.pager"/>
+						</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-3 col-md-3">
+					<t t-call="nomin_web.tender_selection"/>
+				</div>
+				<!-- https://www.nomin.mn/mn/exchangeWeb -->
+			</div>
+	</template>
+		
+	<template id="allsearch_results" name="Хайлтын үр дүн">
+		<t t-call="website.layout" >
+			<div id="wrap" class="oe_structure oe_empty">
+				<div class="container">
+					<div class="content-bg">
+						<!-- <t t-esc="pager['offset']+1"/>
+						<div class="col-md-9 col-sm-9 col-md-offset-3">
+			                <t t-call="website.pager"/>
+			            </div> -->
+			            <t t-call="nomin_web.searchresults"/>
+			            
+		            </div>
+	            </div>
+			</div>
+		</t>
+		<script type="text/javascript">
+		<![CDATA[
+			// *------- hailtiin ur dungiin haragdats neg formatand oruulah -------*
+		    (function strip() {
+				$(".invitation_details").each(function(){
+		    	    var $this = $(this);
+		    	    var t = $this.text();
+		    	    $this.html(t.replace('&lt','<').replace('&gt', '>'));
+				});
+				$(".invitation_details").each(function(){
+		    	    var $this = $(this);
+		    	    var t = $this.text();
+		    	    $this.html(t.replace(/<\/?[^>]+(>|$)/g, "") + "...");
+				});
+			})();
+		]]>	
+		</script>
+	</template>
+	
+	<template id="nomin_footer" inherit_id = "website.layout" name ="Nomin Footer">
+ 	<xpath expr="//div[@id='footer']" position="replace">
+    	<div class="oe_structure" id="eshopfooter">
+    		<div class="top">
+	    		<div class="container">
+	                <div class="row">
+		                    <div class="col-sm-4">
+		                    	<div class="block">
+									<h4>Тендер</h4>
+									<div class="block-content">
+										<ul class="links">
+											<li><a href="/new_tenders/"><span class="fa fa-chevron-right" aria-hidden="true"></span>Нүүр хуудас</a></li>
+											<li><a href="/tender_list"><span class="fa fa-chevron-right" aria-hidden="true"></span>Тендерийн урилга</a></li>
+											<li><a href="/result_list/"><span class="fa fa-chevron-right" aria-hidden="true"></span>Тендерийн үр дүн</a></li>
+											<li><a href="/suggestion/"><span class="fa fa-chevron-right" aria-hidden="true"></span>Зөвлөгөө</a></li>
+											<li><a href="/page/contactus"><span class="fa fa-chevron-right" aria-hidden="true"></span>Бидэнтэй холбогдох</a></li>
+											
+											<!-- <t t-foreach="website.menu_id.child_id" t-as="submenu">
+												<li><a><span class="fa fa-chevron-right" aria-hidden="true" t-call="website.submenu"></span></a></li>
+											</t> -->
+										</ul>
+									</div>
+								</div>
+							</div>
+		                    <div class="col-sm-4">
+		                    	<div class="block">
+									<h4>Холбоосууд</h4>
+									<div class="block-content">
+										<ul class="links">
+											<li><a target="_blank" href="https://www.nomin.mn/mn/"><span class="fa fa-chevron-right" aria-hidden="true"></span>Номин Холдинг</a></li>
+											<li><a target="_blank" href="https://card.nomin.mn/"><span class="fa fa-chevron-right" aria-hidden="true"></span>Номин Бонус Карт</a></li>
+											<li><a target="_blank" href="https://eshop.nomin.mn/"><span class="fa fa-chevron-right" aria-hidden="true"></span>Онлайн Дэлгүүр</a></li>
+											<li><a target="_blank" href="https://www.nomin.mn/mn/c/61"><span class="fa fa-chevron-right" aria-hidden="true"></span>Хэрэглэгчийн Төв</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+		                    	<div class="block">
+									<h4>Холбоо барих</h4>
+										<div class="block-content">
+											<ul class="contact-info">
+												<li>
+													<b>Хаяг:  </b>"Номин Холдинг" ХХК-ийн Номин Юнайтед оффис Хан-Уул дүүрэг, Чингисийн өргөн чөлөө,Улаанбаатар 17042, Монгол Улс, 210136, Ш/Ч-2316
+												</li>
+												<li>
+													<b>Утас:  </b>1800 2888
+												</li>
+												<li>
+													<b>И-мэйл:  </b><a href="mailto:mail@example.com">nomin@nomin.net</a>
+												</li>
+												<li>
+													<b>Веб:  </b>www.nomin.mn
+												</li>
+											</ul>
+										</div>
+									</div>
+							</div>
+					</div>
+	            </div>   
+            </div>
+            <div class="bottom-footer">
+                 	© 2016 Номин Холдинг. Бүх эрх хуулийн хүрээнд хамгаалагдсан. 
+            </div>        		
+    	</div>
+    	
+    </xpath>
+ </template>
+
+ 
+
+
+
+
+</odoo>

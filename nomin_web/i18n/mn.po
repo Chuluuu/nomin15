@@ -1,0 +1,765 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* nomin_web
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-27 01:58+0000\n"
+"PO-Revision-Date: 2016-10-27 01:58+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.send_tender
+#: model:ir.ui.view,arch_db:nomin_web.survey_question
+#: model:ir.ui.view,arch_db:nomin_web.thanks
+msgid "&amp;times;"
+msgstr "&amp;times;"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.result
+msgid "<b>Question </b>"
+msgstr "<b>Question </b>"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.nomin_footer
+msgid "<b>Веб:  </b>www.nomin.mn"
+msgstr "<b>Веб:  </b>www.nomin.mn"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.nomin_footer
+msgid "<b>Утас:  </b>1800 2888"
+msgstr "<b>Утас:  </b>1800 2888"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.nomin_footer
+msgid "<b>Хаяг:  </b>\"Номин Холдинг\" ХХК-ийн Номин Юнайтед оффис Хан-Уул дүүрэг, Чингисийн өргөн чөлөө,Улаанбаатар 17042, Монгол Улс, 210136, Ш/Ч-2316"
+msgstr "<b>Хаяг:  </b>\"Номин Холдинг\" ХХК-ийн Номин Юнайтед оффис Хан-Уул дүүрэг, Чингисийн өргөн чөлөө,Улаанбаатар 17042, Монгол Улс, 210136, Ш/Ч-2316"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.tender_channel_header
+msgid "<i class=\"fa fa-cloud-upload\"/> Upload"
+msgstr "<i class=\"fa fa-cloud-upload\"/> Upload"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.survey_question
+msgid "<span aria-hidden=\"true\">&amp;times;</span><span class=\"sr-only\">Close</span>"
+msgstr "<span aria-hidden=\"true\">&amp;times;</span><span class=\"sr-only\">Close</span>"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.nomin_header
+msgid "<span class=\"sr-only\">Toggle navigation</span>\n"
+"	                                    <span class=\"icon-bar\"/>\n"
+"	                                    <span class=\"icon-bar\"/>\n"
+"	                                    <span class=\"icon-bar\"/>"
+msgstr "<span class=\"sr-only\">Toggle navigation</span>\n"
+"	                                    <span class=\"icon-bar\"/>\n"
+"	                                    <span class=\"icon-bar\"/>\n"
+"	                                    <span class=\"icon-bar\"/>"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.nomin_header
+msgid "<span class=\"sr-only\">Toggle navigation</span>\n"
+"                     <span class=\"icon-bar\"/>\n"
+"                     <span class=\"icon-bar\"/>\n"
+"                     <span class=\"icon-bar\"/>"
+msgstr "<span class=\"sr-only\">Toggle navigation</span>\n"
+"                     <span class=\"icon-bar\"/>\n"
+"                     <span class=\"icon-bar\"/>\n"
+"                     <span class=\"icon-bar\"/>"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_message_needaction
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_message_needaction
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_message_needaction
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_message_needaction
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_message_needaction
+msgid "Action Needed"
+msgstr "Action Needed"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_answer_id
+msgid "Answer"
+msgstr "Хариулт"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_ans_name
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_label_name
+msgid "Answer Name"
+msgstr "Хариулт"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.view_survey_question_form
+msgid "Answer Types"
+msgstr "Хариултын төрлүүд"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_label_score
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_label_score
+msgid "Answer Value"
+msgstr "Answer Value"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.result
+msgid "Answered"
+msgstr "Хариулсан"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_answer_ids
+#: model:ir.ui.view,arch_db:nomin_web.view_survey_question_form
+msgid "Answers"
+msgstr "Хариултууд"
+
+#. module: nomin_web
+#. openerp-web
+#: code:addons/nomin_web/static/src/js/upload.js:251
+#, python-format
+msgid "Category"
+msgstr "Ангилал"
+
+#. module: nomin_web
+#. openerp-web
+#: code:addons/nomin_web/static/src/js/upload.js:171
+#, python-format
+msgid "Channel contains the given title, please change before Save or Publish."
+msgstr "Channel contains the given title, please change before Save or Publish."
+
+#. module: nomin_web
+#: code:addons/nomin_web/controller/main.py:5485
+#, python-format
+msgid "Check your email to activate your account!"
+msgstr "Check your email to activate your account!"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.view_survey_question_form
+msgid "Choices"
+msgstr "Хариулт"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "City"
+msgstr "Сум/Дүүрэг"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.survey_question
+msgid "Close"
+msgstr "Болих"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "Company Name"
+msgstr "Компанийн нэр"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "Confirm\n"
+"                                        <span class=\"fa fa-long-arrow-right\"/>"
+msgstr "Confirm\n"
+"                                        <span class=\"fa fa-long-arrow-right\"/>"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "Contact Details"
+msgstr "Холбоо барих мэдээлэл"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "Country"
+msgstr "Улс"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "Country..."
+msgstr "Улс..."
+
+#. module: nomin_web
+#. openerp-web
+#: code:addons/nomin_web/static/src/js/upload.js:220
+#, python-format
+msgid "Create new tag '%s'"
+msgstr "Create new tag '%s'"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_create_uid
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_create_uid
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_create_uid
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_create_uid
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_create_uid
+msgid "Created by"
+msgstr "Үүсгэгч"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_create_date
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_create_date
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_create_date
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_create_date
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_create_date
+msgid "Created on"
+msgstr "Үүсгэсэн"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_date_create
+msgid "Date Create"
+msgstr "Date Create"
+
+#. module: nomin_web
+#: model:ir.model.fields,help:nomin_web.field_answer_label_message_last_post
+#: model:ir.model.fields,help:nomin_web.field_portal_user_file_message_last_post
+#: model:ir.model.fields,help:nomin_web.field_question_label_message_last_post
+#: model:ir.model.fields,help:nomin_web.field_question_survey_message_last_post
+#: model:ir.model.fields,help:nomin_web.field_tender_suggestion_message_last_post
+msgid "Date of the last message posted on the record."
+msgstr "Бичлэгт хамгийн сүүлд илгээгдсэн зурвасын огноо."
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_description
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_description
+#: model:ir.ui.view,arch_db:nomin_web.view_portal_user_file_form
+#: model:ir.ui.view,arch_db:nomin_web.view_suggestion_document_form
+msgid "Description"
+msgstr "Тодорхойлолт"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "Details"
+msgstr "Дэлгэрэнгүй"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_display_name
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_display_name
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_display_name
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_display_name
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_display_name
+msgid "Display Name"
+msgstr "Дэлгэцийн Нэр"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.portal_register_file
+msgid "Download"
+msgstr "Татах"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "Email"
+msgstr "Имэйл"
+
+#. module: nomin_web
+#: model:ir.model,name:nomin_web.model_answer_label
+#: model:ir.model,name:nomin_web.model_portal_user_file
+#: model:ir.model,name:nomin_web.model_question_label
+#: model:ir.model,name:nomin_web.model_question_survey
+#: model:ir.model,name:nomin_web.model_tender_suggestion
+msgid "Email Thread"
+msgstr "Эмэйл Салбар"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.complete_documentation
+msgid "Email address"
+msgstr "Имэйл хаяг"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.new_tender_list
+msgid "Explore Our Website"
+msgstr "Explore Our Website"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_file_id
+msgid "File Name"
+msgstr "Файлын нэр"
+
+#. module: nomin_web
+#. openerp-web
+#: code:addons/nomin_web/static/src/js/upload.js:90
+#, python-format
+msgid "File is too big. File size cannot exceed 15MB"
+msgstr "File is too big. File size cannot exceed 15MB"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.new_tender_list
+#: model:ir.ui.view,arch_db:nomin_web.side_banner
+msgid "First slide"
+msgstr "First slide"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_message_follower_ids
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_message_follower_ids
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_message_follower_ids
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_message_follower_ids
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_message_follower_ids
+msgid "Followers"
+msgstr "Дагагчид"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_message_channel_ids
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_message_channel_ids
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_message_channel_ids
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_message_channel_ids
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Followers (Channels)"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_message_partner_ids
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_message_partner_ids
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_message_partner_ids
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_message_partner_ids
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Followers (Partners)"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.new_tender_list
+msgid "Get Business Knowledge"
+msgstr "Get Business Knowledge"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_id
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_id
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_id
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_id
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_id
+msgid "ID"
+msgstr "ID"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_token
+msgid "Identification token"
+msgstr "Identification token"
+
+#. module: nomin_web
+#: model:ir.model.fields,help:nomin_web.field_answer_label_message_unread
+#: model:ir.model.fields,help:nomin_web.field_portal_user_file_message_unread
+#: model:ir.model.fields,help:nomin_web.field_question_label_message_unread
+#: model:ir.model.fields,help:nomin_web.field_question_survey_message_unread
+#: model:ir.model.fields,help:nomin_web.field_tender_suggestion_message_unread
+msgid "If checked new messages require your attention."
+msgstr "Хэрэв тэмдэглэгдсэн бол таныг шинэ зурвасуудад анхаарал хандуулахыг шаардана."
+
+#. module: nomin_web
+#: model:ir.model.fields,help:nomin_web.field_answer_label_message_needaction
+#: model:ir.model.fields,help:nomin_web.field_portal_user_file_message_needaction
+#: model:ir.model.fields,help:nomin_web.field_question_label_message_needaction
+#: model:ir.model.fields,help:nomin_web.field_question_survey_message_needaction
+#: model:ir.model.fields,help:nomin_web.field_tender_suggestion_message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "If checked, new messages require your attention."
+
+#. module: nomin_web
+#. openerp-web
+#: code:addons/nomin_web/static/src/js/upload.js:85
+#, python-format
+msgid "Invalid file type. Please select pdf or image file"
+msgstr "Invalid file type. Please select pdf or image file"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_message_is_follower
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_message_is_follower
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_message_is_follower
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_message_is_follower
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_message_is_follower
+msgid "Is Follower"
+msgstr "Дагагч эсэх"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_is_publish
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_is_publish
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_is_publish
+msgid "Is Publish"
+msgstr "Is Publish"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_sequence
+msgid "Label Sequence order"
+msgstr "Label Sequence order"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_message_last_post
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_message_last_post
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_message_last_post
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_message_last_post
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_message_last_post
+msgid "Last Message Date"
+msgstr "Сүүлийн зурвасын огноо"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label___last_update
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file___last_update
+#: model:ir.model.fields,field_description:nomin_web.field_question_label___last_update
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey___last_update
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion___last_update
+msgid "Last Modified on"
+msgstr "Сүүлийн засвар хийсэн огноо"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_write_uid
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_write_uid
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_write_uid
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_write_uid
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_write_uid
+msgid "Last Updated by"
+msgstr "Сүүлийн засвар хийсэн"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_write_date
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_write_date
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_write_date
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_write_date
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_write_date
+msgid "Last Updated on"
+msgstr "Сүүлийн засвар хийсэн огноо"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.result
+msgid "Matrix:"
+msgstr "Matrix:"
+
+#. module: nomin_web
+#: model:ir.model.fields,help:nomin_web.field_tender_suggestion_suggestion_image_medium
+msgid "Medium-sized image of this contact. It is automatically resized as a 128x128px image, with aspect ratio preserved. Use this field in form views or some kanban views."
+msgstr "Medium-sized image of this contact. It is automatically resized as a 128x128px image, with aspect ratio preserved. Use this field in form views or some kanban views."
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_message_ids
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_message_ids
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_message_ids
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_message_ids
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_message_ids
+msgid "Messages"
+msgstr "Зурвасууд"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "My Account"
+msgstr "Миний данс"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.nomin_header
+msgid "My Website"
+msgstr "My Website"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_name
+#: model:ir.ui.view,arch_db:nomin_web.view_portal_user_file_form
+#: model:ir.ui.view,arch_db:nomin_web.view_suggestion_document_form
+msgid "Name"
+msgstr "Нэр"
+
+#. module: nomin_web
+#: model:website.menu,name:nomin_web.website_new_tender_menu
+msgid "New Tenders"
+msgstr "Нүүр хуудас"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_message_needaction_counter
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_message_needaction_counter
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_message_needaction_counter
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_message_needaction_counter
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_message_needaction_counter
+msgid "Number of Actions"
+msgstr "Үйлдлийн тоо"
+
+#. module: nomin_web
+#: model:ir.model.fields,help:nomin_web.field_answer_label_message_needaction_counter
+#: model:ir.model.fields,help:nomin_web.field_portal_user_file_message_needaction_counter
+#: model:ir.model.fields,help:nomin_web.field_question_label_message_needaction_counter
+#: model:ir.model.fields,help:nomin_web.field_question_survey_message_needaction_counter
+#: model:ir.model.fields,help:nomin_web.field_tender_suggestion_message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Үйлдэл шаардлагатай зурвасын тоо"
+
+#. module: nomin_web
+#: model:ir.model.fields,help:nomin_web.field_answer_label_message_unread_counter
+#: model:ir.model.fields,help:nomin_web.field_portal_user_file_message_unread_counter
+#: model:ir.model.fields,help:nomin_web.field_question_label_message_unread_counter
+#: model:ir.model.fields,help:nomin_web.field_question_survey_message_unread_counter
+#: model:ir.model.fields,help:nomin_web.field_tender_suggestion_message_unread_counter
+msgid "Number of unread messages"
+msgstr "Уншаагүй зурвасын тоо"
+
+#. module: nomin_web
+#: model:ir.model,name:nomin_web.model_res_partner
+msgid "Partner"
+msgstr "Харилцагч"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.complete_documentation
+msgid "Password"
+msgstr "Нууц үг"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "Phone"
+msgstr "Утас"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.complete_documentation
+msgid "Please Sign Up"
+msgstr "Please Sign Up"
+
+#. module: nomin_web
+#: model:ir.actions.act_window,name:nomin_web.action_survey_question_menu
+#: model:ir.ui.menu,name:nomin_web.menu_website_survey_root
+#: model:ir.ui.menu,name:nomin_web.nomin_survey_question_menu
+#: model:ir.ui.view,arch_db:nomin_web.view_survey_question_form
+#: model:ir.ui.view,arch_db:nomin_web.view_survey_question_tree
+msgid "Poll"
+msgstr "Санал асуулга"
+
+#. module: nomin_web
+#: model:ir.actions.act_window,name:nomin_web.action_portal_file_upload
+#: model:ir.ui.menu,name:nomin_web.menu_website_portal_file_root
+#: model:ir.ui.menu,name:nomin_web.nomin_portal_file_upload_menu
+#: model:ir.ui.view,arch_db:nomin_web.view_portal_user_file_form
+#: model:ir.ui.view,arch_db:nomin_web.view_portal_user_file_tree
+msgid "Portal User File"
+msgstr "Харилцагч бүртгүүлэх файл"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_published_date
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_published_date
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_published_date
+msgid "Published Date"
+msgstr "Тендер зарласан огноо"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_question_id
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_question_id
+msgid "Question"
+msgstr "Асуулт"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_question
+#: model:ir.ui.view,arch_db:nomin_web.view_survey_question_form
+msgid "Question Name"
+msgstr "Асуулт"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.complete_documentation
+msgid "Register"
+msgstr "Бүртгэл"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.complete_documentation
+msgid "Save"
+msgstr "Хадгалах"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.new_tender_list
+#: model:ir.ui.view,arch_db:nomin_web.side_banner
+msgid "Second slide"
+msgstr "Second slide"
+
+#. module: auth_signup
+#: model:ir.ui.view,arch_db:auth_signup.login
+msgid "Reset Password"
+msgstr "Нууц үг шинэчлэх"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.result
+msgid "Skipped"
+msgstr "Skipped"
+
+#. module: nomin_web
+#: model:ir.model.fields,help:nomin_web.field_tender_suggestion_suggestion_image_small
+msgid "Small-sized image of this contact. It is automatically resized as a 64x64px image, with aspect ratio preserved. Use this field anywhere a small image is required."
+msgstr "Холбогчийн жижиг хэмжээтэй зураг. Энэ нь автоматаар харьцаа нь хадгалагдан 64x64px хэмжээтэй болдог. Энэ талбарыг жижиг зураг хэрэг болсон газар бүрт хэрэглэж болно."
+
+#. module: nomin_web
+#: code:addons/nomin_web/controller/main.py:5481
+#, python-format
+msgid "Something went wrong, please try again later or contact us."
+msgstr "Something went wrong, please try again later or contact us."
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.result
+msgid "Sorry, No one answered this question."
+msgstr "Sorry, No one answered this question."
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "State / Province"
+msgstr "State / Province"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "Street"
+msgstr "Гудамж"
+
+#. module: nomin_web
+#: model:ir.ui.menu,name:nomin_web.menu_website_tender_suggestion_root
+#: model:website.menu,name:nomin_web.website_tender_suggestion_menu
+msgid "Suggestion"
+msgstr "ЗӨВЛӨГӨӨ"
+
+#. module: nomin_web
+#: model:ir.actions.act_window,name:nomin_web.action_tender_suggestion_menu
+#: model:ir.ui.menu,name:nomin_web.nomin_tender_suggestion_menu
+#: model:ir.ui.view,arch_db:nomin_web.view_suggestion_document_form
+#: model:ir.ui.view,arch_db:nomin_web.view_suggestion_document_tree
+msgid "Suggestion Document"
+msgstr "Зөвлөгөө"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_suggestion_image
+msgid "Suggestion Image"
+msgstr "Зураг"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_suggestion_image_medium
+msgid "Suggestion Medium-sized image"
+msgstr "Suggestion Medium-sized image"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_name
+msgid "Suggestion Name"
+msgstr "Нэр"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_suggestion_image_small
+msgid "Suggestion Small-sized image"
+msgstr "Suggestion Small-sized image"
+
+#. module: nomin_web
+#. openerp-web
+#: code:addons/nomin_web/static/src/js/upload.js:274
+#, python-format
+msgid "Tags"
+msgstr "Tags"
+
+#. module: nomin_web
+#: model:website.menu,name:nomin_web.website_tender_result_list_menu
+msgid "Tender Result"
+msgstr "ТЕНДЕР ШАЛГАРУУЛАЛТЫН ҮР ДҮН"
+
+#. module: nomin_web
+#: model:website.menu,name:nomin_web.website_tender_list_menu
+msgid "Tenders"
+msgstr "ТЕНДЕР"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.send_tender
+#: model:ir.ui.view,arch_db:nomin_web.thanks
+msgid "Thanks!"
+msgstr "БАЯРЛАЛАА!"
+
+#. module: nomin_web
+#: code:addons/nomin_web/controller/main.py:5463
+#, python-format
+msgid "That does not seem to be an email address."
+msgstr "That does not seem to be an email address."
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.new_tender_list
+#: model:ir.ui.view,arch_db:nomin_web.side_banner
+msgid "Third slide"
+msgstr "Third slide"
+
+#. module: nomin_web
+#: model:ir.model.fields,help:nomin_web.field_tender_suggestion_suggestion_image
+msgid "This field holds the image used as avatar for this contact, limited to 1024x1024px"
+msgstr "This field holds the image used as avatar for this contact, limited to 1024x1024px"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_label_ids
+msgid "Types of answers"
+msgstr "хариултын сонголтууд"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_message_unread
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_message_unread
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_message_unread
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_message_unread
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_message_unread
+msgid "Unread Messages"
+msgstr "Уншаагүй Зурвасууд"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_message_unread_counter
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_message_unread_counter
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_message_unread_counter
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_message_unread_counter
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Unread Messages Counter"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.tender_channel_header
+msgid "Upload Presentation"
+msgstr "Upload Presentation"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "VAT Number"
+msgstr "НӨАТ дугаар"
+
+#. module: nomin_web
+#: model:ir.model.fields,field_description:nomin_web.field_answer_label_website_message_ids
+#: model:ir.model.fields,field_description:nomin_web.field_portal_user_file_website_message_ids
+#: model:ir.model.fields,field_description:nomin_web.field_question_label_website_message_ids
+#: model:ir.model.fields,field_description:nomin_web.field_question_survey_website_message_ids
+#: model:ir.model.fields,field_description:nomin_web.field_tender_suggestion_website_message_ids
+msgid "Website Messages"
+msgstr "Вебсайтын зурвасууд"
+
+#. module: nomin_web
+#: model:ir.model.fields,help:nomin_web.field_answer_label_website_message_ids
+#: model:ir.model.fields,help:nomin_web.field_portal_user_file_website_message_ids
+#: model:ir.model.fields,help:nomin_web.field_question_label_website_message_ids
+#: model:ir.model.fields,help:nomin_web.field_question_survey_website_message_ids
+#: model:ir.model.fields,help:nomin_web.field_tender_suggestion_website_message_ids
+msgid "Website communication history"
+msgstr "Вебсайтын харилцааны түүх"
+
+#. module: nomin_web
+#. openerp-web
+#: code:addons/nomin_web/static/src/js/upload.js:115
+#, python-format
+msgid "You can not upload password protected file."
+msgstr "You can not upload password protected file."
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "Your Name"
+msgstr "Таны нэр"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.send_tender
+#: model:ir.ui.view,arch_db:nomin_web.thanks
+msgid "Your message has been sent successfully."
+msgstr "Your message has been sent successfully."
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "Zip / Postal Code"
+msgstr "Зип / шуудангийн код"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.nomin_footer
+msgid "nomin@nomin.net"
+msgstr "nomin@nomin.net"
+
+#. module: nomin_web
+#: model:ir.model,name:nomin_web.model_res_partner_file
+msgid "res.partner.file"
+msgstr "res.partner.file"
+
+#. module: nomin_web
+#: model:ir.model,name:nomin_web.model_res_partner_file_type
+msgid "res.partner.file.type"
+msgstr "res.partner.file.type"
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.details_inherit
+msgid "select..."
+msgstr "select..."
+
+#. module: nomin_web
+#: model:ir.ui.view,arch_db:nomin_web.nomin_footer
+msgid "© 2016 Номин Холдинг. Бүх эрх хуулийн хүрээнд хамгаалагдсан."
+msgstr "© 2016 Номин Холдинг. Бүх эрх хуулийн хүрээнд хамгаалагдсан."

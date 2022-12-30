@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+		<record id="view_users_form_inherit_nomin_base" model="ir.ui.view">
+            <field name="name">res.users.form.inherit.nomin_base</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+            <data>
+            	<xpath expr='//field[@name="partner_id"]' position="replace">
+		             <field name="partner_id" readonly="1" required="0"
+		                     attrs="{'invisible': [('id', '=', False)]}"/>
+                </xpath>
+                <xpath  expr="//header" position="inside">
+                        <button name="action_change" invisible="0" string="Албан тушаалын дагуу өөрчлөх" type="object" class="oe_highlight" />
+                        <!-- <button name="action_update_additional_roles" invisible="0" string="Бүх хэрэглэгчийн хандалтын төрлийг шинэчлэх" type="object" class="oe_highlight" />
+                         <button name="action_update_additional_departments" invisible="0" string="Бүх хэрэглэгчийн хэлтэсийн төлвийг шинэчлэх" type="object" class="oe_highlight" /> -->
+                </xpath>
+                <xpath expr='//field[@name="partner_id"]' position="after">
+                	<field name="job_id"/>
+                	<field name="department_id"/>
+                    <field name="arranged" invisible= "1"/>
+                </xpath>
+
+                <xpath expr='//field[@name="company_id"]' position="after">
+                	<field name="job_id"/>
+                	<field name="department_id"/>
+                    <field name="role_type" invisible = "1"/>
+                    <field name="count_of_menu_dominant_roles" invisible = "1"/> 
+                    <field name="count_of_additional_roles" invisible = "1"/>
+                    <field name="count_of_additional_departments" invisible = "1"/>
+                     <field name="count_of_managerial_roles" invisible = "1"/> 
+                     <field name='sdlc_config' invisible="1"/>
+                     
+                     <field name='odoo15_sync'/>
+                    <!-- <field name="additional_roles" widget="many2many_tags" readonly="1" attrs="{'invisible': [('role_type','=','with_standard_roles')]}"/>
+                    <field name="additional_departments" widget="many2many_tags"  />
+                     -->
+                	
+                </xpath>
+
+                <xpath expr='//page[@name="access_rights"]' position="after">
+                 	<page string="Allowed Departments">
+                 		 <group colspan="1" col="2">
+                           
+                 		 	<separator string="Project Allowed Departments" colspan="2"/>
+                            <field name="project_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                 		 	<separator string="Allowed teams" colspan="2"/>
+                            <field name="allowed_teams" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+
+
+
+                            <separator string="Budget Allowed Departments" colspan="2"/>
+                            <field name="budget_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                            
+                            <separator string="Payment Request Allowed Departments" colspan="2"/>
+                            <field name="payment_request_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                            
+                            <separator string="Delivery Allowed Departments" colspan="2"/>
+                            <field name="delivery_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                            <separator string="Hr Allowed Departments" colspan="2"/>
+                            <field name="hr_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                            <separator string="Helpdesk Allowed Departments" colspan="2"/>
+                            <field name="helpdesk_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                            <separator string="Tender Allowed Departments" colspan="2"/>
+                            <field name="tender_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                            <separator string="Archive Allowed Departments" colspan="2"/>
+                            <field name="archive_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                            <separator string="Contract Allowed Departments" colspan="2"/>
+                            <field name="allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                            <separator string="Purchase Allowed Departments" colspan="2"/>
+                            <field name="purchase_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                            <separator string="Asset Lease Allowed Departments" colspan="2"/>
+                            <field name="asset_lease_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                            <separator string="Logistic Allowed Departments" colspan="2"/>
+                            <field name="logistic_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                            <separator string="Loans Request Allowed Departments" colspan="2"/>
+                            <field name="loans_request_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                            <separator string="HR-Allowed Departments" colspan="2"/>
+                            <field name="salary_see_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                            <separator string="HR-Regulation Departments" colspan="2"/>
+                            <field name="regulation_confirm_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}"/>
+                          
+                        </group>
+                 	</page>
+
+                 	<page string="SOD Хэлтсүүд">    
+    
+
+                 		 <group colspan="1" col="2"  >
+                            <field name="team_id"/>    
+                 		 	<separator string="Цаг бүртгэл зөвшөөрөгдсөн хэлтсүүд" colspan="1" />
+                            <h3><field name="tsh_sod_flag" colspan="2" readonly="1"/></h3>
+                            <field name="tsh_sod_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}" colspan="2" />
+                        
+                        </group>
+                        <!-- <group colspan="1" col="2" attrs="{'invisible': [('financial_sod_flag','=',0)]}">                      -->
+                        <group colspan="1" col="2" >  
+                 		
+                          	<separator string="Санхүүгийн зөвшөөрөгдсөн хэлтсүүд" colspan="1"/>
+                            <h3><field name="financial_sod_flag" colspan="2" readonly="1"/></h3>
+                            <field name="financial_sod_allowed_departments" widget="many2many_tags" nolabel="1" options="{'no_create': True}" colspan="2"/>
+                            
+                                                         
+                        </group>
+                 	</page>
+
+                    <page string="Нэмэгдэлийн жагсаалт">    
+                        <group colspan="8">
+                            <group colspan="4" >
+                                <button name="action_update_additional_roles" invisible="0" string="Бүх хэрэглэгчийн хандалтын төрлийг шинэчлэх" type="object" class="oe_highlight" />
+                            </group>              
+                        </group> 
+
+                 		<group colspan="4">
+                            
+                            <group colspan="2" >
+                                <separator string="Нэмэгдэл эрхийн жагсаалт" colspan="1" />
+                                <field name="additional_roles"  string =" " widget="many2many_tags" readonly="1" attrs="{'invisible': [('role_type','=','with_standard_roles')]}"/>
+                            </group>
+                            
+                            <group colspan="2" >
+                                <separator string="Хүний нөөц- Зөвшөөрөгдсөн салбарууд дээрх нэмэгдэл жагсаалт" colspan="1"/>
+                                <field name="additional_hr_departments" widget="many2many_tags" string =" " />
+                            </group>
+
+                            <group colspan="2" >
+                                <separator string="Төсөл-Зөвшөөрөгдсөн салбарууд дээрх нэмэгдэл жагсаалт" colspan="1"/>
+                                <field name="additional_project_departments" widget="many2many_tags" string =" " />
+                            </group>
+
+                            <group colspan="2" >
+                                <separator string="Төсөв-Зөвшөөрөгдсөн салбарууд дээрх нэмэгдэл жагсаалт" colspan="1"/>
+                                <field name="additional_budget_departments" widget="many2many_tags" string =" " />
+                            </group>
+
+                            <group colspan="2" >
+                                <separator string="Гэрээ-Зөвшөөрөгдсөн салбарууд дээрх нэмэгдэл жагсаалт" colspan="1"/>
+                                <field name="additional_allowed_departments" widget="many2many_tags" string =" " />
+                            </group>
+
+                            
+                            <group colspan="2" >
+                                <separator string="Худалдан авалт-Зөвшөөрөгдсөн салбарууд дээрх нэмэгдэл жагсаалт" colspan="1"/>
+                                <field name="additional_purchase_departments" widget="many2many_tags" string =" " />
+                            </group>
+                        </group>
+                        
+                 	</page>
+
+
+                </xpath>
+                <xpath expr='//field[@name="tz"]' position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+            </data>
+            </field>
+        </record>
+        
+        <record id="res_users_tree_inherit_od" model="ir.ui.view">
+            <field name="name">res.users.tree.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_tree"/>
+            <field name="arch" type="xml">
+                <field name="login_date" position="after">   
+                    <field name="count_of_additional_roles" optional="hide"/>
+                    <field name="count_of_additional_departments" optional="hide"/>
+                    <field name="count_of_managerial_roles" optional="hide"/>
+                    <field name="count_of_menu_dominant_roles" optional="hide"/>
+                    <field name="job_id" optional="hide"/>
+                    <field name="department_id" optional="hide"/>
+                    <field name="role_type" invisible = "0" optional="hide"/>
+                </field>
+             </field>
+        </record>
+        
+        <!-- <record id="view_res_users_filter_01" model="ir.ui.view">
+            <field name="name">res.users.search.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_search"/>
+            <field name="arch" type="xml">
+
+                    <group name="name" position="after">
+
+                        <filter name="group_role_type" string="Эрхийн төрөл" domain="[]" context="{'group_by': ['role_type']}"/>
+                    </group>
+
+     
+            </field>
+        </record> -->
+
+
+<!-- <record id="view_account_move_filter" model="ir.ui.view">
+    <field name="name">Add move type group by</field>
+    <field name="model">account.move</field>
+    <field name="inherit_id" ref="account.view_account_move_filter"/>
+    <field name="arch" type="xml">
+        <group expand="0" position="inside">
+            <filter name="move_type" string="Move type" domain="[]" context="{'group_by':'move_type'}"/>
+        </group>
+    </field>
+</record> -->
+
+
+
+        <!-- <record id="action_res_users_inherit1" model="ir.actions.act_window">
+            <field name="name">Users</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.users</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_group_role_type': 1}</field>
+            <field name="help">A user is a set of functional areas that will be assigned to the user in order to give them access and rights to specific applications and tasks in the system. You can create custom groups or edit the ones existing by default in order to customize the view of the menu that users will be able to see. Whether they can have a read, write, create and delete access right can be managed from here.</field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="res_users_tree_inherit_od_tree">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="res_users_tree_inherit_od"/>
+        <field name="act_window_id" ref="action_res_users_inherit1"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="view_users_form_inherit_nomin_base_form">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_users_form_inherit_nomin_base"/>
+        <field name="act_window_id" ref="action_res_users_inherit1"/>
+        </record>
+
+        <menuitem action="action_res_users_inherit1" id="base.menu_action_res_users" parent="base.menu_users" sequence="1"/> -->
+
+
+        
+        <!-- Add user followers -->
+        
+        <!-- <record id="add_user_followers_form" model="ir.ui.view">
+            <field name="name">add.user.followers.form</field>
+            <field name="model">add.user.followers</field>
+            <field name="arch" type="xml">
+                <form string="Add Followers">
+                	<header>
+                		<button name="confirm" states="draft" class="btn-primary" string="Confirm" type="object"/>
+                		<button name="action_cancel" states="confirmed" class="btn-primary" string="Cancel" type="object"/>
+                		<field name="state" widget="statusbar"/>
+                	</header>
+                    <sheet>
+                        <group col="4">
+                            <field name="old_user_id"/>
+                            <field name="old_user_department_id"/>
+                       	</group>
+                        <group col="4">
+                        	<separator string="Add Users" colspan="4"/>
+                            <field name="add_users" nolabel="1"/>
+                        </group>
+                        <group col="4">
+                        	<field name="note"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="add_user_followers_tree" model="ir.ui.view">
+            <field name="name">add.user.followers.tree</field>
+            <field name="model">add.user.followers</field>
+            <field name="arch" type="xml">
+                <tree string="Add Followers">
+                    <field name="old_user_id"/>
+                    <field name="old_user_department_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="add_user_followers_filter" model="ir.ui.view">
+            <field name="name">Add Followers</field>
+            <field name="model">add.user.followers</field>
+            <field name="arch" type="xml">
+                <search string="Add Followers">
+                    <field name="old_user_id" string="Old User"/>
+                    <field name="old_user_department_id" />
+                    <filter string="Unconfirmed" domain="[('state','in',['draft'])]" name="unconfirmed"/>
+                    <filter string="Important Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/>
+                </search>
+             </field>
+        </record>
+        <record id="add_user_followers_open" model="ir.actions.act_window">
+            <field name="name">Add Followers</field>
+            <field name="res_model">add.user.followers</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="add_user_followers_filter"/>
+            <field name="context">{"search_default_unconfirmed":1}</field>
+            <field name="view_id" ref="add_user_followers_tree"/>
+        </record>
+		
+        <menuitem
+            action="add_user_followers_open"
+            id="menu_add_user_followers_open"
+            parent="base.menu_users"
+            sequence="1"
+            groups="base.group_user"/> -->
+
+
+   </data>
+</openerp>

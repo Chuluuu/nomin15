@@ -1,0 +1,59 @@
+<openerp>
+    <data>
+        <record id="view_import_task" model="ir.ui.view">
+            <field name="name">import.task.form</field>
+            <field name="model">import.task</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Stock Product Initial">
+                    <group colspan="4">
+                        <field name="data" colspan="4"/>
+                    </group>
+                    <group colspan="4" col="6">
+                        <label string="" colspan="2"/>
+                        <button icon="gtk-cancel" special="cancel" string="Close"/>
+                        <button icon="gtk-execute" string="Execute" name="import_data" type="object"/>
+                   </group>
+               </form>
+            </field>
+        </record>
+        
+        <record id="action_import_task" model="ir.actions.act_window">
+            <field name="name">Import task</field>
+            <field name="res_model">import.task</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_import_task"/>
+            <field name="target">new</field>
+        </record>
+        
+        <menuitem id="menu_import_task" action="nomin_project.action_import_task"
+           parent="project.menu_project_management" sequence="15" icon="terp-idea"/>
+
+           <record id="view_project_budget_export_task" model="ir.ui.view">
+            <field name="name">project.budget.export.import.form</field>
+            <field name="model">project.budget.export.import</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Stock Product Initial">
+                    <group>
+                        <group >
+                            <field name="type" required="1"/>
+                        </group>
+                        <group >
+                            <field name="data" attrs="{'invisible':[('type','=','export')]}"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <label string="" colspan="2"/>
+                        <button icon="gtk-execute" string="Import" name="action_import" attrs="{'invisible':[('type','!=','import')]}" type="object"/>
+                        <button icon="gtk-execute" string="Export" name="action_export" attrs="{'invisible':[('type','!=','export')]}" type="object"/>
+                        Эсвэл
+                        <button icon="gtk-cancel" special="cancel" string="Close"/>
+                   </footer>
+               </form>
+            </field>
+        </record>
+        
+    </data>
+</openerp>

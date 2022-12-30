@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<openerp>
+    <data>
+        <record id="tender_follower_email_template" model="mail.template">
+            <field name="name">${ctx["subject"]}</field>
+            <field name="email_from">${(user.company_id.email or '')|safe}</field>
+            <field name="subject">${ctx["subject"]} ${user.company_id.name}</field>
+            <field name="email_to">${object.email|safe}</field>
+            <field name="lang">${object.lang}</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<p>
+Сайн байна уу?, ${object.name}, </br>
+</p>
+<p>
+<b>${ctx["company"]}</b> компанийн <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["name"]}</b></a>
+ дугаартай баримт <b>${ctx["state"]}</b> төлөвт орлоо.
+</p>
+<ul>
+    <li>Тендерийн компани/салбар: <b>${ctx["company"]}</b></li>
+    <li>Тендерийн дугаар: <b>${ctx["name"]}</b></li>
+    <li>Тендерийн төрөл: <b>${ctx["type_name"]}</b></li>
+    <li>Тендерийн нэр: <b>${ctx["desc_name"]}</b></li>
+    <li>Төлөв: <b>${ctx["state"]}</b></li>
+</ul>
+<p>
+    Та системийн дараах цэснээс энэхүү баримтыг олох боломжтой.
+   
+</p>
+<ul>
+    <li><b>${ctx["menu_path"]}</b></li>
+</ul>
+
+<p>
+    Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=tender.tendert&action=${ctx["action_id"]}"><b>${ctx["name"]}</b>
+    </a> дугаартай баримтыг дагаж байгаа учир энэхүү имэйлийг хүлээн авч байна. Хэрэв энэ баримтыг дагахаа болихыг хүсвэл баримтын дагагчидаас өөрийн нэрийг устгана уу.
+</p>
+<p>
+    Баярлалаа,
+</p>
+
+<pre>
+-- 
+Odoo ERP Автомат Имэйл
+
+</pre>
+            ]]></field>
+        </record>
+        
+        <record id="tender_meeting_protocol_email_template" model="mail.template">
+            <field name="name">${ctx["subject"]}</field>
+            <field name="email_from">${(user.company_id.email or '')|safe}</field>
+            <field name="subject">${ctx["subject"]} ${user.company_id.name}</field>
+            <field name="email_to">${object.email|safe}</field>
+            <field name="lang">${object.lang}</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+<p>
+Сайн байна уу?, ${object.name}, </br>
+</p>
+<p>
+Таньд <b>${ctx["tender"]}</b> -н хурлын протокол илгээж байна. Тендерийн журмын дагуу хурлын протоколтой танилцана уу.
+</p>
+<ul>
+    <li>Тендерийн нэр: <b>${ctx["meet_name"]}</b></li>
+    <li>Тендерийн нэр: <b>${ctx["tender_name"]}</b></li>
+    <li>Оролцогчид: 
+        <b>${ctx["member_ids"]}</b>
+    </li>
+
+</ul>
+<p>
+    Та системийн дараах цэснээс энэхүү баримтыг олох боломжтой.
+   
+</p>
+<ul>
+    <li><b>${ctx["menu_path"]}</b></li>
+</ul>
+
+<p>
+    Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["name"]}</b>
+    </a> линкээр дамжин орж дэлгэрэнгүй танилцах боломжтой.
+</p>
+<p>
+    Баярлалаа,
+</p>
+
+<pre>
+-- 
+Odoo ERP Автомат Имэйл
+
+</pre>
+            ]]></field>
+        </record>
+        
+        
+        <record id="send_mail_purchase_employees_email_template" model="mail.template">
+            <field name="name">${ctx["subject"]}</field>
+            <field name="email_from">${(user.company_id.email or '')|safe}</field>
+            <field name="subject">${ctx["subject"]} ${user.company_id.name}</field>
+            <field name="email_to">${object.email|safe}</field>
+            <field name="model_id" ref="hr.model_hr_employee"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+                    <p>
+                    Сайн байна уу?,  Танд энэ өдрийн мэндийг хүргэе.
+                    </p></br>
+                    <p>
+                    Та дараах ажил горилогчийн даалгаварт үнэлгээ өгнө үү
+                    </p>
+                    <ul>
+					    <li>Горилогчийн нэр: <b>${ctx['name']}</b></li>
+					</ul>
+					
+					<p>
+                    Холбоос:
+                    <b><a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=task.rate&action=${ctx["action_id"]}">Даалгаврын үнэлгээ</a></b>
+                    </p>
+                    
+                    <pre>
+                    -- 
+                    Энэхүү мэйл нь ERP системээс автоматаар илгээгдэж буй тул хариу илгээх шаардлагагүй.
+                    </pre>
+                    <p>
+                        Баярлалаа,
+                    </p>
+
+            ]]></field>
+        </record>
+        
+        <record id="send_mail_purchase_employees_email_template" model="mail.template">
+            <field name="name">${ctx["subject"]}</field>
+            <field name="email_from">${(user.company_id.email or '')|safe}</field>
+            <field name="subject">${ctx["subject"]} ${user.company_id.name}</field>
+            <field name="email_to">${object.email|safe}</field>
+            <field name="lang">${object.lang}</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+			<p>
+				Сайн байна уу?, ${object.name}, </br>
+			</p>
+			<p>
+				<b>${ctx["name"]}</b> дугаартай <b>${ctx["desc_name"]}</b> тендерээс <b>${ctx["purchase"]}</b> дугаартай худалдан авалтын үнийн санал үүслээ. 
+			</p>
+			<p>
+				Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["purchase"]}</b></a> холбоосоор орно уу!
+			</p>
+						
+			<p>
+			    Баярлалаа,
+			</p>
+			
+			
+						
+			<pre>
+			-- 
+			Odoo ERP Автомат Имэйл
+			
+			</pre>
+            ]]></field>
+        </record>
+        
+        
+    </data>
+</openerp>

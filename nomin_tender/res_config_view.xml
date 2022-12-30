@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_website_config_settings_inherit_l10n_mn_website_sale" model="ir.ui.view">
+            <field name="name">view.website.config.settings.inherit.l10n_mn_website_sale</field>
+            <field name="model">website.config.settings</field>
+            <field name="inherit_id" ref="website.view_website_config_settings"/>
+            <field name="arch" type="xml">
+                <xpath expr='//form/div' position="inside">
+                    <group string="Tender Limit">
+						<field name="purchase_tender_limit"/>              
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>
