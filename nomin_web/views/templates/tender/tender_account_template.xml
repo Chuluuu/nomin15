@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Урилга авсан тендерүүд -->
+        <template id="nomin_web.my_tender_account" name="Урилга хүлээн авсан тендерүүд">
+            <t t-call="website.layout" >
+                <div id="wrap" class="oe_structure oe_empty">
+                    <div class="container">
+                    <div class="content-bg">
+                        <div class="row">
+                            
+                            <div class="col-sm-9 col-md-9">
+                                <h3 class="pagetitle">Урилга хүлээн авсан тендерүүд</h3>
+                                
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-condensed table-hover centered visible-xs" style="width:auto;">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%">#</th>
+                                                <th width="44%">Тендерийн нэр</th>
+                                                <th>Захиалагч</th>
+                                                <th>Дугаар</th>
+                                                <th>Зарласан Огноо</th>
+                                                <th>Хаах огноо</th>
+                                                <th>Төлөв</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-if="inv_tenders">
+                                            <tr t-foreach="inv_tenders" t-as="inv_tender">
+                                                <td scope="row"><t t-esc="inv_tender_index+1"/></td>
+                                                <td>
+                                                    <a t-attf-href="/tender_detail/#{ slug(inv_tender) }/" class="tender-title"><t t-esc="inv_tender.desc_name"></t></a>
+                                                </td>
+                                                <td>
+                                                    <t t-if="inv_tender.company_id"><t t-esc="inv_tender.company_id.name"></t></t>
+                                                </td>
+                                                <td>
+                                                    <t t-if="inv_tender.name"><t t-esc="inv_tender.name"></t></t>
+                                                </td>
+                                                <td>
+                                                    <t t-if="inv_tender.published_date"><span class="user-date" t-esc="inv_tender.published_date"/></t>
+                                                </td>
+                                                <td>
+                                                    <t t-if="inv_tender.date_end"><span class="user-date" t-esc="inv_tender.date_end"/></t>
+                                                </td>
+                                                <t t-if="inv_tender.state == 'published'">
+                                                    <td>Нээлттэй</td>
+                                                </t>
+                                                <t t-if="inv_tender.state != 'published'">
+                                                    <td>Дууссан</td>
+                                                </t>
+                                            </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                    <table class="table table-bordered table-striped table-condensed table-hover centered hidden-xs">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%">#</th>
+                                                <th width="44%">Тендерийн нэр</th>
+                                                <th>Захиалагч</th>
+                                                <th>Дугаар</th>
+                                                <th>Зарласан Огноо</th>
+                                                <th>Хаах огноо</th>
+                                                <th>Төлөв</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-if="inv_tenders">
+                                            <tr t-foreach="inv_tenders" t-as="inv_tender">
+                                                <td scope="row"><t t-esc="inv_tender_index+1"/></td>
+                                                <td>
+                                                    <a t-attf-href="/tender_detail/#{ slug(inv_tender) }/" class="tender-title"><t t-esc="inv_tender.desc_name"></t></a>
+                                                </td>
+                                                <td>
+                                                    <t t-if="inv_tender.company_id"><t t-esc="inv_tender.company_id.name"></t></t>
+                                                </td>
+                                                <td>
+                                                    <t t-if="inv_tender.name"><t t-esc="inv_tender.name"></t></t>
+                                                </td>
+                                                <td>
+                                                    <t t-if="inv_tender.published_date"><span class="user-date" t-esc="inv_tender.published_date"/></t>
+                                                </td>
+                                                <td>
+                                                    <t t-if="inv_tender.date_end"><span class="user-date" t-esc="inv_tender.date_end"/></t>
+                                                </td>
+                                                <t t-if="inv_tender.state == 'published'">
+                                                    <td>Нээлттэй</td>
+                                                </t>
+                                                <t t-if="inv_tender.state != 'published'">
+                                                    <td>Дууссан</td>
+                                                </t>
+                                            </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-3 col-md-3">
+                                <t t-call="nomin_web.my_account"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Тендерийн бичиг баримт, шаардлагууд -->
+        <template id="nomin_web.my_tenders_documents" name="Тендерийн шаардлагууд">
+            <t t-call="website.layout" >
+                <div id="wrap" class="oe_structure oe_empty">
+                    <div class="container">
+                    <div class="content-bg">
+                        <div class="row">
+                            <div class="col-sm-9 col-md-9">
+                                <h3 class="pagetitle">Тендерийн шаардлагууд</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-condensed table-hover centered">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%">#</th>
+                                                <th width="44%">Тендерийн нэр</th>
+                                                <th>Үүсгэсэн огноо</th>
+                                                <th>Төлөв</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-if="part_tenders">
+                                            <tr t-foreach="part_tenders" t-as="part_tender">
+                                                <th scope="row"><t t-esc="part_tender_index+1"/></th>
+                                                <td>
+                                                    <t t-if="website.user_id != user_id"><a t-attf-href="/my/tender_documents/#{ slug(part_tender.tender_id) }" class="tender-title"><t t-esc="part_tender.tender_id.desc_name"></t></a></t>
+                                                </td>
+                                                <td><t t-if="part_tender.datetime"><t t-esc="part_tender.datetime"/></t></td>
+                                                <t t-if="part_tender.state == 'draft'"><td>Нээлттэй</td></t>
+                                                <t t-if="part_tender.state != 'draft'"><td>Илгээсэн</td></t>
+                                            </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3">
+                                <t t-call="nomin_web.my_account"/>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Миний бичиг баримт бүрдэлт -->
+        <template id="nomin_web.my_documents" name="Бичиг баримт бүрдэлт">
+            <t t-call="website.layout" >
+                <div id="content_wrapper">
+                    <div class="container">
+                        <div class="content-bg">
+                        <div class="row">
+                            <div class="col-sm-9 col-md-9">
+                                <div style="clear: both">
+                                    <h3 class="pagetitle" style="float: left;">Бичиг баримт бүрдэлт </h3>
+                                    <h4 class="col-sm-6 text-right">Төлөв: 
+                                    <t t-if="document.sudo().state == 'complete'"><span class="label label-primary text-right">Бичиг баримт бүрдсэн</span></t>
+                                    <t t-if="document.sudo().state != 'complete'"><span class="label label-danger" align="right">Бичиг баримт бүрдээгүй</span></t></h4>
+                                </div>
+                                <form class="s_website_form form-horizontal container-fluid" enctype="multipart/form-data">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Гэрчилгээ</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <!-- <input type="file" required="" name="certificate" accept=".pdf" class="form-control" /> -->
+                                            <t t-if='document.sudo().certificate_ids'>
+                                                <t t-foreach="document.sudo().certificate_ids[0]" t-as="certificate">
+                                                    <a t-att-href="'/mydoc/download?attachment_id=%i' % certificate['id']">
+                                                        <t t-esc="certificate['datas_fname']"/>
+                                                    </a>
+                                                </t>
+                                            </t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            
+                                            <t t-if='document.sudo().certificate_ids'>
+                                                <t t-foreach="document.sudo().certificate_ids[0]" t-as="certificate" >
+                                                    <input type="date" required="" readonly="" name="certif_date_end" t-att-value="certificate.date_end"  class="form-control" />
+                                                </t>
+                                            </t>
+                                            <t t-if='not document.sudo().certificate_ids'>
+                                                <input type="date" required="" readonly="" name="certif_date_end"  class="form-control" />
+                                            </t>
+                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="tax"> Татварын албаны тодорхойлолт</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <!-- <input type="file" required="" name="tax" accept=".pdf" class="form-control" /> -->
+                                            <t t-if='document.sudo().tax_ids'><t t-foreach="document.sudo().tax_ids[0]" t-as="tax">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % tax['id']"><t t-esc="tax['datas_fname']"/></a></t>
+                                            </t>
+                                        </div>
+
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            
+                                            <t t-if='document.sudo().tax_ids'>
+                                                <t t-foreach="document.sudo().tax_ids[0]" t-as="certificate" >
+                                                    <input type="date" required="" readonly="" name="tax_date_end" t-att-value="certificate.date_end"  class="form-control" />
+                                                </t>
+                                            </t>
+                                            <t t-if='not document.sudo().tax_ids'>
+                                                <input type="date" required="" name="tax_date_end" readonly=""  class="form-control" />
+                                            </t>
+                                            
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="organization"> ААН тодорхойлолт</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <!-- <input type="file" required="" name="organization" accept=".pdf" class="form-control"  /> -->
+                                            <t t-if='document.sudo().org_define_ids'>
+                                            <t t-foreach="document.sudo().org_define_ids[0]" t-as="organization">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % organization['id']"><t t-esc="organization['datas_fname']"/></a>
+                                            </t>
+                                            </t>
+                                        </div>
+
+                                    <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            
+                                            <t t-if='document.sudo().org_define_ids'>
+                                                <t t-foreach="document.sudo().org_define_ids[0]" t-as="certificate" >
+                                                    <input type="date" required="" readonly="" name="org_date_end" t-att-value="certificate.date_end"  class="form-control" />
+                                                </t>
+                                            </t>
+                                            <t t-if='not document.sudo().org_define_ids'>
+                                                <input type="date" required="" readonly="" name="org_date_end"  class="form-control" />
+                                            </t>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="work_list"> Ажлын туршлага</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <!-- <input type="file" required="" name="work_list" accept=".pdf" class="form-control"  /> -->
+                                            <t t-if='document.sudo().work_list_ids'>
+                                            <t t-foreach="document.sudo().work_list_ids[0]" t-as="work_list">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % work_list['id']"><t t-esc="work_list['datas_fname']"/></a>
+                                            </t>
+                                            </t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            
+                                            <t t-if='document.sudo().work_list_ids'>
+                                                <t t-foreach="document.sudo().work_list_ids[0]" t-as="certificate" >
+                                                    <input type="date" readonly="" required="" name="work_date_end" t-att-value="certificate.date_end"  class="form-control" />
+                                                </t>
+                                            </t>
+                                            <t t-if='not document.sudo().work_list_ids'>
+                                                <input type="date" required="" readonly="" name="work_date_end"  class="form-control" />
+                                            </t>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="judgement"> Шүүхийн тодорхойлолт</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <!-- <input type="file" required="" name="judgement" accept=".pdf" class="form-control"  /> -->
+                                            <t t-if='document.sudo().judgement_define_ids'>
+                                            <t t-foreach="document.sudo().judgement_define_ids[0]" t-as="judgement">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % judgement['id']"><t t-esc="judgement['datas_fname']"/></a>
+                                            </t>
+                                            </t>
+                                        </div>
+
+                                    <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            
+                                            <t t-if='document.sudo().judgement_define_ids'>
+                                                <t t-foreach="document.sudo().judgement_define_ids[0]" t-as="certificate" >
+                                                    <input type="date" readonly="" required="" name="judge_date_end" t-att-value="certificate.date_end"  class="form-control" />
+                                                </t>
+                                            </t>
+                                            <t t-if='not document.sudo().judgement_define_ids'>
+                                                <input type="date" required="" readonly="" name="judge_date_end"  class="form-control" />
+                                            </t>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="license"> Тусгай зөвшөөрөл</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <!-- <input type="file" required="" name="license" accept=".pdf" class="form-control"  /> -->
+                                            <t t-if='document.sudo().spec_license_ids'>
+                                            <t t-foreach="document.sudo().spec_license_ids[0]" t-as="license">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % license['id']"><t t-esc="license['datas_fname']"/></a>
+                                            </t>
+                                            </t>
+                                        </div>
+
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='document.sudo().spec_license_ids'>
+                                                <t t-foreach="document.sudo().spec_license_ids[0]" t-as="certificate" >
+                                                    <input type="date" readonly="" required="" name="spec_date_end" t-att-value="certificate.date_end"  class="form-control" />
+                                                </t>
+                                            </t>
+                                            <t t-if='not document.sudo().spec_license_ids'>
+                                                <input type="date" required="" readonly="" name="spec_date_end"  class="form-control" />
+                                            </t>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="bank"> Харилцагч банкны тодорхойлолт</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <!-- <input type="file" required="" name="bank" accept=".pdf" class="form-control"  /> -->
+                                            <t t-if='document.sudo().bank_define_ids'>
+                                            <t t-foreach="document.sudo().bank_define_ids[0]" t-as="bank">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % bank['id']"><t t-esc="bank['datas_fname']"/></a>
+                                            </t>
+                                            </t>
+                                        </div>
+
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='document.sudo().bank_define_ids'>
+                                                <t t-foreach="document.sudo().bank_define_ids[0]" t-as="certificate" >
+                                                    <input type="date" required="" readonly="" name="bank_date_end" t-att-value="certificate.date_end"  class="form-control" />
+                                                </t>
+                                            </t>
+                                            <t t-if='not document.sudo().bank_define_ids'>
+                                                <input type="date" required="" readonly="" name="bank_date_end"  class="form-control" />
+                                            </t>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="vat"> НӨАТ гэрчилгээ</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <!-- <input type="file"  required="" name="vat" accept=".pdf" class="form-control"/> -->
+                                            <t t-if='document.sudo().vat_file_ids'>
+                                            <t t-foreach="document.sudo().vat_file_ids[0]" t-as="vat">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % vat['id']"><t t-esc="vat['datas_fname']"/></a>
+                                            </t>
+                                            </t>
+                                        </div>
+
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='document.sudo().vat_file_ids'>
+                                                <t t-foreach="document.sudo().vat_file_ids[0]" t-as="certificate" >
+                                                    <input type="date" required="" readonly="" name="vat_date_end" t-att-value="certificate.date_end"  class="form-control" />
+                                                </t>
+                                            </t>
+                                            <t t-if='not document.sudo().vat_file_ids'>
+                                                <input type="date" required="" readonly="" name="vat_date_end"  class="form-control" />
+                                            </t>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="insurance"> НДГазрын тодорхойлолт</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <!-- <input type="file" required="" name="insurance" accept=".pdf" class="form-control"/> -->
+                                            <t t-if='document.sudo().insurance_define_ids'>
+                                            <t t-foreach="document.sudo().insurance_define_ids[0]" t-as="insurance">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % insurance['id']"><t t-esc="insurance['datas_fname']"/></a>
+                                            </t>
+                                            </t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='document.sudo().insurance_define_ids'>
+                                                <t t-foreach="document.sudo().insurance_define_ids[0]" t-as="certificate" >
+                                                    <input type="date" readonly="" required="" name="insu_date_end" t-att-value="certificate.date_end"  class="form-control" />
+                                                </t>
+                                            </t>
+                                            <t t-if='not document.sudo().insurance_define_ids'>
+                                                <input type="date" readonly="" required="" name="insu_date_end"  class="form-control" />
+                                            </t>
+                                            
+                                        </div>
+
+                                    </div>
+                                    <hr/>
+                                    <h3 class="pagetitle">Санхүүгийн чадавхи</h3>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="ins_report"> НД тайлан</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <!-- <input type="file" required="" name="ins_report" accept=".pdf" class="form-control"/> -->
+                                            <t t-if='document.sudo().insurance_report_ids'>
+                                            <t t-foreach="document.sudo().insurance_report_ids[0]" t-as="ins_report">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % ins_report['id']"><t t-esc="ins_report['datas_fname']"/></a>
+                                            </t>
+                                            </t>
+                                        </div>
+
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='document.sudo().insurance_report_ids'>
+                                                <t t-foreach="document.sudo().insurance_report_ids[0]" t-as="certificate" >
+                                                    <input type="date" readonly="" required="" name="insurep_date_end" t-att-value="certificate.date_end"  class="form-control" />
+                                                </t>
+                                            </t>
+                                            <t t-if='not document.sudo().insurance_report_ids'>
+                                                <input type="date" readonly="" required="" name="insurep_date_end"  class="form-control" />
+                                            </t>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="finance_report"> Санхүүгийн жилийн эцсийн тайлан</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <!-- <input type="file" readonly="" required="" name="finance_report" accept=".pdf" class="form-control"/> -->
+                                            <t t-if='document.sudo().finance_report_ids'>
+                                            <t t-foreach="document.sudo().finance_report_ids[0]" t-as="finance_report">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % finance_report['id']"><t t-esc="finance_report['datas_fname']"/></a>
+                                            </t>
+                                            </t>
+                                        </div>
+
+
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='document.sudo().finance_report_ids'>
+                                                <t t-foreach="document.sudo().finance_report_ids[0]" t-as="certificate" >
+                                                    <input type="date" readonly="" required="" name="fin_date_end" t-att-value="certificate.date_end"  class="form-control" />
+                                                </t>
+                                            </t>
+                                            <t t-if='not document.sudo().finance_report_ids'>
+                                                <input type="date" readonly="" required="" name="fin_date_end"  class="form-control" />
+                                            </t>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="audit_report"> Аудитын тайлан</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <!-- <input required="" type="file" name="audit_report" accept=".pdf" class="form-control"  /> -->
+                                            <t t-if='document.sudo().audit_report_ids'>
+                                            <t t-foreach="document.sudo().audit_report_ids[0]" t-as="audit_report">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % audit_report['id']"><t t-esc="audit_report['datas_fname']"/></a>
+                                            </t>
+                                            </t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='document.sudo().audit_report_ids'>
+                                                <t t-foreach="document.sudo().audit_report_ids[0]" t-as="certificate" >
+                                                    <input type="date" readonly="" required="" name="audit_date_end" t-att-value="certificate.date_end"  class="form-control" />
+                                                </t>
+                                            </t>
+                                            <t t-if='not document.sudo().audit_report_ids'>
+                                                <input type="date" readonly="" required="" name="audit_date_end"  class="form-control" />
+                                            </t>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="col-md-offset-3 col-sm-offset-4 col-sm-8 col-md-7" style="text-align:center;">
+                                            <a t-attf-href="/my/documents/update" class="btn btn-primary btn-md" type="button" id="document_edit">Засах</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-3 col-md-3">
+                                <t t-call="nomin_web.my_account"/>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

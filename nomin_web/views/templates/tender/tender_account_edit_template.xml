@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Миний бүртгэл -->
+        <template id="nomin_web.my_account_edit" name="Ерөнхий бүртгэл">
+            <t t-call="website.layout" >
+                <div id="content_wrapper">
+                    <div class="container">
+                    <div class="content-bg">
+                        <div class="row">
+                        <div class="col-sm-9 col-md-9">
+                                    <h3 class="pagetitle">Ерөнхий бүртгэл</h3>
+                                    <!-- <form enctype="multipart/form-data" t-attf-action="/save_partner/" method="post" role="form" class="row"> -->
+                                    <form action="/save_partner/" method="post" data-model_name="res.partner" data-success_page="/page/nomin_web.thanks" class="s_website_form form-horizontal container-fluid" enctype="multipart/form-data">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        
+                                        
+                                        <div class="form-group form-field o_website_form_required_custom">
+                                            <label class="col-md-3 col-sm-4 control-label" for="company_name">Компанийн лого</label>
+                                            <div class="col-md-7 col-sm-8">
+                                                <!-- <input type="file" class="form-control o_website_form_input" name="Resume"/> -->
+                                                <t t-if="not partner.image"><input type="file" class="form-control" name="company_image"/></t>
+                                                <t t-if="partner.image"><input type="file" class="form-control" name="company_image" t-field="partner.image" t-field-options='{"widget": "image"}'/></t>
+                                                <!-- <t t-if="partner.image"><input type="image" class="form-control" name="company_image" t-att-src="'data:image/png;base64,%s' %partner.image" style="height:90px;width:90px;"/></t> -->
+                                            </div>
+                                        </div>
+                                        <div class="form-group form-field o_website_form_required_custom">
+                                            <label class="col-md-3 col-sm-4 control-label" for="company_name">Компанийн нэр</label>
+                                            <div class="col-md-7 col-sm-8">
+                                                <t t-if="not partner.name"><input type="text" class="form-control o_website_form_input" placeholder="Байгууллагын нэр" id="company_name" name="company_name" readonly=""/></t>
+                                                <t t-if="partner.name"><input type="text" class="form-control o_website_form_input" placeholder="Байгууллагын нэр" id="company_name" name="company_name" t-att-value="partner.name" readonly=""/></t>
+                                            </div>
+                                        </div>
+                                        <div class="form-group form-field o_website_form_required_custom">
+                                            <label class="col-md-3 col-sm-4 control-label" for="company_name">Хаяг</label>
+                                            <div class="col-md-7 col-sm-8">
+                                            <t t-if="not partner.street"><input type="text" class="form-control o_website_form_input" placeholder="Хаяг" id="address" name="address" required=""/></t>
+                                            <t t-if="partner.street"><input type="text" class="form-control o_website_form_input" placeholder="Хаяг" id="address" name="address" t-att-value="partner.street"/></t>
+                                            </div>
+                                        </div>
+                                        <div class="form-group form-field o_website_form_required_custom">
+                                            <label class="col-md-3 col-sm-4 control-label" for="registration_number">Бүртгэлийн дугаар</label>
+                                            <div class="col-md-7 col-sm-8">
+                                                <t t-if="not partner.code"><input type="text" class="form-control o_website_form_input" placeholder="Бүртгэлийн №" id="registration_number" name="registration_number" readonly=""/></t>
+                                                <t t-if="partner.code"><input type="text" class="form-control o_website_form_input" placeholder="Бүртгэлийн №" id="registration_number" name="registration_number" t-att-value="partner.code" readonly=""/></t>
+                                            </div>
+                                        </div>
+                                        <div class="form-group form-field o_website_form_required_custom">
+                                            <label class="col-md-3 col-sm-4 control-label" for="phonenumber">Утас </label>
+                                            <div class="col-md-7 col-sm-8">
+                                                <t t-if="not partner.mobile"><input name="phonenumber" type="text" class="form-control o_website_form_input" placeholder="Утасны дугаар" id="phonenumber" required=""/></t>
+                                                <t t-if="partner.mobile"><input name="phonenumber" type="text" class="form-control o_website_form_input" placeholder="Утасны дугаар" id="phonenumber" t-att-value="partner.mobile"/></t>
+                                            </div>
+                                        </div>
+                                        <div class="form-group form-field o_website_form_required_custom">
+                                            <label class="col-md-3 col-sm-4 control-label" for="certificate_no">Регистрийн дугаар</label>
+                                            <div class="col-md-7 col-sm-8">
+                                                <t t-if="not partner.registry_number"><input name="certificate_no" type="text" class="form-control o_website_form_input" placeholder="Регистрийн дугаар" id="certificate_no" readonly=""/></t>
+                                                <t t-if="partner.registry_number"><input name="certificate_no" type="text" class="form-control o_website_form_input" placeholder="Регистрийн дугаар" id="certificate_no" t-att-value="partner.registry_number" readonly=""/></t>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group form-field o_website_form_required_custom">
+                                            <label class="col-md-3 col-sm-4 control-label" for="email">Цахим шуудан</label>
+                                            <div class="col-md-7 col-sm-8">
+                                                <t t-if="not partner.email"><input name="email" type="text" class="form-control" placeholder="И-Мэйл хаяг" id="email"/></t>
+                                                <t t-if="partner.email"><input name="email" type="text" class="form-control" placeholder="И-Мэйл хаяг" id="email" t-att-value="partner.email"/></t>
+                                            </div>
+                                        </div>
+                                            
+                                        
+                                        
+                                        <div class="form-group form-field o_website_form_required_custom">
+                                            <label class="col-md-3 col-sm-4 control-label" for="category">Үйл ажиллагааны чиглэл</label>
+                                            <div class="col-md-7 col-sm-8">
+                                                <div class="col-md-6">
+                                                    <label>
+                                                        <input type="checkbox" id="cate1" name="cate1" t-att-value="1" t-att-checked="1 in category_ids"/>
+                                                        <span>Төрийн байгууллагууд</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="cate5" t-att-value='5' t-att-checked="5 in category_ids"/>
+                                                        <span>Газрууд</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="cate2" t-att-value='2' t-att-checked="2 in category_ids"/>
+                                                        <span>ЭСЯ</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="cate6" t-att-value='6' t-att-checked="6 in category_ids"/>
+                                                        <span>Номингийн салбарууд</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="cate3" t-att-value='3' t-att-checked="3 in category_ids"/>
+                                                        <span>Компани</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="cate4" t-att-value='4' t-att-checked="4 in category_ids"/>
+                                                        <span>банк</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>
+                                                        <input type="checkbox" name="cate7" t-att-value='7' t-att-checked="7 in category_ids"/>
+                                                        <span>Ажилчид</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="cate12" t-att-value='12' t-att-checked="12 in category_ids"/>
+                                                        <span>Төлөөлөгчийн газар</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="cate8" t-att-value='8' t-att-checked="8 in category_ids"/>
+                                                        <span>Гадаад</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="cate10" t-att-value='10' t-att-checked="10 in category_ids"/>
+                                                        <span>Дотоод</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="cate9" t-att-value='9' t-att-checked="9 in category_ids"/>
+                                                        <span>Хувийн хэвшил</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="cate11" t-att-value='11' t-att-checked="11 in category_ids"/>
+                                                        <span>Хувь хүн</span>
+                                                    </label>
+                                                </div>
+                                            
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group form-field o_website_form_required_custom">
+                                            <label class="col-md-3 col-sm-4 control-label" for="tender_type">Оролцох тендерийн төрлүүд</label>
+                                            <div class="col-md-7 col-sm-8">
+                                                
+                                                <div class="col-md-6">
+                                                    <label>
+                                                        <input type="checkbox" name="type1" t-att-value='1' t-att-checked="1 in type_ids"/>
+                                                        <span>Бараа</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="type2" t-att-value='2' t-att-checked="2 in type_ids"/>
+                                                        <span>Барилга байгууламжийн ажил</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>
+                                                        <input type="checkbox" name="type3" t-att-value='3' t-att-checked="3 in type_ids"/>
+                                                        <span>Ажил</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="type4" t-att-value='4' t-att-checked="4 in type_ids"/>
+                                                        <span>Зөвлөх үйлчилгээ</span>
+                                                    </label>
+                                                    <label>
+                                                        <input type="checkbox" name="type5" t-att-value='5' t-att-checked="5 in type_ids"/>
+                                                        <span>Үйлчилгээ</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                            
+                                        <div class="form-group form-field o_website_form_required_custom">
+                                            <label class="col-md-3 col-sm-4 control-label" for="email">Компанийн дэлгэрэнгүй танилцуулга</label>
+                                            <div class="col-md-7 col-sm-8">
+                                                <t t-if="not partner.comment"><textarea id="description" name="description" rows="5" class="form-control o_website_form_input" placeholder="Компанийн дэлгэрэнгүй танилцуулга бичих ..."/></t>
+                                                <t t-if="partner.comment"><textarea id="description" name="description" rows="5" class="form-control o_website_form_input" placeholder="Компанийн дэлгэрэнгүй танилцуулга бичих ..." t-raw="partner.comment"/></t>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="text-align:center">
+                                            <div class="col-md-offset-3 col-sm-offset-4 col-sm-8 col-md-7">
+                                                <button class="btn btn-primary" type="submit" >Хадгалах</button>
+                                                <!-- <span id="o_website_form_result"></span> -->
+                                                <!-- <input type="submit" value="send"/> -->
+                                                <a t-attf-href="/my/account" class="btn btn-default" type="button">Буцах</a>
+                                            </div>
+                                        </div>
+                                    </form>
+                        </div>
+                        
+                        <div class="col-sm-3 col-md-3">
+                            <t t-call="nomin_web.my_account"/>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            <script type="text/javascript">
+            <![CDATA[
+
+        var registration_number=false;
+        var address=false;
+        var phonenumber=false;
+        var email=false;
+        var password=false;
+        var pass_confirm=false;
+        var certificate_no=false;
+        var activity=false;
+        var tenders=false;
+
+        $("#registration_number").keyup(function(){
+            
+            if($("#registration_number").val()!="")
+                registration_number=true;
+            else
+                registration_number=false;
+
+            nextstep();
+                });
+
+        $("#address").keyup(function(){
+            
+            if($("#address").val()!="")
+                address=true;
+            else
+                address=false;
+
+            nextstep();
+                });
+
+        $("#certificate_no").keyup(function(){
+            
+            if($("#certificate_no").val()!="")
+                certificate_no=true;
+            else
+                certificate_no=false;
+
+            nextstep();
+                });
+
+        $("#phonenumber").keyup(function(){
+            
+            if($("#phonenumber").val()!="")
+                phonenumber=true;
+            else
+                phonenumber=false;
+        nextstep();
+                });
+
+        $("#email").keyup(function(){
+            
+            if($("#email").val()!="")
+                email=true;
+            else
+                email=false;
+            nextstep();
+                });
+
+        $("#password").keyup(function(){
+            
+            if($("#password").val()!="")
+                password=true;
+            else
+                password=false;
+            nextstep();
+                });
+
+        $("#pass_confirm").keyup(function(){
+            
+            if($("#pass_confirm").val()!="" && $("#pass_confirm").val()==$("#password").val())
+                pass_confirm=true;
+            else
+                {
+                    $("#pass_confirm").val(""); pass_confirm=false;
+                }
+            nextstep();
+                });
+
+        $("#activity").change(function(){
+            
+            if($("#activity").prop('selectedIndex')!=0)
+                activity=true;
+            else
+                activity=false;
+            nextstep();
+                });
+
+
+        $("#lstBox1").change(function(){
+
+            $("#btnRight").prop('disabled', false);
+                });
+
+
+        $("#lstBox2").change(function(){
+
+            $("#btnLeft").prop('disabled', false);
+                });
+
+        $('#btnRight').click(function(e) {
+                    var selectedOpts = $('#lstBox1 option:selected');
+
+        $('#lstBox2').append($(selectedOpts));
+
+
+        if($('#lstBox1 > option').length==0)
+                $('#btnRight').prop('disabled', true);
+
+
+        if($('#btnLeft').is(':disabled') == true)
+            $('#btnLeft').prop('disabled', false);
+
+
+
+            if($("#lstBox1").val()==null)
+                $('#btnRight').prop('disabled', true);
+
+
+            tenders=true;
+            nextstep();
+                    e.preventDefault();
+                });
+
+        function nextstep()
+        {
+            if(registration_number && address && phonenumber && email && password && pass_confirm && certificate_no && activity && tenders)
+                { 
+                if($('#step2').attr('class')!="step active")
+                    {
+                        $("#step2").addClass("active");
+                    }
+                }
+            else 
+                {
+                if($('#step2').attr('class')=="step active")
+                {
+                    $("#step2").removeClass("active");
+                }
+                }
+        }
+
+        $('#btnLeft').click(function(e) {
+                    var selectedOpts = $('#lstBox2 option:selected');
+
+        $('#lstBox1').append($(selectedOpts));
+
+        if($('#btnRight').is(':disabled') == true)
+                $('#btnRight').prop('disabled', false);
+
+            if($('#lstBox2 > option').length==0)
+                {
+                    $('#btnLeft').prop('disabled', true);
+                    tenders=false;
+                }
+
+            if($("#lstBox2").val()==null)
+                $('#btnLeft').prop('disabled', true);
+                nextstep();
+                    e.preventDefault();
+                });
+
+            $('#save').click(function(e) {
+            if($('#step2').attr('class')=="step active")
+                alert("save it");
+                });
+            ]]>
+            </script>
+           
+                </t>
+        </template>
+    </data>
+</odoo>

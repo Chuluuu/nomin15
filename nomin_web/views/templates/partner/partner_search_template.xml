@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <template id="partner_search" name="Харилцагч хайх">
+            <t t-call="website.layout">
+              <div id="wrap">
+                <div class="oe_structure"/>
+                <div class="container">
+                    <h5 class="col-md-3 col-sm-offset-4">Харилцагч регистрийн дугаар</h5>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-offset-4">
+                           <form action="/web/partner/check" method="get" t-att-class="search_class">
+                    <div class="input-group">
+    
+                        <div class="oe_search">
+                            <input type="text" name="partner_search" class="search-query form-control oe_search_box"  t-att-value="partner_search" />
+                                
+                            <span class="fa fa-remove fa-lg oe_search_clear"></span>
+                        </div>
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default oe_search_button"><i class="fa fa-search"/>Хайх</button>
+                        </span>
+                    </div>	  
+                </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+              </div>
+            </t>
+        </template>
+    </data>
+</odoo>

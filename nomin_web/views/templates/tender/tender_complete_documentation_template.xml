@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="nomin_web.complete_documentation">
+            <t t-call="website.layout" >
+                <div id="content_wrapper">
+                    <div class="container">
+                        <div class="row clearfix pv-50">
+                            <div class="col-xs-12 col-sm-8 col-md-9">
+                            
+                <form enctype="multipart/form-data" t-attf-action="/save_fildd/" method="post" role="form" class="row">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="text" name="whoknows"/><t t-if="hey"><t t-esc="hey"/></t>
+                            <button type="submit" class="btn btn-primary btn-large" onclick="getit(event)">Save</button>
+                </form>
+                 <!-- <form class="form-signin" action="/signUp" method="post" role="form">
+                  <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>-->
+                     <h2 class="form-signin-heading">Please Sign Up</h2>
+                     <input type="email" name="username" class="form-control" placeholder="Email address"/>
+                     <input type="password" name="password" class="form-control" placeholder="Password"/>
+                            <t t-if="user"><t t-esc="user" /></t>
+                     <button class="btn btn-lg btn-primary btn-block" id="buttonn">Register</button>
+                 <!-- </form>-->
+        <a style="float: right;"><input class="btn btn-primary btn-large" type="submit" value="Хадгалах" disabled="true" id="save_documents"/></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            
+            <script type="text/javascript">
+            <![CDATA[
+                
+                        var one2=false;
+                        var two2=false;
+                        var three2=false;
+                        var four2=false;
+                        var five2=false;
+                        var six2=false;
+                        var seven2=false;
+                        var nine2=false;
+                        var ten2=false;
+                        var eleven2=false;
+                        var twelve2=false;
+                        
+                            
+                    function getit(event)
+                        {
+                        
+                            $.ajax({
+                            url: "/save_fildd/",
+                            data:{'email':'emailll'},
+                            type: "POST",
+                            dataType: 'json',
+                            traditional: true,
+                            success: function(data){
+                                alert(data.message+"Orgil");
+                            },
+                            error: function(jqXHR, textStatus, errorThrown){
+                            alert(textStatus, errorThrown);
+                            }
+        
+                        });   
+                        }
+             ]]>	
+            </script>
+        </template>
+    </data>
+</odoo>

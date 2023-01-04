@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="nomin_web.send_tender" name="Send tender require">
+            <t t-call="website.layout">
+              <div id="wrap">
+                <div class="oe_structure"/>
+                <div class="container">
+                    <h1>Thanks!</h1>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="alert alert-success">
+                                Тендерийн материал системд амжилттай хадгалагдлаа. 
+                                Илгээх товчийг дарснаар та манай тендерийн оролцогч болж баталгаажих болно.
+                                Баярлалаа.
+                                <button type="button" class="close" data-dismiss="alert">&amp;times;</button>
+                            </div>
+                            <t t-if="tender">
+                            	<a class="btn btn-primary" t-attf-href="/my/tender_documents/#{ slug(tender) }"> Тендерийн материал</a>
+                            </t><br/><br/><br/><br/><br/>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+              </div>
+            </t>
+        </template>
+    </data>
+</odoo>

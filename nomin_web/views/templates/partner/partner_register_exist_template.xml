@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <template id="partner_register_request_exist" name="Баярлалаа">
+            <t t-call="website.layout">
+              <div id="wrap">
+                <div class="oe_structure"/>
+                <div class="container">
+                    <h1>Хүсэлт системд бүртгэлтэй байна!</h1>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="alert alert-success">
+                                 <t t-esc="create_date"/> ны өдөр хүсэлт илгээсэн байгаа тул дахин илгээх боломжгүй. 75778888 дугаарт залгаж Тендер хариуцсан үйл ажиллагааны менежерээс лавлана уу. 
+                                <button type="button" class="close" data-dismiss="alert">&amp;times;</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+              </div>
+            </t>
+        </template>
+    </data>
+</odoo>

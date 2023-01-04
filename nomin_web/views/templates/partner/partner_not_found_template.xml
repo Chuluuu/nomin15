@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <template id="partner_not_found" name="Харилцагчийн мэдээлэл олдсонгүй">
+            <t t-call="website.layout">
+              
+              <div id="wrap">
+                <div class="oe_structure"/>
+                <div class="container">
+                    <h1 style="text-align:center">Харилцагчийн мэдээлэл олдсонгүй!</h1> 
+                    <div style="text-align:center" >
+                            <a t-attf-href="/web/partner/search" class="btn btn-primary btn-md" type="button">Буцах</a>          
+                            <a t-attf-href="/web/partner/register" class="btn btn-primary btn-md" type="button">Бүртгүүлэх</a>          
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+              </div>
+              </t>
+    </template>
+    </data>
+</odoo>

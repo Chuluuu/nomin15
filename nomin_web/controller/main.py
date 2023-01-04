@@ -1,67 +1,25 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 import base64
 import logging
 import werkzeug
-import re
 import werkzeug.utils
-import urllib2
 import werkzeug.wrappers
 
-import datetime
-from itertools import islice
-import json
 import xml.etree.ElementTree as ET
-from openerp import SUPERUSER_ID
-
-
-#from werkzeug.wrappers import BaseResponse as Response
-
-import openerp
-from openerp.addons.web.controllers.main import WebClient
-from openerp.addons.web_editor.controllers.main import Web_Editor
-from openerp.addons.web import http
-
-
-from openerp.http import request
-
-from openerp.addons.website.controllers.main import Website
-from reportlab.lib import pagesizes
-from openerp import _, http
-from openerp.addons.auth_signup.controllers.main import AuthSignupHome
-from openerp.addons.web.controllers.main import Home
-#for download
-import requests
-
-from    openerp    import    exceptions,  models
-
+from odoo import SUPERUSER_ID
+from odoo import http
+from odoo.http import request
+from odoo.addons.website.controllers.main import Website
+from odoo import _, http
 import cgi, os
 import cgitb; cgitb.enable()
-
-import psycopg2
-import sys
-
-# for email
-import smtplib
-import time# for time
-from smtplib import SMTPException
-
-from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
-from sys import getsizeof
-#from gdata.finance import CostBasis
-
 _logger = logging.getLogger(__name__)
 
-import hashlib #for sha1 creation
-
 try:
-    from openerp.addons.crm.validate_email import validate_email
+    from odoo.addons.crm.validate_email import validate_email
 except ImportError:
     _logger.debug("Cannot import `validate_email`.")
-from cStringIO import StringIO
-import cStringIO
-from datetime import datetime, timedelta
-from openerp.addons.website.models.website import slug
+from io import StringIO
 PPG = 6
 PPR = 10
 

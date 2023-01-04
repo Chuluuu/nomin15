@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+            <!-- Харилцагчийн бичиг баримт үүсгэх -->
+        <template id="nomin_web.create_my_document" name="Бичиг баримт үүсгэх">
+            <t t-call="website.layout" >
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                <div id="pageloader">
+                            <img src="http://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif" alt="processing..." />
+                            <!-- <img src="https://miro.medium.com/max/700/1*CsJ05WEGfunYMLGfsT2sXA.gif" alt="processing..." />					 -->
+                </div>
+                <div id="content_wrapper">
+                    
+                    <div class="container">
+                        <div class="content-bg">
+                        <div class="row">
+                            <div class="col-sm-9 col-md-9">
+                                <div style="clear: both">
+                                    <h3 class="text-left">Бичиг баримт бүрдэлт </h3>
+                                </div>
+                                
+                                <form id="create_document" action="/create_document/" method="post" data-model_name="res.partner.documents" data-success_page="/page/nomin_web.document_thanks" class="s_website_form form-horizontal container-fluid mt32" enctype="multipart/form-data">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <t t-if='partner'><input type="hidden" class="form-control o_website_form_input" name="name" t-att-value="partner.name +' бичиг баримт'"/></t>
+                                    </div>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <t t-if='partner'><input type="hidden" class="form-control o_website_form_input" name="partner_id" t-att-value="partner.id"/></t>
+                                    </div>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <t t-if='partner'><input type="hidden" class="form-control o_website_form_input" name="state" t-att-value="'complete'"/></t>
+                                    </div>
+                                    
+
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Гэрчилгээ</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <t t-if="required_cer == False"><input type="file" name="certificate" accept=".pdf" class="form-control"/></t>
+                                            <t t-if="required_cer == True"><input type="file" name="certificate" accept=".pdf" class="form-control o_website_form_input" required=""/></t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='required_cer == False'>
+                                                
+                                                    <input type="date" name="certif_date_end" class="form-control" />                             	
+                                            </t>
+                                            <t t-if='required_cer == True'>
+                                                <input type="date"  required="" name="certif_date_end"  class="form-control" />
+                                            </t>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="tax"> Татварын албаны тодорхойлолт</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <t t-if="required_tax == False"><input type="file" name="tax" accept=".pdf" class="form-control"/></t>
+                                            <t t-if="required_tax == True"><input type="file" name="tax" accept=".pdf" class="form-control o_website_form_input" required=""/></t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='required_tax == False'>
+                                                
+                                                    <input type="date"  name="tax_date_end" class="form-control" />                             	
+                                            </t>
+                                            <t t-if='required_tax == True'>
+                                                <input type="date"  required="" name="tax_date_end"  class="form-control" />
+                                            </t>                            		
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="organization"> ААН тодорхойлолт</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <t t-if="required_org == False"><input type="file" name="organization" accept=".pdf" class="form-control"/></t>
+                                            <t t-if="required_org == True"><input type="file" name="organization" accept=".pdf" class="form-control o_website_form_input" required=""/></t>
+                                        </div>
+
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='required_org == False'>
+                                                
+                                                    <input type="date"  name="org_date_end" class="form-control" />                             	
+                                            </t>
+                                            <t t-if='required_org == True'>
+                                                <input type="date"  required="" name="org_date_end"  class="form-control" />
+                                            </t>                            		
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="work_list"> Ажлын туршлага</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <t t-if="required_work == False"><input type="file" name="work_list" accept=".pdf" class="form-control"/></t>
+                                            <t t-if="required_work == True"><input type="file" name="work_list" accept=".pdf" class="form-control o_website_form_input" required=""/></t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='required_work == False'>
+                                                
+                                                    <input type="date"  name="work_date_end" class="form-control" />                             	
+                                            </t>
+                                            <t t-if='required_work == True'>
+                                                <input type="date"  required="" name="work_date_end"  class="form-control" />
+                                            </t>                            		
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="judgement"> Шүүхийн тодорхойлолт</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <t t-if="required_jud == False"><input type="file" name="judgement" accept=".pdf" class="form-control"/></t>
+                                            <t t-if="required_jud == True"><input type="file" name="judgement" accept=".pdf" class="form-control o_website_form_input" required=""/></t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='required_jud == False'>
+                                                
+                                                    <input type="date"  name="judge_date_end" class="form-control" />                             	
+                                            </t>
+                                            <t t-if='required_jud == True'>
+                                                <input type="date"  required="" name="judge_date_end"  class="form-control" />
+                                            </t>                            		
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="license"> Тусгай зөвшөөрөл</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <t t-if="required_lice == False"><input type="file" name="license" accept=".pdf" class="form-control"/></t>
+                                            <t t-if="required_lice == True"><input type="file" name="license" accept=".pdf" class="form-control o_website_form_input" required=""/></t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='required_lice == False'>
+                                                
+                                                    <input type="date"  name="spec_date_end" class="form-control" />                             	
+                                            </t>
+                                            <t t-if='required_lice == True'>
+                                                <input type="date"  required="" name="spec_date_end"  class="form-control" />
+                                            </t>                            		
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="bank"> Харилцагч банкны тодорхойлолт</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <t t-if="required_bank == False"><input type="file" name="bank" accept=".pdf" class="form-control"/></t>
+                                            <t t-if="required_bank == True"><input type="file" name="bank" accept=".pdf" class="form-control o_website_form_input" required=""/></t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='required_bank == False'>
+                                                
+                                                    <input type="date"  name="bank_date_end" class="form-control" />                             	
+                                            </t>
+                                            <t t-if='required_bank == True'>
+                                                <input type="date"  required="" name="bank_date_end"  class="form-control" />
+                                            </t>                            		
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="vat"> НӨАТ гэрчилгээ</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <t t-if="required_vat == False"><input type="file" name="vat" accept=".pdf" class="form-control"/></t>
+                                            <t t-if="required_vat == True"><input type="file" name="vat" accept=".pdf" class="form-control o_website_form_input" required=""/></t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='required_vat == False'>
+                                                
+                                                    <input type="date"  name="vat_date_end" class="form-control" />                             	
+                                            </t>
+                                            <t t-if='required_vat == True'>
+                                                <input type="date"  required="" name="vat_date_end"  class="form-control" />
+                                            </t>                            		
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="insurance"> НДГазрын тодорхойлолт</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <t t-if="required_ins == False"><input type="file" name="insurance" accept=".pdf" class="form-control"/></t>
+                                            <t t-if="required_ins == True"><input type="file" name="insurance" accept=".pdf" class="form-control o_website_form_input" required=""/></t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='required_ins == False'>	                            		
+                                                    <input type="date"  name="insu_date_end" class="form-control" />                             	
+                                            </t>
+                                            <t t-if='required_ins == True'>
+                                                <input type="date"  required="" name="insu_date_end"  class="form-control" />
+                                            </t>                            		
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    <h3 class="pagetitle">Санхүүгийн чадавхи</h3>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="ins_report"> НД тайлан</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <t t-if="required_irep == False"><input type="file" name="ins_report" accept=".pdf" class="form-control"/></t>
+                                            <t t-if="required_irep == True"><input type="file" name="ins_report" accept=".pdf" class="form-control o_website_form_input" required=""/></t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='required_irep == False'>
+                                                
+                                                    <input type="date"  name="insurep_date_end" class="form-control" />                             	
+                                            </t>
+                                            <t t-if='required_irep == True'>
+                                                <input type="date"  required="" name="insurep_date_end"  class="form-control" />
+                                            </t>                            		
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="finance_report"> Санхүүгийн жилийн эцсийн тайлан</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <t t-if="required_fin == False"><input type="file" name="finance_report" accept=".pdf" class="form-control"/></t>
+                                            <t t-if="required_fin == True"><input type="file" name="finance_report" accept=".pdf" class="form-control o_website_form_input" required=""/></t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='required_fin == False'>
+                                                
+                                                    <input type="date"  name="fin_date_end" class="form-control" />                             	
+                                            </t>
+                                            <t t-if='required_fin == True'>
+                                                <input type="date"  required="" name="fin_date_end"  class="form-control" />
+                                            </t>                            		
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="audit_report"> Аудитын тайлан</label>
+                                        <div class="col-md-3 col-sm-4">
+                                            <t t-if="required_aud == False"><input type="file" name="audit_report" accept=".pdf" class="form-control"/></t>
+                                            <t t-if="required_aud == True"><input type="file" name="audit_report" accept=".pdf" class="form-control o_website_form_input" required=""/></t>
+                                        </div>
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate"> Хүчинтэй дуусах огноо</label>
+                                        <div class="col-md-3 col-sm-4">	                                
+                                            <t t-if='required_aud == False'>
+                                                
+                                                    <input type="date"  name="audit_date_end" class="form-control" />                             	
+                                            </t>
+                                            <t t-if='required_aud == True'>
+                                                <input type="date"  required="" name="audit_date_end"  class="form-control" />
+                                            </t>                            		
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="col-md-offset-3 col-sm-offset-4 col-sm-8 col-md-7">
+                                            <button class="btn btn-primary btn-md o_website_form_send">хадгалах</button>
+                                            <span id="o_website_form_result"></span>
+                                            <a t-attf-href="/new_tenders" class="btn btn-default" type="button">Болих</a>
+                                        </div>
+                                    </div>
+                                </form>
+                                <script type="text/javascript">
+                                    <![CDATA[
+                                        $(document).ready(function(){
+                                            $("#create_document").on("click", '.o_website_form_send',function(){
+                                                $("#pageloader").fadeIn();
+                                            });//submit
+                                            });//document ready
+                                            ]]>	
+                                    </script>
+                            </div>
+                            <div class="col-sm-3 col-md-3">
+                                <t t-call="nomin_web.my_account"/>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                
+                <style>
+                    #pageloader
+                        {
+                        background: rgba( 255, 255, 255, 0.8 );
+                        display: none;
+                        height: 100%;
+                        position: fixed;
+                        width: 100%;
+                        z-index: 9999;
+                        }
+
+                        #pageloader img
+                        {
+                        left: 50%;
+                        margin-left: -32px;
+                        margin-top: -32px;
+                        position: absolute;
+                        top: 50%;
+                        }
+                </style>
+            </t>
+        </template>
+    </data>
+</odoo>

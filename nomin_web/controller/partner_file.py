@@ -1,23 +1,22 @@
 # -*- coding: utf-8 -*-
 import base64
 import json
-from openerp import SUPERUSER_ID
-from openerp import http
-from openerp.tools.translate import _
-from openerp.http import request
+from odoo import SUPERUSER_ID
+from odoo import http
+from odoo.tools.translate import _
+from odoo.http import request
 from cStringIO import StringIO
 import cStringIO
 import hashlib
 from PIL import Image
-from openerp.addons.web import http
-from openerp.addons.website.models.website import slug
+from odoo.addons.web import http
 from posix import unlink
 
 
 from psycopg2 import IntegrityError
-from openerp.tools.translate import _
-from openerp.exceptions import ValidationError
-from openerp.addons.base.ir.ir_qweb import nl2br
+from odoo.tools.translate import _
+from odoo.exceptions import ValidationError
+from odoo.addons.base.ir.ir_qweb import nl2br
 
 
 import logging

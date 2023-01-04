@@ -1,12 +1,4 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#    Copyright (C) 2014-2020 Asterisk-technologies LLC Developer). All Rights Reserved
-#
-#    Address : Chingeltei District, Peace Tower, 205, Asterisk-technologies LLC Developer Ganzorig
-#    Email : support@asterisk-tech.mn
-#    Phone : 976 + 99241623
-#
-##############################################################################
 
 import datetime,time
 from datetime import timedelta
@@ -18,24 +10,20 @@ from urllib import urlencode
 import urllib2
 from urlparse import urlparse
 
-from openerp import api, fields, models, SUPERUSER_ID, _
-from openerp.tools import image
-from openerp.exceptions import Warning
-from openerp.addons.website.models.website import slug
+from odoo import api, fields, models, SUPERUSER_ID, _
+from odoo.tools import image, tools, api
+from odoo.exceptions import Warning, UserError, AccessError
 import base64
 import logging
 import werkzeug
 import requests
 from openerp.addons.web import http
-from openerp.exceptions import AccessError, UserError
-from openerp.http import request
-from openerp.tools.translate import _
+from odoo.http import request
+from odoo.tools.translate import _
 from cStringIO import StringIO
 import cStringIO
-from openerp import tools, api
-import openerp
-import openerp.tools
 import uuid
+
 PPG = 10
 PPR = 10
 _logger = logging.getLogger(__name__)

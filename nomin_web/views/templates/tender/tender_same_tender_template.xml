@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Ижил төстэй тендерүүд -->
+        <template id="nomin_web.same_tender" name="Same tender">
+            <div class="row">
+            <div class="col-sm-9 col-md-9">
+                <div class="blockItem" style="padding-left:15px;padding-right:15px;">
+                    <hr/>
+                    <h4 class="block-title">Ижил төстэй тендерүүд<span></span></h4>
+                    <ul class="branch-menu" style="margin-left:0px;">
+                        <t t-foreach="same_tenders" t-as="same">
+                            <table class="table table-bordered table-striped table-condensed">
+                                <thead>
+                                    <tr>
+                                        <td colspan="4" >
+                                        <t t-if="website.user_id == user_id"><t t-esc="same.desc_name"></t></t>
+                                        <t t-if="website.user_id != user_id"><a t-attf-href="/tender_detail/#{ slug(same) }/" class="tender-title"><t t-esc="same.desc_name"></t></a></t>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Захиалагч</td>
+                                        <td>Дугаар</td>
+                                        <td>Нийтэлсэн</td>
+                                        <td>Эцсийн хугацаа</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="colored-text"><t t-esc="same.company_id.name"></t></td>
+                                        <td class="text-info"><t t-esc="same.name"/></td>
+                                        <td class="text-info"><span class="user-date" t-esc="same.published_date"/></td>
+                                        <td class="text-danger"><span class="user-date" t-esc="same.date_end"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="text-align:center">Төлөв:</td>
+                                        <td colspan="2" class="text-center">
+                                            <t t-if="same.state!='published'"><span class="label label-danger">Хаасан</span></t>
+                                            <t t-if="same.state=='published'"><span class="label label-success">Нээлттэй</span></t>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </ul>
+                </div>
+            </div>
+            </div>
+        </template>
+    </data>
+</odoo>

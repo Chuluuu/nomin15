@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="document_thanks" name="Баярлалаа">
+            <t t-call="website.layout">
+            <div id="wrap">
+                <div class="oe_structure"/>
+                <div class="container">
+                    <h1>Баярлалаа!</h1>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="alert alert-success">
+                                Таны бичиг баримт амжилттай хадгалагдлаа. 
+                                <button type="button" class="close" data-dismiss="alert">&amp;times;</button>
+                            </div>
+                            <a class="btn btn-primary" t-attf-href="/new_tenders"> Тендер</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+            </div>
+            </t>
+        </template>
+    </data>
+</odoo>

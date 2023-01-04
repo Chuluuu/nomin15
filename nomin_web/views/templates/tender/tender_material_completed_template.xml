@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="nomin_web.material_completed">
+            <t t-call="website.layout" >
+                <div id="content_wrapper">
+                    <div class="container">
+                        <div class="row clearfix pv-50">
+                            <div class="col-xs-12 col-sm-8 col-md-9">
+                            
+                            <h3>Тендерт оролцох материал бүрдсэн байна.</h3>
+                                <ul class="tabs">
+                                    <li><a data-toggle="tab" href="#details-tab01">Тендерийн материал бүрдүүлэлт</a></li>
+                                    <li><a data-toggle="tab" href="#details-tab02" class="active">Техникийн шаардлага</a></li>
+                                </ul><!-- tabs -->
+                                
+                                <ul id="detail-tab" class="tabs-content xss-mb">
+                                <li id="details-tab01" style="padding-left:20px;">
+                                    
+                                  <h3 class="section-title">Тендерийн шаардлага</h3>
+                                    
+                                    <div class="bb2 mb-20"></div>
+                                    <form enctype="multipart/form-data" style="width: 750px;" t-attf-action="/save_updateds/" method="post" role="form" class="row">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        
+                                        <div style="border: min-height: 900px;">
+                                        
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group" id="todorhoilolt">
+                                            
+                                            <label for="">ААН-ийн тодорхойлолт <span class="text-danger">*</span></label>
+                                            <t t-if='todorhoilolt'><t t-foreach="todorhoilolt" t-as="val"><br></br><a href="/tatah/"><t t-esc='val'/></a></t></t>
+        <input type="file" name="todorhoilolt" id="one2" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group" id="gerchilgee">
+                                            
+                                            <label for="">Гэрчилгээ <span class="text-danger">*</span></label>
+                                            <t t-if='gerchilgee'><t t-foreach="gerchilgee" t-as="val"><br></br><a><t t-esc='val'/></a></t></t>
+        <input type="file" name="gerchilgee" id="two2" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group" id="shuuh">
+                                            
+                                            <label for="">Шүүхийн тодорхойлолт <span class="text-danger">*</span></label>
+                                            <t t-if='shuuh'><t t-foreach="shuuh" t-as="val"><br></br><a><t t-esc='val'/></a></t></t>
+        <input type="file" name="shuuh" id="three2" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group" id="zuvshuurul">
+                                            
+                                            <label for="">Тусгай зөвшөөрөл <span class="text-danger">*</span></label>
+                                            <t t-if='zuvshuurul'><t t-foreach="zuvshuurul" t-as="val"><br></br><a><t t-esc='val'/></a></t></t>
+        <input type="file" name="zuvshuurul" id="four2" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group" id="bank">
+                                            
+                                            <label for="">Харилцагч банкуудын тодорхойлолт <span class="text-danger">*</span></label>
+                                            <t t-if='bank'><t t-foreach="bank" t-as="val"><br></br><a><t t-esc='val'/></a></t></t>
+        <input type="file" name="bank" id="five2" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group" id="vat">
+                                            
+                                            <label for="">НӨАТ-ийн гэрчилгээ <span class="text-danger">*</span></label>
+                                            <t t-if='vat'><t t-foreach="vat" t-as="val"><br></br><a><t t-esc='val'/></a></t></t>
+        <input type="file" name="vat" id="six2" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group" id="daatgal">
+                                            
+                                            <label for="">НД Газрын тодорхойлолт <span class="text-danger">*</span></label>
+                                            <t t-if='daatgal'><t t-foreach="daatgal" t-as="val"><br></br><a><t t-esc='val'/></a></t></t>
+        <input type="file" name="daatgal" id="seven2" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group" id="worklist">
+                                            
+                                            <label for="">Гүйцэтгэсэн ажлын тайлан <span class="text-danger">*</span></label>
+                                            <t t-if='worklist'><t t-foreach="worklist" t-as="val"><br></br><a><t t-esc='val'/></a></t></t>
+        <input type="file" name="worklist" id="nine2" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+        
+                                            <h6>Хүчинтэй хугацаа: 1 улирал</h6>
+                                            </div>
+                                        </div>
+                                        
+                                    <h3 class="section-title">Санхүүгийн чадавхи</h3>
+                                    
+                                    <div class="bb2 mb-30"></div>
+                                    
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group" id="ndtailan">
+                                            
+                                                <label>НДТайлан: <span class="text-danger">*</span></label>
+                                            <t t-if='ndtailan'><t t-foreach="ndtailan" t-as="val"><br></br><a><t t-esc='val'/></a></t></t>
+                                                
+        <input type="file" name="ndtailan" id="ten2" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                                    <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group" id="sanhuutailan">
+                                            
+                                                <label>Санхүүгийн жилийн эцсийн тайлан: <span class="text-danger">*</span></label>
+                                            <t t-if='sanhuutailan'><t t-foreach="sanhuutailan" t-as="val"><br></br><a><t t-esc='val'/></a></t></t>
+                                                
+        <input type="file" name="sanhuutailan" id="eleven2" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                                    <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                                
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group" id="audit">
+                                            
+                                                <label>Аудитийн тайлан: <span class="text-danger">*</span></label>
+                                            <t t-if='audit'><t t-foreach="audit" t-as="val"><br></br><a><t t-esc='val'/></a></t></t>
+                                                
+        <input type="file" name="audit" id="twelve2" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                                    <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                            </div>
+                                        </div>
+                                        </div>
+                                            <a style="float: right;"><input class="btn btn-primary btn-large" type="submit" value="Хадгалах"/></a>
+                                    </form>
+                                    </li>
+                                    
+                                    <li id="details-tab02" class="active">
+                                        <form enctype="multipart/form-data" style="width: 750px;" t-attf-action="/save_finance/" method="post" role="form" class="row">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <div style="height: 200px;" id="cntnr">
+                                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                <label for="">Итгэмжлэл <span class="text-danger">*</span></label>
+            <input id="itgemjlel" type="file" name="itgemjlel" class="inputfilee" onchange="ssee(event)" /><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                                </div>
+                                            </div>
+                                            <t t-esc="tender"/>
+                                            <t t-if="tender">
+                                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                <label for="">Тусгай зөвшөөрөл <span class="text-danger">*</span></label>
+            <input id="tusgaizuvshuurul" type="file" name="tusgaizuvshuurul" class="inputfilee" onchange="ssee(event)" /><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                                </div>
+                                            </div>
+                                            </t>
+                                            
+                                </div>
+                                        <a style="float: right;"><input class="btn btn-primary btn-large" type="submit" value="Илгээх" disabled="false" id="save_documents" /></a>
+                                        </form>
+                                    </li><!-- tab content -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <script type="text/javascript">
+            <![CDATA[
+                var count=1;
+                var children=0;
+                
+                if(document.getElementById("tusgaizuvshuurul"))
+                    count++;
+                
+                /*if(document.getElementById("guitsetgeliinbatalgaa"))
+                    count++;*/
+                
+                if(document.getElementById("tusgaishaardlaga"))
+                    count++;
+                
+                if(document.getElementById("ajliinturshlaga"))
+                    count++;
+                
+                if(document.getElementById("techrequirement"))
+                    count++;
+                
+                if(document.getElementById("alternativetender"))
+                    count++;
+                
+                function ssee(event)
+                    {
+                        children++;
+                        if(children>=count)
+                            $('#save_documents').prop('disabled',false);
+                    }	
+                    
+                    /*
+                        var one2=false;
+                        var two2=false;
+                        var three2=false;
+                        var four2=false;
+                        var five2=false;
+                        var six2=false;
+                        var seven2=false;
+                        var nine2=false;
+                        var ten2=false;
+                        var eleven2=false;
+                        var twelve2=false;
+                        
+                    function nnames(event)
+                        {
+                            switch (event.target.id)
+                            {
+                                case "one2": one2=true; alert(one2); break;
+                                case "two2": two2=true; alert(two2); break;
+                                case "three2": three2=true; alert(three2); break;
+                                case "four2": four2=true; alert(four2); break;
+                                case "five2": five2=true; alert(five2); break;
+                                case "six2": six2=true; alert(six2); break;
+                                case "seven2": seven2=true; alert(seven2); break;
+                                case "nine2": nine2=true; alert(nine2); break;
+                                case "ten2": ten2=true; alert(ten2); break;
+                                case "eleven2": eleven2=true; alert(eleven2); break;
+                                case "twelve2": twelve2=true; alert(twelve2); break;
+                            }
+                            nextt();
+                        }
+                        
+                    function reset(event)
+                        {
+                            event.target.previousSibling.value="";
+                            
+                                switch (event.target.id)
+                                {
+                                    case "one2": one2=false; alert(one2); break;
+                                    case "two2": two2=false; alert(two2); break;
+                                    case "three2": three2=false; alert(three2); break;
+                                    case "four2": four2=false; alert(four2); break;
+                                    case "five2": five2=false; alert(five2); break;
+                                    case "six2": six2=false; alert(six2); break;
+                                    case "seven2": seven2=false; alert(seven2); break;
+                                    case "nine2": nine2=false; alert(nine2); break;
+                                    case "ten2": ten2=false; alert(ten2); break;
+                                    case "eleven2": eleven2=false; alert(eleven2); break;
+                                    case "twelve2": twelve2=false; alert(twelve2); break;
+                                }
+                            
+                            enable_send();
+                            
+                        }
+                    
+                    function enable_send()
+                        {
+                            if(one2==false && two2==false && three2==false && four2==false && five2==false && six2==false && seven2==false && nine2==false && ten2=false && eleven2==false && twelve2==false)
+                                     {alert("disable it");
+                                        $('#save_changes').prop('disabled',true);
+                                        $("#save_changes").attr('value', 'Save');
+                                     }
+                            else
+                                     {alert("enable it");
+                                        $('#save_changes').prop('disabled',false);
+                                        $("#save_changes").attr('value', 'Save changes');
+                                     }
+                        }*/
+            ]]>
+            </script>
+        </template>
+    </data>
+</odoo>

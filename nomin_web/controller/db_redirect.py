@@ -1,6 +1,6 @@
-#from web import http
-from openerp import http
-from openerp.addons.web.controllers.main import Database, db_list
+# -*- coding: utf-8 -*-
+from odoo import http
+from odoo.addons.web.controllers.main import Database, db_list
 import werkzeug.utils
 
 class Database_restrict(Database):

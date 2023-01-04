@@ -8,42 +8,7 @@
         <script type="text/javascript" src="/website_slides/static/src/js/slides_upload.js"/>
     </xpath>
 	</template>
-	<!-- <template id = "account_inherit" inherit_id="website_portal.account" name="Account">
-		<xpath expr="//div[@id='wrap']" position="replace">
-            <div id="wrap">
-                <div class="container mb64">
-                    <div class="col-md-8 o_my_documents">
-                        <div class="oe_structure">
-                        	<ul class="tabs">
-								<li><a href="#details-tab1" class="active">Tender List</a></li>
-							</ul>tabs
-							
-							<ul id="detail-tab" class="tabs-content xss-mb">
-								<li id="details-tab1" class="active">
-									
-								</li>tab content
-								
 	
-							</ul>end tabs
-							<div class="clear xss-mb"></div>
-                        </div>
-                        
-                    </div>
-                    <div t-if="sales_rep" class="col-md-3">
-                      <t t-call="website_portal.contact" />
-                      <div class="oe_structure"/>
-                    </div>
-                    <div class="col-md-3 col-md-offset-1 o_my_sidebar">
-                        <div class="o_my_details">
-                            <h3 class="page-header">Your Details <a href="/my/account" class="btn btn-default btn-xs">Change</a></h3>
-                            <div t-field="user.partner_id" t-field-options='{"widget": "contact", "fields": ["email", "phone", "address", "name"]}'/>
-                        </div>
-                    </div>
-                    <div class="col-md-12 oe_structure"/>
-                </div>
-            </div>
-		</xpath>
-    </template> -->
    <template id="tender_channel_header" name="Slides Channel Header">
     <section class="oe_slides_box_shadow">
         <div class="container">

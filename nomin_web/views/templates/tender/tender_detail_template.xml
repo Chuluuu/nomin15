@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Тендерийн дэлгэрэнгүй -->
+        <template id="nomin_web.tender_detail" name="Тендерийн дэлгэрэнгүй">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+                <div class="container">
+                <div class="content-bg">
+                    <div class="row">
+                        <div class="col-sm-9 col-md-9">
+                            <div class="row">
+                                <div class="col-sm-9 col-md-9 col-xs-12">
+                                    <h3><t t-esc="tender.desc_name" /></h3> 
+                                </div>
+                                <div class="col-sm-3 col-md-3 hidden-xs" style="margin-top:30px; margin-bottom:30px; text-align:right; padding-right:0px; padding-left: 0px;">
+                                    <t t-if="tender.state != 'published'"><span class="label label-danger">Баримт бичиг хүлээн авч дууссан</span></t>
+                                    <t t-if="tender.state == 'published'"><span class="label label-success">Баримт бичиг хүлээн авч байна</span></t>
+                                    <!-- <t t-if="tender.is_open_tender == True"><span class="label label-primary">Нээлттэй тендер</span></t>
+                                    <t t-if="tender.is_open_tender == False"><span class="label label-warning">Хаалттай тендер</span></t> -->
+                                </div>
+                                <div class="col-xs-12 visible-xs m-state">
+                                    <t t-if="tender.state != 'published'"><span class="label label-danger">Баримт бичиг хүлээн авч дууссан</span></t>
+                                    <t t-if="tender.state == 'published'"><span class="label label-success">Баримт бичиг хүлээн авч байна</span></t>
+                                    <!-- <t t-if="tender.is_open_tender == True"><span class="label label-primary">Нээлттэй тендер</span></t>
+                                    <t t-if="tender.is_open_tender == False"><span class="label label-warning">Хаалттай тендер</span></t> -->
+                                </div>
+                            </div>
+                            <div class="row hidden-xs">
+                                <div class="col-sm-12 col-md-12" style="padding-right: 0px;">
+                                    <ul class="nav nav-tabs">
+                                    <li role="presentation" class="active" style="margin-left: -2px;"><a data-toggle="tab" href="#details-tab01">Тендерийн урилга</a></li>
+                                    <t t-if="website.user_id != user_id">
+                                        <li role="presentation"><a data-toggle="tab" href="#details-tab02">Мэдээлэл</a></li>
+                                        <li role="presentation"><a data-toggle="tab" href="#details-tab03">Үр дүн</a></li>
+                                    </t>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row visible-xs" style="margin-left: -30px; margin-right: -17px;">
+                                <div class="col-xs-12">
+                                    <ul class="nav nav-tabs">
+                                    <li role="presentation" class="active" style="margin-left: -2px;width: 100px;"><a data-toggle="tab" href="#details-tab01">Тендерийн урилга</a></li>
+                                    <t t-if="website.user_id != user_id">
+                                        <li role="presentation"><a data-toggle="tab" href="#details-tab02" style="height:51px;">Мэдээлэл</a></li>
+                                        <li role="presentation"><a data-toggle="tab" href="#details-tab03" style="height:51px;">Үр дүн</a></li>
+                                    </t>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <ul id="detail-tab" class="tabs-content">
+                                    <li id="details-tab01" class="active">
+                                        <h3 class="text-center">ТЕНДЕРИЙН УРИЛГА</h3>
+                                        <div class="blog-content">
+                                            <t t-raw='tender.invitation_id.invitation_info'/>
+                                        </div>
+                                    </li>
+                                    
+                                    <li id="details-tab02">
+                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                            <table class="table table-hover table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-right"><b>Захиалагч</b></td>
+                                                        <td class="text-left" width="70%"><t t-esc='tender.company_id.name'/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>Дугаар</b></td>
+                                                        <td class="text-left" width="70%"><t t-esc='tender.name'/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>Нийтэлсэн огноо</b></td>
+                                                        <td class="text-left"><span class="user-date" t-esc="tender.published_date"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>Эцсийн хугацаа</b></td>
+                                                        <td class="text-left"><span class="user-date" t-esc="tender.date_end"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>Тендерийн ангилал</b></td>
+                                                        <td class="text-left"><t t-esc='tender.type_id.name'/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>Дэд ангилал</b></td>
+                                                        <td class="text-left"><t t-esc='tender.child_type_id.name'/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>Баталгаат хугацаатай эсэх</b></td>
+                                                        <td class="text-left">
+                                                            <t t-if='tender.is_warranty == True'><span class="label label-success">"<t t-esc="tender.warranty"/>" сар</span></t>
+                                                            <t t-if='tender.is_warranty == False'><span class="label label-danger">Баталгаат хугацаа шаардлагагүй</span></t>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>Гүйцэтгэлийн баталгаа</b></td>
+                                                        <td class="text-left">
+                                                            <!-- <t t-esc='tender.is_performance'/> -->
+                                                            <t t-if='tender.is_performance == True'><span class="label label-success">Гэрээний үнийн дүнгийн "<t t-esc="tender.performance_amount"/>%"</span></t>
+                                                            <t t-if='tender.is_performance == False'><span class="label label-danger">Гүйцэтгэлийн хугацаа шаардлагагүй</span></t>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>Ажлын туршлага</b></td>
+                                                        <td class="text-left">
+                                                            <t t-if='tender.work_experience_info == 0'><span class="label label-warning">Шаардлагагүй</span></t>
+                                                            <t t-if='tender.work_experience_info != 0'><span class="label label-info">"<t t-esc='tender.work_experience_info'/>" жил</span></t>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>Хувилбарт тендер</b></td>
+                                                        <td class="text-left">
+                                                            <t t-if='tender.is_alternative == True'><span class="label label-success">Тийм</span></t>
+                                                            <t t-if='tender.is_alternative == False'><span class="label label-danger">Үгүй</span></t>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>Тусгай зөвшөөрөл</b></td>
+                                                        <td class="text-left">
+                                                            <t t-if='tender.license == True'><span class="label label-success">Тийм</span></t>
+                                                            <t t-if='tender.license == False'><span class="label label-danger">Үгүй</span></t>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>Дэлгэрэнгүй</b></td>
+                                                        <td class="text-left"><t t-raw='tender.description'/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-right"><b>Тусгай шаардлагууд</b></td>
+                                                        <td class="text-left"><t t-raw='tender.invitation_id.invitation_detail'/></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <t t-if="tender.state == 'published'">
+                                            <t t-if="tender.is_open_tender == True">
+                                                <t t-if="user_type!=3">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-condensed">
+                                                            <thead>
+                                                                <tr style="text-align: center;">
+                                                                    <td>Хавсралтууд</td>
+                                                                    <td>Үйлдэл</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <t t-foreach="tender.sudo().work_task_ids" t-as="document_id">
+                                                                <tr>
+                                                                    <td class="text-info"><t t-esc="document_id.tender_work_document_id.name"/></td>
+                                                                    <!-- <td><a t-att-href="'/document_download?attachment_id=%i' % document_id['tender_work_document_id']">татах</a></td> -->
+                                                                    <td><a target="_top" t-attf-href="/tender_detail/#{ slug(document_id) }/download" title="Татах" id="download">
+                                                                        <i class="fa fa-download fa-2x"></i>
+                                                                    </a></td>
+                                                                </tr>
+                                                            </t>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </t>
+                                                <!-- <t t-esc="partner_docs"/> -->
+                                                <t t-if="not partner_docs">
+                                                    <a class="btn btn-primary" type="button" href="/my/documents/create">Бичиг баримт үүсгэх</a>
+                                                </t>
+                                                
+                                                <t t-if="partner_docs">
+                                                    <t t-if="partner_docs.state == 'complete'">
+                                                        <t t-if="not partner_bid">
+                                                            <a class="btn btn-primary" type="button" t-attf-href="/tender/create/documents/#{ slug(tender) }">Тендерийн материал үүсгэх</a>
+                                                        </t>
+                                                        <t t-if="partner_bid">
+                                                            <t t-if="partner_bid.state == 'draft'">
+                                                                <a class="btn btn-primary" type="button" t-attf-href="/my/tender_documents/#{ slug(tender) }">Тендерийн материал илгээх</a>
+                                                            </t>
+                                                            <t t-if="partner_bid.state != 'draft'">
+                                                                <a class="btn btn-primary" type="button" t-attf-href="/my/tender_documents/#{ slug(tender) }">Үнийн санал харах</a>
+                                                            </t>
+                                                        </t>
+                                                    </t>
+                                                    <t t-if="partner_docs.state != 'complete'">
+                                                        <a class="btn btn-primary" type="button" href="/my/documents">Бичиг баримт гүйцээх</a>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                            
+                                            <t t-if="tender.is_open_tender != True and inv_tenders">
+                                                
+                                                <t t-if="inv_tenders">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-bordered table-condensed">
+                                                            <thead>
+                                                                <tr style="text-align: center;">
+                                                                    <td>Хавсралтууд</td>
+                                                                    <td>Үйлдэл</td>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <t t-foreach="tender.sudo().work_task_ids" t-as="document_id">
+                                                                <tr>
+                                                                    <td class="text-info"><t t-esc="document_id.tender_work_document_id.name"/></td>
+                                                                    <td>
+                                                                        <a target="_top" t-attf-href="/tender_detail/#{ slug(document_id) }/download" title="Татах" id="download">
+                                                                            <i class="fa fa-download fa-2x"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            </t>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </t>
+                                            
+                                                <!-- <t t-esc="partner_docs"/> -->
+                                                <t t-if="not partner_docs">
+                                                    <a class="btn btn-primary" type="button" href="/my/documents">Бичиг баримт үүсгэх</a>
+                                                </t>
+                                                <t t-if="partner_docs">
+                                                    <t t-if="partner_docs.state == 'complete'">
+                                                        <t t-if="not partner_bid">
+                                                            <!-- <a class="btn btn-primary" type="button" href="#">Техникийн шаардлага бүрдүүлэх</a> -->
+                                                            <a class="btn btn-primary" type="button" t-attf-href="/tender/create/documents/#{ slug(tender) }">Тендерийн материал бүрдүүлэх</a>
+                                                        </t>
+                                                        <t t-if="partner_bid">
+                                                            <t t-if="partner_bid.state == 'draft'">
+                                                                <!-- <a class="btn btn-primary" type="button" href="#">Техникийн шаардлага илгээх</a> -->
+                                                                <a class="btn btn-primary" type="button" t-attf-href="/my/tender_documents/#{ slug(tender) }">Тендерийн материал илгээх</a>
+                                                            </t>
+                                                            <t t-if="partner_bid.state != 'draft'">
+                                                                <!-- <a class="btn btn-primary" type="button" href="#">Техникийн шаардлага харах</a> -->
+                                                                <a class="btn btn-primary" type="button" t-attf-href="/my/tender_documents/#{ slug(tender) }">Тендерийн материал харах</a>
+                                                            </t>
+                                                        </t>
+                                                    </t>
+                                                    <t t-if="partner_docs.state != 'complete'">
+                                                        <a class="btn btn-primary" type="button" href="/my/documents">Бичиг баримт гүйцээх</a>
+                                                    </t>
+                                                </t>
+                                                
+                                            </t>
+                                            </t>
+                                        </div>
+                                        </div>
+                                    </li>
+                                    
+                                    <li id="details-tab03">
+                                        <t t-if="not valuations or valuations.is_choose == False">
+                                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                                <div class="row" style="text-align:center;">
+                                                    <span style="color:#1660AB">Тендер шалгаруулалтын үр дүн нийтлэгдээгүй !</span>
+                                                </div>
+                                            </div>
+                                        </t>
+                                        <t t-if="valuations.is_choose == True">
+                                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                                <t t-if="user_ids">
+                                                <t t-if="user_id.id in user_ids">
+                                                    <div class="row">
+                                                        <h3>Тендерт шалгарсан байгууллага</h3>
+                                                        <t t-foreach="winning_partners" t-as="participant">
+                                                            <div class="row">
+                                                                <div class="col-sm-4"><span>Байгууллагын нэр:</span></div>
+                                                                <div class="col-sm-8"><t t-if='participant.is_win == True'><span t-esc='participant.partner_id.name'></span></t></div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-sm-4"><span>Тайлбар:</span></div>
+                                                                <div class="col-sm-8"><t t-if='participant.is_win == True'><span t-esc='participant.reason'></span></t></div>
+                                                            </div>
+                                                        </t>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="table-responsive">
+                                                        <h3>Тендерт оролцсон байгууллагууд</h3>
+                                                        <table>
+                                                            <thead>
+                                                                <tr>	
+                                                                    <th class="text-center">#</th>
+                                                                    <th class="text-center">Тендерт оролцогчийн нэр</th>
+                                                                    <th class="text-center">Шалтгаан</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <t t-foreach="defeated_partners" t-as="participant">
+                                                                <tr>
+                                                                    <td class="text-center"><t t-if='participant.is_win == False'><span t-esc="participant_index+1"/></t></td>
+                                                                    <td class="text-left"><t t-if='participant.is_win == False'><span t-esc='participant.partner_id.name'/></t></td>
+                                                                    <td class="text-left"><t t-if='participant.is_win == False'><span t-esc='participant.reason'/></t></td>
+                                                                </tr> 
+                                                                </t>
+                                                            </tbody>
+                                                        </table>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                                <t t-if="user_id.id not in user_ids">
+                                                    <div class="row" style="text-align:center;">
+                                                        <span style="color:#1660AB">Та уг тендерт оролцоогүй !</span>
+                                                    </div>
+                                                </t>
+                                                </t>
+                                            </div>
+                                        </t>
+                                        
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3">
+                            <t t-call="nomin_web.tender_selection"/>
+                        </div>
+                        <t t-if="same_tenders">
+                            <t t-call="nomin_web.same_tender"/>
+                        </t>
+                    </div>
+                </div>
+                </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

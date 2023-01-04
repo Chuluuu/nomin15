@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <template id="partner_edit_request" name="Харилцагчийн холбоо барих мэдээлэл өөрчлөх хүсэлт">
+            <t t-call="website.layout">
+              <div id="wrap">
+                <div class="oe_structure"/>
+                <div class="container">
+                    <div class="row">
+                    <div class="col-sm-9 col-md-9">
+                                <h3 class="pagetitle">Харилцагчийн холбоо барих мэдээлэл өөрчлөх хүсэлт</h3>
+                                <form action="/web/partner/sendrequest" method="post" data-model_name="res.partner" data-success_page="/page/nomin_web.thanks" class="s_website_form form-horizontal container-fluid" enctype="multipart/form-data">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                       <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="company_name">Нэр</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <t t-if="not partner.name"><input required="1" type="text" class="form-control o_website_form_input" placeholder="Нэр" id="company_name" name="company_name" readonly=""/></t>
+                                            <t t-if="partner.name"><input required="1" type="text" class="form-control o_website_form_input" placeholder="Нэр" id="company_name" name="company_name" t-att-value="partner.name" readonly=""/></t>
+                                        </div>
+                                    </div>
+                                     <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="company_name">Хаяг</label>
+                                        <div class="col-md-7 col-sm-8">
+                                        <t t-if="not partner.street"><input required="1" type="text" class="form-control o_website_form_input" placeholder="Хаяг" id="address" name="address" /></t>
+                                        <t t-if="partner.street"><input type="text" class="form-control o_website_form_input" placeholder="Хаяг" id="address" name="address" t-att-value="partner.street"/></t>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="phonenumber">Утас </label>
+                                        <div class="col-md-7 col-sm-8">
+    
+                                            <t t-if="not partner.mobile">
+                                                <t t-if="not phonenumber">
+                                                    <input name="phonenumber" type="text" class="form-control o_website_form_input" placeholder="Утасны дугаар" id="phonenumber" required=""/>
+                                                </t>
+                                                <t t-if="phonenumber">
+                                                    <input name="phonenumber" type="text" class="	form-control o_website_form_input" placeholder="Утасны дугаар" id="phonenumber" required="" t-att-value="phonenumber"/>
+                                                </t>
+    
+                                            </t>
+                                            <t t-if="partner.mobile"><input required="1" name="phonenumber" type="text" class="form-control o_website_form_input" placeholder="Утасны дугаар" id="phonenumber" t-att-value="partner.mobile"/></t>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate_no">Регистрийн дугаар</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <t t-if="not partner.registry_number"><input required="1" name="certificate_no" type="text" class="form-control o_website_form_input" placeholder="Регистрийн дугаар" id="certificate_no" readonly=""/></t>
+                                            <t t-if="partner.registry_number"><input required="1" name="certificate_no" type="text" class="form-control o_website_form_input" placeholder="Регистрийн дугаар" id="certificate_no" t-att-value="partner.registry_number" readonly=""/></t>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="email">Цахим шуудан</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <t t-if="not partner.email">
+                                                <t t-if="not email">
+                                                <input required="1" name="email" type="text" class="form-control" placeholder="И-Мэйл хаяг" id="email"/>
+                                                </t>
+                                                <t t-if="email">
+                                                    <input required="1" name="email" type="text" class="form-control" placeholder="И-Мэйл хаяг" id="email" t-att-value="email"/>
+                                                </t>
+                                        </t>
+                                            <t t-if="partner.email"><input required="1" name="email" type="text" class="form-control" placeholder="И-Мэйл хаяг" id="email" t-att-value="partner.email"/></t>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="email">Тайлбар</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <t>
+                                                <textarea id="description" required="1" name="description" rows="5" class="form-control o_website_form_input" placeholder="Тайлбар бичих ..."/>
+                                            </t>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="text-align:center">
+                                        <div class="col-md-offset-3 col-sm-offset-4 col-sm-8 col-md-7">
+                                            <button class="btn btn-primary" type="submit" >Илгээх</button>
+                                            <!-- <span id="o_website_form_result"></span> -->
+                                             <!-- <input type="submit" value="send"/> -->
+                                            <a t-attf-href="/web/partner/search" class="btn btn-default" type="button">Буцах</a>
+                                        </div>
+                                    </div>
+                                </form>
+                    </div>
+                    
+                            </div>
+                </div>
+                <div class="oe_structure"/>
+              </div>
+            </t>
+        </template>
+    </data>
+</odoo>

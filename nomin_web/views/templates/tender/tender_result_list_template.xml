@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Тендер дүн -->
+        <template id="nomin_web.tender_result_list" name="Тендерийн үр дүн">
+            <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <div class="container">
+                    <div class="content-bg">
+                        <t t-call="nomin_web.tenderresult"/>
+                    </div>
+                </div>
+            </div>
+            </t>
+        </template>
+    </data>
+</odoo>

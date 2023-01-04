@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Тендерийн шаардлага, үнийн санал -->
+        <template id="nomin_web.my_tenders_documents_details" name="Тендерийн шаардлагууд">
+            <t t-call="website.layout" >
+                <div id="content_wrapper">
+                    <div class="container">
+                    <div class="content-bg">
+                        <div class="row">
+                        <div class="col-sm-9 col-md-9">
+                            <h3 class="pagetitle">Тендерийн бичиг баримт </h3>
+                            <form class="s_website_form form-horizontal container-fluid" enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label" for="proxy_id"> Итгэмжлэл</label>
+                                    <div class="col-md-7 col-sm-8">
+                                        <t t-if="part_tenders.t_partner_proxy_id">
+                                        <t t-foreach="part_tenders.t_partner_proxy_id" t-as="proxy_id">
+                                            <a><t t-esc="proxy_id['datas_fname']" /></a>
+                                        </t>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label" for="technical"> Техникийн үзүүлэлт</label>
+                                    <div class="col-md-7 col-sm-8">
+                                        <!-- <input type="file" name="technical" accept=".pdf" class="form-control"/> -->
+                                        <t t-if='part_tenders.t_partner_technical_id'>
+                                        <t t-foreach="part_tenders.t_partner_technical_id" t-as="technical">
+                                            <!-- <a t-att-href="'/mydoc/download?attachment_id=%i' % technical['id']"><t t-esc="technical['datas_fname']"/></a> -->
+                                            <a><t t-esc="technical['datas_fname']"/></a>
+                                        </t>
+                                        </t>
+                                    </div>
+                                </div>
+                                <t t-if="tender.work_experience_info > 0">
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label" for="work_list"> Ажиллах хүчний чадавхи</label>
+                                    <div class="col-md-7 col-sm-8">
+                                        <!-- <input type="file" name="work_list" accept=".pdf" class="form-control"/> -->
+                                        <t t-if='part_tenders.t_partner_worklist_id'>
+                                        <t t-foreach="part_tenders.t_partner_worklist_id" t-as="work_list">
+                                            <!-- <a t-att-href="'/mydoc/download?attachment_id=%i' % work_list['id']"><t t-esc="work_list['datas_fname']"/></a> -->
+                                            <a><t t-esc="work_list['datas_fname']"/></a>
+                                        </t>
+                                        </t>
+                                    </div>
+                                </div>
+                                </t>
+                                <t t-if="tender.special_require != ''">
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label" for="requirement"> Тусгай шаардлагууд</label>
+                                    <div class="col-md-7 col-sm-8">
+                                        <!-- <input type="file" name="requirement" accept=".pdf" class="form-control"/> -->
+                                        <t t-if='part_tenders.t_partner_require_id'>
+                                        <t t-foreach="part_tenders.t_partner_require_id" t-as="requirement">
+                                            <!-- <a t-att-href="'/mydoc/download?attachment_id=%i' % requirement['id']"><t t-esc="requirement['datas_fname']"/></a> -->
+                                            <a><t t-esc="requirement['datas_fname']"/></a>
+                                        </t>
+                                        </t>
+                                    </div>
+                                </div>
+                                </t>
+                                <t t-if="tender.license == True">
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label" for="license"> Тусгай зөвшөөрөл</label>
+                                    <div class="col-md-7 col-sm-8">
+                                        <!-- <input type="file" name="license" accept=".pdf" class="form-control"/> -->
+                                        <t t-if='part_tenders.t_partner_license_id'>
+                                        <t t-foreach="part_tenders.t_partner_license_id" t-as="license">
+                                            <!-- <a t-att-href="'/mydoc/download?attachment_id=%i' % license['id']"><t t-esc="license['datas_fname']"/></a> -->
+                                            <a><t t-esc="license['datas_fname']"/></a>
+                                        </t>
+                                        </t>
+                                    </div>
+                                </div>
+                                </t>
+                                <t t-if="tender.is_alternative == True">
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label" for="alternative"> Хувилбарт тендер</label>
+                                    <div class="col-md-7 col-sm-8">
+                                        <!-- <input type="file" name="alternative" accept=".pdf" class="form-control"/> -->
+                                        <t t-if='part_tenders.t_partner_alternative_id'>
+                                        <t t-foreach="part_tenders.t_partner_alternative_id" t-as="alternative">
+                                            <!-- <a t-att-href="'/mydoc/download?attachment_id=%i' % alternative['id']"><t t-esc="alternative['datas_fname']"/></a> -->
+                                            <a><t t-esc="alternative['datas_fname']"/></a>
+                                        </t>
+                                        </t>
+                                    </div>
+                                </div>
+                                </t>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label" for="cost"> Үнийн санал</label>
+                                    <div class="col-md-7 col-sm-8">
+                                        <!-- <input type="file" name="cost" accept=".pdf" class="form-control"  /> -->
+                                        <t t-if='part_tenders.t_partner_cost_id'>
+                                        <t t-foreach="part_tenders.t_partner_cost_id" t-as="cost">
+                                            <!-- <a t-att-href="'/mydoc/download?attachment_id=%i' % cost['id']"><t t-esc="cost['datas_fname']"/></a> -->
+                                            <a><t t-esc="cost['datas_fname']"/></a>
+                                        </t>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label" for="schedule"> Ажлын график</label>
+                                    <div class="col-md-7 col-sm-8">
+                                        <!-- <input type="file" name="schedule" accept=".pdf" class="form-control"/> -->
+                                        <t t-if='part_tenders.t_partner_schedule_id'>
+                                        <t t-foreach="part_tenders.t_partner_schedule_id" t-as="schedule">
+                                            <!-- <a t-att-href="'/mydoc/download?attachment_id=%i' % schedule['id']"><t t-esc="schedule['datas_fname']"/></a> -->
+                                            <a><t t-esc="schedule['datas_fname']"/></a>
+                                        </t>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label" for="control_budget"> Хяналтын төсөв</label>
+                                    <div class="col-md-7 col-sm-8">
+                                        <!-- <input type="file" name="schedule" accept=".pdf" class="form-control"/> -->
+                                        <t t-if='part_tenders.t_partner_control_budget_id'>
+                                        <t t-foreach="part_tenders.t_partner_control_budget_id" t-as="control_budget">
+                                            <!-- <a t-att-href="'/mydoc/download?attachment_id=%i' % schedule['id']"><t t-esc="schedule['datas_fname']"/></a> -->
+                                            <a><t t-esc="control_budget['datas_fname']"/></a>
+                                        </t>
+                                        </t>
+                                    </div>
+                                </div>
+                                
+                                <hr/>
+                                <h3 class="pagetitle">Үнийн саналын задаргаа</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-condensed table-striped" style="width: auto;">
+                                        <tbody id ="tasktable">
+                                        <tr class="info">
+                                            <td rowspan="2" width="5%">#</td>
+                                            <td rowspan="2" width="25%">Ажил үйлчилгээний нэр</td>
+                                            <td colspan="3" width="30%">Ажиллах хүчний зардал</td>
+                                            <td rowspan="2">Материалын зардал</td>
+                                            <td rowspan="2">Бусад зардал</td>
+                                            <td rowspan="2">Нийт зардал</td>
+                                        </tr>
+                                        <tr class="info">
+                                            <td style="text-align: right;">Тоо хэмжээ</td>
+                                            <td style="text-align: right;">Hэгж үнэ</td>
+                                            <td style="text-align: right;">Нийт үнэ</td>
+                                        </tr>
+                                        
+                                        <t t-if="lines">
+                                        <tr t-foreach="lines" t-as="line">
+                                            <!-- <tr>
+                                                <td>1</td>
+                                                <td><input name="work1"></input></td>
+                                                <td><input class="quantity" value="1" name="hemjee1" style="width: 60px;"></input></td>
+                                                <td><input class="unitprice" value="0.0" name="negjune1" style="width: 60px;"></input></td>
+                                                <td class="totalcost">0</td>
+                                                <td><input class="materialexpense" value="0" name="material1" style="width: 60px;"></input></td>
+                                                <td><input class="otherexpense" value="0" name="busadzardal1" style="width: 60px;"></input></td>
+                                                <td class="totalsum">0</td>
+                                                <td id="addtask">
+                                                    <button type="button" class="btn btn-xs btn-primary" title="Мөр нэмэх" onclick="add_task()">Мөр нэмэх</button>
+                                                </td>
+                                            </tr> -->
+                                            
+                                                <td><span t-esc="line_index+1"/></td>
+                                                <td><t t-if="line.name"><span t-esc="line.name"/></t></td>
+                                                <td id="line_qty"><t t-if="line.qty"><span t-esc="line.qty"/></t></td>
+                                                <td id="line_unit_price"><t t-if="line.unit_price"><span t-esc="line.unit_price"/></t></td>
+                                                <td id="line_amount"><t t-if="line.amount"><span t-esc="line.amount"/></t></td>
+                                                <td id="line_costs_of_materials"><t t-if="line.costs_of_materials"><span t-esc="line.costs_of_materials"/></t></td>
+                                                <td id="line_other_costs"><t t-if="line.other_costs"><span t-esc="line.other_costs"/></t></td>
+                                                <td id="line_total_amount"><t t-if="line.line_total_amount"><span t-esc="line.line_total_amount"/></t></td>
+                                            </tr>
+                                        </t>
+                                        </tbody>	
+                                    </table>
+                                </div>
+                                <div class="col-md-8 col-xs-8 text-right">Нийт дүн: </div>
+                                <label class="col-md-4 col-xs-4 text-right" id="totalvalue" t-esc="part_tenders.amount_total"></label>
+                                <div class="col-md-8 col-xs-8 text-right">Баталгаат хугацаа (Сараар): </div>
+                                <label class="col-md-4 col-xs-4 text-right"><span t-esc="part_tenders.warranty_time"/></label>
+                                <div class="col-md-8 col-xs-8 text-right">Гүйцэтгэх хугацаа (Хуанлийн хоногоор): </div>
+                                <label class="col-md-4 col-xs-4 text-right"><span t-esc="part_tenders.execute_time"/></label>
+                
+                                <div class="form-group">
+                                    <div class="col-xs-6 col-md-6 text-left">
+                                        <!-- <button class="btn btn-primary btn-md" type="submit" >Хадгалах</button> -->
+                                        <p t-if="part_tenders.state == 'draft'"><a t-attf-href="/my/tender_documents/update/#{ slug(tender) }" class="btn btn-primary btn-xs" type="button" id="tender_document_edit">Засах</a></p>
+                                        <p t-if="part_tenders.state == 'draft'"><a t-attf-href="/my/tenders_documents/" class="btn btn-default btn-xs" type="button" style="white-space: normal;">Миний оролцсон тендерүүд</a></p>
+                                    </div>
+                                    <div class="col-xs-6 col-md-6 text-right">
+                                        <t t-if="part_tenders.state == 'draft'"><a t-attf-href="/send/tender/document/#{ slug(tender) }" class="btn btn-success btn-xs" type="button">Илгээх</a></t>
+                                        <p t-if="part_tenders.state == 'draft'"><a t-attf-href="/tender_detail/#{ slug(tender) }" class="btn btn-default btn-xs" type="button" style="white-space: normal;">Тендерийн дэлгэрэнгүй</a></p>
+                                    </div>
+                                    <div class="col-xs-6 col-md-6 text-left">
+                                        <t t-if="part_tenders.state != 'draft'"><a t-attf-href="/my/tenders_documents/" class="btn btn-success btn-xs" type="button" style="white-space: normal;">Миний оролцсон тендерүүд</a></t>
+                                    </div>
+                                    <div class="col-xs-6 col-md-6 text-right">
+                                        <t t-if="part_tenders.state != 'draft'"><a t-attf-href="/tender_detail/#{ slug(tender) }" class="btn btn-info btn-xs" type="button" style="white-space: normal;">Тендерийн дэлгэрэнгүй</a></t>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    
+                        <div class="col-sm-3 col-md-3">
+                            <t t-call="nomin_web.my_account"/>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+            </t>
+            <script type="text/javascript">
+            <![CDATA[
+                // *------- toog myangachilj taslal tavih --------*
+                (function numberWithCommas(){
+                    $("#line_qty").html($("#line_qty").html().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                    $("#line_unit_price").html($("#line_unit_price").html().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                    $("#line_amount").html($("#line_amount").html().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                    $("#line_costs_of_materials").html($("#line_costs_of_materials").html().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                    $("#line_other_costs").html($("#line_other_costs").html().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                    $("#line_total_amount").html($("#line_total_amount").html().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                    
+                    $("#totalvalue").html($("#totalvalue").html().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "₮");
+                })();
+            ]]>	
+            </script>
+        </template>
+    </data>
+</odoo>

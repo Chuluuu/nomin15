@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="tender_thanks" name="Баярлалаа">
+            <t t-call="website.layout">
+            <div id="wrap">
+                <div class="oe_structure"/>
+                <div class="container">
+                    <h1>Баярлалаа!</h1>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="alert alert-success">
+                                Таны бичиг баримт амжилттай хадгалагдлаа. 
+                                <button type="button" class="close" data-dismiss="alert">&amp;times;</button>
+                            </div>
+                            <a class="btn btn-primary" t-attf-href="/my/documents"> Бичиг баримт</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+            </div>
+            </t>
+        </template>
+        
+        <template id="nomin_web.thanks" name="Баярлалаа">
+            <t t-call="website.layout">
+              <div id="wrap">
+                <div class="oe_structure"/>
+                <div class="container">
+                    <h1>Баярлалаа!</h1>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="alert alert-success">
+                                <t t-if="tender">
+                                <span>Таны мэдээлэл амжилттай илгээгдлээ. <b><t t-esc="tender.desc_name"/></b> тендерт оролцсонд баярлалаа. 
+                                Та тендер шалгаруулалтын мэдээллийг системд өөрийн эрхээр нэвтэрч харах боломжтой. 
+                                Тодруулах бусад зүйлсийн талаар 1800-2888 дугаарт холбогдоно уу. </span>
+                                </t>
+                                <button type="button" class="close" data-dismiss="alert">&amp;times;</button>
+                            </div>
+                            <a class="btn btn-primary" href="/new_tenders"> Нүүр хуудасруу буцах</a>
+                            <br/><br/>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+              </div>
+            </t>
+        </template>
+    </data>
+</odoo>

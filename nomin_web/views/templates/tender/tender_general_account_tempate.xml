@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Миний бүртгэл -->
+        <template id="nomin_web.my_general_account" name="Ерөнхий бүртгэл">
+            <t t-call="website.layout" >
+                <div id="content_wrapper">
+                    <div class="container">
+                    <div class="content-bg">
+                        <div class="row">
+                        <div class="col-sm-9 col-md-9">
+                                <h3 class="pagetitle">Ерөнхий бүртгэл</h3>
+                                <form method="post" data-model_name="res.partner" class="s_website_form form-horizontal container-fluid" enctype="multipart/form-data">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="company_image">Компанийн лого</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <!-- <input type="file" class="form-control o_website_form_input" name="Resume"/> -->
+                                            <t t-if="not partner.image"><input type="image" class="form-control" name="company_image" style="height:90px;width:90px;" disabled=""/></t>
+                                            <!-- <t t-if="partner.image"><input type="file" class="form-control" name="company_image" t-field="partner.image" t-field-options='{"widget": "image"}' style="90;90"/></t> -->
+                                            <t t-if="partner.image"><input type="image" class="form-control" name="company_image" t-att-src="'data:image/png;base64,%s' %partner.image" style="height:90px;width:90px;" disabled=""/></t>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="company_name">Компанийн нэр</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <input type="text" class="form-control" placeholder="Байгууллагын нэр" id="company_name" name="company_name" t-att-value="partner.name" disabled=""/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field">
+                                        <label class="col-md-3 col-sm-4 control-label" for="address">Хаяг</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <input type="text" class="form-control" placeholder="Хаяг" id="address" name="address" t-att-value="partner.street" disabled=""/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field">
+                                        <label class="col-md-3 col-sm-4 control-label" for="registration_number">Бүртгэлийн дугаар</label>
+                                        <div class="col-md-7 col-sm-8">
+                                        <input type="text" class="form-control" placeholder="Бүртгэлийн №" id="registration_number" name="registration_number" t-att-value="partner.code" disabled=""/>
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field">
+                                        <label class="col-md-3 col-sm-4 control-label" for="phonenumber">Утас</label>
+                                        <div class="col-md-7 col-sm-8">
+                                        <input name="phonenumber" type="text" class="form-control" placeholder="Утасны дугаар" id="phonenumber" t-att-value="partner.mobile" disabled=""/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field">
+                                        <label class="col-md-3 col-sm-4 control-label" for="certificate_no">Регистрийн дугаар</label>
+                                        <div class="col-md-7 col-sm-8">
+                                        <input name="certificate_no" type="text" class="form-control" placeholder="Регистрийн дугаар" id="certificate_no" t-att-value="partner.registry_number" disabled=""/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-field">
+                                        <label class="col-md-3 col-sm-4 control-label" for="company_name">Цахим шуудан</label>
+                                        <div class="col-md-7 col-sm-8">
+                                        <input name="email" type="text" class="form-control" placeholder="И-Мэйл хаяг" id="email" t-att-value="partner.email" disabled=""/>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group form-field">
+                                        <label class="col-md-3 col-sm-4 control-label" for="category">Үйл ажиллагааны чиглэл </label>
+                                        <div class="col-md-7 col-sm-8">
+                                            
+                                            <div class="col-md-6">
+                                                <label>
+                                                    <input type="checkbox" id="cate1" name="cate1" t-att-value="1" t-att-checked="1 in category_ids" disabled=""/>
+                                                    <span disabled="">Төрийн байгууллагууд</span>
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="cate5" t-att-value='5' t-att-checked="5 in category_ids" disabled=""/>
+                                                    <span disabled="">Газрууд</span>
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="cate2" t-att-value='2' t-att-checked="2 in category_ids" disabled=""/>
+                                                    <span disabled="">ЭСЯ</span>
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="cate6" t-att-value='6' t-att-checked="6 in category_ids" disabled=""/>
+                                                    <span disabled="">Номингийн салбарууд</span>
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="cate3" t-att-value='3' t-att-checked="3 in category_ids" disabled=""/>
+                                                    <span disabled="">Компани</span>
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="cate4" t-att-value='4' t-att-checked="4 in category_ids" disabled=""/>
+                                                    <span disabled="">банк</span>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>
+                                                    <input type="checkbox" name="cate7" t-att-value='7' t-att-checked="7 in category_ids" disabled=""/>
+                                                    <span disabled="">Ажилчид</span>
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="cate12" t-att-value='12' t-att-checked="12 in category_ids" disabled=""/>
+                                                    <span disabled="">Төлөөлөгчийн газар</span>
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="cate8" t-att-value='8' t-att-checked="8 in category_ids" disabled=""/>
+                                                    <span disabled="">Гадаад</span>
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="cate10" t-att-value='10' t-att-checked="10 in category_ids" disabled=""/>
+                                                    <span disabled="">Дотоод</span>
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="cate9" t-att-value='9' t-att-checked="9 in category_ids" disabled=""/>
+                                                    <span disabled="">Хувийн хэвшил</span>
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="cate11" t-att-value='11' t-att-checked="11 in category_ids" disabled=""/>
+                                                    <span disabled="">Хувь хүн</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group form-field">
+                                        <label class="col-md-3 col-sm-4 control-label" for="tender_type">Оролцох тендерийн төрлүүд </label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <!-- <select multiple="multiple" name="type_id" id="type_id" class="form-control" disabled="">
+                                                <option value="">.:Сонгох:.</option>
+                                                <t t-foreach="types" t-as="type">
+                                                <t t-foreach="partner.tender_type_ids" t-as="tendertype">
+                                                    <t t-if="not type.parent_id and type.id==tendertype.id"><option t-field="type.name" selected="selected"/></t>
+                                                    <t t-if="not type.parent_id and type.id!=tendertype.id"><option t-field="type.name"/></t>
+                                                </t>
+                                                </t>
+                                            </select> -->
+                                            <div class="col-md-6">
+                                                <label>
+                                                    <input type="checkbox" name="type1" t-att-value='1' t-att-checked="1 in type_ids" disabled=""/>
+                                                    <span disabled="">Бараа</span>
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="type2" t-att-value='2' t-att-checked="2 in type_ids" disabled=""/>
+                                                    <span disabled="">Барилга байгууламжийн ажил</span>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>
+                                                    <input type="checkbox" name="type3" t-att-value='3' t-att-checked="3 in type_ids" disabled=""/>
+                                                    <span disabled="">Ажил</span>
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="type4" t-att-value='4' t-att-checked="4 in type_ids" disabled=""/>
+                                                    <span disabled="">Зөвлөх үйлчилгээ</span>
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="type5" t-att-value='5' t-att-checked="5 in type_ids" disabled=""/>
+                                                    <span disabled="">Үйлчилгээ</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                                    <div class="form-group form-field">
+                                        <label class="col-md-3 col-sm-4 control-label" for="description">Компанийн дэлгэрэнгүй танилцуулга</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <!-- <t t-if="not partner.comment"><textarea id="description" name="description" rows="5" class="form-control o_website_form_input" placeholder="Компанийн дэлгэрэнгүй танилцуулга бичих ..."/></t> -->
+                                            <textarea id="description" name="description" rows="5" class="form-control o_website_form_input" placeholder="Компанийн дэлгэрэнгүй танилцуулга бичих ..." t-raw="partner.comment" disabled=""/>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <div class="form-group" style="text-align:center">
+                                        <a t-attf-href="/my/account/update" class="btn btn-primary" type="button" id="account_edit">Засах</a>
+                                    </div>
+                                </form>
+                        </div>
+                        
+                        <div class="col-sm-3 col-md-3">
+                            <t t-call="nomin_web.my_account"/>
+                        </div>
+                        
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+            </t>
+        </template>
+    </data>
+</odoo>

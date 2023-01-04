@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Үр дүнгийн дэлгэрэнгүй -->
+        <template id="nomin_web.my_tender_history" name="Тендерт оролцсон түүх">
+            <t t-call="website.layout" >
+                <div id="wrap" class="oe_structure oe_empty">
+                    <div class="container">
+                        <div class="content-bg">
+                        <div class="row">
+                            
+                            <div class="col-sm-9 col-md-9">
+                                <h3 class="pagetitle">Тендерт оролцсон түүх</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-condensed table-hover centered visible-xs" style="width:auto;">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%">#</th>
+                                                <th width="44%">Тендерийн нэр</th>
+                                                <th>Огноо</th>
+                                                <th>Шалгарсан эсэх</th>
+                                                <th>Шалтгаан</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-if="tender_history">
+                                            <tr t-foreach="tender_history" t-as="history">
+                                                <td><t t-esc="history_index+1"/></td>
+                                                <td><t t-esc="history.tender_id.desc_name"></t></td>
+                                                <td><t t-if="history.date"><t t-esc="history.date"/></t></td>
+                                                <t t-if="history.is_selected == True"><td><span class="label label-success">Шалгарсан</span></td></t>
+                                                <t t-if="history.is_selected != True"><td><span class="label label-danger">Шалгараагүй</span></td></t>
+                                                <td><t t-if="history.note"><t t-esc="history.note"/></t></td>
+                                            </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                    <table class="table table-bordered table-striped table-condensed table-hover centered hidden-xs">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%">#</th>
+                                                <th width="44%">Тендерийн нэр</th>
+                                                <th>Огноо</th>
+                                                <th>Шалгарсан эсэх</th>
+                                                <th>Шалтгаан</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-if="tender_history">
+                                            <tr t-foreach="tender_history" t-as="history">
+                                                <td><t t-esc="history_index+1"/></td>
+                                                <td><t t-esc="history.tender_id.desc_name"></t></td>
+                                                <td><t t-if="history.date"><t t-esc="history.date"/></t></td>
+                                                <t t-if="history.is_selected == True"><td><span class="label label-success">Шалгарсан</span></td></t>
+                                                <t t-if="history.is_selected != True"><td><span class="label label-danger">Шалгараагүй</span></td></t>
+                                                <td><t t-if="history.note"><t t-esc="history.note"/></t></td>
+                                            </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-3 col-md-3">
+                                <t t-call="nomin_web.my_account"/>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>

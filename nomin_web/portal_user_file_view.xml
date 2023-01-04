@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
 		<!-- Surveys -->
 		<menuitem name="Poll" id="menu_website_survey_root" sequence="42" parent="website.menu_website_configuration"/>
@@ -599,4 +599,4 @@
 </template>
 		
     </data>
-</openerp>
+</odoo>

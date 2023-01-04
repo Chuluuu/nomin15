@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Тендерийн шаардлага үүсгэх -->
+        <template id="nomin_web.create_documents_tender" name="Тендерийн бичиг баримт">
+            <t t-call="website.layout" >
+                <div id="content_wrapper">
+                    <div class="container">
+                        <div class="row">
+                        <div class="col-sm-9 col-md-9">
+                            <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h3>Тендерийн бичиг баримт </h3>
+                                <hr />
+                                <form action="/create/tender/documents/" method="post" class="s_website_form form-horizontal container-fluid" enctype="multipart/form-data">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input type="hidden" name="tender" t-att-value="tender.id"/>
+                                    <div class="form-group required">
+                                        <!-- <t t-esc="tender"/> -->
+                                        <label class="col-md-3 col-sm-4 control-label" for="proxy"> Итгэмжлэл</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <input type="file" name="proxy" id="proxy" accept=".pdf" class="form-control" required=""/><span onclick="reset(event)" style="color: red;">Болих</span>
+                                            <!-- <t t-if="part_tenders.t_partner_proxy_id"><t t-foreach="part_tenders.t_partner_proxy_id" t-as="proxy_id">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % proxy_id['id']"><t t-esc="proxy_id['datas_fname']"/></a></t>
+                                            </t> -->
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="col-md-3 col-sm-4 control-label" for="technical"> Техникийн үзүүлэлт</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <input type="file" name="technical" id="technical" accept=".pdf" class="form-control" required=""/><p onclick="reset(event)" style="color: red;">Болих</p>
+                                            <!-- <t t-if='part_tenders.t_partner_technical_id'>
+                                            <t t-foreach="part_tenders.t_partner_technical_id" t-as="technical">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % technical['id']"><t t-esc="technical['datas_fname']"/></a>
+                                            </t>
+                                            </t> -->
+                                        </div>
+                                    </div>
+                                    <t t-if="tender.work_experience_info > 0">
+                                    <div class="form-group required">
+                                        <label class="col-md-3 col-sm-4 control-label" for="work_list"> Ажиллах хүчний чадавхи</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <input type="file" name="work_list" accept=".pdf" class="form-control" required=""/><p onclick="reset(event)" style="color: red;">Болих</p>
+                                            <!-- <t t-if='part_tenders.t_partner_worklist_id'>
+                                            <t t-foreach="part_tenders.t_partner_worklist_id" t-as="work_list">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % work_list['id']"><t t-esc="work_list['datas_fname']"/></a>
+                                            </t>
+                                            </t> -->
+                                        </div>
+                                    </div>
+                                    </t>
+                                    <t t-if="tender.special_require != ''">
+                                    <div class="form-group required">
+                                        <label class="col-md-3 col-sm-4 control-label" for="requirement"> Тусгай шаардлагууд</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <input type="file" name="requirement" accept=".pdf" class="form-control" required=""/><p onclick="reset(event)" style="color: red;">Болих</p>
+                                            <!-- <t t-if='part_tenders.t_partner_require_id'>
+                                            <t t-foreach="part_tenders.t_partner_require_id" t-as="requirement">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % requirement['id']"><t t-esc="requirement['datas_fname']"/></a>
+                                            </t>
+                                            </t> -->
+                                        </div>
+                                    </div>
+                                    </t>
+                                    <t t-if="tender.license == True">
+                                    <div class="form-group required">
+                                        <label class="col-md-3 col-sm-4 control-label" for="license"> Тусгай зөвшөөрөл</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <input type="file" name="license" accept=".pdf" class="form-control" required=""/><p onclick="reset(event)" style="color: red;">Болих</p>
+                                            <!-- <t t-if='part_tenders.t_partner_license_id'>
+                                            <t t-foreach="part_tenders.t_partner_license_id" t-as="license">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % license['id']"><t t-esc="license['datas_fname']"/></a>
+                                                <a><t t-esc="license['datas_fname']"/></a>
+                                            </t>
+                                            </t> -->
+                                        </div>
+                                    </div>
+                                    </t>
+                                    <t t-if="tender.is_alternative == True">
+                                    <div class="form-group">
+                                        <label class="col-md-3 col-sm-4 control-label" for="alternative"> Хувилбарт тендер</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <input type="file" name="alternative" accept=".pdf" class="form-control"/><p onclick="reset(event)" style="color: red;">Болих</p>
+                                            <!-- <t t-if='part_tenders.t_partner_alternative_id'>
+                                            <t t-foreach="part_tenders.t_partner_alternative_id" t-as="alternative">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % alternative['id']"><t t-esc="alternative['datas_fname']"/></a>
+                                            </t>
+                                            </t> -->
+                                        </div>
+                                    </div>
+                                    </t>
+                                    <div class="form-group required">
+                                        <label class="col-md-3 col-sm-4 control-label" for="cost"> Үнийн санал</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <input type="file" name="cost" accept=".pdf" class="form-control" id="cost" required=""/><p onclick="reset(event)" style="color: red;">Болих</p>
+                                            <!-- <t t-if='part_tenders.t_partner_cost_id'>
+                                            <t t-foreach="part_tenders.t_partner_cost_id" t-as="cost">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % cost['id']"><t t-esc="cost['datas_fname']"/></a>
+                                                <a><t t-esc="cost['datas_fname']"/></a>
+                                            </t>
+                                            </t> -->
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="col-md-3 col-sm-4 control-label" for="schedule"> Ажлын график</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <input type="file" name="schedule" accept=".pdf" class="form-control" id="schedule" required=""/><p onclick="reset(event)" style="color: red;">Болих</p>
+                                            <!-- <t t-if='part_tenders.t_partner_schedule_id'>
+                                            <t t-foreach="part_tenders.t_partner_schedule_id" t-as="schedule">
+                                                <a t-att-href="'/mydoc/download?attachment_id=%i' % schedule['id']"><t t-esc="schedule['datas_fname']"/></a>
+                                                <a><t t-esc="schedule['datas_fname']"/></a>
+                                            </t>
+                                            </t> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group required">
+                                        <label class="col-md-3 col-sm-4 control-label" for="schedule"> Хяналтын төсөв</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <input type="file" name="control_budget" accept=".pdf" class="form-control" id="schedule" required=""/><p onclick="reset(event)" style="color: red;">Болих</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group required">
+                                        <label class="col-md-3 col-sm-4 control-label" for="warranty_time">Баталгаат хугацаа (Сараар):</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <input type="text" class="form-control" placeholder="Баталгаат хугацаа (Сараар)" name="warranty_time" required=""/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group required">
+                                        <label class="col-md-3 col-sm-4 control-label" for="execute_time">Гүйцэтгэх хугацаа (Хуанлийн хоногоор):</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            <input type="text" class="form-control" placeholder="Гүйцэтгэх хугацаа (Хуанлийн хоногоор)" name="execute_time" required=""/>
+                                        </div>
+                                    </div>
+                                    
+                                    <h3>Үнийн саналын задаргаа</h3>
+                                    <hr />
+                                    <div class="table-responsive">
+                                    <table class="table table-condensed table-striped" style="width: auto;">
+                                        <tbody id ="tasktable">
+                                        <tr class="info">
+                                            <td rowspan="2" width="5%">#</td>
+                                            <td rowspan="2" width="25%">Ажил үйлчилгээний нэр</td>
+                                            <td colspan="3" width="30%">Ажиллах хүчний зардал</td>
+                                            <td rowspan="2">Материалын зардал</td>
+                                            <td rowspan="2">Бусад зардал</td>
+                                            <td rowspan="2">Нийт зардал</td>
+                                            <td rowspan="2" style="width: 100px;">Үйлдэл</td>
+                                        </tr>
+                                        <tr class="info">
+                                            <td style="text-align: right;">Тоо хэмжээ</td>
+                                            <td style="text-align: right;">Hэгж үнэ</td>
+                                            <td style="text-align: right;">Нийт үнэ</td>
+                                        </tr>
+        <tr><td>1</td><td><input name="work1" required=""/></td><td><input class="quantity" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="1" name="hemjee1" style="width: 60px;"/></td><td><input class="unitprice" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="negjune1" style="width: 60px;"/></td><td class="totalcost">0</td><td><input class="materialexpense" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="material1" style="width: 60px;"/></td><td><input class="otherexpense" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="busadzardal1" style="width: 60px;"/></td><td class="totalsum">0</td><td id="addtask"><button type="button" class="btn btn-xs btn-primary" onclick="add_task()">Мөр нэмэх</button></td></tr>                        		
+                                        
+                                        
+                                        </tbody>	
+                                    </table>
+                                    <div class="bb2 mb-15" style="background-color: #cccccc;">Нийт үнэ: <span id="totalvalue" class="font24 text-danger" style="float: right; padding-top:2px;">0₮</span></div>
+                                    </div>
+                                    <div class="col-md-8 text-right">Нийт дүн: </div>
+                                    <label class="col-md-4 text-right" id="totalvalue">₮</label>
+                                    
+                                    <div class="form-group">
+                                        <div class="col-md-offset-3 col-sm-offset-4 col-sm-8 col-md-7">
+                                            <button class="btn btn-primary btn-md" type="submit" >Хадгалах</button>
+                                            <a t-attf-href="/my/tenders_documents" class="btn btn-default" type="button">Болих</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-sm-3 col-md-3">
+                            <t t-call="nomin_web.my_account"/>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+            </t>
+            <script type="text/javascript">
+            <![CDATA[
+            
+            function reset(event)
+                        {
+                            event.target.previousSibling.value="";
+                        }
+                
+                function value_mandatory(event)
+                    {
+                        if(event.target.value==0)
+                            event.target.value="";
+                    }
+                    
+                var a;
+                function calculate(event)
+                    {
+                            
+                        if(event.target.className=="unitprice")
+                            {a=Number(event.target.value)*Number(event.target.parentNode.previousSibling.childNodes[0].value);
+                                event.target.parentNode.nextSibling.innerHTML=a;
+                                event.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.innerHTML=Number(event.target.parentNode.nextSibling.nextSibling.nextSibling.childNodes[0].value)+a;
+                            }
+                        
+                        if(event.target.className=="quantity")
+                            {a=Number(event.target.value)*Number(event.target.parentNode.nextSibling.childNodes[0].value);
+                                event.target.parentNode.nextSibling.nextSibling.innerHTML=a;
+                                event.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerHTML=Number(event.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.childNodes[0].value)+a;
+                            }
+                            
+                        if(event.target.className=="otherexpense")
+                            {
+                                event.target.parentNode.nextSibling.innerHTML=Number(event.target.value)+Number(event.target.parentNode.previousSibling.previousSibling.innerHTML)+Number(event.target.parentNode.previousSibling.childNodes[0].value);
+                            }
+                            
+                        if(event.target.className=="materialexpense")
+                            {
+                                event.target.parentNode.nextSibling.nextSibling.innerHTML= Number(event.target.value)+Number(event.target.parentNode.previousSibling.innerHTML)+Number(event.target.parentNode.nextSibling.childNodes[0].value);
+                            }
+                            
+                            total_sum();
+                    }
+                    
+                var number=2;
+                function add_task()
+                    {	
+                        $( "#tasktable" ).append( '<tr><td>'+number+'</td><td><input name="work'+number+'" required=""></input></td><td><input class="quantity" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="1" name="hemjee'+number+'" style="width: 60px;"></input></td><td><input class="unitprice" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0.00" name="negjune'+number+'" style="width: 60px;"></input></td><td class="totalcost">0</td><td><input class="materialexpense" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="material'+number+'" style="width: 60px;"></input></td><td><input class="otherexpense" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="busadzardal'+number+'" style="width: 60px;"></input></td><td class="totalsum">0</td><td><button id='+number+' onclick="remove_row(event)" class="delete">Устгах</button></td></tr>' );
+                        number++;
+                    }
+                    
+                function remove_row(event)
+                    {
+                        document.getElementById("tasktable").removeChild(event.target.parentNode.parentNode);
+                            for(var i=Number(event.target.id); i<=document.getElementsByClassName("delete").length+1; i++)
+                                {
+                                    document.getElementById(i+1).parentNode.parentNode.childNodes[0].innerHTML=i;
+                                    document.getElementById(i+1).parentNode.parentNode.childNodes[1].childNodes[0].name="work"+i;
+                                    document.getElementById(i+1).parentNode.parentNode.childNodes[2].childNodes[0].name="hemjee"+i;
+                                    document.getElementById(i+1).parentNode.parentNode.childNodes[3].childNodes[0].name="negjune"+i;
+                                    
+                                    document.getElementById(i+1).parentNode.parentNode.childNodes[5].childNodes[0].name="material"+i;
+                                    document.getElementById(i+1).parentNode.parentNode.childNodes[6].childNodes[0].name="busadzardal"+i;
+                                    
+                                    document.getElementById(i+1).parentNode.parentNode.childNodes[8].childNodes[0].id=i;
+                                }
+                                number--;
+                        total_sum();
+                    }
+                    
+                var b;
+                function total_sum()
+                    {	
+                        a=document.getElementsByClassName("totalsum")
+                        b=Number(a[0].innerHTML);
+                        for(var i=1; i<a.length; i++)
+                            {
+                                b+=Number(a[i].innerHTML);
+                            }
+                        $("#totalvalue").html(b.toLocaleString()+"₮");
+                    }
+            ]]>	
+            </script>
+        </template>
+    </data>
+</odoo>

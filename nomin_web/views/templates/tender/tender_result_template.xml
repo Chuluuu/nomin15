@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Тендерийн үр дүн -->
+        <template id="nomin_web.tenderresult" name="Тендерийн үр дүн">
+            <div class="row">
+                <div class="col-sm-9 col-md-9">
+                    <h4>Шүүлтийн төрөл</h4>
+                    <t t-call="nomin_web.search_result_form"/>
+                    <hr/>
+                    <h3 class="pagetitle">Тендер шалгаруулалтын үр дүн</h3>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-condensed table-hover centered" style="width: auto;">
+                            <thead>
+                                <tr>
+                                    <th width="4%">#</th>
+                                    <th width="44%">Тендерийн нэр</th>
+                                    <th>Дугаар</th>
+                                    <th>Огноо</th>
+                                    <th>Шалгарсан</th>
+                                    <th width="15%">Гэрээ байгуулах эрх олгосон огноо</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="tender_results" t-as="tender_result">
+                                    <td><t t-esc="tender_result_index+1"/></td>
+                                    <td>
+                                        <t t-if="website.user_id == user_id"><t t-esc="tender_result.desc_name"></t></t>
+                                        <t t-if="website.user_id != user_id"><a t-attf-href="/result_details/#{ slug(tender_result) }/" class="tender-title"><t t-esc="tender_result.desc_name"></t></a></t>
+                                    </td>
+                                    <td><t t-if="tender_result.name"><t t-esc="tender_result.name"></t></t></td>
+                                    <td><t t-if="tender_result.date_end"><span class="user-date" t-esc="tender_result.date_end"/></t></td>
+                                    <td><t t-if="tender_result.is_valuation_finished == True">Үр дүн гарсан</t>
+                                    <t t-if="tender_result.is_valuation_finished == False"></t></td>
+                                    <td><t t-if="tender_result.contract_id"><span t-field="tender_result.contract_id.date_start" t-field-options='{"format":"yyyy-MM-dd"}'/></t></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="products_pager">
+                        <t t-call="website.pager"/>
+                    </div>
+                    
+                </div>
+                <div class="col-sm-3 col-md-3">
+                    <t t-call="nomin_web.tender_selection"/>
+                </div>
+            </div>
+        </template>
+    </data>
+</odoo>

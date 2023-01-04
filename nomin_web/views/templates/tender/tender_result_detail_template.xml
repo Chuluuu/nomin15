@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Үр дүнгийн дэлгэрэнгүй -->
+        <template id="nomin_web.tender_result_detail" name="Тендерийн үр дүнгийн дэлгэрэнгүй">
+            <t t-call="website.layout" >
+                <div id="content_wrapper">
+                    <div class="container">
+                    <div class="content-bg">
+                        <div class="row">
+                        <div class="col-sm-9 col-md-9">
+                            
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <span>Тендер шалгаруулалтын нэр: </span>
+                                </div>
+                                <div class="col-xs-8">
+                                    <span><a href=""><t t-esc="tender.desc_name" /></a></span>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="width:auto;">
+                                <t t-if="tender">
+                                    <table class="table table-striped table-condensed">
+                                        <tr>
+                                            <td>Захиалагч:</td>
+                                            <td>Дугаар:</td>
+                                            <td>Нийтэлсэн:</td>
+                                            <td>Эцсийн хугацаа:</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-bold colored-text"><t t-esc="tender.company_id.name"></t></td>
+                                            <td class="text-info"><t t-esc="tender.name"/></td>
+                                            <td class="text-info"><span class="user-date" t-esc="tender.published_date"/></td>
+                                            <td class="text-bold text-danger"><span class="user-date" t-esc="tender.date_end"/></td>
+                                        </tr>
+                                    
+                                    </table>
+                                </t>
+                            </div>
+                            <div>
+                                <t t-if="not valuations or valuations.is_choose == False">
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="row" style="text-align:center;">
+                                            <span style="color:#1660AB">Тендер шалгаруулалтын үр дүн нийтлэгдээгүй !</span>
+                                        </div>
+                                    </div>
+                                </t>
+                                <t t-if="valuations.is_choose == True">
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <t t-if="user_ids">
+                                        <t t-if="user_id.id in user_ids">
+                                            <div class="row">
+                                                <h3><b>Тендерт шалгарсан байгууллага</b></h3>
+                                                <t t-foreach="winning_partners" t-as="participant">
+                                                    <div class="row">
+                                                        <div class="col-sm-4"><span>Байгууллагын нэр:</span></div>
+                                                        <div class="col-sm-8"><t t-if='participant.is_win == True'><span t-esc='participant.partner_id.name'></span></t></div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-sm-4"><span>Тайлбар:</span></div>
+                                                        <div class="col-sm-8"><t t-if='participant.is_win == True'><span t-esc='participant.reason'></span></t></div>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                            <div class="row">
+                                                <div class="table-responsive">
+                                                <h3><b>Тендерт оролцсон байгууллагууд</b></h3>
+                                                <table>
+                                                    <thead>
+                                                        <tr class="bg-info">	
+                                                            <td class="text-center">#</td>
+                                                            <td class="text-center">Тендерт оролцогчийн нэр</td>
+                                                            <td class="text-center">Шалтгаан</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <t t-foreach="defeated_partners" t-as="participant">
+                                                        <tr>
+                                                            <td class="text-center"><t t-if='participant.is_win == False'><span t-esc="participant_index+1"/></t></td>
+                                                            <td class="text-left"><t t-if='participant.is_win == False'><b><span t-esc='participant.partner_id.name'/></b></t></td>
+                                                            <td class="text-left"><t t-if='participant.is_win == False'><b><span t-esc='participant.reason'/></b></t></td>
+                                                        </tr> 
+                                                        </t>
+                                                    </tbody>
+                                                </table>
+                                                </div>
+                                            </div>
+                                        </t>
+                                        <t t-if="user_id.id not in user_ids">
+                                            <div class="row" style="text-align:center;">
+                                                <span style="color:#1660AB">Та уг тендерт оролцоогүй !</span>
+                                            </div>
+                                        </t>
+                                        </t>
+                                    </div>
+                                </t>
+                            </div>
+                            <t t-if="same_tenders">
+                                <t t-call="nomin_web.same_tender"/>
+                            </t>
+                        </div>
+                        
+                        <div class="col-sm-3 col-md-3">
+                            <t t-call="nomin_web.tender_selection"/>
+                        </div>
+                        
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

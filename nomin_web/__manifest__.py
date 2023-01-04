@@ -1,17 +1,9 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#    Copyright (C) 2014-2020 Asterisk-technologies LLC Developer). All Rights Reserved
-#
-#    Address : Chingeltei District, Peace Tower, 205, Asterisk-technologies LLC Developer Ganzorig
-#    Email : support@asterisk-tech.mn
-#    Phone : 976 + 99241623
-#
-##############################################################################
 {
     'name': 'Nomin tender website',
-    'version': '1.0',
+    'version': '2.0',
     'website': 'https://www.odoo.com',
-    "author" : 'Otgonbayar.O',
+    "author" : 'Chuluunbor.B',
     'category': 'Nomin',
     "summary": "Website",
     'data': [
@@ -30,7 +22,7 @@
         'security/ir.model.access.csv',
     ],
     'depends': [
-        'website', 'website_portal', 'website_form', 'nomin_tender'
+        'website', 'portal', 'website_form', 'website_slides'
     ],
     'description': """
     """,
@@ -42,5 +34,4 @@
     'js': ['static/src/js/survey.js','static/src/js/survey_result.js','static/src/js/upload.js'],
     'application': True,
     'icon': '/nomin_web/static/img/bid.png',
-    # 'qweb': ['views/templates.xml','portal_user_file_view.xml','views/pages.xml','views/layout.xml',],
 }

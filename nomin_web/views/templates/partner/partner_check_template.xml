@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <template id="return_check_partner" name="Харилцагчийн холбоо барих товч мэдээлэл">
+            <t t-call="website.layout">
+              <div id="wrap">
+                <div class="oe_structure"/>
+                <div class="container">
+                    <div class="content-bg">
+                        <div class="row">
+                            <div class="col-sm-9 col-md-9">
+                                <h3 class="pagetitle">Харилцагчийн холбоо барих товч мэдээлэл</h3>
+                            <form method="get" action="/web/partner/editrequest" class="s_website_form form-horizontal container-fluid" >
+                                <!-- <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/> -->
+                                   <div class="form-group form-field o_website_form_required_custom">
+                                        <label class="col-md-3 col-sm-4 control-label" for="partner_type">Харилцагчийн төрөл</label>
+                                        <div class="col-md-7 col-sm-8">
+                                            
+                                            <select   id="partner_type" name="partner_type" class="form-control input-sm" t-att-value="partner_type or ''">
+                                                <option value="">.:Сонгох:.</option>
+                                                <option value="tender"   t-att-selected="partner_type == 'tender'">Тендерт оролцох харилцагч</option>
+                                                <option value="insurance_broker" t-att-selected="partner_type == 'insurance_broker'">Даатгалын зуучлагч</option>
+                                            </select>
+                                        
+                                            
+                                        </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 col-sm-4 control-label" for="company_name">Нэр</label>
+                                       <div class="col-md-7 col-sm-8">
+                                        <input type="text" class="form-control" placeholder="Нэр" id="company_name" name="company_name" t-att-value="partner.name" disabled=""/>
+                                         <input type="hidden" style="visiblity:hidden" name="partner_search" class="search-query form-control oe_search_box"  t-att-value="partner_search" />
+                                
+                                    </div>
+                                </div>
+                                <div class="form-group form-field">
+                                    <label class="col-md-3 col-sm-4 control-label" for="address">Хаяг</label>
+                                     <div class="col-md-7 col-sm-8">
+                                        <input type="text" class="form-control" placeholder="Хаяг" id="address" name="address" t-att-value="partner.street" disabled=""/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group form-field">
+                                    <label class="col-md-3 col-sm-4 control-label" for="phonenumber">Утас</label>
+                                    <div class="col-md-7 col-sm-8">
+                                        <t t-if="partner.mobile">
+                                        <input name="phonenumber" type="text" class="form-control" placeholder="Утасны дугаар" id="phonenumber" t-att-value="partner.mobile" disabled=""/>
+                                        </t>
+                                        <t t-if="not partner.mobile">
+                                            <t t-if="not portal">
+                                                <input name="phonenumber" type="text" required="1" class="form-control" placeholder="Утасны дугаар" id="phonenumber" t-att-value="partner.mobile" />
+                                            </t>
+                                            <t t-if="portal">
+                                                <input name="phonenumber" type="text" class="form-control" placeholder="Утасны дугаар" id="phonenumber" t-att-value="partner.mobile" disabled=""/>
+                                            </t>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="form-group form-field">
+                                    <label class="col-md-3 col-sm-4 control-label" for="certificate_no">Регистрийн дугаар</label>
+                                    <div class="col-md-7 col-sm-8">
+                                    <input name="certificate_no" type="text" class="form-control" placeholder="Регистрийн дугаар" id="certificate_no" t-att-value="partner.registry_number" disabled=""/>
+                                    </div>
+                                </div>
+                                <div class="form-group form-field">
+                                    
+                                    <label class="col-md-3 col-sm-4 control-label" for="company_name">Цахим шуудан</label>
+                                    <div class="col-md-7 col-sm-8">
+                                        <t t-if="partner.email">
+                                        <input name="email" type="text" class="form-control" placeholder="И-Мэйл хаяг" id="email" t-att-value	="partner.email" disabled=""/>
+                                        </t>
+                                        <t t-if="not partner.email">
+                                            <t t-if="not portal">
+                                                <input name="email" type="text" required="1" class="form-control" placeholder="И-Мэйл хаяг" id="email" t-att-value	="partner.email" />
+                                            </t>
+                                            <t t-if="portal">
+                                                <input name="email" type="text" class="form-control" placeholder="И-Мэйл хаяг" id="email" t-att-value	="partner.email" disabled="" />
+                                            </t>
+                                            
+                                        </t>
+                                    </div>
+                                </div>	
+    
+    
+                                <div class="form-group form-field">
+                                    <t t-if="portal" >
+                                        <label class="col-md-3 col-sm-4 control-label" for="company_name">Нэвтрэх эрхтэй эсэх</label>
+                                        
+                                        <div class="col-md-7 col-sm-8">
+                                        <input name="email" type="text" class="form-control" placeholder="Тийм" id="email" disabled=""/>
+                                        </div>
+                                    </t>
+                                </div>		
+                                <div class="form-group form-field">
+                                    <t t-if="portal" >
+                                        <label class="col-md-3 col-sm-4 control-label" for="company_name">Нэвтрэх имэйл</label>
+                                        <div class="col-md-7 col-sm-8">
+                                        <input name="email" type="text" class="form-control" placeholder="Нэвтрэх имэйл" id="email" t-att-value="portal.login" disabled=""/>
+                                        </div>
+                                    </t>
+                                </div>		
+    
+                                <div class="form-group">
+                                    <div class="col-sm-offset-4 col-sm-8 col-md-7">
+                                        <t t-if="portal" >
+                                            <a t-attf-href="/web/login" class="btn btn-primary btn-md" type="button">Нэвтрэх</a>
+                                        </t>
+                                        <!-- <a t-attf-href="/web/partner/editrequest" class="btn btn-primary btn-md" type="button">Харилцагчийн холбоо барих мэдээлэл өөрчлөх хүсэлт</a> -->
+                                    
+                                            <button class="btn btn-primary" onclick="buttonChange()" type="submit" >Мэдээлэл өөрчлөх хүсэлт
+                                                         <input type="hidden"  id="change_request" name="change_request" class="search-query form-control oe_search_box"  />
+    
+                                            </button>
+                                        
+                                        <t t-if="not portal" >
+                                            <button class="btn btn-primary" onclick="buttonLogin()" type="submit" >Нэвтрэх эрх үүсгэх хүсэлт
+                                                 <input type="hidden"  name="login_request" id="login_request" class="search-query form-control oe_search_box"   />
+                                            </button>
+                                        </t>
+    
+                                        
+                                        <!-- <button class="btn btn-primary btn-md">Бүртгүүлэх хүсэлт</button> -->
+    
+                                    </div>
+                                </div>					
+                            </form>
+                    </div>			
+                    
+                    
+                        </div>		  		
+                      </div>
+                </div>
+                <div class="oe_structure"/>
+              </div>
+            </t>
+    
+            <script type="text/javascript">
+                        <![CDATA[
+                    function buttonChange() {
+        var change_request = document.getElementById("change_request");
+        change_request.value = "change_request";
+        
+    }
+    function buttonLogin() {
+        var login_request = document.getElementById("login_request");
+        login_request.value = "login_request";
+       
+    }
+    ]]>
+                    </script>
+        </template>
+    </data>
+</odoo>
