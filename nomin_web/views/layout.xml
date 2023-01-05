@@ -170,45 +170,7 @@
       </xpath>
  </template>
  
-	<template id="nomin_web.searchresults" name="Result List">
-			<div class="row">
-				<div class="col-sm-9 col-md-9">
-					<h3 class="pagetitle">Хайлт: <t t-esc="search"/></h3>
-					<div class="tabContents">
-						<div id="news-latest" class="tab-content">
-						<t t-foreach="tenders" t-as="tender">
-							<ul class="news-list" style="margin-left:-40px; margin-top:20px;">
-								<li>
-	                                <a t-attf-href="/tender_detail/#{ slug(tender) }">
-	                                <span class="t"><t t-esc="tender.desc_name"/></span>
-	                                <span class="d">
-	                                	<!-- <span t-field="tender.published_date" t-field-options='{"format":"YYYY"}'/> оны
-										<span t-field="tender.published_date" t-field-options='{"format":"MM"}'/> сарын
-										<span t-field="tender.published_date" t-field-options='{"format":"dd"}'/> өдөр -->
-	                                	<span class="user-date" t-esc="tender.published_date"/>
-	                                	<!-- <span t-field="tender.published_date" t-field-options='{"format":"YYYY-MM-dd hh:mm"}'/> -->
-	                                	<!-- <t t-esc="tender.create_date"/> -->
-	                                	<!-- <t t-set="tender.invitation_id.invitation_detail.split(1-50)"/> -->
-	                                	<!-- <t t-raw="tender.invitation_id.invitation_detail.split(' ')[0] or False"/> -->
-	                                	
-	                                </span>
-	                                <div class="invitation_details" t-esc="tender.invitation_id.invitation_detail.split('\n')[0][:350] or False"></div>
-	                               </a>
-	                            </li>
-							</ul>
-						</t>
-						<div class="products_pager">
-							<t t-call="website.pager"/>
-						</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-3 col-md-3">
-					<t t-call="nomin_web.tender_selection"/>
-				</div>
-				<!-- https://www.nomin.mn/mn/exchangeWeb -->
-			</div>
-	</template>
+	
 		
 	<template id="allsearch_results" name="Хайлтын үр дүн">
 		<t t-call="website.layout" >
