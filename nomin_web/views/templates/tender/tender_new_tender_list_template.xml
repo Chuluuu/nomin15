@@ -3,9 +3,9 @@
     <data>
         <!-- Шинээр зарлагдсан тендерүүд -->
         <template id="nomin_web.new_tender_list" name="Шинээр зарлагдсан тендерүүд">
-            <t t-call="website.layout" >
-                    <div class="container">
-                        <div class="content-bg">
+            <t t-call="website.layout">
+                <div class="container">
+                    <div class="content-bg">
                         <div class="row">
                             <div class="col-sm-9 col-md-9">
                                 <h3 class="pagetitle">Шинээр зарлагдсан тендерүүд</h3>
@@ -14,10 +14,12 @@
                                         <table class="table table-bordered table-striped table-condensed mb-28">
                                             <thead>
                                                 <tr>
-                                                    <td colspan="4" >
+                                                    <td colspan="4">
                                                         <!-- <t t-if="website.user_id == user_id"><t t-esc="tender.desc_name"></t></t>
                                                         <t t-if="website.user_id != user_id"></t> -->
-                                                        <a t-attf-href="/tender_detail/#{ slug(tender) }/" class="tender-title"><t t-esc="tender.desc_name"></t></a>
+                                                        <a t-attf-href="/tender_detail/#{ slug(tender) }/" class="tender-title">
+                                                            <t t-esc="tender.desc_name"></t>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             </thead>
@@ -29,10 +31,18 @@
                                                     <td>Эцсийн хугацаа:</td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="colored-text"><t t-esc="tender.company_id.name"></t></td>
-                                                    <td class="text-info"><t t-esc="tender.name"/></td>
-                                                    <td class="text-info"><span class="user-date" t-esc="tender.published_date"/></td>
-                                                    <td class="text-danger"><span class="user-date" t-esc="tender.date_end"/></td>
+                                                    <td class="colored-text">
+                                                        <t t-esc="tender.company_id.name"></t>
+                                                    </td>
+                                                    <td class="text-info">
+                                                        <t t-esc="tender.name"/>
+                                                    </td>
+                                                    <td class="text-info">
+                                                        <span class="user-date" t-esc="tender.published_date"/>
+                                                    </td>
+                                                    <td class="text-danger">
+                                                        <span class="user-date" t-esc="tender.date_end"/>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2" style="text-align:center">Төлөв:</td>
@@ -42,10 +52,10 @@
                                                     </td> -->
                                                     <td colspan="2" class="text-center">
                                                         <t t-if="tender.state!='published'">
-                                                        <span class="label label-danger">Баримт бичиг хүлээн авч дууссан</span>
+                                                            <span class="label label-danger">Баримт бичиг хүлээн авч дууссан</span>
                                                         </t>
                                                         <t t-if= "tender.state=='published'">
-                                                        <span class="label label-success">Баримт бичиг хүлээн авч байна</span>
+                                                            <span class="label label-success">Баримт бичиг хүлээн авч байна</span>
                                                         </t>
                                                     </td>
                                                 </tr>
@@ -58,13 +68,13 @@
                                 </div>
                             </div>
                             <div class="col-sm-3 col-md-3">
-                                <t t-call="nomin_web.nomin_sub_menu_exchange"/>
+                                <!-- <t t-call="nomin_web.nomin_sub_menu_exchange"/> -->
                                 <t t-call="nomin_web.nomin_sub_menu_subscribe"/>
                                 <t t-call="nomin_web.nomin_sub_menu_suggestion"/>
                                 <t t-call="nomin_web.survey_question"/>
                                 <t t-call="nomin_web.side_banner"/>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
