@@ -6,22 +6,16 @@ import io
 import json
 from PIL import Image
 import re
-from urllib import urlencode
-import urllib2
-from urlparse import urlparse
-
-from odoo import api, fields, models, SUPERUSER_ID, _
-from odoo.tools import image, tools, api
+from odoo import api, fields, models, http, SUPERUSER_ID, _
+from odoo.tools import image, image_process
 from odoo.exceptions import Warning, UserError, AccessError
 import base64
 import logging
 import werkzeug
 import requests
-from openerp.addons.web import http
 from odoo.http import request
 from odoo.tools.translate import _
-from cStringIO import StringIO
-import cStringIO
+from io import StringIO
 import uuid
 
 PPG = 10
@@ -30,7 +24,7 @@ _logger = logging.getLogger(__name__)
 
 class answer_label(models.Model):
     _name='answer.label'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     question_id         = fields.Many2one('question.survey', string = "Question", ondelete="cascade")
     date_create         = fields.Date('Date Create', readonly=1, copy=False)
@@ -46,7 +40,7 @@ class answer_label(models.Model):
     
 class question_label(models.Model):
     _name='question.label'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     question_id         = fields.Many2one('question.survey',string = "Question", ondelete="cascade")
     label_name          = fields.Char(string = "Answer Name", required=1, copy=False)
@@ -55,7 +49,7 @@ class question_label(models.Model):
     
 class question_survey(models.Model):
     _name='question.survey'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     question            = fields.Char(string = "Question Name", required=1, copy=False)
     published_date      = fields.Date("Published Date")
@@ -64,7 +58,6 @@ class question_survey(models.Model):
     answer_ids          = fields.One2many('answer.label', 'question_id', string="Answers", copy=True)
     
     
-    @api.multi
     def website_publish_button(self):
         for main in self:
             if main.is_publish != True:
@@ -72,7 +65,6 @@ class question_survey(models.Model):
             else:
                 self.write({'is_publish': False})
     
-    @api.multi
     def unlink(self):
         for main in self:
             if main.is_publish != False:
@@ -88,11 +80,9 @@ class survey_nomin(http.Controller):
                 type='http', methods=['GET','POST'], auth='public', website=True)
     def submit(self, question, **post):
         _logger.debug('Incoming data: %s', post)
-        cr, uid, context = request.cr, request.uid, request.context
-#         print 'n\n\n\n\post', post
-        survey_obj = request.registry['question.survey']
-        answer_obj = request.registry['answer.label']
-        user_input_id = answer_obj.create(cr, 1, {'question_id': question.id, 'ans_name':question.question}, context=context)
+        survey_obj = request.env['question.survey']
+        answer_obj = request.env['answer.label']
+        user_input_id = answer_obj.sudo().create({'question_id': question.id, 'ans_name':question.question})
         
         vals = {}
         if user_input_id:
@@ -100,43 +90,15 @@ class survey_nomin(http.Controller):
                         'label_score': 1,
                         'answer_id': int(post['label_answer']),
                         })
-        answer_obj.write(cr, 1, user_input_id, vals, context=context)
-#         # Answer validation
+        answer_obj.sudo().write(vals)
         errors = {}
-#         for question in questions:
-#             answer_tag = "%s_%s_%s" % (survey.id, page_id, question.id)
-#             errors.update(questions_obj.validate_question(cr, uid, question, post, answer_tag, context=context))
-# 
         ret = {}
         if (len(errors) != 0):
             # Return errors messages to webpage
             ret['errors'] = errors
         else:
             # Store answers into database
-#             user_input_obj = request.registry['survey.user_input']
-#  
-#             user_input_line_obj = request.registry['survey.user_input_line']
-#             try:
-#                 user_input_id = user_input_obj.search(cr, SUPERUSER_ID, [('token', '=', post['token'])], context=context)[0]
-#             except KeyError:  # Invalid token
-#                 return request.website.render("website.403")
-#             user_input = user_input_obj.browse(cr, SUPERUSER_ID, user_input_id, context=context)
-#             user_id = uid if user_input.type != 'link' else SUPERUSER_ID
-#             for question in questions:
-#                 answer_tag = "%s_%s_%s" % (survey.id, page_id, question.id)
-#                 user_input_line_obj.save_lines(cr, user_id, user_input_id, question, post, answer_tag, context=context)
-#  
-#             go_back = post['button_submit'] == 'previous'
-#             next_page, _, last = survey_obj.next_page(cr, uid, user_input, page_id, go_back=go_back, context=context)
-#             vals = {'last_displayed_page_id': page_id}
-#             if next_page is None and not go_back:
-#                 vals.update({'state': 'done'})
-#             else:
-#                 vals.update({'state': 'skip'})
-#             user_input_obj.write(cr, user_id, user_input_id, vals, context=context)
             ret['redirect'] = '/new_tenders'
-#             if go_back:
-#                 ret['redirect'] += '/prev'
         return json.dumps(ret)
     
     @http.route(['/question/results/<model("survey.survey"):survey>'],
@@ -169,21 +131,28 @@ class survey_nomin(http.Controller):
         
 class tender_suggestion(models.Model):
     _name='tender.suggestion'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     @api.depends('suggestion_image')
     def _compute_sugges_images(self):
         for rec in self:
-            rec.suggestion_image_medium = tools.image_resize_image_medium(rec.suggestion_image)
-            rec.suggestion_image_small = tools.image_resize_image_small(rec.suggestion_image)
+            b64source = base64.b64encode(request.env['ir.http']._placeholder())
+            # rec.suggestion_image_medium = tools.image_resize_image_medium(rec.suggestion_image)
+            rec.suggestion_image_medium = image_process(b64source, size=(64, 64))
+            # rec.suggestion_image_small = tools.image_resize_image_small(rec.suggestion_image)
+            rec.suggestion_image_small = image_process(b64source, size=(48, 48))
 
     def _inverse_sugges_image_medium(self):
         for rec in self:
-            rec.suggestion_image = tools.image_resize_image_big(rec.suggestion_image_medium)
+            b64source = base64.b64encode(request.env['ir.http']._placeholder())
+            # rec.suggestion_image = tools.image_resize_image_big(rec.suggestion_image_medium)
+            rec.suggestion_image = image_process(b64source, size=(120, 120))
 
     def _inverse_sugges_image_small(self):
         for rec in self:
-            rec.suggestion_image = tools.image_resize_image_big(rec.suggestion_image_small)
+            b64source = base64.b64encode(request.env['ir.http']._placeholder())
+            rec.suggestion_image = image_process(b64source, size=(120, 120))
+            # rec.suggestion_image = tools.image_resize_image_big(rec.suggestion_image_small)
     
     name            = fields.Char(string = "Suggestion Name", copy=False)
 #     image           = fields.Binary("Image", attachment=True)
@@ -192,20 +161,19 @@ class tender_suggestion(models.Model):
     description     = fields.Html("Description")
     
     # image: all image fields are base64 encoded and PIL-supported
-    suggestion_image = openerp.fields.Binary("Suggestion Image", attachment=True,
+    suggestion_image = fields.Binary("Suggestion Image", attachment=True,
         help="This field holds the image used as avatar for this contact, limited to 1024x1024px")
-    suggestion_image_medium = openerp.fields.Binary("Suggestion Medium-sized image",
+    suggestion_image_medium = fields.Binary("Suggestion Medium-sized image",
         compute='_compute_sugges_images', inverse='_inverse_sugges_image_medium', store=True, attachment=True,
         help="Medium-sized image of this contact. It is automatically "\
              "resized as a 128x128px image, with aspect ratio preserved. "\
              "Use this field in form views or some kanban views.")
-    suggestion_image_small = openerp.fields.Binary("Suggestion Small-sized image",
+    suggestion_image_small = fields.Binary("Suggestion Small-sized image",
         compute='_compute_sugges_images', inverse='_inverse_sugges_image_small', store=True, attachment=True,
         help="Small-sized image of this contact. It is automatically "\
              "resized as a 64x64px image, with aspect ratio preserved. "\
              "Use this field anywhere a small image is required.")
     
-    @api.multi
     def website_publish_button(self):
         for order in self:
             if order.is_publish != True:
@@ -213,7 +181,6 @@ class tender_suggestion(models.Model):
             else:
                 self.write({'is_publish': False})
     
-    @api.multi
     def unlink(self):
         for main in self:
             if main.is_publish != False:
@@ -223,7 +190,7 @@ class tender_suggestion(models.Model):
     
 class portal_user_file(models.Model):
     _name='portal.user.file'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     name            = fields.Char(string = "Name", copy=False)
     is_publish      = fields.Boolean(string = "Is Publish", default=False)
@@ -231,7 +198,6 @@ class portal_user_file(models.Model):
     published_date  = fields.Date("Published Date")
     description     = fields.Text("Description")
 
-    @api.multi
     def website_publish_button(self):
         for order in self:
             if order.is_publish != True:
@@ -239,7 +205,6 @@ class portal_user_file(models.Model):
             else:
                 self.write({'is_publish': False})
     
-    @api.multi
     def unlink(self):
         for main in self:
             if main.is_publish != False:
@@ -250,12 +215,8 @@ class portal_user_file(models.Model):
     
 class ResPartnerRequest(http.Controller):
 
-
-    # @http.route('/partner_request/<model("res.partner.request"):partner>/', type='http', auth='public', website=True)
     @http.route('/web/partner/register_request/', type='http', auth="public", methods=['GET', 'POST'],website=True)
     def res_partner_request(self, **post):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        
         activities =request.httprequest.form.getlist('area_activity')
         
         new_list = [int(i) for i in activities]
@@ -295,25 +256,15 @@ class ResPartnerRequest(http.Controller):
     @http.route('/web/register/checkpartner', type='http', auth='public', website=True)
     def checkpartner(self, tax_number):
         partner_id = request.env['res.partner'].sudo().search([('registry_number','=',tax_number)])
-        # if partner_id:
-        #     return request.website.render("nomin_web.return_partner_data", {'login':partner_id.email,'email':partner_id.email})
-        #     portal_user_id = request.env['res.users'].sudo().search([('partner_id','=',partner_id.id)])
-        #     if portal_user_id:
-
-        #         return request.website.render("nomin_web.return_partner_data", {'login':portal_user_id.login,'email':partner_id.email})
-
         get_request=requests.get("http://info.ebarimt.mn/rest/merchant/info?regno=%s"%(tax_number))
         data=''
-        
         if get_request.status_code==200:
             data = get_request.json()['name']
-        
         return data
 
       
     @http.route('/web/partner/search', type='http', auth="public", website=True)
     def webPartnerSearch(self, **kw):
-
         return request.website.render("nomin_web.partner_search")
 
     @http.route('/web/partner/check', type='http', auth="public",methods=['GET', 'POST'], website=True)
@@ -476,31 +427,11 @@ class dowload_file(http.Controller):
                     
     @http.route('/web/partner/register/', type='http', auth="public", website=True)
     def register_file(self, **kw):
-        # cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        # portal_file=request.registry('portal.user.file')
-        # file_ids = []
-        # files= ''
-        # file_ids = portal_file.search(request.cr, SUPERUSER_ID, file_ids)
-        # portal_files = portal_file.browse(request.cr, SUPERUSER_ID, file_ids)
-        
-        # if portal_files:
-        #     files = portal_files[0]
-        # # partner = request.env['res.partner'].sudo().search([('registry_number','=',2708892)])
-        # # values = {
-        # #           'portal_files': files,
-        # #           'partner':partner,
-        # #           }
         activities = request.env['area.activity'].sudo().search([('id','!=',0)])
         values  ={
         'activities':activities,
-        # 'partner_type':'insurance_broker',
         }
         return request.website.render("nomin_web.nomin_partner_register",values)
-        # return request.website.render("nomin_web.portal_register_file", values)
-
-
-        
-
 
     @http.route('''/register/file/<model("portal.user.file"):portal>/download''', type='http', auth="public", website=True)
     def register_file_download(self, portal):
@@ -528,7 +459,8 @@ class dowload_file(http.Controller):
         if attachment:
             attachment = attachment[0]
         else:
-            return redirect(self.orders_page)
+            return http.local_redirect(self.orders_page)
+            # return redirect(self.orders_page)
 
 
         # Check if the user has bought the associated product
@@ -568,8 +500,6 @@ class suggestion_list(http.Controller):
                  '/suggestion/page/<int:page>'], 
                 type='http', auth="public", website=True)
     def suggestion_list(self, page=1, ppg=False, **post):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        
         if ppg:
             try:
                 ppg = int(ppg)
@@ -579,30 +509,19 @@ class suggestion_list(http.Controller):
         else:
             ppg = PPG
             
-        suggestion=request.registry('tender.suggestion')
+        suggestion=request.env['tender.suggestion']
         nominsuggestion= ''
-        
-        tender_type_ids = request.registry('tender.type').search(cr, SUPERUSER_ID, [], context=context)
-        tender_types = request.registry('tender.type').browse(cr, SUPERUSER_ID, tender_type_ids, context) 
-        
-        sugges= ''
-        sugges_ids = suggestion.search(request.cr, SUPERUSER_ID, [('is_publish','=',True)], limit=2, order="published_date desc")
-        sugges = suggestion.browse(request.cr, SUPERUSER_ID, sugges_ids)
-        
-        surveys=request.registry('question.survey')
-        s_ids = []
+        tender_types = request.env['tender.type'].sudo().search([])
+        sugges = suggestion.sudo().search([('is_publish','=',True)], limit=2, order="published_date desc")
+        surveys=request.env['question.survey']
         survey_question= ''
-        survey_ids = surveys.search(request.cr, SUPERUSER_ID, [('is_publish','=',True)], order="published_date desc")
-        if survey_ids:
-            survey_question = surveys.browse(request.cr, SUPERUSER_ID, survey_ids[0])
-        
-        
+        survey_question = surveys.sudo().search([('is_publish','=',True)], order="published_date desc", limit = 1)
         query = "select question.id as qid, question.question as question, answer_id, label.label_name, count(answer.answer_id) \
                 from answer_label as answer, question_label as label, question_survey as question \
                 where label.id=answer.answer_id group by answer_id, label.label_name, question.id"
         
-        cr.execute(query)
-        records = cr.dictfetchall()
+        request.env.cr.execute(query)
+        records = request.env.cr.dictfetchall()
         question_dict = {}
         answer_dict = {}
         sum_dict = {}
@@ -618,14 +537,11 @@ class suggestion_list(http.Controller):
                 answer_dict[question['qid']]['answers'].append(question['label_name'])
                 answer_dict[question['qid']]['count'].append(question['count'])
             
-            
-            
         sumquery = "select question.id as qid, question.question as question, count(answer.answer_id) total \
                 from question_survey as question, answer_label as answer \
                 where question.is_publish = true and question.id = answer.question_id group by question.id"
-#         print 'n\n\n\n\\n\nsumquery', sumquery
-        cr.execute(sumquery)
-        sumrecords = cr.dictfetchall()
+        request.env.cr.execute(sumquery)
+        sumrecords = request.env.cr.dictfetchall()
         for sum in sumrecords:
             if sum['qid'] not in sum_dict:
                 sum_dict[sum['qid']] = {
@@ -633,11 +549,9 @@ class suggestion_list(http.Controller):
                                         }
         
         url = "/suggestion"
-        suggestion_count = suggestion.search_count(cr, SUPERUSER_ID, [('is_publish','=',True)], context=context)
+        suggestion_count = suggestion.sudo().search_count([('is_publish','=',True)])
         pager = request.website.pager(url=url, total=suggestion_count, page=page, step=ppg, scope=7, url_args=post)
-        nominsugges_ids = suggestion.search(request.cr, SUPERUSER_ID, [('is_publish','=',True)], limit=ppg, offset=pager['offset'], order="published_date desc")
-        nominsuggestion = suggestion.browse(request.cr, SUPERUSER_ID, nominsugges_ids)
-        
+        nominsuggestion = suggestion.sudo().search([('is_publish','=',True)], limit=ppg, offset=pager['offset'], order="published_date desc")
         values = {
                   'tender_types': tender_types,
                   'nominsuggestion': nominsuggestion,
@@ -654,33 +568,21 @@ class suggestion_list(http.Controller):
         '/suggestion/<model("tender.suggestion"):currsuggest>', 
         ], type='http', auth="public", website=True)
     def suggestion_details(self, currsuggest=None, **post):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        suggestion=request.registry('tender.suggestion')
+        suggestion=request.env['tender.suggestion']
         values = {}
-        sugges= ''
-        sugges_ids = suggestion.search(request.cr, SUPERUSER_ID, [('is_publish','=',True)], order="published_date desc", limit=2)
-        sugges = suggestion.browse(request.cr, SUPERUSER_ID, sugges_ids)
-        
-        tender_type_ids = request.registry('tender.type').search(cr, SUPERUSER_ID, [], context=context)
-        tender_types = request.registry('tender.type').browse(cr, SUPERUSER_ID, tender_type_ids, context) 
-        
+        sugges = suggestion.sudo().search([('is_publish','=',True)], order="published_date desc", limit=2)
+        tender_types = request.env['tender.type'].sudo().search([])
         if currsuggest:
             curr_suggest = currsuggest[0]
         
-        surveys=request.registry('question.survey')
-        s_ids = []
-        survey_question= ''
-        survey_ids = surveys.search(request.cr, SUPERUSER_ID, [('is_publish','=',True)], order="published_date desc")
-        if survey_ids:
-            survey_question = surveys.browse(request.cr, SUPERUSER_ID, survey_ids[0])
-        
-        
+        surveys=request.env['question.survey']
+        survey_question = surveys.sudo().search([('is_publish','=',True)], order="published_date desc")
         query = "select question.id as qid, question.question as question, answer_id, label.label_name, count(answer.answer_id) \
                 from answer_label as answer, question_label as label, question_survey as question \
                 where label.id=answer.answer_id group by answer_id, label.label_name, question.id"
         
-        cr.execute(query)
-        records = cr.dictfetchall()
+        request.env.cr.execute(query)
+        records = request.cr.dictfetchall()
         question_dict = {}
         answer_dict = {}
         sum_dict = {}
@@ -701,9 +603,8 @@ class suggestion_list(http.Controller):
         sumquery = "select question.id as qid, question.question as question, count(answer.answer_id) total \
                 from question_survey as question, answer_label as answer \
                 where question.is_publish = true and question.id = answer.question_id group by question.id"
-#         print 'n\n\n\n\\n\nsumquery', sumquery
-        cr.execute(sumquery)
-        sumrecords = cr.dictfetchall()
+        request.env.cr.execute(sumquery)
+        sumrecords = request.env.cr.dictfetchall()
         for sum in sumrecords:
             if sum['qid'] not in sum_dict:
                 sum_dict[sum['qid']] = {

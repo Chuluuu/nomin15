@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="nomin_web.guitsetgeh_ajil">
+            <t t-call="website.layout">
+                <div id="content_wrapper">
+                    <div class="container">
+                        <div class="row clearfix pv-50">
+                            <div class="col-xs-12 col-sm-8 col-md-9">
+                                <div class="blog-item">
+                                    <div class="blog-details-name">
+                                        <ul class="tabs">
+                                            <li>
+                                                <a data-toggle="tab" href="#details-tab01">Тендерийн материал бүрдүүлэлт</a>
+                                            </li>
+                                            <li>
+                                                <a data-toggle="tab" href="#details-tab02">Техникийн шаардлага</a>
+                                            </li>
+                                            <li>
+                                                <a data-toggle="tab" href="#details-tab03" class="active">Үнийн санал</a>
+                                            </li>
+                                        </ul>                                        <!-- tabs -->
+
+                                        <ul id="detail-tab" class="tabs-content xss-mb" style="width: 1140px;">
+                                            <li id="details-tab01" style="padding-left:20px;">
+                                                <h3 class="section-title">Тендерийн шаардлага</h3>
+
+                                                <div class="bb2 mb-20"></div>
+                                                <form enctype="multipart/form-data" style="width: 750px;" t-attf-action="/save_updated_documents2/" method="post" role="form" class="row">
+                                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                                        <div class="form-group" id="todorhoilolt">
+
+                                                            <label for="">ААН-ийн тодорхойлолт                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <t t-if='todorhoilolt'>
+                                                                <t t-foreach="todorhoilolt" t-as="val">
+                                                                    <br></br>
+                                                                    <a>
+                                                                        <t t-esc='val'/>
+                                                                    </a>
+                                                                </t>
+                                                            </t>
+                                                            <input type="file" name="todorhoilolt" id="one2" class="inputfilee" onchange="nnames(event)" accept=".pdf" />
+                                                            <label onclick="reset(event)" style="color: red;">Болих</label>
+                                                            <label for="file">
+                                                                <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                            </label>
+                                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                                        <div class="form-group" id="gerchilgee">
+
+                                                            <label for="">Гэрчилгээ                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <t t-if='gerchilgee'>
+                                                                <t t-foreach="gerchilgee" t-as="val">
+                                                                    <br></br>
+                                                                    <a>
+                                                                        <t t-esc='val'/>
+                                                                    </a>
+                                                                </t>
+                                                            </t>
+                                                            <input type="file" name="gerchilgee" id="two2" class="inputfilee" onchange="nnames(event)" accept=".pdf" />
+                                                            <label onclick="reset(event)" style="color: red;">Болих</label>
+                                                            <label for="file">
+                                                                <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                            </label>
+                                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                                        <div class="form-group" id="shuuh">
+
+                                                            <label for="">Шүүхийн тодорхойлолт                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <t t-if='shuuh'>
+                                                                <t t-foreach="shuuh" t-as="val">
+                                                                    <br></br>
+                                                                    <a>
+                                                                        <t t-esc='val'/>
+                                                                    </a>
+                                                                </t>
+                                                            </t>
+                                                            <input type="file" name="shuuh" id="three2" class="inputfilee" onchange="nnames(event)" accept=".pdf" />
+                                                            <label onclick="reset(event)" style="color: red;">Болих</label>
+                                                            <label for="file">
+                                                                <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                            </label>
+                                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                                        <div class="form-group" id="zuvshuurul">
+
+                                                            <label for="">Тусгай зөвшөөрөл                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <t t-if='zuvshuurul'>
+                                                                <t t-foreach="zuvshuurul" t-as="val">
+                                                                    <br></br>
+                                                                    <a>
+                                                                        <t t-esc='val'/>
+                                                                    </a>
+                                                                </t>
+                                                            </t>
+                                                            <input type="file" name="zuvshuurul" id="four2" class="inputfilee" onchange="nnames(event)" accept=".pdf" />
+                                                            <label onclick="reset(event)" style="color: red;">Болих</label>
+                                                            <label for="file">
+                                                                <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                            </label>
+                                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                                        <div class="form-group" id="bank">
+
+                                                            <label for="">Харилцагч банкуудын тодорхойлолт                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <t t-if='bank'>
+                                                                <t t-foreach="bank" t-as="val">
+                                                                    <br></br>
+                                                                    <a>
+                                                                        <t t-esc='val'/>
+                                                                    </a>
+                                                                </t>
+                                                            </t>
+                                                            <input type="file" name="bank" id="five2" class="inputfilee" onchange="nnames(event)" accept=".pdf" />
+                                                            <label onclick="reset(event)" style="color: red;">Болих</label>
+                                                            <label for="file">
+                                                                <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                                        <div class="form-group" id="vat">
+
+                                                            <label for="">НӨАТ-ийн гэрчилгээ                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <t t-if='vat'>
+                                                                <t t-foreach="vat" t-as="val">
+                                                                    <br></br>
+                                                                    <a>
+                                                                        <t t-esc='val'/>
+                                                                    </a>
+                                                                </t>
+                                                            </t>
+                                                            <input type="file" name="vat" id="six2" class="inputfilee" onchange="nnames(event)" accept=".pdf" />
+                                                            <label onclick="reset(event)" style="color: red;">Болих</label>
+                                                            <label for="file">
+                                                                <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                            </label>
+                                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                                        <div class="form-group" id="daatgal">
+
+                                                            <label for="">НД Газрын тодорхойлолт                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <t t-if='daatgal'>
+                                                                <t t-foreach="daatgal" t-as="val">
+                                                                    <br></br>
+                                                                    <a>
+                                                                        <t t-esc='val'/>
+                                                                    </a>
+                                                                </t>
+                                                            </t>
+                                                            <input type="file" name="daatgal" id="seven2" class="inputfilee" onchange="nnames(event)" accept=".pdf" />
+                                                            <label onclick="reset(event)" style="color: red;">Болих</label>
+                                                            <label for="file">
+                                                                <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                            </label>
+                                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                                        <div class="form-group" id="worklist">
+
+                                                            <label for="">Гүйцэтгэсэн ажлын тайлан                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <t t-if='worklist'>
+                                                                <t t-foreach="worklist" t-as="val">
+                                                                    <br></br>
+                                                                    <a>
+                                                                        <t t-esc='val'/>
+                                                                    </a>
+                                                                </t>
+                                                            </t>
+                                                            <input type="file" name="worklist" id="nine2" class="inputfilee" onchange="nnames(event)" accept=".pdf" />
+                                                            <label onclick="reset(event)" style="color: red;">Болих</label>
+                                                            <label for="file">
+                                                                <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                            </label>
+
+                                                            <h6>Хүчинтэй хугацаа: 1 улирал</h6>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <h3 class="section-title">Санхүүгийн чадавхи</h3>
+
+                                                    <div class="bb2 mb-30"></div>
+
+                                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                                        <div class="form-group" id="ndtailan">
+
+                                                            <label>НДТайлан:                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <t t-if='ndtailan'>
+                                                                <t t-foreach="ndtailan" t-as="val">
+                                                                    <br></br>
+                                                                    <a>
+                                                                        <t t-esc='val'/>
+                                                                    </a>
+                                                                </t>
+                                                            </t>
+
+                                                            <input type="file" name="ndtailan" id="ten2" class="inputfilee" onchange="nnames(event)" accept=".pdf" />
+                                                            <label onclick="reset(event)" style="color: red;">Болих</label>
+                                                            <label for="file">
+                                                                <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                            </label>
+                                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                                        <div class="form-group" id="sanhuutailan">
+
+                                                            <label>Санхүүгийн жилийн эцсийн тайлан:                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <t t-if='sanhuutailan'>
+                                                                <t t-foreach="sanhuutailan" t-as="val">
+                                                                    <br></br>
+                                                                    <a>
+                                                                        <t t-esc='val'/>
+                                                                    </a>
+                                                                </t>
+                                                            </t>
+
+                                                            <input type="file" name="sanhuutailan" id="eleven2" class="inputfilee" onchange="nnames(event)" accept=".pdf" />
+                                                            <label onclick="reset(event)" style="color: red;">Болих</label>
+                                                            <label for="file">
+                                                                <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                            </label>
+                                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-xs-12 col-sm-6 col-md-6">
+                                                        <div class="form-group" id="audit">
+
+                                                            <label>Аудитийн тайлан:                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <t t-if='audit'>
+                                                                <t t-foreach="audit" t-as="val">
+                                                                    <br></br>
+                                                                    <a>
+                                                                        <t t-esc='val'/>
+                                                                    </a>
+                                                                </t>
+                                                            </t>
+
+                                                            <input type="file" name="audit" id="twelve2" class="inputfilee" onchange="nnames(event)" accept=".pdf" />
+                                                            <label onclick="reset(event)" style="color: red;">Болих</label>
+                                                            <label for="file">
+                                                                <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                            </label>
+                                                            <h6>Хүчинтэй хугацаа: 1 жил</h6>
+                                                        </div>
+                                                    </div>
+                                                    <a style="float: right;">
+                                                        <input class="btn btn-primary btn-large" type="submit" value="Хадгалах" id="save_changes"/>
+                                                    </a>
+                                                </form>
+                                            </li>                                            <!-- tab content -->
+
+                                            <li id="details-tab02">
+                                                <form enctype="multipart/form-data" style="width: 750px;" t-attf-action="/save_tech_updates/" method="post" role="form" class="row">
+                                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                    <div style="height: 200px;" id="cntnr">
+                                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                                            <div class="form-group" id="itgemjlel">
+                                                                <label for="">Итгэмжлэл                                                                    <span class="text-danger">*</span>
+                                                                </label>
+                                                                <!-- <t t-if="valuesss['itgemjlel']"><br></br><a><t t-esc="valuesss['itgemjlel']"/></a></t> -->
+                                                                <input type="file" name="itgemjlel" id="one1" class="inputfilee" onchange="nnames(event)" accept=".pdf" />
+                                                                <label onclick="reset(event)" style="color: red;">Болих</label>
+                                                                <label for="file">
+                                                                    <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                    <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                                            <div class="form-group" id="tusgaizuvshuurul">
+                                                                <label for="">Тусгай зөвшөөрөл                                                                    <span class="text-danger">*</span>
+                                                                </label>
+                                                                <!-- <t t-if="valuesss['tusgaizuvshuurul']"><br></br><a><t t-esc="valuesss['tusgaizuvshuurul']"/></a></t> -->
+                                                                <input type="file" name="tusgaizuvshuurul" id="two1" class="inputfilee" onchange="nnames(event)" accept=".pdf" />
+                                                                <label onclick="reset(event)" style="color: red;">Болих</label>
+                                                                <label for="file">
+                                                                    <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                    <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <!-- <t t-if="tender.is_performance==True">
+                                            <div class="col-xs-12 col-sm-6 col-md-6">
+                                                <div class="form-group">
+                                                <label for="">Гүйцэтгэлийн баталгаа <span class="text-danger">*</span></label>
+            <input id="guitsetgeliinbatalgaa" type="file" name="guitsetgeliinbatalgaa" class="inputfilee" onchange="ssee(event)" /><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                                </div>
+                                            </div>
+                                            </t>-->
+                                                        <!-- <t t-if="tender.special_require==True">										
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <div class="form-group" id="tusgaishaardlaga">
+                                                    <label for="">Тусгай шаардлага<span class="text-danger">*</span></label>
+                                                    <t t-if="valuesss['tusgaishaardlaga']"><br></br><a><t t-esc="valuesss['tusgaishaardlaga']"/></a></t>
+                <input type="file" name="tusgaishaardlaga" id="three1" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                            <t t-if="tender.work_experience_info>0">
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <div class="form-group" id="ajliinturshlaga">
+                                                    <label for="">Ажлын туршлага<span class="text-danger">*</span></label>
+                                                    <t t-if="valuesss['ajliinturshlaga']"><br></br><a><t t-esc="valuesss['ajliinturshlaga']"/></a></t>
+                <input type="file" name="ajliinturshlaga" id="four1" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                            <t t-if="tender.technical_requirement==True">
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <div class="form-group" id="techrequirement">
+                                                    <label for="">Техникийн шаардлага<span class="text-danger">*</span></label>
+                                                    <t t-if="valuesss['techrequirement']"><br></br><a><t t-esc="valuesss['techrequirement']"/></a></t>
+                <input type="file" name="techrequirement" id="five1" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                            <t t-if="tender.is_alternative==True">
+                                                <div class="col-xs-12 col-sm-6 col-md-6">
+                                                    <div class="form-group" id="alternativetender">
+                                                    <label for="">Хувилбар тендер<span class="text-danger">*</span></label>
+                                                    <t t-if="valuesss['alternativetender']"><br></br><a><t t-esc="valuesss['alternativetender']"/></a></t>
+                <input type="file" name="alternativetender" id="six1" class="inputfilee" onchange="nnames(event)" accept=".pdf" /><label onclick="reset(event)" style="color: red;">Болих</label><label for="file"><i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i><span style="padding-top: 11px;">Файл сонгох ...</span></label>
+                                                    </div>
+                                                </div>
+                                            </t> -->
+                                                    </div>
+                                                    <a style="float: right;">
+                                                        <input class="btn btn-primary btn-large" type="submit" value="Илгээх" id="save_doc_changes" />
+                                                    </a>
+                                                </form>
+                                            </li>                                            <!-- tab content -->
+
+                                            <li id="details-tab03" class="active" style="overflow-x: scroll; width: 1100px;">
+                                                <form enctype="multipart/form-data" t-attf-action="/details/" method="post" role="form" class="row" style="padding-left: 20px; width:99%;">
+                                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                    <table name="sugarsuh">
+                                                        <h3>Тухайн тендерийн дэлгэрэнгүй</h3>
+                                                        <tbody id="tasktable">
+                                                            <tr>
+                                                                <th rowspan="2">№</th>
+                                                                <th rowspan="2">Ажил үйлчилгээний нэр</th>
+                                                                <th colspan="3">Ажиллах хүчний зардал</th>
+                                                                <th rowspan="2">Материалын зардал</th>
+                                                                <th rowspan="2">Бусад зардал</th>
+                                                                <th rowspan="2">Нийт зардал</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Тоо хэмжээ</th>
+                                                                <th>Hэгж үнэ</th>
+                                                                <th>Нийт үнэ</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>1</td>
+                                                                <td>
+                                                                    <input name="work1"/>
+                                                                </td>
+                                                                <td>
+                                                                    <input class="quantity" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="hemjee1" style="width: 100px;"/>
+                                                                </td>
+                                                                <td>
+                                                                    <input class="unitprice" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="negjune1" style="width: 100px;"/>
+                                                                </td>
+                                                                <td class="totalcost">0</td>
+                                                                <td>
+                                                                    <input class="materialexpense" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="material1" style="width: 100px;"/>
+                                                                </td>
+                                                                <td>
+                                                                    <input class="otherexpense" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="busadzardal1" style="width: 100px;"/>
+                                                                </td>
+                                                                <td class="totalsum">0</td>
+                                                                <td id="addtask">
+                                                                    <label onclick="add_task()">Даалгавар нэмэх</label>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <div class="bb2 mb-15" style="height: 30px; background-color: #cccccc;">Нийт үнэ:                                                        <span id="totalvalue" class="font24 text-danger" style="float: right; padding-top:2px;">0₮</span>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="inputEmail3" class="col-sm-4 control-label">Үнийн санал:                                                            <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="col-xs-12 col-sm-6 col-md-5">
+                                                            <input type="file" name="uniinsanal" id="file1" class="inputfilee" onchange="change(event)" />
+                                                            <label for="file">
+                                                                <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                <span style="padding-top: 11px;">Файл сонгох ...</span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="inputEmail3" class="col-sm-4 control-label">Хугацаа:                                                            <span class="text-danger">*</span>
+                                                        </label>
+                                                        <div class="col-xs-12 col-sm-6 col-md-5">
+                                                            <input type="file" name="hugatsaa" id="file2" class="inputfilee" onchange="change(event)" />
+                                                            <label for="file">
+                                                                <i class="arrow_carrot-right_alt2" style="vertical-align: middle; padding-top: 11px;"></i>
+                                                                <span style="padding-top: 11px;">
+                                                                    <label>Файл сонгох ...</label>
+                                                                </span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <a href="/download_template/" class="btn btn-primary btn-block" style="float: right; margin-bottom: 20px;">Загвар татан авах</a>
+                                                    <button class="btn btn-primary btn-block" type="submit" id="save_quota" disabled="true">Илгээх</button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+            <script type="text/javascript">
+                <![CDATA[
+        
+        function change(event)
+            {
+                if($("#file1").val()!="" && $("#file2").val()!="")
+                    $('#save_quota').prop('disabled',false);		
+            }
+        
+            function value_mandatory(event)
+                {
+                    if(event.target.value==0)
+                        event.target.value="";
+                }
+                
+            var a;
+            function calculate(event)
+                {
+                    if(event.target.value=="")
+                        event.target.value=0;
+                        
+                    if(event.target.className=="unitprice")
+                        {a=Number(event.target.value)*Number(event.target.parentNode.previousSibling.childNodes[0].value);
+                            event.target.parentNode.nextSibling.innerHTML=a;
+                            event.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.innerHTML=Number(event.target.parentNode.nextSibling.nextSibling.nextSibling.childNodes[0].value)+a;
+                        }
+                        
+                    if(event.target.className=="quantity")
+                        {a=Number(event.target.value)*Number(event.target.parentNode.nextSibling.childNodes[0].value);
+                            event.target.parentNode.nextSibling.nextSibling.innerHTML=a;
+                            event.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerHTML=Number(event.target.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.childNodes[0].value)+a;
+                        }
+                        
+                    if(event.target.className=="otherexpense")
+                        {
+                            event.target.parentNode.nextSibling.innerHTML=Number(event.target.value)+Number(event.target.parentNode.previousSibling.previousSibling.innerHTML)+Number(event.target.parentNode.previousSibling.childNodes[0].value);
+                        }
+                        
+                    if(event.target.className=="materialexpense")
+                        {
+                            event.target.parentNode.nextSibling.nextSibling.innerHTML= Number(event.target.value)+Number(event.target.parentNode.previousSibling.innerHTML)+Number(event.target.parentNode.nextSibling.childNodes[0].value);
+                        }
+                        
+                        total_sum();
+                }
+                
+                var number=2;
+            function add_task()
+                {	
+                    $( "#tasktable" ).append( '<tr><td>'+number+'</td><td><input name="work'+number+'"></input></td><td><input class="quantity" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="hemjee'+number+'" style="width: 100px;"></input></td><td><input class="unitprice" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="negjune'+number+'" style="width: 100px;"></input></td><td class="totalcost">0</td><td><input class="materialexpense" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="material'+number+'" style="width: 100px;"></input></td><td><input class="otherexpense" onkeyup="calculate(event)" onfocus="value_mandatory(event)" value="0" name="busadzardal'+number+'" style="width: 100px;"></input></td><td class="totalsum">0</td><td><button id='+number+' onclick="remove_row(event)" class="delete">Устгах</button></td></tr>' );
+                    number++;
+                }
+                
+            function remove_row(event)
+                {
+                    document.getElementById("tasktable").removeChild(event.target.parentNode.parentNode);
+                        for(var i=Number(event.target.id); i<=document.getElementsByClassName("delete").length+1; i++)
+                            {
+                                document.getElementById(i+1).parentNode.parentNode.childNodes[0].innerHTML=i;
+                                document.getElementById(i+1).parentNode.parentNode.childNodes[1].childNodes[0].name="work"+i;
+                                document.getElementById(i+1).parentNode.parentNode.childNodes[2].childNodes[0].name="hemjee"+i;
+                                document.getElementById(i+1).parentNode.parentNode.childNodes[3].childNodes[0].name="negjune"+i;
+                                
+                                document.getElementById(i+1).parentNode.parentNode.childNodes[5].childNodes[0].name="material"+i;
+                                document.getElementById(i+1).parentNode.parentNode.childNodes[6].childNodes[0].name="busadzardal"+i;
+                                
+                                document.getElementById(i+1).parentNode.parentNode.childNodes[8].childNodes[0].id=i;
+                            }
+                            number--;
+                    total_sum();
+                }
+                
+                var b;
+            function total_sum()
+                {	
+                    a=document.getElementsByClassName("totalsum")
+                    b=Number(a[0].innerHTML);
+                    for(var i=1; i<a.length; i++)
+                        {
+                            b+=Number(a[i].innerHTML);
+                        }
+                    $("#totalvalue").html(b.toLocaleString()+"₮");
+                }
+        ]]>
+            </script>
+        </template>
+    </data>
+</odoo>

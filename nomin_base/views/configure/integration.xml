@@ -8,7 +8,7 @@
                 <form string="Integration Configure">
                     <sheet>
                         <group col="4">
-                        	<field name="name"/>
+                            <field name="name"/>
                             <field name="category"/>
                             <field name="active" />
                             <field name="connection_type"/>
@@ -18,36 +18,36 @@
                             <field name="server_ip"/>
                         </group>
 
-                        
-                        <group colspan="8" col="8">
-						    <group colspan="4">
-							    	<field name="token_url" />
-                                    
-						    </group>
-	                    </group>
-
-                    	 <group col="4">
-                                <field name="url_ids" colspan="4" nolabel="1" >
-						
-								    <tree string="Url" editable="bottom">
-                                        <field name="code" options="{'no_create': True}" />
-                                        <field name="model" options="{'no_create': True}" required = "1"/>
-									    <field name="server_ip" options="{'no_create': True}" />
-                                         
-									
-								    </tree>
-							    </field>
-                         </group> 
 
                         <group colspan="8" col="8">
-						    <group colspan="4">
-							    	<field name="a1" />
-								    <field name="a2" />
-								    <field name="a3" />
-                                    <field name="a4" />
-                                    
-						    </group>
-	                    </group>
+                            <group colspan="4">
+                                <field name="token_url" />
+
+                            </group>
+                        </group>
+
+                        <group col="4">
+                            <field name="url_ids" colspan="4" nolabel="1">
+
+                                <tree string="Url" editable="bottom">
+                                    <field name="code" options="{'no_create': True}" />
+                                    <field name="model" options="{'no_create': True}" required = "1"/>
+                                    <field name="server_ip" options="{'no_create': True}" />
+
+
+                                </tree>
+                            </field>
+                        </group>
+
+                        <group colspan="8" col="8">
+                            <group colspan="4">
+                                <field name="a1" />
+                                <field name="a2" />
+                                <field name="a3" />
+                                <field name="a4" />
+
+                            </group>
+                        </group>
                     </sheet>
 
                     <!-- <div class="oe_chatter">
@@ -57,13 +57,13 @@
                 </form>
             </field>
         </record>
-        
+
         <record id="integration_config_tree" model="ir.ui.view">
             <field name="name">integration.config.tree</field>
             <field name="model">integration.config</field>
             <field name="arch" type="xml">
                 <tree string="Integration Configure">
-                	<field name="name"/>
+                    <field name="name"/>
                     <field name="server_ip"/>
                     <field name="from_server_ips"/>
                     <field name="category"/>
@@ -79,7 +79,7 @@
                 <search string="Search transfer request">
                     <!-- <filter name="group_category_id" string="Категори" domain="[]" context="{'group_by':['category']}"/> -->
                     <filter name="group_category_id" string="Категори" domain="[]" />
-               </search>
+                </search>
             </field>
         </record>
         <record id="integration_config_action" model="ir.actions.act_window">
@@ -90,7 +90,7 @@
             <field name="context">{'search_default_group_category_id': 1}</field>
 
         </record>
-        
+
         <!-- Calendar sync -->
         <record id="calendar_sync_config_form" model="ir.ui.view">
             <field name="name">calendar.sync.config</field>
@@ -99,10 +99,10 @@
                 <form string="Sync user">
                     <sheet>
                         <group col="4">
-                            <field name="name"/>                                                   
+                            <field name="name"/>
                         </group>
                         <group>
-                            <field name="line_ids">     
+                            <field name="line_ids">
                                 <tree editable="bottom">
                                     <field name="user_id"/>
                                     <field name="datetime" readonly="1"/>
@@ -118,13 +118,13 @@
                 </form>
             </field>
         </record>
-        
+
         <record id="calendar_sync_config_tree" model="ir.ui.view">
             <field name="name">calendar.sync.tree</field>
             <field name="model">calendar.sync.user</field>
             <field name="arch" type="xml">
                 <tree string="Integration Configure">
-                    <field name="name"/>                    
+                    <field name="name"/>
                 </tree>
             </field>
         </record>
@@ -145,15 +145,14 @@
             <field name="arch" type="xml">
                 <form string="Proactive notification">
                     <header>
-                        
+
                         <button string="Prepare sync items" name="prepare_sync_items" type="object" class="oe_highlight" />
                         <button string="Sync prepared items" name="sync_prepared_items" states="need_a_solution" type="object" class="oe_highlight" />
-                        <button string="Cron job" name="cron_job_for_proactive_notifications" 
-                            attrs="{'invisible': ['|',('code','=','notification'),('state','!=','need_a_solution')]}" type="object" class="oe_highlight" />
+                        <button string="Cron job" name="cron_job_for_proactive_notifications" attrs="{'invisible': ['|',('code','=','notification'),('state','!=','need_a_solution')]}" type="object" class="oe_highlight" />
                         <field name="state" widget="statusbar"/>
 
 
-                    </header>    
+                    </header>
                     <sheet>
 
                         <group colspan="8" col="8">
@@ -162,8 +161,8 @@
                                 <field name="model"/>
                                 <field name="integration_data_type" />
                                 <field name="active"/>
-                                
-                            
+
+
 
 
                             </group>
@@ -173,16 +172,16 @@
                                 <field name="state" />
                                 <field name="allow_to_show_json"/>
                                 <field name="cron_trial_period"/>
-                                
-                            
 
 
-                            </group>                              
+
+
+                            </group>
                         </group>
                         <notebook>
                             <page string="Жагсаалт">
                                 <group colspan="4" col="4">
-                                    <field name="line_ids" >
+                                    <field name="line_ids">
                                         <tree colors="red:state == 'open'; green:state == 'paid';" domain="[('state', '=', 'need_a_solution')]">
                                             <field name="res_id"/>
                                             <field name="res_id2"/>
@@ -193,7 +192,7 @@
                                     </field>
 
 
-                                </group> 
+                                </group>
                             </page>
                             <page string="Domain">
                                 <group colspan="8" col="8">
@@ -203,7 +202,7 @@
                                         <field name="delete_query"/>
                                     </group>
                                 </group>
-                            </page>                            
+                            </page>
                             <page string="Instant python">
                                 <group colspan="8" col="8">
                                     <group colspan="4">
@@ -228,15 +227,15 @@
                             </page>
                         </notebook>
                         <group colspan="8" col="8">
-                                <group colspan="4">
-                                    <!-- <field name="a1" />
+                            <group colspan="4">
+                                <!-- <field name="a1" />
                                     <field name="a2" />
                                     <field name="a3" /> -->
-                                </group>
                             </group>
+                        </group>
 
-                            
-                        </sheet>
+
+                    </sheet>
 
                     <!-- <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
@@ -255,7 +254,7 @@
 
                     <field name="need_a_solution_count"/>
                     <field name="state" invisible="1"/>
-                    <button string="Шийдэх" class="oe_stat_button"  name="sync_prepared_items" type="object"/>
+                    <button string="Шийдэх" class="oe_stat_button" name="sync_prepared_items" type="object"/>
                     <field name="button_pressed_date"/>
                     <field name="completed_count"/>
                     <field name="total_count"/>
@@ -277,8 +276,8 @@
                     <field name="code" />
                     <field name="model" />
                     <field name="user_id" />
-                    <filter name="state" string="Шийдэл хэрэгтэй" domain="[('state','=','need_a_solution')]"  />
-            </search>
+                    <filter name="state" string="Шийдэл хэрэгтэй" domain="[('state','=','need_a_solution')]" />
+                </search>
             </field>
         </record>
 
@@ -292,7 +291,7 @@
 
 
         </record>
-  
+
 
 
 
@@ -304,37 +303,35 @@
                 <form string="Proactive line">
                     <sheet>
 
-	                    <group colspan="8" col="8">
-		               		<group colspan="4">
+                        <group colspan="8" col="8">
+                            <group colspan="4">
                                 <field name="notification_id"/>
                                 <field name="res_id"/>
                                 <field name="res_id2"/>
                                 <field name="res_id3"/>
-                            
 
 
-				          	</group>
-		               		<group colspan="4">
+
+                            </group>
+                            <group colspan="4">
                                 <field name="state"/>
                                 <field name="write_date"/>
-                                <!-- <button name="refresh_button" class="oe_highlight" string="integration" type="object" 
-                                attrs="{'invisible': [('notification_id', '=',False)]}"/> -->
-                                <button name="resend_button" class="oe_highlight" string="Resend" type="object" 
-                                attrs="{'invisible': [('notification_id', '=',False)]}"/>
-                            
+                                <!-- <button name="refresh_button" class="oe_highlight" string="integration" type="object" attrs="{'invisible': [('notification_id', '=',False)]}"/> -->
+                                <button name="resend_button" class="oe_highlight" string="Resend" type="object" attrs="{'invisible': [('notification_id', '=',False)]}"/>
 
 
-				          	</group>                              
-				     	</group>
 
-                    	 <group colspan="8" col="8">
+                            </group>
+                        </group>
+
+                        <group colspan="8" col="8">
                             <field name="msg"/>
-                         </group> 
+                        </group>
 
                         <field name="json"/>
-			                
+
                     </sheet>
-<!-- 
+                    <!-- 
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
                         <field name="message_ids" widget="mail_thread"/>
@@ -342,7 +339,7 @@
                 </form>
             </field>
         </record>
-        
+
         <record id="proactive_line_tree" model="ir.ui.view">
             <field name="name">proactive.line.tree</field>
             <field name="model">proactive.line</field>
@@ -370,16 +367,16 @@
                 <search string="Search transfer request">
                     <field name="state" />
                     <field name="res_id" />
-                    <filter name="state" string="Шийдэл хэрэгтэй" domain="[('state','in',['need_a_solution','tried'])]"  />
-                    
+                    <filter name="state" string="Шийдэл хэрэгтэй" domain="[('state','in',['need_a_solution','tried'])]" />
+
                     <!-- <filter name="group_notification_id" string="Төрөл" domain="[]" context="{'group_by':['notification_id']}"/>
                     <filter name="group_state" string="Төлөв" domain="[]" context="{'group_by':['state']}"/> -->
 
-                   <filter name="group_notification_id" string="Төрөл" domain="[]" />
+                    <filter name="group_notification_id" string="Төрөл" domain="[]" />
                     <filter name="group_state" string="Төлөв" domain="[]" />
 
 
-               </search>
+                </search>
             </field>
         </record>
 
@@ -392,60 +389,32 @@
             <field name="context">{'search_default_group_notification_id': 1,'search_default_state':2}</field>
 
         </record>
-  
 
 
 
 
 
-		<menuitem 
-            id="measure_menu" name="Хяналтын цонх" web_icon="mw_insurance,static/description/Insurance.png" groups="mw_insurance.group_insurance_user"
-            sequence="5"/>
+        <!-- web_icon="mw_insurance,static/description/Insurance.png" groups="mw_insurance.group_insurance_user" id=measure_menu
+         -->
+        <menuitem id="measure_menu" name="Хяналтын цонх" sequence="5"/>
 
-        <menuitem 
-            id="integration_config_menu" name="Шийдэх зүйлс" parent="measure_menu"
-            sequence="1" />
-            
-        <menuitem
-            name="Интэграц тохиргоо"
-            action="integration_config_action"
-            id="menu_integration_config_action"
-            parent="integration_config_menu"
-            sequence="14"
-            />
+        <menuitem id="integration_config_menu" name="Шийдэх зүйлс" parent="measure_menu" sequence="1" />
+
+        <menuitem name="Интэграц тохиргоо" action="integration_config_action" id="menu_integration_config_action" parent="integration_config_menu" sequence="14" />
 
 
-        <menuitem 
-            id="dash_board_menu" name="Хяналтын Цонх" 
-            sequence="3"/>
+        <menuitem id="dash_board_menu" name="Хяналтын Цонх" sequence="3"/>
 
-        <menuitem 
-            id="dash_board_1" name="Хяналтын Цонх" 
-            parent="dash_board_menu"
-            sequence="1"/>
+        <menuitem id="dash_board_1" name="Хяналтын Цонх" parent="dash_board_menu" sequence="1"/>
 
-        <menuitem
-            action="proactive_notification_action"
-            name="Шийдэх зүйлсийн жагсаалт"
-            id="menu_proactive_notification_action"
-            parent="integration_config_menu"
-            sequence="3"/>
+        <menuitem action="proactive_notification_action" name="Шийдэх зүйлсийн жагсаалт" id="menu_proactive_notification_action" parent="integration_config_menu" sequence="3"/>
 
 
 
-        <menuitem
-            action="proactive_line_action"
-            id="menu_proactive_line_action"
-            parent="integration_config_menu"
-            sequence="7"/>
+        <menuitem action="proactive_line_action" id="menu_proactive_line_action" parent="integration_config_menu" sequence="7"/>
 
-<!-- 
-        <menuitem
-            action="calendar_sync_config_action"
-            id="menu_calendar_sync_config_action"
-            parent="integration_config_menu"
-            sequence="6"
-            /> -->
+        <!-- 
+        <menuitem action="calendar_sync_config_action" id="menu_calendar_sync_config_action" parent="integration_config_menu" sequence="6" /> -->
 
 
 

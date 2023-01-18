@@ -2,7 +2,7 @@
 
 <odoo>
     <data>
-        <template id="assets_backend" name="web_context_tunnel assets" inherit_id="web.assets_backend">
+        <!-- <template id="assets_backend" name="web_context_tunnel assets" inherit_id="web.assets_backend">
             <xpath expr="." position="inside">
                 <script type="text/javascript" src="/nomin_web/static/js/context_tunnel.js"></script>
             </xpath>
@@ -11,6 +11,6 @@
             <xpath expr="//head" position="inside">
                 <script type="text/javascript" src="/nomin_web/static/js/context_tunnel.js"></script>
             </xpath>
-        </template>
+        </template> -->
     </data>
 </odoo>

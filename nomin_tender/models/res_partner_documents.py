@@ -10,7 +10,6 @@
 
 from PIL import Image
 import re
-from urllib import urlencode
 import urllib2
 from urlparse import urlparse
 from openerp.exceptions import Warning

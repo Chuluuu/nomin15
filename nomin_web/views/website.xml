@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-<data>
-	<template id="signup_fields" inherit_id="auth_signup.fields">
-	    <xpath expr="//div[@class='form-group field-password']"
-	           position="attributes">
+	<data>
+		<!-- <template id="signup_fields" inherit_id="auth_signup.fields">
+	    <xpath expr="//div[@class='form-group field-password']" position="attributes">
 	        <attribute name="t-if">only_passwords</attribute>
 	    </xpath>
-	    <xpath expr="//div[@class='form-group field-confirm_password']"
-	           position="attributes">
+	    <xpath expr="//div[@class='form-group field-confirm_password']" position="attributes">
 	        <attribute name="t-if">only_passwords</attribute>
 	    </xpath>
 	    <xpath expr="//input[@name='login']" position="attributes">
@@ -15,7 +13,7 @@
 	    </xpath>
 	    
 
-	</template>
+	</template> -->
 
-</data>
+	</data>
 </odoo>

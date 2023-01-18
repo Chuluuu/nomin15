@@ -4,15 +4,14 @@ import logging
 import werkzeug
 import werkzeug.utils
 import werkzeug.wrappers
-
+import time
 import xml.etree.ElementTree as ET
 from odoo import SUPERUSER_ID
 from odoo import http
 from odoo.http import request
 from odoo.addons.website.controllers.main import Website
 from odoo import _, http
-import cgi, os
-import cgitb; cgitb.enable()
+
 _logger = logging.getLogger(__name__)
 
 try:
@@ -60,15 +59,14 @@ class NominTender(http.Controller):
             [('id', '=', int(attachment_id))],
             ["name", "datas", "file_type", "res_model", "res_id", "type", "url"]
         )
-        #print 'n\n\n\nasdadsdadsas', attachment
         if attachment:
             attachment = attachment[0]
         else:
-            return redirect(self.orders_page)
+            return http.local_redirect(self.orders_page)
  
         if attachment["type"] == "url":
             if attachment["url"]:
-                return redirect(attachment["url"])
+                return http.local_redirect(attachment["url"])
             else:
                 return request.not_found()
         elif attachment["datas"]:
@@ -81,30 +79,25 @@ class NominTender(http.Controller):
         '/page/contactus',
         ], type='http', auth="public", website=True)
     def contactus(self, page=1, **post):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        suggestion=request.registry('tender.suggestion')
+        suggestion=request.env['tender.suggestion']
         values = {}
         sugges= ''
-        sugges_ids = suggestion.search(request.cr, SUPERUSER_ID, [('is_publish','=',True)], order="published_date desc", limit=2)
-        sugges = suggestion.browse(request.cr, SUPERUSER_ID, sugges_ids)
+        sugges = suggestion.sudo().search([('is_publish','=',True)], order="published_date desc", limit=2)
         
-        tender_type_ids = request.registry('tender.type').search(cr, SUPERUSER_ID, [], context=context)
-        tender_types = request.registry('tender.type').browse(cr, SUPERUSER_ID, tender_type_ids, context) 
+        tender_types = request.env['tender.type'].sudo().search([])
         
-        surveys=request.registry('question.survey')
+        surveys=request.env['question.survey']
         s_ids = []
         survey_question= ''
-        survey_ids = surveys.search(request.cr, SUPERUSER_ID, [('is_publish','=',True)], order="published_date desc")
-        if survey_ids:
-            survey_question = surveys.browse(request.cr, SUPERUSER_ID, survey_ids[0])
+        survey_question = surveys.sudo().search([('is_publish','=',True)], order="published_date desc")
         
         
         query = "select question.id as qid, question.question as question, answer_id, label.label_name, count(answer.answer_id) \
                 from answer_label as answer, question_label as label, question_survey as question \
                 where label.id=answer.answer_id group by answer_id, label.label_name, question.id"
         
-        cr.execute(query)
-        records = cr.dictfetchall()
+        request.env.cr.execute(query)
+        records = request.env.cr.dictfetchall()
         question_dict = {}
         answer_dict = {}
         sum_dict = {}
@@ -125,9 +118,8 @@ class NominTender(http.Controller):
         sumquery = "select question.id as qid, question.question as question, count(answer.answer_id) total \
                 from question_survey as question, answer_label as answer \
                 where question.is_publish = true and question.id = answer.question_id group by question.id"
-#         print 'n\n\n\n\\n\nsumquery', sumquery
-        cr.execute(sumquery)
-        sumrecords = cr.dictfetchall()
+        request.env.cr.execute(sumquery)
+        sumrecords = request.env.cr.dictfetchall()
         for sum in sumrecords:
             if sum['qid'] not in sum_dict:
                 sum_dict[sum['qid']] = {
@@ -149,8 +141,7 @@ class NominTender(http.Controller):
         '/new_tenders/page/<int:page>', 
         ], type='http', auth="public", website=True)
     def new_tenders(self, page=1, ppg=False, **post):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        user_id = request.registry('res.users').browse(request.cr, SUPERUSER_ID, uid)
+        user_id = user = request.env['res.users'].sudo().browse(request.uid)
         
         if ppg:
             try:
@@ -161,30 +152,28 @@ class NominTender(http.Controller):
         else:
             ppg = PPG
         
-        suggestion=request.registry('tender.suggestion')
-        tender_obj=request.registry('tender.tender')
+        suggestion=request.env['tender.suggestion']
+        tender_obj=request.env['tender.tender']
         values = {}
         sugges= ''
         domain = [('is_publish','=',True),('state','in',['published','bid_expire'])]
         domainok = [('is_publish','=',True),('is_open_tender','=',True),('state','in',['published','bid_expire'])]
-        sugges_ids = suggestion.search(request.cr, SUPERUSER_ID, [('is_publish','=',True)], order="published_date desc", limit=2)
-        sugges = suggestion.browse(request.cr, SUPERUSER_ID, sugges_ids)
+        sugges = suggestion.sudo().search([('is_publish','=',True)], order="published_date desc", limit=2)
         url = "/new_tenders"
-        tender_type_ids = request.registry('tender.type').search(cr, SUPERUSER_ID, [], context=context)
-        tender_types = request.registry('tender.type').browse(cr, SUPERUSER_ID, tender_type_ids, context) 
+        tender_types = request.env['tender.type'].sudo().search([])
 #         product_count = product_obj.search_count(cr, uid, domain, context=context)
-        if (uid!=3):
-            tender_count = tender_obj.search_count(cr, SUPERUSER_ID, domain, context=context)
+        if (request.uid!=3):
+            tender_count = tender_obj.sudo().search_count(domain)
         else:
-            tender_count = tender_obj.search_count(cr, SUPERUSER_ID, domainok, context=context)
+            tender_count = tender_obj.sudo().search_count(domainok)
         
         pager = request.website.pager(url=url, total=tender_count, page=page, step=ppg, scope=7, url_args=post)
-        if (uid!=3):
-            tender_ids = tender_obj.search(cr, SUPERUSER_ID, [('is_publish','=',True),('state','in',['published', 'bid_expire'])], limit=ppg, offset=pager['offset'], order='published_date desc', context=context)
+        if (request.uid!=3):
+            tenders = tender_obj.sudo().search([('is_publish','=',True),('state','in',['published', 'bid_expire'])], limit=ppg, offset=pager['offset'], order='published_date desc',)
         else:
-            tender_ids = tender_obj.search(cr, SUPERUSER_ID, [('is_publish','=',True),('is_open_tender','=',True),('state','in',['published', 'bid_expire'])], limit=ppg, offset=pager['offset'], order='published_date desc',context=context)
+            tenders = tender_obj.sudo().search([('is_publish','=',True),('is_open_tender','=',True),('state','in',['published', 'bid_expire'])], limit=ppg, offset=pager['offset'], order='published_date desc')
 #         tender_ids = tender_obj.search(cr, uid, domain, limit=ppg, offset=pager['offset'], order='published_date desc', context=context)
-        tenders = tender_obj.browse(cr, SUPERUSER_ID, tender_ids, context=context)
+        # tenders = tender_obj.browse(cr, SUPERUSER_ID, tender_ids, context=context)
         
         tender_tender_ids = []
         for tender in tenders:
@@ -193,20 +182,18 @@ class NominTender(http.Controller):
             if tender.is_open_tender == True:
                 tender_tender_ids.append(tender)
         
-        surveys=request.registry('question.survey')
+        surveys=request.env['question.survey']
         s_ids = []
         survey_question= ''
-        survey_ids = surveys.search(request.cr, SUPERUSER_ID, [('is_publish','=',True)], order="published_date desc")
-        if survey_ids:
-            survey_question = surveys.browse(request.cr, SUPERUSER_ID, survey_ids[0])
+        survey_question = surveys.sudo().search( [('is_publish','=',True)], order="published_date desc")
         
         
         query = "select question.id as qid, question.question as question, answer_id, label.label_name, count(answer.answer_id) \
                 from answer_label as answer, question_label as label, question_survey as question \
                 where label.id=answer.answer_id group by answer_id, label.label_name, question.id"
         
-        cr.execute(query)
-        records = cr.dictfetchall()
+        request.env.cr.execute(query)
+        records = request.env.cr.dictfetchall()
         question_dict = {}
         answer_dict = {}
         sum_dict = {}
@@ -228,8 +215,8 @@ class NominTender(http.Controller):
                 from question_survey as question, answer_label as answer \
                 where question.is_publish = true and question.id = answer.question_id group by question.id"
 
-        cr.execute(sumquery)
-        sumrecords = cr.dictfetchall()
+        request.env.cr.execute(sumquery)
+        sumrecords = request.env.cr.dictfetchall()
         for sum in sumrecords:
             if sum['qid'] not in sum_dict:
                 sum_dict[sum['qid']] = {
@@ -254,8 +241,7 @@ class NominTender(http.Controller):
         '/subscribe/',
         ], type='http', auth="public", website=True)
     def subscribe_users(self, ppg=False, page=1, **post):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        user_id = request.registry('res.users').browse(request.cr, SUPERUSER_ID, uid)
+        user_id = user = request.env['res.users'].sudo().browse(request.uid)
 
         if ppg:
             try:
@@ -268,25 +254,20 @@ class NominTender(http.Controller):
         
         values = {}
         
-        suggestion=request.registry('tender.suggestion')
-        sugges= ''
-        sugges_ids = suggestion.search(request.cr, SUPERUSER_ID, [('is_publish','=',True)], order="published_date desc", limit=2)
-        sugges = suggestion.browse(request.cr, SUPERUSER_ID, sugges_ids)
+        suggestion=request.env['tender.suggestion']
+        sugges = suggestion.sudo().search([('is_publish','=',True)], order="published_date desc", limit=2)
         
-        surveys=request.registry('question.survey')
+        surveys=request.env['question.survey']
         s_ids = []
-        survey_question= ''
-        survey_ids = surveys.search(request.cr, SUPERUSER_ID, [('is_publish','=',True)], order="published_date desc")
-        if survey_ids:
-            survey_question = surveys.browse(request.cr, SUPERUSER_ID, survey_ids[0])
+        survey_question = surveys.sudo().search([('is_publish','=',True)], order="published_date desc")
         
         
         query = "select question.id as qid, question.question as question, answer_id, label.label_name, count(answer.answer_id) \
                 from answer_label as answer, question_label as label, question_survey as question \
                 where label.id=answer.answer_id group by answer_id, label.label_name, question.id"
         
-        cr.execute(query)
-        records = cr.dictfetchall()
+        request.env.cr.execute(query)
+        records = request.env.cr.dictfetchall()
         question_dict = {}
         answer_dict = {}
         sum_dict = {}
@@ -308,16 +289,16 @@ class NominTender(http.Controller):
                 from question_survey as question, answer_label as answer \
                 where question.is_publish = true and question.id = answer.question_id group by question.id"
 
-        cr.execute(sumquery)
-        sumrecords = cr.dictfetchall()
+        request.env.cr.execute(sumquery)
+        sumrecords = request.cr.dictfetchall()
         for sum in sumrecords:
             if sum['qid'] not in sum_dict:
                 sum_dict[sum['qid']] = {
                                         'answered' : sum['total']
                                         }
         
-        tender_obj = request.registry('tender.tender')
-        subscribe = request.registry('subscribe.users')
+        tender_obj = request.env['tender.tender']
+        subscribe = request.env['subscribe.users']
         
         number1 = 1
         number2 = 2
@@ -343,55 +324,14 @@ class NominTender(http.Controller):
         elif type_ids and post['email'] == '':
             return http.local_redirect('/new_tenders')
         else:
-            sub_user = subscribe.search(cr, SUPERUSER_ID, [('email', '=', post['email'])])
+            sub_user = subscribe.sudo().search([('email', '=', post['email'])])
             if sub_user:
-                subscribe.write(cr, SUPERUSER_ID, sub_user, {
-                                                    'tender_type_ids': [(6, 0, [type_ids])]
-                                                    }, context)
+                sub_user.sudo().write({'tender_type_ids': [(6, 0, [type_ids])]
+                                                    })
                 return http.local_redirect('/new_tenders')
             else:
-                sub_id = subscribe.create(cr, SUPERUSER_ID, {
-                                                   'tender_type_ids': [(6, 0, [type_ids])],
-                                                   'email': post['email'],
-                                                   }, context)
+                subscribe.sudo().create({'tender_type_ids': [(6, 0, [type_ids])],'email': post['email']})
                 return http.local_redirect('/new_tenders')
-
-        
-        if (uid!=3):
-            tender_ids = tender_obj.search(cr, SUPERUSER_ID, [('is_publish','=',True)], order='published_date desc', limit=ppg, context=context)
-        else:
-            tender_ids = tender_obj.search(cr, SUPERUSER_ID, [('is_publish','=',True), ('is_open_tender','=',True)], order='published_date desc', limit=ppg, context=context)
-        
-        tender_type_ids = request.registry('tender.type').search(cr, SUPERUSER_ID, [], context=context)
-        tender_types = request.registry('tender.type').browse(cr, SUPERUSER_ID, tender_type_ids, context) 
-        tenders = tender_obj.browse(cr, SUPERUSER_ID, tender_ids, context)
-        tender_tender_ids = []
-        
-        for tender in tenders:
-            if user_id.partner_id.id in tender.requirement_partner_ids.ids and tender.is_open_tender == False:
-                tender_tender_ids.append(tender)
-            if tender.is_open_tender == True:
-                tender_tender_ids.append(tender)
-        
-        url = "/new_tenders"
-        tender_count = tender_obj.search_count(cr, uid, [('is_publish','=',True)], context=context)
-        
-        pager = request.website.pager(url=url, total=tender_count, page=page,
-                                      step=self._results_per_page, scope=3,
-                                      url_args=post)
-        values ={
-                  'suggestions': sugges,
-                  'survey_question': survey_question or '',
-                  'question_dict': question_dict,
-                  'answer_dict': answer_dict,
-                  'sum_dict': sum_dict,
-                  'new_tenders':tender_tender_ids,
-                  'tender_types':tender_types,
-                  'pager': pager
-                }
-
-        return request.website.render("nomin_web.new_tender_list", values)
-    
     
     def _get_search_domain(self, category):
         domain = [('is_publish','=',True)]
@@ -413,8 +353,7 @@ class NominTender(http.Controller):
         '/tender_list/category_id/link_<model("tender.type"):category>/page/<int:page>', 
         ], type='http', auth="public", website=True)
     def tenders(self, page=1, category=None, ppg=False, **post):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        user_id = request.registry('res.users').browse(request.cr, SUPERUSER_ID, uid)
+        user_id = user = request.env['res.users'].sudo().browse(request.uid)
         
         if ppg:
             try:
@@ -427,29 +366,25 @@ class NominTender(http.Controller):
         
         domain = self._get_search_domain(category)
         
-        Users=request.registry('res.users')
-        user=Users.browse(request.cr, request.uid, request.uid)
-        self.partner_id=user.partner_id[0].id#partner_id of online user
+        self.partner_id=user_id.partner_id[0].id#partner_id of online user
 
-        tender_obj = request.registry('tender.tender')
-        tender_type_obj = request.registry('tender.type')
-        tender_documents=request.registry('res.partner.documents')
+        tender_obj = request.env['tender.tender']
+        tender_type_obj = request.env['tender.type']
+        tender_documents=request.env['res.partner.documents']
         url = "/tender_list"
         values = {}
-        tender_count = tender_obj.search_count(cr, SUPERUSER_ID, domain, context=context)
+        tender_count = tender_obj.search_count(domain)
         pager = request.website.pager(url=url, total=tender_count, page=page, step=ppg, scope=7, url_args=post)
-        tender_ids = tender_obj.search(cr, SUPERUSER_ID, domain, limit=ppg, offset=pager['offset'], order='name desc', context=context)
+        tenders = tender_obj.search( domain, limit=ppg, offset=pager['offset'], order='name desc')
         
 #         print '\n\n\n\n\\n\n\ntender_count', tender_count
         if category:
             url = "/tender_list/category_id/link_%s" %int(category)
-            tender_count = tender_obj.search_count(cr, SUPERUSER_ID, domain, context=context)
+            tender_count = tender_obj.search_count(domain)
             pager = request.website.pager(url=url, total=tender_count, page=page, step=ppg, scope=7, url_args=post)
-            tender_ids = tender_obj.search(cr, SUPERUSER_ID, domain, limit=ppg, offset=pager['offset'], order='name desc', context=context)
+            tenders = tender_obj.search(domain, limit=ppg, offset=pager['offset'], order='name desc')
                 
-        tenders = tender_obj.browse(cr, SUPERUSER_ID, tender_ids, context)
-        tender_type_ids = tender_type_obj.search(cr, SUPERUSER_ID, [], context=context)
-        tender_types = tender_type_obj.browse(cr, SUPERUSER_ID, tender_type_ids, context)
+        tender_types = tender_type_obj.search([])
         dt = time.strftime('%Y-%m-%d')
         tender_tender_ids = []
         
@@ -462,13 +397,13 @@ class NominTender(http.Controller):
         values ={
                   'tenders':tender_tender_ids,
                   'tender_types':tender_types,
-                  'user_type':uid, 
+                  'user_type':request.uid, 
                   'start_date': dt,
                   'end_date': dt,
                   'pager': pager
                 }
         #return self.page(page)
-        return request.website.render("nomin_web.tender_list", values)
+        return request.website.render("nomin_web.tender_list", values)        
     
         
     @http.route([
@@ -476,8 +411,7 @@ class NominTender(http.Controller):
         '/tender_list/published/page/<int:page>',
         ], type='http', auth="public", website=True)
     def publish_tenders(self, page=1, ppg=False, **post):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        user_id = request.registry('res.users').browse(request.cr, SUPERUSER_ID, uid)
+        user_id = user = request.env['res.users'].sudo().browse(request.uid)
         
         if ppg:
             try:
@@ -488,19 +422,18 @@ class NominTender(http.Controller):
         else:
             ppg = PPG
         
-        tender_obj = request.registry('tender.tender')
-        tender_type_obj = request.registry('tender.type')
+        tender_obj = request.env['tender.tender']
+        tender_type_obj = request.env['tender.type']
         
         values = {}
         url = "/tender_list/published"
-        tender_count = tender_obj.search_count(cr, SUPERUSER_ID, [('is_publish','=',True), ('state','=','published')], context=context)
+        tender_count = tender_obj.sudo().search_count([('is_publish','=',True), ('state','=','published')])
         pager = request.website.pager(url=url, total=tender_count, page=page, step=ppg, scope=7, url_args=post)
-        if (uid!=3):
-            tender_ids = tender_obj.search(cr, SUPERUSER_ID, [('is_publish','=',True), ('state','=','published')], limit=ppg, offset=pager['offset'], order='name desc', context=context)
+        if (request.uid!=3):
+            tenders = tender_obj.sudo().search([('is_publish','=',True), ('state','=','published')], limit=ppg, offset=pager['offset'], order='name desc')
         else:
-            tender_ids = tender_obj.search(cr, SUPERUSER_ID, [('is_publish','=',True), ('is_open_tender','=',True), ('state','=','published')], limit=ppg, offset=pager['offset'], order='name desc', context=context)
+            tenders = tender_obj.sudo().search([('is_publish','=',True), ('is_open_tender','=',True), ('state','=','published')], limit=ppg, offset=pager['offset'], order='name desc')
         tender_tender_ids = []
-        tenders = tender_obj.browse(cr, SUPERUSER_ID, tender_ids, context)
         
         for tender in tenders:
             if user_id.partner_id.id in tender.requirement_partner_ids.ids and tender.is_open_tender == False:
@@ -508,13 +441,12 @@ class NominTender(http.Controller):
             if tender.is_open_tender == True:
                 tender_tender_ids.append(tender)
                 
-        tender_type_ids = tender_type_obj.search(cr, SUPERUSER_ID, [], context=context)
-        tender_types = tender_type_obj.browse(cr, SUPERUSER_ID, tender_type_ids, context)
+        tender_type_ids = tender_type_obj.sudo().search([])
         dt = time.strftime('%Y-%m-%d')
         
         values ={
                   'tenders':tender_tender_ids,
-                  'tender_types':tender_types,
+                  'tender_types':tender_type_ids,
                   'pager': pager, 
                   'start_date': dt,
                   'end_date': dt,
@@ -527,8 +459,7 @@ class NominTender(http.Controller):
         '/tender_list/unpublished/page/<int:page>',
         ], type='http', auth="public", website=True)
     def unpublish_tenders(self, page=1, ppg=False, **post):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        user_id = request.registry('res.users').browse(request.cr, SUPERUSER_ID, uid)
+        user_id = user = request.env['res.users'].sudo().browse(request.uid)
         
         if ppg:
             try:
@@ -539,19 +470,18 @@ class NominTender(http.Controller):
         else:
             ppg = PPG
             
-        tender_obj = request.registry('tender.tender')
-        tender_type_obj = request.registry('tender.type')
+        tender_obj = request.env('tender.tender')
+        tender_type_obj = request.env('tender.type')
         
         values = {}
         url = "/tender_list/unpublished"
-        tender_count = tender_obj.search_count(cr, SUPERUSER_ID, [('is_publish','=',True), ('state','!=','published')], context=context)
+        tender_count = tender_obj.sudo().search_count([('is_publish','=',True), ('state','!=','published')])
         pager = request.website.pager(url=url, total=tender_count, page=page, step=ppg, scope=7, url_args=post)
-        if (uid!=3):
-            tender_ids = tender_obj.search(cr, SUPERUSER_ID, [('is_publish','=',True), ('state','!=','published')], limit=ppg, offset=pager['offset'], order='name desc', context=context)
+        if (request.uid!=3):
+            tenders = tender_obj.sudo().search([('is_publish','=',True), ('state','!=','published')], limit=ppg, offset=pager['offset'], order='name desc')
         else:
-            tender_ids = tender_obj.search(cr, SUPERUSER_ID, [('is_publish','=',True), ('is_open_tender','=',True), ('state','!=','published')], limit=ppg, offset=pager['offset'], order='name desc', context=context)
+            tenders = tender_obj.sudo().search([('is_publish','=',True), ('is_open_tender','=',True), ('state','!=','published')], limit=ppg, offset=pager['offset'], order='name desc')
         tender_tender_ids = []
-        tenders = tender_obj.browse(cr, SUPERUSER_ID, tender_ids, context)
         
         #урилга авсан харилцагчдыг шалгаж байна
         for tender in tenders:
@@ -560,8 +490,7 @@ class NominTender(http.Controller):
             if tender.is_open_tender == True:
                 tender_tender_ids.append(tender)
         
-        tender_type_ids = tender_type_obj.search(cr, SUPERUSER_ID, [], context=context)
-        tender_types = tender_type_obj.browse(cr, SUPERUSER_ID, tender_type_ids, context)
+        tender_types = tender_type_obj.sudo().search([])
         dt = time.strftime('%Y-%m-%d')
         
         values ={
@@ -576,13 +505,7 @@ class NominTender(http.Controller):
 
     @http.route('/tender_detail/<model("tender.tender"):tender>/', auth='public', website=True)
     def news_detail(self, tender):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        user_id = request.registry('res.users').browse(request.cr, SUPERUSER_ID, uid)
-        
-        #self.variables=tender
-        doc_complete=None
-        tech_complete=None
-        quota_complete=None
+        user_id = user = request.env['res.users'].sudo().browse(request.uid)
         
         part_ids = []
         user_ids = []
@@ -592,62 +515,45 @@ class NominTender(http.Controller):
         partner_docs = ''
         
 
-        tender_obj = request.registry('tender.tender')
-        type_obj = request.registry('tender.type')
-        tender_type_ids = request.registry('tender.type').search(request.cr, SUPERUSER_ID, [])
-        tender_types = request.registry('tender.type').browse(request.cr, SUPERUSER_ID, tender_type_ids)
+        tender_obj = request.env['tender.tender']
+        type_obj = request.env['tender.type']
+        tender_types = request.env['tender.type'].sudo().search([])
         
-        valuation_ids=request.registry['tender.valuation'].search(request.cr, SUPERUSER_ID,[('tender_id','=',tender.id)])
-        valuations=request.registry['tender.valuation'].browse(request.cr, SUPERUSER_ID, valuation_ids)
+        valuations=request.env['tender.valuation'].sudo().search([('tender_id','=',tender.id)])
         
-        val_partner=request.registry['tender.valuation.partner']
-        participant_ids = val_partner.search(request.cr, SUPERUSER_ID,[('tender_id','=',tender.id)])
-        partner_valuation = val_partner.browse(request.cr, SUPERUSER_ID, participant_ids)
+        val_partner=request.env['tender.valuation.partner']
+        partner_valuation = val_partner.sudo().search([('tender_id','=',tender.id)])
         if partner_valuation:
             for order in partner_valuation:
                 part_ids.append(order.partner_id.id)
                 if order.is_win == True:
-                    winning_partners.append(order.id)
+                    winning_partners.append(order)
                 if order.is_win == False:
-                    defeated_partners.append(order.id)
+                    defeated_partners.append(order)
             
             if part_ids:
-                user_ids = request.registry('res.users').search(request.cr, SUPERUSER_ID, [('partner_id','in',part_ids)])
+                user_ids = request.env['res.users'].sudo().search([('partner_id','in',part_ids)])
                 _logger.info(u'\n\n\n\n\n Тендерт оролцсон хэрэглэгчид %s', user_ids)
-            if winning_partners:
-                winning_partners = val_partner.browse(request.cr,SUPERUSER_ID, winning_partners)
-            if defeated_partners:
-                defeated_partners = val_partner.browse(request.cr,SUPERUSER_ID, defeated_partners)
-            
         
-        sametenders = ''
-        tender_ids = []
-        inv_tenders = ()
         partner_bid = ''
         query = "select * from tender_require_partner_rel where res_partner_id = %s and tender_tender_id = %s"%(user_id.partner_id.id, tender.id)
-        cr.execute(query)
-#         print 'n\n\n\n\n\n\nqueryqueryqueryquery',query
-        attend_tenders = cr.dictfetchall()
-        
-        if attend_tenders:
-            attend_tenders = attend_tenders
+        request.env.cr.execute(query)
+        attend_tenders = request.env.cr.dictfetchall()
                 
-        partner_doc=request.registry['res.partner.documents']
-        doc_id=partner_doc.search(request.cr, SUPERUSER_ID, [('partner_id','=',user_id.partner_id.id)])
+        partner_doc=request.env['res.partner.documents']
+        doc_id=partner_doc.sudo().search([('partner_id','=',user_id.partner_id.id)])
         if doc_id:
-            partner_docs=partner_doc.browse(request.cr, SUPERUSER_ID, doc_id[0])
+            partner_docs = doc_id
         
-        
-        participants=request.registry['tender.participants.bid']
-        participant_ids=participants.search(request.cr, SUPERUSER_ID, [('partner_id','=',user_id.partner_id.id),('tender_id','=',tender.id)])
+        participants=request.env['tender.participants.bid']
+        participant_ids=participants.sudo().search([('partner_id','=',user_id.partner_id.id),('tender_id','=',tender.id)])
         if participant_ids:
-            partner_bid = participants.browse(request.cr, SUPERUSER_ID, participant_ids[0])
+            partner_bid =  participant_ids[0]
         
         same_tender_ids = []
-        type_id = tender_obj.search(cr, SUPERUSER_ID, [('is_publish','=',True),('type_id','=',tender.type_id.id),('id', '!=', tender.id)], limit=6, order='name desc', context=context)
-        if type_id:
-            sametenders = tender_obj.browse(cr, SUPERUSER_ID, type_id)
-            for sametender in sametenders:
+        type_ids = tender_obj.sudo().search([('is_publish','=',True),('type_id','=',tender.type_id.id),('id', '!=', tender.id)], limit=6, order='name desc')
+        if type_ids:
+            for sametender in type_ids:
                 if user_id.partner_id.id in sametender.requirement_partner_ids.ids:
                     same_tender_ids.append(sametender)
                 if sametender.is_open_tender:
@@ -661,8 +567,7 @@ class NominTender(http.Controller):
                  '/result_list/page/<int:page>', 
         ], type='http', auth="public", website=True)
     def tender_results(self, page=1, category=False, ppr=False, **post):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        user_id=request.registry('res.users').browse(request.cr, SUPERUSER_ID, request.uid)
+        user_id = user = request.env['res.users'].sudo().browse(request.uid)
         
         if ppr:
             try:
@@ -676,18 +581,15 @@ class NominTender(http.Controller):
         domain = self._get_search_domain(category)
         self.partner_id=user_id.partner_id[0].id#partner_id of online user
         
-        tender_obj = request.registry('tender.tender')
-        tender_type_obj = request.registry('tender.type')
-        valuation_obj = request.registry('tender.valuation')
-        partner_valuation_obj = request.registry('tender.valuation.partner')
+        tender_obj = request.env['tender.tender']
+        tender_type_obj = request.env['tender.type']
         
         values = {}
         url = "/result_list"
-        tender_count = tender_obj.search_count(cr, SUPERUSER_ID, domain, context=context)
+        tender_count = tender_obj.sudo().search_count(domain)
         pager = request.website.pager(url=url, total=tender_count, page=page, step=ppg, scope=7, url_args=post)
         
-        tender_ids = tender_obj.search(cr, SUPERUSER_ID, domain, limit=ppg, offset=pager['offset'], order='name desc', context=context)
-        tenders = tender_obj.browse(cr, SUPERUSER_ID, tender_ids, context)
+        tenders = tender_obj.sudo().search( domain, limit=ppg, offset=pager['offset'], order='name desc')
         
         tender_tender_ids = []
         for tender in tenders:
@@ -696,14 +598,13 @@ class NominTender(http.Controller):
             if tender.is_open_tender == True:
                 tender_tender_ids.append(tender)
         
-        tender_type_ids = tender_type_obj.search(cr, SUPERUSER_ID, [], context=context)
-        tender_types = tender_type_obj.browse(cr, SUPERUSER_ID, tender_type_ids, context)
+        tender_types = tender_type_obj.sudo().search([])
         dt = time.strftime('%Y-%m-%d')
         
         values ={
                   'tender_results':tender_tender_ids,
                   'tender_types':tender_types,
-                  'user_type':uid,
+                  'user_type':request.uid,
                   'start_date': dt,
                   'end_date': dt,
                   'pager': pager
@@ -713,11 +614,8 @@ class NominTender(http.Controller):
 
     
     @http.route('/result_details/<model("tender.tender"):tender>/', type='http', auth="public", website=True)
-  #  @http.route('/result_details/<model("tender.tender"):tender>/', auth='public', website=True)
     def results_details(self, tender):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        user_id=request.registry('res.users').browse(request.cr, SUPERUSER_ID, request.uid)
-        sametenders = ''
+        user_id = user = request.env['res.users'].sudo().browse(request.uid)
 
         part_ids = []
         user_ids = []
@@ -726,40 +624,28 @@ class NominTender(http.Controller):
         valuations = ()
         
         
-        tender_obj = request.registry('tender.tender')
-        tender_type_ids = request.registry('tender.type').search(request.cr, SUPERUSER_ID, [])
-        tender_types = request.registry('tender.type').browse(request.cr, SUPERUSER_ID, tender_type_ids)
+        tender_obj = request.env['tender.tender']
+        tender_types = request.env['tender.type'].sudo().search([])
 
-        valuation_ids=request.registry['tender.valuation'].search(request.cr, SUPERUSER_ID,[('tender_id','=',tender.id)])
-        valuations=request.registry['tender.valuation'].browse(request.cr, SUPERUSER_ID, valuation_ids)
+        valuations=request.env['tender.valuation'].sudo().search([('tender_id','=',tender.id)])
                  
-        val_partner=request.registry['tender.valuation.partner']
-        participant_ids = val_partner.search(request.cr, SUPERUSER_ID,[('tender_id','=', tender.id)])
-        participants = val_partner.browse(request.cr, SUPERUSER_ID, participant_ids)
+        val_partner=request.env['tender.valuation.partner']
+        participants = val_partner.sudo().search([('tender_id','=', tender.id)])
         if participants:
             for order in participants:
                 part_ids.append(order.partner_id.id)
                 if order.is_win == True:
-                    winning_partners.append(order.id)
+                    winning_partners.append(order)
                 if order.is_win == False:
-                    defeated_partners.append(order.id)
+                    defeated_partners.append(order)
             
             if part_ids:
                 user_ids = request.registry('res.users').search(request.cr, SUPERUSER_ID, [('partner_id','in',part_ids)])
                 _logger.info(u'\n\n\n\n\n Тендерт оролцсон хэрэглэгчид %s', user_ids)
-             
-            if winning_partners:
-                winning_partners = val_partner.browse(request.cr, SUPERUSER_ID, winning_partners)
-            if defeated_partners:
-                defeated_partners = val_partner.browse(request.cr, SUPERUSER_ID, defeated_partners)
-        
-             
         same_tender_ids = []
-        type_id = tender_obj.search(cr, SUPERUSER_ID, [('is_publish','=',True),('type_id','=',tender.type_id.id),('id', '!=', tender.id)])
-        if type_id:
-            sametenders = tender_obj.browse(cr, SUPERUSER_ID, type_id)
-            
-            for sametender in sametenders:
+        tender_type_ids = tender_obj.sudo().search([('is_publish','=',True),('type_id','=',tender.type_id.id),('id', '!=', tender.id)])
+        if tender_type_ids:
+            for sametender in tender_type_ids:
                 if user_id.partner_id.id in sametender.requirement_partner_ids.ids:
                     same_tender_ids.append(sametender)
                 if sametender.is_open_tender:
@@ -768,7 +654,7 @@ class NominTender(http.Controller):
         values ={
                     'tender': tender,
                     'tender_types': tender_types,
-                    'user_type': uid,
+                    'user_type': request.uid,
                     'valuations': valuations,
                     'defeated_partners': defeated_partners,
                     'winning_partners': winning_partners,
@@ -780,9 +666,8 @@ class NominTender(http.Controller):
     
     @http.route('/tender/create/documents/<model("tender.tender"):tender>/', type='http', auth="public", website=True)
     def my_tender_bid(self, tender):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        user_id = request.registry('res.users').browse(request.cr, SUPERUSER_ID, request.uid)
-        tender = request.registry('tender.tender').browse(cr, SUPERUSER_ID, tender.id)
+        user_id = user = request.env['res.users'].sudo().browse(request.uid)
+        tender = request.env['tender.tender'].sudo().browse(tender.id)
 
         vals = {
                 'tender': tender,
@@ -798,25 +683,19 @@ class NominTender(http.Controller):
     '/create/tender/documents/',
     ], type='http', auth="public", methods=['GET', 'POST'], website=True)
     def tender_document_save(self, upload=None, **kw):
-        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        users = request.registry('res.users')
-        user = users.browse(cr, SUPERUSER_ID, uid)
+        user_id = user = request.env['res.users'].sudo().browse(request.uid)
         
-        Attachments = request.registry['ir.attachment']
-        tenders = request.registry('tender.tender')
-        res_partner_documents = request.registry['res.partner.documents']
-        participants = request.registry('tender.participants.bid')
-        participants_lines = request.registry('participants.work.task.line')
+        Attachments = request.env['ir.attachment']
+        tenders = request.env['tender.tender']
+        res_partner_documents = request.env['res.partner.documents']
+        participants = request.env['tender.participants.bid']
+        participants_lines = request.env['participants.work.task.line']
         
-        #tender_ids = tenders.search(cr, SUPERUSER_ID, [('id','=',participant.tender_id.id)])
-        t_id = []
-        part_lines = []
-        partner_doc_id = res_partner_documents.search(cr, SUPERUSER_ID, [('partner_id', '=', user.partner_id.id)])
-        partner_doc = res_partner_documents.browse(cr, SUPERUSER_ID, partner_doc_id)
+        partner_doc = res_partner_documents.sudo().search([('partner_id', '=', user_id.partner_id.id)])
 
         if kw.get('tender'):
             
-            tender = tenders.browse(cr, SUPERUSER_ID, int(kw.get('tender')))
+            tender = tenders.sudo().browse(int(kw.get('tender')))
             
             att_proxy_id = []
             att_technical_id = []
@@ -830,100 +709,98 @@ class NominTender(http.Controller):
             if kw.get('proxy', False):
                 upload = kw.get('proxy')
                 image_data = upload.read()                
-                att_proxy_id = Attachments.create(request.cr, request.uid, {
+                att_proxy_id = Attachments.create( {
                         'name': upload.filename,
                         'datas': image_data.encode('base64'),
                         'datas_fname': upload.filename,
                         'res_model': 'tender.participants.bid',
-                    }, request.context)
+                    })
                 
             if kw.get('technical', False):
                 upload = kw.get('technical')
                 image_data = upload.read()                
-                att_technical_id = Attachments.create(request.cr, request.uid, {
+                att_technical_id = Attachments.create({
                         'name': upload.filename,
                         'datas': image_data.encode('base64'),
                         'datas_fname': upload.filename,
                         'res_model': 'tender.participants.bid',
-                    }, request.context)
+                    })
 
                 
             if kw.get('work_list', False):
                 upload = kw.get('work_list')
                 image_data = upload.read()                
-                att_worklist_id = Attachments.create(request.cr, request.uid, {
+                att_worklist_id = Attachments.create({
                         'name': upload.filename,
                         'datas': image_data.encode('base64'),
                         'datas_fname': upload.filename,
                         'res_model': 'tender.participants.bid',
-                    }, request.context)
+                    })
                 
             if kw.get('requirement', False):
                 upload = kw.get('requirement')
                 image_data = upload.read()                
-                att_requirement_id = Attachments.create(request.cr, request.uid, {
+                att_requirement_id = Attachments.create( {
                         'name': upload.filename,
                         'datas': image_data.encode('base64'),
                         'datas_fname': upload.filename,
                         'res_model': 'tender.participants.bid',
-                    }, request.context)
+                    })
             
             if kw.get('license', False):
                 upload = kw.get('license')
                 image_data = upload.read()                
-                att_license_id = Attachments.create(request.cr, request.uid, {
+                att_license_id = Attachments.create({
                         'name': upload.filename,
                         'datas': image_data.encode('base64'),
                         'datas_fname': upload.filename,
                         'res_model': 'tender.participants.bid',
-                    }, request.context)
+                    })
                      
             if kw.get('alternative', False):
                 upload = kw.get('alternative')
                 image_data = upload.read()                
-                att_alternative_id = Attachments.create(request.cr, request.uid, {
+                att_alternative_id = Attachments.create({
                         'name': upload.filename,
                         'datas': image_data.encode('base64'),
                         'datas_fname': upload.filename,
                         'res_model': 'tender.participants.bid',
-                    }, request.context)
+                    })
             
             if kw.get('cost', False):
                 upload = kw.get('cost')
                 image_data = upload.read()                
-                att_cost_id = Attachments.create(request.cr, request.uid, {
+                att_cost_id = Attachments.create({
                         'name': upload.filename,
                         'datas': image_data.encode('base64'),
                         'datas_fname': upload.filename,
                         'res_model': 'tender.participants.bid',
-                    }, request.context)
+                    })
                 
             if kw.get('schedule', False):
                 upload = kw.get('schedule')
                 image_data = upload.read()                
-                att_schedule_id = Attachments.create(request.cr, request.uid, {
+                att_schedule_id = Attachments.create({
                         'name': upload.filename,
                         'datas': image_data.encode('base64'),
                         'datas_fname': upload.filename,
                         'res_model': 'tender.participants.bid',
-                    }, request.context)
+                    })
             if kw.get('control_budget', False):
                 upload = kw.get('control_budget')
                 image_data = upload.read()                
-                control_budget_id = Attachments.create(request.cr, request.uid, {
+                control_budget_id = Attachments.create({
                         'name': upload.filename,
                         'datas': image_data.encode('base64'),
                         'datas_fname': upload.filename,
                         'res_model': 'tender.participants.bid',
-                    }, request.context)
-            
-                       
+                    })
 
-            part_id = participants.create(request.cr, request.uid,  
+            part_id = participants.create(
                                         {
-                                            'name': tender.desc_name + ' - ' + user.partner_id.name,
+                                            'name': tender.desc_name + ' - ' + user_id.partner_id.name,
                                             'tender_id': tender.id,
-                                            'partner_id': user.partner_id.id,
+                                            'partner_id': user_id.partner_id.id,
                                             'document_id': partner_doc.id,
                                             't_partner_proxy_id': att_proxy_id,
                                             't_partner_technical_id': att_technical_id,
@@ -936,30 +813,24 @@ class NominTender(http.Controller):
                                             't_partner_control_budget_id': control_budget_id,
                                             'execute_time': kw.get('execute_time'),
                                             'warranty_time': kw.get('warranty_time'),
-                                        }, request.context)
+                                        })
             count = 1
-            line_id = []
-            checklines = []
-            del_ids = []
             booleann=True
-            old_work = len(part_lines)
-#             print 'n\n\n\n\n\n\n-----------request-----', kw
             while (booleann):
                 if 'work%d'%count in kw:                   
-                    
-                    participants_lines.create(request.cr, request.uid, 
+                    participants_lines.create(
                                                         {
                                                             'name':kw["work%d"%count],
                                                             'tender_id': tender.id,
                                                             'task_id': part_id,
-                                                            'partner_id': user.partner_id.id,
+                                                            'partner_id': user_id.partner_id.id,
                                                             'qty': float(kw["hemjee%d"%count]),
                                                             'unit_price': float(kw["negjune%d"%count]),
 #                                                             'amount': float(kw["hemjee%d"%count])*float(kw["negjune%d"%count]),
                                                             'costs_of_materials': float(kw["material%d"%count] or 0),
                                                             'other_costs': float(kw["busadzardal%d"%count] or 0),
 #                                                             'line_total_amount': float(kw["hemjee%d"%count])*float(kw["negjune%d"%count])+float(kw["material%d"%count])+float(kw["busadzardal%d"%count])
-                                                         }, request.context)
+                                                         })
                     
                 else:
                     booleann=False
@@ -967,28 +838,20 @@ class NominTender(http.Controller):
                     
                 count = count + 1
         
-        participant_ids = participants.search(cr, SUPERUSER_ID, [('partner_id','=', user.partner_id.id),('tender_id','=',tender.id)])
-        part_tenders = participants.browse(cr, SUPERUSER_ID, participant_ids)
+        part_tenders = participants.sudo().search([('partner_id','=', user_id.partner_id.id),('tender_id','=',tender.id)])
         
-        participant_line_ids = participants_lines.search(cr, SUPERUSER_ID, [('partner_id','=', user.partner_id.id),('tender_id','=',tender.id),('task_id','=',participant_ids[0])])
-        lines = participants_lines.browse(cr, SUPERUSER_ID, participant_line_ids)
+        lines = participants_lines.sudo().search([('partner_id','=', user_id.partner_id.id),('tender_id','=',tender.id),('task_id','=',part_tenders[0].id)])
         return request.website.render("nomin_web.my_tenders_documents_details", {
             'tender': tender,
             'part_tenders': part_tenders,
             'lines': lines,
         })
-        # return request.website.render("nomin_web.send_tender", {
-        #     'tender': tender,
-        #     'part_tenders': part_tenders,
-        #     'lines': lines,
-        # })
 
     @http.route(['/search_results/',
                  '/search_results/page/<int:page>'], 
                 type='http', auth="public", website=True)
-#     def search_results(self, **kw):
     def search_results(self, page=1, ppg=False, sorting='date_end', startdate='', enddate='', category='', tendername='', category_id='', child_cate_id='', status='', **post):
-        cr, uid, context = request.cr, request.uid, request.context
+        user_id = user = request.env['res.users'].sudo().browse(request.uid)
         
         if ppg:
             try:
@@ -999,11 +862,10 @@ class NominTender(http.Controller):
         else:
             ppg = PPG
             
-        tender_obj = request.registry('tender.tender')
-        tender_type_obj = request.registry('tender.type')
+        tender_obj = request.env['tender.tender']
+        tender_type_obj = request.env['tender.type']
         
-        tender_type_ids = tender_type_obj.search(cr, SUPERUSER_ID, [], context=context)
-        tender_types = tender_type_obj.browse(cr, SUPERUSER_ID, tender_type_ids, context)
+        tender_types = tender_type_obj.sudo().search([])
         
         # Define search scope
         search_on_pages=self._search_on_pages
@@ -1049,17 +911,16 @@ class NominTender(http.Controller):
                                  OFFSET %s
                                  """ % (sql_query, sql_order_by, limit, offset)
         
-        cr.execute(sql_query)
-        records = cr.dictfetchall()
+        request.env.cr.execute(sql_query)
+        records = request.env.cr.dictfetchall()
         tender_ids = []
         t_ids = []
         for record in records:
             tender_ids.append(record ['id'])
-#             print 'n\n\n\n\n\n\ntender_ids', tender_ids
         # Get results count for pager
         if sql_query_count:
-            cr.execute(sql_query_count)
-            results_count=cr.fetchone()[0] or 0
+            request.env.cr.execute(sql_query_count)
+            results_count=request.env.cr.fetchone()[0] or 0
             
         url_args = {}
         if startdate:
@@ -1086,12 +947,11 @@ class NominTender(http.Controller):
         if sorting:
             url_args['sorting'] = sorting
             pager = request.website.pager(url=url, total=results_count, page=page, step=ppg, scope=7, url_args=url_args)
-            t_ids = tender_obj.search(cr, SUPERUSER_ID, [('id','in',tender_ids)], limit=ppg, offset=pager['offset'], order='name desc', context=context)
-            
-        user = request.registry['res.users'].browse(request.cr, request.uid, request.uid, context=request.context)  
-        tenders = tender_obj.browse(cr, SUPERUSER_ID, t_ids, context)      
+            tenders = tender_obj.sudo().search([('id','in',tender_ids)], limit=ppg, offset=pager['offset'], order='name desc')
+        if not tenders:
+            tenders = tender_obj.sudo().search([], limit=ppg, offset=pager['offset'], order='name desc')     
         values = {
-                  'user': user,
+                  'user': user_id,
                   'pager': pager,
                   'sorting': sorting,
                   'startdate': startdate,
@@ -1111,10 +971,8 @@ class NominTender(http.Controller):
     @http.route(['/result/search_results/',
                  '/result/search_results/page/<int:page>'], 
                 type='http', auth="public", website=True)
-#     def search_results(self, **kw):
     def tenderresult_search_results(self, page=1, ppg=False, sorting='date_end', startdate='', enddate='', category='', tendername='',category_id='',child_cate_id='', state='', **post):
-        cr, uid, context = request.cr, request.uid, request.context
-        
+        user_id = user = request.env['res.users'].sudo().browse(request.uid)
         if ppg:
             try:
                 ppg = int(ppg)
@@ -1124,11 +982,10 @@ class NominTender(http.Controller):
         else:
             ppg = PPG
             
-        tender_obj = request.registry('tender.tender')
-        tender_type_obj = request.registry('tender.type')
+        tender_obj = request.env['tender.tender']
+        tender_type_obj = request.env['tender.type']
         
-        tender_type_ids = tender_type_obj.search(cr, SUPERUSER_ID, [], context=context)
-        tender_types = tender_type_obj.browse(cr, SUPERUSER_ID, tender_type_ids, context)
+        tender_types = tender_type_obj.search(SUPERUSER_ID, [])
         
         # Define search scope
         search_on_pages=self._search_on_pages
@@ -1175,8 +1032,8 @@ class NominTender(http.Controller):
                                  """ % (sql_query, sql_order_by, limit, offset)
             
         
-        cr.execute(sql_query)
-        records = cr.dictfetchall()
+        request.env.cr.execute(sql_query)
+        records = request.env.cr.dictfetchall()
         tender_ids = []
         t_ids = []
 
@@ -1184,8 +1041,8 @@ class NominTender(http.Controller):
             tender_ids.append(record ['id'])
         # Get results count for pager
         if sql_query_count:
-            cr.execute(sql_query_count)
-            results_count=cr.fetchone()[0] or 0
+            request.env.cr.execute(sql_query_count)
+            results_count=request.env.cr.fetchone()[0] or 0
             
         url_args = {}
         if startdate:
@@ -1209,17 +1066,15 @@ class NominTender(http.Controller):
         if state:
             url_args['state'] = state
             
-#        if search_on:
-#            url_args['search_on'] = search_on
         if sorting:
             url_args['sorting'] = sorting
             pager = request.website.pager(url=url, total=results_count, page=page, step=ppg, scope=7, url_args=url_args)
-            t_ids = tender_obj.search(cr, SUPERUSER_ID, [('id','in',tender_ids)], limit=ppg, offset=pager['offset'], order='name desc', context=context)           
+            tenders = tender_obj.sudo().search([('id','in',tender_ids)], limit=ppg, offset=pager['offset'], order='name desc')           
 
-        user = request.registry['res.users'].browse(request.cr, request.uid, request.uid, context=request.context)  
-        tenders = tender_obj.browse(cr, SUPERUSER_ID, t_ids, context)      
-        values = {'user': user,
-                  'is_public_user': user.id == request.website.user_id.id,
+        if not tenders:
+            tenders = tender_obj.sudo().search([], limit=ppg, offset=pager['offset'], order='name desc')     
+        values = {'user': user_id,
+                  'is_public_user': user_id.id == request.website.user_id.id,
                   'header': post.get('header', dict()),
                   'searches': post.get('searches', dict()),
                   'results_per_page': self._results_per_page,
@@ -1245,9 +1100,8 @@ class NominTender(http.Controller):
     @http.route(['/allresults/',
                  '/allresults/page/<int:page>'], 
                 type='http', auth="public", website=True)
-#     def search_results(self, **kw):
     def all_search(self, page=1, ppg=False, sorting='create_date', search='', **post):
-        cr, uid, context = request.cr, request.uid, request.context
+        user_id = user = request.env['res.users'].sudo().browse(request.uid)
         
         if ppg:
             try:
@@ -1258,12 +1112,11 @@ class NominTender(http.Controller):
         else:
             ppg = PPG
             
-        tender_obj = request.registry('tender.tender')
-        tender_type_obj = request.registry('tender.type')
-        tender_inv = request.registry('tender.invitation.guide')
+        tender_obj = request.env['tender.tender']
+        tender_type_obj = request.env['tender.type']
+        tender_inv = request.env['tender.invitation.guide']
         
-        tender_type_ids = tender_type_obj.search(cr, SUPERUSER_ID, [], context=context)
-        tender_types = tender_type_obj.browse(cr, SUPERUSER_ID, tender_type_ids, context)
+        tender_types = tender_type_obj.sudo().search( [])
         
         # Define search scope
         search_on_pages=self._search_on_pages
@@ -1306,16 +1159,16 @@ class NominTender(http.Controller):
                                  """ % (sql_query, sql_order_by, limit, offset)
             
         
-        cr.execute(sql_query)
-        records = cr.dictfetchall()
+        request.env.cr.execute(sql_query)
+        records = request.env.cr.dictfetchall()
         tender_ids = []
 
         for record in records:
             tender_ids.append(record['tender_id'])
         # Get results count for pager
         if sql_query_count:
-            cr.execute(sql_query_count)
-            results_count=cr.fetchone()[0] or 0
+            request.env.cr.execute(sql_query_count)
+            results_count=request.env.cr.fetchone()[0] or 0
             
         url_args = {}
         if search:
@@ -1325,14 +1178,14 @@ class NominTender(http.Controller):
         if sorting:
             url_args['sorting'] = sorting
             pager = request.website.pager(url=url, total=results_count, page=page, step=ppg, scope=7, url_args=url_args)
-            t_ids = tender_obj.search(cr, SUPERUSER_ID, [('id','in',tender_ids)], limit=ppg, offset=pager['offset'], order='name desc', context=context) 
+            t_ids = tender_obj.sudo().search([('id','in',tender_ids)], limit=ppg, offset=pager['offset'], order='name desc') 
 
-        user = request.registry['res.users'].browse(request.cr, request.uid, request.uid, context=request.context)  
-        tenders = tender_obj.browse(cr, SUPERUSER_ID, t_ids, context)
+        if not tenders:
+            tenders = tender_obj.sudo().search([], limit=ppg, offset=pager['offset'], order='name desc')     
 
         values = {
-                    'user': user,
-                    'is_public_user': user.id == request.website.user_id.id,
+                    'user': user_id,
+                    'is_public_user': user_id.id == request.website.user_id.id,
                     'header': post.get('header', dict()),
                     'searches': post.get('searches', dict()),
                     'results_per_page': self._results_per_page,
