@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
-<openerp>
+<odoo>
     <data>
         <record model="ir.ui.view" id="project_issue_report_form">
             <field name="name">project.issue.status.report.form</field>
             <field name="model">project.issue.status.report</field>
             <field name="arch" type="xml">
                 <form string="Асуудлын эмхэтгэл тайлан">
-                	<group>
-	                	<group>
-	                        <field name="project_id" widget="many2many_tags"/>
-	                        <field name="user_id" widget="many2many_tags" />
-						</group>
-	                    <group>
-	                        <field name="reason_id" widget="many2many_tags"/>
-	                        <field name="tag_ids" widget="many2many_tags"/>
-	                    </group>
+                    <group>
+                        <group>
+                            <field name="project_id" widget="many2many_tags"/>
+                            <field name="user_id" widget="many2many_tags" />
+                        </group>
+                        <group>
+                            <field name="reason_id" widget="many2many_tags"/>
+                            <field name="tag_ids" widget="many2many_tags"/>
+                        </group>
                     </group>
                     <footer>
                         <button name="export_report" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/>
@@ -27,20 +27,12 @@
         <record model="ir.actions.act_window" id="action_project_issue_report">
             <field name="name">Асуудлын эмхэтгэл тайлан</field>
             <field name="res_model">project.issue.status.report</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="project_issue_report_form"/>
             <field name="target">new</field>
         </record>
-		<menuitem id="menu_project_reports" name="Reports"
-            groups="project.group_project_manager"
-            parent="base.menu_main_pm" sequence="99"/>
-        <menuitem
-            id= "menu_project_issue_status_report"
-        	name = "Асуудлын эмхэтгэл тайлан"
-            parent="nomin_project.menu_project_reports"
-            sequence= "7"
-            action="action_project_issue_report"
-        />
+        <menuitem id="menu_project_reports" name="Reports" groups="project.group_project_manager" parent="base.menu_main_pm" sequence="99"/>
+        <menuitem id= "menu_project_issue_status_report"
+        	name = "Асуудлын эмхэтгэл тайлан" parent="nomin_project.menu_project_reports" sequence= "7" action="action_project_issue_report" />
     </data>
-</openerp>
+</odoo>

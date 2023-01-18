@@ -1,604 +1,599 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
-      
-      <report 
-            string="Хяналтын төсвийн баримт" 
-            id="action_control_budget_report_view" 
-            model="control.budget" 
-            report_type="qweb-pdf"
-            name="nomin_project.control_budget_report" 
-            file="nomin_project.control_budget_report"
-          />
-      
-      <record id="paperformat_control_budget" model="report.paperformat">
-        <field name="name">Хяналтын төсвийн баримт</field>
-        <field name="default" eval="True"/>
-        <field name="orientation">Portrait</field>
-        <field name="margin_top">5</field>
-        <field name="margin_bottom">23</field>
-        <field name="margin_left">15</field>
-        <field name="margin_right">5</field>
-        <field name="header_line" eval="False"/>
-        <field name="header_spacing">35</field>
-        <field name="dpi">90</field>
+<odoo>
+  <data>
+
+    <report string="Хяналтын төсвийн баримт" id="action_control_budget_report_view" model="control.budget" report_type="qweb-pdf" name="nomin_project.control_budget_report" file="nomin_project.control_budget_report" />
+
+    <record id="paperformat_control_budget" model="report.paperformat">
+      <field name="name">Хяналтын төсвийн баримт</field>
+      <field name="default" eval="True"/>
+      <field name="orientation">Portrait</field>
+      <field name="margin_top">5</field>
+      <field name="margin_bottom">23</field>
+      <field name="margin_left">15</field>
+      <field name="margin_right">5</field>
+      <field name="header_line" eval="False"/>
+      <field name="header_spacing">35</field>
+      <field name="dpi">90</field>
     </record>
-    
+
     <record id="nomin_project.action_control_budget_report_view" model="ir.actions.report.xml">
-        <field name="paperformat_id" ref="nomin_project.paperformat_control_budget" />
+      <field name="paperformat_id" ref="nomin_project.paperformat_control_budget" />
     </record>
-      
-      <!-- Хяналтын төсөв -->
-      <record id="control_budget_tree" model="ir.ui.view">
-        <field name="name">control.budget.tree</field>
-        <field name="model">control.budget</field>
-        <field name="type">tree</field>
-        <field name="arch" type="xml">
-          <tree string="Control budget">
-            <field name="budget_code"/>
-            <field name="name" invisible="1"/>
-            <field name="res_model" invisible="1"/>
-            <field name="res_id" invisible="1"/>
-            <field name="date"/>
-            <field name="user_id"/>
-            <field name="sub_total" sum="Sum total"/>
-            <field name="state"/>
-          </tree>
-        </field>
-      </record>
-      
-      <record id="control_budget_form" model="ir.ui.view">
-        <field name="name">control.budget.form</field>
-        <field name="model">control.budget</field>
-        <field name="type">form</field>
-        <field name="arch" type="xml">
-          <form string="Control budget">
-            <header>
-              <button name="action_start" class ="oe_highlight" string="Эхлэх" type="object" states="draft"/>
-<!--              <button name="test_action" class ="oe_highlight" string="Add follower" type="object"/-->
-              <button name="action_to_confirm" class ="oe_highlight" string="Батлах ажилчидад илгээх" type="object" attrs="{'invisible': ['|',('invisible_to_confirm', '=', False),('state','!=','start')]}"/>
-              <button name="action_confirmed" class ="oe_highlight" string="Батлах" type="object" attrs="{'invisible': [('show_confirm_button_user', '=', False)]}"/>
-              <button name="action_new" class ="oe_highlight" string="Ноорог" type="object" attrs="{'invisible': [('show_confirm_button_user', '=', False)]}"/>
-              <button name="action_cancel" class ="oe_highlight" string="Цуцлах" type="object" attrs="{'invisible': ['|',('state', 'not in', ('start','confirm','done')),('is_budget_confirmer', '=', False)]}"/>
-              <button name="action_after" class ="oe_highlight" string="Хойшлуулах" type="object" attrs="{'invisible': ['|',('state', 'not in', ('start','confirm','done')),('is_budget_confirmer', '=', False)]}"/>
-              <button name="action_back" class ="oe_highlight" string="Буцах" type="object" states="after"/>
-              <button name="action_draft" class="oe_highlight" string="Ноорог" type="object" states="start"/>
-              <button name="create_purchase_request" string="(Create Purchase request)" type="object" class="oe_highlight" states="done" invisible="1"/>
-              <button name="action_create_tender" string="(Тендер үүсгэх)" type="object" class="oe_highlight" states="done"/>
-              <button name="action_budget_partner_comparison" string="(Үнийн харьцуулалт үүсгэх)" type="object" class="oe_highlight" states="done"/>
-              <field name="state" widget="statusbar"/>
-            </header>
-            <sheet string="Control budget">
-              <div class="oe_title">
-                          <h2>
-                              <field name="name" placeholder="Control Budget name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                          </h2>
-                      </div>
+
+    <!-- Хяналтын төсөв -->
+    <record id="control_budget_tree" model="ir.ui.view">
+      <field name="name">control.budget.tree</field>
+      <field name="model">control.budget</field>
+      <field name="type">tree</field>
+      <field name="arch" type="xml">
+        <tree string="Control budget">
+          <field name="budget_code"/>
+          <field name="name" invisible="1"/>
+          <field name="res_model" invisible="1"/>
+          <field name="res_id" invisible="1"/>
+          <field name="date"/>
+          <field name="user_id"/>
+          <field name="sub_total" sum="Sum total"/>
+          <field name="state"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="control_budget_form" model="ir.ui.view">
+      <field name="name">control.budget.form</field>
+      <field name="model">control.budget</field>
+      <field name="type">form</field>
+      <field name="arch" type="xml">
+        <form string="Control budget">
+          <header>
+            <button name="action_start" class ="oe_highlight" string="Эхлэх" type="object" states="draft"/>
+            <!--              <button name="test_action" class ="oe_highlight" string="Add follower" type="object"/-->
+            <button name="action_to_confirm" class ="oe_highlight" string="Батлах ажилчидад илгээх" type="object" attrs="{'invisible': ['|',('invisible_to_confirm', '=', False),('state','!=','start')]}"/>
+            <button name="action_confirmed" class ="oe_highlight" string="Батлах" type="object" attrs="{'invisible': [('show_confirm_button_user', '=', False)]}"/>
+            <button name="action_new" class ="oe_highlight" string="Ноорог" type="object" attrs="{'invisible': [('show_confirm_button_user', '=', False)]}"/>
+            <button name="action_cancel" class ="oe_highlight" string="Цуцлах" type="object" attrs="{'invisible': ['|',('state', 'not in', ('start','confirm','done')),('is_budget_confirmer', '=', False)]}"/>
+            <button name="action_after" class ="oe_highlight" string="Хойшлуулах" type="object" attrs="{'invisible': ['|',('state', 'not in', ('start','confirm','done')),('is_budget_confirmer', '=', False)]}"/>
+            <button name="action_back" class ="oe_highlight" string="Буцах" type="object" states="after"/>
+            <button name="action_draft" class="oe_highlight" string="Ноорог" type="object" states="start"/>
+            <button name="create_purchase_request" string="(Create Purchase request)" type="object" class="oe_highlight" states="done" invisible="1"/>
+            <button name="action_create_tender" string="(Тендер үүсгэх)" type="object" class="oe_highlight" states="done"/>
+            <button name="action_budget_partner_comparison" string="(Үнийн харьцуулалт үүсгэх)" type="object" class="oe_highlight" states="done"/>
+            <field name="state" widget="statusbar"/>
+          </header>
+          <sheet string="Control budget">
+            <div class="oe_title">
+              <h2>
+                <field name="name" placeholder="Control Budget name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+              </h2>
+            </div>
+            <group>
               <group>
-                <group>
-                  <field name="show_confirm_button_user" invisible="1"/>
-                  <field name="show_rating_button_user" invisible="1"/>
-                  <field name="is_show_confirmed" invisible="1"/>
-                  <field name="invisible_to_confirm" invisible="1"/>
-                  <field name="is_show_evaluate" invisible="1"/>
-                  <field name="is_budget_confirmer" invisible="1"/>
-                  <field name="budget_code"/>
-                  <field name="project_id" domain="[('is_parent_project', '=',False)]" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True, 'no_open': True}"/>
-                  <field name="task_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                  <field name="work_graph_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                  <field name="user_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                  <field name="m_department_id"  attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" options="{'no_create': True}"/>
-                  <field name="is_old" invisible="1"/>
-                  <field name="is_old2" invisible="1"/>
-                </group>
-                <group>
-                  <field name="date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                  <field name="confirm_date" readonly="1"/>
-<!--                  <field name="budget_verifier" widget="many2many_tags" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" options="{'no_create': True}"/-->
-                  <field name="budget_confirmer" widget="many2many_tags" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" options="{'no_create': True}"/>
-                  <field name="sub_total"/>
-                  <field name="total_balance"/>
-                  <button name="action_import" string="Экселээс татах" type="object" attrs="{'invisible': [('state', 'not in', ('draft'))]}"/>
-                </group>
+                <field name="show_confirm_button_user" invisible="1"/>
+                <field name="show_rating_button_user" invisible="1"/>
+                <field name="is_show_confirmed" invisible="1"/>
+                <field name="invisible_to_confirm" invisible="1"/>
+                <field name="is_show_evaluate" invisible="1"/>
+                <field name="is_budget_confirmer" invisible="1"/>
+                <field name="budget_code"/>
+                <field name="project_id" domain="[('is_parent_project', '=',False)]" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True, 'no_open': True}"/>
+                <field name="task_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                <field name="work_graph_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                <field name="user_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                <field name="m_department_id" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" options="{'no_create': True}"/>
+                <field name="is_old" invisible="1"/>
+                <field name="is_old2" invisible="1"/>
               </group>
-              <notebook>
-                <page string="Material">
-                  <group>
-                    <button name="action_select" class ="oe_edit_only" string="Сонгох" type="object" states="done"/>
-                  </group>
-                  <group>
-                    <button name="action_deselect" class ="oe_edit_only" string="Хасах" type="object" states="done"/>
-                  </group>
-                  <field name="material_line_ids" attrs="{'invisible':[('is_old2','=',False)]}" context="{'default_department_id': m_department_id}">
-                    <tree string="Material budget line" editable="bottom">
-                      <field name="cost_choose" attrs="{'readonly': [('state', '!=', 'confirm')]}"/>
-                      <field name="department_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}" />
-                      <field name="product_id"  attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                      <field name="product_uom"  attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                      <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                      <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                      <field name="material_total" sum="Нийт"/>
-                      <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}" invisible="1"/>
-                      <field name="state"/>
-                    </tree>
-                    <form>
-                      <group>
-                        <group>
-                          <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}" invisible="1" />
-                          <field name="product_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                          <field name="product_uom" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                        </group>
-                        <group>
-                          <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                          <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                          <field name="material_total" sum="Нийт"/>
-                          <field name="state" invisible="1"/>
-                        </group>
-                      </group>
-                    </form>
-                  </field>
-
-                  <field name="new_material_line_ids" attrs="{'invisible':[('is_old2','=',True)]}" context="{'default_department_id': m_department_id}">
-                    <tree string="Material budget line" editable="bottom">
-                      <field name="cost_choose" attrs="{'readonly': [('state', '!=', 'confirm')]}"/>
-                      <field name="department_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}" />
-                      <field name="product_name" attrs="{'readonly':[('state','not in',['draft','start'])]}"/>
-                      
-                      <field name="product_uom"  attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                      <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                      <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                      <field name="material_total" sum="Нийт"/>
-                     
-                      <field name="state"/>
-                    </tree>
-                    <form>
-                      <group>
-                        <group>
-                          <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}" invisible="1" />
-                          <field name="product_name" attrs="{'readonly':[('state','not in',['draft','start'])]}"/>
-
-                          <field name="product_uom" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                        </group>
-                        <group>
-                          <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                          <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                          <field name="material_total" sum="Нийт"/>
-                          <field name="state" invisible="1"/>
-                        </group>
-                      </group>
-                    </form>
-                  </field>
-                  <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+              <group>
+                <field name="date" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                <field name="confirm_date" readonly="1"/>
+                <!--                  <field name="budget_verifier" widget="many2many_tags" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" options="{'no_create': True}"/-->
+                <field name="budget_confirmer" widget="many2many_tags" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" options="{'no_create': True}"/>
+                <field name="sub_total"/>
+                <field name="total_balance"/>
+                <button name="action_import" string="Экселээс татах" type="object" attrs="{'invisible': [('state', 'not in', ('draft'))]}"/>
+              </group>
+            </group>
+            <notebook>
+              <page string="Material">
+                <group>
+                  <button name="action_select" class ="oe_edit_only" string="Сонгох" type="object" states="done"/>
+                </group>
+                <group>
+                  <button name="action_deselect" class ="oe_edit_only" string="Хасах" type="object" states="done"/>
+                </group>
+                <field name="material_line_ids" attrs="{'invisible':[('is_old2','=',False)]}" context="{'default_department_id': m_department_id}">
+                  <tree string="Material budget line" editable="bottom">
+                    <field name="cost_choose" attrs="{'readonly': [('state', '!=', 'confirm')]}"/>
+                    <field name="department_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}" />
+                    <field name="product_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                    <field name="product_uom" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                    <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="material_total" sum="Нийт"/>
+                    <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}" invisible="1"/>
+                    <field name="state"/>
+                  </tree>
+                  <form>
                     <group>
-                      <separator string="Материалын зардал" colspan="2"/>
-                      <field name="project_budget_material_limit" widget='monetary'/>
-                      <field name="project_budget_material" widget='monetary'/>
-                      <field name="project_budget_material_real" widget='monetary'/>
-                      <field name="material_cost" widget='monetary'/>
+                      <group>
+                        <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}" invisible="1" />
+                        <field name="product_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                        <field name="product_uom" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                      </group>
+                      <group>
+                        <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="material_total" sum="Нийт"/>
+                        <field name="state" invisible="1"/>
+                      </group>
                     </group>
-                            </group>
-                            <separator string="Материалын зардлын гүйцэтгэл" colspan="2"/>
-                            <field name="utilization_budget_material" readonly="1">
-                               <tree string="Utilization budget material">
-                      <field name="purchase"/>
-                      <field name="tender"/>
-                      <field name="budget_comparison"/>
-                      <field name="date" />
-                      <field name="map"/>
-                      <field name="state" />
-                      <field name="price" sum="Нийт"/>
-                    </tree>
-                            </field>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+                  </form>
+                </field>
+
+                <field name="new_material_line_ids" attrs="{'invisible':[('is_old2','=',True)]}" context="{'default_department_id': m_department_id}">
+                  <tree string="Material budget line" editable="bottom">
+                    <field name="cost_choose" attrs="{'readonly': [('state', '!=', 'confirm')]}"/>
+                    <field name="department_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}" />
+                    <field name="product_name" attrs="{'readonly':[('state','not in',['draft','start'])]}"/>
+
+                    <field name="product_uom" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                    <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="material_total" sum="Нийт"/>
+
+                    <field name="state"/>
+                  </tree>
+                  <form>
                     <group>
-                                <field name="material_utilization_limit" widget='monetary'/>
-                              </group>
-                            </group>
-                </page>
-                <page string="Labor">
+                      <group>
+                        <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}" invisible="1" />
+                        <field name="product_name" attrs="{'readonly':[('state','not in',['draft','start'])]}"/>
+
+                        <field name="product_uom" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                      </group>
+                      <group>
+                        <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="material_total" sum="Нийт"/>
+                        <field name="state" invisible="1"/>
+                      </group>
+                    </group>
+                  </form>
+                </field>
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
                   <group>
-                    <button name="action_select_labor" class ="oe_edit_only" string="Сонгох" type="object" states="done"/>
+                    <separator string="Материалын зардал" colspan="2"/>
+                    <field name="project_budget_material_limit" widget='monetary'/>
+                    <field name="project_budget_material" widget='monetary'/>
+                    <field name="project_budget_material_real" widget='monetary'/>
+                    <field name="material_cost" widget='monetary'/>
                   </group>
+                </group>
+                <separator string="Материалын зардлын гүйцэтгэл" colspan="2"/>
+                <field name="utilization_budget_material" readonly="1">
+                  <tree string="Utilization budget material">
+                    <field name="purchase"/>
+                    <field name="tender"/>
+                    <field name="budget_comparison"/>
+                    <field name="date" />
+                    <field name="map"/>
+                    <field name="state" />
+                    <field name="price" sum="Нийт"/>
+                  </tree>
+                </field>
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
                   <group>
-                    <button name="action_deselect_labor" class ="oe_edit_only" string="Хасах" type="object" states="done"/>
+                    <field name="material_utilization_limit" widget='monetary'/>
                   </group>
-                  <field name="labor_line_ids" attrs="{'invisible':[('is_old','!=',True)]}" context="{'default_department_id': m_department_id}">
-                    <tree string="Labor budget line" editable="bottom">
-                      <field name="cost_choose" attrs="{'readonly': [('state', '!=', 'confirm')]}"/>
-                      <field name="department_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                      <field name="product_id" attrs="{'readonly':[('state','!=','draft')]}"/>
-                      <field name="product_uom" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}"/>
-                      <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                      <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                      <field name="labor_total" sum="Нийт"/>
-                      <field name="labor_cost_basic" sum="Нийт" readonly="1"/>
-                      <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                      <field name="state"/>
-                    </tree>
-                    <form>
+                </group>
+              </page>
+              <page string="Labor">
+                <group>
+                  <button name="action_select_labor" class ="oe_edit_only" string="Сонгох" type="object" states="done"/>
+                </group>
+                <group>
+                  <button name="action_deselect_labor" class ="oe_edit_only" string="Хасах" type="object" states="done"/>
+                </group>
+                <field name="labor_line_ids" attrs="{'invisible':[('is_old','!=',True)]}" context="{'default_department_id': m_department_id}">
+                  <tree string="Labor budget line" editable="bottom">
+                    <field name="cost_choose" attrs="{'readonly': [('state', '!=', 'confirm')]}"/>
+                    <field name="department_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                    <field name="product_id" attrs="{'readonly':[('state','!=','draft')]}"/>
+                    <field name="product_uom" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}"/>
+                    <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="labor_total" sum="Нийт"/>
+                    <field name="labor_cost_basic" sum="Нийт" readonly="1"/>
+                    <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="state"/>
+                  </tree>
+                  <form>
+                    <group>
                       <group>
-                        <group>
-                          <field name="department_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                          <field name="product_id" attrs="{'readonly': [('state', '!=', 'draft')]}" />
-                          <field name="product_uom" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                          <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                          <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                          <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                        </group>
-                        <group>
-                          <field name="labor_total" sum="Нийт"/>
-                          <field name="state" invisible="1"/>
-                          <field name="engineer_salary" readonly="1"/>
-                          <field name="extra_salary" readonly="1"/>
-                          <field name="social_insurance" readonly="1"/>
-                          <field name="habe" readonly="1"/>
-                          <field name="total_salary" readonly="1"/>
-                          <field name="labor_cost_basic" readonly="1"/>
-                        </group>
+                        <field name="department_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                        <field name="product_id" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                        <field name="product_uom" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                        <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                       </group>
-                      <separator string="Ажиллах хүчний зардалын хувь" colspan="2"/>
                       <group>
-                        <group>
-                          <field name="engineer_salary_percent" readonly="1"/>
-                          <field name="extra_salary_percent" readonly="1"/>
-                        </group>
-                        <group>
-                          <field name="social_insurance_rate" readonly="1"/>
-                          <field name="habe_percent" readonly="1"/>
-                        </group>
+                        <field name="labor_total" sum="Нийт"/>
+                        <field name="state" invisible="1"/>
+                        <field name="engineer_salary" readonly="1"/>
+                        <field name="extra_salary" readonly="1"/>
+                        <field name="social_insurance" readonly="1"/>
+                        <field name="habe" readonly="1"/>
+                        <field name="total_salary" readonly="1"/>
+                        <field name="labor_cost_basic" readonly="1"/>
                       </group>
-                    </form>
-                  </field>
-                  <field name="labor_line_ids1" attrs="{'invisible':[('is_old','=',True)]}" context="{'default_department_id': m_department_id}">
-                    <tree string="Labor budget line" editable="bottom">
-                      <field name="cost_choose" attrs="{'readonly': [('state', '!=', 'confirm')]}"/>
-                      <field name="department_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                      <field name="product_name" attrs="{'readonly':[('state','!=','draft')],'required':[('state','=','draft')]}"/>
-                      <field name="product_uom"  attrs="{'readonly': [('state', '!=', 'draft')],'required':[('state','=','draft')]}" options="{'no_create': True}"/>
-                      <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                      <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                      <field name="labor_total" sum="Нийт"/>
-                      <field name="labor_cost_basic" sum="Нийт" readonly="1"/>
-                      <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                      <field name="state"/>
-                    </tree>
-                    <form>
+                    </group>
+                    <separator string="Ажиллах хүчний зардалын хувь" colspan="2"/>
+                    <group>
                       <group>
-                        <group>
-                          <field name="department_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
-                          <field name="product_name" attrs="{'readonly': [('state', '!=', 'draft')],'invisible': [('state', '!=', 'draft')],'required': [('state', '!=', 'draft')]}"/>
-                          <field name="product_uom" options="{'no_create': True}" attrs="{'readonly': [('state', '!=', 'draft')],'invisible': [('state', '!=', 'draft')],'required': [('state', '!=', 'draft')]}"/>
-                          <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                          <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                          <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-                        </group>
-                        <group>
-                          <field name="labor_total" sum="Нийт"/>
-                          <field name="state" invisible="1"/>
-                          <field name="engineer_salary" readonly="1"/>
-                          <field name="extra_salary" readonly="1"/>
-                          <field name="social_insurance" readonly="1"/>
-                          <field name="habe" readonly="1"/>
-                          <field name="total_salary" readonly="1"/>
-                          <field name="labor_cost_basic" readonly="1"/>
-                        </group>
+                        <field name="engineer_salary_percent" readonly="1"/>
+                        <field name="extra_salary_percent" readonly="1"/>
                       </group>
-                      <separator string="Ажиллах хүчний зардалын хувь" colspan="2"/>
                       <group>
-                        <group>
-                          <field name="engineer_salary_percent" readonly="1"/>
-                          <field name="extra_salary_percent" readonly="1"/>
-                        </group>
-                        <group>
-                          <field name="social_insurance_rate" readonly="1"/>
-                          <field name="habe_percent" readonly="1"/>
-                        </group>
+                        <field name="social_insurance_rate" readonly="1"/>
+                        <field name="habe_percent" readonly="1"/>
                       </group>
-                    </form>
-                  </field>
-                  <group col="4" colspan = "4">
-                    <group class="oe_subtotal_footer oe_left" colspan="2" name="Sub Total">
+                    </group>
+                  </form>
+                </field>
+                <field name="labor_line_ids1" attrs="{'invisible':[('is_old','=',True)]}" context="{'default_department_id': m_department_id}">
+                  <tree string="Labor budget line" editable="bottom">
+                    <field name="cost_choose" attrs="{'readonly': [('state', '!=', 'confirm')]}"/>
+                    <field name="department_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                    <field name="product_name" attrs="{'readonly':[('state','!=','draft')],'required':[('state','=','draft')]}"/>
+                    <field name="product_uom" attrs="{'readonly': [('state', '!=', 'draft')],'required':[('state','=','draft')]}" options="{'no_create': True}"/>
+                    <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="labor_total" sum="Нийт"/>
+                    <field name="labor_cost_basic" sum="Нийт" readonly="1"/>
+                    <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="state"/>
+                  </tree>
+                  <form>
+                    <group>
+                      <group>
+                        <field name="department_id" attrs="{'readonly': [('state', '!=', 'draft')]}" options="{'no_create': True}"/>
+                        <field name="product_name" attrs="{'readonly': [('state', '!=', 'draft')],'invisible': [('state', '!=', 'draft')],'required': [('state', '!=', 'draft')]}"/>
+                        <field name="product_uom" options="{'no_create': True}" attrs="{'readonly': [('state', '!=', 'draft')],'invisible': [('state', '!=', 'draft')],'required': [('state', '!=', 'draft')]}"/>
+                        <field name="name" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="product_uom_qty" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                        <field name="price_unit" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                      </group>
+                      <group>
+                        <field name="labor_total" sum="Нийт"/>
+                        <field name="state" invisible="1"/>
+                        <field name="engineer_salary" readonly="1"/>
+                        <field name="extra_salary" readonly="1"/>
+                        <field name="social_insurance" readonly="1"/>
+                        <field name="habe" readonly="1"/>
+                        <field name="total_salary" readonly="1"/>
+                        <field name="labor_cost_basic" readonly="1"/>
+                      </group>
+                    </group>
+                    <separator string="Ажиллах хүчний зардалын хувь" colspan="2"/>
+                    <group>
+                      <group>
+                        <field name="engineer_salary_percent" readonly="1"/>
+                        <field name="extra_salary_percent" readonly="1"/>
+                      </group>
+                      <group>
+                        <field name="social_insurance_rate" readonly="1"/>
+                        <field name="habe_percent" readonly="1"/>
+                      </group>
+                    </group>
+                  </form>
+                </field>
+                <group col="4" colspan = "4">
+                  <group class="oe_subtotal_footer oe_left" colspan="2" name="Sub Total">
                     <separator string="Дундаж зэргийн цалингийн нэгтгэл" colspan="2"/>
-                      <field name="total_labor_cost" widget='monetary'/>
-                      <field name="total_engineer_salary" widget='monetary'/>
-                      <field name="total_extra_salary" widget='monetary'/>
-                      <field name="total_salary" widget='monetary'/>
-                      <field name="total_social_insurance" widget='monetary'/>
-                      <field name="total_habe" widget='monetary'/>
-                      <field name="labor_cost" widget='monetary'/>
-                    </group>
-                    <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
-                      <separator string="Ажиллах хүчний зардал" colspan="2"/>
-                      <field name="project_budget_labor_limit" widget='monetary'/>
-                      <field name="project_budget_labor" widget='monetary'/>
-                      <field name="project_budget_labor_real" widget='monetary'/>
-                    </group>
+                    <field name="total_labor_cost" widget='monetary'/>
+                    <field name="total_engineer_salary" widget='monetary'/>
+                    <field name="total_extra_salary" widget='monetary'/>
+                    <field name="total_salary" widget='monetary'/>
+                    <field name="total_social_insurance" widget='monetary'/>
+                    <field name="total_habe" widget='monetary'/>
+                    <field name="labor_cost" widget='monetary'/>
                   </group>
-                            <separator string="Ажиллах хүчний зардлын гүйцэтгэл" colspan="2"/>
-                            <field name="utilization_budget_labor" readonly="1">
-                               <tree string="Utilization budget labor">
-                      <field name="purchase"/>
-                      <field name="tender"/>
-                      <field name="budget_comparison"/>
-                      <field name="date" />
-                      <field name="map"/>
-                      <field name="state" />
-                      <field name="price" sum="Нийт"/>
-                    </tree>
-                            </field>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+                  <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+                    <separator string="Ажиллах хүчний зардал" colspan="2"/>
+                    <field name="project_budget_labor_limit" widget='monetary'/>
+                    <field name="project_budget_labor" widget='monetary'/>
+                    <field name="project_budget_labor_real" widget='monetary'/>
+                  </group>
+                </group>
+                <separator string="Ажиллах хүчний зардлын гүйцэтгэл" colspan="2"/>
+                <field name="utilization_budget_labor" readonly="1">
+                  <tree string="Utilization budget labor">
+                    <field name="purchase"/>
+                    <field name="tender"/>
+                    <field name="budget_comparison"/>
+                    <field name="date" />
+                    <field name="map"/>
+                    <field name="state" />
+                    <field name="price" sum="Нийт"/>
+                  </tree>
+                </field>
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+                  <group>
+                    <field name="labor_utilization_limit" widget='monetary'/>
+                  </group>
+                </group>
+              </page>
+              <page string="Equipment">
+                <field name="equipment_line_ids" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" context="{'default_department_id': m_department_id}">
+                  <tree string="Equipment budget line" editable="bottom">
+                    <field name="department_id" options="{'no_create': True}"/>
+                    <field name="name"/>
+                    <field name="product_uom_qty"/>
+                    <field name="price_unit"/>
+                    <field name="equipment_total" sum="Нийт"/>
+                  </tree>
+                  <form>
                     <group>
-                                <field name="labor_utilization_limit" widget='monetary'/>
-                              </group>
-                            </group>
-                </page>
-                <page string="Equipment" >
-                  <field name="equipment_line_ids" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" context="{'default_department_id': m_department_id}">
-                    <tree string="Equipment budget line" editable="bottom">
-                      <field name="department_id" options="{'no_create': True}"/>
+                      <group>
+                        <field name="department_id" />
+                        <field name="name"/>
+                      </group>
+                      <group>
+                        <field name="product_uom_qty"/>
+                        <field name="price_unit"/>
+                        <field name="equipment_total" sum="Нийт"/>
+                        <field name="state" invisible="1"/>
+                      </group>
+                    </group>
+                  </form>
+                </field>
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+                  <separator string="Машин механизмын зардал" colspan="2"/>
+                  <field name="project_budget_equipment_limit" widget='monetary'/>
+                  <field name="project_budget_equipment" widget='monetary'/>
+                  <field name="project_budget_equipment_real" widget='monetary'/>
+                  <field name="equipment_cost" widget='monetary'/>
+                </group>
+                <separator string="Машин механизмын зардлын гүйцэтгэл" colspan="2"/>
+                <field name="utilization_budget_equipment" readonly="1">
+                  <tree string="Utilization budget equipment">
+                    <field name="purchase"/>
+                    <field name="tender"/>
+                    <field name="budget_comparison"/>
+                    <field name="date" />
+                    <field name="map"/>
+                    <field name="state" />
+                    <field name="price" sum="Нийт"/>
+                  </tree>
+                </field>
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+                  <group>
+                    <field name="equipment_utilization_limit" widget='monetary'/>
+                  </group>
+                </group>
+              </page>
+              <page string="Тээврийн зардал">
+                <field name="carriage_line_ids" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" context="{'default_department_id': m_department_id}">
+                  <tree string="Carriage budget line" editable="bottom">
+                    <field name="department_id" options="{'no_create': True}"/>
+                    <field name="name" />
+                    <field name="price" sum="Нийт"/>
+                  </tree>
+                  <form>
+                    <group>
+                      <group>
+                        <field name="department_id"/>
+                      </group>
+                      <group>
+                        <field name="name" />
+                        <field name="price" sum="Нийт"/>
+                      </group>
+                    </group>
+                  </form>
+                </field>
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+                  <separator string="Тээврийн зардал" colspan="2"/>
+                  <field name="project_budget_carriage_limit" widget='monetary'/>
+                  <field name="project_budget_carriage" widget='monetary'/>
+                  <field name="project_budget_carriage_real" widget='monetary'/>
+                  <field name="carriage_cost" widget='monetary'/>
+                </group>
+                <separator string="Тээврийн зардлын гүйцэтгэл" colspan="2"/>
+                <field name="utilization_budget_carriage" readonly="1">
+                  <tree string="Utilization budget carriage">
+                    <field name="purchase"/>
+                    <field name="tender"/>
+                    <field name="budget_comparison"/>
+                    <field name="date" />
+                    <field name="map"/>
+                    <field name="state" />
+                    <field name="price" sum="Нийт"/>
+                  </tree>
+                </field>
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+                  <group>
+                    <field name="carriage_utilization_limit" widget='monetary'/>
+                  </group>
+                </group>
+              </page>
+              <page string="Postage">
+                <field name="postage_line_ids" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" context="{'default_department_id': m_department_id}">
+                  <tree string="Postage budget line" editable="bottom">
+                    <field name="department_id" options="{'no_create': True}"/>
+                    <field name="name" />
+                    <field name="price" sum="Нийт"/>
+                  </tree>
+                  <form>
+                    <group>
+                      <group>
+                        <field name="department_id"/>
+                      </group>
+                      <group>
+                        <field name="name" />
+                        <field name="price" sum="Нийт"/>
+                      </group>
+                    </group>
+                  </form>
+                </field>
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+                  <separator string="Шууд зардал" colspan="2"/>
+                  <field name="project_budget_postage_limit" widget='monetary'/>
+                  <field name="project_budget_postage" widget='monetary'/>
+                  <field name="project_budget_postage_real" widget='monetary'/>
+                  <field name="postage_cost" widget='monetary'/>
+                </group>
+                <separator string="Шууд зардлын гүйцэтгэл" colspan="2"/>
+                <field name="utilization_budget_postage" readonly="1">
+                  <tree string="Utilization budget postage">
+                    <field name="purchase"/>
+                    <field name="tender"/>
+                    <field name="budget_comparison"/>
+                    <field name="date" />
+                    <field name="map"/>
+                    <field name="state" />
+                    <field name="price" sum="Нийт"/>
+                  </tree>
+                </field>
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+                  <group>
+                    <field name="postage_utilization_limit" widget='monetary'/>
+                  </group>
+                </group>
+              </page>
+              <page string="Other">
+                <field name="other_cost_line_ids" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" context="{'default_department_id': m_department_id}">
+                  <tree string="Other budget line" editable="bottom">
+                    <field name="department_id" options="{'no_create': True}"/>
+                    <field name="name" />
+                    <field name="price" sum="Нийт"/>
+                  </tree>
+                  <form>
+                    <group>
+                      <group>
+                        <field name="department_id"/>
+                      </group>
+                      <group>
+                        <field name="name" />
+                        <field name="price" sum="Нийт"/>
+                      </group>
+                    </group>
+                  </form>
+                </field>
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+                  <separator string="Бусад зардал" colspan="2"/>
+                  <field name="project_budget_other_limit" widget='monetary'/>
+                  <field name="project_budget_other" widget='monetary'/>
+                  <field name="project_budget_other_real" widget='monetary'/>
+                  <field name="other_cost" widget='monetary'/>
+                </group>
+                <separator string="Бусад зардлын гүйцэтгэл" colspan="2"/>
+                <field name="utilization_budget_other" readonly="1">
+                  <tree string="Utilization budget other">
+                    <field name="purchase"/>
+                    <field name="tender"/>
+                    <field name="budget_comparison"/>
+                    <field name="date" />
+                    <field name="map"/>
+                    <field name="state" />
+                    <field name="price" sum="Нийт"/>
+                  </tree>
+                </field>
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+                  <group>
+                    <field name="other_utilization_limit" widget='monetary'/>
+                  </group>
+                </group>
+              </page>
+              <page string = "Хавсралтууд">
+                <field name="document" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}">
+                  <tree string="Files">
+                    <field name="name"/>
+                    <field name="datas_fname" string="Файлын нэр"/>
+                    <field name="datas" filename="datas_fname" string="Файл" readonly="1"/>
+                    <field name="create_date" readonly="1"/>
+                  </tree>
+                  <form>
+                    <label for="name" class="oe_edit_only"/>
+                    <h1>
                       <field name="name"/>
-                      <field name="product_uom_qty"/>
-                      <field name="price_unit"/>
-                      <field name="equipment_total" sum="Нийт"/>
-                    </tree>
-                    <form>
-                      <group>
-                        <group>
-                          <field name="department_id" />
-                          <field name="name"/>
-                        </group> 
-                        <group>
-                          <field name="product_uom_qty"/>
-                          <field name="price_unit"/>
-                          <field name="equipment_total" sum="Нийт"/>
-                          <field name="state" invisible="1"/>
-                        </group>
-                      </group>
-                    </form>
-                  </field>
-                  <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
-                    <separator string="Машин механизмын зардал" colspan="2"/>
-                    <field name="project_budget_equipment_limit" widget='monetary'/>
-                    <field name="project_budget_equipment" widget='monetary'/>
-                    <field name="project_budget_equipment_real" widget='monetary'/>
-                    <field name="equipment_cost" widget='monetary'/>
-                            </group>
-                            <separator string="Машин механизмын зардлын гүйцэтгэл" colspan="2"/>
-                            <field name="utilization_budget_equipment" readonly="1">
-                               <tree string="Utilization budget equipment">
-                      <field name="purchase"/>
-                      <field name="tender"/>
-                      <field name="budget_comparison"/>
-                      <field name="date" />
-                      <field name="map"/>
-                      <field name="state" />
-                      <field name="price" sum="Нийт"/>
-                    </tree>
-                            </field>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
+                    </h1>
+                    <group string="Өгөгдөл">
+                      <field name="type" invisible="1"/>
+                      <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
+                      <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+                      <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+                    </group>
+                    <group groups="base.group_no_one" string="History">
+                      <label for="create_uid" string="Creation"/>
+                      <div name="creation_div">
+                        <field name="create_uid" readonly="1" class="oe_inline"/>
+ on 
+                        <field name="create_date" readonly="1" class="oe_inline"/>
+ from 
+                      </div>
+                    </group>
+                  </form>
+                </field>
+              </page>
+              <page string = "Бодит гүйцэтгэл">
+                <field name ="budgets_utilization" readonly="1">
+                  <tree>
+                    <field name="control_budget_id" invisible="1"/>
+                    <field name="budget_type"/>
+                    <field name="department_id"/>
+                    <field name="value"/>
+                    <field name="price"/>
+                    <field name="balance"/>
+                    <field name="utilization"/>
+                  </tree>
+                  <form>
                     <group>
-                                <field name="equipment_utilization_limit" widget='monetary'/>
-                              </group>
-                            </group>
-                          </page>
-                          <page string="Тээврийн зардал">
-                  <field name="carriage_line_ids" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" context="{'default_department_id': m_department_id}">
-                    <tree string="Carriage budget line" editable="bottom">
-                      <field name="department_id" options="{'no_create': True}"/>
-                      <field name="name" />
-                      <field name="price" sum="Нийт"/>
-                    </tree>
-                    <form>
                       <group>
-                        <group>
-                          <field name="department_id"/>
-                        </group> 
-                        <group>
-                          <field name="name" />
-                          <field name="price" sum="Нийт"/>
-                        </group>
+                        <field name="control_budget_id" invisible="1"/>
+                        <field name="budget_type"/>
+                        <field name="department_id"/>
+                        <field name="value"/>
                       </group>
-                    </form>
-                  </field>
-                  <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
-                    <separator string="Тээврийн зардал" colspan="2"/>
-                    <field name="project_budget_carriage_limit" widget='monetary'/>
-                    <field name="project_budget_carriage" widget='monetary'/>
-                    <field name="project_budget_carriage_real" widget='monetary'/>
-                    <field name="carriage_cost" widget='monetary'/>
+                      <group>
+                        <field name="price"/>
+                        <field name="balance"/>
+                        <field name="utilization"/>
+                      </group>
+                    </group>
+                  </form>
+                </field>
+                <group class="oe_subtotal_footer oe_right" colspan="2" name="Бодит гүйцэтгэл">
+                  <separator string="Бодит гүйцэтгэл" colspan="2"/>
+                  <group>
+                    <field name="budgets_utilization_total" widget='monetary'/>
+                    <field name="budgets_utilization_util" widget='monetary'/>
+                    <field name="budgets_utilization_balance" widget='monetary'/>
                   </group>
-                  <separator string="Тээврийн зардлын гүйцэтгэл" colspan="2"/>
-                            <field name="utilization_budget_carriage" readonly="1">
-                               <tree string="Utilization budget carriage">
-                      <field name="purchase"/>
-                      <field name="tender"/>
-                      <field name="budget_comparison"/>
-                      <field name="date" />
-                      <field name="map"/>
-                      <field name="state" />
-                      <field name="price" sum="Нийт"/>
-                    </tree>
-                            </field>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
-                    <group>
-                                <field name="carriage_utilization_limit" widget='monetary'/>
-                              </group>
-                            </group>
-                </page>
-                          <page string="Postage">
-                  <field name="postage_line_ids" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" context="{'default_department_id': m_department_id}">
-                    <tree string="Postage budget line" editable="bottom">
-                      <field name="department_id" options="{'no_create': True}"/>
-                      <field name="name" />
-                      <field name="price" sum="Нийт"/>
-                    </tree>
-                    <form> 
-                      <group>
-                        <group>
-                          <field name="department_id"/>
-                        </group>
-                        <group>
-                          <field name="name" />
-                          <field name="price" sum="Нийт"/>
-                        </group>
-                      </group>
-                    </form>
-                  </field>
-                  <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
-                    <separator string="Шууд зардал" colspan="2"/>
-                    <field name="project_budget_postage_limit" widget='monetary'/>
-                    <field name="project_budget_postage" widget='monetary'/>
-                    <field name="project_budget_postage_real" widget='monetary'/>
-                    <field name="postage_cost" widget='monetary'/>
-                          </group>
-                          <separator string="Шууд зардлын гүйцэтгэл" colspan="2"/>
-                            <field name="utilization_budget_postage" readonly="1">
-                               <tree string="Utilization budget postage">
-                      <field name="purchase"/>
-                      <field name="tender"/>
-                      <field name="budget_comparison"/>
-                      <field name="date" />
-                      <field name="map"/>
-                      <field name="state" />
-                      <field name="price" sum="Нийт"/>
-                    </tree>
-                            </field>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
-                    <group>
-                                <field name="postage_utilization_limit" widget='monetary'/>
-                              </group>
-                            </group>
-                </page>
-                <page string="Other">
-                  <field name="other_cost_line_ids" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}" context="{'default_department_id': m_department_id}">
-                    <tree string="Other budget line" editable="bottom">
-                      <field name="department_id" options="{'no_create': True}"/>
-                      <field name="name" />
-                      <field name="price" sum="Нийт"/>
-                    </tree>
-                    <form>
-                      <group> 
-                        <group>
-                          <field name="department_id"/>
-                        </group>
-                        <group>
-                          <field name="name" />
-                          <field name="price" sum="Нийт"/>
-                        </group>
-                      </group>
-                    </form>
-                  </field>
-                  <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
-                    <separator string="Бусад зардал" colspan="2"/>
-                    <field name="project_budget_other_limit" widget='monetary'/>
-                    <field name="project_budget_other" widget='monetary'/>
-                    <field name="project_budget_other_real" widget='monetary'/>
-                    <field name="other_cost" widget='monetary'/>
-                          </group>
-                          <separator string="Бусад зардлын гүйцэтгэл" colspan="2"/>
-                            <field name="utilization_budget_other" readonly="1">
-                               <tree string="Utilization budget other">
-                      <field name="purchase"/>
-                      <field name="tender"/>
-                      <field name="budget_comparison"/>
-                      <field name="date" />
-                      <field name="map"/>
-                      <field name="state" />
-                      <field name="price" sum="Нийт"/>
-                    </tree>
-                            </field>
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="Sub Total">
-                    <group>
-                                <field name="other_utilization_limit" widget='monetary'/>
-                              </group>
-                            </group>
-                </page>
-                <page string = "Хавсралтууд">
-                        <field name="document" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}">
-                            <tree string="Files">
-                                      <field name="name"/>
-                                      <field name="datas_fname" string="Файлын нэр"/>
-                                      <field name="datas" filename="datas_fname" string="Файл" readonly="1"/>
-                                      <field name="create_date" readonly="1"/>
-                                  </tree> 
-                                  <form>
-                                      <label for="name" class="oe_edit_only"/>
-                                      <h1>
-                                          <field name="name"/>
-                                      </h1>
-                                      <group string="Өгөгдөл">
-                                          <field name="type" invisible="1"/>
-                                          <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-                                          <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-                                          <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-                                      </group>
-                                      <group groups="base.group_no_one" string="History">
-                                          <label for="create_uid" string="Creation"/>
-                                          <div name="creation_div">
-                                              <field name="create_uid" readonly="1" class="oe_inline"/> on 
-                                              <field name="create_date" readonly="1" class="oe_inline"/> from 
-                                          </div>
-                                      </group>
-                                  </form>
-                              </field>
-                      </page>
-                      <page string = "Бодит гүйцэтгэл"> 
-                        <field name ="budgets_utilization" readonly="1"> 
-                          <tree> 
-                            <field name="control_budget_id" invisible="1"/>
-                            <field name="budget_type"/>
-                            <field name="department_id"/>
-                            <field name="value"/>
-                            <field name="price"/>
-                            <field name="balance"/>
-                            <field name="utilization"/>
-                          </tree>
-                          <form>
-                            <group>
-                              <group>
-                                <field name="control_budget_id" invisible="1"/>
-                                <field name="budget_type"/>
-                                <field name="department_id"/>
-                                <field name="value"/>
-                              </group> 
-                              <group>
-                                <field name="price"/>
-                                <field name="balance"/>
-                                <field name="utilization"/>
-                              </group> 
-                            </group>
-                          </form>
-                        </field>
-                        <group class="oe_subtotal_footer oe_right" colspan="2" name="Бодит гүйцэтгэл">
-                          <separator string="Бодит гүйцэтгэл" colspan="2"/>
-                    <group>
-                                <field name="budgets_utilization_total" widget='monetary'/>
-                                <field name="budgets_utilization_util" widget='monetary'/>
-                                <field name="budgets_utilization_balance" widget='monetary'/>
-                              </group>
-                            </group>
-                      </page>
-              </notebook>
-              <notebook>
-                <page string="Confirmed">
-                  <field name="budget_users" readonly="1">
-                                <tree string="Validations" >
-                                    <field name="confirmer"/>
-                                    <field name="date"/>
-                                    <field name="role"/>
-                                    <field name="state"/>
-                                </tree>
-                                <form string="Validations" >
-                                    <field name="confirmer"/>
-                                    <field name="date"/>
-                                    <field name="role"/>
-                                    <field name="state"/>
-                                </form>
-                            </field>
-                  <field name="step_is_final" invisible="1"/>
-                </page>
-              </notebook>
-              <!--<notebook>
+                </group>
+              </page>
+            </notebook>
+            <notebook>
+              <page string="Confirmed">
+                <field name="budget_users" readonly="1">
+                  <tree string="Validations">
+                    <field name="confirmer"/>
+                    <field name="date"/>
+                    <field name="role"/>
+                    <field name="state"/>
+                  </tree>
+                  <form string="Validations">
+                    <field name="confirmer"/>
+                    <field name="date"/>
+                    <field name="role"/>
+                    <field name="state"/>
+                  </form>
+                </field>
+                <field name="step_is_final" invisible="1"/>
+              </page>
+            </notebook>
+            <!--<notebook>
                 <page string="Evaluate">
                   <field name="evaluate_budget" readonly="1">
                                 <tree string="Evaluate">
@@ -612,98 +607,90 @@
                             </field>
                 </page>
               </notebook>/-->
-                        <div class="oe_clear"/>
-            </sheet>
-            <div class="oe_chatter">
-                      <field name="message_follower_ids" widget="mail_followers"/>
-                      <field name="message_ids" widget="mail_thread"/>
-                  </div>
-          </form>
-        </field>
-      </record>
-      
-         
-    
-      <record id="view_control_budget_filter" model="ir.ui.view">
-        <field name="name">control.budget.select</field>
-        <field name="model">control.budget</field>
-        <field name="arch" type="xml">
-          <search string="Search control budget">
-            <field name="name" filter_domain="['|', ('name','ilike',self), ('desc_name','ilike',self)]" string="Дугаар"/>
-            <field name="budget_code" string="Код"/>
-            <field name="state" string="Төлөв"/>
-            <group expand="0" string="Group By">
-                <filter string="Төлөв" name="state" context="{'group_by':'state'}"/>
-            </group>
-          </search>
-        </field>
-      </record> 
+            <div class="oe_clear"/>
+          </sheet>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" widget="mail_followers"/>
+            <field name="message_ids" widget="mail_thread"/>
+          </div>
+        </form>
+      </field>
+    </record>
 
 
-      <record id="action_control_budget" model="ir.actions.act_window">
-        <field name="name">control budget view</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">control.budget</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="context">{'search_default_state': 1}</field>
-        <field name="search_view_id" ref="view_control_budget_filter"/>
-        <field name="view_id" ref="control_budget_tree"/>
-        <field name="help" type="html">
-            <p>
+
+    <record id="view_control_budget_filter" model="ir.ui.view">
+      <field name="name">control.budget.select</field>
+      <field name="model">control.budget</field>
+      <field name="arch" type="xml">
+        <search string="Search control budget">
+          <field name="name" filter_domain="['|', ('name','ilike',self), ('desc_name','ilike',self)]" string="Дугаар"/>
+          <field name="budget_code" string="Код"/>
+          <field name="state" string="Төлөв"/>
+          <group expand="0" string="Group By">
+            <filter string="Төлөв" name="state" context="{'group_by':'state'}"/>
+          </group>
+        </search>
+      </field>
+    </record>
+
+
+    <record id="action_control_budget" model="ir.actions.act_window">
+      <field name="name">control budget view</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">control.budget</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{'search_default_state': 1}</field>
+      <field name="search_view_id" ref="view_control_budget_filter"/>
+      <field name="view_id" ref="control_budget_tree"/>
+      <field name="help" type="html">
+        <p>
               Odoo's project management allows you to manage the pipeline of your tasks efficiently. You maintain budget monitoring project here.
-            </p>
-        </field>
-      </record> 
-      
-      <menuitem name="Control Budget"
-        action="nomin_project.action_control_budget"
-            id="menu_project_control_budget"
-            parent="project.menu_project_management"
-        groups="project.group_project_budget"
-            sequence="12"
-        />
-        
-      <!-- ТХ -->
-      <record id="payment_request_form_inherit" model="ir.ui.view">
-            <field name="name">payment.request.form.inherit</field>
-            <field name="model">payment.request</field>
-            <field name="inherit_id" ref="nomin_budget.payment_request_form"/>
-            <field name="arch" type="xml">
-            <xpath expr="//sheet/notebook/page/field[@name='line_ids']/form/group/notebook/page[@name='budget']/notebook/page[@name='control_budget']/group/field[@name='controll_budget_line_ids']/tree/field[@name='analytic_account_id']" position="after">
-              <field name="budget_line_id"/>
-                </xpath> 
-            </field>
-        </record>
-        
-        <record id="account_analytic_line_form_inherit_nomin_project" model="ir.ui.view">
-            <field name="name">account.analytic.line.form.inherit.nomin.project</field>
-            <field name="model">account.analytic.line</field>
-            <field name="inherit_id" ref="nomin_budget.account_analytic_line_form_inherit_nomin"/>
-            <field name="arch" type="xml">
-               <xpath expr="//field[@name='other_budget_id']" position="after">
-                  <separator string="Controll Budget" colspan="4"/>
-                  <field name="controll_budget_id"/>
-              </xpath>
-            </field>
-        </record>
+        </p>
+      </field>
+    </record>
 
-        <!-- Budget Balance Check -->
-        <record id="view_budget_balance_payment_check_inherit" model="ir.ui.view">
-            <field name="name">view.budget.balance.payment.check.inherit</field>
-            <field name="model">budget.balance.check.payment</field>
-            <field name="inherit_id" ref="nomin_budget.view_budget_balance_payment_check"/>
-            <field name="arch" type="xml">
-              <xpath expr="//group/notebook/page[@name='control_budget']/group/field[@name='controll_budget_line_ids']" position="before">
-                <field name="control_budget_id" options="{'no_create': True}" colspan="4" domain="[('state','=','done')]" 
-                              attrs="{'readonly':[('is_controll_budget','=',False)]}"/>
-              </xpath>
-            <xpath expr="//group/notebook/page[@name='control_budget']/group/field[@name='controll_budget_line_ids']/tree/field[@name='budget_type']" position="after">           
-              <field name="controll_budget_id" string="Хяналтын төсвийн мөр" options="{'no_create': True}" domain="[('department_id','=',department_id),('budget_type','=',budget_type),('state','=','confirm'),('control_budget_id','=',parent.control_budget_id)]"/>
-                </xpath> 
-            </field>
-        </record>
-        
-        
+    <menuitem name="Control Budget" action="nomin_project.action_control_budget" id="menu_project_control_budget" parent="project.menu_project_management" groups="project.group_project_budget" sequence="12" />
+
+    <!-- ТХ -->
+    <record id="payment_request_form_inherit" model="ir.ui.view">
+      <field name="name">payment.request.form.inherit</field>
+      <field name="model">payment.request</field>
+      <field name="inherit_id" ref="nomin_budget.payment_request_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//sheet/notebook/page/field[@name='line_ids']/form/group/notebook/page[@name='budget']/notebook/page[@name='control_budget']/group/field[@name='controll_budget_line_ids']/tree/field[@name='analytic_account_id']" position="after">
+          <field name="budget_line_id"/>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="account_analytic_line_form_inherit_nomin_project" model="ir.ui.view">
+      <field name="name">account.analytic.line.form.inherit.nomin.project</field>
+      <field name="model">account.analytic.line</field>
+      <field name="inherit_id" ref="nomin_budget.account_analytic_line_form_inherit_nomin"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='other_budget_id']" position="after">
+          <separator string="Controll Budget" colspan="4"/>
+          <field name="controll_budget_id"/>
+        </xpath>
+      </field>
+    </record>
+
+    <!-- Budget Balance Check -->
+    <record id="view_budget_balance_payment_check_inherit" model="ir.ui.view">
+      <field name="name">view.budget.balance.payment.check.inherit</field>
+      <field name="model">budget.balance.check.payment</field>
+      <field name="inherit_id" ref="nomin_budget.view_budget_balance_payment_check"/>
+      <field name="arch" type="xml">
+        <xpath expr="//group/notebook/page[@name='control_budget']/group/field[@name='controll_budget_line_ids']" position="before">
+          <field name="control_budget_id" options="{'no_create': True}" colspan="4" domain="[('state','=','done')]" attrs="{'readonly':[('is_controll_budget','=',False)]}"/>
+        </xpath>
+        <xpath expr="//group/notebook/page[@name='control_budget']/group/field[@name='controll_budget_line_ids']/tree/field[@name='budget_type']" position="after">
+          <field name="controll_budget_id" string="Хяналтын төсвийн мөр" options="{'no_create': True}" domain="[('department_id','=',department_id),('budget_type','=',budget_type),('state','=','confirm'),('control_budget_id','=',parent.control_budget_id)]"/>
+        </xpath>
+      </field>
+    </record>
+
+
   </data>
-</openerp>
+</odoo>

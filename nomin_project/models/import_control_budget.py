@@ -1,24 +1,14 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Asterisk Technologies LLC, Enterprise Management Solution    
-#    Copyright (C) 2007-2013 Asterisk Technologies LLC Co.,ltd (<http://www.erp.mn>). All Rights Reserved
-#
-#    Email : unuruu25@gmail.com
-#    Phone : 976 + 88005462
-#
-##############################################################################
-from openerp.tools.translate import _
-from openerp import api, fields, models, _
+
+from odoo.tools.translate import _
+from odoo import api, fields, models, _
 import time
 import xlrd
-import openerp.netsvc, decimal, base64, os, time, xlrd
+import odoo.netsvc, decimal, base64, os, time, xlrd
 from tempfile import NamedTemporaryFile
 import logging
 _logger = logging.getLogger(__name__)
-from openerp.exceptions import UserError, ValidationError
-# from datetime import datetime
-# from openerp.osv import osv,fields,orm
+from odoo.exceptions import UserError, ValidationError
 
 class import_control_budget(models.Model):
     _name = 'import.control.budget'

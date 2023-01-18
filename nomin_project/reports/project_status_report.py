@@ -3,8 +3,8 @@ import dateutil
 import time
 from dateutil.relativedelta import relativedelta
 from datetime import date, datetime, timedelta
-from openerp.exceptions import UserError
-from openerp import models, fields, api, _
+from odoo.exceptions import UserError
+from odoo import models, fields, api, _
 from StringIO import StringIO
 from io import BytesIO
 import base64

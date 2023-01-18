@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        
+
         <record model="ir.ui.view" id="project_project_forecast_view">
             <field name="name">Project forecast</field>
             <field name="model">project.project.forecast</field>
@@ -10,18 +10,18 @@
                     <div>
                         <group>
                             <group>
-                                <field name="project_id" readonly="1" required="1" options="{'no_create': True}"/>                                
-                            </group>                        
+                                <field name="project_id" readonly="1" required="1" options="{'no_create': True}"/>
+                            </group>
                         </group>
                         <group>
                             <group>
-                                <field name="date_from" string="Даалгавар эхлэх огноо" options="{'no_create': True}"/>                                
+                                <field name="date_from" string="Даалгавар эхлэх огноо" options="{'no_create': True}"/>
                                 <field name="task_state" string="Даалгавар төлөв" options="{'no_create': True}"/>
-                            </group>                        
+                            </group>
                             <group>
                                 <field name="date_to" string="Даалгавар дуусах огноо" options="{'no_create': True}"/>
                                 <field name="user_id" string="Даалгавар хариуцагч" options="{'no_create': True}"/>
-                            </group>                        
+                            </group>
                         </group>
 
                         <notebook>
@@ -40,23 +40,22 @@
                                 </group>
                             </page>
                         </notebook>
-                         
+
                     </div>
                 </form>
             </field>
         </record>
 
-        
+
         <record model="ir.actions.act_window" id="action_project_project_forecast">
             <field name="name">Project forecast</field>
             <field name="res_model">project.project.forecast</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="usage">menu</field>
             <field name="view_id" ref="project_project_forecast_view"/>
-        </record> 
+        </record>
 
-        <!-- <menuitem name="Project forecast"   parent="project.menu_project_management" sequence="15" id="menu_project_project_forecast"  action="action_project_project_forecast"/> -->
+        <!-- <menuitem name="Project forecast" parent="project.menu_project_management" sequence="15" id="menu_project_project_forecast" action="action_project_project_forecast"/> -->
 
     </data>
 </odoo>

@@ -2,19 +2,12 @@
 import datetime
 import time
 from datetime import date, datetime, timedelta
-# from dateutil.relativedelta import relativedelta
-# import time
-# from openerp.osv import osv, fields 
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, ValidationError
-from fnmatch import translate
-from openerp.http import request
-import openerp.tools
-# from openerp import tools
-# from gnomekeyring import is_available
-# import xlwt
-# from xlwt import *
 
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError
+from fnmatch import translate
+from odoo.http import request
+import odoo.tools
 class RateProjecTask(models.TransientModel):
     '''
        Даалгавар үнэлэх

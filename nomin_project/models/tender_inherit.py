@@ -1,27 +1,9 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+
 import datetime
 from datetime import date, datetime, timedelta
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, ValidationError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError
 import time
 
 class create_project_tender(models.TransientModel):
@@ -29,35 +11,7 @@ class create_project_tender(models.TransientModel):
     '''
        хяналтын төсвөөес Тендер үүсгэх
     '''
-    # def default_get(self, cr, uid, fields, context=None):
-    #     result = []
-    #     if context is None:
-    #         context = {}
-    #     res = super(create_project_tender, self).default_get(cr, uid, fields, context=context)    
-    #     active_id = context and context.get('active_id', False) or False
-    #     perform_obj = self.pool.get('control.budget')
-    #     perform = perform_obj.browse(cr, uid, active_id)
-    #     line_ids = []
-    #     line_ids2= []
-    #     for line in perform.material_line_ids:
-    #         if line.cost_choose == True and line.state == 'confirm':
-    #             line_ids.append(line.id)
-    #     for line in perform.labor_line_ids:
-    #         if line.cost_choose == True and line.state == 'confirm':
-    #             line_ids2.append(line.id)
-                
-    #     res.update({
-    #                 'control_budget_id' : perform.id,
-    #                 'material_limit' : perform.material_utilization_limit,
-    #                 'labor_limit' : perform.labor_utilization_limit,
-    #                 'equipment_limit' : perform.equipment_utilization_limit,
-    #                 'carriage_limit' : perform.carriage_utilization_limit,
-    #                 'postage_limit' : perform.postage_utilization_limit,
-    #                 'other_limit' : perform.other_utilization_limit,
-    #                 'material_line': [(6, 0, line_ids)],
-    #                 'labor_line': [(6, 0, line_ids2)]
-    #                 })
-    #     return res
+    
     @api.model
     def default_get(self, fields):
         res = super(create_project_tender, self).default_get(fields) 
@@ -78,14 +32,10 @@ class create_project_tender(models.TransientModel):
             res.update({'material_line': line_ids,})            
         else:
             for line in perform.new_material_line_ids:
-                print '\n\n\n line' , line , line.material_total
                 if line.cost_choose == True and line.state == 'confirm':
                     new_line_ids.append(line.id)
-                    print '\n\n\n glg' , new_line_ids
                     total += line.material_total
-                    print '\n\n\n total' , total
             res.update({'new_material_line': new_line_ids,})
-            print '\n\n\n\ new mat line res' , res 
         if perform.is_old:
             for line in perform.labor_line_ids:
                 if line.cost_choose == True and line.state == 'confirm':

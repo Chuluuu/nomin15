@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
-    	<!-- Төслийн үе шат -->
-<!--    	<record id="view_inherit_purchase_requisition_form" model="ir.ui.view">-->
-<!--            <field name="name">inherit.purchase.requisition.form</field>-->
-<!--            <field name="model">purchase.requisition</field>-->
-<!--            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>-->
-<!--            <field name="arch" type="xml">-->
-<!--        		<xpath expr="//sheet/group/group/field[@name='origin']" position="before">-->
-<!--                   <field name="equipment_amount" attrs="{'invisible':[('control_budget_id','=',False)],'readonly':[('state','!=','draft')]}"/>-->
-<!--                   <field name="carriage_amount" attrs="{'invisible':[('control_budget_id','=',False)],'readonly':[('state','!=','draft')]}"/>-->
-<!--                   <field name="postage_amount" attrs="{'invisible':[('control_budget_id','=',False)],'readonly':[('state','!=','draft')]}"/>-->
-<!--                   <field name="other_amount" attrs="{'invisible':[('control_budget_id','=',False)],'readonly':[('state','!=','draft')]}"/>-->
-<!--                </xpath> -->
-<!--            </field>-->
-<!--        </record>-->
+<odoo>
+	<data>
+		<!-- Төслийн үе шат -->
+		<!--    	<record id="view_inherit_purchase_requisition_form" model="ir.ui.view">-->
+		<!--            <field name="name">inherit.purchase.requisition.form</field>-->
+		<!--            <field name="model">purchase.requisition</field>-->
+		<!--            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>-->
+		<!--            <field name="arch" type="xml">-->
+		<!--        		<xpath expr="//sheet/group/group/field[@name='origin']" position="before">-->
+		<!--                   <field name="equipment_amount" attrs="{'invisible':[('control_budget_id','=',False)],'readonly':[('state','!=','draft')]}"/>-->
+		<!--                   <field name="carriage_amount" attrs="{'invisible':[('control_budget_id','=',False)],'readonly':[('state','!=','draft')]}"/>-->
+		<!--                   <field name="postage_amount" attrs="{'invisible':[('control_budget_id','=',False)],'readonly':[('state','!=','draft')]}"/>-->
+		<!--                   <field name="other_amount" attrs="{'invisible':[('control_budget_id','=',False)],'readonly':[('state','!=','draft')]}"/>-->
+		<!--                </xpath> -->
+		<!--            </field>-->
+		<!--        </record>-->
 	</data>
-</openerp>
+</odoo>

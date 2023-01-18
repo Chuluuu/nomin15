@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api, _
-from openerp.tools.translate import _
-from openerp.exceptions import UserError, ValidationError
+from odoo import models, fields, api, _
+from odoo.tools.translate import _
+from odoo.exceptions import UserError, ValidationError
 import requests
 import json
-from openerp.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
+from odoo.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
 import xlsxwriter
 from io import BytesIO
 import base64

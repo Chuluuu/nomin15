@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError,ValidationError
-from openerp.osv import expression
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError,ValidationError
+from odoo.osv import expression
 from operator import itemgetter
 
 class ProjectProjectForecast(models.TransientModel):

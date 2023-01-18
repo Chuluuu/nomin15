@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data noupdate="0">
         <record id="ir_cron_project_task_alarm" model="ir.cron">
             <field name="name">Project task alarm</field>
@@ -31,5 +31,5 @@
             <field eval="'project.project'" name="model"/>
             <field eval="'_project_flow_cron'" name="function"/>
         </record>
-   </data>
-</openerp>
+    </data>
+</odoo>

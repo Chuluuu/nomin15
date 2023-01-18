@@ -1,29 +1,16 @@
 # -*- coding: utf-8 -*-
 import math
 import time
-import openerp.pooler
-from openerp import SUPERUSER_ID #
-from openerp import tools, api, models, fields # 
+from odoo import tools, api, models, fields # 
 from datetime import timedelta
 from datetime import datetime
 import dateutil.relativedelta as relativedelta
 from dateutil.relativedelta import relativedelta
 import re
-from openerp.exceptions import UserError #
+from odoo.exceptions import UserError #
 import logging
 from time import strftime
 _logger = logging.getLogger(__name__)
-# import openerp.netsvc as netsvc
-# from openerp import models, fields
-# from dateutil.parser import *
-# import sys
-# import logging
-# from openerp.tools.translate import _
-# import math
-# from openerp import tools
-# from openerp.osv import fields, osv, expression
-# import openerp.tools
-# import openerp.netsvc
 
 class ir_attachment(models.Model):
     _inherit = 'ir.attachment'

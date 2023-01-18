@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api
-from openerp.tools.translate import _
-from openerp.exceptions import UserError
+from odoo import models, fields, api
+from odoo.tools.translate import _
+from odoo.exceptions import UserError
 import xlrd, base64, os
 from tempfile import NamedTemporaryFile
-# import logging
-# _logger = logging.getLogger(__name__)
-# from openerp.osv import osv, expression
-
 
 class ImportOperationTask(models.TransientModel):
 	_name = 'import.operation.task'

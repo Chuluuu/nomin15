@@ -1,4 +1,4 @@
-<openerp>
+<odoo>
     <data>
         <record id="view_labor_cost_settings" model="ir.ui.view">
             <field name="name">labor.cost.settings.form</field>
@@ -6,7 +6,7 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="labor cost settings">
-                    <group>                
+                    <group>
                         <group >
                             <field name="engineer_salary"/>
                             <field name="extra_salary"/>
@@ -15,40 +15,38 @@
                             <field name="social_insurance_rate"/>
                             <field name="habe_percent"/>
                         </group>
-                   </group> 
+                    </group>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers"/>
                         <field name="message_ids" widget="mail_thread"/>
                     </div>
-               </form>
+                </form>
             </field>
         </record>
 
         <record model="ir.ui.view" id="view_labor_cost_settings_tree">
-			<field name="name">labor cost settings tree</field>
-			<field name="model">labor.cost.settings</field>
-			<field name="arch" type="xml">
-				<tree string="Ажиллах хүчний зардал тохиргоо" >
-					<field name="engineer_salary"/>
+            <field name="name">labor cost settings tree</field>
+            <field name="model">labor.cost.settings</field>
+            <field name="arch" type="xml">
+                <tree string="Ажиллах хүчний зардал тохиргоо">
+                    <field name="engineer_salary"/>
                     <field name="extra_salary"/>
                     <field name="social_insurance_rate"/>
-                    <field name="habe_percent"/>					
-				</tree>
-			</field>
-		</record>
-        
+                    <field name="habe_percent"/>
+                </tree>
+            </field>
+        </record>
+
         <record id="action_labor_cost_settings" model="ir.actions.act_window">
             <field name="name">Ажиллах хүчний зардал тохиргоо</field>
             <field name="res_model">labor.cost.settings</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form,tree</field>
             <field name="view_id" ref="view_labor_cost_settings_tree"/>
         </record>
 
-        
-        <menuitem id="menu_labor_cost_settings" action="nomin_project.action_labor_cost_settings"
-           parent="nomin_project.menu_project_config2" groups="project.group_general_budgeter" sequence="15" />
 
-        
+        <menuitem id="menu_labor_cost_settings" action="nomin_project.action_labor_cost_settings" parent="nomin_project.menu_project_config2" groups="project.group_general_budgeter" sequence="15" />
+
+
     </data>
-</openerp>
+</odoo>

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from openerp import api, models
+from odoo import api, models
 
 class ReportTaskOperation(models.AbstractModel):
     _name = 'report.nomin_project.report_task_opeartion_action'
-    @api.multi
+    
     def render_html(self, data=None):
         report_obj = self.env['report']
         report = report_obj._get_report_from_name('nomin_project.report_task_opeartion_action')

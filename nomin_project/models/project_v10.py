@@ -3,9 +3,9 @@
 from datetime import datetime, date
 import time
 import openerp.addons.decimal_precision as dp
-from openerp import api, fields, models, _
-from openerp.http import request
-from openerp.exceptions import UserError, ValidationError
+from odoo import api, fields, models, _
+from odoo.http import request
+from odoo.exceptions import UserError, ValidationError
 from dateutil.relativedelta import relativedelta
 from urllib3.connectionpool import _Default
 from operator import itemgetter

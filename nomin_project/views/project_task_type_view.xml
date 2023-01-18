@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
-    	<!-- Төслийн үе шат -->
-    	<record id="task_type_search_inherit" model="ir.ui.view">
+<odoo>
+    <data>
+        <!-- Төслийн үе шат -->
+        <record id="task_type_search_inherit" model="ir.ui.view">
             <field name="name">project.task.type.search</field>
             <field name="model">project.task.type</field>
             <field name="inherit_id" ref="project.task_type_search"/>
             <field name="arch" type="xml">
-            	<!-- <search string="Tasks Stages"> -->
-            		<xpath expr="//search/field[@name='name']" position="after">
-                		<filter string="Common" name="common" domain="[('case_default', '=', 1)]" help="Stages common to all projects"/>
-                	</xpath>
-             	<!-- </search> -->
+                <!-- <search string="Tasks Stages"> -->
+                <xpath expr="//search/field[@name='name']" position="after">
+                    <filter string="Common" name="common" domain="[('case_default', '=', 1)]" help="Stages common to all projects"/>
+                </xpath>
+                <!-- </search> -->
             </field>
         </record>
-    	
+
         <record id="project.task_type_edit" model="ir.ui.view">
             <field name="name">project.task.type.form</field>
             <field name="model">project.task.type</field>
@@ -26,7 +26,7 @@
                             <field name="sequence"/>
                         </group>
                         <group>
-                        	<field name="case_default"/>
+                            <field name="case_default"/>
                             <field name="fold"/>
                         </group>
                     </group>
@@ -37,4 +37,4 @@
             </field>
         </record>
     </data>
-</openerp>
+</odoo>

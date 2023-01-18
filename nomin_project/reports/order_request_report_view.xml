@@ -1,393 +1,575 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>  
+<odoo>
+    <data>
         <template id="nomin_project.order_request_report">
-                <t t-call="report.layout">
-                    <t t-foreach="orders" t-as="o">                       
-                        <div class="page l10n_mn_base_report" >
-                            <table width="100%" >
+            <t t-call="report.layout">
+                <t t-foreach="orders" t-as="o">
+                    <div class="page l10n_mn_base_report">
+                        <table width="100%">
+                            <tr>
+                                <td style="padding-left:50px">
+                                    <img class="image" t-att-src="'data:image/png;base64,%s' %o.project_senior_manager_id.department_id.company_id.favicon_backend " style="height:50px;width:50px;" />
+                                </td>
+                                <td>
+                                    <p> "Номин Холдинг" ХХК, МТСалбар, ПХУАлба</p>
+                                </td>
+                            </tr>
+                        </table>
+                        <table width="100%" style="padding: 1px; font-size: 23px; border:0px">
+                            <tr>
+                                <td align="center" colspan="2" style="vertical-align: text-center; font-size: 20px">
+                                    <h4 t-esc="order_name"/>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <table style="font-size:15 ; padding-left:50px">
+                            <tr>
+                                <td width="100%">
+                                    <tr>
+                                        <td style="padding-left:50px">
+                                            <b>Захиалгын дугаар: </b>
+                                            <span t-if="o.name">
+                                                <span t-field="o.name"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left:50px">
+                                            <b>Захиалгат ажлын нэр: </b>
+                                            <span t-if="o.order_name">
+                                                <span t-field="o.order_name"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left:50px">
+                                            <b>Захиалагч салбар: </b>
+                                            <span t-if="o.department_id">
+                                                <span t-field="o.department_id"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left:50px">
+                                            <b>Захиалга өгсөн ажилтан: </b>
+                                            <span t-if="o.employee_id">
+                                                <span t-field="o.employee_id"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left:50px">
+                                            <b>Захиалга өгсөн огноо: </b>
+                                            <span t-if="o.start_date">
+                                                <span t-field="o.start_date"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+
+                        <t t-set="number" t-value="1"/>
+                        <table width="100%" class="table table-l10n_mn-grid" style="font-size: 15;border: 0px solid #000000; padding-left:50px; padding-right:50px">
+                            <tr style="border: 1px solid #000000; padding-left:50px">
+                                <th align="center" style="width:10px; text-align: center; padding: 0px; border: 1px solid #000000;">№</th>
+                                <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Төслийн гүйцэтгэгч</th>
+                                <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;"> Хүн/Цагийн үнэлгээ</th>
+                                <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Ажиллах цаг</th>
+                                <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Зардал </th>
+
+                            </tr>
+                            <tbody style="border: 1px solid #000000;" t-foreach="lines[o.id]" t-as="l">
+                                <tr style="border: 1px solid #000000;">
+                                    <td style="vertical-align: text-center; width:10px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;" t-esc="number"></td>
+                                    <td style="vertical-align: text-center; width:60px;text-align: center;padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;">
+                                        <span t-esc="l['name']"/>
+                                    </td>
+
+                                    <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                        <span t-esc="l['rate']"/>
+                                    </td>
+                                    <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                        <span t-esc="l['time']"/>
+                                    </td>
+                                    <td style="vertical-align: text-center; width:60px;width:60px; text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;">
+                                        <span t-esc="l['total']"/>
+                                    </td>
+
+                                    <t t-set="number" t-value="number + 1"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="padding-right:50px" align="right">
+                            <b>Нийт зардал: </b>
+                            <span t-field="o.time_cost_info"/>
+                        </p>
+
+                        <table class="table table-l10n_mn-grid" style="font-size: 15;border: 0px solid #000000;">
+                            <t t-foreach="orders" t-as="e">
                                 <tr>
-                                    <td style="padding-left:50px">
-                                        <img class="image" t-att-src="'data:image/png;base64,%s' %o.project_senior_manager_id.department_id.company_id.favicon_backend "  style="height:50px;width:50px;" /> 
-                                    </td>
-                                    <td>
-                                        <p> "Номин Холдинг" ХХК, МТСалбар, ПХУАлба</p>
-                                    </td>
-                                </tr>
-                            </table>                                    
-                            <table width="100%" style="padding: 1px; font-size: 23px; border:0px">
-                                <tr>
-                                    <td align="center" colspan="2" style="vertical-align: text-center; font-size: 20px">
-                                        <h4 t-esc="order_name"/>
-                                    </td>
-                                </tr>
-                            </table>
+                                    <t t-if="e.is_control == True">
+                                        <span align="left" style="font-size:15px; padding-left:50px">
+                                            <b>Боловсруулсан: </b>
+                                        </span>
+                                        <br/>
 
+                                        <span align="left" style="font-size:15px; padding-left:70px">Тооцоо гаргасан:                                            <span t-field="e.project_manager_id.job_id.name"/>
+:
 
-                            <table style="font-size:15 ; padding-left:50px">
-                                <tr><td width="100%">
-                                    <tr>
-                                        <td style="padding-left:50px"> <b>Захиалгын дугаар: </b><span t-if="o.name"><span t-field="o.name"/></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-left:50px"> <b>Захиалгат ажлын нэр: </b><span t-if="o.order_name"><span t-field="o.order_name"/></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-left:50px"><b>Захиалагч салбар: </b><span t-if="o.department_id"><span t-field="o.department_id"/></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-left:50px"><b>Захиалга өгсөн ажилтан: </b><span t-if="o.employee_id"><span t-field="o.employee_id"/></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-left:50px"><b>Захиалга өгсөн огноо: </b><span t-if="o.start_date"><span t-field="o.start_date"/></span></td>
-                                    </tr>
-                                </td></tr>
-                            </table>
-                            <br/>
-                               
-                            <t t-set="number" t-value="1"/>
-                            <table width="100%" class="table table-l10n_mn-grid" style="font-size: 15;border: 0px solid #000000; padding-left:50px; padding-right:50px">
-                                <tr style="border: 1px solid #000000; padding-left:50px">
-                                    <th align="center" style="width:10px; text-align: center; padding: 0px; border: 1px solid #000000;">№</th>
-                                    <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Төслийн гүйцэтгэгч</th>
-                                    <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;"> Хүн/Цагийн үнэлгээ</th>
-                                    <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Ажиллах цаг</th>
-                                    <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Зардал </th>
-    
-                                </tr>
-                                <tbody style="border: 1px solid #000000;"  t-foreach="lines[o.id]"  t-as="l">
-                                    <tr style="border: 1px solid #000000;">
-                                        <td style="vertical-align: text-center; width:10px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;" t-esc="number"></td>
-                                        <td style="vertical-align: text-center; width:60px;text-align: center;padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-esc="l['name']"/></td>
-
-                                        <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-esc="l['rate']"/></td>
-                                        <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-esc="l['time']"/></td>
-                                        <td style="vertical-align: text-center; width:60px;width:60px; text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-esc="l['total']"/></td>
-                                       
-                                        <t t-set="number" t-value="number + 1"/>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <p style="padding-right:50px" align="right"><b>Нийт зардал: </b><span t-field="o.time_cost_info"/></p>
-
-                            <table class="table table-l10n_mn-grid" style="font-size: 15;border: 0px solid #000000;">
-                                <t t-foreach="orders" t-as="e">
-                                    <tr>
-                                        <t t-if="e.is_control == True" >
-                                               <span align="left" style="font-size:15px; padding-left:50px"><b>Боловсруулсан: </b></span><br/>
-
-                                                <span align="left" style="font-size:15px; padding-left:70px">Тооцоо гаргасан: <span t-field="e.project_manager_id.job_id.name"/>:
-
-                                                <t t-if="e.project_manager_id.signature_image">
-
-                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %e.project_manager_id.signature_image" style="height:50px;width:125px;"/>
-                                                </t>
-                                                <t t-if="not e.project_manager_id.signature_image">
-                                                    <span style="height:50px;width:125px;"/> 
-                                                </t>                                                                                            
-
-                                                <span t-esc="e.project_manager_id.last_name[:1]"/>.<span t-field="e.project_manager_id.name"/>
-                                                </span><br/> <br/>
-
-                                                <span align="left" style="font-size:15px; padding-left:70px">Хянасан: <span t-field="e.project_senior_manager_id.job_id.name"/>:
-
-                                                <t t-if="e.project_senior_manager_id.signature_image">
-                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %e.project_senior_manager_id.signature_image" style="height:50px;width:125px;"/>
-                                                </t>
-                                                <t t-if="not e.project_senior_manager_id.signature_image">
-                                                    <span style="height:50px;width:125px;"/> 
-                                                </t> 
-                                                
-                                                <span t-esc="e.project_senior_manager_id.last_name[:1]"/>.<span t-field="e.project_senior_manager_id.name"/>
-                                                </span><br/> <br/>
-
-                                                <span align="left" style="font-size:15px; padding-left:70px">Хянасан: <span t-field="e.project_manager_id.department_id.parent_id.manager_id.job_id.name"/>:
-                                                <t t-if="e.project_manager_id.department_id.parent_id.manager_id.signature_image">
-                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %e.project_manager_id.department_id.parent_id.manager_id.signature_image" style="height:50px;width:125px;"/>
-                                                </t>
-                                                <t t-if="not e.project_manager_id.department_id.parent_id.manager_id.signature_image">
-                                                    <span style="height:50px;width:125px;"/> 
-                                                </t> 
-                                                <span t-esc="e.project_manager_id.department_id.parent_id.manager_id.last_name[:1]"/>. <span t-field="e.project_manager_id.department_id.parent_id.manager_id.name"/>
-                                                </span><br/> <br/>
-
-
-
-                                                <span align="left" style="font-size:15px; padding-left:50px"><b>Захиалагч талаас баталгаажуулсан: </b></span><br/>
-
-                                                <span align="left" style="font-size:15px; padding-left:70px">Захиалга өгсөн: <span t-field="e.employee_id.job_id.name"/>:
-                                                <t t-if="e.employee_id.signature_image">                                                
-                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %e.employee_id.signature_image" style="height:50px;width:125px;"/> 
-                                                </t>
-                                                <t t-if="not e.employee_id.signature_image">
-                                                    <span style="height:50px;width:125px;"/> 
-                                                </t>
-                                                <span t-esc="e.employee_id.last_name[:1]"/>.<span t-field="e.employee_id.name"/>
-                                                </span><br/> <br/>
-
-                                                <span align="left" style="font-size:15px; padding-left:70px">Баталсан: <span t-field="e.confirmed_employee_id.job_id.name"/>:
-                                                <t t-if="e.confirmed_employee_id.signature_image">                                                
-                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %e.confirmed_employee_id.signature_image" style="height:50px;width:125px;"/> 
-                                                </t>
-                                                <t t-if="not e.confirmed_employee_id.signature_image">
-                                                    <span style="height:50px;width:125px;"/> 
-                                                </t>
-                                                <span t-esc="e.confirmed_employee_id.last_name[:1]"/>. <span t-field="e.confirmed_employee_id.name"/>
-                                                </span><br/> <br/>
-                                                <t t-if="e.approve_employee_id">
-                                                    <span align="left" style="font-size:15px; padding-left:70px">Зардал баталсан: <span t-field="e.confirmed_employee_id2.job_id.name"/>:
-                                                    <t t-if="e.confirmed_employee_id2.signature_image">                                                
-                                                        <img class="image" t-att-src="'data:image/png;base64,%s' %e.confirmed_employee_id2.signature_image" style="height:50px;width:125px;"/> 
-                                                    </t>
-                                                    <t t-if="not e.confirmed_employee_id2.signature_image">
-                                                        <span style="height:50px;width:125px;"/> 
-                                                    </t>
-                                                    <span t-esc="e.confirmed_employee_id2.last_name[:1]"/>. <span t-field="e.confirmed_employee_id2.name"/>
-                                                    </span><br/> <br/>
-                                                </t>
-                                        </t>
-                                        <t t-if="e.is_control == False" >
-                                            <span align="left" style="font-size:15px; padding-left:50px"><b>Боловсруулсан: </b></span><br/>
-
-                                            <span align="left" style="font-size:15px; padding-left:70px">Тооцоо гаргасан: <span t-field="e.project_manager_id.job_id.name"/>:
                                             <t t-if="e.project_manager_id.signature_image">
+
                                                 <img class="image" t-att-src="'data:image/png;base64,%s' %e.project_manager_id.signature_image" style="height:50px;width:125px;"/>
                                             </t>
                                             <t t-if="not e.project_manager_id.signature_image">
-                                                <span style="height:50px;width:125px;"/> 
+                                                <span style="height:50px;width:125px;"/>
                                             </t>
-                                            <span t-esc="e.project_manager_id.last_name[:1]"/>.<span t-field="e.project_manager_id.name"/>
-                                            </span><br/> <br/>
-                                            <span align="left" style="font-size:15px; padding-left:70px">Хянасан: <span t-field="e.project_senior_manager_id.job_id.name"/>:
+
+                                            <span t-esc="e.project_manager_id.last_name[:1]"/>
+.                                            <span t-field="e.project_manager_id.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+
+                                        <span align="left" style="font-size:15px; padding-left:70px">Хянасан:                                            <span t-field="e.project_senior_manager_id.job_id.name"/>
+:
+
                                             <t t-if="e.project_senior_manager_id.signature_image">
                                                 <img class="image" t-att-src="'data:image/png;base64,%s' %e.project_senior_manager_id.signature_image" style="height:50px;width:125px;"/>
                                             </t>
                                             <t t-if="not e.project_senior_manager_id.signature_image">
-                                                <span style="height:50px;width:125px;"/> 
+                                                <span style="height:50px;width:125px;"/>
                                             </t>
-                                            <span t-esc="e.project_senior_manager_id.last_name[:1]"/>.<span t-field="e.project_senior_manager_id.name"/>
-                                            </span><br/> <br/>
-                                            <span align="left" style="font-size:15px; padding-left:70px">Хянасан: <span t-field="e.project_manager_id.department_id.parent_id.manager_id.job_id.name"/>:
+
+                                            <span t-esc="e.project_senior_manager_id.last_name[:1]"/>
+.                                            <span t-field="e.project_senior_manager_id.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+
+                                        <span align="left" style="font-size:15px; padding-left:70px">Хянасан:                                            <span t-field="e.project_manager_id.department_id.parent_id.manager_id.job_id.name"/>
+:
                                             <t t-if="e.project_manager_id.department_id.parent_id.manager_id.signature_image">
                                                 <img class="image" t-att-src="'data:image/png;base64,%s' %e.project_manager_id.department_id.parent_id.manager_id.signature_image" style="height:50px;width:125px;"/>
                                             </t>
                                             <t t-if="not e.project_manager_id.department_id.parent_id.manager_id.signature_image">
-                                                <span style="height:50px;width:125px;"/> 
-                                            </t> 
-                                            <span t-esc="e.project_manager_id.department_id.parent_id.manager_id.last_name[:1]"/>. <span t-field="e.project_manager_id.department_id.parent_id.manager_id.name"/>
-                                            </span><br/> <br/>
-                                            <span align="left" style="font-size:15px; padding-left:50px"><b>Захиалагч талаас баталгаажуулсан: </b></span><br/>
+                                                <span style="height:50px;width:125px;"/>
+                                            </t>
+                                            <span t-esc="e.project_manager_id.department_id.parent_id.manager_id.last_name[:1]"/>
+.                                            <span t-field="e.project_manager_id.department_id.parent_id.manager_id.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
 
-                                            <span align="left" style="font-size:15px; padding-left:70px">Захиалга өгсөн: <span t-field="e.employee_id.job_id.name"/>:
-                                            <t t-if="e.employee_id.signature_image">                                                
-                                                <img class="image" t-att-src="'data:image/png;base64,%s' %e.employee_id.signature_image" style="height:50px;width:125px;"/> 
+
+
+                                        <span align="left" style="font-size:15px; padding-left:50px">
+                                            <b>Захиалагч талаас баталгаажуулсан: </b>
+                                        </span>
+                                        <br/>
+
+                                        <span align="left" style="font-size:15px; padding-left:70px">Захиалга өгсөн:                                            <span t-field="e.employee_id.job_id.name"/>
+:
+                                            <t t-if="e.employee_id.signature_image">
+                                                <img class="image" t-att-src="'data:image/png;base64,%s' %e.employee_id.signature_image" style="height:50px;width:125px;"/>
                                             </t>
                                             <t t-if="not e.employee_id.signature_image">
-                                                <span style="height:50px;width:125px;"/> 
+                                                <span style="height:50px;width:125px;"/>
                                             </t>
-                                            <span t-esc="e.employee_id.last_name[:1]"/>.<span t-field="e.employee_id.name"/>
-                                                </span><br/> <br/>
-                                            <span align="left" style="font-size:15px; padding-left:70px">Хянасан: <span t-field="e.control_employee_id.job_id.name"/>:
-                                            <t t-if="e.control_employee_id.signature_image">                                                
-                                                <img class="image" t-att-src="'data:image/png;base64,%s' %e.control_employee_id.signature_image" style="height:50px;width:125px;"/> 
-                                            </t>
-                                            <t t-if="not e.control_employee_id.signature_image">
-                                                <span style="height:50px;width:125px;"/> 
-                                            </t>
-                                            <span t-esc="e.control_employee_id.last_name[:1]"/>.<span t-field="e.control_employee_id.name"/>
-                                            </span><br/> <br/>
-                                            <span align="left" style="font-size:15px; padding-left:70px">Баталсан: <span t-field="e.confirmed_employee_id.job_id.name"/>:
-                                            <t t-if="e.confirmed_employee_id.signature_image">                                                
-                                                <img class="image" t-att-src="'data:image/png;base64,%s' %e.confirmed_employee_id.signature_image" style="height:50px;width:125px;"/> 
+                                            <span t-esc="e.employee_id.last_name[:1]"/>
+.                                            <span t-field="e.employee_id.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+
+                                        <span align="left" style="font-size:15px; padding-left:70px">Баталсан:                                            <span t-field="e.confirmed_employee_id.job_id.name"/>
+:
+                                            <t t-if="e.confirmed_employee_id.signature_image">
+                                                <img class="image" t-att-src="'data:image/png;base64,%s' %e.confirmed_employee_id.signature_image" style="height:50px;width:125px;"/>
                                             </t>
                                             <t t-if="not e.confirmed_employee_id.signature_image">
-                                                <span style="height:50px;width:125px;"/> 
+                                                <span style="height:50px;width:125px;"/>
                                             </t>
-                                            <span t-esc="e.confirmed_employee_id.last_name[:1]"/>. <span t-field="e.confirmed_employee_id.name"/>
-                                                </span><br/> <br/>
-
-                                            <t t-if="e.approve_employee_id">
-                                                <span align="left" style="font-size:15px; padding-left:70px">Зардал баталсан: <span t-field="e.confirmed_employee_id2.job_id.name"/>:
-                                                <t t-if="e.confirmed_employee_id2.signature_image">                                                
-                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %e.confirmed_employee_id2.signature_image" style="height:50px;width:125px;"/> 
+                                            <span t-esc="e.confirmed_employee_id.last_name[:1]"/>
+.                                            <span t-field="e.confirmed_employee_id.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                        <t t-if="e.approve_employee_id">
+                                            <span align="left" style="font-size:15px; padding-left:70px">Зардал баталсан:                                                <span t-field="e.confirmed_employee_id2.job_id.name"/>
+:
+                                                <t t-if="e.confirmed_employee_id2.signature_image">
+                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %e.confirmed_employee_id2.signature_image" style="height:50px;width:125px;"/>
                                                 </t>
                                                 <t t-if="not e.confirmed_employee_id2.signature_image">
-                                                    <span style="height:50px;width:125px;"/> 
+                                                    <span style="height:50px;width:125px;"/>
                                                 </t>
-                                                <span t-esc="e.confirmed_employee_id2.last_name[:1]"/>. <span t-field="e.confirmed_employee_id2.name"/>
-                                                </span><br/> <br/>
-                                            </t>
+                                                <span t-esc="e.confirmed_employee_id2.last_name[:1]"/>
+.                                                <span t-field="e.confirmed_employee_id2.name"/>
+                                            </span>
+                                            <br/>
+                                            <br/>
                                         </t>
-                                    </tr>
-                                </t>
-                            </table>
+                                    </t>
+                                    <t t-if="e.is_control == False">
+                                        <span align="left" style="font-size:15px; padding-left:50px">
+                                            <b>Боловсруулсан: </b>
+                                        </span>
+                                        <br/>
 
-                        </div>
-                    </t>
-                </t>
-        </template>
-        <template id="nomin_project.order_request_act_report">
-                <t t-call="report.layout">
-                    <t t-foreach="orders" t-as="o">                       
-                        <div class="page l10n_mn_base_report" >
-                            <table width="100%" >
-                                <tr>
-                                    <td style="padding-left:50px">
-                                        <img class="image" t-att-src="'data:image/png;base64,%s' %o.project_senior_manager_id.department_id.company_id.favicon_backend "  style="height:50px;width:50px;" /> 
-                                    </td>
-                                    <td>
-                                        <p> "Номин Холдинг" ХХК, МТСалбар, ПХУАлба</p>
-                                    </td>
-                                </tr>
-                            </table>                                    
-                            <table width="100%" style="padding: 1px; font-size: 23px; border:0px">
-                                <tr>
-                                    <td align="center" colspan="2" style="vertical-align: text-center; font-size: 20px">
-                                        <h4 t-esc="order_name"/>
-                                    </td>
-                                </tr>
-                            </table>
-
-
-                            <table style="font-size:15 ; padding-left:50px">
-                                <tr><td width="100%">
-                                    <tr>
-                                        <td style="padding-left:50px"><b>Акт бэлтгэсэн огноо: </b><span t-if="o.handover_date"><span t-field="o.handover_date"/></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-left:50px"><b>Захиалга хүлээн авсан огноо: </b><span t-if="o.assigned_date"><span t-field="o.assigned_date"/></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-left:50px"> <b>Захиалгат ажлын нэр: </b><span t-if="o.order_name"><span t-field="o.order_name"/></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-left:50px"><b>Зорилго: </b><span t-if="o.purpose"><span t-field="o.purpose"/></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding-left:50px"><b>Зардлын бүртгэл: </b><span t-if="o.cost_types"><span t-field="o.cost_types"/></span></td>
-                                    </tr> 
-                                    <tr>
-                                        <td style="padding-left:50px"><b>Захиалгатай холбоотой ажлуудыг хүлээн авч баталгаажуулж байна: </b><span t-if="o.is_receive"><span t-field="o.is_receive"/></span></td>
-                                    </tr>                                
-                                    
-                                </td></tr>
-                            </table>
-                            <br/>                               
-                            <t t-set="number" t-value="1"/>
-                            <table width="100%" class="table table-l10n_mn-grid" style="font-size: 15;border: 0px solid #000000; padding-left:50px; padding-right:50px">
-                                <tr style="border: 1px solid #000000; padding-left:50px">
-                                    <th align="center" style="width:10px; text-align: center; padding: 0px; border: 1px solid #000000;">№</th>
-                                    <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Хийгдсэн ажил</th>
-                                    <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Тайлбар</th>
-                                    <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Хүлээн авсан ажилтны тайлбар</th>
-                                </tr>
-                                <tbody style="border: 1px solid #000000;"  t-foreach="lines[o.id]"  t-as="l">
-                                    <tr style="border: 1px solid #000000;">
-                                        <td style="vertical-align: text-center; width:10px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;" t-esc="number"></td>
-                                        <td style="vertical-align: text-center; width:60px;text-align: center;padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-esc="l['task_name']"/></td>
-
-                                        <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-esc="l['description']"/></td>
-                                        <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-esc="l['comment']"/></td>
-                                       
-                                        <t t-set="number" t-value="number + 1"/>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <br/>
-                            <table class="table table-l10n_mn-grid" style="font-size: 15;border: 0px solid #000000;">
-                                <t t-foreach="orders" t-as="e">
-                                    <tr>
-
-                                            <span align="left" style="font-size:15px; padding-left:50px"><b>Баталгаажуулсан: </b></span><br/>
-                                            <t t-if="e.receive_employee_id1">
-                                                <span align="left" style="font-size:15px; padding-left:70px">Захиалагч талаас: <span t-field="e.receive_employee_id1.job_id.name"/>:
-                                                <t t-if="e.receive_employee_id1.signature_image">                                                
-                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %e.receive_employee_id1.signature_image" style="height:50px;width:125px;"/> 
-                                                </t>
-                                                <t t-if="not e.receive_employee_id1.signature_image">
-                                                    <span style="height:50px;width:125px;"/>                                             </t>
-                                                <span t-esc="e.receive_employee_id1.last_name[:1]"/>.<span t-field="e.receive_employee_id1.name"/>
-                                                    </span><br/> <br/>
-                                            </t>
-                                            <t t-if="e.receive_employee_id2">
-                                                <span align="left" style="font-size:15px; padding-left:70px">Захиалагч талаас: <span t-field="e.receive_employee_id2.job_id.name"/>:
-                                                <t t-if="e.receive_employee_id2.signature_image">                                                
-                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %e.receive_employee_id2.signature_image" style="height:50px;width:125px;"/> 
-                                                </t>
-                                                <t t-if="not e.receive_employee_id2.signature_image">
-                                                    <span style="height:50px;width:125px;"/> 
-                                                </t>
-                                                <span t-esc="e.receive_employee_id2.last_name[:1]"/>.<span t-field="e.receive_employee_id2.name"/>
-                                                </span><br/> <br/>
-                                            </t>
-                                            <t t-if="e.receive_employee_id3">
-                                            <span align="left" style="font-size:15px; padding-left:70px">Захиалагч талаас: <span t-field="e.receive_employee_id3.job_id.name"/>:
-                                                <t t-if="e.receive_employee_id3.signature_image">                                                
-                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %e.receive_employee_id3.signature_image" style="height:50px;width:125px;"/> 
-                                                </t>
-                                                <t t-if="not e.receive_employee_id3.signature_image">
-                                                    <span style="height:50px;width:125px;"/> 
-                                                </t>
-                                                <span t-esc="e.receive_employee_id3.last_name[:1]"/>. <span t-field="e.receive_employee_id3.name"/>
-                                                    </span><br/><br/>
-                                            </t>
-                                            <t t-if="e.approve_employee_id">
-                                                <span align="left" style="font-size:15px; padding-left:70px">Зардал баталсан: <span t-field="e.confirmed_employee_id2.job_id.name"/>:
-                                                <t t-if="e.confirmed_employee_id2.signature_image">                                                
-                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %e.confirmed_employee_id2.signature_image" style="height:50px;width:125px;"/> 
-                                                </t>
-                                                <t t-if="not e.confirmed_employee_id2.signature_image">
-                                                    <span style="height:50px;width:125px;"/> 
-                                                </t>
-                                                <span t-esc="e.confirmed_employee_id2.last_name[:1]"/>. <span t-field="e.confirmed_employee_id2.name"/>
-                                                </span><br/> <br/>
-                                            </t>
-
-                                            <span align="left" style="font-size:15px; padding-left:50px"><b>Баталгаажуулсан: </b></span><br/>
-
-                                            <span align="left" style="font-size:15px; padding-left:70px">Гүйцэтгэгч талаас: <span t-field="e.project_manager_id.job_id.name"/>:
+                                        <span align="left" style="font-size:15px; padding-left:70px">Тооцоо гаргасан:                                            <span t-field="e.project_manager_id.job_id.name"/>
+:
                                             <t t-if="e.project_manager_id.signature_image">
                                                 <img class="image" t-att-src="'data:image/png;base64,%s' %e.project_manager_id.signature_image" style="height:50px;width:125px;"/>
                                             </t>
                                             <t t-if="not e.project_manager_id.signature_image">
-                                                <span style="height:50px;width:125px;"/> 
+                                                <span style="height:50px;width:125px;"/>
                                             </t>
-                                            <span t-esc="e.project_manager_id.last_name[:1]"/>.<span t-field="e.project_manager_id.name"/>
-                                            </span><br/> <br/>
-                                            <span align="left" style="font-size:15px; padding-left:70px">Гүйцэтгэгч талаас: <span t-field="e.project_senior_manager_id.job_id.name"/>:
+                                            <span t-esc="e.project_manager_id.last_name[:1]"/>
+.                                            <span t-field="e.project_manager_id.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                        <span align="left" style="font-size:15px; padding-left:70px">Хянасан:                                            <span t-field="e.project_senior_manager_id.job_id.name"/>
+:
                                             <t t-if="e.project_senior_manager_id.signature_image">
                                                 <img class="image" t-att-src="'data:image/png;base64,%s' %e.project_senior_manager_id.signature_image" style="height:50px;width:125px;"/>
                                             </t>
                                             <t t-if="not e.project_senior_manager_id.signature_image">
-                                                <span style="height:50px;width:125px;"/> 
+                                                <span style="height:50px;width:125px;"/>
                                             </t>
-                                            <span t-esc="e.project_senior_manager_id.last_name[:1]"/>.<span t-field="e.project_senior_manager_id.name"/>
-                                            </span><br/> <br/>
-                                            <span align="left" style="font-size:15px; padding-left:70px">Гүйцэтгэгч талаас: <span t-field="e.project_manager_id.department_id.parent_id.manager_id.job_id.name"/>:
+                                            <span t-esc="e.project_senior_manager_id.last_name[:1]"/>
+.                                            <span t-field="e.project_senior_manager_id.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                        <span align="left" style="font-size:15px; padding-left:70px">Хянасан:                                            <span t-field="e.project_manager_id.department_id.parent_id.manager_id.job_id.name"/>
+:
                                             <t t-if="e.project_manager_id.department_id.parent_id.manager_id.signature_image">
                                                 <img class="image" t-att-src="'data:image/png;base64,%s' %e.project_manager_id.department_id.parent_id.manager_id.signature_image" style="height:50px;width:125px;"/>
                                             </t>
                                             <t t-if="not e.project_manager_id.department_id.parent_id.manager_id.signature_image">
-                                                <span style="height:50px;width:125px;"/> 
-                                            </t> 
-                                            <span t-esc="e.project_manager_id.department_id.parent_id.manager_id.last_name[:1]"/>. <span t-field="e.project_manager_id.department_id.parent_id.manager_id.name"/>
-                                            </span><br/> <br/>
-                                              
-                                        
-                                    </tr>
-                                </t>
-                            </table>
-                            <table style="font-size:15 ; padding-left:50px">
-                                <tr><td width="100%">
-                                     <tr>
-                                        <td style="padding-left:50px"><b>Огноо: </b><span t-if="o.review_date"><span t-field="o.review_date"/></span></td>
-                                    </tr>
-                                </td></tr>
-                            </table>
+                                                <span style="height:50px;width:125px;"/>
+                                            </t>
+                                            <span t-esc="e.project_manager_id.department_id.parent_id.manager_id.last_name[:1]"/>
+.                                            <span t-field="e.project_manager_id.department_id.parent_id.manager_id.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                        <span align="left" style="font-size:15px; padding-left:50px">
+                                            <b>Захиалагч талаас баталгаажуулсан: </b>
+                                        </span>
+                                        <br/>
 
-                        </div>
-                    </t>
+                                        <span align="left" style="font-size:15px; padding-left:70px">Захиалга өгсөн:                                            <span t-field="e.employee_id.job_id.name"/>
+:
+                                            <t t-if="e.employee_id.signature_image">
+                                                <img class="image" t-att-src="'data:image/png;base64,%s' %e.employee_id.signature_image" style="height:50px;width:125px;"/>
+                                            </t>
+                                            <t t-if="not e.employee_id.signature_image">
+                                                <span style="height:50px;width:125px;"/>
+                                            </t>
+                                            <span t-esc="e.employee_id.last_name[:1]"/>
+.                                            <span t-field="e.employee_id.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                        <span align="left" style="font-size:15px; padding-left:70px">Хянасан:                                            <span t-field="e.control_employee_id.job_id.name"/>
+:
+                                            <t t-if="e.control_employee_id.signature_image">
+                                                <img class="image" t-att-src="'data:image/png;base64,%s' %e.control_employee_id.signature_image" style="height:50px;width:125px;"/>
+                                            </t>
+                                            <t t-if="not e.control_employee_id.signature_image">
+                                                <span style="height:50px;width:125px;"/>
+                                            </t>
+                                            <span t-esc="e.control_employee_id.last_name[:1]"/>
+.                                            <span t-field="e.control_employee_id.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                        <span align="left" style="font-size:15px; padding-left:70px">Баталсан:                                            <span t-field="e.confirmed_employee_id.job_id.name"/>
+:
+                                            <t t-if="e.confirmed_employee_id.signature_image">
+                                                <img class="image" t-att-src="'data:image/png;base64,%s' %e.confirmed_employee_id.signature_image" style="height:50px;width:125px;"/>
+                                            </t>
+                                            <t t-if="not e.confirmed_employee_id.signature_image">
+                                                <span style="height:50px;width:125px;"/>
+                                            </t>
+                                            <span t-esc="e.confirmed_employee_id.last_name[:1]"/>
+.                                            <span t-field="e.confirmed_employee_id.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+
+                                        <t t-if="e.approve_employee_id">
+                                            <span align="left" style="font-size:15px; padding-left:70px">Зардал баталсан:                                                <span t-field="e.confirmed_employee_id2.job_id.name"/>
+:
+                                                <t t-if="e.confirmed_employee_id2.signature_image">
+                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %e.confirmed_employee_id2.signature_image" style="height:50px;width:125px;"/>
+                                                </t>
+                                                <t t-if="not e.confirmed_employee_id2.signature_image">
+                                                    <span style="height:50px;width:125px;"/>
+                                                </t>
+                                                <span t-esc="e.confirmed_employee_id2.last_name[:1]"/>
+.                                                <span t-field="e.confirmed_employee_id2.name"/>
+                                            </span>
+                                            <br/>
+                                            <br/>
+                                        </t>
+                                    </t>
+                                </tr>
+                            </t>
+                        </table>
+
+                    </div>
                 </t>
+            </t>
+        </template>
+        <template id="nomin_project.order_request_act_report">
+            <t t-call="report.layout">
+                <t t-foreach="orders" t-as="o">
+                    <div class="page l10n_mn_base_report">
+                        <table width="100%">
+                            <tr>
+                                <td style="padding-left:50px">
+                                    <img class="image" t-att-src="'data:image/png;base64,%s' %o.project_senior_manager_id.department_id.company_id.favicon_backend " style="height:50px;width:50px;" />
+                                </td>
+                                <td>
+                                    <p> "Номин Холдинг" ХХК, МТСалбар, ПХУАлба</p>
+                                </td>
+                            </tr>
+                        </table>
+                        <table width="100%" style="padding: 1px; font-size: 23px; border:0px">
+                            <tr>
+                                <td align="center" colspan="2" style="vertical-align: text-center; font-size: 20px">
+                                    <h4 t-esc="order_name"/>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <table style="font-size:15 ; padding-left:50px">
+                            <tr>
+                                <td width="100%">
+                                    <tr>
+                                        <td style="padding-left:50px">
+                                            <b>Акт бэлтгэсэн огноо: </b>
+                                            <span t-if="o.handover_date">
+                                                <span t-field="o.handover_date"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left:50px">
+                                            <b>Захиалга хүлээн авсан огноо: </b>
+                                            <span t-if="o.assigned_date">
+                                                <span t-field="o.assigned_date"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left:50px">
+                                            <b>Захиалгат ажлын нэр: </b>
+                                            <span t-if="o.order_name">
+                                                <span t-field="o.order_name"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left:50px">
+                                            <b>Зорилго: </b>
+                                            <span t-if="o.purpose">
+                                                <span t-field="o.purpose"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left:50px">
+                                            <b>Зардлын бүртгэл: </b>
+                                            <span t-if="o.cost_types">
+                                                <span t-field="o.cost_types"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding-left:50px">
+                                            <b>Захиалгатай холбоотой ажлуудыг хүлээн авч баталгаажуулж байна: </b>
+                                            <span t-if="o.is_receive">
+                                                <span t-field="o.is_receive"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <t t-set="number" t-value="1"/>
+                        <table width="100%" class="table table-l10n_mn-grid" style="font-size: 15;border: 0px solid #000000; padding-left:50px; padding-right:50px">
+                            <tr style="border: 1px solid #000000; padding-left:50px">
+                                <th align="center" style="width:10px; text-align: center; padding: 0px; border: 1px solid #000000;">№</th>
+                                <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Хийгдсэн ажил</th>
+                                <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Тайлбар</th>
+                                <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Хүлээн авсан ажилтны тайлбар</th>
+                            </tr>
+                            <tbody style="border: 1px solid #000000;" t-foreach="lines[o.id]" t-as="l">
+                                <tr style="border: 1px solid #000000;">
+                                    <td style="vertical-align: text-center; width:10px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;" t-esc="number"></td>
+                                    <td style="vertical-align: text-center; width:60px;text-align: center;padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;">
+                                        <span t-esc="l['task_name']"/>
+                                    </td>
+
+                                    <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                        <span t-esc="l['description']"/>
+                                    </td>
+                                    <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                        <span t-esc="l['comment']"/>
+                                    </td>
+
+                                    <t t-set="number" t-value="number + 1"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <table class="table table-l10n_mn-grid" style="font-size: 15;border: 0px solid #000000;">
+                            <t t-foreach="orders" t-as="e">
+                                <tr>
+
+                                    <span align="left" style="font-size:15px; padding-left:50px">
+                                        <b>Баталгаажуулсан: </b>
+                                    </span>
+                                    <br/>
+                                    <t t-if="e.receive_employee_id1">
+                                        <span align="left" style="font-size:15px; padding-left:70px">Захиалагч талаас:                                            <span t-field="e.receive_employee_id1.job_id.name"/>
+:
+                                            <t t-if="e.receive_employee_id1.signature_image">
+                                                <img class="image" t-att-src="'data:image/png;base64,%s' %e.receive_employee_id1.signature_image" style="height:50px;width:125px;"/>
+                                            </t>
+                                            <t t-if="not e.receive_employee_id1.signature_image">
+                                                <span style="height:50px;width:125px;"/>
+                                            </t>
+                                            <span t-esc="e.receive_employee_id1.last_name[:1]"/>
+.                                            <span t-field="e.receive_employee_id1.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="e.receive_employee_id2">
+                                        <span align="left" style="font-size:15px; padding-left:70px">Захиалагч талаас:                                            <span t-field="e.receive_employee_id2.job_id.name"/>
+:
+                                            <t t-if="e.receive_employee_id2.signature_image">
+                                                <img class="image" t-att-src="'data:image/png;base64,%s' %e.receive_employee_id2.signature_image" style="height:50px;width:125px;"/>
+                                            </t>
+                                            <t t-if="not e.receive_employee_id2.signature_image">
+                                                <span style="height:50px;width:125px;"/>
+                                            </t>
+                                            <span t-esc="e.receive_employee_id2.last_name[:1]"/>
+.                                            <span t-field="e.receive_employee_id2.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="e.receive_employee_id3">
+                                        <span align="left" style="font-size:15px; padding-left:70px">Захиалагч талаас:                                            <span t-field="e.receive_employee_id3.job_id.name"/>
+:
+                                            <t t-if="e.receive_employee_id3.signature_image">
+                                                <img class="image" t-att-src="'data:image/png;base64,%s' %e.receive_employee_id3.signature_image" style="height:50px;width:125px;"/>
+                                            </t>
+                                            <t t-if="not e.receive_employee_id3.signature_image">
+                                                <span style="height:50px;width:125px;"/>
+                                            </t>
+                                            <span t-esc="e.receive_employee_id3.last_name[:1]"/>
+.                                            <span t-field="e.receive_employee_id3.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="e.approve_employee_id">
+                                        <span align="left" style="font-size:15px; padding-left:70px">Зардал баталсан:                                            <span t-field="e.confirmed_employee_id2.job_id.name"/>
+:
+                                            <t t-if="e.confirmed_employee_id2.signature_image">
+                                                <img class="image" t-att-src="'data:image/png;base64,%s' %e.confirmed_employee_id2.signature_image" style="height:50px;width:125px;"/>
+                                            </t>
+                                            <t t-if="not e.confirmed_employee_id2.signature_image">
+                                                <span style="height:50px;width:125px;"/>
+                                            </t>
+                                            <span t-esc="e.confirmed_employee_id2.last_name[:1]"/>
+.                                            <span t-field="e.confirmed_employee_id2.name"/>
+                                        </span>
+                                        <br/>
+                                        <br/>
+                                    </t>
+
+                                    <span align="left" style="font-size:15px; padding-left:50px">
+                                        <b>Баталгаажуулсан: </b>
+                                    </span>
+                                    <br/>
+
+                                    <span align="left" style="font-size:15px; padding-left:70px">Гүйцэтгэгч талаас:                                        <span t-field="e.project_manager_id.job_id.name"/>
+:
+                                        <t t-if="e.project_manager_id.signature_image">
+                                            <img class="image" t-att-src="'data:image/png;base64,%s' %e.project_manager_id.signature_image" style="height:50px;width:125px;"/>
+                                        </t>
+                                        <t t-if="not e.project_manager_id.signature_image">
+                                            <span style="height:50px;width:125px;"/>
+                                        </t>
+                                        <span t-esc="e.project_manager_id.last_name[:1]"/>
+.                                        <span t-field="e.project_manager_id.name"/>
+                                    </span>
+                                    <br/>
+                                    <br/>
+                                    <span align="left" style="font-size:15px; padding-left:70px">Гүйцэтгэгч талаас:                                        <span t-field="e.project_senior_manager_id.job_id.name"/>
+:
+                                        <t t-if="e.project_senior_manager_id.signature_image">
+                                            <img class="image" t-att-src="'data:image/png;base64,%s' %e.project_senior_manager_id.signature_image" style="height:50px;width:125px;"/>
+                                        </t>
+                                        <t t-if="not e.project_senior_manager_id.signature_image">
+                                            <span style="height:50px;width:125px;"/>
+                                        </t>
+                                        <span t-esc="e.project_senior_manager_id.last_name[:1]"/>
+.                                        <span t-field="e.project_senior_manager_id.name"/>
+                                    </span>
+                                    <br/>
+                                    <br/>
+                                    <span align="left" style="font-size:15px; padding-left:70px">Гүйцэтгэгч талаас:                                        <span t-field="e.project_manager_id.department_id.parent_id.manager_id.job_id.name"/>
+:
+                                        <t t-if="e.project_manager_id.department_id.parent_id.manager_id.signature_image">
+                                            <img class="image" t-att-src="'data:image/png;base64,%s' %e.project_manager_id.department_id.parent_id.manager_id.signature_image" style="height:50px;width:125px;"/>
+                                        </t>
+                                        <t t-if="not e.project_manager_id.department_id.parent_id.manager_id.signature_image">
+                                            <span style="height:50px;width:125px;"/>
+                                        </t>
+                                        <span t-esc="e.project_manager_id.department_id.parent_id.manager_id.last_name[:1]"/>
+.                                        <span t-field="e.project_manager_id.department_id.parent_id.manager_id.name"/>
+                                    </span>
+                                    <br/>
+                                    <br/>
+
+
+                                </tr>
+                            </t>
+                        </table>
+                        <table style="font-size:15 ; padding-left:50px">
+                            <tr>
+                                <td width="100%">
+                                    <tr>
+                                        <td style="padding-left:50px">
+                                            <b>Огноо: </b>
+                                            <span t-if="o.review_date">
+                                                <span t-field="o.review_date"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </t>
+            </t>
         </template>
     </data>
-</openerp>
+</odoo>

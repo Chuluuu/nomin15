@@ -1,180 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>  
+<odoo>
+    <data>
         <template id="nomin_project.budget_partner_comparison_report">
-                <t t-call="report.layout">
-                    <t t-foreach="budget_partners" t-as="o">                       
-                        <div class="page l10n_mn_base_report" >
-                            <table width="100%" style="padding: 1px; font-size: 23px; border:0px">
-                                <tr>
-                                    <td align="center" colspan="2" style="vertical-align: text-center; font-size: 20px">
-                                        <b><h4 t-esc="partner_comparison_name"/></b>
-                                    </td>
-                                </tr>
-                            </table>
+            <t t-call="report.layout">
+                <t t-foreach="budget_partners" t-as="o">
+                    <div class="page l10n_mn_base_report">
+                        <table width="100%" style="padding: 1px; font-size: 23px; border:0px">
+                            <tr>
+                                <td align="center" colspan="2" style="vertical-align: text-center; font-size: 20px">
+                                    <b>
+                                        <h4 t-esc="partner_comparison_name"/>
+                                    </b>
+                                </td>
+                            </tr>
+                        </table>
 
-                            <table width="100%"  style="font-size: 14;border: 0px solid #000000; padding-left:50px; padding-right:50px">
+                        <table width="100%" style="font-size: 14;border: 0px solid #000000; padding-left:50px; padding-right:50px">
                             <!-- <table style="font-size:14 ; padding-left:50px"> -->
-                                <tr >
-                                    <td >
-                                        <tr>
-                                            <td style="width:40%;border: 1px solid #000000;">Захиалагч:</td>
-                                            <td style="width:60%;border: 1px solid #000000;padding-left:25px;padding-right:25px;text-align: center;"><span t-if="o.department_id"><span t-field="o.department_id.name"/></span></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width:40%;border: 1px solid #000000;">Шалгаруулалтын төрөл:</td>
-                                            <td style="width:60%;border: 1px solid #000000;padding-left:25px;padding-right:25px;text-align: center;"><span t-if="o.child_type_id"><span t-field="o.child_type_id"/></span></td>
-                                        </tr>
-                                        <!-- <tr>
+                            <tr >
+                                <td >
+                                    <tr>
+                                        <td style="width:40%;border: 1px solid #000000;">Захиалагч:</td>
+                                        <td style="width:60%;border: 1px solid #000000;padding-left:25px;padding-right:25px;text-align: center;">
+                                            <span t-if="o.department_id">
+                                                <span t-field="o.department_id.name"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:40%;border: 1px solid #000000;">Шалгаруулалтын төрөл:</td>
+                                        <td style="width:60%;border: 1px solid #000000;padding-left:25px;padding-right:25px;text-align: center;">
+                                            <span t-if="o.child_type_id">
+                                                <span t-field="o.child_type_id"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <!-- <tr>
                                             <td style="border: 1px solid #000000;">Шалгаруулалтын нэр:</td>
                                             <td style="border: 1px solid #000000;padding-left:25px;padding-right:25px;text-align: center;"><span t-if="o.desc_name"><span t-field="o.desc_name"/></span></td>
                                         </tr> -->
-                                        <tr>
-                                            <td style="width:40%;border: 1px solid #000000;">Шалгаруулалтын дугаар:</td>
-                                            <td style="width:60%;border: 1px solid #000000;padding-left:25px;padding-right:25px;text-align: center;"><span t-if="o.name"><span t-field="o.name"/></span></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width:40%;border: 1px solid #000000;">Төсөвт өртөг: </td>
-                                            <td style="width:60%;border: 1px solid #000000;padding-left:25px;padding-right:25px;text-align: center;"><b><span t-if="o.total_amount"><span t-field="o.total_amount"/>₮</span></b></td>
-                                        </tr>
-                                    </td>
-                                </tr>
-                            </table>
-                            <br/>
-                            <table>
-                                <tr>
-                                    <td align="left">1. Үнийн саналын харьцуулалт</td>
-                                    <!-- <td style="padding-left:50px;text-align: right;" align="right">ОГНОО:</td> -->
-                                </tr>
-                            </table>
-                            <br/>
-                               
-                            <t t-set="member" t-value="1"/>
-                            <table width="100%" class="table table-l10n_mn-grid" style="font-size: 14;border: 0px solid #000000; padding-left:50px; padding-right:50px">
-                                <tr style="height:20px;border: 1px solid #000000; padding-left:50px">
-                                    <th align="center" style="background-color : #E5E7E9;width:4%; text-align: center; padding: 0px; border: 1px solid #000000;">№</th>
-                                    <th align="center" style="background-color : #E5E7E9;width:36%; text-align: center; padding: 0px; border: 1px solid #000000;">Оролцогчийн нэр</th>
-                                    <th align="center" style="background-color : #E5E7E9;width:22%; text-align: center; padding: 0px; border: 1px solid #000000;">Санал болгосон үнэ</th>
-                                    <th align="center" style="background-color : #E5E7E9;width:22%; text-align: center; padding: 0px; border: 1px solid #000000;">Хувиар илэрхийлэх</th>
-                                    <th align="center" style="background-color : #E5E7E9;width:16%; text-align: center; padding: 0px; border: 1px solid #000000;">Баталгаат хугацаа /сараар/ </th>
-                                    <!-- <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">ТАЙЛБАР </th>     -->
-                                </tr>
-                                <tbody style="border: 1px solid #000000;"  t-foreach="lines[o.id]"  t-as="l">
-                                    <tr style="border: 1px solid #000000;">
-                                        <td style="vertical-align: text-center; width:4%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;" t-esc="member"></td>
-                                        <td style="vertical-align: text-center; width:36%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-esc="l['partner_id']"/></td>
-
-                                        <td style="vertical-align: text-center; width:22%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-esc="'{0:,.2f}'.format(l['price'])"/>₮</td>
-                                        <td style="vertical-align: text-center; width:22%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
-                                            <t t-if="20 > l['price_percent']  and  l['price_percent'] > -20 ">
-                                                <span style="color:black;font-weight:bold;" t-esc="'{0:,.2f}'.format(l['price_percent'])"/>
-                                            </t>
-                                            <t t-if=" l['price_percent'] > 20">
-                                                <span  style="color:red;font-weight:bold;"  t-esc="'{0:,.2f}'.format(l['price_percent'])"/>
-                                            </t> 
-                                            <t t-if="-20 > l['price_percent']">
-                                                <span  style="color:red;font-weight:bold;"  t-esc="'{0:,.2f}'.format(l['price_percent'])"/>
-                                            </t> 
+                                    <tr>
+                                        <td style="width:40%;border: 1px solid #000000;">Шалгаруулалтын дугаар:</td>
+                                        <td style="width:60%;border: 1px solid #000000;padding-left:25px;padding-right:25px;text-align: center;">
+                                            <span t-if="o.name">
+                                                <span t-field="o.name"/>
+                                            </span>
                                         </td>
-                                        <td style="vertical-align: text-center; width:16%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-esc="o.confirmed_time"/></td>
-                                        <!-- <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span></span></td> -->
-                                        <t t-set="member" t-value="member + 1"/>
                                     </tr>
-                                </tbody>
-                            </table>
+                                    <tr>
+                                        <td style="width:40%;border: 1px solid #000000;">Төсөвт өртөг: </td>
+                                        <td style="width:60%;border: 1px solid #000000;padding-left:25px;padding-right:25px;text-align: center;">
+                                            <b>
+                                                <span t-if="o.total_amount">
+                                                    <span t-field="o.total_amount"/>
+₮</span>
+                                            </b>
+                                        </td>
+                                    </tr>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <table>
+                            <tr>
+                                <td align="left">1. Үнийн саналын харьцуулалт</td>
+                                <!-- <td style="padding-left:50px;text-align: right;" align="right">ОГНОО:</td> -->
+                            </tr>
+                        </table>
+                        <br/>
 
-                            <p align="left">2. Гүйцэтгэгчийг сонгосон комиссын гишүүдийн санал</p>
+                        <t t-set="member" t-value="1"/>
+                        <table width="100%" class="table table-l10n_mn-grid" style="font-size: 14;border: 0px solid #000000; padding-left:50px; padding-right:50px">
+                            <tr style="height:20px;border: 1px solid #000000; padding-left:50px">
+                                <th align="center" style="background-color : #E5E7E9;width:4%; text-align: center; padding: 0px; border: 1px solid #000000;">№</th>
+                                <th align="center" style="background-color : #E5E7E9;width:36%; text-align: center; padding: 0px; border: 1px solid #000000;">Оролцогчийн нэр</th>
+                                <th align="center" style="background-color : #E5E7E9;width:22%; text-align: center; padding: 0px; border: 1px solid #000000;">Санал болгосон үнэ</th>
+                                <th align="center" style="background-color : #E5E7E9;width:22%; text-align: center; padding: 0px; border: 1px solid #000000;">Хувиар илэрхийлэх</th>
+                                <th align="center" style="background-color : #E5E7E9;width:16%; text-align: center; padding: 0px; border: 1px solid #000000;">Баталгаат хугацаа /сараар/ </th>
+                                <!-- <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">ТАЙЛБАР </th>     -->
+                            </tr>
+                            <tbody style="border: 1px solid #000000;" t-foreach="lines[o.id]" t-as="l">
+                                <tr style="border: 1px solid #000000;">
+                                    <td style="vertical-align: text-center; width:4%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;" t-esc="member"></td>
+                                    <td style="vertical-align: text-center; width:36%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;">
+                                        <span t-esc="l['partner_id']"/>
+                                    </td>
 
-                            <t t-set="partner" t-value="0"/>
-                            <table width="100%" class="table table-l10n_mn-grid" style="font-size: 14;border: 0px solid #000000; padding-left:50px; padding-right:50px">
-                                <tr style="height:20px;border: 1px solid #000000; padding-left:50px">
-                                    <th align="center" style="background-color : #E5E7E9;width:4%; text-align: center; padding: 0px; border: 1px solid #000000;">№</th>
-                                    <th align="center" style="background-color : #E5E7E9;width:36%; text-align: center; padding: 0px; border: 1px solid #000000;">Комиссын гишүүд</th>
-                                    <th align="center" style="background-color : #E5E7E9;width:22%; text-align: center; padding: 0px; border: 1px solid #000000;">Албан тушаал</th>
-                                    <th align="center" style="background-color : #E5E7E9;width:22%; text-align: center; padding: 0px; border: 1px solid #000000;">Комиссын гишүүдийн санал </th>
-                                    <!-- <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">ГАРЫН ҮСЭГ </th> -->
-                                    <th align="center" style="background-color : #E5E7E9;width:16%; text-align: center; padding: 0px; border: 1px solid #000000;">Огноо </th>    
+                                    <td style="vertical-align: text-center; width:22%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                        <span t-esc="'{0:,.2f}'.format(l['price'])"/>
+₮</td>
+                                    <td style="vertical-align: text-center; width:22%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                        <t t-if="20 > l['price_percent']  and  l['price_percent'] > -20 ">
+                                            <span style="color:black;font-weight:bold;" t-esc="'{0:,.2f}'.format(l['price_percent'])"/>
+                                        </t>
+                                        <t t-if=" l['price_percent'] > 20">
+                                            <span style="color:red;font-weight:bold;" t-esc="'{0:,.2f}'.format(l['price_percent'])"/>
+                                        </t>
+                                        <t t-if="-20 > l['price_percent']">
+                                            <span style="color:red;font-weight:bold;" t-esc="'{0:,.2f}'.format(l['price_percent'])"/>
+                                        </t>
+                                    </td>
+                                    <td style="vertical-align: text-center; width:16%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                        <span t-esc="o.confirmed_time"/>
+                                    </td>
+                                    <!-- <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span></span></td> -->
+                                    <t t-set="member" t-value="member + 1"/>
                                 </tr>
-                                <tbody style="border: 1px solid #000000;"  t-foreach="partners[o.id]"  t-as="p">
-                                    <tr style="border: 1px solid #000000;">
-                                        <t t-set="partner" t-value="partner + 1"/>
-                                        <td style="vertical-align: text-center; width:4%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;" t-esc="partner"></td>
-                                        <td style="vertical-align: text-center; width:36%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-esc="p['name']"/></td>
+                            </tbody>
+                        </table>
 
-                                        <td style="vertical-align: text-center; width:22%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-esc="p['job']"/></td>
-                                        <td style="vertical-align: text-center; width:22%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-esc="p['partner']"/></td>
-                                        <!-- <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                        <p align="left">2. Гүйцэтгэгчийг сонгосон комиссын гишүүдийн санал</p>
+
+                        <t t-set="partner" t-value="0"/>
+                        <table width="100%" class="table table-l10n_mn-grid" style="font-size: 14;border: 0px solid #000000; padding-left:50px; padding-right:50px">
+                            <tr style="height:20px;border: 1px solid #000000; padding-left:50px">
+                                <th align="center" style="background-color : #E5E7E9;width:4%; text-align: center; padding: 0px; border: 1px solid #000000;">№</th>
+                                <th align="center" style="background-color : #E5E7E9;width:36%; text-align: center; padding: 0px; border: 1px solid #000000;">Комиссын гишүүд</th>
+                                <th align="center" style="background-color : #E5E7E9;width:22%; text-align: center; padding: 0px; border: 1px solid #000000;">Албан тушаал</th>
+                                <th align="center" style="background-color : #E5E7E9;width:22%; text-align: center; padding: 0px; border: 1px solid #000000;">Комиссын гишүүдийн санал </th>
+                                <!-- <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">ГАРЫН ҮСЭГ </th> -->
+                                <th align="center" style="background-color : #E5E7E9;width:16%; text-align: center; padding: 0px; border: 1px solid #000000;">Огноо </th>
+                            </tr>
+                            <tbody style="border: 1px solid #000000;" t-foreach="partners[o.id]" t-as="p">
+                                <tr style="border: 1px solid #000000;">
+                                    <t t-set="partner" t-value="partner + 1"/>
+                                    <td style="vertical-align: text-center; width:4%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;" t-esc="partner"></td>
+                                    <td style="vertical-align: text-center; width:36%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;">
+                                        <span t-esc="p['name']"/>
+                                    </td>
+
+                                    <td style="vertical-align: text-center; width:22%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                        <span t-esc="p['job']"/>
+                                    </td>
+                                    <td style="vertical-align: text-center; width:22%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                        <span t-esc="p['partner']"/>
+                                    </td>
+                                    <!-- <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
                                             <t t-set="employee_id" t-value="p['employee_id']"/>
                                             <img class="image" t-att-src="'data:image/png;base64,%s' %employee_id.signature_image" style="height:50px;width:145px;"/> 
                                         </td> -->
-                                        <td style="vertical-align: text-center; width:16%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-esc="p['vote_date'].split(' ')[0]"/></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <table>
-                                <tr>
-                                    <td align="left">3. Комиссын гишүүдийн саналыг нэгтгэж сонгосон аж ахуйн нэгж</td>
-                                    <!-- <td style="padding-left:50px;text-align: right;" align="right">ОГНОО:</td> -->
-                                    <td style="padding-left: 60px;text-align: right;">Батлагдсан огноо:<span t-esc="o.date_win"></span></td>
-                                </tr>
-                            </table>
-                            <br/>
-                            
-                            <t t-set="number" t-value="1"/>
-                            <table width="100%" class="table table-l10n_mn-grid" style="font-size: 14;border: 0px solid #000000; padding-left:50px; padding-right:50px">
-                                <tr style="height:20px;border: 1px solid #000000; padding-left:50px;">
-                                    <th align="center" style="background-color : #E5E7E9;width:4%; text-align: center; padding: 0px; border: 1px solid #000000;">№</th>
-                                    <th align="center" style="background-color : #E5E7E9;width:36%; text-align: center; padding: 0px; border: 1px solid #000000;">Сонгон шалгуурсан аж ахуйн нэгж</th>
-                                    <th align="center" style="background-color : #E5E7E9;width:22%; text-align: center; padding: 0px; border: 1px solid #000000;">Санал болгосон үнэ</th>
-                                    <th align="center" style="background-color : #E5E7E9;width:22%; text-align: center; padding: 0px; border: 1px solid #000000;">Хувиар илэрхийлэх</th>
-                                    <th align="center" style="background-color : #E5E7E9;width:16%; text-align: center; padding: 0px; border: 1px solid #000000;">Саналын хувь/%/</th>
-                                    <!-- <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">ШАЛГАРСАН ОГНОО</th>     -->
-                                </tr>
-                                <tbody style="border: 1px solid #000000;"  t-foreach="winners"  t-as="winner">
-                                    <tr t-if="winners[winner]['is_winner']" style="border: 1px solid #000000;">
-                                        <td style="vertical-align: text-center; width:4%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;" t-esc="number"></td>
-                                        <td style="vertical-align: text-center; width:36%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-esc="winners[winner]['partner_id']"/></td>
-
-                                        <td style="vertical-align: text-center; width:22%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-esc="'{0:,.2f}'.format(winners[winner]['price'])"/>₮</td>
-                                        <td style="vertical-align: text-center; width:22%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span style="color:green;font-weight: bold;" t-esc="'{0:,.2f}'.format(winners[winner]['price_percent'])"/></td>
-                                        <td style="vertical-align: text-center; width:16%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
-                                            <span t-esc="winners[winner]['total_votes']*100/partner"/>
-                                        </td>
-                                        <!-- <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-esc="o.date_win"/></td> -->
-                                        <t t-set="number" t-value="number + 1"/>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            
-                            <p align="left">4. Үнийн саналын харьцуулалт нэгтгэсэн</p>
-
-                            <table style="font-size:14 ; padding-left:50px">
-                                <tr >
-                                    <td width="50%">
-                                        <tr>
-                                            <td style="padding-left:50px;text-align: center;"><span t-if="o.department_id"><span t-field="o.department_id.name"/></span></td>
-                                        </tr>
-                                        <br/>
-                                        <tr>
-                                            <td style="text-align: center;"><span t-esc="o.employee_id.job_id.name"></span></td>
-                                            <td style="padding-left:50px;text-align: text-center;">
-                                                <span t-if="o.employee_id">
-                                                    <t t-set="employee_id" t-value="o.employee_id"/>
-                                                    <img class="image" t-att-src="'data:image/png;base64,%s' %employee_id.signature_image" style="height:50px;width:145px;"/>
-                                                </span>
-                                            </td>
-                                            <td style="padding-left:50px;text-align: center;">/<span t-esc="o.employee_id.last_name[:1]"/>.<span t-if="o.employee_id.name"><span t-field="o.employee_id.name"/></span>/</td>
-                                            <td></td>
-                                            <!-- <td style="padding-left: 20px;text-align: center;">Огноо:<span t-esc="o.date_win"></span></td> -->
-                                        </tr>
+                                    <td style="vertical-align: text-center; width:16%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                        <span t-esc="p['vote_date'].split(' ')[0]"/>
                                     </td>
                                 </tr>
-                            </table>
+                            </tbody>
+                        </table>
 
-                        </div>
-                    </t>
+                        <table>
+                            <tr>
+                                <td align="left">3. Комиссын гишүүдийн саналыг нэгтгэж сонгосон аж ахуйн нэгж</td>
+                                <!-- <td style="padding-left:50px;text-align: right;" align="right">ОГНОО:</td> -->
+                                <td style="padding-left: 60px;text-align: right;">Батлагдсан огноо:                                    <span t-esc="o.date_win"></span>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+
+                        <t t-set="number" t-value="1"/>
+                        <table width="100%" class="table table-l10n_mn-grid" style="font-size: 14;border: 0px solid #000000; padding-left:50px; padding-right:50px">
+                            <tr style="height:20px;border: 1px solid #000000; padding-left:50px;">
+                                <th align="center" style="background-color : #E5E7E9;width:4%; text-align: center; padding: 0px; border: 1px solid #000000;">№</th>
+                                <th align="center" style="background-color : #E5E7E9;width:36%; text-align: center; padding: 0px; border: 1px solid #000000;">Сонгон шалгуурсан аж ахуйн нэгж</th>
+                                <th align="center" style="background-color : #E5E7E9;width:22%; text-align: center; padding: 0px; border: 1px solid #000000;">Санал болгосон үнэ</th>
+                                <th align="center" style="background-color : #E5E7E9;width:22%; text-align: center; padding: 0px; border: 1px solid #000000;">Хувиар илэрхийлэх</th>
+                                <th align="center" style="background-color : #E5E7E9;width:16%; text-align: center; padding: 0px; border: 1px solid #000000;">Саналын хувь/%/</th>
+                                <!-- <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">ШАЛГАРСАН ОГНОО</th>     -->
+                            </tr>
+                            <tbody style="border: 1px solid #000000;" t-foreach="winners" t-as="winner">
+                                <tr t-if="winners[winner]['is_winner']" style="border: 1px solid #000000;">
+                                    <td style="vertical-align: text-center; width:4%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;" t-esc="number"></td>
+                                    <td style="vertical-align: text-center; width:36%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;">
+                                        <span t-esc="winners[winner]['partner_id']"/>
+                                    </td>
+
+                                    <td style="vertical-align: text-center; width:22%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                        <span t-esc="'{0:,.2f}'.format(winners[winner]['price'])"/>
+₮</td>
+                                    <td style="vertical-align: text-center; width:22%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                        <span style="color:green;font-weight: bold;" t-esc="'{0:,.2f}'.format(winners[winner]['price_percent'])"/>
+                                    </td>
+                                    <td style="vertical-align: text-center; width:16%;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                        <span t-esc="winners[winner]['total_votes']*100/partner"/>
+                                    </td>
+                                    <!-- <td style="vertical-align: text-center; width:60px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-esc="o.date_win"/></td> -->
+                                    <t t-set="number" t-value="number + 1"/>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p align="left">4. Үнийн саналын харьцуулалт нэгтгэсэн</p>
+
+                        <table style="font-size:14 ; padding-left:50px">
+                            <tr >
+                                <td width="50%">
+                                    <tr>
+                                        <td style="padding-left:50px;text-align: center;">
+                                            <span t-if="o.department_id">
+                                                <span t-field="o.department_id.name"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <br/>
+                                    <tr>
+                                        <td style="text-align: center;">
+                                            <span t-esc="o.employee_id.job_id.name"></span>
+                                        </td>
+                                        <td style="padding-left:50px;text-align: text-center;">
+                                            <span t-if="o.employee_id">
+                                                <t t-set="employee_id" t-value="o.employee_id"/>
+                                                <img class="image" t-att-src="'data:image/png;base64,%s' %employee_id.signature_image" style="height:50px;width:145px;"/>
+                                            </span>
+                                        </td>
+                                        <td style="padding-left:50px;text-align: center;">/                                            <span t-esc="o.employee_id.last_name[:1]"/>
+.                                            <span t-if="o.employee_id.name">
+                                                <span t-field="o.employee_id.name"/>
+                                            </span>/
+                                        </td>
+                                        <td></td>
+                                        <!-- <td style="padding-left: 20px;text-align: center;">Огноо:<span t-esc="o.date_win"></span></td> -->
+                                    </tr>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
                 </t>
+            </t>
         </template>
     </data>
-</openerp>
+</odoo>

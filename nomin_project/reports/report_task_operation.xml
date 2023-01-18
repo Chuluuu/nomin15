@@ -1,185 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>  
-    	
+<odoo>
+	<data>
 
-    	<template id="nomin_project.report_task_opeartion_action">
+
+		<template id="nomin_project.report_task_opeartion_action">
 			<t t-call="report.html_container">
 				<t t-call="report.layout">
 					<t t-foreach="docs" t-as="o">
 						<div class="page">
 							<table width="100%" style="padding: 2px; border:0px">
-                    <tr>
-<td align="center" colspan="2" style="vertical-align: text-center; ">
-                      <b><h3>
-								<span align="center">Ажлын даалгаврын дэлгэрэнгүй хуудас</span>
-							</h3>
-</b>   
-</td>
-                    </tr>
-                    
-                 </table> 
- <table style="font-size: 13;font-family: 'Arial';">
-                   
-                     <tr>
-                     	<td style="padding-bottom: 3px;">
-<span align="center"> <b>Ажлын даалгаврын нэр:</b>
-										<span t-if="o.name">
-											<span t-field="o.name"/>
+								<tr>
+									<td align="center" colspan="2" style="vertical-align: text-center; ">
+										<b>
+											<h3>
+												<span align="center">Ажлын даалгаврын дэлгэрэнгүй хуудас</span>
+											</h3>
+										</b>
+									</td>
+								</tr>
+
+							</table>
+							<table style="font-size: 13;font-family: 'Arial';">
+
+								<tr>
+									<td style="padding-bottom: 3px;">
+										<span align="center">
+											<b>Ажлын даалгаврын нэр:</b>
+											<span t-if="o.name">
+												<span t-field="o.name"/>
+											</span>
 										</span>
-								</span>
-                     	
-                 		</td>
-                     </tr>
-<tr>
-                     	<td style="padding-bottom: 3px;">
-                     		<b>Хугацаа: </b><span t-field="o.task_date_start"/> - <span t-field="o.date_deadline"/>
-                 		</td>
-                     </tr>
-<tr>
-                     	<td style="padding-bottom: 3px;">
-                     		<b>Ажилбарууд:</b>
-                 		</td>
-                     </tr>
-</table>
- 		<t t-set="number" t-value="1"/>
-         <table class="table table-l10n_mn-grid" style="font-size: 13;border: 1px solid #000000;">
-             <tr style="border: 1px solid #000000;">
-                <th align="center" style="width:10px; text-align: center;  border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">Д/Д</th>
-                <th align="center" style="width:200px; text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">Ажилбарын нэр</th>
-                 <th align="center" style="width:50px; text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">Тоо/Хэмжээ</th>
-                 <th align="center" style="width:100px; text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">Нэгж</th>
-                 <th align="center" style="width:200px; text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">Материалын шаардлага</th>
-                 <th align="center" style="width:200px; text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">Тайлбар</th>
-             </tr>
-             <tbody style="border: 1px solid #000000;" t-foreach="o.operation_ids" t-as="line">
-                 <tr style="border: 1px solid #000000;">
-                    <td style="vertical-align: text-center; width:10px;text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;"><b><span t-esc="number"/></b></td>
-                    <td align="center" style="vertical-align: text-center; width:120px;text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;"><b><span t-esc="line.name"/></b></td>
-					 <td align="center" style="vertical-align: text-center; width:120px;text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;"><b><span t-esc="line.quantity"/></b></td>
-					 <td align="center" style="vertical-align: text-center; width:120px;text-align: cebter; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;"><b><span t-esc="line.uom_id.name"/></b></td>          
-					 <td align="center" style="vertical-align: text-center; width:120px;text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;"><b><span t-esc="line.material_claim"/></b></td>                     
-					 <td align="center" style="vertical-align: text-center; width:120px;text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;"><b><span t-esc="line.description"/></b></td>
-					  <t t-set="number" t-value="number + 1"/>
-                </tr>
-            </tbody>         
-        </table>
 
-		  <table  style="font-size: 13;font-family: 'Arial';">
-		 	<tr>
-		 		<td style="padding-bottom: 3px;">
-					<span align="center"> <b>Тодорхойлолт :</b></span>                     	
-         		</td>
-			</tr>
-			<tr>
-				<td style="padding-bottom: 3px;">
-					<span align="left" t-esc="o.description"/>
-				</td>
-			</tr>
-                        <tr>
-		 		<td style="padding-bottom: 3px;">
-					<span align="center"> <b>Боловсруулсан :</b></span>                     	
-         		         </td>
-			</tr>
-		</table>
-<table style="font-size: 13;font-family: 'Arial';width:70%; padding: 0px; padding-left: 1px; margin-top: 0px; text-align: center;">
-<tr>	
-<td align="left" width="23%" t-if="emp"><span t-field="emp.job_id.name"/><span>:                        </span>
-</td>
-<td  align="left" width="15%" t-if="emp">
-<img class="image" t-att-src="'data:image/png;base64,%s' %emp.signature_image" style="height:50px;width:100;"/>
-</td>
-<td  align="left" width="15%" t-if="emp">
-<span>                        / </span><span t-field="emp.name"/><span> / </span>
-					</td>
-						
-</tr>
-</table>
-				
- <table style="font-size: 13;font-family: 'Arial';">
-       <tr>
-		 		<td style="padding-bottom: 0px;">
-					<span align="center"> <b>Хянасан :</b></span>                     	
-         		         </td>
-			</tr>
-		</table>
-		 <table style="font-size: 13;font-family: 'Arial';width:70%; padding-left: 1px; margin-top: 0px; text-align: center;">
-				<t t-foreach="o.verify_user_ids" t-as="e">
-				<tr>
-					<td align="left" width="23%"><span t-field="e.employee_id.job_id.name"/><span>:                        </span>
-</td>
-<td  align="left" width="15%">
-<img class="image" t-att-src="'data:image/png;base64,%s' %e.employee_id.signature_image" style="height:50px;width:100;"/>
-</td>
-<td  align="left" width="15%">
-<span>                        / </span><span t-field="e.employee_id.name"/><span> / </span>
-					</td>
-					<td style="padding-bottom:0px;">
-					<span align="center"> <span t-field="e.date"/></span>                     	
-         		         </td>							
-				</tr>
-				</t>
-	    </table>
- <table style="font-size: 13;font-family: 'Arial';width:100%; padding: 0px; padding-left: 1px; margin-top: 0px; text-align: left;"  >
-       <tr>
-		 		<td style="padding-bottom: 0px;">
-					<span align="center"> <b>Баталсан :</b></span>                     	
-         		         </td>
-			</tr>
-		</table>
+									</td>
+								</tr>
+								<tr>
+									<td style="padding-bottom: 3px;">
+										<b>Хугацаа: </b>
+										<span t-field="o.task_date_start"/>
+ -										<span t-field="o.date_deadline"/>
+									</td>
+								</tr>
+								<tr>
+									<td style="padding-bottom: 3px;">
+										<b>Ажилбарууд:</b>
+									</td>
+								</tr>
+							</table>
+							<t t-set="number" t-value="1"/>
+							<table class="table table-l10n_mn-grid" style="font-size: 13;border: 1px solid #000000;">
+								<tr style="border: 1px solid #000000;">
+									<th align="center" style="width:10px; text-align: center;  border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">Д/Д</th>
+									<th align="center" style="width:200px; text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">Ажилбарын нэр</th>
+									<th align="center" style="width:50px; text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">Тоо/Хэмжээ</th>
+									<th align="center" style="width:100px; text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">Нэгж</th>
+									<th align="center" style="width:200px; text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">Материалын шаардлага</th>
+									<th align="center" style="width:200px; text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">Тайлбар</th>
+								</tr>
+								<tbody style="border: 1px solid #000000;" t-foreach="o.operation_ids" t-as="line">
+									<tr style="border: 1px solid #000000;">
+										<td style="vertical-align: text-center; width:10px;text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">
+											<b>
+												<span t-esc="number"/>
+											</b>
+										</td>
+										<td align="center" style="vertical-align: text-center; width:120px;text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">
+											<b>
+												<span t-esc="line.name"/>
+											</b>
+										</td>
+										<td align="center" style="vertical-align: text-center; width:120px;text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">
+											<b>
+												<span t-esc="line.quantity"/>
+											</b>
+										</td>
+										<td align="center" style="vertical-align: text-center; width:120px;text-align: cebter; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">
+											<b>
+												<span t-esc="line.uom_id.name"/>
+											</b>
+										</td>
+										<td align="center" style="vertical-align: text-center; width:120px;text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">
+											<b>
+												<span t-esc="line.material_claim"/>
+											</b>
+										</td>
+										<td align="center" style="vertical-align: text-center; width:120px;text-align: center; border: 1px solid #000000;padding-left: 1px;padding-right: 1px;padding-top: 1px;padding-bottom: 1px;">
+											<b>
+												<span t-esc="line.description"/>
+											</b>
+										</td>
+										<t t-set="number" t-value="number + 1"/>
+									</tr>
+								</tbody>
+							</table>
 
-<table style="font-size: 13;font-family: 'Arial';width:70%; padding: 0px; padding-left: 1px; margin-top: 1px; text-align: left;">
-				<t t-foreach="o.task_users" t-as="e">
-				<tr>
-					<td align="left" width="23%"><span t-field="e.confirmer.job_id.name"/><span>:                        </span>
-</td>
-<td align="left" width="15%">
-<img class="image" t-att-src="'data:image/png;base64,%s' %e.confirmer.signature_image" style="height:50px;width:100;"/>
-</td>
-<td align="left" width="15%">
-<span>   / </span><span t-field="e.confirmer.name"/><span> / </span>
-					</td>	
-				<td align="left" style="padding-bottom: 0px;">
-					<span align="center"> <span t-field="e.date"/></span>
-         		         </td>		
-				</tr>
+							<table style="font-size: 13;font-family: 'Arial';">
+								<tr>
+									<td style="padding-bottom: 3px;">
+										<span align="center">
+											<b>Тодорхойлолт :</b>
+										</span>
+									</td>
+								</tr>
+								<tr>
+									<td style="padding-bottom: 3px;">
+										<span align="left" t-esc="o.description"/>
+									</td>
+								</tr>
+								<tr>
+									<td style="padding-bottom: 3px;">
+										<span align="center">
+											<b>Боловсруулсан :</b>
+										</span>
+									</td>
+								</tr>
+							</table>
+							<table style="font-size: 13;font-family: 'Arial';width:70%; padding: 0px; padding-left: 1px; margin-top: 0px; text-align: center;">
+								<tr>
+									<td align="left" width="23%" t-if="emp">
+										<span t-field="emp.job_id.name"/>
+										<span>:                        </span>
+									</td>
+									<td align="left" width="15%" t-if="emp">
+										<img class="image" t-att-src="'data:image/png;base64,%s' %emp.signature_image" style="height:50px;width:100;"/>
+									</td>
+									<td align="left" width="15%" t-if="emp">
+										<span>                        / </span>
+										<span t-field="emp.name"/>
+										<span> / </span>
+									</td>
 
-				</t>
-	    </table>
+								</tr>
+							</table>
+
+							<table style="font-size: 13;font-family: 'Arial';">
+								<tr>
+									<td style="padding-bottom: 0px;">
+										<span align="center">
+											<b>Хянасан :</b>
+										</span>
+									</td>
+								</tr>
+							</table>
+							<table style="font-size: 13;font-family: 'Arial';width:70%; padding-left: 1px; margin-top: 0px; text-align: center;">
+								<t t-foreach="o.verify_user_ids" t-as="e">
+									<tr>
+										<td align="left" width="23%">
+											<span t-field="e.employee_id.job_id.name"/>
+											<span>:                        </span>
+										</td>
+										<td align="left" width="15%">
+											<img class="image" t-att-src="'data:image/png;base64,%s' %e.employee_id.signature_image" style="height:50px;width:100;"/>
+										</td>
+										<td align="left" width="15%">
+											<span>                        / </span>
+											<span t-field="e.employee_id.name"/>
+											<span> / </span>
+										</td>
+										<td style="padding-bottom:0px;">
+											<span align="center">
+												<span t-field="e.date"/>
+											</span>
+										</td>
+									</tr>
+								</t>
+							</table>
+							<table style="font-size: 13;font-family: 'Arial';width:100%; padding: 0px; padding-left: 1px; margin-top: 0px; text-align: left;">
+								<tr>
+									<td style="padding-bottom: 0px;">
+										<span align="center">
+											<b>Баталсан :</b>
+										</span>
+									</td>
+								</tr>
+							</table>
+
+							<table style="font-size: 13;font-family: 'Arial';width:70%; padding: 0px; padding-left: 1px; margin-top: 1px; text-align: left;">
+								<t t-foreach="o.task_users" t-as="e">
+									<tr>
+										<td align="left" width="23%">
+											<span t-field="e.confirmer.job_id.name"/>
+											<span>:                        </span>
+										</td>
+										<td align="left" width="15%">
+											<img class="image" t-att-src="'data:image/png;base64,%s' %e.confirmer.signature_image" style="height:50px;width:100;"/>
+										</td>
+										<td align="left" width="15%">
+											<span>   / </span>
+											<span t-field="e.confirmer.name"/>
+											<span> / </span>
+										</td>
+										<td align="left" style="padding-bottom: 0px;">
+											<span align="center">
+												<span t-field="e.date"/>
+											</span>
+										</td>
+									</tr>
+
+								</t>
+							</table>
 
 
 
 						</div>
 					</t>
-	         	</t>		      
-	        </t>
+				</t>
+			</t>
 		</template>
 
 
-		<report 
-            string="Ажлын даалгаврын дэлгэрэнгүй хуудас" 
-            id="action_task_operation_report" 
-            model="project.task" 
-            report_type="qweb-pdf"
-            name="nomin_project.report_task_opeartion_action" 
-            file="nomin_project.report_task_opeartion_action"
-        	/>
+		<report string="Ажлын даалгаврын дэлгэрэнгүй хуудас" id="action_task_operation_report" model="project.task" report_type="qweb-pdf" name="nomin_project.report_task_opeartion_action" file="nomin_project.report_task_opeartion_action" />
 
-        <record id="paperformat_task_operation" model="report.paperformat">
-		    <field name="name">Ажлын даалгаврын хуудас</field>
-		    <field name="default" eval="True"/>
-		    <field name="orientation">Portrait</field>
-		    <field name="margin_top">5</field>
-		    <field name="margin_bottom">23</field>
-		    <field name="margin_left">2</field>
-		    <field name="margin_right">2</field>
-		    <field name="header_line" eval="False"/>
-		    <field name="header_spacing">10</field>
-		    <field name="dpi">90</field>
+		<record id="paperformat_task_operation" model="report.paperformat">
+			<field name="name">Ажлын даалгаврын хуудас</field>
+			<field name="default" eval="True"/>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">5</field>
+			<field name="margin_bottom">23</field>
+			<field name="margin_left">2</field>
+			<field name="margin_right">2</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">10</field>
+			<field name="dpi">90</field>
 		</record>
-		
+
 		<record id="nomin_project.action_task_operation_report" model="ir.actions.report.xml">
-		    <field name="paperformat_id" ref="nomin_project.paperformat_task_operation" />
+			<field name="paperformat_id" ref="nomin_project.paperformat_task_operation" />
 		</record>
-    </data>
-</openerp>
+	</data>
+</odoo>

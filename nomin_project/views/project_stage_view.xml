@@ -1,98 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
-         <!-- Төслийн шат Tree -->
-    	<record id="project_stage_tree" model="ir.ui.view">
-    		<field name="name">project.stage.tree</field>
-    		<field name="model">project.stage</field>
-    		<field name="arch" type="xml">
-    			<tree string="Project Stage">
-    				<field name="name"/>
-    				<field name="sequense"/>
-    				<field name="description"/>
-    			</tree>
-    		</field>
-    	</record>
-    	
-    	<!-- Төслийн шат Form -->
-    	<record id="project_stage_form" model="ir.ui.view">
-    		<field name="name">project.stage.form</field>
-    		<field name="model">project.stage</field>
-    		<field name="arch" type="xml">
-    			<form string="Project Stage">
-    				<group>
-    					<field name="name"/>
-    					<field name="sequense"/>
-    				</group>
+<odoo>
+	<data>
+		<!-- Төслийн шат Tree -->
+		<record id="project_stage_tree" model="ir.ui.view">
+			<field name="name">project.stage.tree</field>
+			<field name="model">project.stage</field>
+			<field name="arch" type="xml">
+				<tree string="Project Stage">
+					<field name="name"/>
+					<field name="sequense"/>
+					<field name="description"/>
+				</tree>
+			</field>
+		</record>
+
+		<!-- Төслийн шат Form -->
+		<record id="project_stage_form" model="ir.ui.view">
+			<field name="name">project.stage.form</field>
+			<field name="model">project.stage</field>
+			<field name="arch" type="xml">
+				<form string="Project Stage">
 					<group>
-    					<field name="description"/>
+						<field name="name"/>
+						<field name="sequense"/>
+					</group>
+					<group>
+						<field name="description"/>
 					</group>
 					<div class="oe_chatter">
-                        <field name="message_ids" widget="mail_thread"/>
-                    </div>
-    			</form>
-    		</field>
-    	</record>
-    	<record id="action_project_stage" model="ir.actions.act_window">
-            <field name="name">Project Stage</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">project.stage</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-        </record>
-        
-        <menuitem 
-        	action="nomin_project.action_project_stage"
-            id="menu_project_stage" 
-        	parent="nomin_project.menu_project_config2"
-			groups="project.group_project_admin"
-            sequence="12"
-        />
-        
-        <record id="task_reason_tree" model="ir.ui.view">
-    		<field name="name">task.deadline.reason.tree</field>
-    		<field name="model">task.deadline.reason</field>
-    		<field name="arch" type="xml">
-    			<tree string="Шалтгааны бүртгэл">
-    				<field name="name"/>
-    				<field name="description"/>
-    			</tree>
-    		</field>
-    	</record>
-    	
-    	<!-- Төслийн шат Form -->
-    	<record id="task_reason_form" model="ir.ui.view">
-    		<field name="name">task.deadline.reason.form</field>
-    		<field name="model">task.deadline.reason</field>
-    		<field name="arch" type="xml">
-    			<form string="Шалтгааны бүртгэл">
-    				<group>
-    					<field name="name"/>
-    				</group>
+						<field name="message_ids" widget="mail_thread"/>
+					</div>
+				</form>
+			</field>
+		</record>
+		<record id="action_project_stage" model="ir.actions.act_window">
+			<field name="name">Project Stage</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">project.stage</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="nomin_project.action_project_stage" id="menu_project_stage" parent="nomin_project.menu_project_config2" groups="project.group_project_admin" sequence="12" />
+
+		<record id="task_reason_tree" model="ir.ui.view">
+			<field name="name">task.deadline.reason.tree</field>
+			<field name="model">task.deadline.reason</field>
+			<field name="arch" type="xml">
+				<tree string="Шалтгааны бүртгэл">
+					<field name="name"/>
+					<field name="description"/>
+				</tree>
+			</field>
+		</record>
+
+		<!-- Төслийн шат Form -->
+		<record id="task_reason_form" model="ir.ui.view">
+			<field name="name">task.deadline.reason.form</field>
+			<field name="model">task.deadline.reason</field>
+			<field name="arch" type="xml">
+				<form string="Шалтгааны бүртгэл">
 					<group>
-    					<field name="description"/>
+						<field name="name"/>
+					</group>
+					<group>
+						<field name="description"/>
 					</group>
 					<div class="oe_chatter">
-	                    <field name="message_ids" widget="mail_thread"/>
-	                </div>
-    			</form>
-    		</field>
-    	</record>
-    	<record id="action_task_reason" model="ir.actions.act_window">
-            <field name="name">Шалтгааны бүртгэл</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">task.deadline.reason</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-        </record>
-        
-        <menuitem 
-        	action="nomin_project.action_task_reason"
-            id="menu_task_reason" 
-        	parent="nomin_project.menu_project_config2"
-			groups="project.group_project_admin"
-            sequence="15"
-        />
-        	
-    </data>
-</openerp>
+						<field name="message_ids" widget="mail_thread"/>
+					</div>
+				</form>
+			</field>
+		</record>
+		<record id="action_task_reason" model="ir.actions.act_window">
+			<field name="name">Шалтгааны бүртгэл</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">task.deadline.reason</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="nomin_project.action_task_reason" id="menu_task_reason" parent="nomin_project.menu_project_config2" groups="project.group_project_admin" sequence="15" />
+
+	</data>
+</odoo>

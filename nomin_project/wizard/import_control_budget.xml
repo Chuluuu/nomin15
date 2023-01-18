@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
-    	<!-- Төслийн үе шат -->
-    	<record id="import_control_budget_view" model="ir.ui.view">
+<odoo>
+    <data>
+        <!-- Төслийн үе шат -->
+        <record id="import_control_budget_view" model="ir.ui.view">
             <field name="name">import.control.budget.form</field>
             <field name="model">import.control.budget</field>
             <field name="arch" type="xml">
-        		<form string="Импорт хийх"> 
-        			<group colspan="4">
+                <form string="Импорт хийх">
+                    <group colspan="4">
                         <field name="data" colspan="4" readonly="0"/>
                     </group>
                     <group colspan="4" col="6">
                         <label string="файл" colspan="2"/>
                         <button icon="gtk-cancel" special="cancel" string="Close"/>
                         <button icon="gtk-execute" string="Execute" name="import_data" type="object"/>
-                   </group>
-    			</form>
+                    </group>
+                </form>
             </field>
         </record>
-        
-       <record id="action_import_control_budget" model="ir.actions.act_window">
-			<field name="name">action.import.control.budget</field>
-			<field name="type">ir.actions.act_window</field>
-			<field name="res_model">import.control.budget</field>
-			<field name="view_type">form</field>
-			<field name="view_mode">form</field>
-			<field name="context">{'record_id' : active_id}</field>
-			<field name="target">new</field>
-		</record>
-	</data>
-</openerp>
+
+        <record id="action_import_control_budget" model="ir.actions.act_window">
+            <field name="name">action.import.control.budget</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">import.control.budget</field>
+            <field name="view_mode">form</field>
+            <field name="context">{'record_id' : active_id}</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

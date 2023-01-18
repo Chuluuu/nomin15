@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, date
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, ValidationError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError
 import time
 
 class ProjectBudget(models.Model):

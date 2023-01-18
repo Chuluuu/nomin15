@@ -1,4 +1,4 @@
-<openerp>
+<odoo>
     <data>
         <record id="view_import_task" model="ir.ui.view">
             <field name="name">import.task.form</field>
@@ -13,24 +13,22 @@
                         <label string="" colspan="2"/>
                         <button icon="gtk-cancel" special="cancel" string="Close"/>
                         <button icon="gtk-execute" string="Execute" name="import_data" type="object"/>
-                   </group>
-               </form>
+                    </group>
+                </form>
             </field>
         </record>
-        
+
         <record id="action_import_task" model="ir.actions.act_window">
             <field name="name">Import task</field>
             <field name="res_model">import.task</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_import_task"/>
             <field name="target">new</field>
         </record>
-        
-        <menuitem id="menu_import_task" action="nomin_project.action_import_task"
-           parent="project.menu_project_management" sequence="15" icon="terp-idea"/>
 
-           <record id="view_project_budget_export_task" model="ir.ui.view">
+        <menuitem id="menu_import_task" action="nomin_project.action_import_task" parent="project.menu_project_management" sequence="15" icon="terp-idea"/>
+
+        <record id="view_project_budget_export_task" model="ir.ui.view">
             <field name="name">project.budget.export.import.form</field>
             <field name="model">project.budget.export.import</field>
             <field name="type">form</field>
@@ -50,10 +48,10 @@
                         <button icon="gtk-execute" string="Export" name="action_export" attrs="{'invisible':[('type','!=','export')]}" type="object"/>
                         Эсвэл
                         <button icon="gtk-cancel" special="cancel" string="Close"/>
-                   </footer>
-               </form>
+                    </footer>
+                </form>
             </field>
         </record>
-        
+
     </data>
-</openerp>
+</odoo>

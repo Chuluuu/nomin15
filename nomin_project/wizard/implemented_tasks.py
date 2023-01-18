@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 import time
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 
 class ImplementedTasks(models.TransientModel):
 	'''Хийгдсэн ажлууд
@@ -37,7 +37,6 @@ class ImplementedTasks(models.TransientModel):
 		'''
 		self.message_subscribe_users(user_ids=user_ids)
 
-	@api.multi	
 	def action_send(self):
 
 		active_id = self._context.get('active_id')

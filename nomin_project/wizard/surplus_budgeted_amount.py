@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 import time
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 import json
 
 class SurplusBudgetedAmount(models.TransientModel):

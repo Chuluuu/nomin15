@@ -3,8 +3,8 @@
 import datetime
 from datetime import date, datetime, timedelta
 import time
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, ValidationError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError
 import random
 import logging
 import string 

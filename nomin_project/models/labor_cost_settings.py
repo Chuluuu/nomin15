@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import UserError, ValidationError
+from odoo import api, fields, models
+from odoo.exceptions import UserError, ValidationError
 from dateutil.relativedelta import relativedelta
 import time
 from datetime import date, datetime, timedelta
-from openerp.tools.translate import _
+from odoo.tools.translate import _
 
 
 class LaborCostSettings(models.Model):
