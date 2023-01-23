@@ -3,12 +3,11 @@
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from openerp import api, fields, models, _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp.tools.translate import _
-from openerp.tools.float_utils import float_is_zero, float_compare
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import UserError, AccessError
+from odoo import api, fields, models, _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools.translate import _
+from odoo.tools.float_utils import float_is_zero, float_compare
+from odoo.exceptions import UserError, AccessError
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -16,14 +15,14 @@ class res_partner(models.Model):
     _inherit='res.partner'
     
      
-    @api.one
+    
     def _tender_count(self):
         '''Харилцагчийн тендерт оролцсон тоо'''
         for partner in self:
             count=self.env['tender.participants.bid'].sudo().search_count([('partner_id','=',partner.id)])
         self.tender_management_counts=count
          
-    @api.one
+    
     def _tender_history(self):
         '''Харилцагчийн тендерт оролцсон үр дүнгийн тоо'''
         for partner in self:
@@ -32,7 +31,7 @@ class res_partner(models.Model):
     
     
     #===========================================================================
-    # @api.multi
+    # 
     # def _tender_count(self):
     #     '''Харилцагчийн тендерт оролцсон тоо'''
     #     
@@ -45,7 +44,7 @@ class res_partner(models.Model):
     #     
     #     
     #                 
-    # @api.multi
+    # 
     # def _tender_history(self):
     #     '''Харилцагчийн тендерт оролцсон үр дүнгийн тоо'''
     #     if self.ids:

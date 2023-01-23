@@ -1,41 +1,17 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-import openerp.tools
-from openerp.tools.translate import _
-from openerp.http import request
-from openerp import SUPERUSER_ID
-from openerp.addons.decimal_precision import decimal_precision as dp
-from openerp import api, fields, models, _
-import xlwt
+
+from odoo.tools.translate import _
+from odoo import SUPERUSER_ID
+from odoo import api, fields, models, _
 from xlwt import *
-from StringIO import StringIO
+from io import StringIO
 from io import BytesIO
 import base64
 import xlsxwriter
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from operator import itemgetter
-
-from openerp.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
-from openerp.addons.nomin_base.report.nomin_report_style import styles
+from odoo.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
 
 class bidding_list_report(models.TransientModel):
     _name = 'bidding.list.report'
@@ -66,7 +42,7 @@ class bidding_list_report(models.TransientModel):
     contract_date_end       = fields.Date(string = u'Гэрээ дуусах огноо')
     
     
-    @api.multi
+    
     def export_tender_report(self,report_code,context=None):
         active_ids = self.env.context.get('active_ids', [])
         if context is None:

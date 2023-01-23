@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
-    
-    	<record id="view_subscribe_users_list_tree" model="ir.ui.view">
+
+        <record id="view_subscribe_users_list_tree" model="ir.ui.view">
             <field name="name">Tender subscribe users tree</field>
             <field name="model">subscribe.users</field>
             <field name="type">tree</field>
@@ -13,38 +13,35 @@
                 </tree>
             </field>
         </record>
-    
-		<record id="view_subscribe_users_list_form" model="ir.ui.view">
+
+        <record id="view_subscribe_users_list_form" model="ir.ui.view">
             <field name="name">Tender subscribe users form</field>
             <field name="model">subscribe.users</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Subscribe Users form">
-                	<sheet>
-	                	<group col="4">
-                			<field name="tender_type_ids" required="1" options="{'no_create': True}" widget="many2many_tags"/>
-                			<field name="email" required="1"/>
-						</group>
-					</sheet>
-					<div class="oe_chatter">
-			            <field name="message_follower_ids" widget="mail_followers"/>
-			            <field name="message_ids" widget="mail_thread"/>
-	             	</div>
+                    <sheet>
+                        <group col="4">
+                            <field name="tender_type_ids" required="1" options="{'no_create': True}" widget="many2many_tags"/>
+                            <field name="email" required="1"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>
-        
+
         <record model="ir.actions.act_window" id="tender_subscribe_users_list_action">
             <field name="name">Tender Subscribe Users</field>
             <field name="res_model">subscribe.users</field>
             <field name="view_mode">tree,form</field>
         </record>
-		
-		<menuitem id="tender_subscribe_users_menu" name="Tender Subscribe Users"
-							parent="root_tender_menu" sequence="8"
-							groups="group_tender_secretary,group_tender_admin"
-							action="tender_subscribe_users_list_action"/>
-			                  	
-							
+
+        <menuitem id="tender_subscribe_users_menu" name="Tender Subscribe Users" parent="root_tender_menu" sequence="8" groups="group_tender_secretary,group_tender_admin" action="tender_subscribe_users_list_action"/>
+
+
     </data>
-</openerp>
+</odoo>

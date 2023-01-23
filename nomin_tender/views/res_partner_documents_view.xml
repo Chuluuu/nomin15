@@ -1,253 +1,311 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
+	<data>
 
 		<record id="view_res_partner_documents_filter" model="ir.ui.view">
-            <field name="name">res.partner.documents</field>
-            <field name="model">res.partner.documents</field>
-            <field name="arch" type="xml">
-                <search string="Search partner documents">
-                    <field name="name" />
-                    <group expand="0" string="Group By">
-                    	<filter string="State" name="document_state" domain="[]" context="{'group_by':'state'}"/>
-                    	<filter string="Current partner" name="partner" domain="[]" context="{'group_by':'partner_id'}"/>
-                    </group>
-                </search>
-            </field>
-        </record>
-		
-		<record id="view_res_partner_documents_tree" model="ir.ui.view">
-            <field name="name">Partner document tree</field>
-            <field name="model">res.partner.documents</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <tree string="Tender">
-                    <field name="name"/>
-                    <field name="partner_id"/>
-                    <field name="state"/>
-                </tree>
-            </field>
-        </record>
+			<field name="name">res.partner.documents</field>
+			<field name="model">res.partner.documents</field>
+			<field name="arch" type="xml">
+				<search string="Search partner documents">
+					<field name="name" />
+					<group expand="0" string="Group By">
+						<filter string="State" name="document_state" domain="[]" context="{'group_by':'state'}"/>
+						<filter string="Current partner" name="partner" domain="[]" context="{'group_by':'partner_id'}"/>
+					</group>
+				</search>
+			</field>
+		</record>
 
-        <record id="view_res_partner_documents_form" model="ir.ui.view">
-            <field name="name">Partner document form</field>
-            <field name="model">res.partner.documents</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="Partner Attachment">
-                	<header>
-                		<!-- <button name="action_change_state" string="Verify" class="btn-primary" type="object" states="complete,incomplete"/> -->
-                		<button name="action_confirm" class="btn-primary" string="Verify" type="object" states="incomplete"/>
-                		<button name="check_dates" class="btn-primary" string="Check" type="object"/>
-                		<field name="state" widget="statusbar" statusbar_visible="complete,incomplete"/>
-                	</header>
-                	<sheet>
-                	<separator string="Partner Document"/>
-	                	<group colspan="4" col="4">
-	                		<group colspan="4">
-	                			<field name="partner_id" required="1" options="{'no_create': True}" attrs="{'readonly':[('state','=','complete')]}"/>
-	                			<field name="name" attrs="{'readonly':[('state','=','complete')]}"/>
-	                		</group>
+		<record id="view_res_partner_documents_tree" model="ir.ui.view">
+			<field name="name">Partner document tree</field>
+			<field name="model">res.partner.documents</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Tender">
+					<field name="name"/>
+					<field name="partner_id"/>
+					<field name="state"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="view_res_partner_documents_form" model="ir.ui.view">
+			<field name="name">Partner document form</field>
+			<field name="model">res.partner.documents</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Partner Attachment">
+					<header>
+						<!-- <button name="action_change_state" string="Verify" class="btn-primary" type="object" states="complete,incomplete"/> -->
+						<button name="action_confirm" class="btn-primary" string="Verify" type="object" states="incomplete"/>
+						<button name="check_dates" class="btn-primary" string="Check" type="object"/>
+						<field name="state" widget="statusbar" statusbar_visible="complete,incomplete"/>
+					</header>
+					<sheet>
+						<separator string="Partner Document"/>
+						<group colspan="4" col="4">
 							<group colspan="4">
-								<field name="tax_ids" >
-			                    	<tree string="Files">
-	                                    <field name="name"/>
-	                                    <field name="datas_fname"/>
-	                                    <field name="datas" filename="datas_fname" readonly="1"/>
-	                                    <field name="create_date" readonly="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" />
-	                                </tree> 
-	                                <form>
-	                                    <label for="name" class="oe_edit_only"/>
-	                                    <h1>
-	                                        <field name="name"/>
-	                                    </h1>
-	                                    <group string="Data">
-	                                        <field name="type" invisible="1"/> 
-	                                        <field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
-	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-	                                    </group>
-	                                    <group groups="base.group_no_one" string="History">
-	                                        <label for="create_uid" string="Creation"/>
-	                                        <div name="creation_div">
-	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
-	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
-	                                        </div>
-	                                    </group>
-	                                </form>
-                                </field>
-								
-			                    <field name="certificate_ids" >
-			                    	<tree string="Files">
-	                                    <field name="name"/>
-	                                    <field name="datas_fname"/>
-	                                    <field name="datas" filename="datas_fname" readonly="1"/>
-	                                    <field name="create_date" readonly="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" />
-	                                    
-	                                </tree> 
-	                                <form>
-	                                    <label for="name" class="oe_edit_only"/>
-	                                    <h1>
-	                                        <field name="name"/>
-	                                    </h1>
-	                                    <group string="Data">
-	                                        <field name="type" invisible="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
-	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-	                                    </group>
-	                                    <group groups="base.group_no_one" string="History">
-	                                        <label for="create_uid" string="Creation"/>
-	                                        <div name="creation_div">
-	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
-	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
-	                                        </div>
-	                                    </group>
-	                                </form>
-                                </field>
-                                <field name="spec_license_ids" >
-			                    	<tree string="Files">
-	                                    <field name="name"/>
-	                                    <field name="datas_fname"/>
-	                                    <field name="datas" filename="datas_fname" readonly="1"/>
-	                                    <field name="create_date" readonly="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" />
-	                                </tree> 
-	                                <form>
-	                                    <label for="name" class="oe_edit_only"/>
-	                                    <h1>
-	                                        <field name="name"/>
-	                                    </h1>
-	                                    <group string="Data">
-	                                        <field name="type" invisible="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
-	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-	                                    </group>
-	                                    <group groups="base.group_no_one" string="History">
-	                                        <label for="create_uid" string="Creation"/>
-	                                        <div name="creation_div">
-	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
-	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
-	                                        </div>
-	                                    </group>
-	                                </form>
-                                </field>
-			                    <field name="vat_file_ids">
-			                    	<tree string="Files">
-	                                    <field name="name"/>
-	                                    <field name="datas_fname"/>
-	                                    <field name="datas" filename="datas_fname" readonly="1"/>
-	                                    <field name="create_date" readonly="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" />
-	                                </tree> 
-	                                <form>
-	                                    <label for="name" class="oe_edit_only"/>
-	                                    <h1>
-	                                        <field name="name"/>
-	                                    </h1>
-	                                    <group string="Data">
-	                                        <field name="type" invisible="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
-	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-	                                    </group>
-	                                    <group groups="base.group_no_one" string="History">
-	                                        <label for="create_uid" string="Creation"/>
-	                                        <div name="creation_div">
-	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
-	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
-	                                        </div>
-	                                    </group>
-	                                </form>
-			                    </field>  
-			                    <field name="org_define_ids">
-			                    	<tree string="Files">
-	                                    <field name="name"/>
-	                                    <field name="datas_fname"/>
-	                                    <field name="datas" filename="datas_fname" readonly="1"/>
-	                                    <field name="create_date" readonly="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" />
-	                                </tree> 
-	                                <form>
-	                                    <label for="name" class="oe_edit_only"/>
-	                                    <h1>
-	                                        <field name="name"/>
-	                                    </h1>
-	                                    <group string="Data">
-	                                        <field name="type" invisible="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
-	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-	                                    </group>
-	                                    <group groups="base.group_no_one" string="History">
-	                                        <label for="create_uid" string="Creation"/>
-	                                        <div name="creation_div">
-	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
-	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
-	                                        </div>
-	                                    </group>
-	                                </form>
-			                    </field>
-			                    <field name="judgement_define_ids">
-			                    	<tree string="Files">
-	                                    <field name="name"/>
-	                                    <field name="datas_fname"/>
-	                                    <field name="datas" filename="datas_fname" readonly="1"/>
-	                                    <field name="create_date" readonly="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" />
-	                                </tree> 
-	                                <form>
-	                                    <label for="name" class="oe_edit_only"/>
-	                                    <h1>
-	                                        <field name="name"/>
-	                                    </h1>
-	                                    <group string="Data">
-	                                        <field name="type" invisible="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
-	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-	                                    </group>
-	                                    <group groups="base.group_no_one" string="History">
-	                                        <label for="create_uid" string="Creation"/>
-	                                        <div name="creation_div">
-	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
-	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
-	                                        </div>
-	                                    </group>
-	                                </form>
-			                    </field>
-			                    <field name="bank_define_ids">
-			                    	<tree string="Files">
-	                                    <field name="name"/>
-	                                    <field name="datas_fname"/>
-	                                    <field name="datas" filename="datas_fname" readonly="1"/>
-	                                    <field name="create_date" readonly="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" />
-	                                </tree> 
-	                                <form>
-	                                    <label for="name" class="oe_edit_only"/>
-	                                    <h1>
-	                                        <field name="name"/>
-	                                    </h1>
-	                                    <group string="Data">
-	                                        <field name="type" invisible="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
-	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-	                                    </group>
-	                                    <group groups="base.group_no_one" string="History">
-	                                        <label for="create_uid" string="Creation"/>
-	                                        <div name="creation_div">
-	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
-	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
-	                                        </div>
-	                                    </group>
-	                                </form>
-			                    </field>	                    
-		                     </group>        
-		                    <group colspan="4">
-		                    	<field name="insurance_define_ids">
+								<field name="partner_id" required="1" options="{'no_create': True}" attrs="{'readonly':[('state','=','complete')]}"/>
+								<field name="name" attrs="{'readonly':[('state','=','complete')]}"/>
+							</group>
+							<group colspan="4">
+								<field name="tax_ids">
+									<tree string="Files">
+										<field name="name"/>
+										<field name="store_fname"/>
+										<field name="datas" filename="store_fname" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+										<field name="date_end" string="Хүчинтэй дуусах хугацаа" />
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Data">
+											<field name="type" invisible="1"/>
+											<field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
+											<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+										<group groups="base.group_no_one" string="History">
+											<label for="create_uid" string="Creation"/>
+											<div name="creation_div">
+												<field name="create_uid" readonly="1" class="oe_inline"/>
+ on 
+												<field name="create_date" readonly="1" class="oe_inline"/>
+ from 
+											</div>
+										</group>
+									</form>
+								</field>
+
+								<field name="certificate_ids">
+									<tree string="Files">
+										<field name="name"/>
+										<field name="store_fname"/>
+										<field name="datas" filename="store_fname" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+										<field name="date_end" string="Хүчинтэй дуусах хугацаа" />
+
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Data">
+											<field name="type" invisible="1"/>
+											<field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
+											<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+										<group groups="base.group_no_one" string="History">
+											<label for="create_uid" string="Creation"/>
+											<div name="creation_div">
+												<field name="create_uid" readonly="1" class="oe_inline"/>
+ on 
+												<field name="create_date" readonly="1" class="oe_inline"/>
+ from 
+											</div>
+										</group>
+									</form>
+								</field>
+								<field name="spec_license_ids">
+									<tree string="Files">
+										<field name="name"/>
+										<field name="store_fname"/>
+										<field name="datas" filename="store_fname" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+										<field name="date_end" string="Хүчинтэй дуусах хугацаа" />
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Data">
+											<field name="type" invisible="1"/>
+											<field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
+											<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+										<group groups="base.group_no_one" string="History">
+											<label for="create_uid" string="Creation"/>
+											<div name="creation_div">
+												<field name="create_uid" readonly="1" class="oe_inline"/>
+ on 
+												<field name="create_date" readonly="1" class="oe_inline"/>
+ from 
+											</div>
+										</group>
+									</form>
+								</field>
+								<field name="vat_file_ids">
+									<tree string="Files">
+										<field name="name"/>
+										<field name="store_fname"/>
+										<field name="datas" filename="store_fname" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+										<field name="date_end" string="Хүчинтэй дуусах хугацаа" />
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Data">
+											<field name="type" invisible="1"/>
+											<field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
+											<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+										<group groups="base.group_no_one" string="History">
+											<label for="create_uid" string="Creation"/>
+											<div name="creation_div">
+												<field name="create_uid" readonly="1" class="oe_inline"/>
+ on 
+												<field name="create_date" readonly="1" class="oe_inline"/>
+ from 
+											</div>
+										</group>
+									</form>
+								</field>
+								<field name="org_define_ids">
+									<tree string="Files">
+										<field name="name"/>
+										<field name="store_fname"/>
+										<field name="datas" filename="store_fname" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+										<field name="date_end" string="Хүчинтэй дуусах хугацаа" />
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Data">
+											<field name="type" invisible="1"/>
+											<field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
+											<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+										<group groups="base.group_no_one" string="History">
+											<label for="create_uid" string="Creation"/>
+											<div name="creation_div">
+												<field name="create_uid" readonly="1" class="oe_inline"/>
+ on 
+												<field name="create_date" readonly="1" class="oe_inline"/>
+ from 
+											</div>
+										</group>
+									</form>
+								</field>
+								<field name="judgement_define_ids">
+									<tree string="Files">
+										<field name="name"/>
+										<field name="store_fname"/>
+										<field name="datas" filename="store_fname" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+										<field name="date_end" string="Хүчинтэй дуусах хугацаа" />
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Data">
+											<field name="type" invisible="1"/>
+											<field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
+											<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+										<group groups="base.group_no_one" string="History">
+											<label for="create_uid" string="Creation"/>
+											<div name="creation_div">
+												<field name="create_uid" readonly="1" class="oe_inline"/>
+ on 
+												<field name="create_date" readonly="1" class="oe_inline"/>
+ from 
+											</div>
+										</group>
+									</form>
+								</field>
+								<field name="bank_define_ids">
+									<tree string="Files">
+										<field name="name"/>
+										<field name="store_fname"/>
+										<field name="datas" filename="store_fname" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+										<field name="date_end" string="Хүчинтэй дуусах хугацаа" />
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Data">
+											<field name="type" invisible="1"/>
+											<field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
+											<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+										<group groups="base.group_no_one" string="History">
+											<label for="create_uid" string="Creation"/>
+											<div name="creation_div">
+												<field name="create_uid" readonly="1" class="oe_inline"/>
+ on 
+												<field name="create_date" readonly="1" class="oe_inline"/>
+ from 
+											</div>
+										</group>
+									</form>
+								</field>
+							</group>
+							<group colspan="4">
+								<field name="insurance_define_ids">
+									<tree string="Files">
+										<field name="name"/>
+										<field name="store_fname"/>
+										<field name="datas" filename="store_fname" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+										<field name="date_end" string="Хүчинтэй дуусах хугацаа" />
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Data">
+											<field name="type" invisible="1"/>
+											<field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
+											<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+										<group groups="base.group_no_one" string="History">
+											<label for="create_uid" string="Creation"/>
+											<div name="creation_div">
+												<field name="create_uid" readonly="1" class="oe_inline"/>
+ on 
+												<field name="create_date" readonly="1" class="oe_inline"/>
+ from 
+											</div>
+										</group>
+									</form>
+								</field>
+								<!-- <field name="technical_define_ids">
 		                    		<tree string="Files">
 	                                    <field name="name"/>
-	                                    <field name="datas_fname"/>
-	                                    <field name="datas" filename="datas_fname" readonly="1"/>
+	                                    <field name="store_fname"/>
+	                                    <field name="datas" filename="store_fname" readonly="1"/>
 	                                    <field name="create_date" readonly="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" />
 	                                </tree> 
 	                                <form>
@@ -257,35 +315,8 @@
 	                                    </h1>
 	                                    <group string="Data">
 	                                        <field name="type" invisible="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
-	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-	                                    </group>
-	                                    <group groups="base.group_no_one" string="History">
-	                                        <label for="create_uid" string="Creation"/>
-	                                        <div name="creation_div">
-	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
-	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
-	                                        </div>
-	                                    </group>
-	                                </form>
-		                    	</field>
-		                    	<!-- <field name="technical_define_ids">
-		                    		<tree string="Files">
-	                                    <field name="name"/>
-	                                    <field name="datas_fname"/>
-	                                    <field name="datas" filename="datas_fname" readonly="1"/>
-	                                    <field name="create_date" readonly="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" />
-	                                </tree> 
-	                                <form>
-	                                    <label for="name" class="oe_edit_only"/>
-	                                    <h1>
-	                                        <field name="name"/>
-	                                    </h1>
-	                                    <group string="Data">
-	                                        <field name="type" invisible="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
-	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+	                                        <field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+	                                        <field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
 	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
 	                                    </group>
 	                                    <group groups="base.group_no_one" string="History">
@@ -297,210 +328,220 @@
 	                                    </group>
 	                                </form>
 		                    	</field> -->
-		                    	<field name="work_list_ids">
-		                    		<tree string="Files">
-	                                    <field name="name"/>
-	                                    <field name="datas_fname"/>
-	                                    <field name="datas" filename="datas_fname" readonly="1"/>
-	                                    <field name="create_date" readonly="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" />
-	                                </tree> 
-	                                <form>
-	                                    <label for="name" class="oe_edit_only"/>
-	                                    <h1>
-	                                        <field name="name"/>
-	                                    </h1>
-	                                    <group string="Data">
-	                                        <field name="type" invisible="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
-	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-	                                    </group>
-	                                    <group groups="base.group_no_one" string="History">
-	                                        <label for="create_uid" string="Creation"/>
-	                                        <div name="creation_div">
-	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
-	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
-	                                        </div>
-	                                    </group>
-	                                </form>
-		                    	</field>
-		                    	<field name="insurance_report_ids">
-		                    		<tree string="Files">
-	                                    <field name="name"/>
-	                                    <field name="datas_fname"/>
-	                                    <field name="datas" filename="datas_fname" readonly="1"/>
-	                                    <field name="create_date" readonly="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" />
-	                                </tree> 
-	                                <form>
-	                                    <label for="name" class="oe_edit_only"/>
-	                                    <h1>
-	                                        <field name="name"/>
-	                                    </h1>
-	                                    <group string="Data">
-	                                        <field name="type" invisible="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
-	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-	                                    </group>
-	                                    <group groups="base.group_no_one" string="History">
-	                                        <label for="create_uid" string="Creation"/>
-	                                        <div name="creation_div">
-	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
-	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
-	                                        </div>
-	                                    </group>
-	                                </form>
-		                    	</field>
-		                    	<field name="finance_report_ids">
-		                    		<tree string="Files">
-	                                    <field name="name"/>
-	                                    <field name="datas_fname"/>
-	                                    <field name="datas" filename="datas_fname" readonly="1"/>
-	                                    <field name="create_date" readonly="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" />
-	                                </tree> 
-	                                <form>
-	                                    <label for="name" class="oe_edit_only"/>
-	                                    <h1>
-	                                        <field name="name"/>
-	                                    </h1>
-	                                    <group string="Data">
-	                                        <field name="type" invisible="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
-	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-	                                    </group>
-	                                    <group groups="base.group_no_one" string="History">
-	                                        <label for="create_uid" string="Creation"/>
-	                                        <div name="creation_div">
-	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
-	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
-	                                        </div>
-	                                    </group>
-	                                </form>
-		                    	</field>
-		                    	<field name="audit_report_ids">
-		                    		<tree string="Files">
-	                                    <field name="name"/>
-	                                    <field name="datas_fname"/>
-	                                    <field name="datas" filename="datas_fname" readonly="1"/>
-	                                    <field name="create_date" readonly="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" />
-	                                </tree> 
-	                                <form>
-	                                    <label for="name" class="oe_edit_only"/>
-	                                    <h1>
-	                                        <field name="name"/>
-	                                    </h1>
-	                                    <group string="Data">
-	                                        <field name="type" invisible="1"/> <field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
-	                                        <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-	                                        <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-	                                        <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-	                                    </group>
-	                                    <group groups="base.group_no_one" string="History">
-	                                        <label for="create_uid" string="Creation"/>
-	                                        <div name="creation_div">
-	                                            <field name="create_uid" readonly="1" class="oe_inline"/> on 
-	                                            <field name="create_date" readonly="1" class="oe_inline"/> from 
-	                                        </div>
-	                                    </group>
-	                                </form>
-		                    	</field>             	
-		                	</group>       
+								<field name="work_list_ids">
+									<tree string="Files">
+										<field name="name"/>
+										<field name="store_fname"/>
+										<field name="datas" filename="store_fname" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+										<field name="date_end" string="Хүчинтэй дуусах хугацаа" />
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Data">
+											<field name="type" invisible="1"/>
+											<field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
+											<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+										<group groups="base.group_no_one" string="History">
+											<label for="create_uid" string="Creation"/>
+											<div name="creation_div">
+												<field name="create_uid" readonly="1" class="oe_inline"/>
+ on 
+												<field name="create_date" readonly="1" class="oe_inline"/>
+ from 
+											</div>
+										</group>
+									</form>
+								</field>
+								<field name="insurance_report_ids">
+									<tree string="Files">
+										<field name="name"/>
+										<field name="store_fname"/>
+										<field name="datas" filename="store_fname" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+										<field name="date_end" string="Хүчинтэй дуусах хугацаа" />
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Data">
+											<field name="type" invisible="1"/>
+											<field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
+											<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+										<group groups="base.group_no_one" string="History">
+											<label for="create_uid" string="Creation"/>
+											<div name="creation_div">
+												<field name="create_uid" readonly="1" class="oe_inline"/>
+ on 
+												<field name="create_date" readonly="1" class="oe_inline"/>
+ from 
+											</div>
+										</group>
+									</form>
+								</field>
+								<field name="finance_report_ids">
+									<tree string="Files">
+										<field name="name"/>
+										<field name="store_fname"/>
+										<field name="datas" filename="store_fname" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+										<field name="date_end" string="Хүчинтэй дуусах хугацаа" />
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Data">
+											<field name="type" invisible="1"/>
+											<field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
+											<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+										<group groups="base.group_no_one" string="History">
+											<label for="create_uid" string="Creation"/>
+											<div name="creation_div">
+												<field name="create_uid" readonly="1" class="oe_inline"/>
+ on 
+												<field name="create_date" readonly="1" class="oe_inline"/>
+ from 
+											</div>
+										</group>
+									</form>
+								</field>
+								<field name="audit_report_ids">
+									<tree string="Files">
+										<field name="name"/>
+										<field name="store_fname"/>
+										<field name="datas" filename="store_fname" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+										<field name="date_end" string="Хүчинтэй дуусах хугацаа" />
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Data">
+											<field name="type" invisible="1"/>
+											<field name="date_end" string="Хүчинтэй дуусах хугацаа" required="1"/>
+											<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+										<group groups="base.group_no_one" string="History">
+											<label for="create_uid" string="Creation"/>
+											<div name="creation_div">
+												<field name="create_uid" readonly="1" class="oe_inline"/>
+ on 
+												<field name="create_date" readonly="1" class="oe_inline"/>
+ from 
+											</div>
+										</group>
+									</form>
+								</field>
+							</group>
 						</group>
 					</sheet>
 					<div class="oe_chatter">
-			            <field name="message_follower_ids" widget="mail_followers"/>
-			            <field name="message_ids" widget="mail_thread"/>
-	             	</div>
-                </form>
-            </field>
-        </record>		
-		
+						<field name="message_follower_ids" widget="mail_followers"/>
+						<field name="message_ids" widget="mail_thread"/>
+					</div>
+				</form>
+			</field>
+		</record>
+
 		<record model="ir.actions.act_window" id="tender_partner_list_action">
-            <field name="name">Tender Partner Document</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">res.partner.documents</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="view_res_partner_documents_filter"></field>
-            <field name="context">{'search_default_document_state':1}</field>
-        </record>
-        
-        <record id="view_document_duration_config_form" model="ir.ui.view">
-            <field name="name">partner.file.duration.form</field>
-            <field name="model">partner.file.duration</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="Documents duration config form" create="false">
-                <!-- <header>
+			<field name="name">Tender Partner Document</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">res.partner.documents</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="view_res_partner_documents_filter"></field>
+			<field name="context">{'search_default_document_state':1}</field>
+		</record>
+
+		<record id="view_document_duration_config_form" model="ir.ui.view">
+			<field name="name">partner.file.duration.form</field>
+			<field name="model">partner.file.duration</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Documents duration config form" create="false">
+					<!-- <header>
                     <button name="action_confirm" states="draft" string="Done" class="btn-primary" type="object" groups="nomin_tender.group_tender_manager"/>
                     <button name="action_cancel" states="draft,done" string="Cancel" type="object" groups="nomin_tender.group_tender_manager"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel"/>
                	</header> readonly="1" -->
-               	<sheet>
-           			<group>
-           				<group>
-            				<field name="name" required="1"/>
-     					</group>
-     					<group>
-           					<field name="is_active"/>
-     					</group>
-     					<group colspan="4">
-            				<field name="duration_ids" colspan="4">
-            					<tree string="Duration" editable="bottom">
-                                    <field name="name" required="1"/>
-                                    <field name="duration_day" required="1" string="Үргэлжлэх хугацаа (Хоногоор)"/>
-                                    <field name="is_required" invisible="1"/>
-                                    <field name="file_id" invisible="1"/>
-                                </tree> 
-                                <form>
-                                    <group string="Duration">
-                                        <field name="file_id"/>
-                                        <field name="name"/>
-                                        <field name="duration_day" string="Үргэлжлэх хугацаа (Хоногоор)"/>
-                                        <field name="is_required" invisible="1"/>
-                                    </group>
-                                </form>
-           					</field>
-           				</group>
-           			</group>
-               	</sheet>
-               	<div class="oe_chatter">
-		            <field name="message_follower_ids" widget="mail_followers"/>
-		            <field name="message_ids" widget="mail_thread"/>
-             	</div>
-         		</form>
-       		</field>
-   		</record>
-        
-        <record id="view_document_duration_config_tree" model="ir.ui.view">
-            <field name="name">partner.file.duration.tree</field>
-            <field name="model">partner.file.duration</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <tree string="Documents duration config tree" create="false">
-                    <field name="name"/>
+					<sheet>
+						<group>
+							<group>
+								<field name="name" required="1"/>
+							</group>
+							<group>
+								<field name="is_active"/>
+							</group>
+							<group colspan="4">
+								<field name="duration_ids" colspan="4">
+									<tree string="Duration" editable="bottom">
+										<field name="name" required="1"/>
+										<field name="duration_day" required="1" string="Үргэлжлэх хугацаа (Хоногоор)"/>
+										<field name="is_required" invisible="1"/>
+										<field name="file_id" invisible="1"/>
+									</tree>
+									<form>
+										<group string="Duration">
+											<field name="file_id"/>
+											<field name="name"/>
+											<field name="duration_day" string="Үргэлжлэх хугацаа (Хоногоор)"/>
+											<field name="is_required" invisible="1"/>
+										</group>
+									</form>
+								</field>
+							</group>
+						</group>
+					</sheet>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"/>
+						<field name="message_ids" widget="mail_thread"/>
+					</div>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_document_duration_config_tree" model="ir.ui.view">
+			<field name="name">partner.file.duration.tree</field>
+			<field name="model">partner.file.duration</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Documents duration config tree" create="false">
+					<field name="name"/>
 					<field name="duration_ids"/>
 					<field name="is_active"/>
-                </tree>
-            </field>
-        </record>
-        
-        <record id="action_partner_document_duration" model="ir.actions.act_window">
-            <field name="name">Partner Documents duration config</field>
-            <field name="res_model">partner.file.duration</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_type">form</field>
-            <field name="view_id" ref="view_document_duration_config_tree"/>
-        </record>
-	        	
-    	<menuitem id="tender_partner_documents_menu" name="Tender Partner Document"
-							parent="tender_documents_menu" groups="group_tender_admin,group_tender_manager,group_tender_secretary,group_tender_committee_members,group_tender_requist_approval_leaders,group_tender_branch_manager,group_tender_user"
-							action="tender_partner_list_action"/>
-		
-		<menuitem id="documents_duration_config_menu" name="Document Duration Config"
-							parent="tender_setting_menu" groups="group_tender_secretary,group_tender_admin"
-							action="action_partner_document_duration" />
-		
-    </data>
-</openerp>
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_partner_document_duration" model="ir.actions.act_window">
+			<field name="name">Partner Documents duration config</field>
+			<field name="res_model">partner.file.duration</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="view_document_duration_config_tree"/>
+		</record>
+
+		<menuitem id="tender_partner_documents_menu" name="Tender Partner Document" parent="tender_documents_menu" groups="group_tender_admin,group_tender_manager,group_tender_secretary,group_tender_committee_members,group_tender_requist_approval_leaders,group_tender_branch_manager,group_tender_user" action="tender_partner_list_action"/>
+
+		<menuitem id="documents_duration_config_menu" name="Document Duration Config" parent="tender_setting_menu" groups="group_tender_secretary,group_tender_admin" action="action_partner_document_duration" />
+
+	</data>
+</odoo>

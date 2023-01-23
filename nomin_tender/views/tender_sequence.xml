@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data noupdate="1">
-        <!-- Sequences for Tender --> 
+        <!-- Sequences for Tender -->
         <record id="seq_tender" model="ir.sequence">
             <field name="name">Tender</field>
             <field name="code">tender.tender</field>
@@ -15,4 +15,4 @@
             <field name="padding">2</field>
         </record>
     </data>
-</openerp>
+</odoo>

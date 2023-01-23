@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-import random
-
-from openerp import SUPERUSER_ID
-from openerp.osv import osv, orm, fields
+from odoo import SUPERUSER_ID
+from odoo.osv import osv, orm, fields
 from openerp.addons.web.http import request
 from openerp.tools.translate import _
 
 from datetime import datetime, timedelta
-import random
+import odoo
 from urlparse import urljoin
 import werkzeug
 from openerp.addons.decimal_precision import decimal_precision as dp
@@ -16,7 +14,7 @@ from openerp.addons.base.ir.ir_mail_server import MailDeliveryException
 from openerp.tools.misc import DEFAULT_SERVER_DATETIME_FORMAT, ustr
 from ast import literal_eval
  
-class website_config_settings(osv.osv_memory):
+class WebsiteConfigSettings(models.Model):
     _inherit = 'website.config.settings'
     '''Тендер зарлах үнийн дүн 
     '''

@@ -1,31 +1,31 @@
-<openerp>
+<odoo>
 	<data>
-		 
+
 		<!-- Тендерийн хурлын протокол -->
 		<record id="view_tender_protocol_form" model="ir.ui.view">
 			<field name="name">Tender Protocol form</field>
 			<field name="model">tender.protocol</field>
-            <field name="type">form</field>
+			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Tender Protocol form">
 					<header>
 						<button name="action_to_open" states="draft" string="Open" class="btn-primary" type="object"/>
-                    	<button name="action_to_sent" groups="nomin_tender.group_tender_secretary" states="open" string="Илгээх" class="btn-primary" type="object"/>
-                    	<button name="action_to_done" states="sent" string="Done" class="btn-primary" type="object"/>
-                    	<field name="state" widget="statusbar" statusbar_visible="draft,open,done"/>
+						<button name="action_to_sent" groups="nomin_tender.group_tender_secretary" states="open" string="Илгээх" class="btn-primary" type="object"/>
+						<button name="action_to_done" states="sent" string="Done" class="btn-primary" type="object"/>
+						<field name="state" widget="statusbar" statusbar_visible="draft,open,done"/>
 					</header>
 					<sheet>
 						<label for="name" class="oe_edit_only" string="Meeting Protocol"/>
-	                    <h1>
-	                        <field name="name" style="width: 24em" required="1" attrs="{'readonly':[('state','in',['done','open'])]}"/>
-	                    </h1>
+						<h1>
+							<field name="name" style="width: 24em" required="1" attrs="{'readonly':[('state','in',['done','open'])]}"/>
+						</h1>
 						<group col="4">
 							<field name="meeting_id" colspan="2" options="{'no_create': True}" required="1" domain="[('state','=','confirmed')]" attrs="{'readonly':[('state','in',['done','open'])]}"/>
 							<field name="tender_id" colspan="2" options="{'no_create': True}" required="1" domain="[('state','in',['closed','in_selection'])]" attrs="{'readonly':[('state','in',['done','open'])]}"/>
 							<field name="committee_member_ids" colspan="2" options="{'no_create': True}" readonly="1">
 								<tree string="Committee members" editable="bottom">
-	                                <field name="tender_id" invisible="1"/>
-	                                <field name="type_id" invisible="1"/>
+									<field name="tender_id" invisible="1"/>
+									<field name="type_id" invisible="1"/>
 									<field name="employee_id" required="1"/>
 									<field name="job_id" readonly="1"/>
 									<field name="is_valuation" invisible="1"/>
@@ -33,16 +33,16 @@
 									<field name="read_state" readonly="1"/>
 									<field name="is_user" invisible="1" />
 									<button name="action_check" attrs="{'invisible':['|',('is_user','=',False),('read_state','=','read')]}" string="Танилцах" class="btn-primary" type="object"/>
-	                           </tree>
-	                           <form string="Committee members">
-	                                <group col="4">
-	                                    <field name="tender_id" colspan="4"/>
+								</tree>
+								<form string="Committee members">
+									<group col="4">
+										<field name="tender_id" colspan="4"/>
 										<field name="employee_id" colspan="2"/>
 										<field name="job_id" colspan="2"/>
 										<field name="is_valuation" colspan="2"/>
 										<field name="state" colspan="2"/>
-	                                </group>
-	                           </form>
+									</group>
+								</form>
 							</field>
 							<field name="user_id" colspan="2" readonly="1"/>
 							<!-- <field name="member_ids" colspan="2" options="{'no_create': True}" widget="many2many_tags" attrs="{'readonly':[('state','in',['done','open'])]}"/> -->
@@ -60,13 +60,13 @@
 						</notebook>
 					</sheet>
 					<div class="oe_chatter">
-			            <field name="message_follower_ids" widget="mail_followers"/>
-			            <field name="message_ids" widget="mail_thread"/>
-	             	</div>
+						<field name="message_follower_ids" widget="mail_followers"/>
+						<field name="message_ids" widget="mail_thread"/>
+					</div>
 				</form>
 			</field>
 		</record>
-		
+
 		<record id="view_tender_protocol_wizard" model="ir.ui.view">
 			<field name="name">Meeting Protocol</field>
 			<field name="model">tender.protocol</field>
@@ -90,51 +90,46 @@
 				</form>
 			</field>
 		</record>
-		
+
 		<record id="view_tender_protocol_tree" model="ir.ui.view">
-            <field name="name">tender.protocol.tree</field>
-            <field name="model">tender.protocol</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <tree string="Tender Protocol tree">
-                    <field name="tender_id"/>
-					<field name="state"/>     
-                </tree>
-            </field>
-        </record>
-		
+			<field name="name">tender.protocol.tree</field>
+			<field name="model">tender.protocol</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Tender Protocol tree">
+					<field name="tender_id"/>
+					<field name="state"/>
+				</tree>
+			</field>
+		</record>
+
 		<record id="action_tender_protocol" model="ir.actions.act_window">
 			<field name="name">Meeting Protocol</field>
 			<field name="res_model">tender.protocol</field>
-			<field name="view_type">form</field>
 			<field name="view_mode">form</field>
 			<field name="context">{'record_id' : active_id}</field>
 			<field name="view_id" ref="view_tender_protocol_wizard"/>
 			<field name="target">new</field>
 		</record>
-		
+
 		<record model="ir.actions.act_window" id="action_tender_protocol_menu">
-            <field name="name">Tender Protocol</field>
-            <field name="res_model">tender.protocol</field>
-            <!-- <field name="context">{'search_default_group_tender_type': 1}</field> -->
-            <field name="view_mode">tree,form</field>
-            <field name="view_type">form</field>
-            <field name="view_id" ref="view_tender_protocol_form"/>
-            <field name="domain">[]</field>
-            <!-- <field name="search_view_id" ref="view_current_tender_filter"/> -->
-        </record>
-        
-        <record id="action_tender_protocol_tree_view" model="ir.actions.act_window.view">
-            <field eval="1" name="sequence"/>
-            <field name="view_mode">tree</field>
-            <field name="view_id" ref="view_tender_protocol_tree"/>
-            <field name="act_window_id" ref="action_tender_protocol_menu"/>
-        </record>
-        
-		<menuitem id="tender_protocol_menu" name="Tender Protocol Menu" 
-							parent="tender_units_menu" sequence="6"
-							groups="group_tender_committee_members,group_tender_secretary,group_tender_manager,group_tender_admin"
-							action="action_tender_protocol_menu"/>
-        
+			<field name="name">Tender Protocol</field>
+			<field name="res_model">tender.protocol</field>
+			<!-- <field name="context">{'search_default_group_tender_type': 1}</field> -->
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="view_tender_protocol_form"/>
+			<field name="domain">[]</field>
+			<!-- <field name="search_view_id" ref="view_current_tender_filter"/> -->
+		</record>
+
+		<record id="action_tender_protocol_tree_view" model="ir.actions.act_window.view">
+			<field eval="1" name="sequence"/>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="view_tender_protocol_tree"/>
+			<field name="act_window_id" ref="action_tender_protocol_menu"/>
+		</record>
+
+		<menuitem id="tender_protocol_menu" name="Tender Protocol Menu" parent="tender_units_menu" sequence="6" groups="group_tender_committee_members,group_tender_secretary,group_tender_manager,group_tender_admin" action="action_tender_protocol_menu"/>
+
 	</data>
-</openerp>
+</odoo>

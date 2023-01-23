@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding='UTF-8'?>
-<openerp>
+<odoo>
     <data>
         <record id="tender_state_change_followers_email_template" model="mail.template">
             <field name="name">Тендерийн мэдээлэл</field>
@@ -25,7 +25,7 @@
     <li>Төлөв: <b>${ctx["state"]}</b></li>
 </ul>
 <p>
-    Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["desc_name"]}</b></a>
+    Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["desc_name"]}</b></a>
     тендерийн мэдээллийг <b>${ctx["menu_path"]}</b> цонхоор дамжин харна уу. 
 </p>
 
@@ -37,11 +37,11 @@
     Баярлалаа,
 </p>
 
-            ]]></field>
+            ]]>            </field>
         </record>
 
         <record id="tender_tender_closed_state_email_template" model="mail.template">
-        	<field name="name">Тендер хаах</field>
+            <field name="name">Тендер хаах</field>
             <field name="email_from">${(user.company_id.email or '')|safe}</field>
             <field name="subject">${ctx["name"]} дугаартай "${ctx["desc_name"]}" тендерийн материал хүлээн авах хугацаа дууслаа.</field>
             <field name="email_to">${object.email|safe}</field>
@@ -62,7 +62,7 @@
     <li>Төлөв: <b>${ctx["state"]}</b></li>
 </ul>
 <p>
-	Та <b><a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["desc_name"]}</b></a></b> 
+	Та <b><a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["desc_name"]}</b></a></b> 
 	тендерийн мэдээллийг <b>${ctx["menu_path"]}</b> цонхоор дамжин харна уу.
 </p>
 <pre>
@@ -72,8 +72,8 @@
 <p>
     Баярлалаа,
 </p>
-			]]></field>
+			]]>            </field>
         </record>
-        
+
     </data>
-</openerp>
+</odoo>

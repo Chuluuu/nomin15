@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <record model="ir.ui.view" id="tender_request_report_form">
             <field name="name">ticket.issue.report.form</field>
-            <field name="model">helpdesk.performance.report</field>
+            <field name="model">tender.request.report</field>
             <field name="arch" type="xml">
                 <form string="Тендер тайлан">
                     <group>
-                    	<group>
-	                        <field name="start_date"/>
+                        <group>
+                            <field name="start_date"/>
                         </group>
                         <group>
-	                        <field name="end_date"/>
-	                    </group>
+                            <field name="end_date"/>
+                        </group>
                     </group>
-                     
-                    
+
+
                     <footer>
                         <button name="export_report" string="Export" type="object" icon="terp-graph"/>
                         <button string="Cancel" class="btn-default" special="cancel"/>
@@ -27,19 +27,12 @@
         <record model="ir.actions.act_window" id="tender_request_report_action">
             <field name="name">Тендер хүсэлтийн тайлан</field>
             <field name="res_model">tender.request.report</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="tender_request_report_form"/>
             <field name="target">new</field>
         </record>
+        <menuitem id="menu_tender_reports" name="Тайлан" groups="nomin_tender.group_tender_secretary" parent="nomin_tender.root_tender_menu" sequence="5"/>
+        <menuitem id= "menu_tender_request_report_act" parent="nomin_tender.menu_tender_reports" sequence= "2" action="tender_request_report_action" />
 
-        <menuitem
-            id= "menu_helpdesk_performance_report_act"
-            parent="nomin_tender.menu_tender_reports"
-            sequence= "2"
-            action="tender_request_report_action"
-			 
-         />
-            
     </data>
-</openerp>
+</odoo>

@@ -1,43 +1,24 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 import time
-from openerp import api, fields, models, SUPERUSER_ID, _
-from openerp.exceptions import UserError
-from pygments.lexer import _inherit
-from openerp.http import request
+from odoo import api, fields, models, SUPERUSER_ID, _
+from odoo.exceptions import UserError
+from odoo.http import request
 
 class tender_participants_bid(models.Model):
     _name="tender.participants.bid"
     _description = "Tender participants bid"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     '''Тендерт оролцогчид'''
     
-    @api.multi
+    
     def _partic_name(self):
         for order in self:
             order.name = order.tender_id.name + '/' + order.partner_id.name
     
-    @api.one
+    
     @api.depends('task_ids.line_total_amount')
     def _compute_amount(self):
         self.amount_total = sum(line.line_total_amount for line in self.task_ids)
@@ -62,7 +43,7 @@ class tender_participants_bid(models.Model):
     execute_time                = fields.Char('Execute Datetime', track_visibility='always') #гүйцэтгэх хугацаа
     warranty_time               = fields.Char('Warranty Datetime', track_visibility='always') #Баталгаат хугацаа
     state                       = fields.Selection([('draft', 'Draft'),('sent', u'Илгээсэн'),('open_document', u'Бичиг баримт нээлттэй'),('open_cost', u'Үнийн санал нээлттэй'),('close', u'Хаасан')]
-                                                   ,string= "Status",track_visibility='onchange')
+                                                   ,string= "Status",tracking=True)
     
     _defaults = {
                     'state'     : 'draft',
@@ -90,7 +71,7 @@ class tender_participants_bid(models.Model):
             return {'domain':{'document_id':[('id','=',doc_ids.ids),
                                          ('state','=','complete')]}}
     
-    @api.multi
+    
     def send_bidding(self):
         '''Тендерт оролцох хүсэлт илгээх'''
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
@@ -157,7 +138,7 @@ class tender_participants_bid(models.Model):
                         #  'attachment_ids': [(6, 0, [attachment.id])],
                         })
                 email_template.sudo().send_mail(self.id)
-    @api.multi
+    
     def action_send(self):
         '''Тендерт оролцогчийн үнийн санал, бичиг баримтыг илгээх.'''
         for order in self:
@@ -166,7 +147,7 @@ class tender_participants_bid(models.Model):
             order.write({'state': 'sent'})
             order.send_bidding()
     
-    @api.multi
+    
     def unlink(self):
         '''Нооргоос бусад үед устгах боломжгүй'''
         for bid in self:
@@ -179,7 +160,7 @@ class participants_bid_line(models.Model):
     _name = "participants.work.task.line"
     _description = "Tender participants line"
     
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     '''Тендерт орлцогчийн үнийн саналын мөр'''
     @api.model
     def _default_tender(self):
@@ -203,13 +184,13 @@ class participants_bid_line(models.Model):
             partner_id = context.get('partner_id')
         return partner_id
     
-    @api.one
+    
     @api.depends('unit_price', 'qty')
     def _compute_amount(self):
         '''Мөрийн тоо ширхэг, нэгж үнэ 2н үржвэр дүнг гаргана'''
         self.amount = self.unit_price*self.qty
         
-    @api.one
+    
     def _compute_total_amount(self):
         '''Мөрийн нийт дүнг гаргана'''
         self.line_total_amount = self.amount + self.costs_of_materials + self.other_costs

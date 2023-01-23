@@ -1,31 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
-    	
-    	<record id="action_open_tender_management" model="ir.actions.act_window">
+
+        <record id="action_open_tender_management" model="ir.actions.act_window">
             <field name="context">{'search_default_partner_id': [active_id],'default_partner_id': active_id}</field>
             <field name="domain">[('partner_id','=',active_id)]</field>
             <field name="name">Tender participants</field>
             <field name="res_model">tender.participants.bid</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_tender_participants_bid_tree"/>
-            <field name="view_type">form</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     Here, you can create new participants of tender
                 </p>
             </field>
         </record>
-		   
+
         <!-- Тендерт оролцогчдын түүх -->
-    	<record id="tender_participants_bid_action" model="ir.actions.act_window">
+        <record id="tender_participants_bid_action" model="ir.actions.act_window">
             <field name="context">{'search_default_partner_id': [active_id],'default_partner_id': active_id}</field>
             <field name="domain">[('partner_id','=', active_id)]</field>
             <field name="name">Partner history</field>
             <field name="res_model">tender.partner.history</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_tender_history_tree"/>
-            <field name="view_type">form</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                     Here, you can create new participants of tender
@@ -41,37 +39,33 @@
                 <field name="category_id" position="after">
                     <field name="tender_type_ids"/>
                 </field>
-             </field>
+            </field>
         </record>
-        
-	    <record id="view_partner_form_inherit_nomin_tender" model="ir.ui.view">
+
+        <record id="view_partner_form_inherit_nomin_tender" model="ir.ui.view">
             <field name="name">res.partner.form.inherit.tender_partner</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-            	<div name="button_box" position="inside">
-                    <button name="%(action_open_tender_management)d" 
-                        class="oe_stat_button" icon="fa-book" type="action"
-                        groups="nomin_tender.group_tender_committee_members">
+                <div name="button_box" position="inside">
+                    <button name="%(action_open_tender_management)d" class="oe_stat_button" icon="fa-book" type="action" groups="nomin_tender.group_tender_committee_members">
                         <field name="tender_management_counts" widget="statinfo" string="Tender bid"/>
                     </button>
-                    <button class="oe_stat_button" type="action" 
-                    	name="%(tender_participants_bid_action)d" icon="fa-book" 
-                        groups="nomin_tender.group_tender_committee_members">
+                    <button class="oe_stat_button" type="action" name="%(tender_participants_bid_action)d" icon="fa-book" groups="nomin_tender.group_tender_committee_members">
                         <field string="Tender history" name="tender_history_counts" widget="statinfo"/>
                     </button>
                 </div>
                 <xpath expr="//notebook" position="inside">
-                	<page name="tender_information" string="Tender Info" groups="nomin_tender.group_tender_manager,nomin_tender.group_tender_secretary">
-                		<group>
-                			<group string = "Tender basic information" name = "basic_info">
+                    <page name="tender_information" string="Tender Info" groups="nomin_tender.group_tender_manager,nomin_tender.group_tender_secretary">
+                        <group>
+                            <group string = "Tender basic information" name = "basic_info">
                                 <field name="area_ids" options="{'no_create': True}" widget="many2many_tags"/>
 
-								<field name="tender_type_ids" options="{'no_create': True}" widget="many2many_tags"/>
-								<field name="document_id" domain="[('partner_id','=',active_id)]"/>
-								<!-- <field name="tender_id"/> -->
-                			</group>
-							<!-- <group string="TENDER PARTNER DOCUMENTS">                    
+                                <field name="tender_type_ids" options="{'no_create': True}" widget="many2many_tags"/>
+                                <field name="document_id" domain="[('partner_id','=',active_id)]"/>
+                                <!-- <field name="tender_id"/> -->
+                            </group>
+                            <!-- <group string="TENDER PARTNER DOCUMENTS">                    
 			                    <field name="vat_file"/>  
 			                    <field name="certificate" />
 			                    <field name="spec_license" />
@@ -90,15 +84,15 @@
                 			<group string="Tender basic information" name = "basic_info">
                 				<field name="describtion"/>
                 			</group> -->
-                			
-						</group>
-					</page>
+
+                        </group>
+                    </page>
                 </xpath>
-                
+
             </field>
         </record>
-        
-		<!-- <record id="view_res_partner_form_nomin_tender" model="ir.ui.view">
+
+        <!-- <record id="view_res_partner_form_nomin_tender" model="ir.ui.view">
             <field name="name">view.partner.form.nomin_tender</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
@@ -111,7 +105,7 @@
             </data>
             </field>
         </record> -->
-        
-        
+
+
     </data>
-</openerp>
+</odoo>

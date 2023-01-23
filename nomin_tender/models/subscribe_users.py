@@ -4,25 +4,24 @@
 from datetime import datetime,date, timedelta
 import datetime, time
 from dateutil.relativedelta import relativedelta
-from openerp import api, fields, models, _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp.tools.translate import _
-from openerp.tools.float_utils import float_is_zero, float_compare
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import UserError, AccessError
+from odoo import api, fields, models, _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools.translate import _
+from odoo.tools.float_utils import float_is_zero, float_compare
+from odoo.exceptions import UserError, AccessError
 
-from openerp.http import request
+from odoo.http import request
 import logging
 _logger = logging.getLogger(__name__)
     
 class subscribe_users(models.Model):
     _name='subscribe.users'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     tender_type_ids = fields.Many2many('tender.type', domain=[('parent_id','=',False)],string = "Tender Type", ondelete='restrict')
     email           = fields.Char(string = "Tender Received Email", copy=False)
     
-    @api.multi
+    
     def send_tender_invitation_subusers(self,ids,tender):
         '''Урилга авах бүртгэл рүү имэйл илгээнэ'''
         template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_invitation_sub_users_email_template')[1]

@@ -1,57 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
-		<report 
-		    string="Print Protocol" 
-		    id="action_tender_protocol_print" 
-		    model="tender.protocol" 
-		    report_type="qweb-pdf"
-		    name="nomin_tender.tender_protocol_report" 
-		    file="nomin_tender.tender_protocol_report" 
-		/>
-		
+<odoo>
+	<data>
+		<!-- <report string="Print Protocol" id="action_tender_protocol_print" model="tender.protocol" report_type="qweb-pdf" name="nomin_tender.tender_protocol_report" file="nomin_tender.tender_protocol_report" /> -->
+
+		<record id="action_tender_protocol_print" model="ir.actions.report">
+			<field name="name">Invoices</field>
+			<field name="model">tender.protocol</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="report_name">Print protocol</field>
+			<field name="report_file">nomin_tender.tender_protocol_report</field>
+			<field name="print_report_name">Print protocol</field>
+			<field name="attachment">(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')</field>
+			<field name="binding_model_id" ref="model_tender_protocol"/>
+			<field name="binding_type">report</field>
+			<!-- <field name="groups_id" eval="[(4, ref('account.group_account_invoice')),
+ (4, ref('account.group_account_readonly'))]"/> -->
+		</record>
+
 		<record id="paperformat_tender_tender_protocol" model="report.paperformat">
-		    <field name="name">Тендер: Протокол</field>
-		    <field name="default" eval="True"/>
-		    <field name="orientation">Portrait</field>
-		    <field name="margin_top">15</field>
-		    <field name="margin_bottom">15</field>
-		    <field name="margin_left">20</field>
-		    <field name="margin_right">15</field>
-		    <field name="header_line" eval="False"/>
-		    <field name="header_spacing">35</field>
-		    <field name="dpi">90</field>
+			<field name="name">Тендер: Протокол</field>
+			<field name="default" eval="True"/>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">15</field>
+			<field name="margin_bottom">15</field>
+			<field name="margin_left">20</field>
+			<field name="margin_right">15</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">35</field>
+			<field name="dpi">90</field>
 		</record>
-		
-		<record id="nomin_tender.action_tender_protocol_print" model="ir.actions.report.xml">
-		    <field name="paperformat_id" ref="nomin_tender.paperformat_tender_tender_protocol" />
+
+		<record id="nomin_tender.action_tender_protocol_print" model="ir.actions.report">
+			<field name="paperformat_id" ref="nomin_tender.paperformat_tender_tender_protocol" />
 		</record>
-		
-		<report 
-		    string="Тендер зарлах хүсэлт" 
-		    id="action_tender_request_print" 
-		    model="tender.tender" 
-		    report_type="qweb-pdf"
-		    name="nomin_tender.tender_request_report" 
-		    file="nomin_tender.tender_request_report" 
-		/>
-		
+
+		<!-- <report string="Тендер зарлах хүсэлт" id="action_tender_request_print" model="tender.tender" report_type="qweb-pdf" name="nomin_tender.tender_request_report" file="nomin_tender.tender_request_report" /> -->
+
+		<record id="action_tender_request_print" model="ir.actions.report">
+			<field name="name">Тендер зарлах хүсэлт</field>
+			<field name="model">tender.tender</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="report_name">nomin_tender.tender_request_report</field>
+			<field name="report_file">nomin_tender.tender_request_report</field>
+			<field name="print_report_name">Tender</field>
+			<field name="attachment">(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')</field>
+			<field name="binding_model_id" ref="model_tender_tender"/>
+			<field name="binding_type">report</field>
+			<!-- <field name="groups_id" eval="[(4, ref('account.group_account_invoice')),
+ (4, ref('account.group_account_readonly'))]"/> -->
+		</record>
 		<record id="paperformat_tender_tender_request" model="report.paperformat">
-		    <field name="name">Тендер: Тендер зарлах хүсэлт</field>
-		    <field name="default" eval="True"/>
-		    <field name="orientation">Portrait</field>
-		    <field name="margin_top">10</field>
-		    <field name="margin_bottom">10</field>
-		    <field name="margin_left">8</field>
-		    <field name="margin_right">8</field>
-		    <field name="header_line" eval="False"/>
-		    <field name="header_spacing">35</field>
-		    <field name="dpi">90</field>
+			<field name="name">Тендер: Тендер зарлах хүсэлт</field>
+			<field name="default" eval="True"/>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">10</field>
+			<field name="margin_bottom">10</field>
+			<field name="margin_left">8</field>
+			<field name="margin_right">8</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">35</field>
+			<field name="dpi">90</field>
 		</record>
-		
-		<record id="nomin_tender.action_tender_request_print" model="ir.actions.report.xml">
-		    <field name="paperformat_id" ref="nomin_tender.paperformat_tender_tender_request" />
+
+		<record id="nomin_tender.action_tender_request_print" model="ir.actions.report">
+			<field name="paperformat_id" ref="nomin_tender.paperformat_tender_tender_request" />
 		</record>
-		
-    </data>
-</openerp>
+
+	</data>
+</odoo>

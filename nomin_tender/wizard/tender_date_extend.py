@@ -1,51 +1,36 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Asterisk Technologies LLC, Enterprise Management Solution    
-#    Copyright (C) 2013-2014 Asterisk Technologies LLC Co.,ltd (<http://www.erp.mn>). All Rights Reserved
-#    Email : unuruu25@gmail.com
-#    Phone : 976 + 88005462
-#
-##############################################################################
 
-from openerp import api, fields, models, SUPERUSER_ID, _
-from openerp.tools.translate import _
-from openerp.osv.orm import setup_modifiers
-from lxml import etree
-import time
-import openerp.pooler
-from openerp.exceptions import UserError, ValidationError
+from odoo import api, fields, models, SUPERUSER_ID, _
+from odoo.tools.translate import _
+from odoo.exceptions import UserError, ValidationError
 import datetime, time
-from openerp.osv import expression
+from odoo.osv import expression
 from datetime import datetime,date
 import logging
 _logger = logging.getLogger(__name__)
 from datetime import date, datetime, timedelta
-from dateutil.relativedelta import relativedelta
 import time
 from datetime import datetime 
 import datetime 
 import time 
-import dateutil
 from datetime import date
-from openerp.osv import osv
-from openerp.http import request
+from odoo.http import request
 
 class tender_date_extend(models.Model):
     _name = "tender.date.extend"
     _description = "Tender extend date"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     '''Тендерийн хугацаа сунгалт
     '''
-    tender_id               = fields.Many2one('tender.tender','Current tender',ondelete='restrict', track_visibility='always', index=True, domain=[('state','in',['bid_expire'])])
-    name                    = fields.Char('Name', track_visibility='always')
-    extend_date_start       = fields.Date('Extend Start Date', track_visibility='always')
-    extend_date_end         = fields.Datetime('Extend Close Date', track_visibility='always')
-    extend_content          = fields.Text('Extend Content', track_visibility='always')
-    user_id                 = fields.Many2one('res.users', string='User', required=True, default=lambda self: self.env.user, readonly=True,ondelete='restrict', track_visibility='always')
+    tender_id               = fields.Many2one('tender.tender','Current tender',ondelete='restrict', tracking=True, index=True, domain=[('state','in',['bid_expire'])])
+    name                    = fields.Char('Name', tracking=True)
+    extend_date_start       = fields.Date('Extend Start Date', tracking=True)
+    extend_date_end         = fields.Datetime('Extend Close Date', tracking=True)
+    extend_content          = fields.Text('Extend Content', tracking=True)
+    user_id                 = fields.Many2one('res.users', string='User', required=True, default=lambda self: self.env.user, readonly=True,ondelete='restrict', tracking=True)
     state                   = fields.Selection([('draft', 'Draft'),('pending','Pending'),
                                                 ('done','Done'),('cancelled','Cancel')], 
-                              string ='Status', track_visibility='onchange', copy=False, default='draft')
+                              string ='Status', tracking=True, copy=False, default='draft')
     
     def _add_followers(self,user_ids): 
         '''Дагагч нэмнэ'''
@@ -71,7 +56,7 @@ class tender_date_extend(models.Model):
                     result._add_followers(user.id)
         return result
     
-    @api.multi
+    
     def write(self, vals):
         '''Хугацаас сунгалт засах үед огнооны 
            шалгуур ажиллана, дагагч нэмнэ
@@ -112,7 +97,7 @@ class tender_date_extend(models.Model):
         
         return result
     
-    @api.multi
+    
     def send_notification(self,signal):
         '''Тендерийн хугацааг сунгаж, батлагдах үед имэйл илгээнэ'''
         states = {
@@ -121,7 +106,6 @@ class tender_date_extend(models.Model):
                   }
         extend_obj=self
         template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_tender_date_extend_email_template2')[1]
-        #model_obj = openerp.pooler.get_pool(cr.dbname).get('ir.model.data')
         date = datetime.datetime.strptime(extend_obj.extend_date_end, '%Y-%m-%d %H:%M:%S')
         
         data = {
@@ -171,7 +155,7 @@ class tender_date_extend(models.Model):
                     self.pool['mail.template'].send_mail(self.env.cr, 1, template_id, user.id, force_send=True, context=self.env.context)
             
         return True
-    @api.multi
+    
     def send_notification_followers(self, signal):
         '''Имэйл илгээнэ'''
         states = {
@@ -180,12 +164,10 @@ class tender_date_extend(models.Model):
                   }
         extend_obj=self
         tender_obj = self.env['tender.tender'].browse(extend_obj.tender_id.id)
-#         print "________________ETSTSEESSV__________",extend_obj
         template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_extend_followers_email_template')[1]
         template_id1 = self.env['ir.model.data'].get_object_reference('nomin_tender', 'invitation_receiver_email_template1')[1]
         published_date = datetime.datetime.strptime(tender_obj.published_date, '%Y-%m-%d %H:%M:%S')
         date_end = datetime.datetime.strptime(tender_obj.date_end, '%Y-%m-%d %H:%M:%S')
-        #model_obj = openerp.pooler.get_pool(cr.dbname).get('ir.model.data')
         data = {
                 'subject': u'Тендерийн хугацаа сунгалт',
                 'name': tender_obj.name,
@@ -225,7 +207,7 @@ class tender_date_extend(models.Model):
             self.env['mail.template'].send_mail(self.env.cr, 1, template_id1, p_id, force_send=True, context=self.env.context)
         return True
     
-    @api.multi
+    
     def extend_save(self):
         '''Хугацаа сунгалт үүсгэх'''
         #data =  self.browse(cr, uid, ids, context=context)[0]
@@ -235,7 +217,7 @@ class tender_date_extend(models.Model):
                     'tender_id': active_id,})
         # self.send_notification('pending')
         
-    @api.multi
+    
     def action_to_confirmed(self):
         '''Хугацаа сунгалт батлах'''
         date_obj=self
@@ -246,18 +228,18 @@ class tender_date_extend(models.Model):
             self.write({'state':'done'})
             # self.send_notification('done')
     
-    @api.multi    
+        
     def action_to_cancel(self):
         '''Хугацаа сунгалт цуцлах'''
         self.write({'state':'cancelled'})
     
-    @api.multi
+    
     def action_to_pending(self):
         '''Хугацаа сунгалт илгээх'''
         # self.send_notification('pending')
         self.write({'state':'pending'})
 
-    @api.multi
+    
     def action_to_approved_date(self):
         '''Хугацаа сунгалт батлах'''
         if self.env.context.get('reg_id') != False:
@@ -276,7 +258,7 @@ class tender_date_extend(models.Model):
                 else:
                     raise UserError(_(u'Тендерийн сунгалт хийгдэж батлагдсан байна'))
         
-    @api.multi
+    
     def unlink(self):
         '''Ноорог болон цуцалсан төлөвтэй хугацаа сунгалтыг устгах боломжтой'''
         for order in self:
@@ -286,9 +268,9 @@ class tender_date_extend(models.Model):
         
 class tender_meeting(models.Model):
     _name = 'tender.meeting'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    @api.multi
+    
     def name_get(self):
         '''Тендерийн хурлын дугаар тендерийн нэр 
             талбаруудыг залгаж харуулна
@@ -316,14 +298,14 @@ class tender_meeting(models.Model):
         return categories.name_get()
     
     
-    name                = fields.Char('Meeting Name', track_visibility='always')
-    tender_id           = fields.Many2one('tender.tender', string='Tender', track_visibility='onchange',ondelete='restrict', index=True)
-    meeting_from_date   = fields.Datetime(string ="Meeting of tender date start",track_visibility='onchange')
-    meeting_to_date     = fields.Datetime(string ="Meeting of tender date end",track_visibility='onchange')
+    name                = fields.Char('Meeting Name', tracking=True)
+    tender_id           = fields.Many2one('tender.tender', string='Tender', tracking=True,ondelete='restrict', index=True)
+    meeting_from_date   = fields.Datetime(string ="Meeting of tender date start",tracking=True)
+    meeting_to_date     = fields.Datetime(string ="Meeting of tender date end",tracking=True)
     comment             = fields.Text(string= "Comment")
     user_id             = fields.Many2one('res.users', string='User', required=True, default=lambda self: self.env.user, readonly=True,ondelete='restrict')
     state               = fields.Selection([('draft', 'Draft'),('confirmed','Confirmed'),('done','Done'),('cancel','Cancel')],
-                                                 string='State', readonly=True, default='draft', track_visibility='always')
+                                                 string='State', readonly=True, default='draft', tracking=True)
     
     def _add_followers(self,user_ids): 
         '''Дагагч нэмнэ'''
@@ -351,7 +333,7 @@ class tender_meeting(models.Model):
                 meet_id.message_subscribe_users(user_ids=user)
         return meet_id
     
-    @api.multi 
+     
     def write(self, values):
         '''Тендерийн хурлыг засахад огнооны шалгуур ажиллаж байна'''
         obj=self
@@ -388,7 +370,7 @@ class tender_meeting(models.Model):
                  
         return meet_id
     
-    @api.multi         
+             
     def send_notif_meeting(self,signal):
         '''Хурал батлагдах имэйл илгээнэ'''
         states = {
@@ -400,7 +382,6 @@ class tender_meeting(models.Model):
         template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_meeting_email_template1')[1]
         meet_obj = self
         tender_obj=self.env['tender.tender'].browse(meet_obj.tender_id.id)
-#         print time.strftime('We are the %d, %b %Y')
         date_from = datetime.datetime.strptime(meet_obj.meeting_from_date, '%Y-%m-%d %H:%M:%S')
         date_to = datetime.datetime.strptime(meet_obj.meeting_to_date, '%Y-%m-%d %H:%M:%S')
         data = {
@@ -433,7 +414,7 @@ class tender_meeting(models.Model):
         return True   
 
     
-    @api.multi
+    
     def action_confirm(self):
         tender_obj = self.env['tender.tender']
         date_now = datetime.datetime.strptime(time.strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S')
@@ -454,12 +435,12 @@ class tender_meeting(models.Model):
                     'name': name})
         # self.send_notif_meeting('confirmed')
        
-    @api.multi
+    
     def action_done(self):
         '''Товлогдсон хурлыг дууссан төлөвт оруулах'''
         self.write({'state': 'done'})
     
-    @api.multi
+    
     def action_cancel(self):
         """Товлогдсон хурал цуцлах"""
         mod_obj = self.env['ir.model.data']
@@ -469,12 +450,11 @@ class tender_meeting(models.Model):
             'type': 'ir.actions.act_window',
             'name': u'Тайлбар',
             'res_model': 'tender.meet.note',
-            'view_type': 'form',
             'view_mode': 'form',
             'target' : 'new',
         }
         
-    #---------------------------------------------------------------- @api.multi
+    #---------------------------------------------------------------- 
     #-------------------------------------------------- def meeting_notif(self):
         # self.env.cr.execute("select id from tender_meeting where state='confirmed' and \
          # now() between (meeting_from_date - interval '16 hour') and (meeting_from_date - interval '15 hour')")
@@ -492,23 +472,23 @@ class tender_meeting(models.Model):
                 
 #   Cron job ni huuchin @api deer suurilsan uchir hurvuuleh bolomjgui
 #    shine api_aar bichegdsen base deer hurvunu
-    def meeting_notif(self,cr,uid):
+    def meeting_notif(self):
         query = "select id from tender_meeting where state='confirmed' and \
          now() between (meeting_from_date - interval '16 hour') and (meeting_from_date - interval '15 hour')"
-        cr.execute(query)
+        self.env.cr.execute(query)
 
-        records = cr.dictfetchall()
+        records = self.env.cr.dictfetchall()
         if records:
             for record in records:
-                self.send_meeting_notif( cr, 1, [record['id']])
+                self.env['tender.meeting'].sudo().browse(record['id']).send_meeting_notif()
         query = "select id from tender_meeting where state='confirmed' and \
          now() between (meeting_from_date + interval '5 hour') and (meeting_from_date + interval '6 hour')"
-        cr.execute(query)
+        self.env.cr.execute(query)
 
-        records = cr.dictfetchall()
+        records = self.env.cr.dictfetchall()
         if records:
             for record in records:
-                self.send_meeting_notif(cr, 1, [record['id']])
+                self.env['tender.meeting'].sudo().browse(record['id']).send_meeting_notif()
                      
     def send_meeting_notif(self):
         states = {
@@ -520,7 +500,6 @@ class tender_meeting(models.Model):
         template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_meeting_email_template1')[1]
         meet_obj = self
         tender_obj=self.env['tender.tender'].browse(meet_obj.tender_id.id)
-#         print time.strftime('We are the %d, %b %Y')
         date_from = datetime.datetime.strptime(meet_obj.meeting_from_date, '%Y-%m-%d %H:%M:%S')
         date_to = datetime.datetime.strptime(meet_obj.meeting_to_date, '%Y-%m-%d %H:%M:%S')
         data = {
@@ -552,7 +531,7 @@ class tender_meeting(models.Model):
                 self.env['mail.template'].send_mail(self.env.cr, 1, template_id, user.id, force_send=True, context=self.env.context)
         return True
        
-    #---------------------------------------------------------------- @api.multi
+    #---------------------------------------------------------------- 
     #----------------------------------------- def running_meet(self, cr , uid):
         #----------- '''Товлогдсон хурлын хугацаа болсон эсэхийг шалгаж байна'''
         # self.env.cr.execute("select tender.id, tender.is_meet_start_date, meeting.* \
@@ -588,7 +567,7 @@ class tender_meeting(models.Model):
                 # self.env['tender.date.extend'].message_post(body=u'Үндсэн тендер бичиг баримт хүлээн авч буйгаас %s төлөвт шилжив '%(states[record['state']]))
 
 
-    def running_meet(self, cr, uid):
+    def running_meet(self):
         '''Товлогдсон хурлын хугацаа болсон эсэхийг шалгаж байна'''
         query= "select tender.id, tender.is_meet_start_date, meeting.* \
                 from tender_meeting as meeting, tender_tender as tender \
@@ -596,9 +575,9 @@ class tender_meeting(models.Model):
                 and meeting.state = 'confirmed' and tender.is_meet_start_date = false \
                 group by tender.id, meeting.id, meeting.tender_id";
         _logger.info(u'----------------Батлагдсан хурал-- %s', query)
-        cr.execute(query)
+        self.env.cr.execute(query)
 
-        records = cr.dictfetchall()
+        records = self.env.cr.dictfetchall()
         if records:
             for record in records:
 #                 bid_ids=self.pool.get('tender.participants.bid').search(cr, 1, [('tender_id','=',record['tender_id'])])
@@ -606,12 +585,12 @@ class tender_meeting(models.Model):
                 date_end = record['meeting_to_date']
                 date_now=time.strftime('%Y-%m-%d %H:%M:%S')
                 if date_start <= date_now:
-                    self.pool.get('tender.tender').write(cr, uid, record['tender_id'], {'is_meet_start_date': True}, context=None)
+                    self.env['tender.tender'].sudo().browse(record['tender_id']).write({'is_meet_start_date': True})
 
         query="select A.id as id,B.state from tender_date_extend A inner join tender_tender B ON A.tender_id =B.id where A.state in ('draft','pending') and \
         B.state in ('closed','finished','cancelled','delay','in_selection','contract_request') and A.extend_date_start >=now()"
-        cr.execute(query)
-        records = cr.dictfetchall()
+        self.env.cr.execute(query)
+        records = self.env.cr.dictfetchall()
         states = {
         'closed':u'Хаагдсан','finished':u'Дууссан','cancelled':u'Цуцлагдсан','delay':u'Хойцлуулсан','in_selection':u'Сонгон шалгаруулалт',
         'contract_request':u'Гэрээний хүсэлт'
@@ -619,11 +598,11 @@ class tender_meeting(models.Model):
         }
         if records:
             for record in records:
-                self.pool.get('tender.date.extend').write(cr,1,record['id'],{'state':'cancelled'},context=None)
-                self.pool.get('tender.date.extend').message_post(cr, 1, record['id'], body=u'Үндсэн тендер бичиг баримт хүлээн авч буйгаас %s төлөвт шилжив '%(states[record['state']]), context=None)
+                self.env['tender.date.extend'].sudo().browse(record['id']).write({'state':'cancelled'})
+                self.env['tender.date.extend'].sudo().browse(record['id']).message_post(record['id'], body=u'Үндсэн тендер бичиг баримт хүлээн авч буйгаас %s төлөвт шилжив '%(states[record['state']]))
 
 
-    @api.multi
+    
     def unlink(self):
         '''Хурлыг ноорог төлөвтэй үед устгана'''
         for order in self:

@@ -1,41 +1,31 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Asterisk Technologies LLC, Enterprise Management Solution    
-#    Copyright (C) 2013-2014 Asterisk Technologies LLC Co.,ltd (<http://www.erp.mn>). All Rights Reserved
-#    Email : unuruu25@gmail.com
-#    Phone : 976 + 88005462
-#
-##############################################################################
 
-from openerp import api, fields, models, SUPERUSER_ID, _
-from openerp.tools.translate import _
-from openerp.osv.orm import setup_modifiers
-from lxml import etree
+
+from odoo import api, fields, models, SUPERUSER_ID, _
+from odoo.tools.translate import _
 import time
-import openerp.pooler
-from openerp.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError, ValidationError
 import datetime, time
 from datetime import date, datetime, timedelta
-from openerp.http import request
+from odoo.http import request
     
 class tender_protocol(models.Model):
     _name="tender.protocol"
     _description = "Tender meeting protocol"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     '''Тендерийн протокол
     '''
-    name                = fields.Char('Tender Protocol',track_visibility='onchange')
-    tender_id           = fields.Many2one('tender.tender', string="Current Tender", track_visibility='onchange',ondelete='restrict', index=True)
-    meeting_id          = fields.Many2one('tender.meeting', string ="Meeting of tender", track_visibility='onchange', ondelete='restrict')
-    member_ids          = fields.Many2many("hr.employee", string ="Member", store=True, track_visibility='onchange')
+    name                = fields.Char('Tender Protocol',tracking=True)
+    tender_id           = fields.Many2one('tender.tender', string="Current Tender", tracking=True,ondelete='restrict', index=True)
+    meeting_id          = fields.Many2one('tender.meeting', string ="Meeting of tender", tracking=True, ondelete='restrict')
+    member_ids          = fields.Many2many("hr.employee", string ="Member", store=True, tracking=True)
     committee_member_ids= fields.One2many(related="tender_id.committee_member_ids", string='Committee Members', track_visibility='always')
-#     comment             = fields.Text(string= "Comment",track_visibility='onchange')
-    meet_protocol       = fields.Html(string= "Comment",track_visibility='onchange')
-    user_id             = fields.Many2one('res.users', string ='User',default=lambda self: self.env.user, readonly=True,track_visibility='onchange')
-    state               = fields.Selection([('draft', 'Draft'), ('open', 'Open'), ('sent',u'Илгээгдсэн'),('done', 'Done')], string ='Status', track_visibility='onchange', default="draft")
+#     comment             = fields.Text(string= "Comment",tracking=True)
+    meet_protocol       = fields.Html(string= "Comment",tracking=True)
+    user_id             = fields.Many2one('res.users', string ='User',default=lambda self: self.env.user, readonly=True,tracking=True)
+    state               = fields.Selection([('draft', 'Draft'), ('open', 'Open'), ('sent',u'Илгээгдсэн'),('done', 'Done')], string ='Status', tracking=True, default="draft")
     employee_comments   = fields.Text(string ="Members Comments")
-    employee_html_comments       = fields.Html(string= "Members Comments",track_visibility='onchange')
+    employee_html_comments       = fields.Html(string= "Members Comments",tracking=True)
         
     @api.onchange('meeting_id')
     def onchange_type(self):
@@ -49,7 +39,7 @@ class tender_protocol(models.Model):
                 self.update({'tender_id':meet_ids.tender_id.id})
 #         return {'domain':{'tender_id': [('id','=', child_ids)]}}
         
-    @api.multi
+    
     def save(self):
         '''Протоколыг нээлттэй төлөвт оруулна'''
         context = self._context
@@ -59,7 +49,7 @@ class tender_protocol(models.Model):
                    'tender_id': active_id,
                    })
     
-    @api.multi
+    
     def action_to_open(self):
         '''Протоколыг нээлттэй төлөвт оруулна'''
         for order in self:
@@ -74,7 +64,7 @@ class tender_protocol(models.Model):
         self.message_subscribe_users(user_ids=user_ids)
         
 
-    #---------------------------------------------------------------- @api.multi
+    #---------------------------------------------------------------- 
     #------------------------------------------------- def protocol_notif(self):
         #------- self.env.cr.execute("select A.id as id from tender_protocol A \
         # inner join tender_meeting B ON A.meeting_id=B.id where A.state='sent' and B.state='done'")
@@ -95,7 +85,7 @@ class tender_protocol(models.Model):
                 self.pool.get('tender.protocol').browse(cr,1,[record['id']]).send_protocol_notif()
 
 
-    @api.multi
+    
     def send_protocol_notif(self):
         '''Имэйл илгээнэ'''
         states = {
@@ -186,7 +176,6 @@ class tender_protocol(models.Model):
                 user_ids.append(member.employee_id.user_id)
         # template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'nomin_tender', 'tender_meeting_protocol_email_template')[1]
         
-        # model_obj = openerp.pooler.get_pool(cr.dbname).get('ir.model.data')
         # data = {
         #         'subject': u'Хурлын протокол',
         #         'tender': protocol_obj.tender_id.name,
@@ -222,7 +211,7 @@ class tender_protocol(models.Model):
                 email_template.sudo().send_mail(self.id)
         return True
 
-    @api.multi
+    
     def send_notification(self,signal):
         '''Имэйл илгээнэ'''
         states = {
@@ -276,7 +265,7 @@ class tender_protocol(models.Model):
         return True
     
     '''Устгах'''
-    @api.multi
+    
     def unlink(self):
         '''Ноорог тендерийн протоколыг устгах боломжтой'''
         for protocol in self:
@@ -284,12 +273,12 @@ class tender_protocol(models.Model):
                 raise UserError(_(u'Ноорог төлөвөөс бусад үед устгах боломжгүй.'))
         return super(tender_protocol, self).unlink()
     
-    @api.multi
+    
     def action_to_sent(self):
 
         self.write({'state':'sent'})
 
-    @api.multi
+    
     def action_to_done(self):
         '''Тендерийн протоколыг дуусгах'''
         users = []
