@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <record id="view_purchase_tender_wizard" model="ir.ui.view">
             <field name="name">Purchase Tender Wizard</field>
             <field name="model">purchase.tender.wizard</field>
             <field name="arch" type="xml">
-               <form string="Purchase Tender Wizard">
-                	<group>
-                		<field name="partner_ids" nolabel="1">
-					     <tree editable="bottom">
-							<field name="partner_id" options="{'no_create': True}"/>
-						</tree>
-						</field>
-                	</group>
-	              
+                <form string="Purchase Tender Wizard">
+                    <group>
+                        <field name="partner_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="partner_id" options="{'no_create': True}"/>
+                            </tree>
+                        </field>
+                    </group>
+
                     <footer>
                         <button name="create_order" string="Худалдан авалт" type="object" class="oe_highlight"/>
                         or
@@ -24,5 +24,5 @@
         </record>
 
     </data>
-</openerp>
+</odoo>
 

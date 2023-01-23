@@ -1,26 +1,17 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#    Copyright (C) 2014-2020 Asterisk-technologies LLC Developer). All Rights Reserved
-#
-#    Address : Chingeltei District, Peace Tower, 205, Asterisk-technologies LLC Developer Ganzorig
-#    Email : support@asterisk-tech.mn
-#    Phone : 976 + 99241623
-#
-##############################################################################
+
 from datetime import datetime, timedelta
 from dateutil import relativedelta 
 import time
 import traceback
 import base64
 
-from openerp.osv import osv, fields
-from openerp import api, fields, models, SUPERUSER_ID, _
-import openerp.tools
-from openerp import tools
+from odoo import api, fields, models, SUPERUSER_ID, _
+import odoo.tools
+from odoo import tools
 
-from openerp.http import request
-from openerp.api import multi
-from openerp.exceptions import UserError, ValidationError
+from odoo.http import request
+from odoo.exceptions import UserError, ValidationError
 from fnmatch import translate
 import logging
 _logger = logging.getLogger(__name__)
@@ -41,15 +32,15 @@ STATE_SELECTION = [
 class tender_rate(models.Model):
 	_name = 'tender.rate'
 	_description = "Tender Rate"
-	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_inherit = ['mail.thread', 'mail.activity.mixin']
 	'''Тендерийн үзүүлэлт
 	'''
-# 	@api.multi
+# 	
 # 	def _get_avg_value(self):
 # 		for this in self:
 # 			this.avg_value = 0
 		
-	@api.multi
+	
 	@api.depends('child_ids','child_ids.default_max_value')
 	def _get_avg_value(self):
 		'''Үзүүлэлтийн мөрүүдээс дундаж оноог тооцоолох'''
@@ -59,54 +50,54 @@ class tender_rate(models.Model):
 			if lenth:
 				this.default_avg_value = sum([val.default_max_value for val in this.child_ids])/len(this.child_ids.ids)
 				
-	name		 		= fields.Char('Name', required=True,track_visibility='onchange')
-	parent_id	 		= fields.Many2one('tender.rate', 'Parent Rate',track_visibility='onchange')
-	default_max_value	= fields.Float('Default Max Value', default=10,track_visibility='onchange')
-	default_avg_value  	= fields.Float('Default Average Value', compute=_get_avg_value, store=True,track_visibility='onchange')
-	child_ids			= fields.One2many('tender.rate', 'parent_id', string="Child Rate",track_visibility='onchange')
+	name		 		= fields.Char('Name', required=True,tracking=True)
+	parent_id	 		= fields.Many2one('tender.rate', 'Parent Rate',tracking=True)
+	default_max_value	= fields.Float('Default Max Value', default=10,tracking=True)
+	default_avg_value  	= fields.Float('Default Average Value', compute=_get_avg_value, store=True,tracking=True)
+	child_ids			= fields.One2many('tender.rate', 'parent_id', string="Child Rate",tracking=True)
  	
-	@api.multi
+	
 	def name_get(self):
 		'''Үзүүлэлтийн нэр, дэд үзүүлэлтийн нэр залгаж харуулна'''
 		result = []
 		for rate in self:
-		    name = rate.name or ''
-		    if rate.parent_id:
-		    	name = rate.parent_id.name + ' / ' + name
-		    result.append((rate.id,name))
+			name = rate.name or ''
+			if rate.parent_id:
+				name = rate.parent_id.name + ' / ' + name
+			result.append((rate.id,name))
 		return result
 	   
-	@api.multi
+	
 	def write(self, vals):
 		'''Эцэг үзүүлэлт дээр өөрийгөө сонгох боломжгүй байна'''
 		parent_id=False
 		if vals.get('parent_id'):
-		    parent_id = vals.get('parent_id')
+			parent_id = vals.get('parent_id')
 		else:
-		    parent_id = self.parent_id.id
+			parent_id = self.parent_id.id
 		    
 		if parent_id == self.id:
-		   raise UserError(_(u'Өөрөө өөрийгөө эцэг үзүүлэлтээр сонгох боломжгүй !'))
+			raise UserError(_(u'Өөрөө өөрийгөө эцэг үзүүлэлтээр сонгох боломжгүй !'))
 		result = super(tender_rate, self).write(vals)
 		return result
     
-	@api.multi
+	
 	def unlink(self):
 		'''Үзүүлэлт дэд төрөлтэй бол устгах боломжгүй байна'''
 		for order in self:
-		    if order.child_ids:
-		        raise UserError(_(u'Та дэд төрөлтэй тендерийн үзүүлэлтийг устгах боломжгүй.'))
+			if order.child_ids:
+				raise UserError(_(u'Та дэд төрөлтэй тендерийн үзүүлэлтийг устгах боломжгүй.'))
 		return super(tender_rate, self).unlink()
 
 """Тендерийн төрлийн үнэлгэнйи макс оноо тохируулах"""
 class tender_type_rate_max(models.Model):
 	_name = 'tender.type.rate.max'
 	_description = "Tender Rate Rate Max"
-	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_inherit = ['mail.thread', 'mail.activity.mixin']
 	
-	rate_id 		= fields.Many2one('tender.rate','Rate', require=True,track_visibility='onchange')
-	tender_type_id 	= fields.Many2one('tender.type','Tender Type', domain=[('parent_id','=',False)],track_visibility='onchange')
-	max_value	 	= fields.Float('Max Value', require=True,track_visibility='onchange')
+	rate_id 		= fields.Many2one('tender.rate','Rate', require=True,tracking=True)
+	tender_type_id 	= fields.Many2one('tender.type','Tender Type', domain=[('parent_id','=',False)],tracking=True)
+	max_value	 	= fields.Float('Max Value', require=True,tracking=True)
 
 	def get_max_value(self):
 		'''Макс оноо тохируулах'''
@@ -144,7 +135,7 @@ class tender_type_rate_max(models.Model):
 		result = super(tender_type_rate_max, self).create(vals)
 		return result
     
-	@api.multi
+	
 	def write(self, vals):
 		'''Үзүүлэлтийн оноо тохируулах үед нэг төрөл 
 		   дээр, ижил үзүүлэлт байж болохгүй
@@ -153,18 +144,17 @@ class tender_type_rate_max(models.Model):
 		tender_type_id=False
 		rate_id=False
 		if vals.get('tender_type_id'):
-		    tender_type_id = vals.get('tender_type_id')
+			tender_type_id = vals.get('tender_type_id')
 		else:
-		    tender_type_id = self.tender_type_id.id
-		    
+			tender_type_id = self.tender_type_id.id
 		if vals.get('rate_id'):
-		    rate_id = vals.get('rate_id')
+			rate_id = vals.get('rate_id')
 		else:
-		    rate_id = self.rate_id.id
+			rate_id = self.rate_id.id
 		    
 		if tender_type_id or rate_id:
-		    type = self.env['tender.type.rate.max'].search([('tender_type_id','=',tender_type_id),('rate_id','=',rate_id)])
-		    if type:
+			type = self.env['tender.type.rate.max'].search([('tender_type_id','=',tender_type_id),('rate_id','=',rate_id)])
+			if type:
 				if type[0].id != self.id:
 					raise UserError(_(u'Нэг төрөл дээр ижил үзүүлэлт тохируулах боломжгүй !'))
 		result = super(tender_type_rate_max, self).write(vals)
@@ -181,23 +171,23 @@ class tender_valuation(models.Model):
 	_name = 'tender.valuation'
 	_description = "Tender Valuation"
 	_order = "create_date desc"
-	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_inherit = ['mail.thread', 'mail.activity.mixin']
 	
-	# @api.multi
+	# 
 	# def _get_avg_value(self):
 	# 	for this in self:
 	# 		this.avg_value = 0
 
-	name					= fields.Char('Valuation name or code', track_visibility='always')
-	tender_id 				= fields.Many2one('tender.tender', string='Tender', track_visibility='onchange', ondelete="restrict")
+	name					= fields.Char('Valuation name or code', tracking=True)
+	tender_id 				= fields.Many2one('tender.tender', string='Tender', tracking=True, ondelete="restrict")
 	valuation_partner_ids	= fields.One2many('tender.valuation.partner', 'tender_valuation_id', 'Participants')
 	valuation_employee_ids	= fields.One2many('tender.valuation.employee.valuation', 'tender_valuation_id', 'Commission Members')
 	bidding_line_ids		= fields.One2many('tender.participants.control.budget.line', 'valuation_id', 'Commission Members')
 	confirm_date			= fields.Date(string='Date')
 	is_choose				= fields.Boolean(string="Is Choose Partner", default=False)
-	state					= fields.Selection(STATE_SELECTION, string='State', readonly=True, default='draft', track_visibility='always')
+	state					= fields.Selection(STATE_SELECTION, string='State', readonly=True, default='draft', tracking=True)
 	
-	@api.multi
+	
 	def send_tender_valuation(self):
 		'''Тендер шалгаруулалтын үр дүн гарахад имэйл илгээнэ'''
 		base_url = self.env['ir.config_parameter'].get_param('web.base.url')
@@ -232,7 +222,7 @@ class tender_valuation(models.Model):
 		                    <p><li><b>Товлосон захиалгын огноо: </b>%s</li></p>
 		                    <p><li><b>Төлөв: </b>%s</li></p>
 		                    </br>
-		                    <p>"%s" - н мэдээллийг <b><a href=%s/web?db=%s#id=%s&view_type=form&model=tender.valuation&action=%s>Тендер/Тендерийн үнэлгээ/Тендерийн үнэлгээ</a></b> цонхоор дамжин харна уу.</p>
+		                    <p>"%s" - н мэдээллийг <b><a href=%s/web?db=%s#id=%s&model=tender.valuation&action=%s>Тендер/Тендерийн үнэлгээ/Тендерийн үнэлгээ</a></b> цонхоор дамжин харна уу.</p>
 		                    <p>--</p>
 		                    <p>Энэхүү мэйл нь ERP системээс автоматаар илгээгдэж буй тул хариу илгээх шаардлагагүй.</p>
 		                    <p>Баярлалаа..</p>
@@ -258,7 +248,7 @@ class tender_valuation(models.Model):
 						})
 				email_template.sudo().send_mail(self.id)
 #	Түр комммент болгов.	
-	@api.multi
+	
 	def write(self, vals):
 		'''Төлвөөс хамаарч имэйл илгээнэ, дагагч нэмнэ'''
 		user_ids = []
@@ -272,7 +262,7 @@ class tender_valuation(models.Model):
 				
 		return super(tender_valuation, self).write(vals)		
 	
-	@api.multi
+	
 	def action_confirm(self):
 		'''Комиссын гишүүд өөрсдийнхөө үнэлгээг дууссан төлөвт оруулна
 	    '''
@@ -303,7 +293,7 @@ class tender_valuation(models.Model):
 				valuation.sudo().valuation_employee_ids.write({'state':'open'})
 				valuation.write({'state': 'open'})
 	
-	@api.multi
+	
 	def action_update(self):
 		'''Тендер менежер
 	    '''
@@ -322,13 +312,13 @@ class tender_valuation(models.Model):
 				# valuation.write({'state': 'open'})
 
 		
-	@api.multi
+	
 	def action_completed(self):
 		for order in self:
 			order.write({'state': 'completed'})
 
 
-	@api.multi
+	
 	def action_back_open(self):
 		employee_valuation = self.env['tender.valuation.employee.valuation'].search([('tender_valuation_id','=',self.id)])
 		if employee_valuation:
@@ -347,7 +337,7 @@ class tender_valuation(models.Model):
 		self.write({'state': 'open'})
 
 	
-	@api.multi
+	
 	def action_approved(self):
 		'''Тендерийн хорооны дарга үнэлгээний 
 			төлвийг зөвшөөрсөн төлөвт оруулна
@@ -375,7 +365,7 @@ class tender_valuation(models.Model):
 				if line.total_value == max(max_obj):
 					line.confirm_partner()
 
-	@api.multi
+	
 	def unlink(self):
 		'''Тендерийн үнэлгээг нооргоос бусад үед устгах боломжгүй'''
 		for order in self:
@@ -388,38 +378,38 @@ class tender_valuation_partner(models.Model):
 	_name = 'tender.valuation.partner'
 	_description = "Tender Valuation Partner"
 	_order = "create_date desc"
-	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_inherit = ['mail.thread', 'mail.activity.mixin']
 	
-	@api.multi
+	
 	def name_get(self):
 		'''Харилцагчийн нэр, тендерийн үнэлгээний нэрийг залгаж харуулна'''
 		result = []
 		for rate in self:
-		    name = rate.tender_valuation_id.name or ''
-		    if rate.partner_id:
-		    	name = name + ' / ' + rate.partner_id.name
-		    result.append((rate.id,name))
+			name = rate.tender_valuation_id.name or ''
+			if rate.partner_id:
+				name = name + ' / ' + rate.partner_id.name
+			result.append((rate.id,name))
 		return result
 	       
-	@api.one
+	
 	def _get_total_value(self):
 		'''Мөрийн нийлбэр нийт оноог тооцоолно'''
 		self.total_value = sum([val.total_value for val in self.employee_partner_ids])
 
-	tender_id 				= fields.Many2one('tender.tender', string='Tender', track_visibility='always', ondelete="restrict", index=True)
-	tender_valuation_id 	= fields.Many2one('tender.valuation', 'Tender Valuation', ondelete="cascade", track_visibility='always')
+	tender_id 				= fields.Many2one('tender.tender', string='Tender', tracking=True, ondelete="restrict", index=True)
+	tender_valuation_id 	= fields.Many2one('tender.valuation', 'Tender Valuation', ondelete="cascade", tracking=True)
 	participant_id			= fields.Many2one('tender.participants.bid', u'Үнийн санал', ondelete="restrict")
-	partner_id 				= fields.Many2one('res.partner','Participants Of Tender', track_visibility='always', ondelete="restrict")
-	total_value  			= fields.Float('Total Value', compute=_get_total_value, track_visibility='always')
+	partner_id 				= fields.Many2one('res.partner','Participants Of Tender', tracking=True, ondelete="restrict")
+	total_value  			= fields.Float('Total Value', compute=_get_total_value, tracking=True)
 	employee_partner_ids	= fields.One2many('tender.valuation.employee.partner', 'tender_valuation_partner_id', 'Partner Valuations Of Employee')
-	state					= fields.Selection(STATE_SELECTION, string='State', readonly=True, default='draft', track_visibility='always')
+	state					= fields.Selection(STATE_SELECTION, string='State', readonly=True, default='draft', tracking=True)
 	is_win					= fields.Boolean(string="Is Partner Win", default=False)
 	is_sent					= fields.Boolean(string="Is sent", default=False)
 	is_choose				= fields.Boolean(string="Is Choose Partner ?", default=False)
-	reason					= fields.Text(string="Reason", track_visibility='always')
+	reason					= fields.Text(string="Reason", tracking=True)
 	# fields_view_get функц ашиглах
 	
-	@api.multi
+	
 	def send_tender_result(self):
 		'''Тендерийн үр дүн гарахад имэйл илгээнэ'''
 		template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_valuation_result_email_template')[1]
@@ -439,7 +429,7 @@ class tender_valuation_partner(models.Model):
 		self.pool['mail.template'].send_mail(self.env.cr, 1, template_id, val_obj.partner_id.id, force_send=True, context=self.env.context)
 		return True
     
-	@api.multi
+	
 	def confirm_partner(self):
 		'''Гэрээ байгуулах харилцагчийг баталгаажуулна'''
 		for order in self:
@@ -457,7 +447,7 @@ class tender_valuation_partner(models.Model):
 		    'tag': 'reload',
 		}
 	
-	@api.multi
+	
 	def unlink(self):
 		'''Ноорог үнэлгээг устгах боломжтой'''
 		for order in self:
@@ -470,16 +460,15 @@ class tender_valuation_employee_valuation(models.Model):
 	_name = 'tender.valuation.employee.valuation'
 	_description = "Tender Valuation Employee Valuation"
 	_order = "create_date desc"
-	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_inherit = ['mail.thread', 'mail.activity.mixin']
 # 5723116
 
-	@api.multi
+	
 	def _is_in_commission_group(self):
 		'''Үнэлгээ өгөх комиссын гишүүн мөн эсэхийг шалгана'''
 		user_obj = self.env['res.users']
 		emp_obj = self.env['hr.employee']
-		model_obj = openerp.pooler.get_pool(self._cr.dbname).get('ir.model.data')
-		notif_groups = model_obj.get_object_reference(self._cr, self._uid,  'nomin_tender', 'group_tender_committee_members')
+		notif_groups = self.env['ir.model.data'].get_object_reference('nomin_tender', 'group_tender_committee_members')
 		sel_user_ids = user_obj.search([('groups_id','in',notif_groups[1])])
 		for valuation in self:
 			valuation.is_in_commission = False
@@ -490,14 +479,14 @@ class tender_valuation_employee_valuation(models.Model):
 	
 	name 						= fields.Char('Tender Valuation', related="tender_valuation_id.name")				
 	is_in_commission			= fields.Boolean('Is in Commission', compute=_is_in_commission_group)
-	tender_id 					= fields.Many2one('tender.tender', string='Tender', track_visibility='always', ondelete="restrict")
-	tender_valuation_id 		= fields.Many2one('tender.valuation', 'Tender Valuation', ondelete="cascade", track_visibility='always')
-	employee_id					= fields.Many2one('hr.employee', 'Rate of Employee', track_visibility='always', ondelete="restrict")
+	tender_id 					= fields.Many2one('tender.tender', string='Tender', tracking=True, ondelete="restrict")
+	tender_valuation_id 		= fields.Many2one('tender.valuation', 'Tender Valuation', ondelete="cascade", tracking=True)
+	employee_id					= fields.Many2one('hr.employee', 'Rate of Employee', tracking=True, ondelete="restrict")
 	employee_partner_ids		= fields.One2many('tender.valuation.employee.partner', 'employee_valuation_id', 'Partner Valuations Of Employee')
 	line_ids					= fields.One2many('tender.valuation.rate.line', 'employee_valuation_id', 'Valuation line')
-	state						= fields.Selection(STATE_SELECTION, string='State', readonly=True, default='draft', track_visibility='always')
+	state						= fields.Selection(STATE_SELECTION, string='State', readonly=True, default='draft', tracking=True)
 	
-	@api.multi
+	
 	def write(self, vals):
 		'''Дагагч нэмнэ'''
 		user_ids = []
@@ -509,7 +498,7 @@ class tender_valuation_employee_valuation(models.Model):
 				
 		return super(tender_valuation_employee_valuation, self).write(vals)		
  	
-	@api.multi
+	
 	def action_complete(self):
 		'''Комиссын гишүүн өөрийн үнэлгээг дууссан төлөвт шилжүүлнэ'''
 		ratename = ''
@@ -528,7 +517,7 @@ class tender_valuation_employee_valuation(models.Model):
 			if not protocol_obj:
 				raise UserError(_(u'Хурлын протокол үүсч баталгаажсаны дараа үнэлгээгээ илгээнэ үү !'))
 			else:
-			 	protocol_id = protocol_obj[0]
+				protocol_id = protocol_obj[0]
  				
 			member_id = committee_member_obj.sudo().search([('tender_id','=',order.tender_id.id),('employee_id','=',order.employee_id.id)])
 			member_id.write({'state': 'complete'})
@@ -603,7 +592,7 @@ class tender_valuation_employee_valuation(models.Model):
 
  			
 	#===========================================================================
-	# @api.multi
+	# 
 	# def action_complete(self):
 	# 	ratename = ''
 	# 	rate = ''
@@ -633,7 +622,7 @@ class tender_valuation_employee_valuation(models.Model):
 	#===========================================================================
 						
 
-	@api.multi
+	
 	def unlink(self):
 		'''Ноорог төлөвтэй үнэлгээг устгах боломжтой'''
 		for order in self:
@@ -646,9 +635,9 @@ class tender_valuation_employee_partner(models.Model):
 	_name = 'tender.valuation.employee.partner'
 	_description = "Tender Valuation Employee Partner"
 	_order = "create_date desc"
-	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_inherit = ['mail.thread', 'mail.activity.mixin']
 	
-	@api.multi
+	
 	def _get_avg_value(self):
 		'''Дундаж оноог тооцоолно'''
 		for this in self:
@@ -657,24 +646,24 @@ class tender_valuation_employee_partner(models.Model):
 			if lenth:
 				this.avg_value = sum([val.rate_value for val in this.line_ids])/len(this.line_ids.ids)
 							   
-	@api.one
+	
 	def _get_total_value(self):
 		'''Нийт оноог тооцоолно'''
 		self.total_value = sum([val.rate_value for val in self.line_ids])	
 
-	tender_id 						= fields.Many2one('tender.tender', string='Tender', track_visibility='always', ondelete="restrict")
-	tender_valuation_id 			= fields.Many2one('tender.valuation', 'Tender Valuation', ondelete="cascade", track_visibility='always')
-	employee_valuation_id			= fields.Many2one('tender.valuation.employee.valuation','Tender Valuation Employee', ondelete="cascade", track_visibility='always')
-	employee_id 					= fields.Many2one('hr.employee','Rate of Employee', track_visibility='always')
-	tender_valuation_partner_id 	= fields.Many2one('tender.valuation.partner','Tender Valuation Partner', ondelete="cascade", track_visibility='always')
-	partner_id 						= fields.Many2one('res.partner', 'Participants Of Tender', related="tender_valuation_partner_id.partner_id", store=True, track_visibility='always')
+	tender_id 						= fields.Many2one('tender.tender', string='Tender', tracking=True, ondelete="restrict")
+	tender_valuation_id 			= fields.Many2one('tender.valuation', 'Tender Valuation', ondelete="cascade", tracking=True)
+	employee_valuation_id			= fields.Many2one('tender.valuation.employee.valuation','Tender Valuation Employee', ondelete="cascade", tracking=True)
+	employee_id 					= fields.Many2one('hr.employee','Rate of Employee', tracking=True)
+	tender_valuation_partner_id 	= fields.Many2one('tender.valuation.partner','Tender Valuation Partner', ondelete="cascade", tracking=True)
+	partner_id 						= fields.Many2one('res.partner', 'Participants Of Tender', related="tender_valuation_partner_id.partner_id", store=True, tracking=True)
 	total_value						= fields.Float('Total Value', compute=_get_total_value)
 	avg_value  						= fields.Float('Average Value', compute=_get_avg_value)
 	line_ids						= fields.One2many('tender.valuation.rate.line', 'employee_partner_id', 'Valuation line')
-	comment 						= fields.Text(string='Content', track_visibility='always')
-	state							= fields.Selection(STATE_SELECTION, string='State', readonly=True, default='draft', track_visibility='always')
+	comment 						= fields.Text(string='Content', tracking=True)
+	state							= fields.Selection(STATE_SELECTION, string='State', readonly=True, default='draft', tracking=True)
 
-	@api.multi
+	
 	def unlink(self):
 		'''Ноорог төлөвтэй үнэлгээг устгана'''
 		for order in self:
@@ -687,31 +676,31 @@ class tender_valuation_rate_line(models.Model):
 	_name = 'tender.valuation.rate.line'
 	_description = "Tender Valuation Rate Line"
 	_order = "create_date desc"
-	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_inherit = ['mail.thread', 'mail.activity.mixin']
 	
 	
-	@api.one
+	
 	@api.depends('max_value')
 	def _get_condition(self):
 		'''Боломжит дээд оноог шалгана'''
 		self.condition = str(self.max_value) + ' => '
 		
-	tender_id 							= fields.Many2one('tender.tender', string='Tender', track_visibility='always', ondelete="restrict")
-	tender_valuation_id			 		= fields.Many2one('tender.valuation','Tender Valuation', ondelete="cascade", track_visibility='always')
-	tender_valuation_partner_id 		= fields.Many2one('tender.valuation.partner','Tender Valuation Partner', ondelete="cascade", track_visibility='always')
-	partner_id 							= fields.Many2one('res.partner','Participants Of Tender',related="tender_valuation_partner_id.partner_id", store=True, track_visibility='always')
-	employee_valuation_id				= fields.Many2one('tender.valuation.employee.valuation', string='Tender Valuation Employee', ondelete="cascade", track_visibility='always')
-	employee_partner_id 				= fields.Many2one('tender.valuation.employee.partner', string='Employee Rate Valuation', ondelete="cascade", track_visibility='always')
-	employee_id 						= fields.Many2one('hr.employee','Rate of Employee', related="employee_valuation_id.employee_id", store=True, track_visibility='always')
-	rate_id 							= fields.Many2one('tender.rate','Tender Rate', track_visibility='always')
-	max_value 							= fields.Float('Max Value', track_visibility='always')
-	rate_name 							= fields.Char('Tender Rate Old', track_visibility='always')
-	condition							= fields.Char('Condition', compute=_get_condition, store=True, track_visibility='always')
-	rate_value 							= fields.Float('Rate Value', track_visibility='always')
-	comment 							= fields.Text(string='Content', track_visibility='always')
-	state								= fields.Selection(STATE_SELECTION, string='Status', readonly=True, default='draft', track_visibility='always')
+	tender_id 							= fields.Many2one('tender.tender', string='Tender', tracking=True, ondelete="restrict")
+	tender_valuation_id			 		= fields.Many2one('tender.valuation','Tender Valuation', ondelete="cascade", tracking=True)
+	tender_valuation_partner_id 		= fields.Many2one('tender.valuation.partner','Tender Valuation Partner', ondelete="cascade", tracking=True)
+	partner_id 							= fields.Many2one('res.partner','Participants Of Tender',related="tender_valuation_partner_id.partner_id", store=True, tracking=True)
+	employee_valuation_id				= fields.Many2one('tender.valuation.employee.valuation', string='Tender Valuation Employee', ondelete="cascade", tracking=True)
+	employee_partner_id 				= fields.Many2one('tender.valuation.employee.partner', string='Employee Rate Valuation', ondelete="cascade", tracking=True)
+	employee_id 						= fields.Many2one('hr.employee','Rate of Employee', related="employee_valuation_id.employee_id", store=True, tracking=True)
+	rate_id 							= fields.Many2one('tender.rate','Tender Rate', tracking=True)
+	max_value 							= fields.Float('Max Value', tracking=True)
+	rate_name 							= fields.Char('Tender Rate Old', tracking=True)
+	condition							= fields.Char('Condition', compute=_get_condition, store=True, tracking=True)
+	rate_value 							= fields.Float('Rate Value', tracking=True)
+	comment 							= fields.Text(string='Content', tracking=True)
+	state								= fields.Selection(STATE_SELECTION, string='Status', readonly=True, default='draft', tracking=True)
     
-	@api.multi
+	
 	def unlink(self):
 		'''Ноорог үнэлгээг устгана'''
 		for order in self:
@@ -728,7 +717,7 @@ class tender_participants_control_budget_line(models.Model):
 	'''Үнийн санал хяналтын төсөвтэй харьцуулах
 	'''
 	
-	@api.multi
+	
 	def _control_amount_compute(self):
 		'''Тендер дээрх хяналтын төсвийн үнийн 
 			дүнг хяналтын төсөв талбарт авна
@@ -736,7 +725,7 @@ class tender_participants_control_budget_line(models.Model):
 		for order in self:
 			order.control_budget_amount = order.tender_id.total_budget_amount
 		
-	@api.multi
+	
 	def _diff_amount_compute(self):
 		'''Оролцогчдын үнийн санал, хяналтын 
 		    төсвийн зөрүү дүн тооцоолох
@@ -748,7 +737,7 @@ class tender_participants_control_budget_line(models.Model):
 			else:
 				order.diff_percent = 0
 
-	@api.multi
+	
 	def _diff_percent_compute(self):
 		for order in self:
 			if order.control_budget_amount:

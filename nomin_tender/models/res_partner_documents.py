@@ -1,28 +1,16 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#    Copyright (C) 2014-2020 Asterisk-technologies LLC Developer). All Rights Reserved
-#
-#    Address : Chingeltei District, Peace Tower, 205, Asterisk-technologies LLC Developer Ganzorig
-#    Email : support@asterisk-tech.mn
-#    Phone : 976 + 99241623
-#
-##############################################################################
 
-from PIL import Image
 import re
-from urllib import urlencode
-import urllib2
-from urlparse import urlparse
-from openerp.exceptions import Warning
-from openerp.tools.translate import _
+from odoo.exceptions import Warning
+from odoo.tools.translate import _
 import datetime, time
 from datetime import date, datetime, timedelta
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 import logging
 _logger = logging.getLogger(__name__)
 
 
-from openerp import api, fields, models, tools
+from odoo import api, fields, models, tools
 class ir_attachment(models.Model):
     _inherit = 'ir.attachment'
     '''Хавсралт файлууд'''
@@ -45,7 +33,7 @@ class ir_attachment(models.Model):
 class res_partner_documents(models.Model):
     _name="res.partner.documents"
     _description = 'Basic registration'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     '''Харилцагчийн бичиг баримт
     '''
     
@@ -65,7 +53,7 @@ class res_partner_documents(models.Model):
     insurance_report_ids    = fields.One2many('ir.attachment','p_insurance_report_id','Insurance report pdf', required = False) #НДаатгалын тайлан
     finance_report_ids      = fields.One2many('ir.attachment','p_finance_report_id','Finance report pdf', required = False) #Санхүүгийн тодорхойлолт
     audit_report_ids        = fields.One2many('ir.attachment','p_audit_report_id','Audit report pdf') #Аудитын тайлан
-    state                   = fields.Selection([('complete','Complete Document'),('expired',u'Хүчинтэй хугацаа дууссан'),('incomplete','Incomplete Document')], string='Status', track_visibility='onchange',copy=False, default='incomplete')
+    state                   = fields.Selection([('complete','Complete Document'),('expired',u'Хүчинтэй хугацаа дууссан'),('incomplete','Incomplete Document')], string='Status', tracking=True,copy=False, default='incomplete')
     
     
     @api.onchange('partner_id')
@@ -75,7 +63,7 @@ class res_partner_documents(models.Model):
             self.name = u'Бичиг баримт' + self.partner_id.name
         return 
 
-    @api.multi
+    
     def write(self, vals):
         '''Харилцагчийг бичиг баримтанд давхар сонгосон эсэхийг шалгаж байна'''
         if vals.get('partner_id'):
@@ -84,14 +72,14 @@ class res_partner_documents(models.Model):
                     raise UserError(_(u'Харилцагчийн бичиг баримт давхар үүсэх тул анх үүсгэсэн харилцагчийн оруулж өгнө үү.!!!'))
         return super(res_partner_documents, self).write(vals)
     
-    @api.multi
+    
     def action_confirm(self):
         '''Харилцагчийн бичиг баримтын төлвийг бичиг баримт бүрдсэн болгоно'''
         self.state = 'complete'
         for doc in self:
             doc.partner_id.document_id = doc.id
 
-    @api.multi
+    
     def check_document_expiredates(self):
         self.env.cr.execute("select A.id from res_partner_documents A inner join ir_attachment B ON A.id =B.p_tax_id and B.date_end is not null order by B.date_end desc limit 1 ")
         records = self.env.cr.dictfetchall()
@@ -147,7 +135,7 @@ class res_partner_documents(models.Model):
             self.env.cr.execute("update res_partner_documents set state='expired' where id=%s"%record['id'])
 
     
-    @api.multi
+    
     def partner_document_running(self):
         '''Харилцагчийн бичиг баримтын хугацаа шалгана'''
         file_duration =self.env['partner.file.duration']
@@ -241,7 +229,6 @@ class res_partner_documents(models.Model):
         DATE_FORMAT = '%Y-%m-%d'
         date_now=  datetime.now()
         date_now = date_now.strftime(DATE_FORMAT)
-        #print 'n\n\n\datenow', date_now 
         date = False
         
 
@@ -251,7 +238,6 @@ class res_partner_documents(models.Model):
                 
         self.env.cr.execute = "select doc.id document_id, Max(ir.create_date) as ir_create_date from res_partner_documents as doc, ir_attachment as ir \
                 where doc.state='complete' and ir.p_certificate_id=doc.id and ir.create_date < now() group by document_id order by document_id;"
-        #print 'n\n\n\document_obj', query
         #cr.execute(query)
         cer_obj = self.env.cr.dictfetchall()
         is_in_cer = False
@@ -472,7 +458,7 @@ class res_partner_documents(models.Model):
                 if is_in_audit == True:
                     self.env['res.partner.documents'].browse(audit_document['document_id']).write({'state': 'incomplete'})
 
-    @api.multi
+    
     def unlink(self):
         '''Нооргоос бусад үед устгах боломжгүй'''
         for document in self:
@@ -494,7 +480,7 @@ class res_partner(models.Model):
 class partner_file_type(models.Model):
     _name="partner.file.type"
     _description = "Partner File Type"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     '''Харилцагчийн бичиг баримтын хугацаа тохируулах'''
     
     name = fields.Selection([('tax','Tax'),
@@ -502,27 +488,27 @@ class partner_file_type(models.Model):
                                             ('org_define','Organization define'),('judgement','Judgement define'),('bank','Bank define'),
                                             ('insurance_def','Insurance define'),('work','Work history'),
                                             ('insurance_rep','Insurance report'),('finance','Finance report'),('audit','Audit report'),
-                                            ], string='Document type', track_visibility='onchange',copy=False)
-    duration_day = fields.Integer('Duration days',track_visibility='onchange')
-    is_required = fields.Boolean('Is required',default=False,track_visibility='onchange')
-    file_id = fields.Many2one('partner.file.duration', 'Partner file', ondelete='restrict',track_visibility='onchange')
+                                            ], string='Document type', tracking=True,copy=False)
+    duration_day = fields.Integer('Duration days',tracking=True)
+    is_required = fields.Boolean('Is required',default=False,tracking=True)
+    file_id = fields.Many2one('partner.file.duration', 'Partner file', ondelete='restrict',tracking=True)
     
                     
 class partner_file_duration(models.Model):
     _name = "partner.file.duration"
     _description = "File duration"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     '''Бичиг баримтын төрөл'''
 
-    name = fields.Char('Name',track_visibility='onchange')
-    duration_ids = fields.One2many('partner.file.type', 'file_id', string='Document duration',track_visibility='onchange')
-    is_active = fields.Boolean('Is Active', default=False,track_visibility='onchange')
+    name = fields.Char('Name',tracking=True)
+    duration_ids = fields.One2many('partner.file.type', 'file_id', string='Document duration',tracking=True)
+    is_active = fields.Boolean('Is Active', default=False,tracking=True)
 
 class PartnerDocuments(models.Model):
     _inherit = 'res.partner.documents'
 
 
-    @api.multi
+    
     def check_dates(self):
         
         self.env.cr.execute("select A.id from res_partner_documents A inner join ir_attachment B ON A.id =B.p_tax_id and B.date_end is not null and B.date_end >now() and a.id=%s order by b.date_end desc limit 1 ;"%self.id)

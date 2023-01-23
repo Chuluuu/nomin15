@@ -1,30 +1,10 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2014-Today OpenERP SA (<http://www.openerp.com>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+
 import time
 import datetime
-import openerp
-#from openerp.osv import osv
-from openerp import api, fields, models, _, modules
-from openerp.tools.translate import _
-from openerp.addons.l10n_mn_report_base.report_helper import verbose_numeric,comma_me, convert_curr
+import odoo
+from odoo import api, fields, models, _, modules
+from odoo.tools.translate import _
 from operator import itemgetter
 import logging
 _logger = logging.getLogger(__name__)
@@ -36,7 +16,7 @@ class ReportTenderRequest(models.AbstractModel):
     '''
     _name = 'report.nomin_tender.tender_request_report'
     
-    @api.multi
+    
     def render_html(self, data=None):
         #if context is None:
         #    context = {}
@@ -97,23 +77,19 @@ class ReportTenderRequest(models.AbstractModel):
                 employees.append(emp.employee_id)
             
         
-        #model_obj = openerp.pooler.get_pool(cr.dbname).get('ir.model.data')
         #manager_group_id = model_obj.get_object_reference(cr, 1, 'nomin_tender', 'group_tender_manager')
         manager_group_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'group_tender_manager')[1]
         _logger.info(u'Тендерийн хорооны дарга групп =  %s', manager_group_id)
         if manager_group_id:
             #user_ids=self.pool['res.users'].search(cr, 1, [('groups_id','=',manager_group_id[1])])
             user_ids = self.env['res.users'].sudo().search([('groups_id','in',manager_group_id)])
-            print u'Тендерийн хорооны дарга хэрэглэгч', user_ids
             _logger.info(u'Тендерийн хорооны дарга хэрэглэгч   %s', user_ids)
             if user_ids:
                 #manager_empl = self.pool['hr.employee'].browse(cr, uid, self.pool['hr.employee'].search(cr, uid, [('user_id','=',user_ids[0])]))
                 manager_empl = self.env['hr.employee'].search([('user_id','=',user_ids.ids)])
-                print u'Тендерийн хорооны дарга ажилтан', manager_empl
                 _logger.info(u'Тендерийн хорооны дарга ажилтан %s', manager_empl)
                 if manager_empl:
                     tender_ceo = manager_empl[0]
-                    print 'GGGGGGGGGGGGGGGGGGGGGGGGGG', tender_ceo
                     _logger.info(u'Тендерийн хорооны дарга %s', tender_ceo)
         
         #sec_group_id = model_obj.get_object_reference(cr, 1, 'nomin_tender', 'group_tender_secretary')
@@ -122,7 +98,6 @@ class ReportTenderRequest(models.AbstractModel):
         if sec_group_id:
             #user_ids=self.pool['res.users'].search(cr, 1, [('groups_id','=',sec_group_id[1])])
             user_ids = self.env['res.users'].sudo().search([('groups_id','in',sec_group_id)])
-            print 'Nariin bicheg ggggggg', user_ids
             _logger.info(u'Тендерийн нарийн бичиг хэрэглэгч  %s', user_ids) 
             if user_ids:
                 #sec_empl = self.pool['hr.employee'].browse(cr, uid, self.pool['hr.employee'].search(cr, uid, [('user_id','=',user_ids[0])]))
@@ -130,7 +105,6 @@ class ReportTenderRequest(models.AbstractModel):
                 _logger.info(u'Тендерийн нарийн бичиг ажилтан  %s', sec_empl)
                 if sec_empl:
                     tender_secretary = sec_empl[0]
-                    print 'TTTTTTTTTTTTTTTTTTTTT', tender_secretary
                     _logger.info(u'Тендерийн нарийн бичиг  %s', tender_secretary)
                     
         docargs = {

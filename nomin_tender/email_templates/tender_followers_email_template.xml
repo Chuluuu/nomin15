@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding='UTF-8'?>
-<openerp>
+<odoo>
     <data>
         <record id="tender_follower_email_template" model="mail.template">
             <field name="name">${ctx["subject"]}</field>
@@ -14,7 +14,7 @@
 Сайн байна уу?, ${object.name}, </br>
 </p>
 <p>
-<b>${ctx["company"]}</b> компанийн <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["name"]}</b></a>
+<b>${ctx["company"]}</b> компанийн <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["name"]}</b></a>
  дугаартай баримт <b>${ctx["state"]}</b> төлөвт орлоо.
 </p>
 <ul>
@@ -33,7 +33,7 @@
 </ul>
 
 <p>
-    Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=tender.tendert&action=${ctx["action_id"]}"><b>${ctx["name"]}</b>
+    Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&model=tender.tendert&action=${ctx["action_id"]}"><b>${ctx["name"]}</b>
     </a> дугаартай баримтыг дагаж байгаа учир энэхүү имэйлийг хүлээн авч байна. Хэрэв энэ баримтыг дагахаа болихыг хүсвэл баримтын дагагчидаас өөрийн нэрийг устгана уу.
 </p>
 <p>
@@ -45,9 +45,9 @@
 Odoo ERP Автомат Имэйл
 
 </pre>
-            ]]></field>
+            ]]>            </field>
         </record>
-        
+
         <record id="tender_meeting_protocol_email_template" model="mail.template">
             <field name="name">${ctx["subject"]}</field>
             <field name="email_from">${(user.company_id.email or '')|safe}</field>
@@ -80,7 +80,7 @@ Odoo ERP Автомат Имэйл
 </ul>
 
 <p>
-    Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["name"]}</b>
+    Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["name"]}</b>
     </a> линкээр дамжин орж дэлгэрэнгүй танилцах боломжтой.
 </p>
 <p>
@@ -92,10 +92,10 @@ Odoo ERP Автомат Имэйл
 Odoo ERP Автомат Имэйл
 
 </pre>
-            ]]></field>
+            ]]>            </field>
         </record>
-        
-        
+
+
         <record id="send_mail_purchase_employees_email_template" model="mail.template">
             <field name="name">${ctx["subject"]}</field>
             <field name="email_from">${(user.company_id.email or '')|safe}</field>
@@ -116,7 +116,7 @@ Odoo ERP Автомат Имэйл
 					
 					<p>
                     Холбоос:
-                    <b><a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=task.rate&action=${ctx["action_id"]}">Даалгаврын үнэлгээ</a></b>
+                    <b><a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&model=task.rate&action=${ctx["action_id"]}">Даалгаврын үнэлгээ</a></b>
                     </p>
                     
                     <pre>
@@ -127,9 +127,9 @@ Odoo ERP Автомат Имэйл
                         Баярлалаа,
                     </p>
 
-            ]]></field>
+            ]]>            </field>
         </record>
-        
+
         <record id="send_mail_purchase_employees_email_template" model="mail.template">
             <field name="name">${ctx["subject"]}</field>
             <field name="email_from">${(user.company_id.email or '')|safe}</field>
@@ -146,7 +146,7 @@ Odoo ERP Автомат Имэйл
 				<b>${ctx["name"]}</b> дугаартай <b>${ctx["desc_name"]}</b> тендерээс <b>${ctx["purchase"]}</b> дугаартай худалдан авалтын үнийн санал үүслээ. 
 			</p>
 			<p>
-				Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["purchase"]}</b></a> холбоосоор орно уу!
+				Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["purchase"]}</b></a> холбоосоор орно уу!
 			</p>
 						
 			<p>
@@ -160,9 +160,9 @@ Odoo ERP Автомат Имэйл
 			Odoo ERP Автомат Имэйл
 			
 			</pre>
-            ]]></field>
+            ]]>            </field>
         </record>
-        
-        
+
+
     </data>
-</openerp>
+</odoo>

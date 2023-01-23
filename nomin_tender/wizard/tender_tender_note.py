@@ -1,23 +1,12 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Asterisk Technologies LLC, Enterprise Management Solution    
-#    Copyright (C) 2013-2014 Asterisk Technologies LLC Co.,ltd (<http://www.erp.mn>). All Rights Reserved
-#
-#    Email : unuruu25@gmail.com
-#    Phone : 976 + 88005462
-#
-##############################################################################
 
-from openerp import api, fields, models, SUPERUSER_ID, _
-from openerp.tools.translate import _
-from openerp.osv.orm import setup_modifiers
-from lxml import etree
+from odoo import api, fields, models, SUPERUSER_ID, _
+from odoo.tools.translate import _
 import time
 import logging
 _logger = logging.getLogger(__name__)
-from openerp.http import request
-from openerp.exceptions import UserError
+from odoo.http import request
+from odoo.exceptions import UserError
 class tender_cancel_note(models.Model):
     _name = "tender.cancel.note"
     _description = "Tender Cancel Note"
@@ -26,7 +15,7 @@ class tender_cancel_note(models.Model):
     tender_id       = fields.Many2one('tender.tender', 'Tender')
     description     = fields.Text('Note', require=True)
     
-    @api.multi
+    
     def save_cancel_note(self):
         '''Тендерийг цуцлах тайлбарыг бичиж хадгална'''
         context = self._context
@@ -57,7 +46,7 @@ class DisabledTender(models.Model):
     tender_id       = fields.Many2one('tender.tender', 'Tender')
     description     = fields.Text('Note', require=True)
     
-    @api.multi
+    
     def confirm(self):
         '''Тендерийг хэрэгсэхгүй болгох тайлбарыг бичиж хадгална'''
         context = self._context
@@ -70,7 +59,7 @@ class DisabledTender(models.Model):
         return True
 
 
-    @api.multi
+    
     def send_notif_parners(self):
         
          
@@ -117,7 +106,7 @@ class tender_meeting_note(models.Model):
     meet_id     = fields.Many2one('tender.meet', 'Tender Meet')
     note        = fields.Text('Note', require=True)
     
-    @api.multi
+    
     def save_note(self):
         '''Тендерийн хурлыг цуцлах тайлбарыг бичиж хадгална'''
         meet_obj = self.env['tender.meeting']
@@ -139,7 +128,7 @@ class tender_tender_note(models.Model):
     tender_id   = fields.Many2one('tender.tender', 'Tender')
     note        = fields.Text('Note', require=True)
     
-    @api.multi
+    
     def send_notif_to_followers(self,signal):
         '''Имэйл илгээнэ'''
         states = {
@@ -189,7 +178,7 @@ class tender_tender_note(models.Model):
                     self.pool['mail.template'].send_mail(self.env.cr, 1, template_id, user_id.id, force_send=True, context=self.env.context)
         return True
     
-    @api.multi
+    
     def save(self):
         '''Тендерийг буцаах бүрт тайлбар бичиж хадгална'''
         tender_obj = self.env['tender.tender']
@@ -208,7 +197,6 @@ class tender_tender_note(models.Model):
                     valuation_ids.write({'state':'draft'})
                     valuation_ids.unlink()
                 # for val in self.env['tender.valuation'].browse(valuation_ids):
-                #     print'_____val____',val
                 #     val.write({'state':'draft'})
                 # for val in self.env['tender.valuation'].browse(valuation_ids):
                 #     val.unlink()
@@ -283,7 +271,7 @@ class tender_request_note(models.TransientModel):
     note        = fields.Text('Note', require=True)
 
 
-    @api.multi
+    
     def action_contract_request(self):
         active_id = self._context and self._context.get('active_ids', [])
         

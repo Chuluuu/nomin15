@@ -1,14 +1,4 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    ShineERP, Enterprise Management Solution    
-#    Copyright (C) 2014-2020 ShineERP Co.,ltd (<http://www.serp.mn>). All Rights Reserved
-#
-#    Address : Chingeltei District, Peace Tower, 205, Asterisk-technologies LLC Developer Ganzorig
-#    Email : info@serp.mn
-#    Phone : 976 + 99241623
-#
-##############################################################################
 
 {
     'name': 'Nomin tender backend',
@@ -19,8 +9,11 @@
     'sequence': 55,
     "summary": "Tender",
     'depends': [
-        'nomin_purchase',
-        'nomin_contract'
+        'base', 
+        'mail',
+        # TODO FIX LATER
+        # 'nomin_purchase',
+        # 'nomin_contract'
     ],
     'description': """
     """,
@@ -29,7 +22,8 @@
         'wizard/tender_invitation_view.xml',
         'wizard/tender_date_extend_view.xml',
         'views/tender_participants_view.xml',
-        'wizard/tender_contract_view.xml',
+        # TODO FIX LATER
+        # 'wizard/tender_contract_view.xml',
         'wizard/tender_tender_note.xml',
         'wizard/purchase_tender_view.xml',
         'views/tender_view.xml',
@@ -38,23 +32,24 @@
         'views/res_partner_documents_view.xml',
         'views/res_partner_view.xml',
         'views/res_partner_request_view.xml',
-        'res_config_view.xml',
+        # 'res_config_view.xml',
         'views/tender_sequence.xml',
-        'security/ir.model.access.csv',
+        
         'purchase_requisition.xml',
         'purchase_order_inherit.xml',
         'views/subscribe_users_view.xml',
         'views/tender_cron_view.xml',
-        'report/tender_list_report.xml',
         'report/tender_protocol.xml',
         'report/tender_request.xml',
         'report/tender_request_report.xml',
+        # 'report/tender_list_report.xml',
         'report_menu_view.xml',
         'email_templates/tender_result_email_template.xml',
         'email_templates/tender_tender_email_template.xml',
         'email_templates/tender_followers_email_template.xml',
         'email_templates/tender_info_email_template.xml',
         'email_templates/tender_invitation_email_template.xml',
+        'security/ir.model.access.csv',
     ],
     'test': [
     ],

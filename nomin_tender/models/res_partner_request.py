@@ -3,13 +3,12 @@
 
 from datetime import datetime,timedelta
 from dateutil.relativedelta import relativedelta
-from openerp import api, fields, models, _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp.tools.translate import _
-from openerp.tools.float_utils import float_is_zero, float_compare
-import openerp.addons.decimal_precision as dp
-from openerp.tools import email_split
-from openerp.exceptions import UserError, AccessError
+from odoo import api, fields, models, _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools.translate import _
+from odoo.tools.float_utils import float_is_zero, float_compare
+from odoo.tools import email_split
+from odoo.exceptions import UserError, AccessError
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -21,26 +20,26 @@ def extract_email(email):
 
 class ResPartnerRequest(models.Model):
 	_name ='res.partner.request'
-	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_inherit = ['mail.thread', 'mail.activity.mixin']
 	_order = "create_date DESC"
 	_description = "Partner register request"
 
-	name 		= fields.Char(string="Нэр",track_visibility='onchange')
-	street		= fields.Char(string="Хаяг",track_visibility='onchange')
-	website		= fields.Char(string="Вэбсайт",track_visibility='onchange')
-	phone		= fields.Char(string="Утас",track_visibility='onchange')
-	email 		= fields.Char(string="Имэйл",track_visibility='onchange')
-	tax_number	= fields.Char(string="Татвар төлөгчийн дугаар",track_visibility='onchange')
-	nomin_code 	= fields.Char(string="Номин код",track_visibility='onchange')
-	register_number = fields.Char(string="Регистерийн дугаар",track_visibility='onchange')
-	partner_id 	= fields.Many2one('res.partner',string="Харилцагч",track_visibility='onchange')
-	state 		= fields.Selection([('draft','Ноорог'),('confirmed','Батлагдсан')],string="Төлөв",default="draft",track_visibility='onchange')
-	type		= fields.Selection([('edit','Засах'),('create','Үүсгэх'),('portal','Портал')], string="Төрөл",track_visibility='onchange',default='edit')
+	name 		= fields.Char(string="Нэр",tracking=True)
+	street		= fields.Char(string="Хаяг",tracking=True)
+	website		= fields.Char(string="Вэбсайт",tracking=True)
+	phone		= fields.Char(string="Утас",tracking=True)
+	email 		= fields.Char(string="Имэйл",tracking=True)
+	tax_number	= fields.Char(string="Татвар төлөгчийн дугаар",tracking=True)
+	nomin_code 	= fields.Char(string="Номин код",tracking=True)
+	register_number = fields.Char(string="Регистерийн дугаар",tracking=True)
+	partner_id 	= fields.Many2one('res.partner',string="Харилцагч",tracking=True)
+	state 		= fields.Selection([('draft','Ноорог'),('confirmed','Батлагдсан')],string="Төлөв",default="draft",tracking=True)
+	type		= fields.Selection([('edit','Засах'),('create','Үүсгэх'),('portal','Портал')], string="Төрөл",tracking=True,default='edit')
 	area_ids	= fields.Many2many(comodel_name='area.activity',string="Үйл ажиллагааны чиглэл")
 	description = fields.Text(string="Тайлбар")
 
 
-	@api.multi
+	
 	def action_create_partner(self):
 
 		partner_id = self.env['res.partner'].create({'name':self.name,'street':self.street,
@@ -49,7 +48,7 @@ class ResPartnerRequest(models.Model):
 		self.write({'state':'confirmed','partner_id':partner_id.id})
 		self.action_apply()			
 
-	@api.multi
+	
 	def action_portal_partner(self):
 
 		# partner_id = self.env['res.partner'].create({'name':self.name,'street':self.street,
@@ -65,7 +64,7 @@ class ResPartnerRequest(models.Model):
 		# self.write({'state':'confirmed','partner_id':partner_id.id})
 		self.write({'state':'confirmed'})
 
-	@api.multi
+	
 	def action_edit_partner(self):
 
 		request_ids= self.env['res.partner.request'].sudo().search([('create_date','<',self.create_date),('register_number','=',self.register_number),('id','!=',self.id),('state','=','draft')],order="create_date desc" )
@@ -89,7 +88,7 @@ class ResPartnerRequest(models.Model):
 		self.partner_id.write(values)
 		self.write({'state':'confirmed'})
 
-	@api.multi
+	
 	def action_apply(self):
 		
 		self.env['res.partner'].check_access_rights('write')
@@ -109,7 +108,7 @@ class ResPartnerRequest(models.Model):
         
 
 
-	@api.multi   
+	   
 	def _create_user(self):
 		res_users = self.env['res.users']
 

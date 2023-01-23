@@ -1,19 +1,9 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Asterisk Technologies LLC, Enterprise Management Solution    
-#    Copyright (C) 2013-2014 Asterisk Technologies LLC Co.,ltd (<http://www.erp.mn>). All Rights Reserved
-#
-#    Email : unuruu25@gmail.com
-#    Phone : 976 + 88005462
-#
-##############################################################################
 
-from openerp import api, fields, models, SUPERUSER_ID, _
-from openerp.tools.translate import _
-from openerp.osv.orm import setup_modifiers
-from lxml import etree
-import time
+
+from odoo import api, fields, models, SUPERUSER_ID, _
+from odoo.tools.translate import _
+from odoo.exceptions import UserError, ValidationError
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -23,13 +13,14 @@ class purchase_tender(models.TransientModel):
     
     partner_ids = fields.One2many('purchase.tender.line', 'wizard_id', 'Partner')
     
-    @api.multi
+    
     def create_order(self):
         '''Хаалттай тендерийг цуцалж худалдан авалт үүсгэх'''
         active_ids = self._context and self._context.get('active_ids', [])
         
         if not self.partner_ids:
-            raise osv.except_osv(_('Warning!'), _('Please select supplier'))
+            raise UserError(_('Warning!'),_(u'Эхлэх огноо одоогийн цагаас бага байна.'))
+            
         
         purchase_obj = self.env['purchase.order']
         purchase_line_obj = self.env['purchase.order.line']

@@ -1,7 +1,7 @@
-<openerp>
-	<data>
-		
-    	<record id="view_contract_management_filter_inherit" model="ir.ui.view">
+<odoo>
+    <data>
+
+        <record id="view_contract_management_filter_inherit" model="ir.ui.view">
             <field name="name">contract.management.select.inherit</field>
             <field name="model">contract.management</field>
             <field name="inherit_id" ref="nomin_contract.view_contract_management_filter"/>
@@ -13,22 +13,21 @@
                     <filter string="Tender" domain="[]" context="{'group_by':'tender_id'}"/>
                 </xpath> -->
                 <xpath expr="//group/filter[@name='department']" position="after">
-               		<filter string="Tender" name="tender_id" context="{'group_by':'tender_id'}"/>
-               	</xpath>
+                    <filter string="Tender" name="tender_id" context="{'group_by':'tender_id'}"/>
+                </xpath>
             </field>
         </record>
-        
-		<record id="view_contract_management_form_inherit" model="ir.ui.view">
+
+        <record id="view_contract_management_form_inherit" model="ir.ui.view">
             <field name="name">contract.management.form.inherit</field>
             <field name="model">contract.management</field>
             <field name="inherit_id" ref="nomin_contract.view_contract_management_form"/>
             <field name="arch" type="xml">
                 <field name="verified_employee" position="after">
-                    <field name="tender_id" readonly="1" attrs="{'invisible': [('tender_id','=',False)]}" 
-                    groups="nomin_tender.group_tender_manager,nomin_tender.group_tender_branch_manager"/>
+                    <field name="tender_id" readonly="1" attrs="{'invisible': [('tender_id','=',False)]}" groups="nomin_tender.group_tender_manager,nomin_tender.group_tender_branch_manager"/>
                 </field>
             </field>
         </record>
-        
-	</data>
-</openerp>
+
+    </data>
+</odoo>

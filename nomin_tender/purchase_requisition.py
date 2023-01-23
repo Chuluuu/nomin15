@@ -1,36 +1,25 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#    Copyright (C) 2014-2020 Asterisk-technologies LLC Developer). All Rights Reserved
-#
-#    Address : Chingeltei District, Peace Tower, 205, Asterisk-technologies LLC Developer Ganzorig
-#    Email : support@asterisk-tech.mn
-#    Phone : 976 + 99241623
-#
-##############################################################################
 
 from datetime import datetime
-from openerp.osv import fields, osv
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
-from openerp.tools.translate import _
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import UserError
-from openerp import api, fields, models, SUPERUSER_ID, _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
+from odoo.exceptions import UserError
+from odoo import api, fields, models, SUPERUSER_ID, _
 
 class purchase_tender_config(models.Model):
     _name = 'purchase.tender.config'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     name        = fields.Char(u'Үнийн дүн')
-    amount      = fields.Float('Amount', digits=(16, 2), track_visibility='onchange')
+    amount      = fields.Float('Amount', digits=(16, 2), tracking=True)
     type = fields.Selection([('purchase','Шаардах'),('control_budget','Хяналтын төсөв')],string="Төрөл")
-    is_active   = fields.Boolean('Is Active', default=True, track_visibility='onchange')
+    is_active   = fields.Boolean('Is Active', default=True, tracking=True)
     
 purchase_tender_config()
 
 class purchase_requisition_line(models.Model):
     _inherit = 'purchase.requisition.line'
     '''Шаардахын мөр'''
-    @api.multi
+    
     def write(self,vals):
         for line in self:
           if line.requisition_id.state=='tender_created':
@@ -54,7 +43,7 @@ class purchase_requisition(models.Model):
     #           vals.update({'state':'tender_created'})
     #     return result
     
-    @api.multi
+    
     def write(self,vals):
         '''Батлагдсан шаардахын үнийн дүн тендер зарлах 
            үнийн дүнгээс хэтэрсэн бол тендер үүснэ
@@ -72,7 +61,7 @@ class purchase_requisition(models.Model):
         return super(purchase_requisition, self).write(vals)
 
 
-    @api.multi
+    
     def check_tender_amount(self):
         '''Шаардахын үнийн тендер зарлах 
            үнийн дүнгээс хэтэрсэн эсэхийг шалгана
@@ -118,9 +107,9 @@ class purchase_requisition(models.Model):
                                                                  'tender_id': tender_id.id,
                                                                  })
                     else:
-                        raise osv.except_osv(_('Warning!'), _(u'Тендер авах хязгаар дүн оруулж өгнө үү. Админтай холбогдоно уу.'))        
+                        raise UserError(_('Warning!'),_(u'Тендер авах хязгаар дүн оруулж өгнө үү. Админтай холбогдоно уу.'))
             else :
-                raise osv.except_osv(_('Warning!'), _(u'Тендер үнийн дүн оруулж өгнө үү'))
+                raise UserError(_('Warning!'),_(u'Тендер үнийн дүн оруулж өгнө үү.'))
         return is_true,tender_id
 purchase_requisition()
 

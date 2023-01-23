@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<openerp>
+<odoo>
     <data noupdate="0">
 
         <record id="tender_tender_date_extend_email_template2" model="mail.template">
-        	<field name="name">Extended of tender</field>
+            <field name="name">Extended of tender</field>
             <field name="email_from">${(user.company_id.email or '')|safe}</field>
             <field name="subject">${ctx["subject"]}</field>
             <field name="email_to">${object.email|safe}</field>
@@ -28,7 +28,7 @@
     <li>Сунгах болсон шалтгаан: <b>${ctx["content"]}</b></li>
 </ul>
 <p>
-    Та <b><a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["extend_name"]}</b></a></b>
+    Та <b><a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["extend_name"]}</b></a></b>
     -н мэдээллийг <b>${ctx["menu_path"]}</b> цонхоор дамжин харна уу. 
 </p>
 <pre>
@@ -39,11 +39,11 @@
     Баярлалаа.
 </p>
 
-]]></field>
+]]>            </field>
         </record>
 
         <record id="tender_extend_followers_email_template" model="mail.template">
-        	<field name="name">Extended of tender</field>
+            <field name="name">Extended of tender</field>
             <field name="email_from">${(user.company_id.email or '')|safe}</field>
             <field name="subject">${ctx["subject"]}</field>
             <field name="email_to">${object.email|safe}</field>
@@ -52,7 +52,7 @@
             <field name="auto_delete" eval="True"/>
             <field name="body_html"><![CDATA[
 <p>Сайн байна уу?, <b>${object.name}</b>, </p>
-<p><b>${ctx["company"]}</b> -н <b>${ctx["department"]}</b> -с зарлагдсан <b><a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["name"]}</b></a></b> тендерийн материал хүлээн авах хугацаа дууссан байна. 
+<p><b>${ctx["company"]}</b> -н <b>${ctx["department"]}</b> -с зарлагдсан <b><a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["name"]}</b></a></b> тендерийн материал хүлээн авах хугацаа дууссан байна. 
 <br> <b>${ctx["desc_name"]}</b> тендерийн хугацааг <b>${ctx["extend_from_date"]}</b> дараах руу <b>${ctx["extend_to_date"]}</b> хүртэл сунгасан байна.</p>
 <p>
     Та системийн дараах цэснээс энэхүү баримтын олох боломжтой.
@@ -69,11 +69,11 @@
 Odoo ERP Автомат Имэйл
 
 </pre>
-]]></field>
+]]>            </field>
         </record>
-        
+
         <record id="tender_meeting_email_template1" model="mail.template">
-        	<field name="name">Meeting of tender</field>
+            <field name="name">Meeting of tender</field>
             <field name="email_from">${(user.company_id.email or '')|safe}</field>
             <field name="subject">${ctx["subject"]}</field>
             <field name="email_to">${object.email|safe}</field>
@@ -95,7 +95,7 @@ Odoo ERP Автомат Имэйл
     <li>Тайлбар: <b>${ctx["comment"]}</b></li>
 </ul>
 <p>
-	Та <b><a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["meetname"]}</b></a></b>
+	Та <b><a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["meetname"]}</b></a></b>
 	-н мэдээллийг <b>"${ctx["menu_path"]}"</b> цонхоор дамжин харна уу. 
 </p>
 <pre>
@@ -105,8 +105,8 @@ Odoo ERP Автомат Имэйл
 <p>
     Баярлалаа,
 </p>
-]]></field>
+]]>            </field>
         </record>
 
     </data>
-</openerp>
+</odoo>
