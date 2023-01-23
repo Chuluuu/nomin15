@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from openerp import api, fields, models, tools
-from openerp.exceptions import UserError
-from openerp.addons.web import http
-from openerp.http import request
+from odoo import api, fields, models, tools, http
+from odoo.exceptions import UserError
+from odoo.http import request
 import base64
 import werkzeug
 

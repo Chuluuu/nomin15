@@ -2,20 +2,14 @@
 import datetime
 import time
 from datetime import date, datetime, timedelta
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, ValidationError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError
 from fnmatch import translate
-from openerp.http import request
-import openerp.tools
-# from openerp import tools
-# from gnomekeyring import is_available
-# import xlwt
-# from xlwt import *
-# from dateutil.relativedelta import relativedelta
-# import time
-# from openerp.osv import osv, fields 
+from odoo.http import request
+import odoo.tools
 
-class rate_project_perform(models.TransientModel):
+class rate_project_perform(models.Model):
+    # Changed TransientModel to Model
     _name ='rate.project.perform'
     
     '''
@@ -24,29 +18,6 @@ class rate_project_perform(models.TransientModel):
     project_id   = fields.Many2one('project.project', index=True, string = 'Task')
     perform_line  = fields.One2many('project.rate','perform_rate_id','Line')
     
-#     def default_get(self, cr, uid, fields, context=None):
-#         result = []
-#         if context is None:
-#             context = {}
-#         res = super(rate_project_perform, self).default_get(cr, uid, fields, context=context)    
-#         active_id = context and context.get('active_id', False) or False
-#         perform_obj = self.pool.get('project.project')
-#         performs = perform_obj.browse(cr, uid, active_id)
-#         perform_line = []
-#         for project in performs:
-#             for perform in project.perform:
-#                 perform_line.append((0,0,{
-#                                          'perform'       : perform.id,
-#                                          'percent'       : 0.0
-#                                         }))
-# #                 perform_line = perform_line.create(vals)
-                
-#         res.update({
-#                     'project_id' : performs.id,
-#                     'perform_line':perform_line
-#                     })
-#         return res
-
     @api.model
     def default_get(self, fields):
         res = super(rate_project_perform, self).default_get(fields) 
@@ -69,7 +40,7 @@ class rate_project_perform(models.TransientModel):
                     })
         return res
     
-    @api.multi    
+        
     def rate_button(self):
         '''
            Төсөл үнэлэх Товч, үнэлсэн талаар түүх хөтөлнө 1-100 хооронд үнэлнэ

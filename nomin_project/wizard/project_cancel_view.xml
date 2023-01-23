@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
-    	<!-- Төслийн үе шат -->
-    	<record id="cancel_project_view" model="ir.ui.view">
-            <field name="name">cancel.project.project.form</field>
-            <field name="model">cancel.project.project</field>
-            <field name="arch" type="xml">
-        		<form string="Cancel project"> 
-        			<group>
-        				<group>
-        					<field name="description" required="1"/>
-	        				<field name="project_id" invisible="1"/>
-        				</group> 
-        			</group>
-        			<button name="send_mail" string="Цуцлах" type="object" />
+<odoo>
+	<data>
+		<!-- Төслийн үе шат -->
+		<record id="cancel_project_view" model="ir.ui.view">
+			<field name="name">cancel.project.project.form</field>
+			<field name="model">cancel.project.project</field>
+			<field name="arch" type="xml">
+				<form string="Cancel project">
+					<group>
+						<group>
+							<field name="description" required="1"/>
+							<field name="project_id" invisible="1"/>
+						</group>
+					</group>
+					<button name="send_mail" string="Цуцлах" type="object" />
 					<button string="Болих" class="oe_link" special="cancel" />
-    			</form>
-            </field>
-        </record>
-        
-       <record id="action_project_cancel" model="ir.actions.act_window">
+				</form>
+			</field>
+		</record>
+
+		<record id="action_project_cancel" model="ir.actions.act_window">
 			<field name="name">action.cancel.project.project</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">cancel.project.project</field>
-			<field name="view_type">form</field>
 			<field name="view_mode">form</field>
 			<field name="context">{'record_id' : active_id}</field>
 			<field name="target">new</field>
 		</record>
 	</data>
-</openerp>
+</odoo>

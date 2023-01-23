@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
-    	<!-- Төслийн үе шат -->
-    	<record id="action_vote_wizard" model="ir.ui.view">
-            <field name="name">action.vote.wizard.form</field>
-            <field name="model">action.vote.wizard</field>
-            <field name="arch" type="xml">
-        		<form string="Action vote wizard" > 
-        			<group>
+<odoo>
+	<data>
+		<!-- Төслийн үе шат -->
+		<record id="action_vote_wizard" model="ir.ui.view">
+			<field name="name">action.vote.wizard.form</field>
+			<field name="model">action.vote.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Action vote wizard">
+					<group>
 						<field name="comparison_id" invisible="1"/>
 						<field name="participants_ids" colspan="2" nolabel="1" readonly = "1">
 							<tree string="budget partner" colors="blue:is_winner==True">
 								<field name="wizard_id" invisible="1"/>
-								<field name="partner_id"  options="{'no_create': True}"/>
+								<field name="partner_id" options="{'no_create': True}"/>
 								<field name="price_amount" />
 								<field name="employee_ids" widget="many2many_tags"/>
 								<field name="is_winner" invisible="1" />
 								<field name="date_win" invisible="1" />
-								<button name="action_vote" class ="oe_highlight" string="Санал өгөх" type="object" />								
+								<button name="action_vote" class ="oe_highlight" string="Санал өгөх" type="object" />
 							</tree>
 							<form string="participants_ids">
 								<group>
@@ -28,22 +28,21 @@
 							</form>
 						</field>
 						<!-- <field name="control_budget_id" invisible="1"/> -->
-        			</group>
+					</group>
 
-        			<!-- <button name="action_create" string="Save"  class="oe_highlight" type="object" />
+					<!-- <button name="action_create" string="Save" class="oe_highlight" type="object" />
 					<button string="Cancel" class="oe_link" special="cancel" /> -->
-    			</form>
-            </field>
-        </record>
-        
-       <record id="action_action_vote_wizard" model="ir.actions.act_window">
+				</form>
+			</field>
+		</record>
+
+		<record id="action_action_vote_wizard" model="ir.actions.act_window">
 			<field name="name">action.action.vote.wizard</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">action.vote.wizard</field>
-			<field name="view_type">form</field>
 			<field name="view_mode">form</field>
 			<field name="context">{'record_id' : active_id}</field>
 			<field name="target">new</field>
 		</record>
 	</data>
-</openerp>
+</odoo>

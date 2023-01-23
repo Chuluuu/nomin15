@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
-    	<!-- Төслийн үе шат -->
-    	<record id="create_circle_task_view2" model="ir.ui.view">
-            <field name="name">project.circle.task.form</field>
-            <field name="model">project.circle.task</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-        		<form string="Create Tender"> 
-        			<group>
-        				<field name="date_count"/>
-        				<field name="date_lines">
-        					<tree string ='Огноo' editable="bottom">
-        						<field name="date"/>
-        					</tree>
-        					<form>
-        						<field name="date"/>
-        					</form>
-        				</field>
-        			</group>
-        			<footer>
-	        			<button name="action_create" string="Үүсгэх"  class="oe_highlight" type="object"/> or 
+<odoo>
+	<data>
+		<!-- Төслийн үе шат -->
+		<record id="create_circle_task_view2" model="ir.ui.view">
+			<field name="name">project.circle.task.form</field>
+			<field name="model">project.circle.task</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Create Tender">
+					<group>
+						<field name="date_count"/>
+						<field name="date_lines">
+							<tree string ='Огноo' editable="bottom">
+								<field name="date"/>
+							</tree>
+							<form>
+								<field name="date"/>
+							</form>
+						</field>
+					</group>
+					<footer>
+						<button name="action_create" string="Үүсгэх" class="oe_highlight" type="object"/>
+ or 
 						<button string="Cancel" class="oe_link" special="cancel" />
 					</footer>
-    			</form>
-            </field>
-        </record>
-        
-       <record id="action_create_circle_task2" model="ir.actions.act_window">
+				</form>
+			</field>
+		</record>
+
+		<record id="action_create_circle_task2" model="ir.actions.act_window">
 			<field name="name">Давтагдах ажил үүсгэх</field>
-            <field name="res_model">project.circle.task</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="create_circle_task_view2"/>
-            <field name="target">new</field>
+			<field name="res_model">project.circle.task</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="create_circle_task_view2"/>
+			<field name="target">new</field>
 		</record>
 	</data>
-</openerp>
+</odoo>

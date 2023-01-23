@@ -3,8 +3,8 @@
 import datetime
 from datetime import date, datetime, timedelta
 import time
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, ValidationError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError
 import random
 import logging
 import string 
@@ -63,7 +63,7 @@ class CreatePurchaseRequisition(models.Model):
                             ('urgent',u'Яаралтай')
                             ],string = u'Урьтамж')
     budget_id = fields.Many2one('control.budget', index=True, string = 'Budget')
-    priority_id = fields.Many2one('purchase.priority',string='Purchase priority',track_visibility='onchange')
+    priority_id = fields.Many2one('purchase.priority',string='Purchase priority',tracking=True)
     location = fields.Char(u'Хүлээн авах байршил', required=True)
     m_line = fields.One2many('material.budget.line','purchase_id',string = u'Материалын зардал')
     l_line = fields.One2many('labor.budget.line','purchase_id',string = u'Ажиллах хүчний зардал')
@@ -151,7 +151,7 @@ class CreatePurchaseRequisition(models.Model):
                     })
         return res
 
-    @api.multi    
+        
     def create_purchase_button(self):
         '''
             Худалдан авалтын шаардах үүсгэх

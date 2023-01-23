@@ -1,29 +1,16 @@
 # -*- coding: utf-8 -*-
 import math
 import time
-import openerp.pooler
-from openerp import SUPERUSER_ID #
-from openerp import tools, api, models, fields # 
+from odoo import tools, api, models, fields # 
 from datetime import timedelta
 from datetime import datetime
 import dateutil.relativedelta as relativedelta
 from dateutil.relativedelta import relativedelta
 import re
-from openerp.exceptions import UserError #
+from odoo.exceptions import UserError #
 import logging
 from time import strftime
 _logger = logging.getLogger(__name__)
-# import openerp.netsvc as netsvc
-# from openerp import models, fields
-# from dateutil.parser import *
-# import sys
-# import logging
-# from openerp.tools.translate import _
-# import math
-# from openerp import tools
-# from openerp.osv import fields, osv, expression
-# import openerp.tools
-# import openerp.netsvc
 
 class ir_attachment(models.Model):
     _inherit = 'ir.attachment'
@@ -32,7 +19,7 @@ class ir_attachment(models.Model):
     order_file_id = fields.Many2one('order.page','order Number')
     order_id = fields.Many2one('order.page','order Number')
 
-    # create_date = fields.Date(string='Огноо', track_visibility='onchange', default=time.strftime("%Y-%m-%d"))
+    # create_date = fields.Date(string='Огноо', tracking=True, default=time.strftime("%Y-%m-%d"))
 
 class BatchName(models.Model):
     _name = 'batch.name'
@@ -71,9 +58,9 @@ class JobName(models.Model):
         else:
             self.is_senior_manager = False
         
-    name = fields.Char(string='Албан тушаал', size=80 , track_visibility='onchange')
-    rate = fields.Float(string='Тариф',track_visibility='onchange')
-    is_select = fields.Boolean(string="Сонголтонд харуулах",track_visibility='onchange')
+    name = fields.Char(string='Албан тушаал', size=80 , tracking=True)
+    rate = fields.Float(string='Тариф',tracking=True)
+    is_select = fields.Boolean(string="Сонголтонд харуулах",tracking=True)
     is_senior_manager = fields.Boolean(string='Ахлах төслийн менежер', compute=_is_senior_manager)
 
 class netSpec(models.Model):
@@ -113,7 +100,7 @@ class BackingUp(models.Model):
 
     name = fields.Char(string='Нөөцлөх мэдээллийн төрөл', size=80)
 
-@api.multi
+
 def check_attachment(self, res_model, res_id):
     '''Ирсэн бичиг дээрх хавсралтыг зөвхөн ноорог төлөв дээр устгах'''
     self._cr.execute("select id from ir_attachment where res_model='%s' and res_id=%s"%(res_model,res_id))
@@ -128,7 +115,7 @@ class OrderArchived(models.TransientModel):
 
 
 
-    @api.multi
+    
     def action_archived(self):
     
         context = self._context
@@ -160,14 +147,14 @@ class OrderPage (models.Model):
     _order = "create_date DESC"
 
 
-    @api.multi
+    
     def _add_followers(self,user_ids):
         '''Add followers
         '''
         self.message_subscribe_users(user_ids=user_ids)
 
 
-    @api.multi
+    
     def name_get(self):
         res = []
         for obj in self:
@@ -181,7 +168,7 @@ class OrderPage (models.Model):
 
 
  
-    @api.multi
+    
     def action_to_confirm(self):
         '''Хянах
         '''
@@ -215,14 +202,14 @@ class OrderPage (models.Model):
         self.write({'state':'confirmed'})
 
 
-    @api.multi
+    
     def action_to_approved1(self):
         '''Хянах
         '''       
        
         self.write({'state':'approved1'})
     
-    @api.multi
+    
     def skip_state(self):
         '''төлөв алгасах
         '''
@@ -235,7 +222,7 @@ class OrderPage (models.Model):
                 order.write({'state':'estimated'})
     
 
-    @api.multi
+    
     def order_recovery(self):
         '''Архиваас сэргээх
         '''
@@ -246,7 +233,7 @@ class OrderPage (models.Model):
                        'WHERE id = %s', (order.previous_state, (self.id)))
 
 
-    @api.multi
+    
     def action_to_approve_cost(self):
         '''Хянах
         '''
@@ -296,7 +283,7 @@ class OrderPage (models.Model):
         self.write({'state':'approve_cost'})
         
 
-    @api.multi
+    
     def action_to_approve_cost_in(self):
         '''Хянах
         '''
@@ -321,7 +308,7 @@ class OrderPage (models.Model):
         self.write({'state':'approve_cost'})
         
         
-    @api.multi
+    
     def action_handover(self):
            
         return {
@@ -334,7 +321,7 @@ class OrderPage (models.Model):
             'target': 'new',            
         }
     
-    @api.multi
+    
     def to_receive(self):
         # self.message_post(body=u"Хүлээн авсан огноо %s " %(self.create_date))
         # self.message_post(body=u"Хүлээн авсан огноо test %s " %(time.strftime("%Y-%m-%d")))
@@ -349,7 +336,7 @@ class OrderPage (models.Model):
             'target': 'new',            
         }
     
-    @api.one
+    
     def _is_confirm_user(self):
         for order in self:
             if self._uid not in order.confirmed_user_ids.ids and self._uid == order.receive_employee_id1.user_id.id:                
@@ -360,7 +347,7 @@ class OrderPage (models.Model):
                 order.is_confirm_user =True
 
 
-    @api.multi
+    
     def action_confirmed(self):
 
         '''Батлах
@@ -379,7 +366,7 @@ class OrderPage (models.Model):
 
 
 
-    @api.multi
+    
     def action_to_estimate(self):
         '''Ирсэн захиалгыг хянуулах төлөвт оруулж байна.
         '''
@@ -433,7 +420,7 @@ class OrderPage (models.Model):
 
 
 
-    @api.multi
+    
     def action_to_approve(self):
         '''Ирсэн захиалгыг хянасан төлөвт оруулж байна.
         '''
@@ -451,7 +438,7 @@ class OrderPage (models.Model):
 
 
 
-    @api.multi
+    
     def action_to_slow_up(self):
         '''Ирсэн захиалгыг хойшлогдсон төлөвт оруулж байна.
         '''
@@ -460,7 +447,7 @@ class OrderPage (models.Model):
         else:
             self.write({'state':'slow_up'})
 
-    @api.multi
+    
     def action_to_reject(self):
         '''Ирсэн захиалгыг цуцлагдсан төлөвт оруулж байна.
         '''
@@ -473,7 +460,7 @@ class OrderPage (models.Model):
 
 
 
-    # @api.multi
+    # 
     # def reject_to_director(self):
     #     '''Ирсэн захиалгыг цуцлагдсан төлөвт оруулж байна.
     #     '''
@@ -482,7 +469,7 @@ class OrderPage (models.Model):
     #     else:
     #         self.write({'state':'sent_director'})
 
-    # @api.multi
+    # 
     # def slow_up_to_director(self):
     #     '''Ирсэн захиалгыг цуцлагдсан төлөвт оруулж байна.
     #     '''
@@ -492,7 +479,7 @@ class OrderPage (models.Model):
     #         self.write({'state':'sent_director'})
 
 
-    @api.multi
+    
     def action_to_done_cost(self):
 
         # body = u'Төлөв: → ' + u' Зардал батлуулах. '
@@ -522,7 +509,7 @@ class OrderPage (models.Model):
 
 
 
-    @api.multi
+    
     def action_to_done_cost_in(self):
 
         # body = u'Төлөв: → ' + u' Дотоодод зардал батлуулах. '
@@ -556,7 +543,7 @@ class OrderPage (models.Model):
        
 
 
-    @api.multi
+    
     def action_to_allocate(self):
         '''Ирсэн захиалгыг хуваарилагдсан төлөвт оруулж байна.
         '''
@@ -596,7 +583,7 @@ class OrderPage (models.Model):
         self.pool['mail.template'].send_mail(self.env.cr, 1, template_id, self.project_manager_id.user_id.id, force_send=True, context=self.env.context)
 
 
-    @api.multi
+    
     def action_to_allocate_sys_admin(self):
         '''Ирсэн захиалгыг хуваарилагдсан төлөвт оруулж байна.
         '''
@@ -661,7 +648,7 @@ class OrderPage (models.Model):
 
 
 
-    @api.multi
+    
     def action_to_done(self):
         '''Ирсэн захиалгыг done төлөвт оруулж байна.
         '''
@@ -669,7 +656,7 @@ class OrderPage (models.Model):
         self.message_post(cbody= body)
         self.write({'state':'done'})
     
-    @api.multi
+    
     def training_done(self):
         '''Сургалтын захиалгыг дуусгах
         '''
@@ -677,7 +664,7 @@ class OrderPage (models.Model):
         self.message_post(cbody= body)
         self.write({'state':'done'})
     
-    @api.multi
+    
     def action_done(self):
         '''Эрхийн хүсэлтийн захиалгыг дуусгах
         '''
@@ -685,7 +672,7 @@ class OrderPage (models.Model):
         self.message_post(cbody= body)
         self.write({'state':'done'})
 
-    @api.multi
+    
     def action_to_done1(self):
         '''Ирсэн захиалгыг дууссан төлөвт оруулж байна.
         '''
@@ -693,7 +680,7 @@ class OrderPage (models.Model):
         self.message_post(cbody= body)
         self.write({'state':'done'})
 
-    @api.multi
+    
     def action_to_order_done(self):
         '''Ирсэн захиалгыг цуцлагдсан төлөвт оруулж байна.
         '''
@@ -702,7 +689,7 @@ class OrderPage (models.Model):
         self.write({'state':'done'})
 
 
-    @api.multi
+    
     def action_to_draft(self):
         '''Ирсэн захиалгыг ноорог төлөвт оруулж байна.
         '''
@@ -711,7 +698,7 @@ class OrderPage (models.Model):
         self.write({'state':'draft','sequence':0, 'rejection_reason':' '})
 
 
-    @api.multi
+    
     def action_to_stop(self):
         '''Ирсэн захиалгыг зогссон төлөвт оруулж байна.
         '''
@@ -724,7 +711,7 @@ class OrderPage (models.Model):
 
 
 
-    @api.multi
+    
     def action_to_allocated(self):
         '''Ирсэн захиалгыг зогссон төлөвт оруулж байна.
         '''
@@ -736,7 +723,7 @@ class OrderPage (models.Model):
 
 
 
-    @api.multi
+    
     def unlink(self):
         '''Нооргоос бусад үед устгахгүй байх.
         '''
@@ -806,7 +793,7 @@ class OrderPage (models.Model):
 
 
 
-    @api.one
+    
     def _show_control_button(self):       
 
         if self.control_employee_id:         
@@ -814,7 +801,7 @@ class OrderPage (models.Model):
 
                 self.show_control_button = True
 
-    @api.one
+    
     def _is_employee (self):       
 
         if self.employee_id:         
@@ -824,7 +811,7 @@ class OrderPage (models.Model):
 
 
 
-    # @api.one
+    # 
     # def _show_confirm_button(self):
     #     '''
     #        Батлах хэрэглэгчид харуулах эсэх тооцох
@@ -833,7 +820,7 @@ class OrderPage (models.Model):
     #          if self.confirm_employee_id.user_id.id == self.env.user.id or  self.approve_employee_id.user_id.id == self.env.user.id  :
     #            self.show_confirm_button = True
 
-    @api.one
+    
     def _show_confirm_button(self):
         for order in self:
             if self._uid not in order.confirmed_user_ids2.ids and self._uid == order.confirm_employee_id.user_id.id:                
@@ -842,7 +829,7 @@ class OrderPage (models.Model):
                 order.show_confirm_button =True
           
 
-    @api.one
+    
     def _show_done_button(self):
         '''
            Нягтланд дуусгах товч харуулах 
@@ -853,7 +840,7 @@ class OrderPage (models.Model):
 
 
 
-    @api.one
+    
     def _is_inlist(self):        
 
         for line in self.project_manager_id:
@@ -861,7 +848,7 @@ class OrderPage (models.Model):
             if line.user_id.id == self.env.user.id:                
                 self.is_inlist = True
     
-    @api.one
+    
     def _senior_manager(self):        
         
         for line in self.project_senior_manager_id:
@@ -872,7 +859,7 @@ class OrderPage (models.Model):
 
 
 
-    @api.one
+    
     def _is_list(self):        
 
         for line in self.system_admin_id:
@@ -880,7 +867,7 @@ class OrderPage (models.Model):
             if line.user_id.id == self.env.user.id:                
                 self.is_list = True
     
-    @api.one
+    
     def _is_training_manager(self):        
 
         if self.training_manager_id:
@@ -888,7 +875,7 @@ class OrderPage (models.Model):
                 self.is_training_manager = True
 
 
-    @api.one
+    
     def _is_project_manager(self):
         for line in self.request_id.program_order_flow_lines:
             if self.request_type.id == 1:
@@ -897,12 +884,12 @@ class OrderPage (models.Model):
                         if user.id == self.env.user.id:
                             self.is_project_manager = True
                             break
-    @api.one
+    
     def _is_manager_of_the_project(self):
         if self.project_manager_id.user_id == self.env.user:
             self.is_manager_of_the_project = True
 
-    @api.one
+    
     def _is_system_admin(self):
         for order in self:
             if order.request_type.request_name == 'installation_order':
@@ -919,7 +906,7 @@ class OrderPage (models.Model):
                                     order.is_system_admin = True
                                     break
             
-    @api.one
+    
     def _is_system_senior(self):
        for line in self.request_id.program_order_flow_lines:
             if self.request_type.id == 4 or self.request_type.id == 5 or self.request_type.id == 6 or self.request_type.id == 11 or self.request_type.id == 12 or self.request_type.id == 13:
@@ -929,7 +916,7 @@ class OrderPage (models.Model):
                             self.is_system_senior = True
                             break
     
-    @api.one
+    
     def _is_system_quality_assurance(self):
        for line in self.request_id.program_order_flow_lines:
             if self.request_type.id == 17 or self.request_type.id == 16:
@@ -951,7 +938,7 @@ class OrderPage (models.Model):
                             {'request_type':[('attr','=', True)]}}
 
 
-    @api.one
+    
     def planned_time_cost(self):
         time = 0
         cost = 0
@@ -971,7 +958,7 @@ class OrderPage (models.Model):
     def _get_senior_manager_domain(self): 
 
         group_ids = [
-                self.env['ir.model.data'].get_object_reference('project', 'group_program_admin')[1]]
+                self.env['ir.model.data']._xmlid_to_res_id('nomin_project.group_program_admin')]
 
         return [('user_id.groups_id','in',group_ids)]
 
@@ -987,32 +974,32 @@ class OrderPage (models.Model):
     receive_date1 = fields.Date(string='Хүлээн авсан огноо')
     receive_date2 = fields.Date(string='Хүлээн авсан огноо')
     receive_date3 = fields.Date(string='Хүлээн авсан огноо')
-    control_employee_id = fields.Many2one('hr.employee', string='Хянах ажилтан',track_visibility='onchange')
-    confirm_employee_id = fields.Many2one('hr.employee', string='Батлах ажилтан',track_visibility='onchange')
-    is_cost_approved = fields.Boolean(string='Зардал батлагдсан', default=False,track_visibility='onchange')
-    cost_approved_fully = fields.Boolean(string='Зардал бүрэн батлагдсан', default=False,track_visibility='onchange')
-    is_control = fields.Boolean(string='Хянах процессыг алгасах эсэх', default=False,track_visibility='onchange')
-    is_handover = fields.Boolean(string='Системээр акт хүлээлцэх эсэх', default=False,track_visibility='onchange')
+    control_employee_id = fields.Many2one('hr.employee', string='Хянах ажилтан',tracking=True)
+    confirm_employee_id = fields.Many2one('hr.employee', string='Батлах ажилтан',tracking=True)
+    is_cost_approved = fields.Boolean(string='Зардал батлагдсан', default=False,tracking=True)
+    cost_approved_fully = fields.Boolean(string='Зардал бүрэн батлагдсан', default=False,tracking=True)
+    is_control = fields.Boolean(string='Хянах процессыг алгасах эсэх', default=False,tracking=True)
+    is_handover = fields.Boolean(string='Системээр акт хүлээлцэх эсэх', default=False,tracking=True)
     is_receive = fields.Boolean(string='Захиалгатай холбоотой ажлуудыг хүлээн авч баталгаажуулж байна')
     technical_info_choose = fields.Selection([('batch','Багц сонгох'),('other','Бусад')], string="Техник үзүүлэлт" , default="batch")
-    email = fields.Char('Имэйл',readonly=True, track_visibility='always',related='employee_id.work_email')
+    email = fields.Char('Имэйл',readonly=True, tracking=True,related='employee_id.work_email')
     dedication = fields.Selection([('ded1','Зориулалт1'),('ded2','Зориулалт2'),('ded3','Зориулалт3')], string='Зориулалт', default='ded1', required=True)
-    telephone = fields.Char('Утас',readonly=True, track_visibility='always',related='employee_id.mobile_phone')
+    telephone = fields.Char('Утас',readonly=True, tracking=True,related='employee_id.mobile_phone')
     name = fields.Char(string='Дугаар', readonly=True , default="New")
-    employee_id = fields.Many2one('hr.employee',string = 'Захиалга үүсгэгч', ondelete="restrict", track_visibility='always', default=_set_employee1)
-    department_id = fields.Many2one('hr.department', string = 'Захиалагч салбар', ondelete="restrict", track_visibility='always', related='employee_id.department_id')
-    # job_id = fields.Many2one('hr.job', string='Jobs', ondelete="restrict", track_visibility='always')
+    employee_id = fields.Many2one('hr.employee',string = 'Захиалга үүсгэгч', ondelete="restrict", tracking=True, default=_set_employee1)
+    department_id = fields.Many2one('hr.department', string = 'Захиалагч салбар', ondelete="restrict", tracking=True, related='employee_id.department_id')
+    # job_id = fields.Many2one('hr.job', string='Jobs', ondelete="restrict", tracking=True)
     date=fields.Date(string='Хүлээн авах эцсийн хугацаа' ,default=(datetime.today()+relativedelta(days=7)).strftime('%Y-%m-%d'))
-    start_date = fields.Date(string='Захиалга өгсөн огноо', track_visibility='onchange', required=True, default=time.strftime("%Y-%m-%d"))
-    assigned_date = fields.Date(string='Хуваарилагдсан огноо',track_visibility='onchange')
-    project_progress_percentage=fields.Integer(string='Төслийн явц%(enter дарна уу!)',track_visibility='onchange')
-    project_started_date=fields.Date(string='Төсөл эхлэх огноо', track_visibility='onchange')
-    project_finished_date=fields.Date(string='Tөсөл дуусах огноо', track_visibility='onchange', default=time.strftime("%Y-%m-%d"))
-    confirmed_date = fields.Date(string='Батлагдсан огноо',track_visibility='onchange', default=time.strftime("%Y-%m-%d"))
-    confirmed_date1 = fields.Date(string='Зардал баталсан огноо',track_visibility='onchange' )
-    confirmed_date2 = fields.Date(string='Зардал баталсан огноо',track_visibility='onchange')
-    handover_date = fields.Date(string='Хүлээлгэн өгөх дарсан огноо',track_visibility='onchange', default=time.strftime("%Y-%m-%d"))
-    review_date = fields.Date(string='Хянуулах төлөвт орсон огноо',track_visibility='onchange', default=time.strftime("%Y-%m-%d"))
+    start_date = fields.Date(string='Захиалга өгсөн огноо', tracking=True, required=True, default=time.strftime("%Y-%m-%d"))
+    assigned_date = fields.Date(string='Хуваарилагдсан огноо',tracking=True)
+    project_progress_percentage=fields.Integer(string='Төслийн явц%(enter дарна уу!)',tracking=True)
+    project_started_date=fields.Date(string='Төсөл эхлэх огноо', tracking=True)
+    project_finished_date=fields.Date(string='Tөсөл дуусах огноо', tracking=True, default=time.strftime("%Y-%m-%d"))
+    confirmed_date = fields.Date(string='Батлагдсан огноо',tracking=True, default=time.strftime("%Y-%m-%d"))
+    confirmed_date1 = fields.Date(string='Зардал баталсан огноо',tracking=True )
+    confirmed_date2 = fields.Date(string='Зардал баталсан огноо',tracking=True)
+    handover_date = fields.Date(string='Хүлээлгэн өгөх дарсан огноо',tracking=True, default=time.strftime("%Y-%m-%d"))
+    review_date = fields.Date(string='Хянуулах төлөвт орсон огноо',tracking=True, default=time.strftime("%Y-%m-%d"))
 
 
     request_type = fields.Many2one('sel.type', string="Хүсэлтийн төрөл")
@@ -1026,8 +1013,8 @@ class OrderPage (models.Model):
     reg_file = fields.Many2one('ir.attachment','File', readonly=True)
     req_file = fields.One2many('ir.attachment','order_id',u'Шаардлага / Хавсралт')
     annex_file = fields.One2many('ir.attachment','order_file_id', string='Хавсралт')
-    datas_fname =  fields.Char(related = 'reg_file.datas_fname', string='File name', store=True, readonly=True)
-
+    # datas_fname =  fields.Char(related = 'reg_file.datas_fname', string='File name', store=True, readonly=True)
+    datas_fname =  fields.Char(related = 'reg_file.store_fname', string='File name', store=True, readonly=True)
 
     show_confirm_button=fields.Boolean(compute=_show_confirm_button,string = 'Батлах',type='boolean')
     show_control_button=fields.Boolean(compute=_show_control_button,string = 'хянах',type='boolean')
@@ -1044,16 +1031,16 @@ class OrderPage (models.Model):
     engineer_ids = fields.Many2many('res.users','order_res_users_rel_engineer','order_id','user_id',string="Installation engineer")
     is_system_senior = fields.Boolean(string="Is system senior", compute=_is_system_senior, default=False)
     is_system_quality_assurance = fields.Boolean(string="Is system quality assurance", compute=_is_system_quality_assurance, default=False)
-    rejection_reason = fields.Text(string="Татгалзсан шалтгаан" , track_visibility='onchange')
-    description_admin = fields.Text(string="Тайлбар " , track_visibility='onchange')
-    description_admin1 = fields.Text(string="Тайлбар " , track_visibility='onchange')
+    rejection_reason = fields.Text(string="Татгалзсан шалтгаан" , tracking=True)
+    description_admin = fields.Text(string="Тайлбар " , tracking=True)
+    description_admin1 = fields.Text(string="Тайлбар " , tracking=True)
 
     # job_id=fields.Many2one(related='employee_id.job_id', store=True , string="Албан тушаал tets")
     job =fields.Many2one(related='employee_id.job_id' , string="Албан тушаал new")
     request_rating = fields.Selection([('0','Хэвийн'),('1','Яаралтай'),('2','Нэн яаралтай')], string='Хүсэлтийн зэрэглэл',required=True)
-    company_id = fields.Many2one('res.company', 'Компани', readonly=True, ondelete='restrict', track_visibility='always',related='employee_id.department_id.company_id')
-    logged_in_employee_id = fields.Many2one('hr.employee',string = 'Employee', readonly=True, ondelete="restrict", track_visibility='always', default=lambda self: self._set_employee1())
-    request_id = fields.Many2one('request.config', string='Request config',  track_visibility='onchange')
+    company_id = fields.Many2one('res.company', 'Компани', readonly=True, ondelete='restrict', tracking=True,related='employee_id.department_id.company_id')
+    logged_in_employee_id = fields.Many2one('hr.employee',string = 'Employee', readonly=True, ondelete="restrict", tracking=True, default=lambda self: self._set_employee1())
+    request_id = fields.Many2one('request.config', string='Request config',  tracking=True)
     confirm_user_ids = fields.Many2many('res.users', string='Agreed Users')
     leave_flow = fields.Integer(string = 'Leave Flow')
     state = fields.Selection([
@@ -1073,7 +1060,7 @@ class OrderPage (models.Model):
                                 ('slow_up',u'Хойшлогдсон'),
                                 ('rejected',u'Татгалзсан'),
                                 ('stop',u'Зогссон'),
-                                ], u'Төлөв', track_visibility='always', default = 'draft')
+                                ], u'Төлөв', tracking=True, default = 'draft')
     state_sequence = fields.Char(string = 'State sequence')
 
     technical_infos = fields.One2many('server.info','server_id', string='Үзүүлэлт')    
@@ -1091,8 +1078,8 @@ class OrderPage (models.Model):
     sequence = fields.Integer(string = 'Sequence') 
     allocate_infos = fields.One2many('server.info','allocate_id')
         
-    project_manager_id = fields.Many2one('hr.employee', string='Төслийн менежер' , domain=[('parent_department','=',254)],track_visibility='always')
-    training_manager_id = fields.Many2one('hr.employee', string='Сургалт өгөх төслийн менежер' , domain=[('parent_department','=',254)],track_visibility='always')
+    project_manager_id = fields.Many2one('hr.employee', string='Төслийн менежер' , domain=[('parent_department','=',254)],tracking=True)
+    training_manager_id = fields.Many2one('hr.employee', string='Сургалт өгөх төслийн менежер' , domain=[('parent_department','=',254)],tracking=True)
     project_senior_manager_id = fields.Many2one('hr.employee' , string='Ахлах төслийн менежер', domain=_get_senior_manager_domain)
     # senior_manager_id = fields.Many2one('res.users', 'Ахлах төслийн менежер',  domain="[('groups_id','=',887)]")
     system_admin_id = fields.Many2one('hr.employee', string='Систем админ',domain=[('department_id','in',[89,1786])])
@@ -1120,11 +1107,11 @@ class OrderPage (models.Model):
                                 ('parking_equipment',u'Зогсоол'),
                                 ('entrance_conrol',u'Орохын камер'),
                                 ('other',u'Бусад'),
-                                ], u'Хийгдэх ажил', track_visibility='onchange', default = 'network')   
+                                ], u'Хийгдэх ажил', tracking=True, default = 'network')   
 
     location = fields.Char (string='Байршил')
 
-    is_confirm = fields.Boolean(string='Зардал батлах ажилтан нэмэх', default=False,track_visibility='onchange')
+    is_confirm = fields.Boolean(string='Зардал батлах ажилтан нэмэх', default=False,tracking=True)
 
     approve_employee_id = fields.Many2one('hr.employee' , string='Батлах ажилтан')
     # system_line_ids              = fields.One2many('list.other.systems.line','order_id', string="List other systems line")
@@ -1159,7 +1146,7 @@ class OrderPage (models.Model):
     interruption_registration_period = fields.Char(string="Interruption registration period")
     location_modification_system = fields.Char(string="Location of the modification system" )
     system_lists = fields.Many2many('hr.system.list', string="List other systems line")
-    rate = fields.Integer(string="Үнэлгээ" , compute='_rate_risk',track_visibility="onchange")
+    rate = fields.Integer(string="Үнэлгээ" , compute='_rate_risk')
     risk_level = fields.Selection([
                                     ('low',u'Бага'), 
                                     ('middle',u'Дунд'),
@@ -1267,11 +1254,7 @@ class OrderPage (models.Model):
         hr_holidays_id = self.env['server.info'].search([('server_id','=',self.id)])
 
 
-        if hr_holidays_id: 
-
-            print'_________'
-
-        else:
+        if not hr_holidays_id: 
             hhhh = self.env['pr.spec.dt'].search([(1,'=',1)])
             for i in hhhh:
                 hr_holidays_id1 = hr_holidays_id.create({
@@ -1279,12 +1262,11 @@ class OrderPage (models.Model):
                     'indicator_name':i.id,
                     }) 
    
-    @api.one
+    
     def _rate_risk(self):
         for order in self:
             # if order.request_type.id == 51:
             if order.request_type.request_name == 'change_request':
-                print '\n\n\n ffffffffffffff' , order.request_type
                 total_risk = 0
                 risk_1 = 0
                 risk_2 = 0
@@ -1348,7 +1330,6 @@ class OrderPage (models.Model):
 
                 
                 total_risk += risk_1 + risk_2 + risk_3 + risk_4 + risk_5
-                print '\n\n\n total risk' , total_risk
                 order.rate = total_risk
                 if total_risk in range(1,6):
                     order.risk_level = 'low'
@@ -1428,7 +1409,7 @@ class OrderPage (models.Model):
                     order.implementation_period = '34day'     
 
 
-    @api.multi
+    
     def write(self, vals):
         if vals.get('project_manager_id'):
             employee_obj = self.env['hr.employee'].browse(vals.get('project_manager_id'))
@@ -1482,7 +1463,7 @@ class OrderPage (models.Model):
         return result
     
 
-    @api.multi
+    
     def back_to_allocated(self):
 
         self.write({'is_invisible':True})
@@ -1497,7 +1478,7 @@ class OrderPage (models.Model):
             'target': 'new',            
         }
 
-    @api.multi
+    
     def get_engineer(self):
         ''' Хуваарилах менежерийг олох.
         '''
@@ -1511,7 +1492,7 @@ class OrderPage (models.Model):
 
 
 
-    @api.multi
+    
     def action_to_send(self):
         ''' Хянах руу илгээх.
         '''
@@ -1605,9 +1586,7 @@ class OrderPage (models.Model):
 
     # @api.onchange('project_manager_id')
     # def onchange_project_manager(self):
-    #     print '\n\n\n\nddddddddddddddddddddddddddddddddddd ' 
     #     if self.project_manager_id:
-    #         print '\n\n\n\n manager' , self.project_manager_id.user_id
     #         self.sudo()._add_followers(self.project_manager_id.user_id.id)
 
 # class ListOtherSystems(models.Model):
@@ -1627,8 +1606,11 @@ class OrderPageLine(models.Model):
 
 
     order_id = fields.Many2one('order.page', string="Order page" ,ondelete='cascade')
-    category_id = fields.Many2one('knowledge.store.category', string="Ангилал" ,domain="[('id','in',category_ids[0][2])]" )
-    service_id = fields.Many2one('work.service',string="Ажил үйлчилгээ" , domain = "[('category_id','=',category_id)]" , required="1")
+    # category_id = fields.Many2one('knowledge.store.category', string="Ангилал" ,domain="[('id','in',category_ids[0][2])]" )
+    # TODO FIX LATER
+    category_id = fields.Many2one('knowledge.store.category', string="Ангилал" )
+    service_id = fields.Many2one('work.service',string="Ажил үйлчилгээ" ,required="1")
+    # service_id = fields.Many2one('work.service',string="Ажил үйлчилгээ" , domain = "[('category_id','=',category_id)]" , required="1")
     category_ids = fields.Many2many('knowledge.store.category','knowledge_store_category_order_page_line_rel','order_line_id','categor_id' ,string='category ids')
     employee_name = fields.Char(string='Employee name')
     product_category = fields.Char(string='Product category name')
@@ -1662,7 +1644,9 @@ class OrderPageLine(models.Model):
 class WorkService(models.Model):
     '''Ажил үйлчилгээ
     '''
-    _inherit = "work.service"
+    _name = "work.service"
+    #TODO FIX LATER
+    # _inherit = "work.service"
     
     latin_name = fields.Char(string='Latin name')
 
@@ -1673,7 +1657,7 @@ class ServerInfo(models.Model):
     _inherit = ['mail.thread']
 
 
-    @api.one
+    
     def line_cost(self):
         time = 0
         cost = 0
@@ -1723,39 +1707,40 @@ class ServerInfo(models.Model):
     backing_way = fields.Char(string="Нөөцлөх мэдээллийн зам")
     backing_time = fields.Selection([('year','Жил'),('season','Улирал'),('month','Сар'),('week','7 хоног'),('day','Өдөрт')], string="Нөөцлөх хугацаа төрөл")
     backing_frequency = fields.Integer(string='Нөөцлөх давтамж')
-    date_from = fields.Date('Эхлэх хугацаа', track_visibility='onchange' , default=fields.Date.today)
-    date_to = fields.Date('Дуусах хугацаа', track_visibility='onchange', default=fields.Date.today)
+    date_from = fields.Date('Эхлэх хугацаа', tracking=True , default=fields.Date.today)
+    date_to = fields.Date('Дуусах хугацаа', tracking=True, default=fields.Date.today)
     number_of_days_temp = fields.Float('Хугацаа/хоногоор/', readonly=True)
     unit_amount1 = fields.Float('Эхлэх цаг', default=0.0)
     unit_amount1a = fields.Float('Дуусах цаг', default=0.0)
-    partner_id = fields.Many2one('res.partner', string='Байгууллагын нэр',  states={'draft': [('readonly', False)]},track_visibility='onchange')
+    partner_id = fields.Many2one('res.partner', string='Байгууллагын нэр',  states={'draft': [('readonly', False)]},tracking=True)
     user_name = fields.Char(string="Хэрэглэгчийн нэр")
     user_position = fields.Char(string="Албан тушаал")
     user_phone = fields.Char(string="Утас")
     user_mail = fields.Char(string="Email")
 
     system = fields.Selection([('erp','ERP систем'),('nomin','Nomin систем')], string='Систем', default='erp')
-    departments = fields.Many2many('hr.department', string='Салбар', track_visibility='onchange')
+    departments = fields.Many2many('hr.department', string='Салбар', tracking=True)
 
     year_id = fields.Many2one('account.fiscalyear',string="Year")
-    month_id = fields.Many2one('account.period', string="Month",domain="[('fiscalyear_id','=',year_id)]")
-    plan_name = fields.Char(string='Plan information',track_visibility='onchange')
-    first_week = fields.Char(string='first week',track_visibility='onchange')
+    # TODO FIX LATER
+    # month_id = fields.Many2one('account.period', string="Month",domain="[('fiscalyear_id','=',year_id)]")
+    plan_name = fields.Char(string='Plan information',tracking=True)
+    first_week = fields.Char(string='first week',tracking=True)
     second_week = fields.Char(string='second week')
     third_week = fields.Char(string='third week')
     fourth_week = fields.Char(string='fourth week')
 
-    position_name = fields.Many2one('job.name', string='Job name',track_visibility='onchange',domain="[('is_select','=',True)]")
-    rate = fields.Float(string='Rate' , related='position_name.rate',track_visibility='onchange')
-    time_info = fields.Float(string="Time info",track_visibility='onchange')
-    cost_reference = fields.Char(string='Cost reference',track_visibility='onchange')
+    position_name = fields.Many2one('job.name', string='Job name',tracking=True,domain="[('is_select','=',True)]")
+    rate = fields.Float(string='Rate' , related='position_name.rate',tracking=True)
+    time_info = fields.Float(string="Time info",tracking=True)
+    cost_reference = fields.Char(string='Cost reference',tracking=True)
     total = fields.Integer(string="Total" , compute="line_cost")
 
     is_check = fields.Boolean(string='Check')
     
-    implemented_task = fields.Char(string='Implemented task',track_visibility='onchange')
-    explanation = fields.Char(string='Explanation',track_visibility='onchange')
-    comment = fields.Char(string='employee explanation',track_visibility='onchange')
+    implemented_task = fields.Char(string='Implemented task',tracking=True)
+    explanation = fields.Char(string='Explanation',tracking=True)
+    comment = fields.Char(string='employee explanation',tracking=True)
 
     
     
@@ -1826,7 +1811,7 @@ class ServerInfo(models.Model):
 
         return result
 
-    @api.multi 
+     
     def write(self, vals):
 
         d = datetime.now().date() - timedelta(days=40)

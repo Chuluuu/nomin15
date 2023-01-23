@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api, _
-from openerp.tools.translate import _
-from openerp.exceptions import UserError, ValidationError
+from odoo import models, fields, api, _
+from odoo.tools.translate import _
+from odoo.exceptions import UserError, ValidationError
 import requests
 import json
-from openerp.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
 import xlsxwriter
 from io import BytesIO
 import base64
@@ -46,7 +45,7 @@ class SdlcIntegration(models.TransientModel):
             return False 
         return True
 
-    @api.multi
+    
     def action_update_sdlc(self):
         self.set_access_token()
         headers = {
@@ -97,7 +96,7 @@ class SdlcIntegration(models.TransientModel):
                             _child2 = requests.patch(url='http://sdlc.nomin.net/api/v3/work_packages/' + str(child_id) + '', headers = headers2, data = json.dumps(body))
         return {'type': 'ir.actions.act_window_close'}
     
-    @api.multi
+    
     def export_report(self):
         self.set_access_token()
         headers = {

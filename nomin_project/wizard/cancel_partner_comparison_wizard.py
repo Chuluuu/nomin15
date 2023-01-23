@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api, _
-from openerp.tools.translate import _
-from openerp.exceptions import UserError, ValidationError
+from odoo import models, fields, api, _
+from odoo.tools.translate import _
+from odoo.exceptions import UserError, ValidationError
 
 
 
@@ -12,7 +12,6 @@ class CancelPartnerComparisonWizard(models.TransientModel):
     
     comment = fields.Text('Comment', required=True)
     
-    @api.multi
     def action_cancel(self):
         context = self._context
         if context.get('active_model') and context.get('active_id'):

@@ -1,63 +1,18 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+
 import datetime
 from datetime import date, datetime, timedelta
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, ValidationError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError
 import time
 
-class create_project_tender(models.TransientModel):
+class create_project_tender(models.Model):
+    # TransientModel changed to Model
     _name = 'create.project.tender'
     '''
        хяналтын төсвөөес Тендер үүсгэх
     '''
-    # def default_get(self, cr, uid, fields, context=None):
-    #     result = []
-    #     if context is None:
-    #         context = {}
-    #     res = super(create_project_tender, self).default_get(cr, uid, fields, context=context)    
-    #     active_id = context and context.get('active_id', False) or False
-    #     perform_obj = self.pool.get('control.budget')
-    #     perform = perform_obj.browse(cr, uid, active_id)
-    #     line_ids = []
-    #     line_ids2= []
-    #     for line in perform.material_line_ids:
-    #         if line.cost_choose == True and line.state == 'confirm':
-    #             line_ids.append(line.id)
-    #     for line in perform.labor_line_ids:
-    #         if line.cost_choose == True and line.state == 'confirm':
-    #             line_ids2.append(line.id)
-                
-    #     res.update({
-    #                 'control_budget_id' : perform.id,
-    #                 'material_limit' : perform.material_utilization_limit,
-    #                 'labor_limit' : perform.labor_utilization_limit,
-    #                 'equipment_limit' : perform.equipment_utilization_limit,
-    #                 'carriage_limit' : perform.carriage_utilization_limit,
-    #                 'postage_limit' : perform.postage_utilization_limit,
-    #                 'other_limit' : perform.other_utilization_limit,
-    #                 'material_line': [(6, 0, line_ids)],
-    #                 'labor_line': [(6, 0, line_ids2)]
-    #                 })
-    #     return res
+    
     @api.model
     def default_get(self, fields):
         res = super(create_project_tender, self).default_get(fields) 
@@ -78,14 +33,10 @@ class create_project_tender(models.TransientModel):
             res.update({'material_line': line_ids,})            
         else:
             for line in perform.new_material_line_ids:
-                print '\n\n\n line' , line , line.material_total
                 if line.cost_choose == True and line.state == 'confirm':
                     new_line_ids.append(line.id)
-                    print '\n\n\n glg' , new_line_ids
                     total += line.material_total
-                    print '\n\n\n total' , total
             res.update({'new_material_line': new_line_ids,})
-            print '\n\n\n\ new mat line res' , res 
         if perform.is_old:
             for line in perform.labor_line_ids:
                 if line.cost_choose == True and line.state == 'confirm':
@@ -132,7 +83,6 @@ class create_project_tender(models.TransientModel):
                     
             res.update({'labor_line1': line_ids3,})
             
-        print '\n\n\n task' , perform.task_id.id      
         res.update({
                     'control_budget_id' : perform.id,
                     'material_limit' : perform.material_utilization_limit,
@@ -148,10 +98,9 @@ class create_project_tender(models.TransientModel):
                     'material_line': [(6, 0, line_ids)],
                     'new_material_line': [(6, 0, new_line_ids)],
                     })
-        print '\n\n\n res' , res
         return res
 
-    @api.multi
+    
     def _total_amount1(self):
         total = 0.0
         for budget in  self:
@@ -264,15 +213,13 @@ class create_project_tender(models.TransientModel):
             child_ids.extend(type_ids.ids)
         return {'domain':{'child_type_id': [('id','=', child_ids)]}}
     
-    @api.multi    
+        
     def action_create(self):
         '''
            Тендер үүсгэх товч 
                Хяналтын төсвийн сонгосон талваруудаар тендер үүсгэх мөн хяналтын төсөврүү зардал бүрээр гүйцэтгэл хөтлөх
         '''
-        print '\n\n\n tender uusgeh'
         budget  = self.env['control.budget'].search([('id','=', self.control_budget_id.id)])
-        print '\n\n\n budget hahaha' , budget , self,self.is_old2
         space = ', '
         names = []
         work_task_employee = []
@@ -360,7 +307,6 @@ class create_project_tender(models.TransientModel):
                         tender_line = tender_line.create(line_vals)
                 else:
                     for line in self.new_material_line:
-                        print '\n\n\n line' , line, line.product_name
                         line_vals = {
                                     'product_name':    line.product_name,
                                     'product_uom_id':  line.product_uom.id,
@@ -498,8 +444,10 @@ class create_project_tender(models.TransientModel):
                      'nodestroy' : True,
                  }
     
-class inherit_tender_tender(models.Model):
-    _inherit = 'tender.tender'
+class TenderTender(models.Model):
+    _name = 'tender.tender'
+    #TODO FIX LATER
+    # _inherit = 'tender.tender'
     
     '''
        Тендер 

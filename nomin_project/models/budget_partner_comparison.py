@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import UserError, ValidationError
+from odoo import api, fields, models
+import odoo.addons.decimal_precision as dp
+from odoo.exceptions import UserError, ValidationError
 from dateutil.relativedelta import relativedelta
 import time
 from datetime import date, datetime, timedelta
-from openerp.tools.translate import _
+from odoo.tools.translate import _
 
 
 class BudgetPartnerComparison(models.Model):
     _name = 'budget.partner.comparison'
     _description = "Budget partner comparison"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
 
     def _add_followers(self,user_ids):
@@ -19,7 +19,6 @@ class BudgetPartnerComparison(models.Model):
          '''
          self.message_subscribe_users(user_ids=user_ids)
 
-    @api.one
     def _is_voter(self):
         if self.department_id:
             if self.department_id.is_sector and self.department_id.manager_id.user_id.id == self.env.user.id:
@@ -27,44 +26,27 @@ class BudgetPartnerComparison(models.Model):
             elif self.department_id.is_sector == False and self.department_id.parent_id.manager_id.user_id.id == self.env.user.id:
                 self.is_voter = True
    
-    @api.one
     def _is_employee(self):
         if self.employee_id and self.employee_id.user_id.id == self.env.user.id:
             self.is_employee =True
-   
-    # @api.multi
-    # def _total_amount(self):
-    #    total = 0.0
-    #    for budget in  self:
-    #       for line in material_cost_ids:
-    #             if line.cost_choose == True and line.state == 'confirm':
-    #                total += line.material_total
-    #       for line in labor_cost_ids:
-    #             if line.cost_choose == True and line.state == 'confirm':
-    #                total += line.labor_total
-    #       total += budget.equipment_create
-    #       total += budget.carriage_create
-    #       total += budget.postage_create
-    #       total += budget.other_create
-    #       budget.total_amount = total
 
     def _is_old(self):
         if self.sudo().control_budget_id.is_old:
             self.is_old = True
             
-    name = fields.Char(string='Дугаар' ,track_visibility='onchange' ,default='New')
-    desc_name = fields.Char(string = "Тодорхойлох нэр",track_visibility='onchange')
+    name = fields.Char(string='Дугаар' ,tracking=True ,default='New')
+    desc_name = fields.Char(string = "Тодорхойлох нэр",tracking=True)
     control_budget_id = fields.Many2one('control.budget', string = 'Хяналтын төсөв')
     project_id = fields.Many2one('project.project', string = 'Төсөл')
     task_id = fields.Many2one('project.task', string = u'Ажлын даалгавар')   
     task_graph_id = fields.Many2one('project.task', string = u'Ажлын зураг')
-    employee_id = fields.Many2one('hr.employee',string = u'Хариуцагч' ,track_visibility='onchange')
-    type_id = fields.Many2one('tender.type',  string = u'Ангилал' ,track_visibility='onchange')
+    employee_id = fields.Many2one('hr.employee',string = u'Хариуцагч' ,tracking=True)
+    type_id = fields.Many2one('tender.type',  string = u'Ангилал' ,tracking=True)
     child_type_id = fields.Many2one('tender.type', string = u'Дэд ангилал')
     is_verify = fields.Boolean(string = "Баталгаат хугацаатай эсэх", default=False)
     confirmed_time = fields.Integer(string ='Баталгаат хугацаа(сараар)')
-    date_start = fields.Date(string ='Зарлах огноо' , track_visibility='onchange')
-    date_end = fields.Date(string ='Хаах огноо', track_visibility='onchange')
+    date_start = fields.Date(string ='Зарлах огноо' , tracking=True)
+    date_end = fields.Date(string ='Хаах огноо', tracking=True)
     # is_performance_percent = fields.Boolean(string = "Гүйцэтгэлийн баталгаа", default=False)
     # performance_percent = fields.Integer(string ='Гүйцэтгэлийн хувь')
     description = fields.Text(string ='Тодорхойлолт')
@@ -88,7 +70,7 @@ class BudgetPartnerComparison(models.Model):
                                     ('management',u'Удирдлагад илгээгдсэн'),
                                     ('winner',u'Шалгарсан'),
                                     ('cancelled',u'Цуцлагдсан'),                            
-                                    ], u'Төлөв',  default = 'draft' ,track_visibility='onchange')
+                                    ], u'Төлөв',  default = 'draft' ,tracking=True)
 
     new_material_cost_ids = fields.One2many('comparison.material.line','partner_comparison_id',string = u'Материалын зардал')
     material_cost_ids = fields.One2many('comparison.material.line','partner_comparison_id',string = u'Материалын зардал')
@@ -124,7 +106,6 @@ class BudgetPartnerComparison(models.Model):
                 result.sudo()._add_followers([result.department_id.parent_id.manager_id.user_id.id])
         return result
 
-    @api.multi
     def write(self, vals):
         old_date_end = False
         if vals.get('date_end'):
@@ -140,8 +121,6 @@ class BudgetPartnerComparison(models.Model):
                 self.sudo()._add_followers([line.employee_id.user_id.id])
         return result
    
-
-    @api.multi
     def action_start(self):
         if not self.committee_member_ids:
             raise UserError((u'Комиссийн гишүүдийг сонгоогүй байна.'))
@@ -262,18 +241,15 @@ class BudgetPartnerComparison(models.Model):
             utilization_budget_other        = utilization_budget_other.create(o_vals)
             
    
-    @api.multi
     def action_quotation(self):
         self.write({'state':'comparison'})
     
-    @api.multi
     def action_cancel(self):
         mod_obj = self.env['ir.model.data']
 
         res = mod_obj.get_object_reference('nomin_project', 'action_cancel_partner_comparison')
         return {
             'name': 'Цуцлах шалтгаан',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'cancel.partner.comparison.wizard',
             'context': self._context,
@@ -282,8 +258,6 @@ class BudgetPartnerComparison(models.Model):
             'target': 'new',
         }
         
-
-    @api.multi
     def action_vote(self):
         '''
             Салбарын захирал санал өгөх 
@@ -310,7 +284,6 @@ class BudgetPartnerComparison(models.Model):
         template_id = self.env['action.vote.wizard'].create(vals)
         return {
             'name': 'Note',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'action.vote.wizard',
             'type': 'ir.actions.act_window',         
@@ -359,15 +332,11 @@ class BudgetPartnerComparison(models.Model):
                 comparison = self.env['budget.partner.comparison'].browse(comparison_id)
                 comparison.write({'state':'end_quotation'})
 
-    @api.multi
     def create_contract(self):
         '''
             Гэрээ үүсгэх
         '''
         contract_id = self.env['contract.management']
-
-        
-        
         customer_company = False
         contract_amount = False
 
@@ -402,7 +371,6 @@ class BudgetPartnerComparison(models.Model):
             if not self.contract_id:
                 self.write({'contract_id':contract_id.id})
         return {
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'contract.management',
             'type': 'ir.actions.act_window',         
@@ -410,7 +378,6 @@ class BudgetPartnerComparison(models.Model):
             'nodestroy': True,
         }
    
-    @api.multi
     def unlink(self):
         for main in self:
             if main.state != 'draft':
@@ -456,8 +423,8 @@ class BudgetPartnerComparison(models.Model):
                             line.unlink()
         return super(BudgetPartnerComparison, self).unlink()
 
-    @api.one
-    def copy(self):
+    @api.returns('self', lambda value: value.id)
+    def copy(self, default=None):
         raise UserError((u"Хуулбарлан үүсгэх боломжгүй!"))
         return super(BudgetPartnerComparison, self).copy()
 
@@ -508,7 +475,6 @@ class BudgetPartners(models.Model):
     is_winner = fields.Boolean(string = 'is winner', default=False )
     price_percent = fields.Float(string = 'Үнийн саналын хувь (%)', compute = _get_price_percent)
    
-    @api.multi
     def action_vote(self):
         members = {}
         partners = {}

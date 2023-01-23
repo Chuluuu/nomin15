@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, date
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, ValidationError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError
 import time
 
 class ProjectBudget(models.Model):
@@ -166,7 +166,7 @@ class ProjectBudget(models.Model):
     sum_of_contract = fields.Float(string="Гэрээний нийт дүн" , compute="_compute_sum_contract")
     sum_of_payment_request = fields.Float(string="Төлбөрийн хүсэлтийн нийт дүн" , compute="_compute_sum_payment")
     amount_that_can_be_spent = fields.Float(string="Зарцуулах боломжтой дүн" , compute='_compute_sum_spent')
-    state =  fields.Selection([('draft',u'Ноорог'), 
+    state =  fields.Selection(selection=[('draft',u'Ноорог'), 
                                 ('sent',u'Илгээгдсэн'), 
                                 ('approved',u'Зөвшөөрсөн'),
                                 ('confirmed',u'Баталсан'),
@@ -174,7 +174,7 @@ class ProjectBudget(models.Model):
                                 ('rejected',u'Татгалзсан'),
                                 ('closed',u'Хаагдсан'),
                                 ],
-                                'State',  copy=False, default='draft', track_visibility='onchange')
+                                string = 'State',  copy=False, default='draft', tracking=True)
 
     default_attrs = fields.Boolean(string="Is parent project", default=_default_attrs)
     default_type = fields.Boolean(string="Is sub project", default=_default_type)
@@ -205,7 +205,7 @@ class ProjectBudget(models.Model):
 
 
 
-    @api.multi
+    
     def write(self,vals):
         result = super(ProjectBudget, self).write(vals)
         # total = 0
@@ -239,7 +239,7 @@ class ProjectBudgetLine(models.Model):
 
 
 
-    @api.multi
+    
     def _line_limit(self):
         '''Хөрөнгө оруулалтын батлагдсан хяналтын төсвүүдийн ажиллах хүчний зардлын нийт дүНгээр үлдэгдэл тооцох
         '''
@@ -270,7 +270,7 @@ class ProjectBudgetLine(models.Model):
             line.other_line_limit_new = other_total
             line.carriage_limit_new = carriage_total
 
-    @api.multi
+    
     def _material_line_total_new(self):
         '''Хөрөнгө оруулалтын батлагдахаар хүлээж буй хяналтын төсвүүдийн материалын зардлын нийт дүн
         '''
@@ -283,7 +283,7 @@ class ProjectBudgetLine(models.Model):
 
 
     
-    @api.multi
+    
     def _equipment_line_total_new(self):
         '''Хөрөнгө оруулалтын батлагдахаар хүлээж буй хяналтын төсвүүдийн машин механизм зардлын нийт дүн
         '''
@@ -294,7 +294,7 @@ class ProjectBudgetLine(models.Model):
                 line.equipment_line_total = line.equipment_line_limit_new - res
     
 
-    @api.multi
+    
     def _labor_line_total_new(self):
         '''Хөрөнгө оруулалтын батлагдахаар хүлээж буй хяналтын төсвүүдийн ажиллах хүчний зардлын нийт дүн
         '''
@@ -311,7 +311,7 @@ class ProjectBudgetLine(models.Model):
                 res = self.env.cr.fetchone()[0] or 0.0
                 line.labor_line_total = line.labor_line_limit_new - res
     
-    @api.multi
+    
     def _carriage_cost_total_new(self):
         '''Хөрөнгө оруулалтын батлагдахаар хүлээж буй хяналтын төсвүүдийн тээврийн зардлын нийт дүн
         '''
@@ -322,7 +322,7 @@ class ProjectBudgetLine(models.Model):
                 line.carriage_cost = line.carriage_limit_new - res
     
 
-    @api.multi
+    
     def _postage_line_total_new(self):
         '''Хөрөнгө оруулалтын батлагдахаар хүлээж буй хяналтын төсвүүдийн шууд зардлын нийт дүн
         '''
@@ -333,7 +333,7 @@ class ProjectBudgetLine(models.Model):
                 line.postage_line_total = line.postage_line_limit_new - res
     
 
-    @api.multi
+    
     def _other_line_total_new(self):
         '''Хөрөнгө оруулалтын батлагдахаар хүлээж буй хяналтын төсвүүдийн бусад зардлын нийт дүн
         '''
@@ -364,7 +364,7 @@ class ProjectBudgetLine(models.Model):
     other_cost = fields.Float(string="Other costs")
     description = fields.Text(string="Description")
     total_cost = fields.Float(string = 'Total cost')
-    state  = fields.Selection(STATE_SELECTION,string = 'Төлөв' , default = 'new', track_visibility='onchange' , readonly=True)
+    state  = fields.Selection(selection=STATE_SELECTION,string = 'Төлөв' , default = 'new', tracking=True , readonly=True)
 
     labor_line_limit_new  = fields.Float(u'Ажиллах хүчний зардлын төсөвлөсөн дүн',    compute = _line_limit)
     material_line_limit_new     = fields.Float(u'Материалын зардлын төсөвлөсөн дүн',        compute = _line_limit)
@@ -395,7 +395,6 @@ class ProjectBudgetLine(models.Model):
         # actual_balance = 0
         result = super(ProjectBudgetLine, self).create(vals)
         if result.project_budget_id.approximate_amount == 0.0:
-            print '\n\n\\n hjaaaaaaaaaa' , result.project_budget_id.approximate_amount , result.project_budget_id
             raise ValidationError(_(u'Дэд төсөл бол Эцэг төслийн төлөвлөлтөөс үүснэ'))
         if result:
             total = result.material_cost + result.labor_cost + result.equipment_cost + result.carriage_cost + result.postage_cost + result.other_cost
@@ -426,7 +425,7 @@ class ProjectBudgetLine(models.Model):
    
         return result
     
-    @api.multi
+    
     def write(self,vals):
         '''
            6 зардлаар төлөвлөх
@@ -488,10 +487,10 @@ class SurplusBudgetLine(models.Model):
 
     project_id = fields.Many2one('project.project',string="Төсөл")
     budgeted_amount = fields.Float(string="Төлөвлөсөн дүн" , readonly=True)
-    surplus_amount = fields.Float(string="Тодотгосон дүн" , track_visibility='onchange')
+    surplus_amount = fields.Float(string="Тодотгосон дүн" , tracking=True)
     parent_project_id = fields.Many2one('project.project',string="Parent project")
     surplus_date = fields.Datetime(string='Surplus Date', required=True)
-    state =  fields.Selection([('draft',u'Ноорог'), 
+    state =  fields.Selection(selection=[('draft',u'Ноорог'), 
                                 ('sent',u'Илгээгдсэн'), 
                                 ('approved',u'Зөвшөөрсөн'),
                                 ('confirmed',u'Баталсан'),
@@ -499,7 +498,7 @@ class SurplusBudgetLine(models.Model):
                                 ('rejected',u'Татгалзсан'),
                                 ('closed',u'Хаагдсан'),
                                 ],
-                                'State',  copy=False, default='draft', track_visibility='onchange' , readonly=True)   
+                                string='State',  copy=False, default='draft', tracking=True , readonly=True)   
 
 class ProjectSpecification(models.Model):
     _name ="project.specification"
@@ -539,7 +538,7 @@ class BudgetedLine(models.Model):
                 
          
 
-    @api.multi
+    
     def write(self,vals):
         # amount = 0
         # balance = 0
@@ -568,15 +567,15 @@ class BudgetedLine(models.Model):
     actual_balance = fields.Float(string="Actual balance", readonly=True ,  compute="_compute_actual_balance")
     surplus_number = fields.Integer(string="Surplus number", readonly=True , default=0)
     
-    state =  fields.Selection([('draft',u'Ноорог'), 
+    state =  fields.Selection(selection=[('draft',u'Ноорог'), 
                                 ('sent',u'Илгээгдсэн'), 
                                 ('modified',u'Тодотгосон'),
                                 ('rejected',u'Татгалзсан'),
                                 ('surplus_request',u'Тодотгох хүсэлт '),
                                 ],
-                                string='Тодотгол төлөв',  copy=False, default='draft', track_visibility='onchange')
+                                string='Тодотгол төлөв',  copy=False, default='draft', tracking=True)
 
-    @api.multi
+    
     def confirm_surplus(self):
         '''Тодотгол батлах
         '''
@@ -655,7 +654,7 @@ class BudgetedLine(models.Model):
             line.project_id.write({'state_new':'comfirm'})
     
 
-    @api.multi
+    
     def sub_project_surplus(self):
         '''Тодотгол батлах
         '''
@@ -670,7 +669,6 @@ class BudgetedLine(models.Model):
             balance = 0
             if line.state == 'surplus_request':
                 balance = project_budget.approximate_amount - project_budget.sum_of_budgeted_amount
-                print '\n\n\n balance' , balance
             
             project_budget.update({                               
                                 'sum_of_budgeted_amount':project_budgeted_line.total_cost,
@@ -721,7 +719,7 @@ class BudgetedLine(models.Model):
             line.project_id.write({'state_new':'comfirm'})
         
     
-    @api.multi
+    
     def reject_surplus(self):
         '''Тодотгол татгалзах
         '''

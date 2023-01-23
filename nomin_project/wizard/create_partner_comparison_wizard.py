@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api, _
-from openerp.tools.translate import _
-from openerp.exceptions import UserError, ValidationError
-import openerp.addons.decimal_precision as dp
+from odoo import models, fields, api, _
+from odoo.tools.translate import _
+from odoo.exceptions import UserError, ValidationError
+import odoo.addons.decimal_precision as dp
 import time
 from datetime import datetime, timedelta
-from openerp.http import request
+from odoo.http import request
 
 class CreatePartnerComparisonWizard(models.TransientModel):
     _name = 'create.partner.comparison.wizard'
@@ -104,7 +104,7 @@ class CreatePartnerComparisonWizard(models.TransientModel):
         
         return res
 
-    @api.multi
+    
     def _total_amount(self):
         total = 0.0
         for budget in  self:
@@ -206,7 +206,7 @@ class CreatePartnerComparisonWizard(models.TransientModel):
             child_ids.extend(type_ids.ids)
         return {'domain':{'child_type_id': [('id','=', child_ids)]}}
 
-    @api.multi
+    
     def action_create(self):
         budget = self.control_budget_id
         budget_partner_comparison = self.env['budget.partner.comparison']

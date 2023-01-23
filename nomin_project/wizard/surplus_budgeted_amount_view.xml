@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
+<odoo>
+    <data>
         <!-- Тодотгох -->
         <record id="surplus_budgeted_amount_form" model="ir.ui.view">
             <field name="name">surplus.budgeted.amount</field>
             <field name="model">surplus.budgeted.amount</field>
             <field name="arch" type="xml">
-                <form string="Surplus amount"> 
-                    <group>                                            
-                        <form>										
+                <form string="Surplus amount">
+                    <group>
+                        <form>
                             <group>
                                 <group string="Батлагдсан дүн">
-                                    <field name="total_cost" readonly="1"/>  
+                                    <field name="total_cost" readonly="1"/>
                                     <field name="material_cost" readonly="1"/>
                                     <field name="labor_cost" readonly="1"/>
                                     <field name="equipment_cost" readonly="1"/>
                                     <field name="carriage_cost" readonly="1"/>
                                     <field name="postage_cost" readonly="1"/>
                                     <field name="other_cost" readonly="1"/>
-                                    
+
                                 </group>
                                 <group string="Тодотгох дүн">
                                     <field name="surplus_total_cost" readonly="1"/>
@@ -28,15 +28,15 @@
                                     <field name="surplus_carriage_cost" />
                                     <field name="surplus_postage_cost" />
                                     <field name="surplus_other_cost" />
-                                     
+
                                 </group>
-                            </group>										
-                        </form>                            	
+                            </group>
+                        </form>
                     </group>
                     <footer>
-                    <button name="action_surplus" string="Тодотгох" type="object" confirm="Та тодотгол үүсгэхдээ итгэлтэй байна уу?"/>
+                        <button name="action_surplus" string="Тодотгох" type="object" confirm="Та тодотгол үүсгэхдээ итгэлтэй байна уу?"/>
                     or
-                    <button string="Cancel" class="btn-default" special="cancel"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
                 </form>
             </field>
@@ -46,28 +46,28 @@
             <field name="name">to.evaluate.perform</field>
             <field name="model">to.evaluate.perform</field>
             <field name="arch" type="xml">
-                <form string="Evaluate perform"> 
+                <form string="Evaluate perform">
                     <group>
                         <group>
                             <field name="line_ids">
-                                <tree editable="bottom" >
+                                <tree editable="bottom">
                                     <field name="perform" readonly="1"/>
-                                    <field name ="percent"/>                                   
+                                    <field name ="percent"/>
 
                                 </tree>
-                                <form >										
+                                <form >
                                     <group>
                                         <field name="perform" readonly="1"/>
-                                        <field name ="percent"/>										
-                                    </group>										
-                                </form>                             	
+                                        <field name ="percent"/>
+                                    </group>
+                                </form>
                             </field>
-                        </group> 
+                        </group>
                     </group>
                     <footer>
-                    <button name="action_evaluate" string="Үнэлэх" type="object" />
+                        <button name="action_evaluate" string="Үнэлэх" type="object" />
                     or
-                    <button string="Cancel" class="btn-default" special="cancel"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
                 </form>
             </field>
@@ -77,20 +77,20 @@
             <field name="name">return.state</field>
             <field name="model">return.state</field>
             <field name="arch" type="xml">
-                <form string="Return state"> 
+                <form string="Return state">
                     <group>
                         <group>
-                            <form >										
+                            <form >
                                 <group>
                                     <field name="reason" required="1"/>
-                                </group>										
-                            </form>                             	
-                        </group> 
+                                </group>
+                            </form>
+                        </group>
                     </group>
                     <footer>
-                    <button name="action_return" string="Буцаах" type="object" />
+                        <button name="action_return" string="Буцаах" type="object" />
                     or
-                    <button string="Cancel" class="btn-default" special="cancel"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
                 </form>
             </field>
@@ -100,20 +100,20 @@
             <field name="name">project.cancel</field>
             <field name="model">project.cancel</field>
             <field name="arch" type="xml">
-                <form string="Project cancel"> 
+                <form string="Project cancel">
                     <group>
                         <group>
-                            <form >										
+                            <form >
                                 <group>
                                     <field name="cancel_reason" required="1"/>
-                                </group>										
-                            </form>                             	
-                        </group> 
+                                </group>
+                            </form>
+                        </group>
                     </group>
                     <footer>
-                    <button name="action_cancel" string="Цуцлах" type="object" />
+                        <button name="action_cancel" string="Цуцлах" type="object" />
                     or
-                    <button string="Болих" class="btn-default" special="cancel"/>
+                        <button string="Болих" class="btn-default" special="cancel"/>
                     </footer>
                 </form>
             </field>
@@ -123,27 +123,27 @@
             <field name="name">project.back</field>
             <field name="model">project.back</field>
             <field name="arch" type="xml">
-                <form string="Project back"> 
+                <form string="Project back">
                     <group>
                         <group>
-                            <form >										
+                            <form >
                                 <group>
                                     <field name="project_back_reason" required="1"/>
                                     <field name="project_back_day" required="1"/>
-                                </group>										
-                            </form>                             	
-                        </group> 
+                                </group>
+                            </form>
+                        </group>
                     </group>
                     <footer>
-                    <button name="action_back" string="Хойшлуулах" type="object" />
+                        <button name="action_back" string="Хойшлуулах" type="object" />
                     or
-                    <button string="Цуцлах" class="btn-default" special="cancel"/>
+                        <button string="Цуцлах" class="btn-default" special="cancel"/>
                     </footer>
                 </form>
             </field>
         </record>
-        
+
 
     </data>
-</openerp>
+</odoo>
 

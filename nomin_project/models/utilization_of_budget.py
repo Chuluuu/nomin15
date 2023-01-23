@@ -1,37 +1,16 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+
 import datetime
 import time
 from datetime import date, datetime, timedelta
-from openerp import api, fields, models, _
-# from dateutil.relativedelta import relativedelta
-# from openerp.exceptions import UserError, ValidationError
-# import time
+from odoo import api, fields, models, _
 
 class utilization_on_budget(models.Model):
     _name = 'utilization.on.budget'
     '''
        Хяналтын төсвийн бодит гүйцэтгэл
     '''
-    @api.multi
+    
     def name_get(self):
         result = []
         for budget in self:
@@ -42,12 +21,12 @@ class utilization_on_budget(models.Model):
             result.append((budget.id, name))
         return result
     
-    @api.one
+    
     @api.depends('price', 'utilization')
     def _balance_subtotal(self):
         self.balance = self.price-self.utilization
     
-    @api.one
+    
     def _prac_amt(self):
         '''
            Хяналтын төсвийн бодит гүйцэтгэл бодох
@@ -66,7 +45,7 @@ class utilization_on_budget(models.Model):
         return res
 
 
-    @api.one
+    
     def _practical_subtotal(self):
         res = 0.0
         if self.id:

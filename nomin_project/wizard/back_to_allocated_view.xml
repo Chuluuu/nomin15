@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
+<odoo>
+    <data>
         <!-- Хуваарилах руу буцаах -->
         <record id="back_to_allocated_form" model="ir.ui.view">
             <field name="name">back.to.allocated.form</field>
             <field name="model">back.to.allocated</field>
             <field name="arch" type="xml">
-                <form string="Allocated state"> 
+                <form string="Allocated state">
                     <group>
                         <group>
                             <field name="description" required="1" string="Тайлбар"/>
-                            
-                        </group> 
+
+                        </group>
                     </group>
 
-                    
+
                     <footer>
                         <button name="action_confirm" string="Батлах" type="object" />
                         or
@@ -22,8 +22,8 @@
                     </footer>
                 </form>
             </field>
-        </record>       
+        </record>
 
     </data>
-</openerp>
+</odoo>
 

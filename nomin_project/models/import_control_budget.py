@@ -1,24 +1,14 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Asterisk Technologies LLC, Enterprise Management Solution    
-#    Copyright (C) 2007-2013 Asterisk Technologies LLC Co.,ltd (<http://www.erp.mn>). All Rights Reserved
-#
-#    Email : unuruu25@gmail.com
-#    Phone : 976 + 88005462
-#
-##############################################################################
-from openerp.tools.translate import _
-from openerp import api, fields, models, _
+
+from odoo.tools.translate import _
+from odoo import api, fields, models, _
 import time
 import xlrd
-import openerp.netsvc, decimal, base64, os, time, xlrd
+import odoo.netsvc, decimal, base64, os, time, xlrd
 from tempfile import NamedTemporaryFile
 import logging
 _logger = logging.getLogger(__name__)
-from openerp.exceptions import UserError, ValidationError
-# from datetime import datetime
-# from openerp.osv import osv,fields,orm
+from odoo.exceptions import UserError, ValidationError
 
 class import_control_budget(models.Model):
     _name = 'import.control.budget'
@@ -133,7 +123,7 @@ class import_control_budget(models.Model):
 #                     raise osv.except_osv('Алдаа', 'Индексийн алдаа %s -р мөр дээр ' % rowi)
 #             return True    
 # import_control_budget()
-    @api.multi
+    
     def import_data(self):
         labor_line_obj = self.env['labor.budget.line']
         material_line_obj = self.env['material.budget.line']
@@ -152,9 +142,7 @@ class import_control_budget(models.Model):
             book = xlrd.open_workbook(fileobj.name)
             
             sheet = book.sheet_by_index(0)
-            # print '\n\n\n sheet' , sheet 
             nrows = sheet.nrows
-            print '\n\n\n nrows' , nrows
             rowi = 1
             data = {}
             tasks_ids = []

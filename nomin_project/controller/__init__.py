@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-import budget_partner
+from . import budget_partner

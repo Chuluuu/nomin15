@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api, _
-from openerp.tools.translate import _
-from openerp.exceptions import UserError, ValidationError
+from odoo import models, fields, api, _
+from odoo.tools.translate import _
+from odoo.exceptions import UserError, ValidationError
 
 
 
@@ -30,7 +30,6 @@ class CreateContractWizard(models.TransientModel):
     control_budget_id = fields.Many2one('control.budget', string = 'Budget')
     employee_id = fields.Many2one('hr.employee',string = u'Хариуцагч')
     
-    @api.multi
     def action_create(self):
         budget = self.env['control.budget'].search([('id','=', self.control_budget_id.id)])
         budget_partner_comparison = self.env['budget.partner.comparison']
@@ -60,7 +59,6 @@ class CreateContractWizard(models.TransientModel):
                      'type': 'ir.actions.act_window',
                      'name': _('Register Call'),
                      'res_model': 'budget.partner.comparison',
-                     'view_type' : 'tree',
                      'view_mode' : 'form',
                      'search_view_id' : view_id,
                      'res_id':budget_partner_comparison.id,

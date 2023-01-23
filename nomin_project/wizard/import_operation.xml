@@ -1,31 +1,29 @@
-<openerp>
-	<data>		
-    	<record id="import_operation_task_view" model="ir.ui.view">
+<odoo>
+    <data>
+        <record id="import_operation_task_view" model="ir.ui.view">
             <field name="name">import.operation.task.view</field>
             <field name="model">import.operation.task</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Import operation task">
-                    <group colspan="4">                    	
-                    	<field name="data"/>                                                
+                    <group colspan="4">
+                        <field name="data"/>
                     </group>
                     <group colspan="4" col="6">
-                        <label string="" colspan="2"/>
                         <button icon="gtk-cancel" special="cancel" string="Close"/>
                         <button icon="gtk-execute" string="Execute" name="import_data" type="object"/>
-                   </group>
-               </form>
+                    </group>
+                </form>
             </field>
         </record>
         <record id="import_operation_task_view_action" model="ir.actions.act_window">
             <field name="name">Import operation task</field>
             <field name="res_model">import.operation.task</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="import_operation_task_view"/>
             <field name="target">new</field>
         </record>
-        
-        
-	</data>
-</openerp>
+
+
+    </data>
+</odoo>

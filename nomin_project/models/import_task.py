@@ -1,19 +1,11 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Asterisk Technologies LLC, Enterprise Management Solution    
-#    Copyright (C) 2007-2013 Asterisk Technologies LLC Co.,ltd (<http://www.erp.mn>). All Rights Reserved
-#
-#    Email : unuruu25@gmail.com
-#    Phone : 976 + 88005462
-#
-##############################################################################
-from openerp.tools.translate import _
-from openerp import api, fields, models, _
+
+from odoo.tools.translate import _
+from odoo import api, fields, models, _
 import time
-import openerp.netsvc, decimal, base64, os, time, xlrd
+import odoo.netsvc, decimal, base64, os, time, xlrd
 from tempfile import NamedTemporaryFile
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 from datetime import datetime
 import xlsxwriter
 from io import BytesIO
@@ -26,7 +18,7 @@ class ProjectBudgetExportImport(models.TransientModel):
     data=fields.Binary('Excel File')
     type= fields.Selection([('export','Export'),('import','Import')],string="type")    
 
-    @api.multi
+    
     def action_export(self):
         active_id = self.env.context and self.env.context.get('active_id', False) or False
         project_obj = self.env['project.project']
@@ -154,7 +146,7 @@ class ProjectBudgetExportImport(models.TransientModel):
 		}
         
         
-    @api.multi
+    
     def action_import(self):
         project_obj = self.env['project.project']
         active_id = self.env.context and self.env.context.get('active_id', False) or False
@@ -271,7 +263,7 @@ class ImporTask(models.TransientModel):
     data=fields.Binary('Excel File', required=True)
     
 
-    @api.multi
+    
     def import_data(self):
         task_obj = self.env['project.task']
         form = self.browse()

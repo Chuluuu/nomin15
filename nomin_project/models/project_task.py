@@ -1,28 +1,9 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
 
 import time
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, ValidationError
-from openerp.http import request
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError
+from odoo.http import request
 from datetime import datetime, date, timedelta
 # import datetime 
 # import time 
@@ -53,8 +34,8 @@ class deadline_reason(models.Model):
     _description ='Issue reason'
     _inherit = ['mail.thread']
     
-    name        = fields.Char(u'Нэр',required = True, track_visibility='onchange')
-    description = fields.Text(u'Тайлбар', track_visibility='onchange') 
+    name        = fields.Char(u'Нэр',required = True, tracking=True)
+    description = fields.Text(u'Тайлбар', tracking=True) 
 
     @api.model    
     def create(self,vals):
@@ -68,7 +49,7 @@ class deadline_reason(models.Model):
         else:
             raise ValidationError(_(u'Ийм нэртэй Төслийн даалгаварын үе үүссэн байна !'))
 
-    @api.multi    
+        
     def unlink(self):
         '''
             Төслийн даалгаварын үе устгах, Төсөлд ашигласан эсэхийг шалгах
@@ -88,13 +69,13 @@ class deadline_reason_line(models.Model):
     
     _name = 'task.deadline.reason.line'
     
-    task_id     = fields.Many2one('project.task')
+    task_id     = fields.Many2one('project.task', string="Project task")
     reason_id  = fields.Many2one('task.deadline.reason',required = True,string=u'Шалтгаан')
     description = fields.Text(string=u'Тайлбар')
     count       = fields.Float(string=u'Хугацаа хойшлуулсан хоногийн тоо',required = True)
     
 
-    @api.multi
+    
     def unlink(self):
         '''
             Даалгаварын хугацаа хойшилсон шалтгаан устгах даалгаварт ашигласан бол устгах боломжгүй
@@ -145,14 +126,14 @@ class task_tarif_line(models.Model):
     '''
         Даалгаварын Тарифт ажил
     '''
-    @api.multi
+    
     def _get_price(self):
         total = 0.0
         for line in self:
             total = line.work_id.unit_price
             line.price= total
     
-    @api.multi
+    
     def _get_total_price(self):
         total = 0.0
         for line in self:
@@ -195,7 +176,7 @@ class ProjecTaskInherit(models.Model):
     '''
         Даалгавар
     '''
-    @api.multi
+    
     @api.depends('task_work_service')
     def _get_total(self):
         '''
@@ -209,7 +190,7 @@ class ProjecTaskInherit(models.Model):
                              'tariff_price' : price 
                              })
     
-    @api.multi
+    
     def _is_user(self):
         '''
             Даалгавар хариуцагч эсэх мөн хариуцагчтай төлөвт байгаа эсэх
@@ -221,7 +202,7 @@ class ProjecTaskInherit(models.Model):
 
 
     
-    @api.multi
+    
     def _is_confirm_user(self):
         '''
             Даалгавар хариуцагч эсэх мөн хариуцагчтай төлөвт байгаа эсэх
@@ -263,7 +244,7 @@ class ProjecTaskInherit(models.Model):
             if project.task_state != 't_evaluate':
                 project.is_show_rating_user = False
             
-    @api.multi
+    
     def _is_comfirm(self):
         '''
             баталж дууссан эсэх
@@ -278,7 +259,7 @@ class ProjecTaskInherit(models.Model):
             if count == len(task.controller):
                 task.is_confirm = True
     
-    @api.multi
+    
     def _is_rating(self):
         '''
             Үнэлж дууссан эсэх
@@ -293,7 +274,7 @@ class ProjecTaskInherit(models.Model):
             if count == len(task.rating_users):
                 task.is_rating = True
     
-    @api.multi
+    
     def _get_total_percent(self):
         '''
             Үнэлгээний дундаж
@@ -309,7 +290,7 @@ class ProjecTaskInherit(models.Model):
                 total = percent/count
             task.total_percent = total
     
-    @api.multi
+    
     def _is_show_evaluate_button(self):
         '''
             Үнэлэх төлөвт оруулах товч харагдах эсэх
@@ -320,7 +301,7 @@ class ProjecTaskInherit(models.Model):
             else:
                 task.is_show_evaluate_button = False
             
-    @api.multi
+    
     def _is_show_user_button(self):
         '''
             Хариуцагчид оноох товч харагдах эсэх
@@ -334,7 +315,7 @@ class ProjecTaskInherit(models.Model):
                 else:
                     task.is_show_user_button = False
     
-    @api.multi
+    
     def _is_show_done(self):
         '''
             Хянах товч харагдах эсэх
@@ -358,7 +339,7 @@ class ProjecTaskInherit(models.Model):
                         task.is_show_done = False
                 else:
                     task.is_show_done = False
-    @api.multi
+    
     def _is_user_and_verifier(self):
         '''
             Даалгавар хариуцгагч , хянагч , төслийн менежер мөн эсэх
@@ -448,17 +429,17 @@ class ProjecTaskInherit(models.Model):
                                    ('t_evaluate',u'Үнэлэх'),
                                    ('t_done',u'Дууссан'),
                                    ('t_cancel',u'Цуцалсан'),
-                                   ('t_back',u'Хойшлуулсан')],default = 't_new',string='State', track_visibility='onchange')
+                                   ('t_back',u'Хойшлуулсан')],default = 't_new',string='State', tracking=True)
     
 #     child_task              = fields.Many2many('project.task','project_task_child_ids','parent_task_id','tasks_id', string = 'Child Task', compute=_get_parent)
     task_work_service       = fields.Many2many('work.service','project_task_work_sevice_id','work_id','task_id',string = 'Work service')
-    parent_task             = fields.Many2one('project.task', index=True,string = 'Parent Task', track_visibility='onchange')
+    parent_task             = fields.Many2one('project.task', index=True,string = 'Parent Task', tracking=True)
     work_graph              = fields.Many2one('project.task', index=True, string = 'Work Graph')
-    project_stage           = fields.Many2one('project.stage', index=True, string = 'Project Stage', track_visibility='onchange')
-    work_name               = fields.Char('Work Name', track_visibility='onchange')
+    project_stage           = fields.Many2one('project.stage', index=True, string = 'Project Stage', tracking=True)
+    work_name               = fields.Char('Work Name', tracking=True)
     back_state              = fields.Char('back_stage')
-    work_description        = fields.Text('Work Description', track_visibility='onchange')
-    description             = fields.Text('Description', track_visibility='onchange')
+    work_description        = fields.Text('Work Description', tracking=True)
+    description             = fields.Text('Description', tracking=True)
     is_user                 = fields.Boolean('is user',compute = _is_user)
     
     is_confirm_user         = fields.Boolean('is confirm user',compute = _is_confirm_user)
@@ -474,34 +455,35 @@ class ProjecTaskInherit(models.Model):
     agreed_price            = fields.Float('Agreed price')
     percent                 = fields.Integer('Rating percent')
     total_percent           = fields.Integer('Total percent',compute = _get_total_percent)
-    flow                    = fields.Integer('Flow', track_visibility='onchange')
+    flow                    = fields.Integer('Flow', tracking=True)
     stages                  = fields.One2many('task.stages.history','task_id')
     task_users              = fields.One2many('task.confirm.users','task_id','Task users')
     task_rating_users       = fields.One2many('task.rating.users','task_id','Task users')
     deadline_task           = fields.One2many('task.deadline.reason.line','task_id')
     progress1               = fields.Float('Ажилласан цагийн явц (%)',compute=_hours_get)
-    date_deadline           = fields.Date('Deadline', select=True, copy=False,track_visibility='onchange')
+    date_deadline           = fields.Date('Deadline', select=True, copy=False,tracking=True)
     count_date_deadline     = fields.Float(u'Хойшилсон хоногийн тоо',compute=_count_date_deadline)
     tarif_line              = fields.One2many('task.tarif.line','task_id',string = 'Tariff line')
-    customer_id             = fields.Many2one('hr.employee', 'Customer name', index=True, track_visibility='onchange')
-    customer_department     = fields.Many2one('hr.department', 'Customer Department', index=True, track_visibility='onchange')
+    customer_id             = fields.Many2one('hr.employee', 'Customer name', index=True, tracking=True)
+    customer_department     = fields.Many2one('hr.department', 'Customer Department', index=True, tracking=True)
     phone                   = fields.Char('Phone',compute=_get_phone)
     email                   = fields.Char('Email',compute=_get_email)
     planned_start_date      = fields.Date('Planned start date',readonly = True)
     planned_end_date        = fields.Date('Planned end date',readonly = True)
     ticket_id               = fields.Many2one('crm.helpdesk', index=True,string = u'Тикет')
     is_customer_id          = fields.Boolean(compute=_is_customer_id,string = 'Customer')
-    done_date = fields.Date(string="Done date", readonly=True, track_visibility='always', copy=False)
+    done_date = fields.Date(string="Done date", readonly=True, tracking=True, copy=False)
     operation_ids = fields.One2many('task.operation','task_id',string="Operation")
     verify_user_ids = fields.One2many('task.verify.users','task_id',string="task verify users")
     is_task_user = fields.Boolean(string="Bool",compute=_is_task_user)
+    user_id = fields.Many2one('res.users', 'Assigned to', index=True, tracking=True)
     @api.onchange('customer_id')
     def onchange_customer_id(self):
         self.update({
                     'customer_department':self.customer_id.department_id.id
                     })
      
-    @api.one
+    
     def copy(self, default=None):
         if default is None:
             default = {}
@@ -532,7 +514,7 @@ class ProjecTaskInherit(models.Model):
                 task.update({
                                  'agreed_price' : price 
                                  })
-    @api.multi
+    
     def write(self, vals):
         '''
             Дагагчид нэмэх
@@ -813,7 +795,7 @@ class ProjecTaskInherit(models.Model):
             is_verifier = False
             emp_obj = self.env['hr.employee']
             emp = emp_obj.search([('user_id','=',self._uid)])
-            if emp in self.task_verifier_users or self.env.user.has_group('project.group_project_admin'):
+            if emp in self.task_verifier_users or self.env.user.has_group('nomin_project.group_project_admin'):
                 is_verifier =True
             if not is_verifier:
                 raise ValidationError(_(u'Даалгаврын дуусах огноог өөрчлөх эрхгүй байна !!!'))
@@ -851,7 +833,7 @@ class ProjecTaskInherit(models.Model):
         
         return result
     
-    @api.multi
+    
     def unlink(self):
         for line in self:
             if line.task_state != 't_new':
@@ -859,7 +841,7 @@ class ProjecTaskInherit(models.Model):
         else:
             return super(ProjecTaskInherit, self).unlink()
     
-    @api.multi
+    
     def action_test(self):
         tasks = self.env['project.task'].search([('planned_start_date', '=', False)])
         for task in tasks:
@@ -890,7 +872,7 @@ class ProjecTaskInherit(models.Model):
                             'task_date_start':task.parent_task.date_deadline
                             })
 
-    @api.multi
+    
     def action_cheapen(self):
         '''
             Үнэ тохирох төлөвт оруулах
@@ -901,7 +883,7 @@ class ProjecTaskInherit(models.Model):
                     'planned_end_date':self.date_deadline
                     })
         
-    @api.multi
+    
     def action_cheapened(self):
         '''
             Үнэ тохирсон төлөвт оруулах
@@ -909,7 +891,7 @@ class ProjecTaskInherit(models.Model):
         self.write({'task_state':'t_cheapened'})
     
         
-    @api.multi
+    
     def action_user(self):
         '''
             Хариуцагчид оноох
@@ -1030,7 +1012,7 @@ class ProjecTaskInherit(models.Model):
                     'planned_end_date':self.date_deadline
                     })
         
-    @api.multi
+    
     def action_back_user(self):
         '''
             хариуцагчид буцаан оноох
@@ -1061,7 +1043,7 @@ class ProjecTaskInherit(models.Model):
             self.write({'task_state':'t_user',
                         'done_date': None,})
         
-    @api.multi
+    
     def action_start(self):
         '''
             Хийгдэж буй төлөвт оруулах хариуцагч байгаа эсэхийг шалгана
@@ -1072,7 +1054,7 @@ class ProjecTaskInherit(models.Model):
         else:
             raise ValidationError(_(u'Хариуцагч онооно уу!!!'))
         
-    @api.multi
+    
     def action_to_confirm(self):
         '''
             Батлах шатанд оруулах
@@ -1150,7 +1132,7 @@ class ProjecTaskInherit(models.Model):
             self.write({'task_state':'t_confirm'})
         else:
             raise ValidationError(_(u'Явцын хувь талбар 100 хувь болоогүй байна!!!'))
-    @api.multi
+    
     def action_to_evaluate(self):
         '''
             Үнэлэх шатанд оруулах
@@ -1160,7 +1142,7 @@ class ProjecTaskInherit(models.Model):
         else:
             raise ValidationError(_(u'Явцын хувь талбар 100 хувь болоогүй байна!!!'))
         
-    @api.multi
+    
     def action_cancel(self):
         '''
             цуцлах , төслийн менежер мөн эсэхийг шалгана
@@ -1173,7 +1155,7 @@ class ProjecTaskInherit(models.Model):
             else:
                 raise ValidationError(_(u'Төслийн менежер цуцлах эрхтэй'))
         
-    @api.multi
+    
     def action_draft(self):
         '''
             Шинэ төлөвт оруулах үнэлэсэн болон баталсан түүх цэвэрлэнэ
@@ -1186,7 +1168,7 @@ class ProjecTaskInherit(models.Model):
             history_confirm.unlink()
         self.write({'task_state':'t_new'})
         
-    @api.multi
+    
     def action_to_control(self):
         '''
             Хянах төлөвт оруулна явцын хувь талбар 100 болсон эсэхийг шалгана
@@ -1265,7 +1247,7 @@ class ProjecTaskInherit(models.Model):
         else:
             raise ValidationError(_(u'Явцын хувь талбар 100 хувь болоогүй байна!!!'))
         
-    @api.multi
+    
     def action_done(self):
         '''
             Дууссан төлөвт оруулах
@@ -1350,7 +1332,6 @@ class ProjecTaskInherit(models.Model):
                             email_template.sudo().send_mail(self.id)
                 self.write({'task_state':'t_evaluate'})
             elif self.task_type in ('work_graph','work_task'):
-                print'_________POLO_____________',self.controller
                 base_url = self.env['ir.config_parameter'].get_param('web.base.url')
                 action_id = self.env['ir.model.data'].get_object_reference('project', 'action_view_task')[1]
                 db_name = request.session.db
@@ -1382,7 +1363,6 @@ class ProjecTaskInherit(models.Model):
                     description = self.description
                 
                 if self.controller:
-                    print'_________POLO_____________',self.controller
                     for line in self.controller:
                         email = line.work_email
                         subject = u'"%s" салбарт "%s" төслийн "%s" таскыг батлах хүсэлт ирлээ.'%( self.department_id.name, self.project_id.name , self.name)
@@ -1439,7 +1419,7 @@ class ProjecTaskInherit(models.Model):
                     else :
                         self.write({'task_state':'t_confirm'})
         
-    @api.multi
+    
     def action_after(self):
         '''
             Хойшлуулсан төлөвт оруулах аль төлөвөөс хойшилсонг бүртгэх
@@ -1450,7 +1430,7 @@ class ProjecTaskInherit(models.Model):
                     'task_state':'t_back'
                     })
         
-    @api.multi
+    
     def action_back(self):
         if self.back_state == 't_cheapen':
             self.write({'task_state':'t_cheapen'})
@@ -1467,7 +1447,7 @@ class ProjecTaskInherit(models.Model):
         if self.verify_user_ids :
             self.verify_user_ids.unlink()
         
-    @api.multi
+    
     def action_confirm(self):
         '''
             Батлах товч, баталсан түүх хөтөлнө , сүүлийн хүн  баталхад баталсан төлөвт орно
@@ -1521,7 +1501,6 @@ class ProjecTaskInherit(models.Model):
                     description = self.description
                 
                 if self.rating_users:
-                    print'_________POLO_____________',self.rating_users
                     for line in self.rating_users:
                         email = line.work_email
                         subject = u'"%s" салбарт "%s" төслийн "%s" таскыг үнэлэх хүсэлт ирлээ.'%( self.department_id.name, self.project_id.name , self.name)
@@ -1562,7 +1541,7 @@ class ProjecTaskInherit(models.Model):
                             email_template.sudo().send_mail(self.id)
                 task.write({'task_state':'t_evaluate'})
     
-    @api.multi
+    
     def action_circle(self):
         '''
             Даалгавар давтаж үүсгэх цонх дуудах
@@ -1582,7 +1561,7 @@ class ProjecTaskInherit(models.Model):
                 'nodestroy': True,
                 'target': 'new',
             }
-    @api.multi
+    
     def action_evaluate(self):
         '''
             Даалгавар үнэлэх цонх дуудах
@@ -1606,8 +1585,8 @@ class ProjecTaskInherit(models.Model):
             Даалгаварын гүйцэтгэх хугацаа хэтэрсэн майл илгээх cron
         '''
         query = "SELECT id FROM project_task WHERE task_state not in ('t_done','t_cancel','t_back')";
-        cr.execute(query)
-        records = cr.dictfetchall()
+        self.env.cr.execute(query)
+        records = self.env.cr.dictfetchall()
         template_id2 = self.env['ir.model.data'].get_object_reference('nomin_project', 'project_task_alarm_email_template2')[1]
         
         for record in records:
@@ -1670,8 +1649,8 @@ class ProjecTaskInherit(models.Model):
             Даалгаварын эхлэх хугацаа болсон , эсвэл эхлэх хугацаа болоход 1 хоног дутуу байгаа талаар емайл илгээх
         '''
         query = "SELECT id FROM project_task WHERE task_state in ('t_new','t_cheapen','t_cheapened','t_user')";
-        cr.execute(query)
-        records = cr.dictfetchall()
+        self.env.cr.execute(query)
+        records = self.env.cr.dictfetchall()
         template_id = self.env['ir.model.data'].get_object_reference('nomin_project', 'project_task_alarm_email_template')[1]
         template_id1 = self.env['ir.model.data'].get_object_reference('nomin_project', 'project_task_alarm_email_template1')[1]
         
@@ -1708,7 +1687,6 @@ class ProjecTaskInherit(models.Model):
                 date_now.date()
                 date = datetime.strptime(task.task_date_start, '%Y-%m-%d')
                 if (date.date() - date_now.date()).days == 1:
-                    print 'task',task.name
                     data = {
                         'name': task.name,
                         'project':task.project_id.name,

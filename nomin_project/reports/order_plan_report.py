@@ -1,31 +1,12 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2014-Today OpenERP SA (<http://www.openerp.com>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
 
-from openerp import models, fields, api, _
+
+from odoo import models, fields, api, _
 from dateutil.relativedelta import relativedelta
 from lxml import etree
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 import xlwt
 from xlwt import *
-from StringIO import StringIO
 from datetime import date, datetime, timedelta
 import time
 from dateutil import rrule
@@ -37,7 +18,6 @@ class OrderPlanReport(models.TransientModel):
     '''Захиалгын ерөнхий тайлан
     '''
     _name = 'order.plan.report'
-    _inherit = 'abstract.report.model'
     _description = 'Helpdesk Coupon Report'
 
     
@@ -45,11 +25,11 @@ class OrderPlanReport(models.TransientModel):
     
     start_date = fields.Date(string=u'Эхлэх огноо', required=True)
     end_date = fields.Date(string=u'Дуусах огноо', required=True)
-    department_id = fields.Many2one('hr.department', string = 'Захиалагч салбар', ondelete="restrict", track_visibility='always')
-    project_manager_id = fields.Many2one('hr.employee', string='Төслийн менежер' , domain=[('parent_department','=',254)],track_visibility='always')
+    department_id = fields.Many2one('hr.department', string = 'Захиалагч салбар', ondelete="restrict", tracking=True)
+    project_manager_id = fields.Many2one('hr.employee', string='Төслийн менежер' , domain=[('parent_department','=',254)],tracking=True)
     project_state_name = fields.Many2one('project.state.name' , string='Ажлын явц')
 
-    @api.multi
+    
     def get_export_data(self,report_code,context=None):
         '''Тайлан экселруу импорт хийх
         '''

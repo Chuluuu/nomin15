@@ -1,28 +1,28 @@
 <?xml version="1.0"?>
-<openerp>
+<odoo>
     <data>
         <record model="ir.ui.view" id="project_tarif_task_report_form">
             <field name="name">project.tarif.task.report.form</field>
             <field name="model">project.tarif.task.report</field>
             <field name="arch" type="xml">
                 <form string="Тарифт ажлын дэлгэрэнгүй тайлан">
-                	<group>
+                    <group>
                         <field name="start_date"/>
                         <field name="end_date"/>
-					</group>
-					<group>
-	                    <group>
-	                        <field name="project_ids" widget="many2many_tags"/>
-	                        <field name="user_ids" widget="many2many_tags"/>
-	                        <field name="departments" widget="many2many_tags"/>
-	                    </group>
-	                    <group>
-	                        <field name="category_ids" widget="many2many_tags"/>
-	                        <field name="work_service" widget="many2many_tags"/>
-	                    </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="project_ids" widget="many2many_tags"/>
+                            <field name="user_ids" widget="many2many_tags"/>
+                            <field name="departments" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="category_ids" widget="many2many_tags"/>
+                            <field name="work_service" widget="many2many_tags"/>
+                        </group>
                     </group>
                     <footer>
-                        <button name="export_report" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/>
+                        <!-- <button name="export_report" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/> -->
                         <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
                 </form>
@@ -32,17 +32,11 @@
         <record model="ir.actions.act_window" id="action_project_tarif_task_report">
             <field name="name">Тарифт ажлын дэлгэрэнгүй тайлан</field>
             <field name="res_model">project.tarif.task.report</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="project_tarif_task_report_form"/>
             <field name="target">new</field>
         </record>
-        <menuitem
-            id= "menu_project_tarif_task_report"
-        	name = "Тарифт ажлын дэлгэрэнгүй тайлан"
-            parent="nomin_project.menu_project_reports"
-            sequence= "10"
-            action="action_project_tarif_task_report"
-        />
+        <menuitem id= "menu_project_tarif_task_report"
+        	name = "Тарифт ажлын дэлгэрэнгүй тайлан" parent="nomin_project.menu_project_reports" sequence= "10" action="action_project_tarif_task_report" />
     </data>
-</openerp>
+</odoo>

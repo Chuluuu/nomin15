@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api, _
-from openerp.tools.translate import _
-from openerp.exceptions import UserError, ValidationError
+from odoo import models, fields, api, _
+from odoo.tools.translate import _
+from odoo.exceptions import UserError, ValidationError
 
 
 
@@ -12,7 +12,7 @@ class refuse_reason_order(models.TransientModel):
     
     comment = fields.Text('Commit', required=True)
     
-    @api.multi
+    
     def refuse_order(self):
         context = self._context
         #commet = u'Татгалзсан шалтгаан: %s'%(self.comment)

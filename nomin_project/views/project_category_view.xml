@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
-    	
-    	<record model="ir.ui.view" id="project_category_view">
+<odoo>
+	<data>
+
+		<record model="ir.ui.view" id="project_category_view">
 			<field name="name">Project category</field>
 			<field name="model">project.category</field>
 			<field name="arch" type="xml">
@@ -17,30 +17,30 @@
 						<page string="Specifications">
 							<field name="specification_ids" widget="many2many_tags" options="{'no_create': True}"/>
 						</page>
-						
-						<page string = "Required attachment" >
+
+						<page string = "Required attachment">
 							<field name="line_ids" />
 						</page>
 
-						<page string = "Required attachment in task" >
+						<page string = "Required attachment in task">
 							<field name="task_line_ids"/>
 						</page>
-					</notebook>					
+					</notebook>
 					<div class="oe_chatter">
-                        <field name="message_ids" widget="mail_thread"/>
-                    </div>
+						<field name="message_ids" widget="mail_thread"/>
+					</div>
 				</form>
 			</field>
-		</record>		
-		
+		</record>
+
 		<record model="ir.ui.view" id="project_category_tree">
 			<field name="name">Project category tree</field>
 			<field name="model">project.category</field>
 			<field name="arch" type="xml">
-				<tree string="Project category" >
+				<tree string="Project category">
 					<field name="name"/>
 					<field name="description" />
-					<field name="line_ids"  />
+					<field name="line_ids" />
 				</tree>
 			</field>
 		</record>
@@ -55,10 +55,10 @@
 					<field name="project_type" required="1"/>
 					<field name="project_state" required="1"/>
 					<field name="confirm_state" required="1"/>
-					<field name="is_confirm"/>					
+					<field name="is_confirm"/>
 					<field name="department_id" options="{'no_create':True}" attrs="{'required':[('is_confirm','=',True)],'readonly':[('is_confirm','=',False)]}"/>
 					<field name="job_ids" widget="many2many_tags" options="{'no_create':True}" attrs="{'required':[('is_confirm','=',True)],'readonly':[('is_confirm','=',False)]}"/>
-				
+
 				</tree>
 			</field>
 		</record>
@@ -72,18 +72,17 @@
 					<field name="project_type" required="1"/>
 					<field name="task_type" required="1"/>
 					<field name="task_state" required="1"/>
-				</tree>				
+				</tree>
 			</field>
 		</record>
-		
+
 		<record id="action_project_catgeory_view" model="ir.actions.act_window">
-           <field name="name">Project category</field>
-           <field name="res_model">project.category</field>
-           <field name="view_type">form</field>
-           <field name="view_mode">tree,form</field>
-           <field name="domain">[]</field>
-           <field name="context">{}</field>    
-       </record>
+			<field name="name">Project category</field>
+			<field name="res_model">project.category</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+		</record>
 		<!-- PROJECT SPECIFICATION -->
 		<record model="ir.ui.view" id="project_specification_view">
 			<field name="name">Project specification</field>
@@ -92,39 +91,34 @@
 				<form>
 					<group>
 						<field name="name" required="1"/>
-					</group>					
-					
+					</group>
+
 					<div class="oe_chatter">
-                        <field name="message_ids" widget="mail_thread"/>
-                    </div>
+						<field name="message_ids" widget="mail_thread"/>
+					</div>
 				</form>
 			</field>
-		</record>		
-		
+		</record>
+
 		<record model="ir.ui.view" id="project_specification_tree">
 			<field name="name">Project specification tree</field>
 			<field name="model">project.specification</field>
 			<field name="arch" type="xml">
-				<tree string="Project specification" >
-					<field name="name"/>					
+				<tree string="Project specification">
+					<field name="name"/>
 				</tree>
 			</field>
 		</record>
-	
-		<record id="action_project_specification" model="ir.actions.act_window">
-           <field name="name">Project specification</field>
-           <field name="res_model">project.specification</field>
-           <field name="view_type">form</field>
-           <field name="view_mode">tree,form</field>
-           <field name="domain">[]</field>
-           <field name="context">{}</field>    
-       </record>
 
-	   <menuitem id="menu_action_project_specification" 
-		name="Project specification" 
-		action="action_project_specification" 
-		groups="project.group_project_admin"
-		parent="nomin_project.menu_project_config2" sequence="9"/>
+		<record id="action_project_specification" model="ir.actions.act_window">
+			<field name="name">Project specification</field>
+			<field name="res_model">project.specification</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+		</record>
+
+		<menuitem id="menu_action_project_specification" name="Project specification" action="action_project_specification" groups="group_project_admin" parent="nomin_project.menu_project_config2" sequence="9"/>
 
 		<!--  Project employee duty -->
 		<record model="ir.ui.view" id="project_employee_duty_view">
@@ -134,46 +128,37 @@
 				<form>
 					<group>
 						<field name="name" required="1"/>
-					</group>					
-					
+					</group>
+
 					<div class="oe_chatter">
-                        <field name="message_ids" widget="mail_thread"/>
-                    </div>
+						<field name="message_ids" widget="mail_thread"/>
+					</div>
 				</form>
 			</field>
-		</record>		
-		
+		</record>
+
 		<record model="ir.ui.view" id="project_employee_duty_tree">
 			<field name="name">Project employee duty tree</field>
 			<field name="model">project.employee.duty</field>
 			<field name="arch" type="xml">
-				<tree string="Project employee.duty" >
-					<field name="name"/>					
+				<tree string="Project employee.duty">
+					<field name="name"/>
 				</tree>
 			</field>
 		</record>
-	
+
 		<record id="action_project_employee_duty" model="ir.actions.act_window">
-           <field name="name">Project employee duty</field>
-           <field name="res_model">project.employee.duty</field>
-           <field name="view_type">form</field>
-           <field name="view_mode">tree,form</field>
-           <field name="domain">[]</field>
-           <field name="context">{}</field>    
-       </record>
+			<field name="name">Project employee duty</field>
+			<field name="res_model">project.employee.duty</field>
+			<field name="view_mode">tree,form</field>
+			<field name="domain">[]</field>
+			<field name="context">{}</field>
+		</record>
 
-	   <menuitem id="menu_action_project_employee_duty" 
-		name="Project employee duty" 
-		action="action_project_employee_duty" 
-		groups="project.group_project_admin"
-		parent="nomin_project.menu_project_config2" sequence="10"/>
-		
+		<menuitem id="menu_action_project_employee_duty" name="Project employee duty" action="action_project_employee_duty" groups="group_project_admin" parent="nomin_project.menu_project_config2" sequence="10"/>
 
-	   <menuitem id="action_project_category" 
-		name="Project category" 
-		action="action_project_catgeory_view" 
-		groups="project.group_project_admin"
-		parent="nomin_project.menu_project_config2" sequence="11"/>
-       
-    </data>
-</openerp>
+
+		<menuitem id="action_project_category" name="Project category" action="action_project_catgeory_view" groups="group_project_admin" parent="nomin_project.menu_project_config2" sequence="11"/>
+
+	</data>
+</odoo>

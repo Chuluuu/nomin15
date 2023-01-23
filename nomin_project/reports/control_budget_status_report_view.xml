@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<openerp>
+<odoo>
     <data>
         <record model="ir.ui.view" id="control_budget_status_report_form">
             <field name="name">control.budget.status.report.form</field>
@@ -10,7 +10,7 @@
                         <field name="project_id"/>
                     </group>
                     <footer>
-                        <button name="export_report" string="Export" class ="oe_highlight" type="object" icon="terp-graph"/>
+                        <!-- <button name="export_report" string="Export" class ="oe_highlight" type="object" icon="terp-graph"/> -->
                         <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
                 </form>
@@ -20,18 +20,12 @@
         <record model="ir.actions.act_window" id="action_control_budget_status_report">
             <field name="name">Төсвийн гүйцэтгэлийн тайлан</field>
             <field name="res_model">control.budget.status.report</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="control_budget_status_report_form"/>
             <field name="target">new</field>
         </record>
 
-        <menuitem
-            id= "menu_control_budget_status_report"
-        	name = "Төсвийн гүйцэтгэлийн тайлан"
-            parent="nomin_project.menu_project_reports"
-            sequence= "10"
-            action="action_control_budget_status_report"
-        />
+        <menuitem id= "menu_control_budget_status_report"
+        	name = "Төсвийн гүйцэтгэлийн тайлан" parent="nomin_project.menu_project_reports" sequence= "10" action="action_control_budget_status_report" />
     </data>
-</openerp>
+</odoo>

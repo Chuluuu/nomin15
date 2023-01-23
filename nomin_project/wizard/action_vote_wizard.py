@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api, _
-from openerp.tools.translate import _
-from openerp.exceptions import UserError, ValidationError
+from odoo import models, fields, api, _
+from odoo.tools.translate import _
+from odoo.exceptions import UserError, ValidationError
 import time
 from datetime import date, datetime, timedelta
 
@@ -29,7 +29,7 @@ class BudgetPartnersLine(models.TransientModel):
     employee_ids = fields.Many2many('hr.employee', string="Voted employees")
 
 
-    @api.multi
+    
     def action_vote(self):
         for partner in self:
             if partner.wizard_id.comparison_id:

@@ -1,44 +1,24 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2014-Today OpenERP SA (<http://www.openerp.com>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-from openerp import models, fields, api, _
+
+from odoo import models, fields, api, _
 from dateutil.relativedelta import relativedelta
 from lxml import etree
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 import xlwt
 from xlwt import *
-from StringIO import StringIO
+from io import StringIO
 from datetime import date, datetime, timedelta
 import time
 from dateutil import rrule
-import xlsxwriter
 
 class control_budget_status_report(models.TransientModel):
     _name = 'control.budget.status.report'
-    _inherit = 'abstract.report.model'
     _description = 'Control Budget Status Report'
 
     project_id = fields.Many2one('project.project', required=True,string=u'Төсөл')
     
 
-    @api.multi
+    
     def get_export_data(self,report_code,context=None):
         if context is None:
             context = {}
