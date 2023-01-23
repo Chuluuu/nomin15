@@ -18,7 +18,7 @@ class ProjectBudgetExportImport(models.TransientModel):
     data=fields.Binary('Excel File')
     type= fields.Selection([('export','Export'),('import','Import')],string="type")    
 
-    @api.multi
+    
     def action_export(self):
         active_id = self.env.context and self.env.context.get('active_id', False) or False
         project_obj = self.env['project.project']
@@ -146,7 +146,7 @@ class ProjectBudgetExportImport(models.TransientModel):
 		}
         
         
-    @api.multi
+    
     def action_import(self):
         project_obj = self.env['project.project']
         active_id = self.env.context and self.env.context.get('active_id', False) or False
@@ -263,7 +263,7 @@ class ImporTask(models.TransientModel):
     data=fields.Binary('Excel File', required=True)
     
 
-    @api.multi
+    
     def import_data(self):
         task_obj = self.env['project.task']
         form = self.browse()

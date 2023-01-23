@@ -51,7 +51,6 @@ class project_cicle_task(models.Model):
                     })
         return res
         
-    @api.multi
     def action_create(self):
         '''
             Даалгавар давтаж үүсгэх товч

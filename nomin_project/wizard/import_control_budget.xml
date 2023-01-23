@@ -11,7 +11,7 @@
                         <field name="data" colspan="4" readonly="0"/>
                     </group>
                     <group colspan="4" col="6">
-                        <label string="файл" colspan="2"/>
+                        <!-- <label string="файл" for="file" colspan="2"/> -->
                         <button icon="gtk-cancel" special="cancel" string="Close"/>
                         <button icon="gtk-execute" string="Execute" name="import_data" type="object"/>
                     </group>

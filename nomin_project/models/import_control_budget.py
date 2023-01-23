@@ -123,7 +123,7 @@ class import_control_budget(models.Model):
 #                     raise osv.except_osv('Алдаа', 'Индексийн алдаа %s -р мөр дээр ' % rowi)
 #             return True    
 # import_control_budget()
-    @api.multi
+    
     def import_data(self):
         labor_line_obj = self.env['labor.budget.line']
         material_line_obj = self.env['material.budget.line']
@@ -142,9 +142,7 @@ class import_control_budget(models.Model):
             book = xlrd.open_workbook(fileobj.name)
             
             sheet = book.sheet_by_index(0)
-            # print '\n\n\n sheet' , sheet 
             nrows = sheet.nrows
-            print '\n\n\n nrows' , nrows
             rowi = 1
             data = {}
             tasks_ids = []

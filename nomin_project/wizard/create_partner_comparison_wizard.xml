@@ -134,8 +134,9 @@
 						<group>
 							<field name="desc_name"/>
 							<field name="employee_id" required="1"/>
-							<field name="type_id" options="{'no_create': True}" domain="[('parent_id','=',False)]"/>
-							<field name="child_type_id" options="{'no_create': True}" domain="[('parent_id','!=',False)]"/>
+							<!-- TODO FIX LATER -->
+							<!-- <field name="type_id" options="{'no_create': True}" domain="[('parent_id','=',False)]"/>
+							<field name="child_type_id" options="{'no_create': True}" domain="[('parent_id','!=',False)]"/> -->
 						</group>
 						<group>
 							<field name="task_id" domain="[('task_state','=','t_done')]"/>

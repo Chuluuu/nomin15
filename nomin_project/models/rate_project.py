@@ -8,7 +8,8 @@ from fnmatch import translate
 from odoo.http import request
 import odoo.tools
 
-class rate_project_perform(models.TransientModel):
+class rate_project_perform(models.Model):
+    # Changed TransientModel to Model
     _name ='rate.project.perform'
     
     '''
@@ -39,7 +40,7 @@ class rate_project_perform(models.TransientModel):
                     })
         return res
     
-    @api.multi    
+        
     def rate_button(self):
         '''
            Төсөл үнэлэх Товч, үнэлсэн талаар түүх хөтөлнө 1-100 хооронд үнэлнэ

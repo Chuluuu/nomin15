@@ -1,25 +1,24 @@
 # -*- coding: utf-8 -*-
 
-from odooo import models, fields, api, _
+from odoo import models, fields, api, _
 from dateutil.relativedelta import relativedelta
 from lxml import etree
 from odoo.exceptions import UserError
 import xlwt
 from xlwt import *
-from StringIO import StringIO
+from io import StringIO
 from datetime import date, datetime, timedelta
 import time
 from dateutil import rrule
 
 class control_budget_status_report(models.TransientModel):
     _name = 'control.budget.status.report'
-    _inherit = 'abstract.report.model'
     _description = 'Control Budget Status Report'
 
     project_id = fields.Many2one('project.project', required=True,string=u'Төсөл')
     
 
-    @api.multi
+    
     def get_export_data(self,report_code,context=None):
         if context is None:
             context = {}

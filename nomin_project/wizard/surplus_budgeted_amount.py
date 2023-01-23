@@ -98,7 +98,7 @@ class SurplusBudgetedAmount(models.TransientModel):
     
 
 
-    @api.multi
+    
     def action_surplus(self):
         project = self.env['project.project'].browse(self._context.get('active_ids', []))
         project.button_check = True
@@ -180,7 +180,7 @@ class EvaluatePerform(models.TransientModel):
     line_ids = fields.One2many('perform.line','perform_id', string="Perform line")
 
   
-    @api.multi
+    
     def action_evaluate(self):    
         project = self.env['project.project'].browse(self._context.get('active_ids', []))
         project_perform = self.env['project.perform']
@@ -230,7 +230,7 @@ class ReturnState(models.TransientModel):
     reason = fields.Text(string="Шалтгаан")
 
   
-    @api.multi
+    
     def action_return(self):    
         project = self.env['project.project'].browse(self._context.get('active_ids', []))
 
@@ -309,7 +309,7 @@ class ProjectCancel(models.TransientModel):
     cancel_reason = fields.Text(string="Цуцлах шалтгаан")
 
   
-    @api.multi
+    
     def action_cancel(self):    
         project = self.env['project.project'].browse(self._context.get('active_ids', []))
 
@@ -341,7 +341,7 @@ class ProjectBack(models.TransientModel):
     project_back_day = fields.Integer(string="Хойшлуулах өдрийн тоо")
 
   
-    @api.multi
+    
     def action_back(self):    
         project = self.env['project.project'].browse(self._context.get('active_ids', []))
 

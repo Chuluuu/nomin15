@@ -6,14 +6,13 @@ from lxml import etree
 from odoo.exceptions import UserError
 import xlwt
 from xlwt import *
-from StringIO import StringIO
+from io import StringIO
 from datetime import date, datetime, timedelta
 import time
 from dateutil import rrule
 
 class project_issue_status_report(models.TransientModel):
     _name = 'project.issue.status.report'
-    _inherit = 'abstract.report.model'
     _description = 'Project Issue Status Report'
     
     project_id = fields.Many2many(comodel_name='project.project',string=u'Төсөл')
@@ -21,7 +20,7 @@ class project_issue_status_report(models.TransientModel):
     reason_id = fields.Many2many(comodel_name='task.deadline.reason', string=u'Шалтгаан')
     tag_ids = fields.Many2many(comodel_name='project.tags', string=u'Пайз')
     
-    @api.multi
+    
     def get_export_data(self,report_code,context=None):
         if context is None:
             context = {}

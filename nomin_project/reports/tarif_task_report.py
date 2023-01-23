@@ -13,7 +13,6 @@ from dateutil import rrule
 
 class project_tarif_task_report(models.TransientModel):
     _name = 'project.tarif.task.report'
-    _inherit = 'abstract.report.model'
     _description = 'Project Tarif Task Report'
     
     @api.model
@@ -37,7 +36,7 @@ class project_tarif_task_report(models.TransientModel):
     category_ids = fields.Many2many(comodel_name='knowledge.store.category', string=u'Тарифт ажлын ангилал')
     work_service = fields.Many2many(comodel_name='work.service',string=u'Тарифт ажил')
     
-    @api.multi
+    
     def get_export_data(self,report_code,context=None):
         if context is None:
             context = {}

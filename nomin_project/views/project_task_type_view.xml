@@ -15,9 +15,12 @@
             </field>
         </record>
 
-        <record id="project.task_type_edit" model="ir.ui.view">
+        <record id="task_type_edit_inherit" model="ir.ui.view">
             <field name="name">project.task.type.form</field>
             <field name="model">project.task.type</field>
+            <field name="priority">1</field>
+            <field name="mode">primary</field>
+            <field name="inherit_id" ref="project.task_type_edit"/>
             <field name="arch" type="xml">
                 <form string="Task Stage">
                     <group>

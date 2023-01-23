@@ -34,19 +34,19 @@ class BudgetPartnerComparison(models.Model):
         if self.sudo().control_budget_id.is_old:
             self.is_old = True
             
-    name = fields.Char(string='Дугаар' ,tracking='onchange' ,default='New')
-    desc_name = fields.Char(string = "Тодорхойлох нэр",tracking='onchange')
+    name = fields.Char(string='Дугаар' ,tracking=True ,default='New')
+    desc_name = fields.Char(string = "Тодорхойлох нэр",tracking=True)
     control_budget_id = fields.Many2one('control.budget', string = 'Хяналтын төсөв')
     project_id = fields.Many2one('project.project', string = 'Төсөл')
     task_id = fields.Many2one('project.task', string = u'Ажлын даалгавар')   
     task_graph_id = fields.Many2one('project.task', string = u'Ажлын зураг')
-    employee_id = fields.Many2one('hr.employee',string = u'Хариуцагч' ,tracking='onchange')
-    type_id = fields.Many2one('tender.type',  string = u'Ангилал' ,tracking='onchange')
+    employee_id = fields.Many2one('hr.employee',string = u'Хариуцагч' ,tracking=True)
+    type_id = fields.Many2one('tender.type',  string = u'Ангилал' ,tracking=True)
     child_type_id = fields.Many2one('tender.type', string = u'Дэд ангилал')
     is_verify = fields.Boolean(string = "Баталгаат хугацаатай эсэх", default=False)
     confirmed_time = fields.Integer(string ='Баталгаат хугацаа(сараар)')
-    date_start = fields.Date(string ='Зарлах огноо' , tracking='onchange')
-    date_end = fields.Date(string ='Хаах огноо', tracking='onchange')
+    date_start = fields.Date(string ='Зарлах огноо' , tracking=True)
+    date_end = fields.Date(string ='Хаах огноо', tracking=True)
     # is_performance_percent = fields.Boolean(string = "Гүйцэтгэлийн баталгаа", default=False)
     # performance_percent = fields.Integer(string ='Гүйцэтгэлийн хувь')
     description = fields.Text(string ='Тодорхойлолт')
@@ -70,7 +70,7 @@ class BudgetPartnerComparison(models.Model):
                                     ('management',u'Удирдлагад илгээгдсэн'),
                                     ('winner',u'Шалгарсан'),
                                     ('cancelled',u'Цуцлагдсан'),                            
-                                    ], u'Төлөв',  default = 'draft' ,tracking='onchange')
+                                    ], u'Төлөв',  default = 'draft' ,tracking=True)
 
     new_material_cost_ids = fields.One2many('comparison.material.line','partner_comparison_id',string = u'Материалын зардал')
     material_cost_ids = fields.One2many('comparison.material.line','partner_comparison_id',string = u'Материалын зардал')

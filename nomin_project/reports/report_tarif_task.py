@@ -2,7 +2,6 @@
 
 from odoo import models, fields, api
 from odoo.tools.translate import _
-from odoo.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
 # from operator import itemgetter
 from odoo.exceptions import UserError, ValidationError
 # import logging
@@ -60,7 +59,7 @@ class PrintTarifTask(models.AbstractModel):
     #     }
     #     return report_obj.render(cr, 1, ids, 'nomin_project.report_tarif_task', docargs, context=context)
 
-    @api.multi
+    
     def render_html(self, data):
         task_obj = self.env['project.task']
         report = self.env['report']._get_report_from_name('nomin_project.report_tarif_task')

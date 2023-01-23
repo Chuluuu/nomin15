@@ -31,7 +31,7 @@ class ImplementedTasks(models.TransientModel):
 	line_ids = fields.One2many('implemented.task.line','line_id',string="Хийгдсэн ажлууд")
 
 
-	@api.multi
+	
 	def _add_followers(self,user_ids):
 		'''Add followers
 		'''
@@ -145,11 +145,11 @@ class OrderPageReceive(models.TransientModel):
 	order_name = fields.Char(string='Захиалгын нэр')
 	order_description = fields.Char(string='Зорилт')
 	cost_type = fields.Selection([('cost_in','Дотоод зардал'),('payment','Нэг удаагийн төлбөр'),('rent_cost','Түрээсийн зардалд шингээх (МТС)'),('rent_cost_other','Түрээсийн зардалд шингээх (Бусад: __________________)')], string='Зардлын төрөл')
-	is_approve = fields.Boolean(string='Захиалгатай холбоотой ажлуудыг хүлээн авч баталгаажуулж байна', default=False,track_visibility='onchange')
-	is_reject = fields.Boolean(string='Дээр дутуу хэмээн тэмдэглэгдсэн ажлуудын гүйцэтгэлийг хүлээн авахаас өмнө баталгаажуулах боломжгүй', default=False,track_visibility='onchange')
+	is_approve = fields.Boolean(string='Захиалгатай холбоотой ажлуудыг хүлээн авч баталгаажуулж байна', default=False,tracking=True)
+	is_reject = fields.Boolean(string='Дээр дутуу хэмээн тэмдэглэгдсэн ажлуудын гүйцэтгэлийг хүлээн авахаас өмнө баталгаажуулах боломжгүй', default=False,tracking=True)
 	line_ids = fields.One2many('order.page.receive.line','line_id',string="Order page receive line")
 
-	@api.multi
+	
 	def to_receive(self):
 
 		

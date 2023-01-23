@@ -10,12 +10,12 @@ from odoo.tools.translate import _
 class LaborCostSettings(models.Model):
     _name ="labor.cost.settings"
     _description = 'labor cost settings'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    engineer_salary= fields.Float(string="Инженер техникийн ажилчдын цалингийн хувь", track_visibility='onchange')
-    extra_salary = fields.Float(string="Нэмэгдэл цалингийн хувь", track_visibility='onchange')
-    social_insurance_rate = fields.Float(string="Нийгмийн даатгалын хувь" , track_visibility='onchange')
-    habe_percent = fields.Float(string="ХАБЭ хувь", track_visibility='onchange')
+    engineer_salary= fields.Float(string="Инженер техникийн ажилчдын цалингийн хувь", tracking=True)
+    extra_salary = fields.Float(string="Нэмэгдэл цалингийн хувь", tracking=True)
+    social_insurance_rate = fields.Float(string="Нийгмийн даатгалын хувь" , tracking=True)
+    habe_percent = fields.Float(string="ХАБЭ хувь", tracking=True)
 
     @api.model
     def create(self,vals):

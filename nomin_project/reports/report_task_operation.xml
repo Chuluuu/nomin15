@@ -223,7 +223,7 @@
 			<field name="dpi">90</field>
 		</record>
 
-		<record id="nomin_project.action_task_operation_report" model="ir.actions.report.xml">
+		<record id="nomin_project.action_task_operation_report" model="ir.actions.report">
 			<field name="paperformat_id" ref="nomin_project.paperformat_task_operation" />
 		</record>
 	</data>

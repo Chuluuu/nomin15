@@ -2,7 +2,6 @@
 
 from odoo import models, fields, api
 from odoo.tools.translate import _
-from odoo.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
 from operator import itemgetter
 from odoo.exceptions import UserError, ValidationError
 
@@ -13,7 +12,7 @@ class PrintOrderRequest(models.AbstractModel):
     _name = 'report.nomin_project.budget_partner_comparison_report'
 
 
-    @api.multi
+    
     def render_html(self, data):
         report = self.env['report']._get_report_from_name('nomin_project.budget_partner_comparison_report')
 

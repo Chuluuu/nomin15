@@ -12,7 +12,7 @@ class ImportOperationTask(models.TransientModel):
 	data = fields.Binary(string='File', required=True)
 
 
-	@api.multi
+	
 	def import_data(self):	       
 		form = self
 		fileobj = NamedTemporaryFile('w+')

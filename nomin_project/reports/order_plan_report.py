@@ -18,7 +18,6 @@ class OrderPlanReport(models.TransientModel):
     '''Захиалгын ерөнхий тайлан
     '''
     _name = 'order.plan.report'
-    _inherit = 'abstract.report.model'
     _description = 'Helpdesk Coupon Report'
 
     
@@ -26,11 +25,11 @@ class OrderPlanReport(models.TransientModel):
     
     start_date = fields.Date(string=u'Эхлэх огноо', required=True)
     end_date = fields.Date(string=u'Дуусах огноо', required=True)
-    department_id = fields.Many2one('hr.department', string = 'Захиалагч салбар', ondelete="restrict", track_visibility='always')
-    project_manager_id = fields.Many2one('hr.employee', string='Төслийн менежер' , domain=[('parent_department','=',254)],track_visibility='always')
+    department_id = fields.Many2one('hr.department', string = 'Захиалагч салбар', ondelete="restrict", tracking=True)
+    project_manager_id = fields.Many2one('hr.employee', string='Төслийн менежер' , domain=[('parent_department','=',254)],tracking=True)
     project_state_name = fields.Many2one('project.state.name' , string='Ажлын явц')
 
-    @api.multi
+    
     def get_export_data(self,report_code,context=None):
         '''Тайлан экселруу импорт хийх
         '''

@@ -10,7 +10,7 @@
                         <field name="project_id"/>
                     </group>
                     <footer>
-                        <button name="export_report" string="Export" class ="oe_highlight" type="object" icon="terp-graph"/>
+                        <!-- <button name="export_report" string="Export" class ="oe_highlight" type="object" icon="terp-graph"/> -->
                         <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
                 </form>

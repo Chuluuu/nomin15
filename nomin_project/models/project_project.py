@@ -37,7 +37,7 @@ class cancel_project(models.Model):
     '''
     
     _name = 'cancel.project.project'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     description = fields.Text('Description')
     project_id  = fields.Many2one('project.project', index=True)
@@ -56,7 +56,7 @@ class cancel_project(models.Model):
                     })
         return res
     
-    @api.multi
+    
     def send_mail(self):
         '''
             Төсөл шалтгаан бичээд цуцлах
@@ -159,7 +159,7 @@ class transfer_user(models.Model):
             project_checker_ids.append(emp.id)
         return {'domain':{'employee':[('id','in',emp_ids.ids),('id','not in',project_checker_ids)]}}
     
-    @api.multi
+    
     def transfer_action(self):
         '''
             Ацагласан ажилчин санал өгөх ажилчид дээр нэмэгдэж ажилчин ацагласан талаар баталсан түүх талбарт лог хөтлөх 
@@ -199,7 +199,7 @@ class project_project(models.Model):
         return self.env.cr.fetchone()[0]
 
 
-    @api.multi
+    
     def _is_show_project_checkers(self):
         '''
            Нэвтэрсэн хэрэглэгчийн холбоотой ажилтан нь төслийн хянагч мөн эсэх
@@ -217,7 +217,7 @@ class project_project(models.Model):
             if project.state != 'request':
                 project.is_show_project_checkers = False
                 
-    @api.multi
+    
     def _is_show_project_team(self):
         '''
            Нэвтэрсэн хэрэглэгчийн холбоотой ажилтан нь төслийн багт байгаа эсэх
@@ -229,7 +229,7 @@ class project_project(models.Model):
             if emp in project.team_users:
                 project.is_show_project_team = True
 
-    @api.multi
+    
     def _is_show_project_evaluator(self):
         '''
            Нэвтэрсэн хэрэглэгчийн холбоотой ажилтан нь төслийн батлагч мөн эсэх
@@ -244,7 +244,7 @@ class project_project(models.Model):
                 if emp == users.confirmer and users.role == 'evaluator':
                     project.is_show_project_evaluator = False
     
-    @api.multi
+    
     def _is_comfirm(self):
         '''
            Төслийн Хянагчид санал өгч дууссан эсэх
@@ -262,7 +262,7 @@ class project_project(models.Model):
             if count == len(project.project_checkers):
                 project.is_comfirm = True
     
-    @api.multi
+    
     def _is_done(self):
         '''
            Төслийн Үнэлэгчид үнэлгээ өгч дууссан эсэх
@@ -277,7 +277,7 @@ class project_project(models.Model):
             if count == len(project.evaluator):
                 project.is_done = True
     
-    @api.multi
+    
     def _is_show_project_verifier(self):
         '''
            Батлах хэрэглэгч мөн эсэх
@@ -291,7 +291,7 @@ class project_project(models.Model):
             if project.state != 'request':
                 project.is_show_project_verifier = False
                 
-    @api.multi
+    
     def _show_button_request(self):
         '''
            Хүсэлт товч харагдах эсэх
@@ -302,7 +302,7 @@ class project_project(models.Model):
             else: 
                 project.show_button_request = False
     
-    @api.multi
+    
     def _show_button_eval(self):
         '''
            Төсөл үнэлэх эсэх
@@ -313,7 +313,7 @@ class project_project(models.Model):
             else: 
                 project.show_button_eval = False
     
-    @api.multi
+    
     def _show_button_start(self):
         '''
            Эхлэх товч харагдах нөхцөл
@@ -327,7 +327,7 @@ class project_project(models.Model):
                 else:
                     project.show_button_start = False
             
-    @api.multi
+    
     def _total_percent(self):
         '''
           Нийт үнэлгээний дундаж
@@ -341,7 +341,7 @@ class project_project(models.Model):
                     count += 1
                 project.total_percent = total/count
         
-    @api.multi
+    
     def _is_done_all_task(self):
         '''
           Бүх даалгавар дууссан эсэх
@@ -353,7 +353,7 @@ class project_project(models.Model):
                     project.is_done_all_task = False
                     
     
-    @api.multi
+    
     def _is_done_all_control_budget(self):
         '''
           Бүх Хяналтын төсөв дууссан эсэх
@@ -365,7 +365,7 @@ class project_project(models.Model):
                 if budget.state != 'done' and budget.state != 'cancel' and budget.state != 'close':
                     project.is_done_all_control_budget = False
     
-    @api.multi
+    
     def _is_project_evaluater(self):
         '''
           Төслийн үнэлэгч мөн эсэх 
@@ -375,13 +375,11 @@ class project_project(models.Model):
         for project in self:
             project.is_project_evaluater = False
             if emp in project.evaluator:
-                print 'yes'
                 project.is_project_evaluater = True
             for users in project.project_users:
                 if emp == users.confirmer and users.role == 'evaluator':
-                    print 'no'
                     project.is_project_evaluater = False
-    @api.multi
+    
     def _is_evaluate_done(self):
         '''
           Төсөлд үнэлгээ өгч дууссан эсэх 
@@ -396,7 +394,7 @@ class project_project(models.Model):
             if count == len(project.evaluator):
                 project.is_evaluate_done = True
     
-    @api.multi
+    
     def _control_budget_count(self):
         '''Хяналтын төсвийн тоо
         '''
@@ -404,7 +402,7 @@ class project_project(models.Model):
             order.control_budget_count = len(self.env['control.budget'].sudo().search([('project_id','=',order.id),('state','not in',['draft','cancel'])])) or 0
         return True
     
-    @api.multi
+    
     def _control_budget_count_of_parent(self):
         '''эцэг төслөөс үүссэн дэд төслүүдийн Хяналтын төсвийн тоо
         '''
@@ -412,7 +410,7 @@ class project_project(models.Model):
             order.control_budget_count_of_parent = len(self.env['control.budget'].sudo().search([('project_id.parent_project','=',order.id),('state','not in',['draft','cancel'])])) or 0
         return True
     
-    @api.multi
+    
     def _contract_count(self):
         '''Гэрээний тоо
         '''
@@ -420,7 +418,7 @@ class project_project(models.Model):
             order.contract_count = len(self.env['contract.management'].sudo().search([('project_id','=',order.id),('state','not in',['draft','canceled'])])) or 0
         return True
     
-    @api.multi
+    
     def _contract_count_of_parent(self):
         '''эцэг төслөөс үүссэн дэд төслүүдийн Гэрээний тоо
         '''
@@ -428,7 +426,7 @@ class project_project(models.Model):
             order.contract_count_of_parent = len(self.env['contract.management'].sudo().search([('project_id.parent_project','=',order.id),('state','not in',['draft','canceled'])])) or 0
         return True
 
-    @api.multi
+    
     def _payment_request_count(self):
         '''Дэд төсөл дээрх төлбөрийн хүсэлтийн тоо
         '''
@@ -436,7 +434,7 @@ class project_project(models.Model):
             order.payment_request_count = len(self.env['payment.request'].sudo().search([('project_id','=',order.id),('state','not in',['draft','cancel'])])) or 0
         return True
     
-    @api.multi
+    
     def _payment_request_count_of_parent(self):
         '''эцэг төслөөс үүссэн дэд төслүүдийн төлбөрийн хүсэлтийн тоо
         '''
@@ -444,7 +442,7 @@ class project_project(models.Model):
             order.payment_request_count_of_parent = len(self.env['payment.request'].sudo().search([('project_id.parent_project','=',order.id),('state','not in',['draft','cancel'])])) or 0
         return True
 
-    @api.multi
+    
     def _purchase_requisition_count(self):
         '''Худалдан авалтын шаардахын тоо
         '''
@@ -453,7 +451,7 @@ class project_project(models.Model):
         return True
     
 
-    @api.multi
+    
     def _purchase_requisition_count_of_parent(self):
         '''Эцэг төслөөс үүссэн дэд төслүүдийн худалдан авалтын шаардахын тоо
         '''
@@ -461,7 +459,7 @@ class project_project(models.Model):
             order.purchase_requisition_count_of_parent = len(self.env['purchase.requisition'].sudo().search([('project_id.parent_project','=',order.id),('state','not in',['draft','canceled'])])) or 0
         return True
 
-    @api.multi
+    
     def _subproject_count(self):
         '''Дэд төслүүдийн тоо
         '''
@@ -469,7 +467,7 @@ class project_project(models.Model):
             order.subproject_count = len(self.env['project.project'].sudo().search([('parent_project','=',order.id)])) or 0            
         return True
      
-    @api.multi
+    
     def _contract_performance(self):
         '''Гэрээний гүйцэтгэлийн үнэлгээ
         '''
@@ -541,23 +539,18 @@ class project_project(models.Model):
     
     def _is_button_clicker(self):
         for project in self:	
-            print "\n\nButton clickers", self
-        #     for user in project.button_clickers:
-        #         if user.id == self.env.user.id:
-        #             project.button_clicker = True
-
             project.button_clicker=project.state_handler(project.state_new,'validate_button_clicker')
     
 
-    department_id               = fields.Many2one('hr.department', string = 'Department',required = True, track_visibility='onchange')
-    project_stage               = fields.Many2many('project.stage','project_projetc_stages','project_id','stage_id', string = 'Project Stage', required = True, track_visibility='onchange')
-    perform                     = fields.Many2many('evaluation.indicators', string = 'Rating perform' ,states={'finished': [('required', True)]}, track_visibility='onchange')
-    perform_new                 = fields.Many2many('evaluation.indicators', 'project_perform_rel','project_id','perform_id',string = 'Perform new' , track_visibility='onchange')
+    department_id               = fields.Many2one('hr.department', string = 'Department',required = True, tracking=True)
+    project_stage               = fields.Many2many('project.stage','project_projetc_stages','project_id','stage_id', string = 'Project Stage', required = True, tracking=True)
+    perform                     = fields.Many2many('evaluation.indicators', string = 'Rating perform' ,states={'finished': [('required', True)]}, tracking=True)
+    perform_new                 = fields.Many2many('evaluation.indicators', 'project_perform_rel','project_id','perform_id',string = 'Perform new' , tracking=True)
     transfer_user               = fields.Many2one('hr.employee',string=u'Ацаглах ажилтан')
-    state                       = fields.Selection(STATE_SELECTION,string = 'Status', required=True, copy=False , default = 'draft', track_visibility='onchange')
-    state_new                   = fields.Selection(STATE_SELECTION_NEW,string = 'Status', required=True, copy=False , default = 'draft', track_visibility='onchange')
-    state_comfirm               = fields.Boolean(string='Project confirm',default = True, readonly=True, states={'draft': [('readonly', False)]}, track_visibility='onchange')
-    state_eval                  = fields.Boolean(string='Project evaluate',default = True, readonly=True, states={'draft': [('readonly', False)]}, track_visibility='onchange')
+    state                       = fields.Selection(STATE_SELECTION,string = 'Status', required=True, copy=False , default = 'draft', tracking=True)
+    state_new                   = fields.Selection(STATE_SELECTION_NEW,string = 'Status', required=True, copy=False , default = 'draft', tracking=True)
+    state_comfirm               = fields.Boolean(string='Project confirm',default = True, readonly=True, states={'draft': [('readonly', False)]}, tracking=True)
+    state_eval                  = fields.Boolean(string='Project evaluate',default = True, readonly=True, states={'draft': [('readonly', False)]}, tracking=True)
     is_show_project_checkers    = fields.Boolean(u'Санал өгөх ажилчид',compute = _is_show_project_checkers)
     is_show_project_team        = fields.Boolean(u'Төслийн баг',compute = _is_show_project_team)
     is_show_project_evaluator   = fields.Boolean(u'Төслийн үнэлэгч',compute = _is_show_project_evaluator)
@@ -593,9 +586,9 @@ class project_project(models.Model):
     voters = fields.Many2many('hr.employee','project_main_hr_employee_rel','project_id','emp_id',string = u'Санал өгсөн ажилчид new')
     is_voter              = fields.Boolean(string='Is voter',default=False, compute=_is_voter)
     button_clicker             = fields.Boolean(string='Button clicker',default=False, compute=_is_button_clicker)
-    return_reason = fields.Char(string="Буцаасан шалтгаан" , track_visibility='onchange' )
-    cancel_reason = fields.Char(string="Цуцалсан шалтгаан" , track_visibility='onchange' )
-    back_reason = fields.Char(string="Хойшлуулсан шалтгаан" , track_visibility='onchange' )
+    return_reason = fields.Char(string="Буцаасан шалтгаан" , tracking=True )
+    cancel_reason = fields.Char(string="Цуцалсан шалтгаан" , tracking=True )
+    back_reason = fields.Char(string="Хойшлуулсан шалтгаан" , tracking=True )
     
 
     def _project_flow_cron(self ,cr, uid):
@@ -835,7 +828,7 @@ class project_project(models.Model):
                           'user_id':[('id','in',manager_user_ids.ids)]
                           }}
     
-    @api.multi
+    
     def transfer_button(self):
         '''Ацаглах товч
         '''
@@ -852,7 +845,7 @@ class project_project(models.Model):
             'target': 'new',
         }
     
-    @api.multi
+    
     def action_import(self):
         ''' Төсөл хөрөнгө оруулалт
         '''        
@@ -868,7 +861,7 @@ class project_project(models.Model):
             'target': 'new',
         }
 
-    @api.multi
+    
     def project_rate_button(self):
         '''Үнэлэх товч
         '''
@@ -886,7 +879,7 @@ class project_project(models.Model):
             'target': 'new',
         }
     
-    @api.multi
+    
     def reject_button(self):
         '''Татгалзах товч
         '''
@@ -915,7 +908,7 @@ class project_project(models.Model):
             self.reject_choose = False
         
     # Цуцлах товч дээр дарахад ажиллах функц
-    @api.multi
+    
     def action_cancel(self):
         '''Цуцлах товч
         '''
@@ -939,7 +932,7 @@ class project_project(models.Model):
             }
     
     # Батлах товч дээр дарахад ажиллах функц
-    @api.multi
+    
     def action_start(self):
         '''Эхлэх товч
         '''
@@ -949,7 +942,7 @@ class project_project(models.Model):
             task.write({'state':'project_started'})
     
     # Батлах товч дээр дарахад ажиллах функц
-    @api.multi
+    
     def action_start_new(self):
         '''Эхлэх товч
         '''
@@ -959,7 +952,7 @@ class project_project(models.Model):
                 raise ValidationError(_(u'Төслийн менежер эхлэх товч дарна'))
             task.write({'state_new':'implement_project'})
     
-    @api.multi
+    
     def action_send(self):
         '''Илгээх
         '''
@@ -1023,7 +1016,6 @@ class project_project(models.Model):
                                                         'parent_project_id':project.parent_project.id,
                                                         'possible_amount_create_project':balance
                                                         })   
-                print '\n\n\n ded tosol'
                 total_material_cost = 0
                 total_labor_cost = 0
                 total_equipment_cost = 0
@@ -1097,7 +1089,7 @@ class project_project(models.Model):
                 
         
 
-    @api.multi
+    
     def action_confirm(self):
         '''Батлах
         '''
@@ -1131,7 +1123,7 @@ class project_project(models.Model):
 
 
 
-    @api.multi
+    
     def vote_button(self):
         '''Санал өгөх 
             Санал өгсөн мөр дээр санал өгсөн ажилтны нэрийг санал өгсөн ажилчид талбарт нэмэх
@@ -1168,7 +1160,7 @@ class project_project(models.Model):
             
             
     
-    @api.multi
+    
     def action_done(self):
         '''Дуусгах товч
         '''
@@ -1185,7 +1177,7 @@ class project_project(models.Model):
             else:
                 raise ValidationError(_(u'Төслийн даалгаварууд дуусаагүй байна'))
         
-    @api.multi
+    
     def action_request(self):
         '''Хүсэлт товч
         '''
@@ -1238,7 +1230,7 @@ class project_project(models.Model):
                 raise ValidationError(_(u'Төслийн хөрөнгө оруулалтын мөрийг оруулаагүй байна'))
             
 
-    @api.multi
+    
     def action_evaluate(self):
         '''Үнэлэх төлөвт оруулах 
         '''
@@ -1264,7 +1256,7 @@ class project_project(models.Model):
                         }
                 project_perform = project_perform.create(vals)     
 
-    @api.multi
+    
     def to_assess(self):
         '''Үнэлэхээс дууссан төлөвт оруулах
         '''
@@ -1282,7 +1274,7 @@ class project_project(models.Model):
 
           
             
-    @api.multi
+    
     def action_perform(self):
         '''Үнэлэх шатанд оруулах товч
         '''
@@ -1297,7 +1289,7 @@ class project_project(models.Model):
                         }
                 project_perform = project_perform.create(vals)
         
-    @api.multi
+    
     def history_evaluator(self):
         '''Ноорог шатанд оруулах товч
         '''
@@ -1311,14 +1303,14 @@ class project_project(models.Model):
                 }
         main_specification_confirmers = main_specification_confirmers.create(vals)
     
-    @api.multi
+    
     def action_draft(self):
         '''Ноорог шатанд оруулах товч
         '''
         self.write({'state':'draft'})
     
 
-    @api.multi
+    
     def action_return(self):
         ''' Төлөв буцаах
         '''
@@ -1336,7 +1328,7 @@ class project_project(models.Model):
         }
     
 
-    @api.multi
+    
     def project_cancel(self):
         ''' Цуцлах
         '''
@@ -1354,7 +1346,7 @@ class project_project(models.Model):
         }
     
 
-    @api.multi
+    
     def back_comfirm(self):
         ''' Батлагдсан руу буцаах
         '''
@@ -1362,7 +1354,7 @@ class project_project(models.Model):
             project.write({'state':'comfirm'})
 
 
-    @api.multi
+    
     def project_back(self):
         ''' Хойшлуулах
         '''
@@ -1389,9 +1381,9 @@ class project_stage(models.Model):
     _description = 'Project Stage'
     _inherit = ['mail.thread']
     
-    name        = fields.Char(u'Нэр',required = True , track_visibility='onchange')
+    name        = fields.Char(u'Нэр',required = True , tracking=True)
     sequense    = fields.Integer(u'Дараалал',default = 1, required = True)
-    description = fields.Text(u'Тайлбар' , track_visibility='onchange')
+    description = fields.Text(u'Тайлбар' , tracking=True)
     project_ids = fields.Many2many('project.project', 'project_stage_relat', 'project_stage_id', 'project_id', 'Project_stages')
     
     def create(self, cr, uid, vals, context=None):
@@ -1447,7 +1439,7 @@ class main_pec(models.Model):
             else:
                 line.is_comfirm_project = False
                 
-    @api.multi
+    
     def _material_line_total(self):
         '''Хөрөнгө оруулалтын батлагдахаар хүлээж буй хяналтын төсвүүдийн материалын зардлын нийт дүн
         '''
@@ -1458,7 +1450,7 @@ class main_pec(models.Model):
                 res = self.env.cr.fetchone()[0] or 0.0
                 main.material_line_total =  main.material_line_limit - res
 
-    @api.multi
+    
     def _material_line_real(self):
         '''Хөрөнгө оруулалтын батлагдсан хяналтын төсвүүдийн материалын зардлын нийт дүн
         '''
@@ -1468,7 +1460,7 @@ class main_pec(models.Model):
                 res = self.env.cr.fetchone()[0] or 0.0
                 main.material_line_real =  main.material_line_limit - res
 
-    @api.multi
+    
     @api.depends('lines_budgets')
     def _material_line_limit(self):
         '''Хөрөнгө оруулалтын батлагдсан хяналтын төсвүүдийн материалын зардлын нийт дүНгээр үлдэгдэл тооцох
@@ -1480,7 +1472,7 @@ class main_pec(models.Model):
                     total += line.price
             main.material_line_limit = total
     
-    @api.multi
+    
     def _labor_line_total(self):
         '''Хөрөнгө оруулалтын батлагдахаар хүлээж буй хяналтын төсвүүдийн ажиллах хүчний зардлын нийт дүн
         '''
@@ -1497,7 +1489,7 @@ class main_pec(models.Model):
                 res = self.env.cr.fetchone()[0] or 0.0
                 main.labor_line_total = main.labor_line_limit - res
 
-    @api.multi
+    
     def _labor_line_real(self):
         '''Хөрөнгө оруулалтын батлагдсан хяналтын төсвүүдийн ажиллах хүчний зардлын нийт дүн
         '''
@@ -1513,7 +1505,7 @@ class main_pec(models.Model):
                 res = self.env.cr.fetchone()[0] or 0.0
                 main.labor_line_real = main.labor_line_limit - res
 
-    @api.multi
+    
     @api.depends('lines_budgets')
     def _labor_line_limit(self):
         '''Хөрөнгө оруулалтын батлагдсан хяналтын төсвүүдийн ажиллах хүчний зардлын нийт дүНгээр үлдэгдэл тооцох
@@ -1525,7 +1517,7 @@ class main_pec(models.Model):
                     total += line.price
             main.labor_line_limit = total
 
-    @api.multi
+    
     def _equipment_line_total(self):
         '''Хөрөнгө оруулалтын батлагдахаар хүлээж буй хяналтын төсвүүдийн машин механизм зардлын нийт дүн
         '''
@@ -1535,7 +1527,7 @@ class main_pec(models.Model):
                 res = self.env.cr.fetchone()[0] or 0.0
                 main.equipment_line_total = main.equipment_line_limit - res
 
-    @api.multi
+    
     def _equipment_line_real(self):
         '''Хөрөнгө оруулалтын батлагдсан хяналтын төсвүүдийн машин механизм зардлын нийт дүн
         '''
@@ -1545,7 +1537,7 @@ class main_pec(models.Model):
                 res = self.env.cr.fetchone()[0] or 0.0
                 main.equipment_line_real = main.equipment_line_limit - res
 
-    @api.multi
+    
     @api.depends('lines_budgets')
     def _equipment_line_limit(self):
         '''Хөрөнгө оруулалтын батлагдсан хяналтын төсвүүдийн машин механизм зардлын нийт дүНгээр үлдэгдэл тооцох
@@ -1557,7 +1549,7 @@ class main_pec(models.Model):
                     total += line.price
             main.equipment_line_limit = total
 
-    @api.multi
+    
     def _postage_line_total(self):
         '''Хөрөнгө оруулалтын батлагдахаар хүлээж буй хяналтын төсвүүдийн шууд зардлын нийт дүн
         '''
@@ -1567,7 +1559,7 @@ class main_pec(models.Model):
                 res = self.env.cr.fetchone()[0] or 0.0
                 main.postage_line_total = main.postage_line_limit - res
 
-    @api.multi
+    
     def _postage_line_real(self):
         '''Хөрөнгө оруулалтын батлагдсан хяналтын төсвүүдийн шууд зардлын нийт дүн
         '''
@@ -1577,7 +1569,7 @@ class main_pec(models.Model):
                 res = self.env.cr.fetchone()[0] or 0.0
                 main.postage_line_real = main.postage_line_limit - res
     
-    @api.multi
+    
     @api.depends('lines_budgets')
     def _postage_line_limit(self):
         '''Хөрөнгө оруулалтын батлагдсан хяналтын төсвүүдийн Шууд зардлын нийт дүНгээр үлдэгдэл тооцох
@@ -1589,7 +1581,7 @@ class main_pec(models.Model):
                     total += line.price
             main.postage_line_limit = total
     
-    @api.multi
+    
     def _other_line_total(self):
         '''Хөрөнгө оруулалтын батлагдахаар хүлээж буй хяналтын төсвүүдийн бусад зардлын нийт дүн
         '''
@@ -1599,7 +1591,7 @@ class main_pec(models.Model):
                 res = self.env.cr.fetchone()[0] or 0.0
                 main.other_line_total = main.other_line_limit - res
 
-    @api.multi
+    
     def _other_line_real(self):
         '''Хөрөнгө оруулалтын батлагдсан хяналтын төсвүүдийн  бусад зардлын нийт дүн
         '''
@@ -1609,7 +1601,7 @@ class main_pec(models.Model):
                 res = self.env.cr.fetchone()[0] or 0.0
                 main.other_line_real = main.other_line_limit - res
     
-    @api.multi
+    
     @api.depends('lines_budgets')
     def _other_line_limit(self):
         '''Хөрөнгө оруулалтын батлагдсан хяналтын төсвүүдийн бусад зардлын нийт дүНгээр үлдэгдэл тооцох
@@ -1622,7 +1614,7 @@ class main_pec(models.Model):
                     total += line.price
             main.other_line_limit = total
     
-    @api.multi
+    
     def _carriage_cost(self):
         '''Хөрөнгө оруулалтын батлагдахаар хүлээж буй хяналтын төсвүүдийн тээврийн зардлын нийт дүн
         '''
@@ -1632,7 +1624,7 @@ class main_pec(models.Model):
                 res = self.env.cr.fetchone()[0] or 0.0
                 main.carriage_cost = main.carriage_limit - res
 
-    @api.multi
+    
     def _carriage_real(self):
         '''Хөрөнгө оруулалтын батлагдсан хяналтын төсвүүдийн  тээврийн зардлын нийт дүн
         '''
@@ -1642,7 +1634,7 @@ class main_pec(models.Model):
                 res = self.env.cr.fetchone()[0] or 0.0
                 main.carriage_real = main.carriage_limit - res
     
-    @api.multi
+    
     @api.depends('lines_budgets')
     def _carriage_limit(self):
         '''Хөрөнгө оруулалтын батлагдсан хяналтын төсвүүдийн тээврийн зардлын нийт дүНгээр үлдэгдэл тооцох
@@ -1653,7 +1645,7 @@ class main_pec(models.Model):
                 if line.sel_bud == 'carriage':
                     total += line.price
             main.carriage_limit = total
-    @api.multi
+    
     def _get_total_investment(self):
         '''Нийт хөрөнгө оруулалт тооцох
         '''
@@ -1663,7 +1655,7 @@ class main_pec(models.Model):
                 total += line.price
             main.total_investment = total
             
-    @api.multi
+    
     def _get_total_real(self):
         '''Нийт гүйцэтгэл
         '''
@@ -1722,7 +1714,7 @@ class main_pec(models.Model):
                         'total_investment':total,
                         })
     
-    @api.multi
+    
     def confirm_button(self):
         '''Батлах 
             батлагдаагүй хөрөнгө оруулалтын хувилбаруудыг сонгогдоогүй болгох
@@ -1755,7 +1747,7 @@ class main_pec(models.Model):
             else:
                 raise ValidationError(_(u'Төсөл дээр санал өгч дуусаагүй тул батлах боломжгүй'))
         
-    @api.multi
+    
     def vote_button(self):
         '''Санал өгөх 
             Санал өгсөн мөр дээр санал өгсөн ажилтны нэрийг санал өгсөн ажилчид талбарт нэмэх
@@ -1816,7 +1808,7 @@ class main_pec(models.Model):
                         email_template.sudo().send_mail(project.parent_project_id.id)
         return { 'type': 'ir.actions.client', 'tag': 'reload', }
     
-    @api.multi
+    
     def modify_button(self):
         '''Тодотгох 
             Тодотгож буй мөрийг хуулбарлан үүсгэх засах боломжтой
@@ -1873,7 +1865,7 @@ class main_pec(models.Model):
         main_specification_confirmers   = main_specification_confirmers.create(vals)
         return { 'type': 'ir.actions.client', 'tag': 'reload', }
     
-    @api.multi
+    
     def modify_confirm_button(self):
         '''Тодотгосөнг баталгаажуулах 
             Тодотгол оруулсан мөрийг баталгаажуулж засварлах боломжгүй болгох
@@ -1948,7 +1940,7 @@ class project_rate(models.Model):
     '''
     _name = 'project.rate'
     
-    @api.multi
+    
     def _get_total(self):
         for rate in self:
             if rate.users:

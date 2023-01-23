@@ -40,7 +40,7 @@
 			<field name="view_mode">tree,form</field>
 		</record>
 
-		<menuitem action="nomin_project.action_project_stage" id="menu_project_stage" parent="nomin_project.menu_project_config2" groups="project.group_project_admin" sequence="12" />
+		<menuitem action="nomin_project.action_project_stage" id="menu_project_stage" parent="nomin_project.menu_project_config2" groups="group_project_admin" sequence="12" />
 
 		<record id="task_reason_tree" model="ir.ui.view">
 			<field name="name">task.deadline.reason.tree</field>
@@ -78,7 +78,7 @@
 			<field name="view_mode">tree,form</field>
 		</record>
 
-		<menuitem action="nomin_project.action_task_reason" id="menu_task_reason" parent="nomin_project.menu_project_config2" groups="project.group_project_admin" sequence="15" />
+		<menuitem action="nomin_project.action_task_reason" id="menu_task_reason" parent="nomin_project.menu_project_config2" groups="group_project_admin" sequence="15" />
 
 	</data>
 </odoo>

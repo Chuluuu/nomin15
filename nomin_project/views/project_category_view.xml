@@ -118,7 +118,7 @@
 			<field name="context">{}</field>
 		</record>
 
-		<menuitem id="menu_action_project_specification" name="Project specification" action="action_project_specification" groups="project.group_project_admin" parent="nomin_project.menu_project_config2" sequence="9"/>
+		<menuitem id="menu_action_project_specification" name="Project specification" action="action_project_specification" groups="group_project_admin" parent="nomin_project.menu_project_config2" sequence="9"/>
 
 		<!--  Project employee duty -->
 		<record model="ir.ui.view" id="project_employee_duty_view">
@@ -155,10 +155,10 @@
 			<field name="context">{}</field>
 		</record>
 
-		<menuitem id="menu_action_project_employee_duty" name="Project employee duty" action="action_project_employee_duty" groups="project.group_project_admin" parent="nomin_project.menu_project_config2" sequence="10"/>
+		<menuitem id="menu_action_project_employee_duty" name="Project employee duty" action="action_project_employee_duty" groups="group_project_admin" parent="nomin_project.menu_project_config2" sequence="10"/>
 
 
-		<menuitem id="action_project_category" name="Project category" action="action_project_catgeory_view" groups="project.group_project_admin" parent="nomin_project.menu_project_config2" sequence="11"/>
+		<menuitem id="action_project_category" name="Project category" action="action_project_catgeory_view" groups="group_project_admin" parent="nomin_project.menu_project_config2" sequence="11"/>
 
 	</data>
 </odoo>

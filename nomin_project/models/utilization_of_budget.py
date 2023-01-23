@@ -10,7 +10,7 @@ class utilization_on_budget(models.Model):
     '''
        Хяналтын төсвийн бодит гүйцэтгэл
     '''
-    @api.multi
+    
     def name_get(self):
         result = []
         for budget in self:
@@ -21,12 +21,12 @@ class utilization_on_budget(models.Model):
             result.append((budget.id, name))
         return result
     
-    @api.one
+    
     @api.depends('price', 'utilization')
     def _balance_subtotal(self):
         self.balance = self.price-self.utilization
     
-    @api.one
+    
     def _prac_amt(self):
         '''
            Хяналтын төсвийн бодит гүйцэтгэл бодох
@@ -45,7 +45,7 @@ class utilization_on_budget(models.Model):
         return res
 
 
-    @api.one
+    
     def _practical_subtotal(self):
         res = 0.0
         if self.id:

@@ -23,21 +23,21 @@ class project_issue_inherit(models.Model):
         self.message_subscribe_users(user_ids=user_ids)
     
 
-    name        = fields.Char('Issue', required=True,track_visibility='onchange')
-    checker       = fields.Many2one('res.users', index=True,string = u'Хянагч',track_visibility='onchange',required=True)
-    date_deadline =fields.Date('Deadline',track_visibility='onchange',required=True)
-    date        = fields.Datetime('Date',track_visibility='onchange',required=True)
-    tag_ids       = fields.Many2many('project.tags', index=True, string='Tags',track_visibility='onchange')
-    priority      = fields.Selection([('0','Low'), ('1','Normal'), ('2','High')], 'Priority', select=True,track_visibility='onchange')
-    partner_id   = fields.Many2one('res.partner', 'Contact', select=1,track_visibility='onchange')
+    name        = fields.Char('Issue', required=True,tracking=True)
+    checker       = fields.Many2one('res.users', index=True,string = u'Хянагч',tracking=True,required=True)
+    date_deadline =fields.Date('Deadline',tracking=True,required=True)
+    date        = fields.Datetime('Date',tracking=True,required=True)
+    tag_ids       = fields.Many2many('project.tags', index=True, string='Tags',tracking=True)
+    priority      = fields.Selection([('0','Low'), ('1','Normal'), ('2','High')], 'Priority', select=True,tracking=True)
+    partner_id   = fields.Many2one('res.partner', 'Contact', select=1,tracking=True)
     task_id      = fields.Many2one('project.task', 'Task', domain="[('project_id','=',project_id)]", index=True,
-                                                  help="You can link this issue to an existing task or directly create a new one from here", track_visibility='onchange')
-    departmet_id  = fields.Many2one('hr.department',string='Department',required=True,track_visibility='onchange')
-    contract_id  = fields.Many2one('contract.management',string='Contract', domain=['&',('state', 'in',('certified','warranty')),('is_conflicted','=',True)],track_visibility='onchange')
-    reason_id     = fields.Many2one('task.deadline.reason', index=True,string='Reason',track_visibility='onchange')
+                                                  help="You can link this issue to an existing task or directly create a new one from here", tracking=True)
+    departmet_id  = fields.Many2one('hr.department',string='Department',required=True,tracking=True)
+    contract_id  = fields.Many2one('contract.management',string='Contract', domain=['&',('state', 'in',('certified','warranty')),('is_conflicted','=',True)],tracking=True)
+    reason_id     = fields.Many2one('task.deadline.reason', index=True,string='Reason',tracking=True)
     created_task  =fields.Boolean(string = 'Created task',type='boolean')
     created_ticket= fields.Boolean(string = 'Created ticket',type='boolean' )
-    description   = fields.Text('Private Note',track_visibility='onchange')
+    description   = fields.Text('Private Note',tracking=True)
     issue_created_user_id= fields.Many2one('res.users',string='Created User',readonly=True)
     created_task_id=  fields.Many2one('project.task',string=u'Холбоотой даалгавар',readonly=True)
     created_ticket_id=fields.Many2one('crm.helpdesk',string=u'Холбоотой тикет',readonly=True)
@@ -61,7 +61,7 @@ class project_issue_inherit(models.Model):
         result.sudo()._add_followers(result.project_id.user_id.id)
         return result
     
-    @api.multi
+    
     def write(self, vals):
         '''
             төсөлрүү дагагч нэмэх
@@ -76,7 +76,7 @@ class project_issue_inherit(models.Model):
         result = super(project_issue_inherit, self).write(vals)
         return result
 
-    @api.multi
+    
     def create_task(self, vals):
         '''
             Асуудлаас даалгавар үүсгэх
@@ -85,10 +85,7 @@ class project_issue_inherit(models.Model):
         result = model_obj._get_id('project', 'view_task_form2')
         view_id = model_obj.browse(result).res_id
         # res = model_obj.sudo().get_object_reference('project', 'view_task_form2')
-        print'_______view_id______',view_id
-        print'_______result______',result
         for issue in self:
-            print'_______SSS____',issue
             employee = self.env['hr.employee'].search([('user_id','=',issue.checker.id)])
             project_task = self.env['project.task']
             if not employee:
@@ -122,7 +119,7 @@ class project_issue_inherit(models.Model):
             #          'target' : 'current',
             #          'nodestroy' : True,
             #      }
-    @api.multi
+    
     def create_ticket(self):
         '''
             Асуудлаас тикет үүсгэх цонх дуудах

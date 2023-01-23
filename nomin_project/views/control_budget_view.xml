@@ -17,7 +17,7 @@
       <field name="dpi">90</field>
     </record>
 
-    <record id="nomin_project.action_control_budget_report_view" model="ir.actions.report.xml">
+    <record id="nomin_project.action_control_budget_report_view" model="ir.actions.report">
       <field name="paperformat_id" ref="nomin_project.paperformat_control_budget" />
     </record>
 
@@ -510,8 +510,8 @@
                 <field name="document" attrs="{'readonly': [('state', 'not in', ('draft','start'))]}">
                   <tree string="Files">
                     <field name="name"/>
-                    <field name="datas_fname" string="Файлын нэр"/>
-                    <field name="datas" filename="datas_fname" string="Файл" readonly="1"/>
+                    <field name="store_fname" string="Файлын нэр"/>
+                    <field name="datas" filename="store_fname" string="Файл" readonly="1"/>
                     <field name="create_date" readonly="1"/>
                   </tree>
                   <form>
@@ -521,8 +521,8 @@
                     </h1>
                     <group string="Өгөгдөл">
                       <field name="type" invisible="1"/>
-                      <field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-                      <field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+                      <field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+                      <field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
                       <field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
                     </group>
                     <group groups="base.group_no_one" string="History">
@@ -650,10 +650,10 @@
       </field>
     </record>
 
-    <menuitem name="Control Budget" action="nomin_project.action_control_budget" id="menu_project_control_budget" parent="project.menu_project_management" groups="project.group_project_budget" sequence="12" />
+    <menuitem name="Control Budget" action="nomin_project.action_control_budget" id="menu_project_control_budget" parent="project.menu_project_management" groups="group_project_budget" sequence="12" />
 
-    <!-- ТХ -->
-    <record id="payment_request_form_inherit" model="ir.ui.view">
+    <!-- ТODO FIX LATER -->
+    <!-- <record id="payment_request_form_inherit" model="ir.ui.view">
       <field name="name">payment.request.form.inherit</field>
       <field name="model">payment.request</field>
       <field name="inherit_id" ref="nomin_budget.payment_request_form"/>
@@ -662,9 +662,9 @@
           <field name="budget_line_id"/>
         </xpath>
       </field>
-    </record>
-
-    <record id="account_analytic_line_form_inherit_nomin_project" model="ir.ui.view">
+    </record> -->
+    <!-- TODO FIX LATER -->
+    <!-- <record id="account_analytic_line_form_inherit_nomin_project" model="ir.ui.view">
       <field name="name">account.analytic.line.form.inherit.nomin.project</field>
       <field name="model">account.analytic.line</field>
       <field name="inherit_id" ref="nomin_budget.account_analytic_line_form_inherit_nomin"/>
@@ -674,10 +674,11 @@
           <field name="controll_budget_id"/>
         </xpath>
       </field>
-    </record>
+    </record> -->
 
     <!-- Budget Balance Check -->
-    <record id="view_budget_balance_payment_check_inherit" model="ir.ui.view">
+    <!-- TODO FIX LATTER -->
+    <!-- <record id="view_budget_balance_payment_check_inherit" model="ir.ui.view">
       <field name="name">view.budget.balance.payment.check.inherit</field>
       <field name="model">budget.balance.check.payment</field>
       <field name="inherit_id" ref="nomin_budget.view_budget_balance_payment_check"/>
@@ -689,7 +690,7 @@
           <field name="controll_budget_id" string="Хяналтын төсвийн мөр" options="{'no_create': True}" domain="[('department_id','=',department_id),('budget_type','=',budget_type),('state','=','confirm'),('control_budget_id','=',parent.control_budget_id)]"/>
         </xpath>
       </field>
-    </record>
+    </record> -->
 
 
   </data>

@@ -50,6 +50,6 @@
 			<field name="target">new</field>
 		</record>
 
-		<menuitem action="action_sdlc_integration" sequence="99" name="SDLC интеграци" id="sdlc_integration_menu" parent="project.menu_project_management" groups="project.group_program_admin,project.group_project_manager"/>
+		<menuitem action="action_sdlc_integration" sequence="99" name="SDLC интеграци" id="sdlc_integration_menu" parent="project.menu_project_management" groups="group_program_admin,project.group_project_manager"/>
 	</data>
 </odoo>

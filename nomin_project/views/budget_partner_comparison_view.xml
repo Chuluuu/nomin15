@@ -53,7 +53,8 @@
 						<group>
 							<field name="contract_id" attrs = "{'invisible':[('contract_id', '=',False)]}" options="{'no_create': True}" readonly="1" />
 							<field name="type_id" required="1" attrs = "{'readonly':[('state', '!=','draft')]}" options="{'no_create': True}" readonly="1" />
-							<field name="child_type_id" options="{'no_create': True}" required="1" domain="[('parent_id','!=',False)]" attrs = "{'readonly':[('state', '!=','draft')]}" readonly="1"/>
+							<!-- TODO FIX LATER -->
+							<!-- <field name="child_type_id" options="{'no_create': True}" required="1" domain="[('parent_id','!=',False)]" attrs = "{'readonly':[('state', '!=','draft')]}" readonly="1"/> -->
 							<field name="date_start" required="1" attrs = "{'readonly':[('state','not in','draft')]}"/>
 							<field name="date_end" required="1" attrs = "{'readonly':[('state','not in',('draft','end_quotation'))]}"/>
 							<field name="is_verify" attrs = "{'readonly':[('state', '!=','draft')]}"/>
@@ -258,8 +259,8 @@
 							<field name="document_ids" readonly="1">
 								<tree string="Files" delete="false">
 									<field name="name"/>
-									<field name="datas_fname" string="Файлын нэр"/>
-									<field name="datas" filename="datas_fname" string="Файл" readonly="1"/>
+									<field name="store_fname" string="Файлын нэр"/>
+									<field name="datas" filename="store_fname" string="Файл" readonly="1"/>
 									<field name="create_date" readonly="1"/>
 								</tree>
 								<form>
@@ -269,8 +270,8 @@
 									</h1>
 									<group string="Өгөгдөл">
 										<field name="type" invisible="1"/>
-										<field name="datas" string="Файл" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-										<field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+										<field name="datas" string="Файл" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+										<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
 										<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
 									</group>
 								</form>
@@ -279,8 +280,8 @@
 							<field name="task_graph_document" readonly="1">
 								<tree string="Files" delete="false">
 									<field name="name"/>
-									<field name="datas_fname" string="Файлын нэр"/>
-									<field name="datas" filename="datas_fname" string="Файл" readonly="1"/>
+									<field name="store_fname" string="Файлын нэр"/>
+									<field name="datas" filename="store_fname" string="Файл" readonly="1"/>
 									<field name="create_date" readonly="1"/>
 								</tree>
 								<form>
@@ -290,8 +291,8 @@
 									</h1>
 									<group string="Өгөгдөл">
 										<field name="type" invisible="1"/>
-										<field name="datas" string="Файл" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-										<field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+										<field name="datas" string="Файл" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+										<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
 										<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
 									</group>
 								</form>
@@ -342,6 +343,6 @@
 		</record>
 
 
-		<menuitem name="Хяналтын төсвийн үнийн харьцуулалт" action="nomin_project.action_budget_partner_comparison" id="menu_budget_partner_comparison" parent="project.menu_project_management" groups="project.group_project_budget" sequence="13" />
+		<menuitem name="Хяналтын төсвийн үнийн харьцуулалт" action="nomin_project.action_budget_partner_comparison" id="menu_budget_partner_comparison" parent="project.menu_project_management" groups="group_project_budget" sequence="13" />
 	</data>
 </odoo> 

@@ -6,7 +6,8 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 import time
 
-class create_project_tender(models.TransientModel):
+class create_project_tender(models.Model):
+    # TransientModel changed to Model
     _name = 'create.project.tender'
     '''
        хяналтын төсвөөес Тендер үүсгэх
@@ -82,7 +83,6 @@ class create_project_tender(models.TransientModel):
                     
             res.update({'labor_line1': line_ids3,})
             
-        print '\n\n\n task' , perform.task_id.id      
         res.update({
                     'control_budget_id' : perform.id,
                     'material_limit' : perform.material_utilization_limit,
@@ -98,10 +98,9 @@ class create_project_tender(models.TransientModel):
                     'material_line': [(6, 0, line_ids)],
                     'new_material_line': [(6, 0, new_line_ids)],
                     })
-        print '\n\n\n res' , res
         return res
 
-    @api.multi
+    
     def _total_amount1(self):
         total = 0.0
         for budget in  self:
@@ -214,15 +213,13 @@ class create_project_tender(models.TransientModel):
             child_ids.extend(type_ids.ids)
         return {'domain':{'child_type_id': [('id','=', child_ids)]}}
     
-    @api.multi    
+        
     def action_create(self):
         '''
            Тендер үүсгэх товч 
                Хяналтын төсвийн сонгосон талваруудаар тендер үүсгэх мөн хяналтын төсөврүү зардал бүрээр гүйцэтгэл хөтлөх
         '''
-        print '\n\n\n tender uusgeh'
         budget  = self.env['control.budget'].search([('id','=', self.control_budget_id.id)])
-        print '\n\n\n budget hahaha' , budget , self,self.is_old2
         space = ', '
         names = []
         work_task_employee = []
@@ -310,7 +307,6 @@ class create_project_tender(models.TransientModel):
                         tender_line = tender_line.create(line_vals)
                 else:
                     for line in self.new_material_line:
-                        print '\n\n\n line' , line, line.product_name
                         line_vals = {
                                     'product_name':    line.product_name,
                                     'product_uom_id':  line.product_uom.id,
@@ -448,8 +444,10 @@ class create_project_tender(models.TransientModel):
                      'nodestroy' : True,
                  }
     
-class inherit_tender_tender(models.Model):
-    _inherit = 'tender.tender'
+class TenderTender(models.Model):
+    _name = 'tender.tender'
+    #TODO FIX LATER
+    # _inherit = 'tender.tender'
     
     '''
        Тендер 

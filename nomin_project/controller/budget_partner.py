@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-from odoo import api, fields, models, tools
+from odoo import api, fields, models, tools, http
 from odoo.exceptions import UserError
-from odoo.addons.web import http
 from odoo.http import request
 import base64
 import werkzeug

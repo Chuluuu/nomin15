@@ -45,7 +45,7 @@
         </record>
 
 
-        <menuitem id="menu_labor_cost_settings" action="nomin_project.action_labor_cost_settings" parent="nomin_project.menu_project_config2" groups="project.group_general_budgeter" sequence="15" />
+        <menuitem id="menu_labor_cost_settings" action="nomin_project.action_labor_cost_settings" parent="nomin_project.menu_project_config2" groups="group_general_budgeter" sequence="15" />
 
 
     </data>

@@ -21,7 +21,7 @@
                     </group>
 
                     <footer>
-                        <button name="export_report" string="Export" type="object" icon="terp-graph"/>
+                        <!-- <button name="export_report" string="Export" type="object" icon="terp-graph"/> -->
                         <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
                 </form>
@@ -36,7 +36,7 @@
             <field name="target">new</field>
         </record>
 
-        <menuitem name="Захиалгын ерөнхий тайлан" id="menu_order_plan_export" parent="project.menu_project_management" action="order_plan_report" groups="project.group_program_admin" sequence="17" />
+        <menuitem name="Захиалгын ерөнхий тайлан" id="menu_order_plan_export" parent="project.menu_project_management" action="order_plan_report" groups="group_program_admin" sequence="17" />
 
     </data>
 </odoo>

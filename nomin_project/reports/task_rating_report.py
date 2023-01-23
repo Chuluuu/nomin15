@@ -11,11 +11,9 @@ from xlwt import *
 from datetime import date, datetime, timedelta
 from dateutil import rrule
 # import time
-# from StringIO import StringIO
 
 class deadline_project_task(models.TransientModel):
     _name = 'project.task.rating.report'
-    _inherit = 'abstract.report.model'
     _description = 'Project Task Rating Report'
     
     @api.model
@@ -36,7 +34,7 @@ class deadline_project_task(models.TransientModel):
     user_id = fields.Many2many(comodel_name='res.users', string=u'Хариуцагч')
     department_id = fields.Many2many(comodel_name='hr.department', string=u'Салбар')
     
-    @api.multi
+    
     def get_export_data(self,report_code,context=None):
         if context is None:
             context = {}

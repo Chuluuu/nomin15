@@ -29,7 +29,7 @@ class BudgetPartnersLine(models.TransientModel):
     employee_ids = fields.Many2many('hr.employee', string="Voted employees")
 
 
-    @api.multi
+    
     def action_vote(self):
         for partner in self:
             if partner.wizard_id.comparison_id:

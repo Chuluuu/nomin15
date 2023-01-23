@@ -46,7 +46,7 @@ class RateProjecTask(models.TransientModel):
                         })
         return res
         
-    @api.multi    
+        
     def rate_button(self):
         '''
            1-100 хооронд даалгавар үнэлэх

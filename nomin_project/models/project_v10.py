@@ -29,7 +29,7 @@ class ProjecTagsInherit(models.Model):
         else:
             raise ValidationError(_(u'Ийм нэртэй пайз үүссэн байна !!!!'))
 
-    @api.multi
+    
     def unlink(self):
         '''
            Пайз устгах бүртгэлд ашигласан эсэх шалгах
@@ -51,9 +51,9 @@ class ProjecTaskType(models.Model):
     
     _description = 'Task Stage'
     
-    name=fields.Char('Stage Name', required=True, translate=True, track_visibility='onchange')
-    description=fields.Text('Description', translate=True, track_visibility='onchange')
-    sequence=fields.Integer('Sequence', track_visibility='onchange')
+    name=fields.Char('Stage Name', required=True, translate=True, tracking=True)
+    description=fields.Text('Description', translate=True, tracking=True)
+    sequence=fields.Integer('Sequence', tracking=True)
     case_default=fields.Boolean('Default for New Projects',
                                      help="If you check this field, this stage will be proposed by default on each new project. It will not assign this stage to existing projects.")
             
@@ -70,7 +70,7 @@ class ProjecTaskType(models.Model):
         else:
             raise ValidationError(_(u'Ийм нэртэй асуудлын үе шат үүссэн байна !!!!'))
         
-    @api.multi
+    
     def unlink(self):
         '''
            Асуудын үе шат устгах, бүртгэлд ашигласан эсэх шалгах
@@ -99,8 +99,9 @@ class InvestmentBreakdown(models.Model):
     control_budget=fields.Many2one('control.budget', index=True, string = 'Control Budget')
 
 class ProjectHistory(models.Model):
-    _inherit = 'request.history'
-
+    _name = 'request.history'
+    #TODO fix later 
+    # _inherit = 'request.history'
     project_id = fields.Many2one('project.project', string='Project history', ondelete="cascade")
 
 
@@ -111,7 +112,7 @@ class ProjectIrAttachment(models.Model):
     _inherit = 'ir.attachment'
 
 
-    @api.multi
+    
     def _find_confirm_user(self):
         '''Батлах ажилтныг хэлтэс болон албан тушаалаар олох'''
 
@@ -141,7 +142,7 @@ class ProjectIrAttachment(models.Model):
 
   
 
-    @api.multi
+    
     def confirm_button(self):
         '''Батлах 
             Шаардах баримт бичгийг батлах
@@ -166,7 +167,7 @@ class ProjectIrAttachment(models.Model):
 
     project_document=fields.Many2one('project.project', string='Project Document')
     project_task_document=fields.Many2one('project.task','Task Document', index=True)
-    project_work_task_document=fields.Many2one('project.task','Task Document', index=True)
+    task_id =fields.Many2one('project.task','Task Document', index=True)
     project_work_confirm_task_document=fields.Many2one('task.work.document','Task Document', index=True)
     control_budget_document=fields.Many2one('control.budget','Budget Document', index=True)
                 
@@ -177,7 +178,7 @@ class MainSpecification(models.Model):
     _name = 'main.specification'
     _description = 'Main specifications'
     
-    @api.multi
+    
     def _is_editable_user(self):
         count = 0
         emp_obj = self.env['hr.employee']
@@ -231,7 +232,7 @@ class MainSpecification(models.Model):
     #     main = super(MainSpecification, self).create(vals)
     #     return main
     
-    @api.multi
+    
     def unlink(self):
         '''
            Ноорог төлөвтөй үед устгах боломжтой
@@ -245,17 +246,17 @@ class MainSpecification(models.Model):
 
 class ProjecCategory(models.Model):
     _name ='project.category'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     '''
        Төслийн ангилал бүртгэх
     '''
     
 
-    name=fields.Char('Name',required=True, track_visibility='onchange')
+    name=fields.Char('Name',required=True, tracking=True)
     line_ids = fields.One2many('project.category.line','parent_id', string = 'Required attachment')   
      
-    description=fields.Text(u'Тайлбар',  track_visibility='onchange')
+    description=fields.Text(u'Тайлбар',  tracking=True)
     specification_ids = fields.Many2many('project.specification','project_category_specification_rel','categ_id','spec_id',string = 'Project specifications')#
     task_line_ids = fields.One2many('required.attachment.in.task','category_id', string = "Required attachment in task")
    
@@ -271,7 +272,7 @@ class ProjecCategory(models.Model):
         else:
             raise ValidationError(_(u'Ийм нэртэй Төслийн ангилал үүссэн байна !!!!'))
     
-    @api.multi
+    
     def unlink(self):
         '''
            Төслийн ангилал устгах, бүртгэлд ашигласан эсэх шалгах
@@ -312,8 +313,8 @@ class ProjectCategroyLine(models.Model):
     name = fields.Char(string='Name')
     parent_id = fields.Many2one('project.category',string = 'parent')
     project_id = fields.Many2one('project.project' , string='Project')
-    project_state = fields.Selection(STATE_SELECTION,string = 'State', copy=False , default = 'draft', track_visibility='onchange')
-    confirm_state = fields.Selection(STATES,string = 'Батлах төлөв ', required=True,  default = 'draft', track_visibility='onchange')
+    project_state = fields.Selection(STATE_SELECTION,string = 'State', copy=False , default = 'draft', tracking=True)
+    confirm_state = fields.Selection(STATES,string = 'Батлах төлөв ', required=True,  default = 'draft', tracking=True)
     project_type = fields.Selection([('investment_project',"Хөрөнгө оруулалттай төсөл"),('construction_project',"Барилгын засварын төсөл"),('operational_project',"Үйл ажиллагааны төсөл"),('general_project',"Ерөнхий")],string='Project type')
     is_confirm = fields.Boolean(string='Is confirm' , default=False)
     department_id =  fields.Many2one('hr.department', string='Батлах ажилтны хэлтэс')
@@ -360,7 +361,7 @@ class RequiredAttachmentTask(models.Model):
                                                       ('work_graph',u'Ажлын зураг'),
                                                       ('work_task',u'Ажлын даалгавар'), # Худалдан авалтын ажил
                                                       ],
-                                                     'Task type',  copy=False, default='normal', track_visibility='onchange')
+                                                     'Task type',  copy=False, default='normal', tracking=True)
 
 class ProjectProject(models.Model):
     '''
@@ -370,7 +371,7 @@ class ProjectProject(models.Model):
     _description = 'Project'
     
 
-    @api.multi
+    
     def name_get(self):
         result = []
         for proj in self:
@@ -378,7 +379,7 @@ class ProjectProject(models.Model):
             result.append((proj.id, name))
         return result
 
-    @api.multi
+    
     def create_history(self,state,note):
         history_obj = self.env['request.history']
         history_obj.create({'user_id':self._uid,
@@ -389,7 +390,7 @@ class ProjectProject(models.Model):
                                 'comment':note
                             })
 
-    @api.multi
+    
     def _get_visibility_selection(self):
         
         """ Overriden in portal_project to offer more options """
@@ -405,19 +406,19 @@ class ProjectProject(models.Model):
             order.control_budget_counts = len(self.env['control.budget'].sudo().search([('project_id','=',order.id)])) or 0            
         return True
 
-    @api.one
+    
     def _is_expenditure_handler(self):
 
         # self.logged_in_employee_id.id == employee_id.id or employee_id.user_id.has_group('nomin_hr.group_hr_timesheet_manager'):
 
-        if self.env.user.has_group('project.group_project_manager') or self.env.user.has_group('project.group_project_admin') or self.env.user.has_group('project.group_project_leader'):
+        if self.env.user.has_group('project.group_project_manager') or self.env.user.has_group('nomin_project.group_project_admin') or self.env.user.has_group('project.group_project_leader'):
  
             self.is_expenditure_handler = True
 
     _visibility_selection = lambda self, *args, **kwargs: self._get_visibility_selection(*args, **kwargs)
 
 
-    # @api.one
+    # 
     # def _is_project_category(self):
     #     for project in self:
     #         print '\n\n\n project' , project
@@ -445,7 +446,7 @@ class ProjectProject(models.Model):
     #             project.project_category = False
     #             print '\n\n\n\n on ded',project.project_category
 
-    @api.multi
+    
     def _is_raci_user(self):
         for proj in self:            
             if proj.privacy_visibility in ['portal','followers']:
@@ -487,7 +488,7 @@ class ProjectProject(models.Model):
         return  sod_id
 
 
-    # @api.one
+    # 
     # def state_handler(self,current_state):
 
     #     flow_id = self.env['sod.designer'].search([('model_name','=','project.project')])
@@ -505,7 +506,7 @@ class ProjectProject(models.Model):
     
 
 
-    @api.multi
+    
     def refresh_workflow(self):
 
         # self.state_handler(self.previous_state)
@@ -514,7 +515,7 @@ class ProjectProject(models.Model):
 
     
 
-    @api.multi
+    
     def surplus_button(self):
         '''Дэд төслийн дүн тодотгох
         '''
@@ -557,14 +558,14 @@ class ProjectProject(models.Model):
             project.total_limit = balance
     
 
-    @api.one
+    
     def _project_flag(self):
-        if self.create_date <= '2022-03-28 09:00:00':
+        if self.create_date <= datetime.strptime('2022-03-28 09:00:00', '%Y-%m-%d %H:%M:%S'):
             self.project_flag = False
         else:
             self.project_flag = True
 
-    @api.multi
+    
     def _compute_amount_new(self):
         for project in self:
             project.material_remaining_amount_new = project.material_budget_new - project.material_expenditure_new
@@ -581,23 +582,23 @@ class ProjectProject(models.Model):
     project_flag = fields.Boolean(string='Project flag' , compute=_project_flag , default=True)
     # project_flag = fields.Boolean(string='Project flag' , default=False) 
     button_check = fields.Boolean(string='Button check' , default=False)             
-    user_id=fields.Many2one('res.users', 'Project Manager', track_visibility='onchange')
-    project_purpose=fields.Text("Project purpose", track_visibility='onchange') # Төслийн зорилго
-    project_objectives=fields.Text("Project objectives", track_visibility='onchange') # Төслийн зорилт
+    user_id=fields.Many2one('res.users', 'Project Manager', tracking=True)
+    project_purpose=fields.Text("Project purpose", tracking=True) # Төслийн зорилго
+    project_objectives=fields.Text("Project objectives", tracking=True) # Төслийн зорилт
     total_duration = fields.Float(string='Total duration', readonly=True,  copy=False)
     project_type = fields.Selection([('investment_project',"Хөрөнгө оруулалттай төсөл"),('construction_project',"Барилгын засварын төсөл"),('operational_project',"Үйл ажиллагааны төсөл"),('general_project',"Ерөнхий")],string='Project type')
-    start_date=fields.Date('Start Date', select=True, track_visibility='onchange') # Төслийн эхлэх хугацаа
-    end_date=fields.Date('End Date', select=True, track_visibility='onchange') # Төслийн дуусах хугацаа
-    benefits=fields.Text("Benefits", track_visibility='onchange') # Төслийн үр ашиг
-    project_categ=fields.Many2one('project.category', "Category", required = 'True', track_visibility='onchange', index=True) # Төслийн ангилал, readonly=True, states={'draft': [('readonly', False)]}
-    parent_project=fields.Many2one('project.project',string = 'Parent project', track_visibility='onchange', index=True)
-    project_checkers=fields.Many2many('hr.employee','project_project_project_hr_employee_ref','project_id_ids','employ_id',string = 'Project Checkers', track_visibility='onchange' ,domain="['|',('active','=',True),('active','=',False)]")#төсөл хянах хүмүүс
+    start_date=fields.Date('Start Date', select=True, tracking=True) # Төслийн эхлэх хугацаа
+    end_date=fields.Date('End Date', select=True, tracking=True) # Төслийн дуусах хугацаа
+    benefits=fields.Text("Benefits", tracking=True) # Төслийн үр ашиг
+    project_categ=fields.Many2one('project.category', "Category", required = 'True', tracking=True, index=True) # Төслийн ангилал, readonly=True, states={'draft': [('readonly', False)]}
+    parent_project=fields.Many2one('project.project',string = 'Parent project', tracking=True, index=True)
+    project_checkers=fields.Many2many('hr.employee','project_project_project_hr_employee_ref','project_id_ids','employ_id',string = 'Project Checkers', tracking=True ,domain="['|',('active','=',True),('active','=',False)]")#төсөл хянах хүмүүс
     required_cost=fields.Integer("Required Cost")# Төслийн хянасан зардал
     project_cost=fields.Integer("Project Cost")# Төслийн бодит зардал
-    comment=fields.Text('Comment', track_visibility='onchange') # Тайлбар
-    team_users=fields.Many2many('hr.employee','project_project_hr_employee_ref_team','project_team_id','emp_id',string = 'Project team', track_visibility='onchange')#төслийн баг
-    project_verifier=fields.Many2one('hr.employee', index=True,string = 'Project verifier', track_visibility='onchange')#төсөл батлагч
-    evaluator=fields.Many2many('hr.employee','project_project_project_hr_employee_ref_ref','project_id_id','empl_id',string = 'Project evaluators', track_visibility='onchange')#Төсөл үнэлэгчид
+    comment=fields.Text('Comment', tracking=True) # Тайлбар
+    team_users=fields.Many2many('hr.employee','project_project_hr_employee_ref_team','project_team_id','emp_id',string = 'Project team', tracking=True)#төслийн баг
+    project_verifier=fields.Many2one('hr.employee', index=True,string = 'Project verifier', tracking=True)#төсөл батлагч
+    evaluator=fields.Many2many('hr.employee','project_project_project_hr_employee_ref_ref','project_id_id','empl_id',string = 'Project evaluators', tracking=True)#Төсөл үнэлэгчид
     created_user_id=fields.Many2one('res.users', index=True,string=u'Үүсгэсэн хэрэглэгч', default=lambda self: self.env.user.id)
     privacy_visibility=fields.Selection(_get_visibility_selection, string='Төслийн хандалтын эрх', required=True,
             help="Holds visibility of the tasks or issues that belong to the current project:\n"
@@ -606,7 +607,7 @@ class ProjectProject(models.Model):
                     "   them or by someone of their company\n"
                     "- Employees Only: employees see all tasks or issues\n"
                     "- Followers Only: employees see only the followed tasks or issues; if portal\n"
-                    "   is activated, portal users see the followed tasks or issues.", track_visibility='onchange',default=False)
+                    "   is activated, portal users see the followed tasks or issues.", tracking=True,default=False)
          # Голлох үзүүлэлт класстай холбогдох талбар
     overrun_counts=fields.Integer(string = 'Overrun Counts')
     expenditure_ratio=fields.Integer(string = 'Expenditure Ratio',group_operator='avg')
@@ -761,7 +762,7 @@ class ProjectProject(models.Model):
                     if user_ids:                        
                             project.update({'c_user_ids':[(6,0,user_ids+project.c_user_ids.ids)]})
 
-    @api.multi
+    
     def add_raci_users(self, add_type, users):
         if type(users)==int:
             users = [users]
@@ -836,7 +837,7 @@ class ProjectProject(models.Model):
 
         return result
 
-    @api.multi 
+     
     def write(self, vals):    
 
         overrun_counts=0
@@ -962,7 +963,6 @@ class ProjectProject(models.Model):
             
             elif control_budget:
                 for i in control_budget:
-                    print '\n\n\n ccccccccccccbudget  i' , i
 
                     material_cost += i.material_cost 
                     labor_cost += i.labor_cost 
@@ -1087,7 +1087,7 @@ class ProjectProject(models.Model):
         
         return result  
 
-    @api.multi
+    
     def _get_type_common(self):
         ids = self.env['project.task.type'].search([('case_default','=',1)])
         return ids
@@ -1098,7 +1098,7 @@ class ProjectProject(models.Model):
         'type_ids': _get_type_common,
     }
 
-    @api.multi
+    
     def unlink(self):
         '''
            Төсөл  устгах
@@ -1281,7 +1281,7 @@ class control_budget(models.Model):
     '''
        зардлуудын ний дүн тооцох
     '''
-    @api.one
+    
     @api.depends('material_line_ids.product_uom_qty', 'material_line_ids.price_unit')
     def _amount_material(self):
         material = 0.0
@@ -1290,7 +1290,7 @@ class control_budget(models.Model):
                 material += line.product_uom_qty * line.price_unit
             obj.material_cost = material
     
-    @api.one
+    
     @api.depends('carriage_line_ids.price')    
     def _amount_carriage(self):
         carriage = 0.0
@@ -1300,7 +1300,7 @@ class control_budget(models.Model):
 
             obj.carriage_cost = carriage   
     
-    @api.one
+    
     @api.depends('equipment_line_ids.product_uom_qty','equipment_line_ids.price_unit')      
     def _amount_equipment(self):
         equipment = 0.0
@@ -1309,7 +1309,7 @@ class control_budget(models.Model):
                 equipment += line.product_uom_qty * line.price_unit
             obj.equipment_cost = equipment 
         
-    @api.one
+    
     @api.depends('labor_line_ids.labor_cost_basic')      
     def _amount_labor(self):
         labor = 0.0
@@ -1317,7 +1317,7 @@ class control_budget(models.Model):
             for line in obj.labor_line_ids:
                     labor += line.labor_cost_basic
             obj.labor_cost = labor
-    @api.one
+    
     @api.depends('postage_line_ids.price')      
     def _amount_postage(self):
         res = {}
@@ -1326,7 +1326,7 @@ class control_budget(models.Model):
             for line in obj.postage_line_ids:
                         postage += line.price
             obj.postage_cost = postage
-    @api.one
+    
     @api.depends('other_cost_line_ids.price')          
     def _amount_other(self):
         res = {}
@@ -1336,7 +1336,7 @@ class control_budget(models.Model):
                 other += line.price
             obj.other_cost = other
     
-    @api.one
+    
     @api.depends('labor_line_ids.engineer_salary')      
     def _total_engineer_salary(self):
         engineer_salary = 0.0
@@ -1345,7 +1345,7 @@ class control_budget(models.Model):
                     engineer_salary += line.engineer_salary
             obj.total_engineer_salary = engineer_salary
 
-    @api.one
+    
     @api.depends('labor_line_ids.extra_salary','labor_line_ids.product_uom_qty','labor_line_ids.price_unit')      
     def _total_extra_salary(self):
         extra_salary = 0.0
@@ -1354,7 +1354,7 @@ class control_budget(models.Model):
                     extra_salary += line.extra_salary
             obj.total_extra_salary = extra_salary
 
-    @api.one
+    
     @api.depends('labor_line_ids.social_insurance')      
     def _total_social_insurance(self):
         social_insurance = 0.0
@@ -1363,7 +1363,7 @@ class control_budget(models.Model):
                     social_insurance += line.social_insurance
             obj.total_social_insurance = social_insurance
 
-    @api.one
+    
     @api.depends('labor_line_ids.habe')      
     def _total_HABE(self):
         habe = 0.0
@@ -1372,7 +1372,7 @@ class control_budget(models.Model):
                     habe += line.habe
             obj.total_habe = habe
     
-    @api.one
+    
     @api.depends('labor_line_ids.total_salary')      
     def _amount_salary(self):
         salary = 0.0
@@ -1381,7 +1381,7 @@ class control_budget(models.Model):
                     salary += line.total_salary
             obj.total_salary = salary
     
-    @api.one
+    
     @api.depends('labor_line_ids.product_uom_qty','labor_line_ids.price_unit')      
     def _total_labor_cost(self):
         labor = 0.0
@@ -1390,13 +1390,13 @@ class control_budget(models.Model):
                     labor += line.product_uom_qty * line.price_unit
             obj.total_labor_cost = labor
 
-    @api.one  
+      
     def _amount_total(self):
         for obj in self:
             amount = obj.material_cost + obj.labor_cost + obj.carriage_cost + obj.equipment_cost + obj.postage_cost + obj.other_cost 
             obj.sub_total = amount
             
-    @api.one  
+      
     def _amount_total_balance(self):
         amount = 0.0
         util = 0.0
@@ -1419,7 +1419,7 @@ class control_budget(models.Model):
             obj.total_balance = balance
 
     #================================================================
-    @api.multi
+    
     def _step_is_final(self):
 #         workflow_obj = self.pool.get('hr.expense.workflow')
         workflow_line_obj = self.env['confirm.workflow.transition']
@@ -1433,7 +1433,7 @@ class control_budget(models.Model):
                     final = True
             budget.step_is_final = final
     
-    @api.multi
+    
     def _show_rating_button_user(self):
         emp_obj = self.env['hr.employee']
         #user = self.env['res.users'].browse(['user_id'])
@@ -1452,7 +1452,7 @@ class control_budget(models.Model):
                         show_confirm = False
             obj.show_rating_button_user = show_confirm
     
-    @api.one
+    
     def _is_budget_confirmer(self):
         '''
            Батлах хэрэглэгч мөн эсэх тооцох
@@ -1469,7 +1469,7 @@ class control_budget(models.Model):
             
             obj.is_budget_confirmer = show_confirm
 
-    @api.one
+    
     def _show_confirm_button_user(self):
         '''
            Батлах хэрэглэгчид харуулах эсэх тооцох
@@ -1490,7 +1490,7 @@ class control_budget(models.Model):
                             show_confirm = False 
             obj.show_confirm_button_user = show_confirm
     
-    @api.one
+    
     def _is_show_confirmed(self):
         '''
            батлаж дууссан эсэх
@@ -1506,7 +1506,7 @@ class control_budget(models.Model):
                 confirmed = True
             obj.is_show_confirmed = confirmed
 
-    @api.multi
+    
     def _is_show_evaluate(self):
         count = 0
         for obj in self:
@@ -1527,11 +1527,11 @@ class control_budget(models.Model):
                                                           ('close',u'Хаагдсан'),
                                                           ('cancel',u'Цуцлагдсан'),
                                                           ('after',u'Хойшлуулсан')],
-                                                         'Status',readonly=True, default='draft',track_visibility='onchange')
+                                                         'Status',readonly=True, default='draft',tracking=True)
     main_id=fields.Many2one('main.specification','Project', index=True)
-    project_id=fields.Many2one('project.project','Project', required = True,domain="[('state', 'in',('comfirm','project_started')),('state_comfirm','=',True)]", track_visibility='onchange', index=True) # Төсөл
-    user_id=fields.Many2one('res.users', 'Budgeter',required = True, track_visibility='onchange', default=lambda self: self.env.user.id ) # Төсөвчин
-    task_id=fields.Many2one('project.task', 'Work Task' ,required = True, track_visibility='onchange', index=True)
+    project_id=fields.Many2one('project.project','Project', required = True,domain="[('state', 'in',('comfirm','project_started')),('state_comfirm','=',True)]", tracking=True, index=True) # Төсөл
+    user_id=fields.Many2one('res.users', 'Budgeter',required = True, tracking=True, default=lambda self: self.env.user.id ) # Төсөвчин
+    task_id=fields.Many2one('project.task', 'Work Task' ,required = True, tracking=True, index=True)
     name=fields.Char('Name', required = True) # Хяналтын төсвийн нэр
     budget_code=fields.Char('Code', required = True,readonly=True, default='New')
     res_model=fields.Char('Resource Model', readonly=True)
@@ -1539,8 +1539,8 @@ class control_budget(models.Model):
     budget_confirmer=fields.Many2many('hr.employee','project_control_budget_budget_hr_employee_ref_ref','budget_id_ids','empl_id',string='Confirmer',required = True)
     check_users=fields.Many2many('res.users', string= 'Checkers', readonly=True, copy=False)
     required_cost=fields.Integer("Required Cost")# Нийт хяналтын төсөв
-    date=fields.Date('Budget date', required = True, track_visibility='onchange') # Огноо
-    confirm_date=fields.Date('Confirm date', track_visibility='onchange') # Баталсан Огноо
+    date=fields.Date('Budget date', required = True, tracking=True) # Огноо
+    confirm_date=fields.Date('Confirm date', tracking=True) # Баталсан Огноо
     res_id=fields.Integer('Resource ID', readonly=True)
     
     material_cost=fields.Float(compute='_amount_material',string='Material Cost',type='float') # Бараа материалын зардал
@@ -1550,8 +1550,8 @@ class control_budget(models.Model):
     equipment_cost=fields.Float(compute=_amount_equipment, string='Equipment Cost',digits_compute=dp.get_precision('Account')) # Машин механизмын зардал,
     postage_cost=fields.Float(compute=_amount_postage,string='Postage Cost',digits_compute=dp.get_precision('Account')) # Шууд зардал
     other_cost=fields.Float(compute=_amount_other,string='Other Cost')# Бусад зардал
-    sub_total=fields.Float(compute=_amount_total, digits_compute=dp.get_precision('Account'), string='Sub Total', track_visibility='onchange')
-    total_balance=fields.Float(compute=_amount_total_balance, digits_compute=dp.get_precision('Account'), string='Total Balance', track_visibility='onchange')
+    sub_total=fields.Float(compute=_amount_total, digits_compute=dp.get_precision('Account'), string='Sub Total', tracking=True)
+    total_balance=fields.Float(compute=_amount_total_balance, digits_compute=dp.get_precision('Account'), string='Total Balance', tracking=True)
     check_sequence=fields.Integer('Workflow Step', copy=False, default=0)
     step_is_final=fields.Boolean(compute=_step_is_final, type='boolean', string='Is this accountant step?', store=False)
     show_confirm_button_user=fields.Boolean(compute=_show_confirm_button_user,string = 'show button',type='boolean')
@@ -1567,7 +1567,7 @@ class control_budget(models.Model):
     total_salary = fields.Float(compute=_amount_salary, string="Нийт цалин")
     total_labor_cost=fields.Float(compute=_total_labor_cost, string='Нийт Үндсэн цалин',type='float',digits_compute=dp.get_precision('Account')) #  Ажиллах хүчний зардал
 
-    @api.multi
+    
     def send(self):
         workflow_obj = self.env['confirm.workflow.transition']
         user_obj = self.env['res.users']
@@ -1580,7 +1580,7 @@ class control_budget(models.Model):
                       
         return self.write({'state': 'confirm', 'date_confirm': time.strftime('%Y-%m-%d')})
 
-    @api.multi
+    
     def action_confirm(self):
         workflow_obj = self.env['confirm.workflow.transition']
         user_obj = self.env['res.users']
@@ -1605,7 +1605,7 @@ class control_budget(models.Model):
                         _('Expense request has been approved and payeble account entry generated with %s number.') % \
                                       expense.account_move_id.name_get()[0][1])
 
-    @api.multi
+    
     def log_to_history(self,parent,action):
         history_obj = self.env['confirm.workflow.history']
         todo_delete = []
@@ -1630,7 +1630,7 @@ class control_budget(models.Model):
         
         todo_delete += history_obj.search([('parent_id','=',parent.id),
                                 ('action','=','pending')])
-        if action <> 'pending' and todo_delete:
+        if action != 'pending' and todo_delete:
             history_obj.unlink(todo_delete)
         return True
 
@@ -1658,7 +1658,6 @@ class MaterialBudgetLine(models.Model):
     def _amount(self):
         for obj in self:
             obj.material_total = obj.product_uom_qty * obj.price_unit
-        # print'___________PP________',self.ids
         # if not self.ids:
         #     return {}
         # self._cr.execute("SELECT l.id,COALESCE(SUM(l.price_unit*l.product_uom_qty),0) AS amount FROM material_budget_line l WHERE id IN %s GROUP BY l.id ",(tuple(self.ids),))
@@ -1714,7 +1713,7 @@ class MaterialBudgetLine(models.Model):
         return main
 
     
-    @api.multi
+    
     def unlink(self):
         for obj in self:
             if obj.parent_id.state not in ('draft','user','start'):
@@ -1859,7 +1858,7 @@ class LaborBudgetLine(models.Model):
         main = super(LaborBudgetLine, self).create(vals)
         return main
     
-    @api.multi
+    
     def unlink(self):
 
         for obj in self:
@@ -1915,7 +1914,7 @@ class EquipmentBudgetLine(models.Model):
         main = super(EquipmentBudgetLine, self).create(vals)
         return main
 
-    @api.multi
+    
     def unlink(self):
         for obj in self:
             if obj.parent_id.state not in ('draft','user','start'):
@@ -1944,7 +1943,7 @@ class PostageBudgetLine(models.Model):
                     raise UserError(_(u'Энэ үед шууд зардлын мөр нэмэх боломжгүй'))
         main = super(PostageBudgetLine, self).create(vals)
         return main
-    @api.multi
+    
     def unlink(self):
         for obj in self:
             if obj.parent_id.state != 'draft':
@@ -1975,7 +1974,7 @@ class OtherCostBudgetLine(models.Model):
         main = super(OtherCostBudgetLine, self).create(vals)
         return main
     
-    @api.multi
+    
     def unlink(self):
         for obj in self:
             if obj.parent_id.state not in ('draft','user','start'):
@@ -1998,7 +1997,7 @@ class ConfirmWorkflowTransition(models.Model):
     job_id=fields.Many2one('hr.job','Job')
     user_id=fields.Many2one('res.users', 'Confirm Employee')
     
-    @api.multi
+    
     def _default_sequence(self):
         seq = 0
         if context.get('transitions', False):
@@ -2046,7 +2045,7 @@ class ConfirmWorkflowTransition(models.Model):
 class TaskWorkDocument(models.Model):
     _name = 'task.work.document'
      
-    @api.multi 
+     
     def _invisible_botton(self):
         for obj in self:
             if obj.task_id.task_state == 't_confirm':
@@ -2062,7 +2061,7 @@ class TaskWorkDocument(models.Model):
     _defaults = {
                  'is_confirmed':False
                  }
-    @api.multi
+    
     def action_confirm(self):
         doc_ids = []
         for obj in self:
@@ -2096,7 +2095,7 @@ class ProjectTask(models.Model):
     _inherit = 'project.task' 
     _description = 'Project task'
     
-    @api.multi
+    
     def control_budget_tree_view(self):
         """ open Control budget view """
         mod_obj = self.env['ir.model.data']
@@ -2118,24 +2117,24 @@ class ProjectTask(models.Model):
         return result
     
 
-    name=fields.Char('Task Title', track_visibility='onchange', index=True, size=350, required=True, select=True)
-    task_date_start=fields.Date('Starting Date', select=True, copy=False, track_visibility='onchange')
+    name=fields.Char('Task Title', tracking=True, index=True, size=350, required=True, select=True)
+    task_date_start=fields.Date('Starting Date', select=True, copy=False, tracking=True)
     company_id=fields.Many2one('res.company', 'Company')
-    planned_hours=fields.Float('Initially Planned Hours', help='Estimated time to do the task, usually set by the project manager when the task is in draft state.', track_visibility='onchange')
-    department_id=fields.Many2one('hr.department', 'Department', index=True,required = True, track_visibility='onchange')
-    controller=fields.Many2many('hr.employee','project_task_controller_employee','project_task_id','employee_id','Controlled employee' , track_visibility='onchange')# Даалгавар хянагч
+    planned_hours=fields.Float('Initially Planned Hours', help='Estimated time to do the task, usually set by the project manager when the task is in draft state.', tracking=True)
+    department_id=fields.Many2one('hr.department', 'Department', index=True,required = True, tracking=True)
+    controller=fields.Many2many('hr.employee','project_task_controller_employee','project_task_id','employee_id','Controlled employee' , tracking=True)# Даалгавар хянагч
     task_type=fields.Selection([('normal',u'Энгийн'), # Энгийн ажил
                                                       ('tariff_task',u'Тарифт ажил'), # Тарифт ажил
                                                       ('work_graph',u'Ажлын зураг'),
                                                       ('work_task',u'Ажлын даалгавар'), # Худалдан авалтын ажил
                                                       ],
-                                                     'Task type', required=True, copy=False, default='normal', track_visibility='onchange')
-    rating_users=fields.Many2many('hr.employee','project_task_rating_employee_ref','project_task_id','emp_id',string='Rated employee', track_visibility='onchange')# Даалгавар үнэлэгчид
-    task_verifier=fields.Many2one('hr.employee', string="Verifier", track_visibility='onchange')
-    task_verifier_users=fields.Many2many('hr.employee','project_task_verify_employee','task_id','employee_id',string="Verifier",track_visibility='onchange')
+                                                     'Task type', required=True, copy=False, default='normal', tracking=True)
+    rating_users=fields.Many2many('hr.employee','project_task_rating_employee_ref','project_task_id','emp_id',string='Rated employee', tracking=True)# Даалгавар үнэлэгчид
+    task_verifier=fields.Many2one('hr.employee', string="Verifier", tracking=True)
+    task_verifier_users=fields.Many2many('hr.employee','project_task_verify_employee','task_id','employee_id',string="Verifier",tracking=True)
     task_planed_date=fields.Date('Task Planed Date')
     document=fields.One2many('ir.attachment','project_task_document',string='Document', required = False)
-    work_document=fields.One2many('ir.attachment','project_work_task_document',string='Confirmed Document', required = False)
+    work_document=fields.One2many('ir.attachment','task_id',string='Confirmed Document', required = False)
     document_line=fields.One2many('task.work.document','task_id','Document line')
     
 #     def write(self, cr, uid, ids, vals, context=None):
@@ -2184,7 +2183,7 @@ class EmployeeDutyLine(models.Model):
     
 
     project_id = fields.Many2one('project.project', string="Project" ,ondelete='cascade')
-    employee_id = fields.Many2one('hr.employee' , string="Employee", track_visibility='always')
-    employee_department_id = fields.Many2one('hr.department' , string="Department" , readonly=True, track_visibility='always',related='employee_id.department_id')
+    employee_id = fields.Many2one('hr.employee' , string="Employee", tracking=True)
+    employee_department_id = fields.Many2one('hr.department' , string="Department" , readonly=True, tracking=True,related='employee_id.department_id')
     employee_duty = fields.Many2one('project.employee.duty',string="Employee duty")
     duty_type=fields.Many2one('project.employee.duty',string="Duty type")

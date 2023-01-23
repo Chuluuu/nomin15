@@ -8,8 +8,8 @@
             <field name="interval_type">days</field>
             <field name="numbercall">-1</field>
             <field eval="False" name="doall"/>
-            <field eval="'project.task'" name="model"/>
-            <field eval="'_project_task_alarm'" name="function"/>
+            <field name="model_id" ref="model_project_task"/>
+            <field name="code">model._project_task_alarm()</field>
         </record>
         <record id="ir_cron_project_task_alarm_deadline" model="ir.cron">
             <field name="name">Project task alarm deadline</field>
@@ -18,8 +18,8 @@
             <field name="interval_type">days</field>
             <field name="numbercall">-1</field>
             <field eval="False" name="doall"/>
-            <field eval="'project.task'" name="model"/>
-            <field eval="'_project_task_alarm_deadline'" name="function"/>
+            <field name="model_id" ref="model_project_task"/>
+            <field name="code">model._project_task_alarm_deadline()</field>
         </record>
         <record id="ir_cron_project_flow" model="ir.cron">
             <field name="name">Project flow</field>
@@ -28,8 +28,8 @@
             <field name="interval_type">days</field>
             <field name="numbercall">-1</field>
             <field eval="False" name="doall"/>
-            <field eval="'project.project'" name="model"/>
-            <field eval="'_project_flow_cron'" name="function"/>
+            <field name="model_id" ref="model_project_project"/>
+            <field name="code">model._project_flow_cron()</field>
         </record>
     </data>
 </odoo>

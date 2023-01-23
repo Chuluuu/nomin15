@@ -43,7 +43,7 @@ class create_project_ticket(models.Model):
                     })
         return res
 
-    @api.multi
+    
     def action_create(self):
         '''
             Асуудлаас тикет үүсгэх товч

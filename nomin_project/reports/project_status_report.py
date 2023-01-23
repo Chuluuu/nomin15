@@ -5,19 +5,18 @@ from dateutil.relativedelta import relativedelta
 from datetime import date, datetime, timedelta
 from odoo.exceptions import UserError
 from odoo import models, fields, api, _
-from StringIO import StringIO
+from io import StringIO
 from io import BytesIO
 import base64
 import xlsxwriter
 
 class project_status_report(models.TransientModel):
     _name = 'project.status.report'
-    _inherit = 'abstract.report.model'
     _description = 'Project Status Report'
 
     project_id = fields.Many2one('project.project', required=True,string=u'Төсөл')
     
-    @api.multi
+    
     def export_chart(self,report_code,context=None):
         output = BytesIO()
         workbook = xlsxwriter.Workbook(output)
@@ -223,8 +222,6 @@ class project_status_report(models.TransientModel):
                             complete_percent_day += ((day_count.days+1) * task.flow)/100
             if complete_percent_day > 0:
                 project_status  = (complete_percent_day * 100) / tasks_total_day
-                print 'ss',tasks_total_day
-                print 'aa',complete_percent_day
             else:
                 project_status = 0
             

@@ -12,7 +12,7 @@ class refuse_reason_order(models.TransientModel):
     
     comment = fields.Text('Commit', required=True)
     
-    @api.multi
+    
     def refuse_order(self):
         context = self._context
         #commet = u'Татгалзсан шалтгаан: %s'%(self.comment)

@@ -8,11 +8,12 @@
     'category': 'Nomin project',
     'depends': [
         'project',
-        'project_timesheet',
-        'nomin_tender',
+        'sale_timesheet',
+        # 'nomin_tender',
         'stock', 
         'project_issue',
-        'project_issue_sheet',
+        'hr_timesheet',
+        # 'project_issue_sheet',
     ],
     'description': "",
     'data': [
@@ -29,7 +30,8 @@
              'views/project_task_view.xml',
              'views/control_budget_view.xml',
              'views/project_issue_view.xml',
-             'views/contract_management_view.xml',
+            #  TODO FIX LATER
+            #  'views/contract_management_view.xml',
              'views/program_order_view.xml',
              'views/ordering_sequence.xml',
              'views/labor_cost_settings_view.xml',
@@ -47,8 +49,9 @@
              'wizard/control_budget_cancel.xml',
              'wizard/control_budget_back.xml',
              'wizard/back_to_allocated_view.xml',
-             'views/tender_inherit_view.xml',
-             'views/inherit_purchase_requisition.xml',
+            #  TODO FIX LATER
+            #  'views/tender_inherit_view.xml',
+            #  'views/inherit_purchase_requisition.xml',
              'views/budget_partner_comparison_view.xml',
              'views/budget_partner_comparison_seq.xml',
              'wizard/create_partner_comparison_wizard.xml',
@@ -73,16 +76,21 @@
              'views/import_task_view.xml',
              'views/project_task_cron_view.xml',
              'security/ir.model.access.csv',
-             'static/xml/project_gantt_view.xml',              
+            #  'static/xml/project_gantt_view.xml',              
              'controller/budget_partner_view.xml',     
-             'static/xml/project_gantt_view.xml', 
              ],
     'test': [
     ],
     'installable': True,
     'auto_install': False,
     'application': True,
-    'js': ['static/src/js/project_gantt_view.js'],
-    'qweb': ['static/src/xml/project_gantt_view.xml'],
+    'assets': {
+        'web.assets_frontend': [
+           'nomin_project/static/src/js/project_gantt_view.js', 
+        ],
+        'web.assets_qweb': [
+                'nomin_project/static/src/xml/project_gantt_view.xml',
+        ]
+    },
     'icon': '/nomin_project/static/src/img/logo.jpg',
 }

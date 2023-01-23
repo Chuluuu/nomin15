@@ -10,9 +10,8 @@ from datetime import date, datetime, timedelta
 import time
 from dateutil import rrule
 
-class deadline_project_task(models.TransientModel):
+class DeadlineProjectTask(models.TransientModel):
     _name = 'deadline.project.task'
-    _inherit = 'abstract.report.model'
     _description = 'Deadline Project Task'
     
     project_ids = fields.Many2one('project.project',string=u'Төсөл', required=True)
@@ -25,7 +24,7 @@ class deadline_project_task(models.TransientModel):
         project = self.env['project.project'].search([('id','=',self.project_ids.id)])
         return {'domain':{'project_stage':[('id','in',project.project_stage.ids)]}}
     
-    @api.multi
+    
     def get_export_data(self,report_code,context=None):
         if context is None:
             context = {}

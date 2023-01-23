@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 	<data>
-
-
 		<report string="Захиалгын хүсэлт" id="action_order_request_report_view" model="order.page" report_type="qweb-pdf" name="nomin_project.order_request_report" file="nomin_project.order_request_report" />
 
 		<record id="paperformat_order_request" model="report.paperformat">
@@ -18,11 +16,10 @@
 			<field name="dpi">90</field>
 		</record>
 
-		<record id="nomin_project.action_order_request_report_view" model="ir.actions.report.xml">
+		<record id="nomin_project.action_order_request_report_view" model="ir.actions.report">
 			<field name="paperformat_id" ref="nomin_project.paperformat_order_request" />
 		</record>
 
-		<!-- akt -->
 		<report string="Хүлээлцэх акт" id="action_order_request_act_report_view" model="order.page" report_type="qweb-pdf" name="nomin_project.order_request_act_report" file="nomin_project.order_request_act_report" />
 
 		<record id="paperformat_order_request_act" model="report.paperformat">
@@ -38,7 +35,7 @@
 			<field name="dpi">90</field>
 		</record>
 
-		<record id="nomin_project.action_order_request_act_report_view" model="ir.actions.report.xml">
+		<record id="nomin_project.action_order_request_act_report_view" model="ir.actions.report">
 			<field name="paperformat_id" ref="nomin_project.paperformat_order_request_act" />
 		</record>
 
@@ -460,17 +457,6 @@
 
 								<group colspan="8" col="8" attrs="{'invisible':[('request_type','!=',1)]}">
 									<group colspan="4">
-
-
-										<!-- 
-										<field name="date" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
-		           						<field name="order_name" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}" />
-				               			<field name="order_offer" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}" />
-				               			<field name="difficulty" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>		               	
-		               					<field name="purpose" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
-		               					<field name="result" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
-										 -->
-
 										<field name="date" attrs="{'required':[('request_type','in',(1,15)),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
 										<field name="job_selection" attrs="{'invisible':[('request_type','not in',15)]}"/>
 										<field name="order_name" attrs="{'required':[('request_type','=',1),('state','in','draft')]}" />
@@ -479,15 +465,10 @@
 										<field name="purpose" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
 										<field name="result" attrs="{'invisible':[('request_type','in',15)],'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
 										<field name="location" attrs="{'invisible':[('request_type','not in',15)]}" />
-
-_
-
-
-
 										<field name="req_file" options="{'no_open': True}" attrs="{'readonly':[('state','!=','draft')]}">
 											<tree string="Files">
-												<field name="datas_fname"/>
-												<field name="datas" filename="datas_fname" readonly="1" invisible="1"/>
+												<field name="store_fname"/>
+												<field name="datas" filename="store_fname" readonly="1" invisible="1"/>
 											</tree>
 											<form>
 												<label for="name" class="oe_edit_only"/>
@@ -496,15 +477,14 @@ _
 												</h1>
 												<group string="Data">
 													<field name="type" invisible="1"/>
-													<field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-													<field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+													<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+													<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
 													<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
 												</group>
 												<group groups="base.group_no_one" string="History">
 													<label for="create_uid" string="Creation"/>
 													<div name="creation_div">
 														<field name="create_uid" readonly="1" class="oe_inline"/>
- on 
 														<field name="create_date" readonly="1" class="oe_inline"/>
 													</div>
 												</group>
@@ -536,8 +516,8 @@ _
 										<field name="annex_file" options="{'no_open': True}" attrs="{'invisible':[('state','in',['draft','send','control','confirmed','rejected','approved1'])],'readonly':[('state','not in',['allocated','cost_done'])]}">
 											<tree string="Files">
 												<field name="name" />
-												<field name="datas_fname"/>
-												<field name="datas" filename="datas_fname" readonly="1" invisible="1"/>
+												<field name="store_fname"/>
+												<field name="datas" filename="store_fname" readonly="1" invisible="1"/>
 												<field name="create_date"/>
 											</tree>
 											<form>
@@ -548,15 +528,14 @@ _
 												<group string="Data">
 
 													<field name="type" invisible="1"/>
-													<field name="datas" filename="datas_fname" attrs="{'invisible':[('type','=','url')]}"/>
-													<field name="datas_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+													<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+													<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
 													<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
 												</group>
 												<group groups="base.group_no_one" string="History">
 													<label for="create_uid" string="Creation"/>
 													<div name="creation_div">
 														<field name="create_uid" readonly="1" class="oe_inline"/>
- on 
 														<field name="create_date" readonly="1" class="oe_inline"/>
 													</div>
 												</group>
@@ -573,7 +552,7 @@ _
 								<field name="plan_info">
 									<form string="Plan information">
 										<field name="year_id" invisible="1"/>
-										<field name="month_id" />
+										<!-- <field name="month_id" /> -->
 										<field name="plan_name"/>
 										<field name="first_week"/>
 										<field name="second_week"/>
@@ -583,7 +562,7 @@ _
 									</form>
 									<tree string="Plan info" editable="bottom">
 										<field name="year_id" />
-										<field name="month_id" />
+										<!-- <field name="month_id" /> -->
 										<field name="plan_name"/>
 										<field name="first_week"/>
 										<field name="second_week"/>
@@ -700,7 +679,9 @@ _
 							</page>
 
 							<page string="Cost information" attrs="{'invisible':['|',('state','in',['draft','control','confirmed','slow_up','rejected']),('request_type','not in',[1,17])]}">
-								<field name="cost_info" attrs="{'required':[('state','in','allocated'),('request_type','in',1,17)],'readonly':[('state','not in',['allocated','approved1'])]}">
+								<!-- TODO FIX LATER -->
+								<field name="cost_info" attrs="{'required':[('state','in','allocated')],'readonly':[('state','not in',['allocated','approved1'])]}">
+									<!-- <field name="cost_info" attrs="{'required':[('state','in','allocated'),('request_type','in',1,17)],'readonly':[('state','not in',['allocated','approved1'])]}"> -->
 									<form>
 										<group>
 											<group>
@@ -844,9 +825,9 @@ _
 		<record model="ir.ui.view" id="order_page_tree">
 			<field name="name">order.page.tree</field>
 			<field name="model">order.page</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="ПХ-ийн захиалга өгөх" colors="black:state == 'draft';blue:state == 'send';grey:state == 'confirmed';">
+				<!-- <tree string="ПХ-ийн захиалга өгөх" colors="black:state == 'draft';blue:state == 'send';grey:state == 'confirmed';"> -->
+				<tree string="test">
 					<field name="name" />
 					<field name="department_id"/>
 					<field name="employee_id"/>
@@ -912,16 +893,15 @@ _
 			<field name="arch" type="xml">
 				<form>
 					<group class="oe_footer">
-						<button name="action_archived" string="Archived" type="object" icon="gtk-apply" groups="project.group_program_admin"/>
+						<button name="action_archived" string="Archived" type="object" icon="gtk-apply" groups="group_program_admin"/>
 						<button special="cancel" string="Cancel" type="object" icon="gtk-cancel"/>
 					</group>
 				</form>
 			</field>
 		</record>
-		<act_window name="Архивлах" res_model="order.archived" src_model="order.page" view_mode="form"
-				view_id = "action_to_archived" target="new" multi="True" key2="client_action_multi" id="action_to_archived_form_id" groups="project.group_program_admin"/>
-
-
+		<!-- TODO FIX LATER -->
+		<!-- <act_window name="Архивлах" res_model="order.archived" src_model="order.page" view_mode="form"
+				view_id = "action_to_archived" target="new" binding_model="model_order_archived" key2="client_action_multi" id="action_to_archived_form_id" groups="group_program_admin"/> -->
 
 
 
@@ -963,8 +943,8 @@ _
 			<field name="model">job.name</field>
 			<field name="arch" type="xml">
 				<search string="Search HR branch location">
-					<filter string="New HR branch location" help="Draft HR branch locations"/>
-					<filter string="Send HR branch location" help="Draft HR branch locations"/>
+					<filter name="new hr" string="New HR branch location" help="Draft HR branch locations"/>
+					<filter name="hr location" string="Send HR branch location" help="Draft HR branch locations"/>
 					<field name="name" string="HR branch location"/>
 					<group expand="0" name="group_by" string="Group By">
 						<filter name="group_name" string="name" domain="" context="{'group_by':'name'}"/>
@@ -1032,8 +1012,8 @@ _
 			<field name="model">pr.spec.dt</field>
 			<field name="arch" type="xml">
 				<search string="Search HR branch location">
-					<filter string="New HR branch location" help="Draft HR branch locations"/>
-					<filter string="Send HR branch location" help="Draft HR branch locations"/>
+					<filter name="new hr" string="New HR branch location" help="Draft HR branch locations"/>
+					<filter name="hr locccation" string="Send HR branch location" help="Draft HR branch locations"/>
 					<field name="name" string="HR branch location"/>
 					<group expand="0" name="group_by" string="Group By">
 						<filter name="group_name" string="name" domain="" context="{'group_by':'name'}"/>
@@ -1139,8 +1119,8 @@ _
 			<field name="model">net.spec</field>
 			<field name="arch" type="xml">
 				<search string="Search HR branch location">
-					<filter string="New HR branch location" help="Draft HR branch locations"/>
-					<filter string="Send HR branch location" help="Draft HR branch locations"/>
+					<filter name="new hr" string="New HR branch location" help="Draft HR branch locations"/>
+					<filter name="hr location" string="Send HR branch location" help="Draft HR branch locations"/>
 					<field name="name" string="HR branch location"/>
 
 				</search>
@@ -1199,8 +1179,8 @@ _
 			<field name="model">backing.up</field>
 			<field name="arch" type="xml">
 				<search string="Search HR branch location">
-					<filter string="New HR branch location" help="Draft HR branch locations"/>
-					<filter string="Send HR branch location" help="Draft HR branch locations"/>
+					<filter name="new hr " string="New HR branch location" help="Draft HR branch locations"/>
+					<filter name="hr location" string="Send HR branch location" help="Draft HR branch locations"/>
 					<field name="name" string="HR branch location"/>
 
 				</search>
@@ -1396,8 +1376,8 @@ _
 			<field name="model">batch.name</field>
 			<field name="arch" type="xml">
 				<search string="Search HR branch location">
-					<filter string="New HR branch location" help="Draft HR branch locations"/>
-					<filter string="Send HR branch location" help="Draft HR branch locations"/>
+					<filter name="new hr" string="New HR branch location" help="Draft HR branch locations"/>
+					<filter name="hr location" string="Send HR branch location" help="Draft HR branch locations"/>
 					<field name="name" string="HR branch location"/>
 					<group expand="0" name="group_by" string="Group By">
 						<filter name="group_name" string="name" domain="" context="{'group_by':'name'}"/>
@@ -1430,8 +1410,8 @@ _
 				</p>
 			</field>
 		</record>
-
-		<record id="view_work_service_form_order_page_field_inherit" model="ir.ui.view">
+		<!-- TODO FIX LATER -->
+		<!-- <record id="view_work_service_form_order_page_field_inherit" model="ir.ui.view">
 			<field name="name">work.service.form.inherit</field>
 			<field name="model">work.service</field>
 			<field name="inherit_id" ref="nomin_base.view_work_service_form"/>
@@ -1440,31 +1420,31 @@ _
 					<field name="latin_name"/>
 				</field>
 			</field>
-		</record>
+		</record> -->
 
 
 		<menuitem action="action_order_page" sequence="16" name="МТС-д захиалга өгөх" id="program_order_page_menu" parent="project.menu_project_management" groups="base.group_user"/>
 
 
-		<menuitem action="action_hr_branch_location" id="hr_indicator_menu" groups="project.group_system_senior" name="Үзүүлэлт " parent="project.menu_project_management" sequence="18"/>
+		<menuitem action="action_hr_branch_location" id="hr_indicator_menu" groups="group_system_senior" name="Үзүүлэлт " parent="project.menu_project_management" sequence="18"/>
 
 
-		<menuitem action="action_hr_net_information" id="hr_internet_information_menu" groups="project.group_system_senior" name="Сувгийн мэдээлэл" parent="project.menu_project_management" sequence="20"/>
+		<menuitem action="action_hr_net_information" id="hr_internet_information_menu" groups="group_system_senior" name="Сувгийн мэдээлэл" parent="project.menu_project_management" sequence="20"/>
 
 
-		<menuitem action="action_backing_up" id="information_back_up_menu" groups="project.group_system_senior" name="Нөөцлөх мэдээллийн төрөл" parent="project.menu_project_management" sequence="22"/>
+		<menuitem action="action_backing_up" id="information_back_up_menu" groups="group_system_senior" name="Нөөцлөх мэдээллийн төрөл" parent="project.menu_project_management" sequence="22"/>
 
 
-		<menuitem action="action_performance_information" id="performance_information_menu_menu" groups="project.group_system_senior" name="Үзүүлэлтийн нэр" parent="project.menu_project_management" sequence="24"/>
+		<menuitem action="action_performance_information" id="performance_information_menu_menu" groups="group_system_senior" name="Үзүүлэлтийн нэр" parent="project.menu_project_management" sequence="24"/>
 
 
-		<menuitem action="action_job_name" id="job_name_menu" groups="project.group_program_admin" name="Цагийн тарифын мэдээлэл" parent="project.menu_project_management" sequence="28"/>
+		<menuitem action="action_job_name" id="job_name_menu" groups="group_program_admin" name="Цагийн тарифын мэдээлэл" parent="project.menu_project_management" sequence="28"/>
 
-		<menuitem action="action_batch_name_information" id="batch_name_menu_menu" groups="project.group_system_senior" name="Багцын нэр" parent="project.menu_project_management" sequence="26"/>
+		<menuitem action="action_batch_name_information" id="batch_name_menu_menu" groups="group_system_senior" name="Багцын нэр" parent="project.menu_project_management" sequence="26"/>
 
-		<menuitem action="action_nat_pat_access_information" id="nat_access_information_menu" groups="project.group_system_senior" name="NAT PAT" parent="project.menu_project_management" sequence="21"/>
+		<menuitem action="action_nat_pat_access_information" id="nat_access_information_menu" groups="group_system_senior" name="NAT PAT" parent="project.menu_project_management" sequence="21"/>
 
-		<menuitem action="action_project_state_information" id="project_state_information_menu" groups="project.group_program_admin" name="Төлвийн нэр" parent="project.menu_project_management" sequence="23"/>
+		<menuitem action="action_project_state_information" id="project_state_information_menu" groups="group_program_admin" name="Төлвийн нэр" parent="project.menu_project_management" sequence="23"/>
 
 
 	</data>

@@ -10,7 +10,6 @@
                         <field name="data"/>
                     </group>
                     <group colspan="4" col="6">
-                        <label string="" colspan="2"/>
                         <button icon="gtk-cancel" special="cancel" string="Close"/>
                         <button icon="gtk-execute" string="Execute" name="import_data" type="object"/>
                     </group>

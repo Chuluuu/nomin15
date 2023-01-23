@@ -104,7 +104,7 @@ class CreatePartnerComparisonWizard(models.TransientModel):
         
         return res
 
-    @api.multi
+    
     def _total_amount(self):
         total = 0.0
         for budget in  self:
@@ -206,7 +206,7 @@ class CreatePartnerComparisonWizard(models.TransientModel):
             child_ids.extend(type_ids.ids)
         return {'domain':{'child_type_id': [('id','=', child_ids)]}}
 
-    @api.multi
+    
     def action_create(self):
         budget = self.control_budget_id
         budget_partner_comparison = self.env['budget.partner.comparison']

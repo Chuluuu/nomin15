@@ -2,7 +2,6 @@
 
 from odoo import models, fields, api
 from odoo.tools.translate import _
-from odoo.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
 
 # class PrintTarifTask(osv.AbstractModel):
 #     _name = 'report.nomin_project.control_budget_report'
@@ -46,7 +45,7 @@ class PrintTarifTask(models.AbstractModel):
     """
     _name = 'report.nomin_project.control_budget_report'
 
-    @api.multi
+    
     def render_html(self, data):
         budget_obj = self.env['control.budget']
         report = self.env['report']._get_report_from_name('nomin_project.control_budget_report')

@@ -204,8 +204,8 @@ Odoo ERP Автомат Имэйл
             <field name="interval_type">days</field>
             <field name="numbercall">-1</field>
             <field eval="False" name="doall"/>
-            <field eval="'project.project'" name="model"/>
-            <field eval="'_project_alarm_cron'" name="function"/>
+            <field name="model_id" ref="model_project_project"/>
+            <field name="code">model._project_alarm_cron()</field>
         </record>
 
         <record id="ir_cron_vote_end_cron" model="ir.cron">
@@ -215,8 +215,8 @@ Odoo ERP Автомат Имэйл
             <field name="interval_type">days</field>
             <field name="numbercall">-1</field>
             <field eval="False" name="doall"/>
-            <field eval="'budget.partner.comparison'" name="model"/>
-            <field eval="'_vote_end_cron'" name="function"/>
+            <field name="model_id" ref="model_budget_partner_comparison"/>
+            <field name="code">model._vote_end_cron()</field>
         </record>
     </data>
 </odoo>

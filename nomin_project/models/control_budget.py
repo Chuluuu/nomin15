@@ -220,7 +220,6 @@ class purchase_requisition(models.Model):
     _inherit = 'purchase.requisition'
 
 
-    @api.multi
     def write(self, vals):
         if 'state' in vals:
             if vals.get('state')=='confirmed':
@@ -238,7 +237,6 @@ class inherit_control_budget(models.Model):
         Хяналтын төсөв
     '''
     
-    @api.multi
     def _get_all(self):
         '''
             Зардлуудын боломжит үлдэгдэл , жинхэнэ үлдэгдэл төсөвлөсөн дүн тооцоолох
@@ -297,7 +295,6 @@ class inherit_control_budget(models.Model):
                                 'project_budget_other_real'       :line.other_line_total
                                 })
                     
-    @api.multi
     def _get_limit(self):
         '''
             Зардлуудын гүйцэтгэл тооцолох
@@ -328,7 +325,6 @@ class inherit_control_budget(models.Model):
                 total_price += other_line.price
             budget.other_utilization_limit = budget.other_cost - total_price
             
-    @api.multi
     def _total_limit(self):
         '''
             Нийт төсвийн үлдэгдэл тооцоолох
@@ -338,7 +334,6 @@ class inherit_control_budget(models.Model):
             total += budget.material_utilization_limit + budget.labor_utilization_limit + budget.equipment_utilization_limit + budget.carriage_utilization_limit + budget.postage_utilization_limit + budget.other_utilization_limit
             budget.total_utilization_limit = total
             
-    @api.multi
     def _budgets_utilization_total(self):
         '''
             Бодит гүйцэтгэлийн нийт дүн талбар тооцоолох
@@ -349,7 +344,6 @@ class inherit_control_budget(models.Model):
                 total += util_line.price
             budget.budgets_utilization_total = total
             
-    @api.multi
     def _budgets_utilization_util(self):
         '''
             Бодит гүйцэтгэлийн гүйцэтгэл талбар тооцоолох
@@ -360,7 +354,6 @@ class inherit_control_budget(models.Model):
                 total += util_line.utilization
             budget.budgets_utilization_util = total
     
-    @api.multi
     def _budgets_utilization_balance(self):
         '''
             Бодит гүйцэтгэлийн Үлдэгдэл талбар тооцоолох
@@ -371,7 +364,6 @@ class inherit_control_budget(models.Model):
                 total += util_line.balance
             budget.budgets_utilization_balance = total
     
-    @api.multi
     def _invisible_to_confirm(self):
         '''
             Нэвтэрсэн хэрэглэгчийг Төсөвчин мөн эсэхийг тооцоолох
@@ -386,12 +378,12 @@ class inherit_control_budget(models.Model):
         '''
         self.message_subscribe_users(user_ids=user_ids)
     
-    @api.one
+    
     def _is_old(self):
         if self.create_date < '2021-12-09':
             self.is_old = True
 
-    @api.one
+    
     def _is_old2(self):
         if self.create_date < '2022-11-28':
             self.is_old2 = True
@@ -429,7 +421,7 @@ class inherit_control_budget(models.Model):
     budgets_utilization_total       = fields.Float(u'Нийт дүн',compute=_budgets_utilization_total)
     budgets_utilization_util        = fields.Float(u'Гүйцэтгэл',compute=_budgets_utilization_util)
     budgets_utilization_balance       = fields.Float(u'Үлдэгдэл',compute=_budgets_utilization_balance)
-    work_graph_id                   = fields.Many2one('project.task', index=True,string='Work Graph', track_visibility='onchange')
+    work_graph_id                   = fields.Many2one('project.task', index=True,string='Work Graph', tracking=True)
     
     back_state                  = fields.Char('back_stage')
     evaluate_budget             = fields.One2many('evaluate.tasks','budget_id','Budget evaluate')
@@ -444,7 +436,6 @@ class inherit_control_budget(models.Model):
           "You cannot define another: please edit the existing one."))
     ]
      
-    @api.multi
     def test_action(self):
         budgets = self.env['control.budget'].search([('user_id','!=',False)])
         for budget in budgets:
@@ -475,9 +466,6 @@ class inherit_control_budget(models.Model):
             result.project_id.sudo().add_raci_users('C',result.user_id.id)
         return result
 
-
-
-    @api.multi
     def handle_budget_consumption(self):
 
 
@@ -569,7 +557,6 @@ class inherit_control_budget(models.Model):
 
 
                 project = self.env['project.project'].sudo().search([('id','=',self.project_id.id)])
-                print '\n\n\n tosol tets 18' , project , project.project_flag
 
                 expenditure_ratio = 0
                 overrun_ratio = 0
@@ -655,10 +642,6 @@ class inherit_control_budget(models.Model):
 
                     })
 
-
-
-
-    @api.multi
     def write(self, vals):
         '''
             Төсөвчин болон батлах хэрэглэгчидийг дагагчаар нэмнэ
@@ -677,7 +660,7 @@ class inherit_control_budget(models.Model):
                         self.project_id.sudo().add_raci_users('C',emp.user_id.id)
                     self._add_followers(emp.user_id.id)
         return result
-    @api.multi
+    
     def unlink(self):
         '''
             Устгах Ноорог төлөвтөй Хяналтын төсвийг
@@ -687,7 +670,7 @@ class inherit_control_budget(models.Model):
                 raise UserError(_(u'Та зөвхөн ноорог төлөвтөй хяналтын төсөв устгах боломжтой'))
         return super(inherit_control_budget, self).unlink()
     
-    @api.one
+    
     def copy(self, default=None):
         if default is None:
             default = {}
@@ -698,7 +681,6 @@ class inherit_control_budget(models.Model):
         
         return super(inherit_control_budget, self).copy(default=default)
 
-    @api.multi
     def action_select(self):
         '''
             Материалын зардлын батлагдаагүй мөрүүдийг нийтээр нь сонгох
@@ -708,7 +690,6 @@ class inherit_control_budget(models.Model):
                 if line.state == 'confirm':
                     line.cost_choose = True
     
-    @api.multi
     def action_deselect(self):
         '''
             Материалын зардлын батлагдаагүй мөрүүдийг нийтээр нь сонгохыг болиулах
@@ -718,7 +699,7 @@ class inherit_control_budget(models.Model):
                 if line.state == 'confirm':
                     line.cost_choose = False
                     
-    @api.multi
+    
     def action_select_labor(self):
         '''
             Ажиллах хүчний зардлын батлагдаагүй мөрүүдийг нийтээр нь сонгох
@@ -728,7 +709,6 @@ class inherit_control_budget(models.Model):
                 if line.state == 'confirm':
                     line.cost_choose = True
     
-    @api.multi
     def action_deselect_labor(self):
         '''
             Ажиллах хүчний зардлын батлагдаагүй мөрүүдийг нийтээр нь сонгохыг болиулах
@@ -797,14 +777,10 @@ class inherit_control_budget(models.Model):
 
                         line.write({'total_amount_of_control_budget':total})
                         
-                                
-        
-    @api.multi
     def action_to_user(self):
         # self.check_budget_limit()
         self.write({'state':'user'})
     
-    @api.multi
     def action_start(self):
         '''
             Эхлэх товч
@@ -816,8 +792,6 @@ class inherit_control_budget(models.Model):
                 self.check_budget_limit()
             budget.write({'state':'start'})
         
-    
-    @api.multi
     def action_close(self):
         '''
             Бодит гүйцэтгэл гарж дууссан эсэхийг шалгаад хаах
@@ -830,7 +804,7 @@ class inherit_control_budget(models.Model):
                             })
         else:
             raise ValidationError(_(u'Бодит гүйцэтгэл гарж дуусаагүй байна'))
-    @api.multi
+    
     def action_new(self):
         history_confirm = self.env['main.specification.confirmers'].search([('budget_id', '=',self.id)])
         if history_confirm:
@@ -863,7 +837,6 @@ class inherit_control_budget(models.Model):
         self.reject_control_budget()
         self.write({'state':'draft'})
         
-    @api.multi
     def action_to_confirm(self):
         '''
             Батлах төлөвт оруулах, зардлын мөрүүдийн төлвийг мөн өөрчлөх
@@ -906,7 +879,6 @@ class inherit_control_budget(models.Model):
             line.write({
                         'state':'request'
                         })
-    @api.multi
     def action_after(self):
         '''
             Шалтгаан бичээд хойшлуулах товч
@@ -925,21 +897,18 @@ class inherit_control_budget(models.Model):
             'target': 'new',
         }
     
-    @api.multi
     def action_back(self):
         '''
             Хойшлогдсон төлвөөс буцааж хуучин төлөвт оруулах
         '''
         self.write({'state':self.back_state})
     
-    @api.multi
     def action_draft_back(self):
         '''
             Эхэлсэн төлөврүү буцаах
         '''
         self.write({'state':'start'})
     
-    @api.multi
     def action_confirmed(self):
         '''
             Батлах товч 
@@ -1076,7 +1045,6 @@ class inherit_control_budget(models.Model):
             #                 'confirm_date':time.strftime('%Y-%m-%d %H:%M:%S'),})
 
 
-    @api.multi
     def action_evaluate(self):
         mod_obj = self.env['ir.model.data']
 
@@ -1093,7 +1061,6 @@ class inherit_control_budget(models.Model):
         }
         
    
-    @api.multi
     def action_create_tender(self):
         '''
             Тендер үүсгэх товч
@@ -1113,7 +1080,6 @@ class inherit_control_budget(models.Model):
             'target': 'new',
         }
     
-    @api.multi
     def action_budget_partner_comparison(self):
         '''
             Үнийн харьцуулалт үүсгэх товч
@@ -1139,11 +1105,8 @@ class inherit_control_budget(models.Model):
             Төсөл солигдоход хөрөнгө оруулалтын төсөвлөсөн дүн , боломжит үлдэгдэл, үлдэгдэл талбаруудыг зардлуудаар харуулна
         '''
         for budget in self:
-            print '\n\n\n budget' , budget
             if budget.project_id:
-                print '\n\n\n project' , budget.project_id
                 for line in budget.project_id.main_line_ids:
-                    print '\n\n\n line' , line
                     if line.confirm == True:
                         budget.project_budget_material = line.material_line_real
                         budget.project_budget_carriage = line.carriage_real
@@ -1166,7 +1129,7 @@ class inherit_control_budget(models.Model):
                         budget.project_budget_postage_real = line.postage_line_total
                         budget.project_budget_other_real = line.other_line_total
     
-    @api.multi
+    
     def reject_control_budget(self):
         '''
             Холбоотой төслийн хяналтын төсвийг хасах 
@@ -1180,7 +1143,7 @@ class inherit_control_budget(models.Model):
                             balance = line.total_amount_of_control_budget - budget.sub_total
                             line.write({'total_amount_of_control_budget':balance })
 
-    @api.multi
+    
     def action_draft(self):
         '''
             Шинэ төлөврүү оруулах
@@ -1220,7 +1183,7 @@ class inherit_control_budget(models.Model):
         
         self.write({'state':'draft'})
     
-    @api.multi
+    
     def action_cancel(self):
         '''
             Төсөл Цуцлах цонх дуудна
@@ -1239,7 +1202,7 @@ class inherit_control_budget(models.Model):
         }
 
     
-    @api.multi
+    
     def create_purchase_request(self):
         '''
             Худалдан авалтын шаардах үүсгэх цонх дуудах
@@ -1259,7 +1222,7 @@ class inherit_control_budget(models.Model):
                     'nodestroy': True,
                     'target': 'new',
                     }
-    @api.multi
+    
     def action_import(self):
         '''
             Хяналтын төсвийн ажиллах хүчний зардал болон материалын зардал импортлох цонх дуудна
@@ -1301,7 +1264,7 @@ class CancelControlBudget(models.Model):
                     })
         return res
     
-    @api.multi
+    
     def action_cancel(self):
         self.budget_id.message_post(subject=_('Хяналтын төсөв цуцлагдлаа'), body="Цуцлагдсан шалтгаан : %s"%(self.description))
         self.budget_id.write({
@@ -1331,7 +1294,7 @@ class BackControlBudget(models.Model):
                     })
         return res
     
-    @api.multi
+    
     def action_cancel(self):
         self.budget_id.message_post(subject=_('Хяналтын төсөв хойшлогдлоо'), body="Хойшилсон шалтгаан : %s"%(self.description))
         state = self.budget_id.state
@@ -1340,319 +1303,318 @@ class BackControlBudget(models.Model):
                               'state':'after'
                               })
         self.budget_id.reject_control_budget()
-
-class ControllBudgetLine(models.Model):
-    _inherit = 'controll.budget.line'
-    budget_line_id = fields.Many2one('utilization.on.budget', string='Budget')
-    control_budget_id = fields.Many2one('control.budget', string='Control Budget',required=True)
+#TODO FIX LATER controll.budget.line
+# class ControllBudgetLine(models.Model):
+#     _inherit = 'controll.budget.line'
+#     budget_line_id = fields.Many2one('utilization.on.budget', string='Budget')
+#     control_budget_id = fields.Many2one('control.budget', string='Control Budget',required=True)
      
-    @api.constrains('budget_line_id')
-    def _check_budget_line_id(self):
-        if self.budget_line_id:
-            self._cr.execute("select count(id) from controll_budget_line where budget_line_id = %s and parent_id = %s "
-                       "and id <> %s",(self.budget_line_id.id,self.parent_id.id, self.id))
-            fetched = self._cr.fetchone()
-            if fetched and fetched[0] and fetched[0] > 0:
-                raise UserError((u'Төлбөрийн хүсэлтийн мөр дээр хяналтын төсвийн мөр давхар үүсэх боломжгүй!'))
+#     @api.constrains('budget_line_id')
+#     def _check_budget_line_id(self):
+#         if self.budget_line_id:
+#             self._cr.execute("select count(id) from controll_budget_line where budget_line_id = %s and parent_id = %s "
+#                        "and id <> %s",(self.budget_line_id.id,self.parent_id.id, self.id))
+#             fetched = self._cr.fetchone()
+#             if fetched and fetched[0] and fetched[0] > 0:
+#                 raise UserError((u'Төлбөрийн хүсэлтийн мөр дээр хяналтын төсвийн мөр давхар үүсэх боломжгүй!'))
             
 class account_analytic_line(models.Model):
     _inherit = 'account.analytic.line'
     controll_budget_id = fields.Many2one('utilization.on.budget', string='Controll budget',readonly=True, ondelete="restrict")
- 
-class BudgetBalanceCheckPayment(models.TransientModel):
-    _inherit = 'budget.balance.check.payment'
+#TODO FIX LATER 
+# class BudgetBalanceCheckPayment(models.TransientModel):
+#     _inherit = 'budget.balance.check.payment'
      
-    @api.model
-    def default_get(self, fields):
-        rec = super(BudgetBalanceCheckPayment, self).default_get(fields)
-        context = dict(self._context or {})
-        active_model = context.get('active_model')
-        active_ids = context.get('active_ids')
+#     @api.model
+#     def default_get(self, fields):
+#         rec = super(BudgetBalanceCheckPayment, self).default_get(fields)
+#         context = dict(self._context or {})
+#         active_model = context.get('active_model')
+#         active_ids = context.get('active_ids')
  
-        # Checks on context parameters
-        if not active_model or not active_ids:
-            raise UserError(_("Programmation error: wizard action executed without active_model or active_ids in context."))
-        payments = self.env[active_model].browse(active_ids)
+#         # Checks on context parameters
+#         if not active_model or not active_ids:
+#             raise UserError(_("Programmation error: wizard action executed without active_model or active_ids in context."))
+#         payments = self.env[active_model].browse(active_ids)
          
-        is_hoat=False
-        if payments.tax_id and payments.tax_id.is_hoat:
-            is_hoat=True
+#         is_hoat=False
+#         if payments.tax_id and payments.tax_id.is_hoat:
+#             is_hoat=True
          
          
-        untax_amount = payments.subtotal
-        amount = payments.amount
+#         untax_amount = payments.subtotal
+#         amount = payments.amount
              
-        amount_currency=payments.amount_currency
-        department_id = payments.sector_id.id
-        cashflow_type = payments.ask_budget_type
+#         amount_currency=payments.amount_currency
+#         department_id = payments.sector_id.id
+#         cashflow_type = payments.ask_budget_type
          
-        partner_id=False
-        if payments.partner_id:
-            partner_id=payments.partner_id.id
-        result1=[]
-        result2=[]
-        result3=[]
-        control_budget_id=False
-        for line in payments:
-            for budget in line.nomin_budget_line_ids:
-                result1.append((0, 0, {'account_id': payments.account_id.id, 
-                                          'internal_type': payments.account_id.internal_type, 
-                                          'department_id':department_id,
-                                          'cashflow_type':cashflow_type,
-                                          'accept_amount':budget.accept_amount,
-                                          'analytic_account_id':budget.analytic_account_id.id,
-                                          'budget_post_ids':[(6,0,budget.budget_post_ids.ids)],
-                                          'current_budget_month_id':budget.current_budget_month_id.id,
-                                          'budget_month_ids':[(6,0,budget.budget_month_ids.ids)],
-                                          'is_null_budget':False}))
+#         partner_id=False
+#         if payments.partner_id:
+#             partner_id=payments.partner_id.id
+#         result1=[]
+#         result2=[]
+#         result3=[]
+#         control_budget_id=False
+#         for line in payments:
+#             for budget in line.nomin_budget_line_ids:
+#                 result1.append((0, 0, {'account_id': payments.account_id.id, 
+#                                           'internal_type': payments.account_id.internal_type, 
+#                                           'department_id':department_id,
+#                                           'cashflow_type':cashflow_type,
+#                                           'accept_amount':budget.accept_amount,
+#                                           'analytic_account_id':budget.analytic_account_id.id,
+#                                           'budget_post_ids':[(6,0,budget.budget_post_ids.ids)],
+#                                           'current_budget_month_id':budget.current_budget_month_id.id,
+#                                           'budget_month_ids':[(6,0,budget.budget_month_ids.ids)],
+#                                           'is_null_budget':False}))
          
-            for other_budget in line.other_budget_line_ids:
-                result2.append((0,0,{'date':other_budget.date,
-                                     'analytic_account_id':other_budget.analytic_account_id.id,
-                                     'partner_id':partner_id,
-                                     'budget_id':other_budget.budget_line_id.parent_id.id,
-                                     'budget_line_id':other_budget.budget_line_id.id,
-                                     'accept_amount':other_budget.accept_amount,
-                                     }))
+#             for other_budget in line.other_budget_line_ids:
+#                 result2.append((0,0,{'date':other_budget.date,
+#                                      'analytic_account_id':other_budget.analytic_account_id.id,
+#                                      'partner_id':partner_id,
+#                                      'budget_id':other_budget.budget_line_id.parent_id.id,
+#                                      'budget_line_id':other_budget.budget_line_id.id,
+#                                      'accept_amount':other_budget.accept_amount,
+#                                      }))
              
-            for control_budget in line.controll_budget_line_ids:
-                control_budget_id=control_budget.control_budget_id.id if control_budget.control_budget_id else False
-                result3.append((0,0,{'date':control_budget.date,
-                                     'analytic_account_id':control_budget.analytic_account_id.id,
-                                     'controll_budget_id':control_budget.budget_line_id.id,
-                                     'accept_amount':control_budget.accept_amount,
-                                     'budget_type':control_budget.budget_type
-                                     }))
+#             for control_budget in line.controll_budget_line_ids:
+#                 control_budget_id=control_budget.control_budget_id.id if control_budget.control_budget_id else False
+#                 result3.append((0,0,{'date':control_budget.date,
+#                                      'analytic_account_id':control_budget.analytic_account_id.id,
+#                                      'controll_budget_id':control_budget.budget_line_id.id,
+#                                      'accept_amount':control_budget.accept_amount,
+#                                      'budget_type':control_budget.budget_type
+#                                      }))
                  
-        if 'nomin_budget_line_ids' in fields:
-            if rec['nomin_budget_line_ids'] == []:
-                rec.update({'nomin_budget_line_ids': result1})
+#         if 'nomin_budget_line_ids' in fields:
+#             if rec['nomin_budget_line_ids'] == []:
+#                 rec.update({'nomin_budget_line_ids': result1})
          
-        if 'other_budget_line_ids' in fields:
-            rec.update({'other_budget_line_ids': result2})
+#         if 'other_budget_line_ids' in fields:
+#             rec.update({'other_budget_line_ids': result2})
              
-        if 'controll_budget_line_ids' in fields:
-            rec.update({'controll_budget_line_ids': result3})
+#         if 'controll_budget_line_ids' in fields:
+#             rec.update({'controll_budget_line_ids': result3})
              
-        rec.update({
-            'date':payments.parent_id.date,
-            'budget_id':payments.other_budget_id.id if payments.other_budget_id else False,
-            'is_hoat':is_hoat,
-            'amount':amount,
-            'untax_amount':untax_amount,
-            'currency_id':payments.transaction_currency_id.id,
-            'is_other_currency':payments.is_other_currency,
-            'amount_currency':amount_currency,
-            'department_id':department_id,
-            'account_id':payments.account_id.id,
-            'cashflow_type':cashflow_type,
-            'is_controll_budget':payments.cashflow_account_id.is_controll_budget,
-            'partner_id':partner_id,
-            'control_budget_id':control_budget_id
-        })
-        return rec
+#         rec.update({
+#             'date':payments.parent_id.date,
+#             'budget_id':payments.other_budget_id.id if payments.other_budget_id else False,
+#             'is_hoat':is_hoat,
+#             'amount':amount,
+#             'untax_amount':untax_amount,
+#             'currency_id':payments.transaction_currency_id.id,
+#             'is_other_currency':payments.is_other_currency,
+#             'amount_currency':amount_currency,
+#             'department_id':department_id,
+#             'account_id':payments.account_id.id,
+#             'cashflow_type':cashflow_type,
+#             'is_controll_budget':payments.cashflow_account_id.is_controll_budget,
+#             'partner_id':partner_id,
+#             'control_budget_id':control_budget_id
+#         })
+#         return rec
      
-    control_budget_id = fields.Many2one('control.budget', string='Control Budget')
+#     control_budget_id = fields.Many2one('control.budget', string='Control Budget')
      
-    @api.multi
-    def ok_new(self):
-        month_budget_obj = self.env['nomin.budget.month.expense']
-        context = self._context
-        analytic_account_id=False
-        if self.nomin_budget_line_ids: 
-            budget_ids = []
-            sum_season = 0.0
-            line_amount = 0.0
     
-            if self.not_found_budget:
-                name = ''
-                check = False
-                for line in self.nomin_budget_line_ids:
-                    for aa in self.not_found_budget:
-                        if aa.id == line.analytic_account_id.id:
-                            check = True
-                            break
+#     def ok_new(self):
+#         month_budget_obj = self.env['nomin.budget.month.expense']
+#         context = self._context
+#         analytic_account_id=False
+#         if self.nomin_budget_line_ids: 
+#             budget_ids = []
+#             sum_season = 0.0
+#             line_amount = 0.0
     
-                if check == True:
-                    for aa in self.not_found_budget:
-                        name += ' ' + aa.code+'-'+aa.name + ','
-                    raise UserError(u'Дараах шинжилгээний данснууд бизнес төлөвлөгөөнд тусгагдаагүй байна!!! %s'%(name))        
+#             if self.not_found_budget:
+#                 name = ''
+#                 check = False
+#                 for line in self.nomin_budget_line_ids:
+#                     for aa in self.not_found_budget:
+#                         if aa.id == line.analytic_account_id.id:
+#                             check = True
+#                             break
+    
+#                 if check == True:
+#                     for aa in self.not_found_budget:
+#                         name += ' ' + aa.code+'-'+aa.name + ','
+#                     raise UserError(u'Дараах шинжилгээний данснууд бизнес төлөвлөгөөнд тусгагдаагүй байна!!! %s'%(name))        
             
-            if self.nomin_budget_line_ids:
-                for line in self.nomin_budget_line_ids:
-                    line_amount += line.accept_amount
-                    print '----------line-----',line.accept_amount
+#             if self.nomin_budget_line_ids:
+#                 for line in self.nomin_budget_line_ids:
+#                     line_amount += line.accept_amount
         
-                tt100 = round(float(self.untax_amount),2)
-                tt00 = round(float(line_amount),2)
-                if tt00 != tt100:
-                    raise UserError(u'Мөрүүд дээр хувиарласан дүнгүүдийн нийлбэр зардлын дүнтэй тэнцүү байх ёстой!!!')
+#                 tt100 = round(float(self.untax_amount),2)
+#                 tt00 = round(float(line_amount),2)
+#                 if tt00 != tt100:
+#                     raise UserError(u'Мөрүүд дээр хувиарласан дүнгүүдийн нийлбэр зардлын дүнтэй тэнцүү байх ёстой!!!')
     
-            self.env.cr.execute("select budget_id from account_budget_rel where account_id=%s order by budget_id"%(self.account_id.id))
-            fetched = self.env.cr.fetchall()
-            if fetched:
-                budget_post = self.env['account.budget.post'].browse(fetched[0])
-                if budget_post.not_ask_budget == False:
-                    account_period = self.env['account.period'].search([('date_start','<=',self.date),('date_stop','>=',self.date)])[0]
-                    account_season = self.env['account.period'].search([('fiscalyear_id','=',account_period.fiscalyear_id.id),('account_season','=',account_period.account_season),('date_stop','<=',account_period.date_stop)], order="id desc")
-                    for period in account_season.ids:
-                        budget_ids.extend(month_budget_obj.search([('general_budget_id','=', budget_post.id),
-                                                        ('month_id','=',period),                                                    
-                                                        ('state','=','done')], order='id desc'))
-                    if budget_ids != []:
-                        for budget in budget_ids:
-                            sum_season += budget.balance_resource_subtotal
+#             self.env.cr.execute("select budget_id from account_budget_rel where account_id=%s order by budget_id"%(self.account_id.id))
+#             fetched = self.env.cr.fetchall()
+#             if fetched:
+#                 budget_post = self.env['account.budget.post'].browse(fetched[0])
+#                 if budget_post.not_ask_budget == False:
+#                     account_period = self.env['account.period'].search([('date_start','<=',self.date),('date_stop','>=',self.date)])[0]
+#                     account_season = self.env['account.period'].search([('fiscalyear_id','=',account_period.fiscalyear_id.id),('account_season','=',account_period.account_season),('date_stop','<=',account_period.date_stop)], order="id desc")
+#                     for period in account_season.ids:
+#                         budget_ids.extend(month_budget_obj.search([('general_budget_id','=', budget_post.id),
+#                                                         ('month_id','=',period),                                                    
+#                                                         ('state','=','done')], order='id desc'))
+#                     if budget_ids != []:
+#                         for budget in budget_ids:
+#                             sum_season += budget.balance_resource_subtotal
     
-                    if sum_season != 0.0 and sum_season > self.amount:
-                        pass
-                    else:
-                        raise UserError(u'Төсвийн үлдэгдэл хүрэлцэхгүй байна!!! Төсвийн боломжит үлдэгдэл %s'%(sum_season))
+#                     if sum_season != 0.0 and sum_season > self.amount:
+#                         pass
+#                     else:
+#                         raise UserError(u'Төсвийн үлдэгдэл хүрэлцэхгүй байна!!! Төсвийн боломжит үлдэгдэл %s'%(sum_season))
     
-        if self.cashflow_type == 'other_budget_ask':
-            if not self.budget_id and not self.controll_budget_line_ids:
-                raise UserError((u'Бусад төсөв эсвэл Хяналтын төсвээс заавал шалгах ёстой!'))
+#         if self.cashflow_type == 'other_budget_ask':
+#             if not self.budget_id and not self.controll_budget_line_ids:
+#                 raise UserError((u'Бусад төсөв эсвэл Хяналтын төсвээс заавал шалгах ёстой!'))
          
-        other_budget_id=False
-        if self.budget_id:
-            other_budget_id = self.budget_id.id
+#         other_budget_id=False
+#         if self.budget_id:
+#             other_budget_id = self.budget_id.id
          
-        current_budget_month_id=False
-        if self.current_budget_month_id:
-            current_budget_month_id = self.current_budget_month_id.id
+#         current_budget_month_id=False
+#         if self.current_budget_month_id:
+#             current_budget_month_id = self.current_budget_month_id.id
              
-        total = 0.0
-        amount_currency = self.amount_currency
-        is_bp=False
-        is_ob=False
-        is_cb=False
-        if context.get('active_model') and context.get('active_id'):
-            if context['active_model'] == 'payment.request.line' and context['active_id']:
-                active_obj = self.env['payment.request.line'].browse(context['active_id'])
+#         total = 0.0
+#         amount_currency = self.amount_currency
+#         is_bp=False
+#         is_ob=False
+#         is_cb=False
+#         if context.get('active_model') and context.get('active_id'):
+#             if context['active_model'] == 'payment.request.line' and context['active_id']:
+#                 active_obj = self.env['payment.request.line'].browse(context['active_id'])
          
-                remove_analytic_lines = self.env['budget.analytic.line'].search([('payment_request_line_id','=',active_obj.id)])
-                if remove_analytic_lines:
-                    for ral in remove_analytic_lines:
-                        ral.unlink()
+#                 remove_analytic_lines = self.env['budget.analytic.line'].search([('payment_request_line_id','=',active_obj.id)])
+#                 if remove_analytic_lines:
+#                     for ral in remove_analytic_lines:
+#                         ral.unlink()
                  
-                remove_other_budget_lines = self.env['other.budget.line'].search([('parent_id','=',active_obj.id)])
-                if remove_other_budget_lines:
-                    for reob in remove_other_budget_lines:
-                        reob.unlink()
+#                 remove_other_budget_lines = self.env['other.budget.line'].search([('parent_id','=',active_obj.id)])
+#                 if remove_other_budget_lines:
+#                     for reob in remove_other_budget_lines:
+#                         reob.unlink()
                          
-                if self.cashflow_type == 'bp_ask' or self.internal_type == 'expense':
-                    if not self.nomin_budget_line_ids:
-                        raise UserError((u'Бизнес төлөвлөгөөнөөс заавал шалгах ёстой!'))                     
+#                 if self.cashflow_type == 'bp_ask' or self.internal_type == 'expense':
+#                     if not self.nomin_budget_line_ids:
+#                         raise UserError((u'Бизнес төлөвлөгөөнөөс заавал шалгах ёстой!'))                     
                              
-                    for budget_line in self.nomin_budget_line_ids:
-                            total += budget_line.accept_amount
-                            budget_month_ids=[]
-                            if budget_line.budget_month_ids:
-                                budget_month_ids = budget_line.budget_month_ids.ids
+#                     for budget_line in self.nomin_budget_line_ids:
+#                             total += budget_line.accept_amount
+#                             budget_month_ids=[]
+#                             if budget_line.budget_month_ids:
+#                                 budget_month_ids = budget_line.budget_month_ids.ids
                              
-                            current_budget_month_id=False
-                            if budget_line.current_budget_month_id:
-                                current_budget_month_id = budget_line.current_budget_month_id.id
+#                             current_budget_month_id=False
+#                             if budget_line.current_budget_month_id:
+#                                 current_budget_month_id = budget_line.current_budget_month_id.id
                              
-                            budget_post_ids=[]
-                            if budget_line.budget_post_ids:
-                                budget_post_ids = budget_line.budget_post_ids.ids
+#                             budget_post_ids=[]
+#                             if budget_line.budget_post_ids:
+#                                 budget_post_ids = budget_line.budget_post_ids.ids
                                  
-                            self.env['budget.analytic.line'].create({'payment_request_line_id':active_obj.id,
-                                                                  'analytic_account_id':budget_line.analytic_account_id.id,
-                                                                  'budget_post_ids':[(6,0,budget_post_ids)],
-                                                                  'current_budget_month_id':current_budget_month_id,
-                                                                  'budget_month_ids':[(6,0,budget_month_ids)],
-                                                                  'accept_amount':budget_line.accept_amount
-                                                                  })
-                            is_bp=True
-                    if not self.is_hoat:
-                        if total == self.untax_amount:
-                            total = self.amount
-                        else:
-                            if active_obj.tax_id:
-                                total = total*1.1
+#                             self.env['budget.analytic.line'].create({'payment_request_line_id':active_obj.id,
+#                                                                   'analytic_account_id':budget_line.analytic_account_id.id,
+#                                                                   'budget_post_ids':[(6,0,budget_post_ids)],
+#                                                                   'current_budget_month_id':current_budget_month_id,
+#                                                                   'budget_month_ids':[(6,0,budget_month_ids)],
+#                                                                   'accept_amount':budget_line.accept_amount
+#                                                                   })
+#                             is_bp=True
+#                     if not self.is_hoat:
+#                         if total == self.untax_amount:
+#                             total = self.amount
+#                         else:
+#                             if active_obj.tax_id:
+#                                 total = total*1.1
                                  
-                if other_budget_id:
-                    if self.controll_budget_line_ids:
-                        raise UserError((u'Мөнгөн урсгалын төсөв сонгосон учир Хяналтын төсөв давхар сонгох боломжгүй. Хяналтын төсвөө устгана уу!'))
+#                 if other_budget_id:
+#                     if self.controll_budget_line_ids:
+#                         raise UserError((u'Мөнгөн урсгалын төсөв сонгосон учир Хяналтын төсөв давхар сонгох боломжгүй. Хяналтын төсвөө устгана уу!'))
                      
-                    total = 0.0
-                    is_budget_other_curr = False
-                    for other_budget_line in self.other_budget_line_ids:
-                            if other_budget_line.budget_line_id.is_other_currency:
-                                is_budget_other_curr=True
+#                     total = 0.0
+#                     is_budget_other_curr = False
+#                     for other_budget_line in self.other_budget_line_ids:
+#                             if other_budget_line.budget_line_id.is_other_currency:
+#                                 is_budget_other_curr=True
                                  
-                            total += other_budget_line.accept_amount
-                            self.env['other.budget.line'].create({'parent_id':active_obj.id,
-                                                                  'analytic_account_id':other_budget_line.analytic_account_id.id,
-                                                                  'budget_line_id':other_budget_line.budget_line_id.id,
-                                                                  'accept_amount':other_budget_line.accept_amount,
-                                                                  'date':other_budget_line.date
-                                                                  })
-                            is_ob=True
-                    if is_budget_other_curr:
-                        if self.is_other_currency:
-                            rate = active_obj.currency_rate
-                            amount_currency = total
-                            total = total*rate
-                    else:
-                        if self.is_other_currency and active_obj.currency_rate > 0.0:
-                            amount_currency = total/active_obj.currency_rate
+#                             total += other_budget_line.accept_amount
+#                             self.env['other.budget.line'].create({'parent_id':active_obj.id,
+#                                                                   'analytic_account_id':other_budget_line.analytic_account_id.id,
+#                                                                   'budget_line_id':other_budget_line.budget_line_id.id,
+#                                                                   'accept_amount':other_budget_line.accept_amount,
+#                                                                   'date':other_budget_line.date
+#                                                                   })
+#                             is_ob=True
+#                     if is_budget_other_curr:
+#                         if self.is_other_currency:
+#                             rate = active_obj.currency_rate
+#                             amount_currency = total
+#                             total = total*rate
+#                     else:
+#                         if self.is_other_currency and active_obj.currency_rate > 0.0:
+#                             amount_currency = total/active_obj.currency_rate
                  
                  
-                if self.controll_budget_line_ids:
-                    if other_budget_id:
-                         raise UserError((u'Хяналтын төсөв сонгосон учир Мөнгөн урсгалын төсөв давхар сонгох боломжгүй. Мөнгөн урсгалын төсвөө устгана уу!'))
+#                 if self.controll_budget_line_ids:
+#                     if other_budget_id:
+#                          raise UserError((u'Хяналтын төсөв сонгосон учир Мөнгөн урсгалын төсөв давхар сонгох боломжгүй. Мөнгөн урсгалын төсвөө устгана уу!'))
                      
-                    total = 0.0
-                    remove_controll_budget_line = self.env['controll.budget.line'].search([('parent_id','=',active_obj.id)])
-                    if remove_controll_budget_line:
-                        for ro in remove_controll_budget_line:
-                            ro.unlink()
-                    for controll_budget_line in self.controll_budget_line_ids:
-                        total += controll_budget_line.accept_amount
-                        cb_line = self.env['controll.budget.line'].create({'parent_id':active_obj.id,
-                                                                  'analytic_account_id':controll_budget_line.analytic_account_id.id,
-                                                                  'control_budget_id':self.control_budget_id.id,
-                                                                  'budget_line_id':controll_budget_line.controll_budget_id.id,
-                                                                  'accept_amount':controll_budget_line.accept_amount,
-                                                                  'date':controll_budget_line.date,
-                                                                  'budget_type':controll_budget_line.budget_type
-                                                                  })
-                        is_cb=True
+#                     total = 0.0
+#                     remove_controll_budget_line = self.env['controll.budget.line'].search([('parent_id','=',active_obj.id)])
+#                     if remove_controll_budget_line:
+#                         for ro in remove_controll_budget_line:
+#                             ro.unlink()
+#                     for controll_budget_line in self.controll_budget_line_ids:
+#                         total += controll_budget_line.accept_amount
+#                         cb_line = self.env['controll.budget.line'].create({'parent_id':active_obj.id,
+#                                                                   'analytic_account_id':controll_budget_line.analytic_account_id.id,
+#                                                                   'control_budget_id':self.control_budget_id.id,
+#                                                                   'budget_line_id':controll_budget_line.controll_budget_id.id,
+#                                                                   'accept_amount':controll_budget_line.accept_amount,
+#                                                                   'date':controll_budget_line.date,
+#                                                                   'budget_type':controll_budget_line.budget_type
+#                                                                   })
+#                         is_cb=True
                          
-                account_id=False
-                if self.account_id:
-                    account_id = self.account_id.id
+#                 account_id=False
+#                 if self.account_id:
+#                     account_id = self.account_id.id
                      
-                if total == 0.0 and self.amount > 0.0:
-                    total = self.amount
+#                 if total == 0.0 and self.amount > 0.0:
+#                     total = self.amount
                  
-                active_obj.write({'account_id':account_id,
-                                  'other_budget_id':other_budget_id,
-                                  'amount':total,
-                                  'amount_currency':amount_currency})
+#                 active_obj.write({'account_id':account_id,
+#                                   'other_budget_id':other_budget_id,
+#                                   'amount':total,
+#                                   'amount_currency':amount_currency})
                  
-        return {'type': 'ir.actions.act_window_close'}
+#         return {'type': 'ir.actions.act_window_close'}
 
-class ControllBudgetCheckLine(models.TransientModel):
-    _inherit = 'controll.budget.check.line'
+# class ControllBudgetCheckLine(models.TransientModel):
+#     _inherit = 'controll.budget.check.line'
      
-    controll_budget_id = fields.Many2one('utilization.on.budget', string='Control Budget line',required=True)
+#     controll_budget_id = fields.Many2one('utilization.on.budget', string='Control Budget line',required=True)
      
-    @api.multi
-    @api.onchange('controll_budget_id','accept_amount')
-    def onchange_budget(self):
-        res = {}
-        if self.controll_budget_id and self.accept_amount:
-            if self.controll_budget_id.balance < self.accept_amount:
-                self.update({'accept_amount':self.controll_budget_id.balance})
-                res = {
-                    'warning': {
-                        'title': u'Анхааруулга',
-                        'message': u'Зөвшөөрсөн дүн төсвийн үлдэгдэлээс их байна!'
-                            }
-                    }
-        return res
+    
+#     @api.onchange('controll_budget_id','accept_amount')
+#     def onchange_budget(self):
+#         res = {}
+#         if self.controll_budget_id and self.accept_amount:
+#             if self.controll_budget_id.balance < self.accept_amount:
+#                 self.update({'accept_amount':self.controll_budget_id.balance})
+#                 res = {
+#                     'warning': {
+#                         'title': u'Анхааруулга',
+#                         'message': u'Зөвшөөрсөн дүн төсвийн үлдэгдэлээс их байна!'
+#                             }
+#                     }
+#         return res
     
             
