@@ -120,7 +120,7 @@ class survey_nomin(http.Controller):
             filter_data = self.get_filter_data(post)
             current_filters = survey_obj.filter_input_ids(request.cr, request.uid, survey, filter_data, filter_finish, context=request.context)
             filter_display_data = survey_obj.get_filter_display_data(request.cr, request.uid, filter_data, context=request.context)
-        return request.website.render(result_template,
+        return request.render(result_template,
                                       {'survey': survey,
                                        'survey_dict': self.prepare_result_dict(survey, current_filters),
                                        'page_range': self.page_range,
@@ -229,14 +229,14 @@ class ResPartnerRequest(http.Controller):
             'create_date':create_date
 
             }
-            return request.website.render("nomin_web.partner_register_request_exist",values)
+            return request.render("nomin_web.partner_register_request_exist",values)
         parent = False
         if post['partner_type']=='insurance_broker':
             partner_search=request.env['res.partner'].sudo().search(['|','|',('nomin_code','=',post['parent_register_number']),('registry_number','=',post['parent_register_number']),('code','=',post['parent_register_number'])],limit=1)
             if partner_search:
                 parent = partner_search.id
             else:
-                return request.website.render("nomin_web.partner_not_found")
+                return request.render("nomin_web.partner_not_found")
         request.env['res.partner.request'].sudo().create({'name':post['company_name'],
             'register_number':post['register_number'],
             'tax_number':post['register_number'],
@@ -251,7 +251,7 @@ class ResPartnerRequest(http.Controller):
             'area_ids':[(6,0,new_list)]
             })
 
-        return request.website.render("nomin_web.partner_register_thanks")
+        return request.render("nomin_web.partner_register_thanks")
 
     @http.route('/web/register/checkpartner', type='http', auth='public', website=True)
     def checkpartner(self, tax_number):
@@ -265,7 +265,7 @@ class ResPartnerRequest(http.Controller):
       
     @http.route('/web/partner/search', type='http', auth="public", website=True)
     def webPartnerSearch(self, **kw):
-        return request.website.render("nomin_web.partner_search")
+        return request.render("nomin_web.partner_search")
 
     @http.route('/web/partner/check', type='http', auth="public",methods=['GET', 'POST'], website=True)
     def webcheckpartner(self, **post):
@@ -286,7 +286,7 @@ class ResPartnerRequest(http.Controller):
             portal_user_id = request.env['res.users'].sudo().search([('partner_id','=',partner_id.id)])
             if len(portal_user_id)>1:
                 portal_user_id = portal_user_id[0]
-            # return request.website.render("nomin_web.return_partner_data", {'login':portal_user_id.login,'email':partner_id.email})
+            # return request.render("nomin_web.return_partner_data", {'login':portal_user_id.login,'email':partner_id.email})
             if not portal_user_id:
                 portal_user_id= False
 
@@ -298,9 +298,9 @@ class ResPartnerRequest(http.Controller):
             }
             
                 
-            return request.website.render("nomin_web.return_check_partner",values)
+            return request.render("nomin_web.return_check_partner",values)
            
-        return request.website.render("nomin_web.partner_not_found")
+        return request.render("nomin_web.partner_not_found")
 
 
     @http.route('/web/partner/editrequest', type='http', auth="public", methods=['GET','POST'], website=True)
@@ -335,7 +335,7 @@ class ResPartnerRequest(http.Controller):
                     'email':email
                     }
             
-            return request.website.render("nomin_web.partner_edit_request", vals)
+            return request.render("nomin_web.partner_edit_request", vals)
         if post['login_request']=='login_request':
 
             partner_search=request.env['res.partner.request'].sudo().search([('register_number','=',post['partner_search']),('state','=','draft')])
@@ -348,7 +348,7 @@ class ResPartnerRequest(http.Controller):
                 values={
                 'create_date':create_date,
                 }
-                return request.website.render("nomin_web.partner_register_request_exist",values)
+                return request.render("nomin_web.partner_register_request_exist",values)
 
             partner_id = request.env['res.partner'].sudo().search([('registry_number','=',post['partner_search'])])
             if not partner_id:
@@ -394,7 +394,7 @@ class ResPartnerRequest(http.Controller):
             'email':email
             })
 
-            return request.website.render("nomin_web.partner_register_thanks")
+            return request.render("nomin_web.partner_register_thanks")
 
 
     @http.route('/web/partner/sendrequest', type='http', auth="public", methods=['GET','POST'], website=True)
@@ -421,7 +421,7 @@ class ResPartnerRequest(http.Controller):
             })
 
 
-        return request.website.render("nomin_web.partner_register_thanks")
+        return request.render("nomin_web.partner_register_thanks")
 
 class dowload_file(http.Controller):
                     
@@ -431,7 +431,7 @@ class dowload_file(http.Controller):
         values  ={
         'activities':activities,
         }
-        return request.website.render("nomin_web.nomin_partner_register",values)
+        return request.render("nomin_web.nomin_partner_register",values)
 
     @http.route('''/register/file/<model("portal.user.file"):portal>/download''', type='http', auth="public", website=True)
     def register_file_download(self, portal):
@@ -445,7 +445,7 @@ class dowload_file(http.Controller):
                  ('Content-Disposition', disposition)])
         elif request.session.uid:
             return werkzeug.utils.redirect('/web?redirect=/web')
-        return request.website.render("website.403")
+        return request.render("website.403")
  
     @http.route([
         '/portal/download',
@@ -562,7 +562,7 @@ class suggestion_list(http.Controller):
                   'sum_dict': sum_dict,
                   'pager': pager,
                   }
-        return request.website.render("nomin_web.tender_suggestion_document", values)
+        return request.render("nomin_web.tender_suggestion_document", values)
         
     @http.route([
         '/suggestion/<model("tender.suggestion"):currsuggest>', 
@@ -621,7 +621,7 @@ class suggestion_list(http.Controller):
                   'sum_dict': sum_dict,
                   }
         
-        return request.website.render("nomin_web.tender_current_suggestion", values)
+        return request.render("nomin_web.tender_current_suggestion", values)
     
 class partner_file(models.Model):
     _name = "res.partner.file"

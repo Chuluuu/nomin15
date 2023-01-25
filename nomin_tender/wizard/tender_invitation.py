@@ -27,7 +27,8 @@ class tender_invitation_guide(models.Model):
     
     def _add_followers(self,user_ids): 
         '''Дагагч нэмнэ'''
-        self.message_subscribe_users(user_ids=user_ids)
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
         
     @api.model
     def create(self, vals):

@@ -48,7 +48,7 @@ class NominTender(http.Controller):
                  ('Content-Disposition', disposition)])
         elif not request.session.uid:
             return werkzeug.utils.redirect('/web?redirect=/tender_details/%s' % (document.tender_id.id))
-        return request.website.render("website.403")
+        return request.render("website.403")
  
     @http.route([
         '/document_download',
@@ -134,7 +134,7 @@ class NominTender(http.Controller):
                   'answer_dict': answer_dict,
                   'sum_dict': sum_dict,
                 }
-        return request.website.render("nomin_web.nomin_contactus_form", values)
+        return request.render("nomin_web.nomin_contactus_form", values)
      
     @http.route([
         '/new_tenders/',
@@ -235,7 +235,7 @@ class NominTender(http.Controller):
                   
                 }
 
-        return request.website.render("nomin_web.new_tender_list", values)
+        return request.render("nomin_web.new_tender_list", values)
     
     @http.route([
         '/subscribe/',
@@ -403,7 +403,7 @@ class NominTender(http.Controller):
                   'pager': pager
                 }
         #return self.page(page)
-        return request.website.render("nomin_web.tender_list", values)        
+        return request.render("nomin_web.tender_list", values)        
     
         
     @http.route([
@@ -452,7 +452,7 @@ class NominTender(http.Controller):
                   'end_date': dt,
                 }
         #return self.page(page)
-        return request.website.render("nomin_web.tender_list", values)    
+        return request.render("nomin_web.tender_list", values)    
         
     @http.route([
         '/tender_list/unpublished',
@@ -501,7 +501,7 @@ class NominTender(http.Controller):
                   'end_date': dt,
                 }
         #return self.page(page)
-        return request.website.render("nomin_web.tender_list", values)
+        return request.render("nomin_web.tender_list", values)
 
     @http.route('/tender_detail/<model("tender.tender"):tender>/', auth='public', website=True)
     def news_detail(self, tender):
@@ -586,6 +586,7 @@ class NominTender(http.Controller):
         
         values = {}
         url = "/result_list"
+        print("domain",domain)
         tender_count = tender_obj.sudo().search_count(domain)
         pager = request.website.pager(url=url, total=tender_count, page=page, step=ppg, scope=7, url_args=post)
         
@@ -610,7 +611,7 @@ class NominTender(http.Controller):
                   'pager': pager
                 }
         
-        return request.website.render("nomin_web.tender_result_list", values)
+        return request.render("nomin_web.tender_result_list", values)
 
     
     @http.route('/result_details/<model("tender.tender"):tender>/', type='http', auth="public", website=True)
@@ -662,7 +663,7 @@ class NominTender(http.Controller):
                     'user_ids' : user_ids,
                 }
         
-        return request.website.render("nomin_web.tender_result_detail", values)
+        return request.render("nomin_web.tender_result_detail", values)
     
     @http.route('/tender/create/documents/<model("tender.tender"):tender>/', type='http', auth="public", website=True)
     def my_tender_bid(self, tender):
@@ -673,7 +674,7 @@ class NominTender(http.Controller):
                 'tender': tender,
                 }
         
-        return request.website.render("nomin_web.create_documents_tender", vals)
+        return request.render("nomin_web.create_documents_tender", vals)
     
     
     
@@ -841,7 +842,7 @@ class NominTender(http.Controller):
         part_tenders = participants.sudo().search([('partner_id','=', user_id.partner_id.id),('tender_id','=',tender.id)])
         
         lines = participants_lines.sudo().search([('partner_id','=', user_id.partner_id.id),('tender_id','=',tender.id),('task_id','=',part_tenders[0].id)])
-        return request.website.render("nomin_web.my_tenders_documents_details", {
+        return request.render("nomin_web.my_tenders_documents_details", {
             'tender': tender,
             'part_tenders': part_tenders,
             'lines': lines,
@@ -965,7 +966,7 @@ class NominTender(http.Controller):
                   'tender_types':tender_types,
                   }
         
-        return request.website.render("nomin_web.search_results", values)
+        return request.render("nomin_web.search_results", values)
     
     
     @http.route(['/result/search_results/',
@@ -1095,7 +1096,7 @@ class NominTender(http.Controller):
                   'tender_types':tender_types,
                   }
         
-        return request.website.render("nomin_web.tender_result_search_results", values)
+        return request.render("nomin_web.tender_result_search_results", values)
     
     @http.route(['/allresults/',
                  '/allresults/page/<int:page>'], 
@@ -1201,6 +1202,6 @@ class NominTender(http.Controller):
 #                   'invitation':invitation,
                   }
 
-        return request.website.render("nomin_web.allsearch_results", values)
+        return request.render("nomin_web.allsearch_results", values)
     
     

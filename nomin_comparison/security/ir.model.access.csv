@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_user,purchase user,model_purchase_comparison,purchase.group_purchase_user,1,1,0,0
+access_purchase_complex_manager,purchase comparison complex manager,model_purchase_comparison,nomin_purchase_requisition.group_complex_manager,1,1,1,1
+access_purchase_supply_import_manager,purchase comparison supply import manager,model_purchase_comparison,nomin_purchase_requisition.group_supply_import_manager,1,1,1,1
+access_purchase_procurement_admin,purchase comparison procurement admin,model_purchase_comparison,nomin_purchase_requisition.group_procurement_admin,1,1,1,1
+
+access_purchase_partner_user,purchase user,model_purchase_partner_comparison,purchase.group_purchase_user,1,1,1,1
+access_purchase_evaluation_user,purchase user,model_purchase_evaluation_indicators,purchase.group_purchase_user,1,1,1,1
+access_purchase_rate_employee_user,purchase user,model_purchase_employee_rate,purchase.group_purchase_user,1,1,1,1
+access_purchase_rate_indicator_user,purchase user,model_purchase_indicator_rate_employee,purchase.group_purchase_user,1,1,1,1
+access_purchase_rate_indicators_user,purchase user,model_purchase_indicators,purchase.group_purchase_user,1,1,1,1
+access_model_purchase_comparison_report_wizard,purchase user,model_purchase_comparison_report_wizard,purchase.group_purchase_user,1,1,1,1
+access_purchase_evaluation_infos_user,purchase user,model_purchase_evaluation_infos,purchase.group_purchase_user,1,1,1,1
+

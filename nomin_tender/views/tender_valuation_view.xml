@@ -6,7 +6,6 @@
 		<record id="view_tender_rate_tree" model="ir.ui.view">
 			<field name="name">tender.rate.tree</field>
 			<field name="model">tender.rate</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Tender Rate Tree">
 					<field name="name"/>
@@ -21,7 +20,6 @@
 		<record id="view_tender_rate_form" model="ir.ui.view">
 			<field name="name">tender.rate.form</field>
 			<field name="model">tender.rate</field>
-			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Tender Rate Form">
 					<sheet>
@@ -49,7 +47,6 @@
 		<record id="view_tender_type_rate_max_tree" model="ir.ui.view">
 			<field name="name">tender.type.rate.max.tree</field>
 			<field name="model">tender.type.rate.max</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Tender type rate max Tree">
 					<field name="rate_id"/>
@@ -63,7 +60,6 @@
 		<record id="view_tender_type_rate_max_form" model="ir.ui.view">
 			<field name="name">tender.type.rate.max.form</field>
 			<field name="model">tender.type.rate.max</field>
-			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Tender type rate max Form">
 					<sheet>
@@ -84,7 +80,6 @@
 		<!--         <record id="view_tender_type_inherit_form" model="ir.ui.view">
             <field name="name">tender.type.inherit.form</field>
             <field name="model">tender.type</field>
-	        <field name="type">form</field>
             <field name="inherit_id" ref="nomin_tender.view_tender_type_form" />
             <field name="arch" type="xml">
             	<xpath expr='//field[@name="child_ids"]' position="after">
@@ -104,7 +99,6 @@
 		<record id="view_tender_valuation_tree" model="ir.ui.view">
 			<field name="name">tender.valuation.tree</field>
 			<field name="model">tender.valuation</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Tender Valuation Tree">
 					<field name="tender_id"/>
@@ -120,7 +114,6 @@
 		<record id="view_tender_valuation_form" model="ir.ui.view">
 			<field name="name">tender.valuation.form</field>
 			<field name="model">tender.valuation</field>
-			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Tender Valuation Form">
 					<header>
@@ -418,7 +411,6 @@
 		<record id="view_tender_valuation_partner_tree" model="ir.ui.view">
 			<field name="name">tender.valuation.partner.tree</field>
 			<field name="model">tender.valuation.partner</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Tender Valuation Partner Tree">
 					<field name="partner_id"/>
@@ -435,7 +427,6 @@
 		<record id="view_tender_valuation_partner_form" model="ir.ui.view">
 			<field name="name">tender.valuation.partner.form</field>
 			<field name="model">tender.valuation.partner</field>
-			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Tender Valuation Partner Form">
 					<sheet>
@@ -537,7 +528,6 @@
 		<record id="view_tender_valuation_employee_partner_tree" model="ir.ui.view">
 			<field name="name">tender.valuation.employee.partner.tree</field>
 			<field name="model">tender.valuation.employee.partner</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Tender Valuation Employee Partner Tree">
 					<field name="employee_id"/>
@@ -555,7 +545,6 @@
 		<record id="view_tender_valuation_employee_partner_form" model="ir.ui.view">
 			<field name="name">tender.valuation.employee.partner.form</field>
 			<field name="model">tender.valuation.employee.partner</field>
-			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Tender Valuation Employee Partner Form">
 					<sheet>
@@ -628,7 +617,6 @@
 		<record id="view_tender_valuation_employee_valuation_tree" model="ir.ui.view">
 			<field name="name">tender.valuation.employee.valuation.tree</field>
 			<field name="model">tender.valuation.employee.valuation</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Tender Valuation Partner User Tree">
 					<field name="employee_id"/>
@@ -663,7 +651,6 @@
 		<record id="view_tender_valuation_employee_valuation_form" model="ir.ui.view">
 			<field name="name">tender.valuation.employee.valuation.form</field>
 			<field name="model">tender.valuation.employee.valuation</field>
-			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Tender Valuation Employee Valuation Form" create="false">
 					<header>
@@ -810,7 +797,6 @@
 		<record id="view_tender_valuation_rate_line_tree" model="ir.ui.view">
 			<field name="name">tender.valuation.rate.line.tree</field>
 			<field name="model">tender.valuation.rate.line</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Tender Valuation Partner User Tree">
 					<field name="tender_id"/>
@@ -831,7 +817,6 @@
 		<record id="view_tender_valuation_rate_line_form" model="ir.ui.view">
 			<field name="name">tender.valuation.rate.line.form</field>
 			<field name="model">tender.valuation.rate.line</field>
-			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Tender Valuation Partner Rate Form">
 					<sheet>

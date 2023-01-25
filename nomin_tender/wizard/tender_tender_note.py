@@ -13,7 +13,7 @@ class tender_cancel_note(models.Model):
     '''Тендер цуцлах
     '''
     tender_id       = fields.Many2one('tender.tender', 'Tender')
-    description     = fields.Text('Note', require=True)
+    description     = fields.Text('Note', required=True)
     
     
     def save_cancel_note(self):
@@ -44,7 +44,7 @@ class DisabledTender(models.Model):
     '''Тендер хэрэгсэхгүй болгох
     '''
     tender_id       = fields.Many2one('tender.tender', 'Tender')
-    description     = fields.Text('Note', require=True)
+    description     = fields.Text('Note', required=True)
     
     
     def confirm(self):
@@ -104,7 +104,7 @@ class tender_meeting_note(models.Model):
     '''Тендерийн хурлыг цуцлах
     '''
     meet_id     = fields.Many2one('tender.meet', 'Tender Meet')
-    note        = fields.Text('Note', require=True)
+    note        = fields.Text('Note', required=True)
     
     
     def save_note(self):
@@ -126,7 +126,7 @@ class tender_tender_note(models.Model):
     _description = "Tender Note"
     
     tender_id   = fields.Many2one('tender.tender', 'Tender')
-    note        = fields.Text('Note', require=True)
+    note        = fields.Text('Note', required=True)
     
     
     def send_notif_to_followers(self,signal):
@@ -268,7 +268,7 @@ class tender_request_note(models.TransientModel):
     _description = "Tender Note"
 
     tender_id   = fields.Many2one('tender.tender', 'Tender')
-    note        = fields.Text('Note', require=True)
+    note        = fields.Text('Note', required=True)
 
 
     

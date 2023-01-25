@@ -80,37 +80,6 @@ class CreatePurchaseRequisition(models.Model):
     postage_limit       = fields.Float(u'Шууд зардлын үлдэгдэл')
     other_limit         = fields.Float(u'Бусад зардлын үлдэгдэл')
     
-    # def default_get(self, cr, uid, fields, context=None):
-    #     '''
-    #         Хяналтын төсвийн материал болон ажиллах хүчний зардлын сонгосон мөр болон бусад зардлуудын оруулсан дүн, хяналтын төсвийг буцаана
-    #     '''
-    #     result = []
-    #     if context is None:
-    #         context = {}
-    #     res = super(create_purchase_requisition, self).default_get(cr, uid, fields, context=context)    
-    #     active_id = context and context.get('active_id', False) or False
-    #     perform_obj = self.pool.get('control.budget')
-    #     perform = perform_obj.browse(cr, uid, active_id)
-    #     m_line_ids = []
-    #     for line in perform.material_line_ids:
-    #         if line.cost_choose == True and line.state == 'confirm':
-    #             m_line_ids.append(line.id)
-    #     l_line_ids = []
-    #     for line in perform.labor_line_ids:
-    #         if line.cost_choose == True and line.state == 'confirm':
-    #             l_line_ids.append(line.id)
-    #     res.update({
-    #                 'budget_id' : perform.id,
-    #                 'material_limit':perform.material_utilization_limit,
-    #                 'labor_limit':perform.labor_utilization_limit,
-    #                 'equipment_limit' : perform.equipment_utilization_limit,
-    #                 'carriage_limit' : perform.carriage_utilization_limit,
-    #                 'postage_limit' : perform.postage_utilization_limit,
-    #                 'other_limit' : perform.other_utilization_limit,
-    #                 'm_line':[(6, 0, m_line_ids)],
-    #                 'l_line':[(6, 0, l_line_ids)]
-    #                 })
-    #     return res
 
     @api.model
     def default_get(self, fields):
@@ -387,7 +356,6 @@ class CreatePurchaseRequisition(models.Model):
                      'type': 'ir.actions.act_window',
                      'name': _('Register Call'),
                      'res_model': 'purchase.requisition',
-                     'view_type' : 'tree',
                      'view_mode' : 'form',
                      'search_view_id' : view_id,
                      'res_id':purchase_requisition.id,

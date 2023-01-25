@@ -30,7 +30,6 @@
             <field name="view_id" ref="project_task_rating_report_form"/>
             <field name="target">new</field>
         </record>
-        <menuitem id="menu_project_reports" name="Reports" groups="project.group_project_user" parent="project.menu_main_pm" sequence="99"/>
         <menuitem id= "menu_project_task_rating_report"
         	name = "Даалгаварын үнэлгээний тайлан" parent="nomin_project.menu_project_reports" sequence= "7" action="action_project_task_rating_report" />
     </data>

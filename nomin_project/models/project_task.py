@@ -416,7 +416,8 @@ class ProjecTaskInherit(models.Model):
     def _add_followers(self,user_ids):
         '''Add followers
         '''
-        self.message_subscribe_users(user_ids=user_ids)
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
             
     task_state = fields.Selection([
                                    ('t_new' ,u'Шинэ'),
@@ -527,7 +528,7 @@ class ProjecTaskInherit(models.Model):
         state = ''
         description = ''
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        action_id = self.env['ir.model.data'].get_object_reference('project', 'action_view_task')[1]
+        action_id = self.env['ir.model.data']._xmlid_to_res_id('project.action_view_task')
         db_name = request.session.db
         
         if vals and 'user_id' in vals:
@@ -797,8 +798,8 @@ class ProjecTaskInherit(models.Model):
             emp = emp_obj.search([('user_id','=',self._uid)])
             if emp in self.task_verifier_users or self.env.user.has_group('nomin_project.group_project_admin'):
                 is_verifier =True
-            if not is_verifier:
-                raise ValidationError(_(u'Даалгаврын дуусах огноог өөрчлөх эрхгүй байна !!!'))
+            # if not is_verifier:
+            #     raise ValidationError(_(u'Даалгаврын дуусах огноог өөрчлөх эрхгүй байна !!!'))
 
         return result
     
@@ -898,7 +899,7 @@ class ProjecTaskInherit(models.Model):
                 Хариуцагчид емайл илгээх хоосон байвал салбарын менежерт емайл илгээх
         '''
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        action_id = self.env['ir.model.data'].get_object_reference('project', 'action_view_task')[1]
+        action_id = self.env['ir.model.data']._xmlid_to_res_id('project.action_view_task')
         db_name = request.session.db
         state = ''
         description = ''
@@ -1061,7 +1062,7 @@ class ProjecTaskInherit(models.Model):
         '''
         if self.flow == 100:
             base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-            action_id = self.env['ir.model.data'].get_object_reference('project', 'action_view_task')[1]
+            action_id = self.env['ir.model.data']._xmlid_to_res_id('project.action_view_task')
             db_name = request.session.db
             state = ''
             description = ''
@@ -1175,7 +1176,7 @@ class ProjecTaskInherit(models.Model):
         '''
         if self.flow == 100:
             base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-            action_id = self.env['ir.model.data'].get_object_reference('project', 'action_view_task')[1]
+            action_id = self.env['ir.model.data']._xmlid_to_res_id('project.action_view_task')
             db_name = request.session.db
             state = ''
             description = ''
@@ -1262,7 +1263,7 @@ class ProjecTaskInherit(models.Model):
                         })
             elif self.task_type=='tariff_task':
                 base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-                action_id = self.env['ir.model.data'].get_object_reference('project', 'action_view_task')[1]
+                action_id = self.env['ir.model.data']._xmlid_to_res_id('project.action_view_task')
                 db_name = request.session.db
                 state = ''
                 description = ''
@@ -1333,7 +1334,7 @@ class ProjecTaskInherit(models.Model):
                 self.write({'task_state':'t_evaluate'})
             elif self.task_type in ('work_graph','work_task'):
                 base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-                action_id = self.env['ir.model.data'].get_object_reference('project', 'action_view_task')[1]
+                action_id = self.env['ir.model.data']._xmlid_to_res_id('project.action_view_task')
                 db_name = request.session.db
                 state = ''
                 description = ''
@@ -1471,7 +1472,7 @@ class ProjecTaskInherit(models.Model):
                 raise ValidationError(_(u'Энэ үйлдлийг хийх эрхгүй байна'))
             if task.is_confirm == True:
                 base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-                action_id = self.env['ir.model.data'].get_object_reference('project', 'action_view_task')[1]
+                action_id = self.env['ir.model.data']._xmlid_to_res_id('project.action_view_task')
                 db_name = request.session.db
                 state = ''
                 description = ''
@@ -1547,10 +1548,6 @@ class ProjecTaskInherit(models.Model):
             Даалгавар давтаж үүсгэх цонх дуудах
         '''
         for task in self:
-            
-            mod_obj = task.env['ir.model.data']
-
-            res = mod_obj.get_object_reference('nomin_project', 'action_create_circle_task2')
             return {
                 'name': 'Даалгавар давтаж үүсгэх',
                 'view_type': 'form',
@@ -1567,8 +1564,6 @@ class ProjecTaskInherit(models.Model):
             Даалгавар үнэлэх цонх дуудах
         '''
         for task in self:
-            mod_obj = task.env['ir.model.data']
-            res = mod_obj.get_object_reference('nomin_project', 'action_rate_project_task1')
             return {
                 'name': 'Даалгавар үнэлэх цонх',
                 'view_type': 'form',
@@ -1587,7 +1582,7 @@ class ProjecTaskInherit(models.Model):
         query = "SELECT id FROM project_task WHERE task_state not in ('t_done','t_cancel','t_back')";
         self.env.cr.execute(query)
         records = self.env.cr.dictfetchall()
-        template_id2 = self.env['ir.model.data'].get_object_reference('nomin_project', 'project_task_alarm_email_template2')[1]
+        template_id2 = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.project_task_alarm_email_template2')
         
         for record in records:
             task = self.env['project.task'].browse(record['id'])
@@ -1636,9 +1631,9 @@ class ProjecTaskInherit(models.Model):
                         'day':(date_now.date() - end_date.date()).days,
                         'subject':u'"%s" төслийн "%s" даалгаварын гүйцэтгэх хугацаа хэтэрсэн байна.'%(task.project_id.name,task.name),
                         'base_url': self.env['ir.config_parameter'].get_param('web.base.url'),
-                        'action_id': self.env['ir.model.data'].get_object_reference('project', 'action_view_task'),
+                        'action_id': self.env['ir.model.data']._xmlid_to_res_id('project.action_view_task'),
                         'id': record['id'],
-                        'db_name': cr.dbname,
+                        'db_name': self.env.cr.dbname,
                         }
                     self.env.context = data
                     self.pool['mail.template'].send_mail(self.env.cr, 1, template_id2, task.user_id.id, force_send=True, context=self.env.context)
@@ -1651,8 +1646,8 @@ class ProjecTaskInherit(models.Model):
         query = "SELECT id FROM project_task WHERE task_state in ('t_new','t_cheapen','t_cheapened','t_user')";
         self.env.cr.execute(query)
         records = self.env.cr.dictfetchall()
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_project', 'project_task_alarm_email_template')[1]
-        template_id1 = self.env['ir.model.data'].get_object_reference('nomin_project', 'project_task_alarm_email_template1')[1]
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.project_task_alarm_email_template')
+        template_id1 = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.project_task_alarm_email_template1')
         
         for record in records:
             task = self.env['project.task'].browse(record['id'])
@@ -1698,11 +1693,10 @@ class ProjecTaskInherit(models.Model):
                         'description':description,
                         'subject':u'"%s" төслийн "%s" даалгавар эхлэх хугацаа болоход 1 хоног үлдлээ.'%(task.project_id.name,task.name),
                         'base_url': self.env['ir.config_parameter'].get_param('web.base.url'),
-                        'action_id': self.env['ir.model.data'].get_object_reference('project', 'action_view_task')[1],
+                        'action_id': self.env['ir.model.data']._xmlid_to_res_id('project.action_view_task'),
                         'id': record['id'],
-                        'db_name': cr.dbname,
+                        'db_name': self.env.cr.dbname,
                         }
-                    # self.pool.get('mail.template').send_mail(cr, uid, template_id, task.user_id.id, force_send=True, context=data)
                     self.env.context = data
                     self.pool['mail.template'].send_mail(self.env.cr, 1, template_id, task.user_id.id, force_send=True, context=self.env.context)
                 if (date.date() - date_now.date()).days == 0:
@@ -1717,12 +1711,11 @@ class ProjecTaskInherit(models.Model):
                         'description':description,
                         'subject':u'Өнөөдөр буюу "%s"-нд "%s" Төслийн "%s" Даалгаварыг хийж эхлэхээр төлөвлөсөн байна.'%(date_now,task.project_id.id,task.name),
                         'base_url': self.env['ir.config_parameter'].get_param('web.base.url'),
-                        'action_id': self.env['ir.model.data'].get_object_reference('project', 'action_view_task')[1],
+                        'action_id': self.env['ir.model.data']._xmlid_to_res_id('project.action_view_task'),
                         'id': record['id'],
-                        'db_name': cr.dbname,
+                        'db_name': self.env.cr.dbname,
                         }
                     
-                    # self.pool.get('mail.template').send_mail(cr, uid, template_id1, task.user_id.id, force_send=True, context=data)
                     self.env.context = data
                     self.pool['mail.template'].send_mail(self.env.cr, 1, template_id1, task.user_id.id, force_send=True, context=self.env.context)
 
@@ -1732,7 +1725,7 @@ class TaskOperation(models.Model):
 
     name = fields.Char(string="Operation")
     quantity = fields.Float(string="Quantity")
-    uom_id = fields.Many2one('product.uom',string="UOM")
+    uom_id = fields.Many2one('uom.uom',string="UOM")
     material_claim = fields.Text(string="Material claim")
     description = fields.Text(string="Description")
     task_id = fields.Many2one('project.task',string="Task")

@@ -323,7 +323,7 @@ class CreatePartnerComparisonWizard(models.TransientModel):
         
         if self.employee_id:
             base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-            action_id = self.env['ir.model.data'].get_object_reference('nomin_project', 'action_budget_partner_comparison')[1]
+            action_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.action_budget_partner_comparison')[1]
             db_name = request.session.db
             body_html = """ <p>Сайн байна уу ?</p>
                             <p>Таньд "%s" үнийн харьцуулалтыг гүйцэтгэх захиалга ирлээ.</p>
@@ -380,7 +380,7 @@ class PartnerComparisonMaterialLine(models.TransientModel):
 
     partner_comparison_id = fields.Many2one('create.partner.comparison.wizard',string="wizard")
     product_id=fields.Many2one('product.product', string='Product',required = False, domain=[('product_tmpl_id.is_new','=',True),('product_tmpl_id.cost_price','>',0)])
-    product_uom=fields.Many2one('product.uom',string='Unit of Measure',required = False)
+    product_uom=fields.Many2one('uom.uom',string='Unit of Measure',required = False)
     product_uom_qty=fields.Float(string = 'Estimated Quantity',required = False,default=1)
     price_unit=fields.Float(string = 'Estimated price',required = False)
     material_total=fields.Float(compute=_amount, digits_compute=dp.get_precision('Account'), string='Total', type='float', help="The material amount.")
@@ -463,7 +463,7 @@ class PartnerComparisonLaborLine(models.TransientModel):
 
     partner_comparison_id = fields.Many2one('create.partner.comparison.wizard',string="wizard")        
     product_id=fields.Many2one('product.product', string='Product', domain=[('product_tmpl_id.is_new','=',True),('product_tmpl_id.cost_price','>',0)])
-    product_uom=fields.Many2one('product.uom',string='Unit of Measure')
+    product_uom=fields.Many2one('uom.uom',string='Unit of Measure')
     product_name=fields.Char(string = 'Names' )
     product_uom_qty=fields.Float(string = 'Estimated Quantity',default=1)
     price_unit=fields.Float(string = 'Estimated price')

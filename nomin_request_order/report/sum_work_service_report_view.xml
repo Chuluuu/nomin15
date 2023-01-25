@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+    <record id="form_sum_work_service_report_view" model="ir.ui.view">
+        <field name="name">Нэгтгэл тайлан </field>
+        <field name="model">sum.work.service.report</field>
+        <field name="arch" type="xml">
+            <form string="Нэгтгэл тайлан">
+                <group>                   
+                    <group>
+                            <field name="date_from"  required="1"/>
+                            <field name="type" required="1"/>
+                    </group>
+                    <group>
+                            <field name="date_to" required="1" />
+                            <field name="request_config_id" options="{'no_create': True}" invisible="1"/>
+                    </group>                  
+                </group>
+                <notebook>
+                    <page string="Захиалагч салбар" attrs="{'invisible':[('type','=','employee')]}" >
+                            <field name="sector_ids"  widget="many2many_tags" options="{'no_create': True}"  />
+                    </page>   
+                    <page string="Гүйцэтгэгч хэлтэс" attrs="{'invisible':[('type','=','employee')]}" >
+                            <field name="perform_department_ids"  widget="many2many_tags" options="{'no_create': True}"  />
+                    </page>                    
+                </notebook>
+                 <footer>
+                    <button name="action_export" class ="oe_highlight" string="Татах" type="object" icon="terp-graph"/>
+                    or
+                    <button string="Цуцлах" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+
+    <record model="ir.actions.act_window" id="action_sum_work_service_report">
+            <field name="name">Tайлан</field>
+            <field name="res_model">sum.work.service.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="form_sum_work_service_report_view"/>
+            <field name="target">new</field>
+    </record>
+
+    <menuitem name="Нэгтгэл тайлан " id="menu_action_sum_work_service_report_id"  parent="menu_nomin_request_report"
+            action="action_sum_work_service_report" sequence="12" />
+
+</data>
+</odoo>

@@ -155,3 +155,8 @@ access_labor_cost_settings_general_budgeter,order.page.line,model_labor_cost_set
 
 access_project_perform_user,project.perform,model_project_perform,project.group_project_user,1,1,1,0
 access_project_perform_admin,project.perform,model_project_perform,nomin_project.group_project_admin,1,1,1,0
+access_sdlc_integration,sdlc_integration,model_sdlc_integration,project.group_project_user,1,1,1,1
+access_required_attachment_in_task_user,required.attachment.in.task,model_required_attachment_in_task,project.group_project_user,1,0,0,0
+access_required_attachment_in_task_admin,required.attachment.in.task,model_required_attachment_in_task,nomin_project.group_project_admin,1,1,1,1
+access_sel_type_user,sel.type,model_sel_type,project.group_project_user,1,0,0,0
+access_sel_type_admin,sel.type,model_sel_type,nomin_project.group_project_admin,1,1,1,

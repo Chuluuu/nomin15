@@ -16,7 +16,7 @@
 #
 ##############################################################################
 from . import integration
-# import evaluation_indicators
+from . import evaluation_indicators
 # import google_calendar
 # import nomin_state_changer
 # import res_users_config

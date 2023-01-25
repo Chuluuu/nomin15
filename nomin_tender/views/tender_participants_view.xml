@@ -36,7 +36,6 @@
         <record id="view_tender_participants_bid_tree" model="ir.ui.view">
             <field name="name">Tender participants bid tree</field>
             <field name="model">tender.participants.bid</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Participants bid tree">
                     <field name="name"/>
@@ -51,7 +50,6 @@
         <record id="view_tender_history_tree" model="ir.ui.view">
             <field name="name">tender.partner.history.tree</field>
             <field name="model">tender.partner.history</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Tender history partner" editable="bottom">
                     <field name="partner_id"/>
@@ -68,7 +66,6 @@
         <record id="view_tender_participants_bid_form" model="ir.ui.view">
             <field name="name">Tender participants bid form</field>
             <field name="model">tender.participants.bid</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Partner bid form">
                     <header>
@@ -154,7 +151,6 @@
         <!--  <record id="view_tender_history_form" model="ir.ui.view">
             <field name="name">tender.partner.history.form</field>
             <field name="model">tender.partner.history</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Tender history">
                 	<header>
@@ -179,7 +175,7 @@
 
         <record model="ir.actions.act_window" id="tender_partner_bid_action">
             <field name="name">Partner bids</field>
-            <field name="type">ir.actions.act_window</field>
+            <!-- <field name="type">ir.actions.act_window</field> -->
             <field name="res_model">tender.participants.bid</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_tender_participants_bid_tree"/>

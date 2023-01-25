@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_purchase_order_inherit" model="ir.ui.view">
+            <field name="name">Purchase Order</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref ="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+               <xpath expr="//field[@name='partner_ref']" position='after'>
+                    <field name="purchase_type" groups="purchase.group_purchase_user" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+                    <field name="comparison_id"  groups="purchase.group_purchase_user" attrs="{'invisible':[('comparison_id','=',False)],'readonly':[('state','!=','draft')]}"/>
+                    <!-- <field name="comparison_id" invisible="1"/> -->
+                </xpath>
+                  
+            </field>
+        </record>
+
+
+         <record id="purchase.purchase_order_tree" model="ir.ui.view">
+            <field name="name">purchase.order.tree</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <tree decoration-bf="message_unread==True" decoration-muted="state=='cancel'" decoration-info="state in ('wait','confirmed')" string="Purchase Order">
+                    <field name="message_unread" invisible="1"/>
+                    <field name="name" string="Reference"/>
+                    <field name="date_order" />
+                    <field name="sector_id"/>
+                    <field name="department_id"/>
+                    <field name="purchase_type"/>
+                    <field name="partner_id"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="date_planned" invisible="context.get('quotation_only', False)"/>
+                    <field name="origin"/>
+                    <field name="amount_untaxed" sum="Total Untaxed amount" string="Untaxed" widget="monetary"/>
+                    <field name="amount_total" sum="Total amount" widget="monetary"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</openerp>

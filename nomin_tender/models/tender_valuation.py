@@ -29,7 +29,7 @@ STATE_SELECTION = [
         ('approved','Approved'),
     ]
 
-class tender_rate(models.Model):
+class TenderRate(models.Model):
 	_name = 'tender.rate'
 	_description = "Tender Rate"
 	_inherit = ['mail.thread', 'mail.activity.mixin']
@@ -78,7 +78,7 @@ class tender_rate(models.Model):
 		    
 		if parent_id == self.id:
 			raise UserError(_(u'Өөрөө өөрийгөө эцэг үзүүлэлтээр сонгох боломжгүй !'))
-		result = super(tender_rate, self).write(vals)
+		result = super(TenderRate, self).write(vals)
 		return result
     
 	
@@ -90,14 +90,14 @@ class tender_rate(models.Model):
 		return super(tender_rate, self).unlink()
 
 """Тендерийн төрлийн үнэлгэнйи макс оноо тохируулах"""
-class tender_type_rate_max(models.Model):
+class TenderTypeRateMax(models.Model):
 	_name = 'tender.type.rate.max'
 	_description = "Tender Rate Rate Max"
 	_inherit = ['mail.thread', 'mail.activity.mixin']
 	
-	rate_id 		= fields.Many2one('tender.rate','Rate', require=True,tracking=True)
+	rate_id 		= fields.Many2one('tender.rate','Rate', required=True,tracking=True)
 	tender_type_id 	= fields.Many2one('tender.type','Tender Type', domain=[('parent_id','=',False)],tracking=True)
-	max_value	 	= fields.Float('Max Value', require=True,tracking=True)
+	max_value	 	= fields.Float('Max Value', required=True,tracking=True)
 
 	def get_max_value(self):
 		'''Макс оноо тохируулах'''
@@ -132,7 +132,7 @@ class tender_type_rate_max(models.Model):
 			type = self.env['tender.type.rate.max'].search([('tender_type_id','=',vals.get('tender_type_id')),('rate_id','=',vals.get('rate_id'))])
 			if type:
 				raise UserError(_(u'Нэг төрөл дээр ижил үзүүлэлт тохируулах боломжгүй !'))
-		result = super(tender_type_rate_max, self).create(vals)
+		result = super(TenderTypeRateMax, self).create(vals)
 		return result
     
 	
@@ -157,17 +157,17 @@ class tender_type_rate_max(models.Model):
 			if type:
 				if type[0].id != self.id:
 					raise UserError(_(u'Нэг төрөл дээр ижил үзүүлэлт тохируулах боломжгүй !'))
-		result = super(tender_type_rate_max, self).write(vals)
+		result = super(TenderTypeRateMax, self).write(vals)
 		return result
     
 """MТендерийн төрөл: Үнэлгээний макс оноо өгч байгаа хэсэг"""
-class tender_type(models.Model):
+class TenderType(models.Model):
 	_inherit = ["tender.type"]
 
 	rate_max_ids = fields.One2many('tender.type.rate.max', 'tender_type_id', string="Rate Max Values")
 
 """Тендерийн үнэлгээ: """
-class tender_valuation(models.Model):
+class TenderValuation(models.Model):
 	_name = 'tender.valuation'
 	_description = "Tender Valuation"
 	_order = "create_date desc"
@@ -251,16 +251,16 @@ class tender_valuation(models.Model):
 	
 	def write(self, vals):
 		'''Төлвөөс хамаарч имэйл илгээнэ, дагагч нэмнэ'''
-		user_ids = []
+		partner_ids = []
 		for add in self:
 			if vals.get('state')=='completed':
 				add.send_tender_valuation()
 			if vals.get('state')=='approved':
 				for emp in add.valuation_employee_ids:
-					user_ids.append(emp.employee_id.user_id.id)
-				add.message_subscribe_users(user_ids=user_ids)
+					partner_ids.append(emp.employee_id.user_id.partner_id.id)
+				add.message_subscribe(partner_ids=partner_ids)
 				
-		return super(tender_valuation, self).write(vals)		
+		return super(TenderValuation, self).write(vals)		
 	
 	
 	def action_confirm(self):
@@ -371,10 +371,10 @@ class tender_valuation(models.Model):
 		for order in self:
 			if order.state != 'draft':
 				raise UserError(_(u'Та зөвхөн ноорог үнэлгээг устгах боломжтой !'))
-		return super(tender_valuation, self).unlink()
+		return super(TenderValuation, self).unlink()
 
 """Тендерийн харилцагчийн нийт үнэлгээний дундаж: Харилцагчийн бүх шинжийн нийт оноо"""
-class tender_valuation_partner(models.Model):
+class TenderValuationPartner(models.Model):
 	_name = 'tender.valuation.partner'
 	_description = "Tender Valuation Partner"
 	_order = "create_date desc"
@@ -421,7 +421,7 @@ class tender_valuation_partner(models.Model):
 		        'company': tender_obj.company_id.name,
 		        'name': tender_obj.name,
 		        'desc_name': tender_obj.desc_name,
-		        'is_win': result,
+		        'is_win': self.is_win,
 		        'description': val_obj.reason,
 		        'model': 'tender.tender',
 		        }
@@ -453,10 +453,10 @@ class tender_valuation_partner(models.Model):
 		for order in self:
 			if order.tender_valuation_id.state != 'draft':
 				raise UserError(_(u'Та зөвхөн ноорог үнэлгээг устгах боломжтой !'))
-		return super(tender_valuation_partner, self).unlink()
+		return super(TenderValuationPartner, self).unlink()
 
 """Ажилтаны үнэлсэн төлөв, байдал"""
-class tender_valuation_employee_valuation(models.Model):
+class TenderValuationEmployeeValuation(models.Model):
 	_name = 'tender.valuation.employee.valuation'
 	_description = "Tender Valuation Employee Valuation"
 	_order = "create_date desc"
@@ -489,14 +489,14 @@ class tender_valuation_employee_valuation(models.Model):
 	
 	def write(self, vals):
 		'''Дагагч нэмнэ'''
-		user_ids = []
+		partner_ids = []
 		for emp_val in self:	
 			if vals.get('state')=='approved':
 				for emp in emp_val.tender_valuation_id.valuation_employee_ids:
-					user_ids.append(emp.employee_id.user_id.id)
-				emp_val.message_subscribe_users(user_ids=user_ids)
+					partner_ids.append(emp.employee_id.user_id.partner_id.id)
+				emp_val.message_subscribe(partner_ids=partner_ids)
 				
-		return super(tender_valuation_employee_valuation, self).write(vals)		
+		return super(TenderValuationEmployeeValuation, self).write(vals)		
  	
 	
 	def action_complete(self):
@@ -548,7 +548,7 @@ class tender_valuation_employee_valuation(models.Model):
             	
             	
              
-			order.tender_valuation_id.sudo().message_subscribe_users(user_ids = self._uid)
+			order.tender_valuation_id.sudo().message_subscribe(partner_ids =[self.env.user.partner_id.id])
 			order.write({'state': 'completed'})
 			for emp in order.employee_partner_ids:
 				emp.write({'state': 'completed'})
@@ -628,10 +628,10 @@ class tender_valuation_employee_valuation(models.Model):
 		for order in self:
 			if order.tender_valuation_id.state != 'draft':
 				raise UserError(_(u'Та зөвхөн ноорог үнэлгээг устгах боломжтой !'))
-		return super(tender_valuation_employee_valuation, self).unlink()
+		return super(TenderValuationEmployeeValuation, self).unlink()
 	
 """Харилцагчийн нийт үнэлэмжийн хувьд үнэлсэн байдал нэг үнэлэгчийн үзүүлэлт"""
-class tender_valuation_employee_partner(models.Model):
+class TenderValuationEmployeePartner(models.Model):
 	_name = 'tender.valuation.employee.partner'
 	_description = "Tender Valuation Employee Partner"
 	_order = "create_date desc"
@@ -669,10 +669,10 @@ class tender_valuation_employee_partner(models.Model):
 		for order in self:
 			if order.tender_valuation_id.state != 'draft':
 				raise UserError(_(u'Та зөвхөн ноорог үнэлгээг устгах боломжтой !'))
-		return super(tender_valuation_employee_partner, self).unlink()
+		return super(TenderValuationEmployeePartner, self).unlink()
 	
 """Үнэлэгчийн нэг бүрчлэн өгч байгаа оноо: Хамгийн дэлгэрэнгүй оноо. Тайланд ашиглана."""
-class tender_valuation_rate_line(models.Model):
+class TenderValuationRateLine(models.Model):
 	_name = 'tender.valuation.rate.line'
 	_description = "Tender Valuation Rate Line"
 	_order = "create_date desc"
@@ -706,10 +706,10 @@ class tender_valuation_rate_line(models.Model):
 		for order in self:
 			if order.state != 'draft':
 				raise UserError(_(u'Та зөвхөн ноорог үнэлгээг устгах боломжтой !'))
-		return super(tender_valuation_rate_line, self).unlink()
+		return super(TenderValuationRateLine, self).unlink()
 
 
-class tender_participants_control_budget_line(models.Model):
+class TenderParticipantsControlBudgetLine(models.Model):
 	_name = 'tender.participants.control.budget.line'
 	_description = "Tender Participants Budget Line"
 	_order = "amount asc"

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+    <record id="form_purchase_comparison_report_wizard_view" model="ir.ui.view">
+        <field name="name">Худалдан авалт харьцуулалт</field>
+        <field name="model">purchase.comparison.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Худалдан авалт тайлан">     
+                        <group>
+                            <field name="comparison_id" invisible="1" />
+                        </group>           
+                      <footer>
+                        <button name="export_comparison" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/>
+                        or
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+            </form> 
+        </field>
+    </record>
+
+
+     <record model="ir.actions.act_window" id="action_purchase_comparison_report_wizard">
+            <field name="name">Худалдан авалт харьцуулалт</field>
+            <field name="res_model">purchase.comparison.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="form_purchase_comparison_report_wizard_view"/>
+            <field name="context">{'active_id':active_id}</field>
+            <field name="target">new</field>
+        </record>
+
+
+    </data>
+</openerp>

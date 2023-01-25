@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="purchase_comparison_participation_report_form">
+            <field name="name">purchase.comparison.participation.report.form</field>
+            <field name="model">purchase.comparison.participation.report</field>
+            <field name="arch" type="xml">
+                <form string="Purchase comparison participation report">
+                    <group>
+                        <group>                         
+                            <field name="date_from" required="1"/>
+                        </group>
+                        <group>                         
+                            <field name="date_to" required="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Бараа">
+                            <field name="product_ids" widget="many2many_tags" nolabel="1" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create':True}" />
+                        </page>
+                        <page string="Нийлүүлэгч">
+                            <field name="partner_ids" widget="many2many_tags" nolabel="1" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create':True}" />
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="export" string="Export" type="object" icon="terp-graph" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_purchase_comparison_participation_report">
+            <field name="name">Үнийн харьцуулалтанд оролцсон түүх</field>
+            <field name="res_model">purchase.comparison.participation.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="purchase_comparison_participation_report_form"/>
+            <field name="target">new</field>
+        </record>
+
+
+        <menuitem 
+            name="Үнийн харьцуулалтанд оролцсон түүх" 
+            id="menu_purchase_comparison_participation_report" 
+            parent="nomin_purchase.parent_menu_purchase_report_wizard"
+            action="action_purchase_comparison_participation_report" 
+            sequence="105" 
+            groups="capitalLease.group_regular_accountant,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_buyer" />
+
+
+    </data>
+</openerp>

@@ -3,10 +3,7 @@
 
 from odoo import api, fields, models, SUPERUSER_ID, _
 from odoo.tools.translate import _
-import time
 from odoo.exceptions import UserError, ValidationError
-import datetime, time
-from datetime import date, datetime, timedelta
 from odoo.http import request
     
 class tender_protocol(models.Model):
@@ -16,10 +13,10 @@ class tender_protocol(models.Model):
     '''Тендерийн протокол
     '''
     name                = fields.Char('Tender Protocol',tracking=True)
-    tender_id           = fields.Many2one('tender.tender', string="Current Tender", tracking=True,ondelete='restrict', index=True)
+    tender_id           = fields.Many2one('tender.tender', string="Current Tender", tracking=True,ondelete='restrict' )
     meeting_id          = fields.Many2one('tender.meeting', string ="Meeting of tender", tracking=True, ondelete='restrict')
     member_ids          = fields.Many2many("hr.employee", string ="Member", store=True, tracking=True)
-    committee_member_ids= fields.One2many(related="tender_id.committee_member_ids", string='Committee Members', track_visibility='always')
+    committee_member_ids= fields.One2many(related="tender_id.committee_member_ids", string='Committee Members', readonly=False,store=True)
 #     comment             = fields.Text(string= "Comment",tracking=True)
     meet_protocol       = fields.Html(string= "Comment",tracking=True)
     user_id             = fields.Many2one('res.users', string ='User',default=lambda self: self.env.user, readonly=True,tracking=True)
@@ -61,7 +58,8 @@ class tender_protocol(models.Model):
 
     def _add_followers(self,user_ids):
         '''Дагагч нэмнэ'''
-        self.message_subscribe_users(user_ids=user_ids)
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
         
 
     #---------------------------------------------------------------- 
@@ -73,16 +71,16 @@ class tender_protocol(models.Model):
         #----------------------------------------------------------- if records:
             #-------------------------------------------- for record in records:
                 # self.env['tender.protocol'].browse([record['id']]).send_protocol_notif()
-       
-    def protocol_notif(self,cr,uid):
+    @api.model       
+    def protocol_notif(self):
         query = "select A.id as id from tender_protocol A \
         inner join tender_meeting B ON A.meeting_id=B.id where A.state='sent' and B.state='done'"
-        cr.execute(query)
+        self.env.cr.execute(query)
         
-        records = cr.dictfetchall()
+        records = self.env.cr.dictfetchall()
         if records:
             for record in records:
-                self.pool.get('tender.protocol').browse(cr,1,[record['id']]).send_protocol_notif()
+                self.env['tender.protocol'].sudo().browse([record['id']]).send_protocol_notif()
 
 
     
@@ -174,25 +172,6 @@ class tender_protocol(models.Model):
         for member in protocol_obj.committee_member_ids:
             if member.read_state!='read':
                 user_ids.append(member.employee_id.user_id)
-        # template_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'nomin_tender', 'tender_meeting_protocol_email_template')[1]
-        
-        # data = {
-        #         'subject': u'Хурлын протокол',
-        #         'tender': protocol_obj.tender_id.name,
-        #         'meet_name': protocol_obj.meeting_id.name,
-        #         'tender_name': protocol_obj.tender_id.desc_name,
-        #         # 'comment': protocol_obj.meet_protocol,
-        #         'state': protocol_obj.state,
-        #         'member_ids': html_text,
-        #         'model': 'tender.protocol',
-        #         'base_url': self.pool.get('ir.config_parameter').get_param(cr, uid, 'web.base.url'),
-        #         'action_id': self.pool.get('ir.model.data').get_object_reference(cr, uid, 'nomin_tender', 'action_tender_protocol_menu')[1],
-        #         'id': protocol_obj[0].id,
-        #         'db_name': cr.dbname, 
-        #         'sender': self.pool.get('res.users').browse(cr, 1, uid).name,
-        #         'state': states['done'],
-        #         'menu_path': 
-        #         }
         
         for user in user_ids:
             email = user.login

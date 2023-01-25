@@ -14,28 +14,45 @@
                 <!-- </search> -->
             </field>
         </record>
+        <record id="task_type_tree_new" model="ir.ui.view">
+            <field name="name">project.task.type.tree</field>
+            <field name="model">project.task.type</field>
+            <field name="priority">1</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <tree string="Task Stage">
+                    <field name="name"/>
+                    <field name="sequence"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
 
         <record id="task_type_edit_inherit" model="ir.ui.view">
             <field name="name">project.task.type.form</field>
             <field name="model">project.task.type</field>
-            <field name="priority">1</field>
             <field name="mode">primary</field>
-            <field name="inherit_id" ref="project.task_type_edit"/>
+            <field name="priority">1</field>
+            <!-- <field name="inherit_id" ref="project.task_type_edit"/> -->
             <field name="arch" type="xml">
                 <form string="Task Stage">
-                    <group>
+                    <sheet>
+                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}" />
                         <group>
-                            <field name="name"/>
-                            <field name="sequence"/>
+                            <group>
+                                <field name="active" invisible="1" />
+                                <field name="name"/>
+                                <field name="sequence"/>
+                            </group>
+                            <group>
+                                <field name="case_default"/>
+                                <field name="fold"/>
+                            </group>
                         </group>
-                        <group>
-                            <field name="case_default"/>
-                            <field name="fold"/>
+                        <group string="Projects using this stage">
+                            <field name="project_ids" widget="many2many_tags"/>
                         </group>
-                    </group>
-                    <group string="Projects using this stage">
-                        <field name="project_ids" widget="many2many_tags"/>
-                    </group>
+                    </sheet>
                 </form>
             </field>
         </record>

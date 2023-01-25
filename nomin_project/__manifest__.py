@@ -9,7 +9,7 @@
     'depends': [
         'project',
         'sale_timesheet',
-        # 'nomin_tender',
+        'nomin_tender',
         'stock', 
         'project_issue',
         'hr_timesheet',
@@ -49,8 +49,8 @@
              'wizard/control_budget_cancel.xml',
              'wizard/control_budget_back.xml',
              'wizard/back_to_allocated_view.xml',
+             'views/tender_inherit_view.xml',
             #  TODO FIX LATER
-            #  'views/tender_inherit_view.xml',
             #  'views/inherit_purchase_requisition.xml',
              'views/budget_partner_comparison_view.xml',
              'views/budget_partner_comparison_seq.xml',

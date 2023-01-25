@@ -11,7 +11,8 @@
             <field name="numbercall">-1</field>
             <field eval="False" name="doall"/>
             <field name="model_id" ref="model_tender_tender"/>
-            <field name="code">model._tender_alarm()</field>
+            <field name="code">model.tender_tender_alarm()</field>
+            <field name="state">code</field>
         </record>
 
         <!-- Харилцагчийн бичиг баримт шалгах  -->
@@ -36,6 +37,7 @@
             <field eval="False" name="doall"/>
             <field name="model_id" ref="model_tender_meeting"/>
             <field name="code">model.running_meet()</field>
+            <field name="state">code</field>
         </record>
 
         <record id="ir_cron_tender_meeting_notif_action" model="ir.cron">
@@ -47,9 +49,10 @@
             <field eval="False" name="doall"/>
             <field name="model_id" ref="model_tender_meeting"/>
             <field name="code">model.meeting_notif()</field>
+            <field name="state">code</field>
         </record>
 
-        <!-- <record id="ir_cron_tender_protocol_notif_action" model="ir.cron">
+        <record id="ir_cron_tender_protocol_notif_action" model="ir.cron">
             <field name="name">Tender protocol notifcation</field>
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">2</field>
@@ -58,7 +61,7 @@
             <field eval="False" name="doall"/>
             <field name="model_id" ref="model_tender_protocol"/>
             <field name="code">model.protocol_notif()</field>
-        </record> -->
+        </record>
 
         <record id="ir_cron_partner_document_expire_action" model="ir.cron">
             <field name="name">Res partner document expire</field>
@@ -69,6 +72,7 @@
             <field eval="False" name="doall"/>
             <field name="model_id" ref="model_res_partner_documents"/>
             <field name="code">model.check_document_expiredates()</field>
+            <field name="state">code</field>
         </record>
 
     </data>

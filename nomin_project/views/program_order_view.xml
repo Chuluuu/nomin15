@@ -131,70 +131,68 @@
 							</h3>
 						</div>
 
-						<group colspan="8" col="8">
-							<group colspan="4">
-								<group>
-									<field name="previous_state" invisible="1"/>
-									<field name="is_confirm_user" invisible="1"/>
-									<field name="state_sequence" invisible="1"/>
+						<group colspan="2">
+							<group>
+								<field name="previous_state" invisible="1"/>
+								<field name="is_confirm_user" invisible="1"/>
+								<field name="state_sequence" invisible="1"/>
 
-									<field name="show_control_button" invisible="1"/>
-									<field name="is_employee" invisible="1"/>
-									<field name="show_confirm_button" invisible="1"/>
-									<field name="show_done_button" invisible="1"/>
-									<field name="is_project_manager" invisible="1"/>
-									<field name="is_manager_of_the_project" invisible="1"/>
-									<field name="is_inlist" invisible="1"/>
-									<field name="senior_manager" invisible="1"/>
-									<field name="is_list" invisible="1"/>
-									<field name="is_training_manager" invisible="1"/>
-									<field name="is_system_admin" invisible="1"/>
-									<field name="is_system_senior" invisible="1"/>
-									<field name="is_system_quality_assurance" invisible="1"/>
-									<field name="request_type" attrs="{'required':[('state','=','draft')],'readonly':[('state','!=','draft')]}" options="{'no_create': True}"/>
-									<field name="request_rating" attrs="{'required':[('state','=','draft')],'readonly':[('state','!=','draft')]}"/>
-									<field name="dedication" attrs="{'invisible':[('request_type','!=',5)]}"/>
-									<field name="is_control" attrs="{'readonly':[('state','!=','draft')]}"/>
-									<field name="control_employee_id" options="{'no_create': True}" attrs="{'required':[('state','=','draft'),('is_control','=',False)],'invisible':[('is_control','=',True)],'readonly':[('state','not in','draft')]}" />
-									<field name="confirm_employee_id" options="{'no_create': True}" attrs="{'readonly':[('state','not in','draft')],'required':[('state','=','draft')]}"/>
-									<field name="start_date" readonly="1"/>
-									<field name="assigned_date" readonly="1" attrs="{'invisible':[('state','in',['draft','control','confirmed','approved1'])]}"/>
-									<field name="project_progress_percentage" widget="progressbar" attrs="{'invisible':[('request_type','!=',1)],'readonly':['|',('state', 'not in', ['allocated','approve_cost','cost_done','estimated']),('is_manager_of_the_project','=',False)], 'required':[('state', 'in', ['approve_cost','cost_done'])]}"/>
-									<field name="project_started_date" attrs="{'invisible':[('request_type','!=',1)],'readonly':['|',('state', 'not in', ['allocated','approve_cost','cost_done','estimated']),('is_manager_of_the_project','=',False)], 'required':[('state', 'in', ['approve_cost','cost_done'])]}"/>
-									<field name="project_finished_date" attrs="{'invisible':[('request_type','!=',1)],'readonly':['|',('state', 'not in', ['allocated','approve_cost','cost_done','estimated']),('is_manager_of_the_project','=',False)], 'required':[('state', 'in', ['approve_cost','cost_done'])]}"/>
-									<field name="handover_date" readonly="1" invisible="1"/>
-									<field name="review_date" readonly="1" invisible="1"/>
-									<field name="rejection_reason" attrs="{'invisible':[('state','in',['draft','done'])],'readonly':[('state','in',['draft','rejected','slow_up','done','approved'])]}"/>
+								<field name="show_control_button" invisible="1"/>
+								<field name="is_employee" invisible="1"/>
+								<field name="show_confirm_button" invisible="1"/>
+								<field name="show_done_button" invisible="1"/>
+								<field name="is_project_manager" invisible="1"/>
+								<field name="is_manager_of_the_project" invisible="1"/>
+								<field name="is_inlist" invisible="1"/>
+								<field name="senior_manager" invisible="1"/>
+								<field name="is_list" invisible="1"/>
+								<field name="is_training_manager" invisible="1"/>
+								<field name="is_system_admin" invisible="1"/>
+								<field name="is_system_senior" invisible="1"/>
+								<field name="is_system_quality_assurance" invisible="1"/>
+								<field name="request_type" attrs="{'required':[('state','=','draft')],'readonly':[('state','!=','draft')]}" options="{'no_create': True}"/>
+								<field name="request_rating" attrs="{'required':[('state','=','draft')],'readonly':[('state','!=','draft')]}"/>
+								<field name="dedication" attrs="{'invisible':[('request_type','!=',5)]}"/>
+								<field name="is_control" attrs="{'readonly':[('state','!=','draft')]}"/>
+								<field name="control_employee_id" options="{'no_create': True}" attrs="{'required':[('state','=','draft'),('is_control','=',False)],'invisible':[('is_control','=',True)],'readonly':[('state','not in','draft')]}" />
+								<field name="confirm_employee_id" options="{'no_create': True}" attrs="{'readonly':[('state','not in','draft')],'required':[('state','=','draft')]}"/>
+								<field name="start_date" readonly="1"/>
+								<field name="assigned_date" readonly="1" attrs="{'invisible':[('state','in',['draft','control','confirmed','approved1'])]}"/>
+								<field name="project_progress_percentage" widget="progressbar" attrs="{'invisible':[('request_type','!=',1)],'readonly':['|',('state', 'not in', ['allocated','approve_cost','cost_done','estimated']),('is_manager_of_the_project','=',False)], 'required':[('state', 'in', ['approve_cost','cost_done'])]}"/>
+								<field name="project_started_date" attrs="{'invisible':[('request_type','!=',1)],'readonly':['|',('state', 'not in', ['allocated','approve_cost','cost_done','estimated']),('is_manager_of_the_project','=',False)], 'required':[('state', 'in', ['approve_cost','cost_done'])]}"/>
+								<field name="project_finished_date" attrs="{'invisible':[('request_type','!=',1)],'readonly':['|',('state', 'not in', ['allocated','approve_cost','cost_done','estimated']),('is_manager_of_the_project','=',False)], 'required':[('state', 'in', ['approve_cost','cost_done'])]}"/>
+								<field name="handover_date" readonly="1" invisible="1"/>
+								<field name="review_date" readonly="1" invisible="1"/>
+								<field name="rejection_reason" attrs="{'invisible':[('state','in',['draft','done'])],'readonly':[('state','in',['draft','rejected','slow_up','done','approved'])]}"/>
 
-									<field name = "accountant_id" options="{'no_create': True}" attrs="{'invisible':['|',('state','not in',['approved','done','estimated']),('request_type','!=',1)],'required':[('state','in','estimated')],'readonly':[('state','!=','estimated')]}"/>
-									<field name = "accountant_description" attrs="{'invisible':['|',('state','not in',['approved','done']),('request_type','!=',1)],'required':[('state','in','approved')],'readonly':[('state','not in','approved')]}"/>
-
-
-								</group>
-								<group>
-
-									<field name="employee_id" options="{'no_create': True}" attrs="{'readonly':[('state','!=','draft')]}"/>
-									<field name="company_id" options="{'no_create': True}" readonly="1"/>
-									<field name="department_id" options="{'no_create': True}" readonly="1" />
-									<!-- <field name="job_id" options="{'no_create': True}" readonly="1"/> -->
-									<field name="job" options="{'no_create': True}" readonly="1"/>
-									<field name="telephone" options="{'no_create': True}" readonly="1"/>
-									<field name="email" options="{'no_create': True}" readonly="1"/>
-									<field name="is_cost_approved" attrs="{'readonly':['|',('state','!=','allocated'),('is_project_manager','=',False)],'invisible':[('state','!=','allocated')]}"/>
-									<field name="cost_approved_fully" attrs="{'readonly':['|',('state','!=','allocated'),('is_project_manager','=',False)],'invisible':[('state','!=','allocated')]}"/>
-									<field name="confirmed_employee_id" invisible="1" />
-									<field name="confirmed_date" invisible="1" readonly="1" attrs="{'invisible':[('state','in',['draft','control','confirmed'])]}"/>
-									<field name="is_confirm" attrs="{'invisible':['|',('state','in',['draft','control','confirmed','approved1']),('is_project_manager','=',False)],'readonly':[('state','!=','allocated')]}"/>
-									<field name="description" attrs="{'invisible':[('is_invisible','=',False)]}"/>
-									<field name="is_invisible" invisible="1"/>
-									<field name="approve_employee_id" options="{'no_create': True}" attrs="{'invisible':['|',('is_confirm','=',False),('state','in',['draft','control','confirmed','approved1'])],'readonly':[('state','not in','allocated')]}"/>
-									<field name="is_handover" attrs="{'readonly':[('state','!=','cost_done')],'invisible':[('state','in',['draft','control','confirmed','approved1','allocated','stop','rejected','slow_up'])]}"/>
-								</group>
+								<field name = "accountant_id" options="{'no_create': True}" attrs="{'invisible':['|',('state','not in',['approved','done','estimated']),('request_type','!=',1)],'required':[('state','in','estimated')],'readonly':[('state','!=','estimated')]}"/>
+								<field name = "accountant_description" attrs="{'invisible':['|',('state','not in',['approved','done']),('request_type','!=',1)],'required':[('state','in','approved')],'readonly':[('state','not in','approved')]}"/>
 
 
 							</group>
+							<group>
+
+								<field name="employee_id" options="{'no_create': True}" attrs="{'readonly':[('state','!=','draft')]}"/>
+								<field name="company_id" options="{'no_create': True}" readonly="1"/>
+								<field name="department_id" options="{'no_create': True}" readonly="1" />
+								<!-- <field name="job_id" options="{'no_create': True}" readonly="1"/> -->
+								<field name="job" options="{'no_create': True}" readonly="1"/>
+								<field name="telephone" options="{'no_create': True}" readonly="1"/>
+								<field name="email" options="{'no_create': True}" readonly="1"/>
+								<field name="is_cost_approved" attrs="{'readonly':['|',('state','!=','allocated'),('is_project_manager','=',False)],'invisible':[('state','!=','allocated')]}"/>
+								<field name="cost_approved_fully" attrs="{'readonly':['|',('state','!=','allocated'),('is_project_manager','=',False)],'invisible':[('state','!=','allocated')]}"/>
+								<field name="confirmed_employee_id" invisible="1" />
+								<field name="confirmed_date" invisible="1" readonly="1" attrs="{'invisible':[('state','in',['draft','control','confirmed'])]}"/>
+								<field name="is_confirm" attrs="{'invisible':['|',('state','in',['draft','control','confirmed','approved1']),('is_project_manager','=',False)],'readonly':[('state','!=','allocated')]}"/>
+								<field name="description" attrs="{'invisible':[('is_invisible','=',False)]}"/>
+								<field name="is_invisible" invisible="1"/>
+								<field name="approve_employee_id" options="{'no_create': True}" attrs="{'invisible':['|',('is_confirm','=',False),('state','in',['draft','control','confirmed','approved1'])],'readonly':[('state','not in','allocated')]}"/>
+								<field name="is_handover" attrs="{'readonly':[('state','!=','cost_done')],'invisible':[('state','in',['draft','control','confirmed','approved1','allocated','stop','rejected','slow_up'])]}"/>
+							</group>
+
 
 						</group>
+
 
 
 
@@ -406,17 +404,13 @@
 
 							</tree>
 						</field>
-						<group colspan="4">
+						<group >
 							<field name="system_quality_assurance" options="{'no_create':True}" attrs="{'required':[('state','=','approved1'),('request_type','=',16)],'invisible':['|',('request_type','not in',[16,17]),('state','not in',['approved1','allocated','done'])]}"/>
 							<field name="training_manager_id" options="{'no_create':True}" attrs="{'invisible':['|',('request_type','!=',17),('state','not in',['approved1','allocated','done'])],'required':[('state','=','approved1'),('request_type','=',17)]}"/>
 							<field name="system_admin_id" options="{'no_create':True}" attrs="{'required':[('state','in','approved1'),('request_type','not in',[1,16,17,15])],'invisible':['|',('request_type','in',[1,16,17,15]),('state','not in',['allocated','approved1','done'])],'readonly':[('state','not in','approved1')]}"/>
 							<field name="description_admin" attrs="{'invisible':['|',('request_type','in',[1,17]),('state','not in',['approved1','allocated','done'])],'required':[('request_type','not in',[1,16,17]),('state','in','approved1')],'readonly':[('state','!=','approved1')]}"/>
 							<field name="description_admin1" attrs="{'invisible':['|',('request_type','in',[1,16]),('state','in',['approved1','control','done','draft'])],'required':[('request_type','not in',[1,16]),('state','in','allocated')],'readonly':[('state','not in',['allocated','approved1'])]}"/>
-
-
-
 						</group>
-
 						<field name="server_access_infos" attrs="{'invisible':[('request_type','!=',6)]}">
 							<form string="VPN мэдээлэл">
 								<field name="partner_id" />
@@ -431,8 +425,6 @@
 								<field name="unit_amount1a" widget="float_time"/>
 								<field name="ip_address"/>
 								<field name="reference"/>
-
-
 							</form>
 							<tree string="Server access info" editable="bottom">
 								<field name="partner_id" />
@@ -450,69 +442,57 @@
 
 							</tree>
 						</field>
-
 						<notebook>
-
 							<page string='Order info' attrs="{'invisible':[('request_type','!=',1)]}">
-
-								<group colspan="8" col="8" attrs="{'invisible':[('request_type','!=',1)]}">
-									<group colspan="4">
-										<field name="date" attrs="{'required':[('request_type','in',(1,15)),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
-										<field name="job_selection" attrs="{'invisible':[('request_type','not in',15)]}"/>
-										<field name="order_name" attrs="{'required':[('request_type','=',1),('state','in','draft')]}" />
-										<field name="order_offer" attrs="{'invisible':[('request_type','in',15)],'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}" />
-										<field name="difficulty" attrs="{'invisible':[('request_type','in',15)],'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}" />
-										<field name="purpose" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
-										<field name="result" attrs="{'invisible':[('request_type','in',15)],'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
-										<field name="location" attrs="{'invisible':[('request_type','not in',15)]}" />
-										<field name="req_file" options="{'no_open': True}" attrs="{'readonly':[('state','!=','draft')]}">
-											<tree string="Files">
-												<field name="store_fname"/>
-												<field name="datas" filename="store_fname" readonly="1" invisible="1"/>
-											</tree>
-											<form>
-												<label for="name" class="oe_edit_only"/>
-												<h1>
-													<field name="name"/>
-												</h1>
-												<group string="Data">
-													<field name="type" invisible="1"/>
-													<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
-													<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-													<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-												</group>
-												<group groups="base.group_no_one" string="History">
-													<label for="create_uid" string="Creation"/>
-													<div name="creation_div">
-														<field name="create_uid" readonly="1" class="oe_inline"/>
-														<field name="create_date" readonly="1" class="oe_inline"/>
-													</div>
-												</group>
-											</form>
-										</field>
-
-									</group>
-
+								<group attrs="{'invisible':[('request_type','!=',1)]}">
+									<field name="date" attrs="{'required':[('request_type','in',(1,15)),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
+									<field name="job_selection" attrs="{'invisible':[('request_type','not in',15)]}"/>
+									<field name="order_name" attrs="{'required':[('request_type','=',1),('state','in','draft')]}" />
+									<field name="order_offer" attrs="{'invisible':[('request_type','in',15)],'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}" />
+									<field name="difficulty" attrs="{'invisible':[('request_type','in',15)],'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}" />
+									<field name="purpose" attrs="{'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
+									<field name="result" attrs="{'invisible':[('request_type','in',15)],'required':[('request_type','=',1),('state','in','draft')],'readonly':[('state','!=','draft')]}"/>
+									<field name="location" attrs="{'invisible':[('request_type','not in',15)]}" />
+									<field name="req_file" options="{'no_open': True}" attrs="{'readonly':[('state','!=','draft')]}">
+										<tree string="Files" editable="bottom">
+											<field name="name"/>
+											<field name="store_fname"/>
+											<field name="datas" filename="store_fname" />
+										</tree>
+										<form>
+											<label for="name" class="oe_edit_only"/>
+											<h1>
+												<field name="name"/>
+											</h1>
+											<group string="Data">
+												<field name="type" invisible="1"/>
+												<field name="datas" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+												<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+												<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+											</group>
+											<group groups="base.group_no_one" string="History">
+												<label for="create_uid" string="Creation"/>
+												<div name="creation_div">
+													<field name="create_uid" readonly="1" class="oe_inline"/>
+													<field name="create_date" readonly="1" class="oe_inline"/>
+												</div>
+											</group>
+										</form>
+									</field>
 								</group>
 							</page>
 
 							<page string='Project info' attrs="{'invisible':[('request_type','!=',1)]}">
-								<group colspan="8" col="8">
-									<group colspan="4">
-
+								<group colspan="2">
+									<group >
 										<field name="project_senior_manager_id" options="{'no_create': True}" attrs="{'invisible':[('is_project_manager','=',False),('state','in',['draft','send','control','confirmed','approved1'])],'readonly':[('state','not in','approved1')]}" />
 										<!-- <field name="senior_manager_id" options="{'no_create': True}" attrs="{'required':[('request_type','in',1),('state','=','approved1')],'invisible':[('is_project_manager','=',False),('state','in',['draft','send','control','confirmed','approved1'])],'readonly':[('state','not in','approved1')]}" />  -->
-
 										<field name="project_manager_id" options="{'no_create': True}" attrs="{'invisible':[('is_project_manager','=',False),('state','in',['draft','send','confirmed','control','approved1'])]}" />
-
 										<!-- <field name="cost_type" attrs="{'invisible':['|',('state','in',['draft','control','confirmed']),('request_type','!=',1)]}"/>						    		 -->
 										<field name="cost_types" string="Зардлын төрөл" attrs="{'invisible':['|',('state','in',['draft','control','confirmed']),('request_type','!=',1)],'readonly':['|',('is_project_manager','=',False),('state','not in',['approved1','allocated'])]}"/>
-									</group>
-									<group colspan="4">
 										<field name="project_state_name" options="{'no_create': True}" attrs="{'invisible':['|',('state','in',['draft','send','confirmed','control','approved1']),('request_type','not in',1)],'required':[('state','in','allocated'),('request_type','in',1)]}"/>
 									</group>
-									<group colspan="8">
-
+									<group>
 										<field name="annex_file" options="{'no_open': True}" attrs="{'invisible':[('state','in',['draft','send','control','confirmed','rejected','approved1'])],'readonly':[('state','not in',['allocated','cost_done'])]}">
 											<tree string="Files">
 												<field name="name" />
@@ -541,13 +521,9 @@
 												</group>
 											</form>
 										</field>
-
 									</group>
 								</group>
-
 							</page>
-
-
 							<page string='Plan info' attrs="{'invisible':['|',('state','in',['draft','control','confirmed','approved1','slow_up','rejected']),('request_type','!=',1)]}">
 								<field name="plan_info">
 									<form string="Plan information">
@@ -573,7 +549,6 @@
 								</field>
 
 							</page>
-
 							<page string="Өөрчлөлтийн мэдээлэл" attrs="{'invisible':[('request_type','!=',51)]}">
 								<group >
 									<group>
@@ -589,7 +564,6 @@
 										<field name="effect_of_not_allowing_change"/>
 										<field name="interruption_registration_period"/>
 										<field name="location_modification_system"/>
-
 									</group>
 								</group>
 
@@ -601,7 +575,6 @@
 										<field name="influence_customers_clients"/>
 										<field name="influence_information_technology_resources"/>
 										<field name="difficulty_implementing_change"/>
-
 									</group>
 									<group attrs="{'required':[('state','=','draft')]}">
 										<field name="technical_impact"/>
@@ -613,41 +586,15 @@
 										<field name ="implementation_period" readonly="1" attrs="{'invisible':['|',('rate','=',0),('request_type','!=',51)]}"/>
 									</group>
 								</group>
-
 							</page>
-
-							<!-- <page string='System list' attrs="{'invisible':[('request_type','!=',51)]}">
-				            	<field name="system_line_ids">
-		                			<form string="Plan information">	            		
-										<field name="system_name" />					       					
-
-	                                </form>			            			
-		                        		<tree string="Plan info" editable="bottom">
-											<field name="system_name" />						       					
-							          			
-				                    	</tree>
-		                        </field> 
-
-		                    </page> -->
-
 							<page string="Ажил үйлчилгээ" attrs="{'invisible':[('request_type','not in',[16,17,18])],'required':[('request_type','in',[16,17]),('state','=','draft')],'readonly':[('state','!=','draft')]}">
 								<field name="line_ids">
 									<tree >
 
-										<field name="category_id" required="1" options="{'no_quick_create': True, 'no_create_edit' : True,
-                                'no_create':True}"/>
-										<field name="service_id" options="{'no_quick_create': True, 'no_create_edit' : True,
-                                'no_create':True}" />
-										<!-- <field name ="employee_name" />
-												<field name ="product_category" />
-												<field name ="add_right" />
-												<field name ="reason" />
-												<field name ="department_id" /> -->
-
-
+										<field name="category_id" required="1" options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}"/>
+										<field name="service_id" options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}" />
 									</tree>
 									<form >
-
 										<group>
 											<group>
 
@@ -679,9 +626,7 @@
 							</page>
 
 							<page string="Cost information" attrs="{'invisible':['|',('state','in',['draft','control','confirmed','slow_up','rejected']),('request_type','not in',[1,17])]}">
-								<!-- TODO FIX LATER -->
-								<field name="cost_info" attrs="{'required':[('state','in','allocated')],'readonly':[('state','not in',['allocated','approved1'])]}">
-									<!-- <field name="cost_info" attrs="{'required':[('state','in','allocated'),('request_type','in',1,17)],'readonly':[('state','not in',['allocated','approved1'])]}"> -->
+								<field name="cost_info" attrs="{'required':[('state','in','allocated'),('request_type','in',[1,17])],'readonly':[('state','not in',['allocated','approved1'])]}">
 									<form>
 										<group>
 											<group>
@@ -709,7 +654,6 @@
 
 								</group>
 							</page>
-
 							<page string="Хийгдсэн ажлууд" attrs="{'invisible':['|',('state','in',['draft','control','confirmed','approved1','slow_up','rejected']),('request_type','!=',1)]}">
 								<group>
 									<field name="is_receive" readonly="1"/>
@@ -725,7 +669,6 @@
 
 											</group>
 										</group>
-
 									</form>
 									<tree string="Implemented task" editable="bottom">
 										<field name="is_check" readonly="1"/>
@@ -736,25 +679,20 @@
 									</tree>
 								</field>
 							</page>
-
-
 							<page string="Participants" attrs="{'invisible':['|',('state','in',['draft','control','confirmed','approved1','slow_up','rejected']),('request_type','!=',1)]}">
-								<group colspan="4" col="4" string="Зардал батлах ажилтнууд">
-									<group colspan="2">
+								<group string="Зардал батлах ажилтнууд">
+									<group >
 										<field name="confirmed_employee_id"/>
 										<field name="confirmed_date1" readonly="1"/>
 										<field name="confirmed_user_ids2" widget="many2many_tags" readonly="1" string="Зардал баталсан ажилтан"/>
 									</group>
-									<group colspan="2" attrs="{'invisible':[('is_confirm','=',False)]}">
+									<group attrs="{'invisible':[('is_confirm','=',False)]}">
 										<field name="confirmed_employee_id2" />
 										<field name="confirmed_date2" invisible="1"/>
-
 									</group>
-
 								</group>
-
-								<group colspan="6" col="6" string="Хүлээн авах ажилтнууд">
-									<group colspan="2">
+								<group tring="Хүлээн авах ажилтнууд">
+									<group>
 										<field name="receive_employee_id1"/>
 										<field name="receive_date1" invisible="1"/>
 										<field name="receive_employee_id2"/>
@@ -763,23 +701,8 @@
 									<group>
 										<field name="confirmed_user_ids" widget="many2many_tags" readonly="1" string="Хүлээн авсан ажилтан"/>
 									</group>
-									<!-- <group colspan="2">
-										<field name="receive_employee_id2"/>
-										<field name="receive_date2" invisible="1"/>		
-											
-									</group>
-									<group colspan="2">
-										<field name="receive_employee_id3"/>
-										<field name="receive_date3" invisible="1"/>	
-											
-									</group>														 -->
 								</group>
-
-
-
 							</page>
-
-
 							<!-- 
 	            			<page string="Time plan" attrs="{'invisible':['|',('state','in',['draft','control','confirmed','approved1','slow_up','rejected']),('request_type','!=',1)]}">
 	            				<group>
@@ -789,28 +712,20 @@
 				          			<field name="programm_tester_time" attrs="{'readonly':[('state','not in','cost_done')]}"/>
 				          		</group>			          			
 							</page>    -->
-
-
 							<page string="Төлвийн түүх">
-								<group col="2">
-									<group>
-										<separator string="Сонгогдсон урсгал" colspan="4" />
+								<group >
+									<group string="Сонгогдсон урсгал">
 										<field name="request_id" readonly="1"/>
 										<field name="logged_in_employee_id" readonly='1' invisible="1"/>
-
-
 									</group>
-									<group>
-										<separator string="Дараагийн батлах хэрэглэгчид" colspan="4"/>
+									<group string="Дараагийн батлах хэрэглэгчид">
 										<field name="confirm_user_ids" string="Confirm users" widget="many2many_tags" readonly="1"/>
 										<field name="engineer_ids" string="Engineer" widget="many2many_tags" readonly="1" attrs="{'invisible':[('request_type','!=',15)]}"/>
 										<field name="leave_flow" invisible="1"/>
 										<field name="sequence" invisible="1"/>
 									</group>
 								</group>
-
 							</page>
-
 						</notebook>
 
 					</sheet>
@@ -914,19 +829,14 @@
 					<header>
 					</header>
 					<sheet>
-						<group colspan="8" col="8">
-							<group colspan="8">
-							</group>
-							<group colspan="4">
+						<group>
+							<group>
 								<field name="name" attrs="{'readonly':[('is_senior_manager','=',False)]}"/>
 								<field name="is_select" attrs="{'readonly':[('is_senior_manager','=',False)]}"/>
 							</group>
-							<group colspan="4">
+							<group>
 								<field name="rate" attrs="{'readonly':[('is_senior_manager','=',False)]}"/>
 								<field name="is_senior_manager" invisible="1"/>
-
-							</group>
-							<group colspan="4">
 							</group>
 						</group>
 					</sheet>
@@ -980,10 +890,6 @@
 			</field>
 		</record>
 
-
-
-
-
 		<record model="ir.ui.view" id="hr_performance_form">
 			<field name="name">pr.spec.dt.form</field>
 			<field name="model">pr.spec.dt</field>
@@ -993,13 +899,9 @@
 					<header>
 					</header>
 					<sheet>
-						<group colspan="8" col="8">
-							<group colspan="8">
-							</group>
-							<group colspan="4">
-								<field name="name"/>
-							</group>
-							<group colspan="4">
+						<group>
+							<group colspan="2">
+								<field name="name" required="1"/>
 							</group>
 						</group>
 					</sheet>
@@ -1056,14 +958,12 @@
 					<header>
 					</header>
 					<sheet>
-						<group colspan="8" col="8">
-							<group colspan="8">
-							</group>
-							<group colspan="4">
+						<group>
+							<group>
 								<field name="performance_name"/>
-								<field name="name"/>
 							</group>
-							<group colspan="4">
+							<group >
+								<field name="name" required="1"/>
 							</group>
 						</group>
 					</sheet>
@@ -1127,6 +1027,57 @@
 			</field>
 		</record>
 
+		<!-- SEL TYPE -->
+		<record model="ir.ui.view" id="view_sel_type_form">
+			<field name="name">sel.type.form</field>
+			<field name="model">sel.type</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Hr Branch Location">
+					<header>
+					</header>
+					<sheet>
+						<group>
+							<group >
+								<field name="name" required="1"/>
+							</group>
+							<group>
+								<field name="request_name" required="1"/>
+								<field name="attr" />
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_sel_type_tree">
+			<field name="name">sel.type.tree</field>
+			<field name="model">sel.type</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="server_info">
+					<field name="name"/>
+					<field name="request_name"/>
+					<field name="attr"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_sel_type" model="ir.actions.act_window">
+			<field name="name">Хүсэлтийн төрөл</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">sel.type</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="view_sel_type_tree"/>
+			<field name="help" type="html">
+				<p class="oe_view_nocontent_create">
+                Click to define a new server information.
+				</p>
+			</field>
+		</record>
+
+
 		<record model="ir.ui.view" id="hr_net_information_form">
 			<field name="name">net.spec.form</field>
 			<field name="model">net.spec</field>
@@ -1136,9 +1087,9 @@
 					<header>
 					</header>
 					<sheet>
-						<group colspan="8" col="8">
-							<group colspan="4">
-								<field name="name"/>
+						<group >
+							<group >
+								<field name="name" required="1"/>
 							</group>
 						</group>
 					</sheet>
@@ -1196,9 +1147,9 @@
 					<header>
 					</header>
 					<sheet>
-						<group colspan="8" col="8">
-							<group colspan="4">
-								<field name="name"/>
+						<group >
+							<group >
+								<field name="name" required="1"/>
 							</group>
 						</group>
 					</sheet>
@@ -1254,9 +1205,9 @@
 					<header>
 					</header>
 					<sheet>
-						<group colspan="8" col="8">
-							<group colspan="4">
-								<field name="name"/>
+						<group >
+							<group >
+								<field name="name" required="1"/>
 							</group>
 						</group>
 					</sheet>
@@ -1311,9 +1262,9 @@
 					<header>
 					</header>
 					<sheet>
-						<group colspan="8" col="8">
-							<group colspan="4">
-								<field name="name"/>
+						<group>
+							<group >
+								<field name="name" required="1"/>
 							</group>
 						</group>
 					</sheet>
@@ -1357,13 +1308,9 @@
 					<header>
 					</header>
 					<sheet>
-						<group colspan="8" col="8">
-							<group colspan="8">
-							</group>
-							<group colspan="4">
-								<field name="name"/>
-							</group>
-							<group colspan="4">
+						<group>
+							<group>
+								<field name="name" required="1"/>
 							</group>
 						</group>
 					</sheet>
@@ -1425,28 +1372,17 @@
 
 		<menuitem action="action_order_page" sequence="16" name="МТС-д захиалга өгөх" id="program_order_page_menu" parent="project.menu_project_management" groups="base.group_user"/>
 
-
-		<menuitem action="action_hr_branch_location" id="hr_indicator_menu" groups="group_system_senior" name="Үзүүлэлт " parent="project.menu_project_management" sequence="18"/>
-
-
-		<menuitem action="action_hr_net_information" id="hr_internet_information_menu" groups="group_system_senior" name="Сувгийн мэдээлэл" parent="project.menu_project_management" sequence="20"/>
-
-
-		<menuitem action="action_backing_up" id="information_back_up_menu" groups="group_system_senior" name="Нөөцлөх мэдээллийн төрөл" parent="project.menu_project_management" sequence="22"/>
-
-
-		<menuitem action="action_performance_information" id="performance_information_menu_menu" groups="group_system_senior" name="Үзүүлэлтийн нэр" parent="project.menu_project_management" sequence="24"/>
-
-
-		<menuitem action="action_job_name" id="job_name_menu" groups="group_program_admin" name="Цагийн тарифын мэдээлэл" parent="project.menu_project_management" sequence="28"/>
-
-		<menuitem action="action_batch_name_information" id="batch_name_menu_menu" groups="group_system_senior" name="Багцын нэр" parent="project.menu_project_management" sequence="26"/>
-
-		<menuitem action="action_nat_pat_access_information" id="nat_access_information_menu" groups="group_system_senior" name="NAT PAT" parent="project.menu_project_management" sequence="21"/>
-
-		<menuitem action="action_project_state_information" id="project_state_information_menu" groups="group_program_admin" name="Төлвийн нэр" parent="project.menu_project_management" sequence="23"/>
-
-
+		<!-- EXPANDABLE config menu FOR MTC-->
+		<menuitem id="menu_mtc_config" groups="group_system_senior,group_project_admin," name="МТС Тохиргоо " parent="project.menu_project_config" sequence="18"/>
+		<menuitem action="action_hr_branch_location" id="hr_indicator_menu" groups="group_system_senior" name="Үзүүлэлт " parent="menu_mtc_config" sequence="18"/>
+		<menuitem action="action_hr_net_information" id="hr_internet_information_menu" groups="group_system_senior" name="Сувгийн мэдээлэл" parent="menu_mtc_config" sequence="20"/>
+		<menuitem action="action_backing_up" id="information_back_up_menu" groups="group_system_senior" name="Нөөцлөх мэдээллийн төрөл" parent="menu_mtc_config" sequence="22"/>
+		<menuitem action="action_performance_information" id="performance_information_menu_menu" groups="group_system_senior" name="Үзүүлэлтийн нэр" parent="menu_mtc_config" sequence="24"/>
+		<menuitem action="action_job_name" id="job_name_menu" groups="group_program_admin" name="Цагийн тарифын мэдээлэл" parent="menu_mtc_config" sequence="28"/>
+		<menuitem action="action_sel_type" id="menu_sel_type" groups="group_program_admin" name="Хүсэлтийн төрөл" parent="menu_mtc_config" sequence="28"/>
+		<menuitem action="action_batch_name_information" id="batch_name_menu_menu" groups="group_system_senior" name="Багцын нэр" parent="menu_mtc_config" sequence="26"/>
+		<menuitem action="action_nat_pat_access_information" id="nat_access_information_menu" groups="group_system_senior" name="NAT PAT" parent="menu_mtc_config" sequence="21"/>
+		<menuitem action="action_project_state_information" id="project_state_information_menu" groups="group_program_admin" name="Төлвийн нэр" parent="menu_mtc_config" sequence="23"/>
 	</data>
 </odoo>
    	

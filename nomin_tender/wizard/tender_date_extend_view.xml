@@ -31,7 +31,6 @@
 		<record id="view_tender_date_extend_form" model="ir.ui.view">
 			<field name="name">Date extend form</field>
 			<field name="model">tender.date.extend</field>
-			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Tender date extend form">
 					<header>
@@ -99,7 +98,6 @@
 		<record id="view_tender_extend_date" model="ir.ui.view">
 			<field name="name">Date extend tree</field>
 			<field name="model">tender.date.extend</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Tender date extend tree">
 					<field name="name"/>
@@ -142,7 +140,6 @@
 		<record id="view_tender_meeting_form" model="ir.ui.view">
 			<field name="name">tender.meeting.form</field>
 			<field name="model">tender.meeting</field>
-			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Meeting of tender form">
 					<header>
@@ -179,7 +176,6 @@
 		<record id="view_tender_meeting" model="ir.ui.view">
 			<field name="name">tender.meeting.tree</field>
 			<field name="model">tender.meeting</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Meeting of tender tree">
 					<field name="name"/>

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'Nomin tender backend',
     'version': '1.0',
@@ -11,6 +11,7 @@
     'depends': [
         'base', 
         'mail',
+        'purchase_requisition',
         # TODO FIX LATER
         # 'nomin_purchase',
         # 'nomin_contract'
@@ -58,4 +59,5 @@
     'application': True,
     'icon': '/nomin_tender/static/img/tender.png',
     'qweb': [],
+    'license': 'LGPL-3',
 }

@@ -11,7 +11,7 @@ from odoo.exceptions import UserError, AccessError
 import logging
 _logger = logging.getLogger(__name__)
 
-class res_partner(models.Model):
+class ResPartner(models.Model):
     _inherit='res.partner'
     
      

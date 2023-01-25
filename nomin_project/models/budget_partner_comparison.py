@@ -15,9 +15,10 @@ class BudgetPartnerComparison(models.Model):
 
 
     def _add_followers(self,user_ids):
-         '''Add followers
-         '''
-         self.message_subscribe_users(user_ids=user_ids)
+        '''Add followers
+        '''
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
 
     def _is_voter(self):
         if self.department_id:
@@ -57,20 +58,20 @@ class BudgetPartnerComparison(models.Model):
     document_ids= fields.One2many(related='task_id.work_document', string=u'Хавсралтууд')
     task_graph_document= fields.One2many(related='task_graph_id.work_document', string=u'Хавсралтууд')
     requirement_partner_ids = fields.Many2many(comodel_name='res.partner', string='Урилга явуулах харилцагчид')#Урилга явуулах харилцагчид
-    invitation_type =fields.Selection([
+    invitation_type =fields.Selection(selection=[
                             ('requirement_partner' ,u'Сонгосон харилцагч'),
                             ('partner_type',u'Ангиллын дагуу')
                         ], string="Урилга илгээх төрөл")
     invitation_template = fields.Html(string ='Урилга илгээх загвар')
-    state = fields.Selection([
-                                    ('draft',u'Ноорог'),
-                                    ('quotation',u'Үнийн санал авах'),
-                                    ('end_quotation',u'Үнийн санал авч дууссан'),
-                                    ('comparison',u'Үнийн харьцуулалт хийх'),
-                                    ('management',u'Удирдлагад илгээгдсэн'),
-                                    ('winner',u'Шалгарсан'),
-                                    ('cancelled',u'Цуцлагдсан'),                            
-                                    ], u'Төлөв',  default = 'draft' ,tracking=True)
+    state = fields.Selection(selection=[
+                                    ('draft','Ноорог'),
+                                    ('quotation','Үнийн санал авах'),
+                                    ('end_quotation','Үнийн санал авч дууссан'),
+                                    ('comparison','Үнийн харьцуулалт хийх'),
+                                    ('management','Удирдлагад илгээгдсэн'),
+                                    ('winner','Шалгарсан'),
+                                    ('cancelled','Цуцлагдсан'),                            
+                                    ], string='Төлөв',  default='draft' ,tracking=True)
 
     new_material_cost_ids = fields.One2many('comparison.material.line','partner_comparison_id',string = u'Материалын зардал')
     material_cost_ids = fields.One2many('comparison.material.line','partner_comparison_id',string = u'Материалын зардал')
@@ -247,7 +248,7 @@ class BudgetPartnerComparison(models.Model):
     def action_cancel(self):
         mod_obj = self.env['ir.model.data']
 
-        res = mod_obj.get_object_reference('nomin_project', 'action_cancel_partner_comparison')
+        res = mod_obj._xmlid_to_res_id('nomin_project.action_cancel_partner_comparison')
         return {
             'name': 'Цуцлах шалтгаан',
             'view_mode': 'form',
@@ -367,7 +368,7 @@ class BudgetPartnerComparison(models.Model):
 
         contract_id = contract_id.sudo().create(vals)
         if contract_id:
-            contract_id.sudo().message_subscribe_users([self.employee_id.user_id.id])
+            contract_id.sudo().message_subscribe([self.employee_id.user_id.partner_id.id])
             if not self.contract_id:
                 self.write({'contract_id':contract_id.id})
         return {
@@ -556,7 +557,7 @@ class ComparisonMaterialLine(models.Model):
 
     partner_comparison_id = fields.Many2one('budget.partner.comparison',string="wizard")
     product_id=fields.Many2one('product.product', string='Product',required = False, domain=[('product_tmpl_id.is_new','=',True),('product_tmpl_id.cost_price','>',0)])
-    product_uom=fields.Many2one('product.uom',string='Unit of Measure',required = False)
+    product_uom=fields.Many2one('uom.uom',string='Unit of Measure',required = False)
     product_uom_qty=fields.Float(string = 'Estimated Quantity',required = False,default=1)
     price_unit=fields.Float(string = 'Estimated price',required = False)
     material_total=fields.Float(compute=_amount, digits_compute=dp.get_precision('Account'), string='Total', type='float', help="The material amount.")
@@ -638,7 +639,7 @@ class ComparisonLaborLine(models.Model):
 
     partner_comparison_id = fields.Many2one('budget.partner.comparison',string="wizard")        
     product_id=fields.Many2one('product.product', string='Product', domain=[('product_tmpl_id.is_new','=',True),('product_tmpl_id.cost_price','>',0)])
-    product_uom=fields.Many2one('product.uom',string='Unit of Measure')
+    product_uom=fields.Many2one('uom.uom',string='Unit of Measure')
     product_name=fields.Char(string = 'Names' )
     product_uom_qty=fields.Float(string = 'Estimated Quantity',default=1)
     price_unit=fields.Float(string = 'Estimated price')

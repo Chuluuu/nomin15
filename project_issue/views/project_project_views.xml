@@ -81,7 +81,7 @@
         <field name="inherit_id" ref="project.task_type_edit"/>
         <field name="arch" type="xml">
             <xpath expr='//field[@name="description"]' position='before'>
-                <div class="row ml-1" colspan="2">
+                <div class="row ml-1">
                     <label for="legend_priority" string=" " class="o_status o_status_green mt4" title="This step is done. Click to block or set in progress." aria-label="This step is done. Click to block or set in progress." role="img"/>
                     <div class="col-11 pl-0">
                         <field name="legend_priority"/>

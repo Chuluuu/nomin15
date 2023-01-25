@@ -39,7 +39,7 @@ class PartnerDocuments(http.Controller):
                 'inv_tenders': inv_tenders, 
                 }
         
-        return request.website.render("nomin_web.my_tender_account", vals)
+        return request.render("nomin_web.my_tender_account", vals)
         
     @http.route('/my/account', type='http', methods=['GET','POST'], auth='public', website=True)
     def my_account(self):
@@ -55,7 +55,7 @@ class PartnerDocuments(http.Controller):
                 'category_ids': cate_ids,
                 'type_ids': tendertype_ids,
                 }
-        return request.website.render("nomin_web.my_general_account", vals)
+        return request.render("nomin_web.my_general_account", vals)
     
     
     @http.route('/my/account/update', type='http', auth="public", methods=['GET','POST'], website=True)
@@ -74,7 +74,7 @@ class PartnerDocuments(http.Controller):
                 'type_ids': tendertype_ids,
                 }
         
-        return request.website.render("nomin_web.my_account_edit", vals)
+        return request.render("nomin_web.my_account_edit", vals)
     
     
     @http.route('/save_partner/', type='http', auth='public', methods=['GET', 'POST'], website=True)
@@ -147,7 +147,7 @@ class PartnerDocuments(http.Controller):
                 'type_ids': tendertype_ids,
                 }
         
-        return request.website.render("nomin_web.my_general_account", vals)
+        return request.render("nomin_web.my_general_account", vals)
 
     @http.route([
         '/my/documents/create',
@@ -171,9 +171,9 @@ class PartnerDocuments(http.Controller):
         documents=request.env['res.partner.documents']
         document = documents.sudo().search([('partner_id', '=', user.partner_id.id)])
         if document:
-            return request.website.render("nomin_web.my_documents")
+            return request.render("nomin_web.my_documents")
         else:
-            return request.website.render("nomin_web.create_my_document", {
+            return request.render("nomin_web.create_my_document", {
                 'partner': user.partner_id,
                 'document': document,
 #                 'file': conf_line,
@@ -519,7 +519,7 @@ class PartnerDocuments(http.Controller):
         user = request.env['res.users'].sudo().browse(request.uid)
         documents=request.env['res.partner.documents']
         document = documents.sudo().search([('partner_id', '=', user.partner_id.id)])
-        return request.website.render("nomin_web.my_documents", {
+        return request.render("nomin_web.my_documents", {
             'document': document,
         })
         
@@ -530,7 +530,7 @@ class PartnerDocuments(http.Controller):
         user = request.env['res.users'].sudo().browse(request.uid)
         documents=request.env['res.partner.documents']
         document = documents.sudo().search([('partner_id', '=', user.partner_id.id)])
-        return request.website.render("nomin_web.my_documents_edit", {
+        return request.render("nomin_web.my_documents_edit", {
             'document': document,
             'partner': user.partner_id,
         })
@@ -621,7 +621,7 @@ class PartnerDocuments(http.Controller):
                 attachment_id = self.attachment_create(field_name='p_audit_report_id',doc_id=doc_id.id,upload=upload)
         
         document = res_partner_documents.sudo().search([('partner_id', '=', user.partner_id.id)])
-        return request.website.render("nomin_web.my_documents", {
+        return request.render("nomin_web.my_documents", {
             'document': document,
         })
 
@@ -646,7 +646,7 @@ class PartnerDocuments(http.Controller):
                 'part_tenders': participant_ids,                
                 }
         
-        return request.website.render("nomin_web.my_tenders_documents", vals)
+        return request.render("nomin_web.my_tenders_documents", vals)
     
     @http.route('/my/tender_documents/<model("tender.tender"):tender>/', type='http', auth="public", website=True)
     def my_tender_documents_detail(self, tender):
@@ -663,7 +663,7 @@ class PartnerDocuments(http.Controller):
                 'part_tenders': participant_id, 
                 'lines': lines
                 }
-        return request.website.render("nomin_web.my_tenders_documents_details", vals)
+        return request.render("nomin_web.my_tenders_documents_details", vals)
     
     @http.route('/my/tender_documents/update/<model("tender.tender"):tender>/', type='http', auth="public", website=True)
     def my_tender_documents_detail_update(self, tender):
@@ -680,7 +680,7 @@ class PartnerDocuments(http.Controller):
                 'part_tenders': participant_id, 
                 'lines': participant_line_ids
                 }
-        return request.website.render("nomin_web.my_tenders_documents_details_edit", vals)
+        return request.render("nomin_web.my_tenders_documents_details_edit", vals)
         
 
     @http.route([
@@ -964,7 +964,7 @@ class PartnerDocuments(http.Controller):
         part_tender = participants.sudo().search([('partner_id','=', user.partner_id.id),('tender_id','=',participant.tender_id.id)],limit=1)
         
         lines = participants_lines.sudo().search([('partner_id','=', user.partner_id.id),('tender_id','=',participant.tender_id.id),('task_id','=',part_tender.id)])
-        return request.website.render("nomin_web.my_tenders_documents_details", {
+        return request.render("nomin_web.my_tenders_documents_details", {
             'tender': tender,
             'part_tenders': part_tender,
             'lines': lines,
@@ -982,10 +982,10 @@ class PartnerDocuments(http.Controller):
         if participant_id:
             lines = participants_lines.sudo().search([('partner_id','=', user_id.partner_id.id),('tender_id','=',tender.id),('task_id','=',participant_id.id)])
             if participant_id.state != 'draft':
-                return request.website.render("nomin_web.thanks", {'tender': tender})
+                return request.render("nomin_web.thanks", {'tender': tender})
             else:
                 participant_id.write({'state': 'sent'})
-        return request.website.render("nomin_web.thanks", {'tender': tender,})
+        return request.render("nomin_web.thanks", {'tender': tender,})
     
     
     @http.route('/my/tenders/history', type='http', auth="public", website=True)
@@ -999,4 +999,4 @@ class PartnerDocuments(http.Controller):
                 'tender_history': tender_history, 
                 }
         
-        return request.website.render("nomin_web.my_tender_history", vals)
+        return request.render("nomin_web.my_tender_history", vals)

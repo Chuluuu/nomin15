@@ -5,7 +5,6 @@
         <record id="view_subscribe_users_list_tree" model="ir.ui.view">
             <field name="name">Tender subscribe users tree</field>
             <field name="model">subscribe.users</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Subscribe Users tree">
                     <field name="tender_type_ids"/>
@@ -17,7 +16,6 @@
         <record id="view_subscribe_users_list_form" model="ir.ui.view">
             <field name="name">Tender subscribe users form</field>
             <field name="model">subscribe.users</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Subscribe Users form">
                     <sheet>

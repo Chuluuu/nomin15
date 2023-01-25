@@ -45,7 +45,7 @@ class ImportOperationTask(models.TransientModel):
 				
 				
 				if uom:
-					uom_id = self.env['product.uom'].search([('name','=',str(uom))])
+					uom_id = self.env['uom.uom'].search([('name','=',str(uom))])
 				if not uom_id:
 					raise UserError(_(u'%s мөр дээр алдаа гарав. %s хэмжих нэгж системд бүртгэлгүй байна эсвэл хэмжих нэгжийг буруу бичсэн байна.' % (rowi,uom)))	
 				is_type = False

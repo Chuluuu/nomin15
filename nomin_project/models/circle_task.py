@@ -25,18 +25,6 @@ class project_cicle_task(models.Model):
     date_lines = fields.One2many('circle.task.dates','parent_id',string = u'Огноо')
     task_id = fields.Many2one('project.task', index=True,string='Task')
     
-    # def default_get(self, cr, uid, fields, context=None):
-    #     result = []
-    #     if context is None:
-    #         context = {}
-    #     res = super(project_cicle_task, self).default_get(cr, uid, fields, context=context)    
-    #     active_id = context and context.get('active_id', False) or False
-    #     perform_obj = self.pool.get('project.task')
-    #     perform = perform_obj.browse(cr, uid, active_id)
-    #     res.update({
-    #                 'task_id' : perform.id,
-    #                 })
-    #     return res
     
     @api.model
     def default_get(self, fields):

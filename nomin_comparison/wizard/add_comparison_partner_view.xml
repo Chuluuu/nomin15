@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+    	<record id="view_comparison_partner_form" model="ir.ui.view">
+            <field name="name">add.comparison.partner.form</field>
+            <field name="model">add.comparison.partner</field>
+            <field name="arch" type="xml">
+                <form string="Add comparison partner">
+                    <group>
+                        <field name="comparison_id" invisible="1"/>
+                        <field name="partner_ids" nolabel="1">
+                            <tree string="Partner" editable="bottom">
+                                <field name="partner_id" required="1" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create':True}" />
+                                <field name="partner_lastname" readonly="1" invisible="1"/>
+                                <field name="partner_nomin_code" readonly="1"/>
+                                <field name="partner_phone" readonly="1"/>
+                                <field name="partner_email" readonly="1"/>
+                            </tree>
+                        </field> 
+                    </group>
+                    <footer>
+                        <button string="Add partner" name="action_add_partner" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+               </form>
+            </field>
+        </record>
+
+        <record id="add_comparison_partner_action" model="ir.actions.act_window" >
+            <field name="name">Add comparison partner</field>
+            <field name="res_model">add.comparison.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_comparison_partner_form"/>
+            <field name="target">new</field>
+        </record>
+    		
+    </data>
+</openerp>

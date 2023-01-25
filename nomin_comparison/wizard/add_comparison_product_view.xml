@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+    	<record id="view_comparison_product_form" model="ir.ui.view">
+            <field name="name">add.comparison.product.form</field>
+            <field name="model">add.comparison.product</field>
+            <field name="arch" type="xml">
+                <form string="Add comparison product">
+                    <group>
+                        <field name="comparison_id" invisible="1"/>
+                        <field name="product_ids" nolabel="1">
+                            <tree string="Product" editable="bottom">
+                                <field name="product_id" required="1" options="{'no_quick_create': True, 'no_create_edit' : True, 'no_create':True}" />
+                                <field name="product_description"/>
+                                <field name="product_qty"/>
+                                <field name="price_unit" invisible="1"/>
+                                <field name="market_value"/>
+                                <field name="market_price_total" readonly="1"/>
+                                <field name="price_subtotal" invisible="1"/>
+                            </tree>
+                        </field> 
+                    </group>
+                    <footer>
+                        <button string="Add product" name="action_add_product" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+               </form>
+            </field>
+        </record>
+
+        <record id="add_comparison_product_action" model="ir.actions.act_window" >
+            <field name="name">Add comparison product</field>
+            <field name="res_model">add.comparison.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_comparison_product_form"/>
+            <field name="target">new</field>
+        </record>
+    		
+    </data>
+</openerp>

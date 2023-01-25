@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id="view_purchase_order_inherit_form" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group/group/field[@name='currency_id']" position="after">
+                    <field name="contract_id" groups="purchase.group_purchase_user" attrs="{'readonly':[('state','!=','draft')]}"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_nomin_purchase_order_form" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="nomin_purchase.view_purchase_order_inherit_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header/button[@name='button_done']" position="after">
+                    <button name="create_contract" groups="purchase.group_purchase_user" class="oe_highlight" type="object" string="Гэрээ үүсгэх" attrs="{'invisible':['|',('contract_id','!=',False),('state','!=','purchase')]}" />
+                </xpath>
+            </field>
+        </record>
+        
+    </data>
+</openerp>

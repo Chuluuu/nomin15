@@ -20,7 +20,8 @@ class project_issue_inherit(models.Model):
     def _add_followers(self,user_ids):
         '''Add followers
         '''
-        self.message_subscribe_users(user_ids=user_ids)
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
     
 
     name        = fields.Char('Issue', required=True,tracking=True)
@@ -84,7 +85,6 @@ class project_issue_inherit(models.Model):
         model_obj =self.env['ir.model.data']
         result = model_obj._get_id('project', 'view_task_form2')
         view_id = model_obj.browse(result).res_id
-        # res = model_obj.sudo().get_object_reference('project', 'view_task_form2')
         for issue in self:
             employee = self.env['hr.employee'].search([('user_id','=',issue.checker.id)])
             project_task = self.env['project.task']
@@ -124,12 +124,8 @@ class project_issue_inherit(models.Model):
         '''
             Асуудлаас тикет үүсгэх цонх дуудах
         '''
-        mod_obj =  self.env['ir.model.data']
-
-        res = mod_obj.sudo().get_object_reference('nomin_project', 'action_create_project_ticket')
         return {
             'name': 'Тикет үүсгэх цонх',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'create.project.ticket',
             'context': self.env.context,

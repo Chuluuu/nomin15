@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import datetime
-from datetime import date, datetime, timedelta
 import time
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
-
+from datetime import datetime
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -119,7 +117,7 @@ def create_purchase_with_control_budget(self, control_budget_id, requisition_id,
         else:
             raise UserError(_(u'Хяналтын төсвийн Бусад зардлын боломжит үлдэгдэлээс их байна'))
         
-def create_tender_with_control_budget(self,cr, uid,control_budget_id,tender_id,context=None):
+def create_tender_with_control_budget(self,control_budget_id,tender_id):
     '''
         Хяналтын төсөв сонгож тендер үүсгэхэд хяналтын төсөврүү гүйцэтгэл хотлох
         :param cr: Cr заалт. Өгөгдлийн сантай ажиллах
@@ -128,12 +126,12 @@ def create_tender_with_control_budget(self,cr, uid,control_budget_id,tender_id,c
         :param tender_id: Худалдан авалтын шаардах
         :param context: Нэмэлт мэдээлэл агуулсан Dict байна
     '''
-    utilization_budget_material     = self.pool.get('utilization.budget.material')
-    utilization_budget_labor        = self.pool.get('utilization.budget.labor')
-    utilization_budget_equipment    = self.pool.get('utilization.budget.equipment')
-    utilization_budget_carriage     = self.pool.get('utilization.budget.carriage')
-    utilization_budget_postage      = self.pool.get('utilization.budget.postage')
-    utilization_budget_other        = self.pool.get('utilization.budget.other')
+    utilization_budget_material     = self.env['utilization.budget.material']
+    utilization_budget_labor        = self.env['utilization.budget.labor']
+    utilization_budget_equipment    = self.env['utilization.budget.equipment']
+    utilization_budget_carriage     = self.env['utilization.budget.carriage']
+    utilization_budget_postage      = self.env['utilization.budget.postage']
+    utilization_budget_other        = self.env['utilization.budget.other']
     
     total_amount = 0.0
     material_amount = 0.0
@@ -159,7 +157,7 @@ def create_tender_with_control_budget(self,cr, uid,control_budget_id,tender_id,c
             'map'           :'tender',
             'state'         :'tender'
             }
-        utilization_budget_material = utilization_budget_material.create(cr, uid, m_vals, context=context)
+        utilization_budget_material = utilization_budget_material.create( m_vals)
     
     if labor_amount > 0:
         l_vals = {
@@ -170,7 +168,7 @@ def create_tender_with_control_budget(self,cr, uid,control_budget_id,tender_id,c
             'map'           :'tender',
             'state'         :'tender'
             }
-        utilization_budget_labor = utilization_budget_labor.create(cr, uid, l_vals, context=context)
+        utilization_budget_labor = utilization_budget_labor.create(l_vals)
     
     if equipment_amount > 0:
         e_vals = {
@@ -181,7 +179,7 @@ def create_tender_with_control_budget(self,cr, uid,control_budget_id,tender_id,c
             'map'           :'tender',
             'state'         :'tender'
             }
-        utilization_budget_equipment = utilization_budget_equipment.create(cr, uid, e_vals, context=context)
+        utilization_budget_equipment = utilization_budget_equipment.create(e_vals)
     
     if carriage_amount > 0:
         c_vals = {
@@ -192,7 +190,7 @@ def create_tender_with_control_budget(self,cr, uid,control_budget_id,tender_id,c
             'map'           :'tender',
             'state'         :'tender'
             }
-        utilization_budget_carriage = utilization_budget_carriage.create(cr, uid, c_vals, context=context)
+        utilization_budget_carriage = utilization_budget_carriage.create(c_vals)
     
     if postage_amount > 0:
         p_vals = {
@@ -203,7 +201,7 @@ def create_tender_with_control_budget(self,cr, uid,control_budget_id,tender_id,c
             'map'           :'tender',
             'state'         :'tender'
             }
-        utilization_budget_postage = utilization_budget_postage.create(cr, uid, p_vals, context=context)
+        utilization_budget_postage = utilization_budget_postage.create(p_vals)
     
     if other_amount > 0:
         o_vals = {
@@ -214,9 +212,9 @@ def create_tender_with_control_budget(self,cr, uid,control_budget_id,tender_id,c
             'map'           :'tender',
             'state'         :'tender'
             }
-        utilization_budget_other = utilization_budget_other.create(cr, uid, o_vals, context=context)
+        utilization_budget_other = utilization_budget_other.create(o_vals)
         
-class purchase_requisition(models.Model):
+class PurchaseRequisition(models.Model):
     _inherit = 'purchase.requisition'
 
 
@@ -227,9 +225,9 @@ class purchase_requisition(models.Model):
                     create_purchase_with_control_budget(self, vals.get('control_budget_id'), self.id, self.equipment_amount,self.carriage_amount,self.postage_amount,self.other_amount,self.line_ids)
                 elif  self.control_budget_id and self.is_in_control_budget == False:
                         create_purchase_with_control_budget(self, self.control_budget_id, self.id, self.equipment_amount,self.carriage_amount,self.postage_amount,self.other_amount,self.line_ids)
-        return super(purchase_requisition ,self).write(vals)
+        return super(PurchaseRequisition ,self).write(vals)
 
-class inherit_control_budget(models.Model):
+class ControlBudget(models.Model):
     _inherit = 'control.budget'
     _order = "create_date desc"
     
@@ -242,58 +240,57 @@ class inherit_control_budget(models.Model):
             Зардлуудын боломжит үлдэгдэл , жинхэнэ үлдэгдэл төсөвлөсөн дүн тооцоолох
         '''
         for budget in self:
-            
-            if budget.project_id.project_flag:
-                lines = self.env['project.budget.line'].sudo().search([('project_budget_id.project_id','=',budget.project_id.id)])
-                a = []
-                for line in lines:
-                    a.append(line.total_cost)
-                    maxx = max(a)
-                    if line.total_cost == maxx:
+            if budget.project_id:
+                if budget.project_id.project_flag:
+                    lines = self.env['project.budget.line'].sudo().search([('project_budget_id.project_id','=',budget.project_id.id)])
+                    a = []
+                    for line in lines:
+                        a.append(line.total_cost)
+                        maxx = max(a)
+                        if line.total_cost == maxx:
+                            budget.update({
+                                        # 'project_budget_material'         :line.material_line_limit_new,
+                                        # 'project_budget_carriage'         :line.carriage_limit_new,
+                                        # 'project_budget_labor'            :line.labor_line_limit_new,
+                                        # 'project_budget_equipment'        :line.equipment_line_limit_new,
+                                        # 'project_budget_postage'          :line.postage_line_limit_new,
+                                        # 'project_budget_other'            :line.other_line_limit_new,
+                                        'project_budget_material_limit'   :line.material_line_limit_new,
+                                        'project_budget_carriage_limit'   :line.carriage_limit_new,
+                                        'project_budget_labor_limit'      :line.labor_line_limit_new,
+                                        'project_budget_equipment_limit'  :line.equipment_line_limit_new,
+                                        'project_budget_postage_limit'    :line.postage_line_limit_new,
+                                        'project_budget_other_limit'      :line.other_line_limit_new,
+                                        'project_budget_material_real'    :line.material_line_total_new,
+                                        'project_budget_carriage_real'    :line.carriage_cost_new,
+                                        'project_budget_labor_real'       :line.labor_line_total_new,
+                                        'project_budget_equipment_real'   :line.equipment_line_total_new,
+                                        'project_budget_postage_real'     :line.postage_line_total_new,
+                                        'project_budget_other_real'       :line.other_line_total_new
+                                        })
+                else:
+                    line = self.env['main.specification'].sudo().search([('parent_project_id','=',budget.project_id.id),('confirm','=',True)])
+                    if line:
                         budget.update({
-                                    # 'project_budget_material'         :line.material_line_limit_new,
-                                    # 'project_budget_carriage'         :line.carriage_limit_new,
-                                    # 'project_budget_labor'            :line.labor_line_limit_new,
-                                    # 'project_budget_equipment'        :line.equipment_line_limit_new,
-                                    # 'project_budget_postage'          :line.postage_line_limit_new,
-                                    # 'project_budget_other'            :line.other_line_limit_new,
-                                    'project_budget_material_limit'   :line.material_line_limit_new,
-                                    'project_budget_carriage_limit'   :line.carriage_limit_new,
-                                    'project_budget_labor_limit'      :line.labor_line_limit_new,
-                                    'project_budget_equipment_limit'  :line.equipment_line_limit_new,
-                                    'project_budget_postage_limit'    :line.postage_line_limit_new,
-                                    'project_budget_other_limit'      :line.other_line_limit_new,
-                                    'project_budget_material_real'    :line.material_line_total_new,
-                                    'project_budget_carriage_real'    :line.carriage_cost_new,
-                                    'project_budget_labor_real'       :line.labor_line_total_new,
-                                    'project_budget_equipment_real'   :line.equipment_line_total_new,
-                                    'project_budget_postage_real'     :line.postage_line_total_new,
-                                    'project_budget_other_real'       :line.other_line_total_new
+                                    'project_budget_material'         :line.material_line_real,
+                                    'project_budget_carriage'         :line.carriage_real,
+                                    'project_budget_labor'            :line.labor_line_real,
+                                    'project_budget_equipment'        :line.equipment_line_real,
+                                    'project_budget_postage'          :line.postage_line_real,
+                                    'project_budget_other'            :line.other_line_real,
+                                    'project_budget_material_limit'   :line.material_line_limit,
+                                    'project_budget_carriage_limit'   :line.carriage_limit,
+                                    'project_budget_labor_limit'      :line.labor_line_limit,
+                                    'project_budget_equipment_limit'  :line.equipment_line_limit,
+                                    'project_budget_postage_limit'    :line.postage_line_limit,
+                                    'project_budget_other_limit'      :line.other_line_limit,
+                                    'project_budget_material_real'    :line.material_line_total,
+                                    'project_budget_carriage_real'    :line.carriage_cost,
+                                    'project_budget_labor_real'       :line.labor_line_total,
+                                    'project_budget_equipment_real'   :line.equipment_line_total,
+                                    'project_budget_postage_real'     :line.postage_line_total,
+                                    'project_budget_other_real'       :line.other_line_total
                                     })
-            else:
-
-                line = self.env['main.specification'].sudo().search([('parent_project_id','=',budget.project_id.id),('confirm','=',True)])
-                if line:
-                    budget.update({
-                                'project_budget_material'         :line.material_line_real,
-                                'project_budget_carriage'         :line.carriage_real,
-                                'project_budget_labor'            :line.labor_line_real,
-                                'project_budget_equipment'        :line.equipment_line_real,
-                                'project_budget_postage'          :line.postage_line_real,
-                                'project_budget_other'            :line.other_line_real,
-                                'project_budget_material_limit'   :line.material_line_limit,
-                                'project_budget_carriage_limit'   :line.carriage_limit,
-                                'project_budget_labor_limit'      :line.labor_line_limit,
-                                'project_budget_equipment_limit'  :line.equipment_line_limit,
-                                'project_budget_postage_limit'    :line.postage_line_limit,
-                                'project_budget_other_limit'      :line.other_line_limit,
-                                'project_budget_material_real'    :line.material_line_total,
-                                'project_budget_carriage_real'    :line.carriage_cost,
-                                'project_budget_labor_real'       :line.labor_line_total,
-                                'project_budget_equipment_real'   :line.equipment_line_total,
-                                'project_budget_postage_real'     :line.postage_line_total,
-                                'project_budget_other_real'       :line.other_line_total
-                                })
                     
     def _get_limit(self):
         '''
@@ -376,16 +373,17 @@ class inherit_control_budget(models.Model):
     def _add_followers(self,user_ids):
         '''Add followers
         '''
-        self.message_subscribe_users(user_ids=user_ids)
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
     
     
     def _is_old(self):
-        if self.create_date < '2021-12-09':
+        if self.create_date < datetime.strptime('2021-12-09 00:00:00', '%Y-%m-%d %H:%M:%S'):
             self.is_old = True
 
     
     def _is_old2(self):
-        if self.create_date < '2022-11-28':
+        if self.create_date < datetime.strptime('2022-12-28 00:00:00', '%Y-%m-%d %H:%M:%S'):
             self.is_old2 = True
 
     project_budget_material         = fields.Float(u'Жинхэнэ үлдэгдэл', compute=_get_all)
@@ -421,12 +419,12 @@ class inherit_control_budget(models.Model):
     budgets_utilization_total       = fields.Float(u'Нийт дүн',compute=_budgets_utilization_total)
     budgets_utilization_util        = fields.Float(u'Гүйцэтгэл',compute=_budgets_utilization_util)
     budgets_utilization_balance       = fields.Float(u'Үлдэгдэл',compute=_budgets_utilization_balance)
-    work_graph_id                   = fields.Many2one('project.task', index=True,string='Work Graph', tracking=True)
+    work_graph_id                   = fields.Many2one('project.task', string='Work Graph', tracking=True)
     
     back_state                  = fields.Char('back_stage')
     evaluate_budget             = fields.One2many('evaluate.tasks','budget_id','Budget evaluate')
     budget_users                = fields.One2many('main.specification.confirmers','budget_id','Project users')
-    m_department_id             = fields.Many2one('hr.department', index=True,string=u'Зардал гарах салбар',domain=[('is_sector', '=',True)])
+    m_department_id             = fields.Many2one('hr.department', string=u'Зардал гарах салбар',domain=[('is_sector', '=',True)])
     is_old                      = fields.Boolean(string='is old' , compute=_is_old, default=False)
     is_old2                      = fields.Boolean(string='is old material' , compute=_is_old2, default=False)
 
@@ -456,7 +454,7 @@ class inherit_control_budget(models.Model):
         '''
         if vals.get('budget_code','New') == 'New':
             vals['budget_code'] = self.env['ir.sequence'].next_by_code('control.budget') or 'New'
-        result = super(inherit_control_budget, self).create(vals)
+        result = super(ControlBudget, self).create(vals)
         if vals.get('budget_confirmer'):
             for user in result.budget_confirmer:
                 result._add_followers(user.user_id.id)
@@ -647,7 +645,7 @@ class inherit_control_budget(models.Model):
             Төсөвчин болон батлах хэрэглэгчидийг дагагчаар нэмнэ
         '''
         
-        result = super(inherit_control_budget, self).write(vals)
+        result = super(ControlBudget, self).write(vals)
         if vals and 'user_id' in vals:
             self._add_followers(vals['user_id'])
             if vals['user_id'] not in self.project_id.sudo().c_user_ids.ids:
@@ -668,7 +666,7 @@ class inherit_control_budget(models.Model):
         for budget in self:
             if budget.state != 'draft':
                 raise UserError(_(u'Та зөвхөн ноорог төлөвтөй хяналтын төсөв устгах боломжтой'))
-        return super(inherit_control_budget, self).unlink()
+        return super(ControlBudget, self).unlink()
     
     
     def copy(self, default=None):
@@ -679,7 +677,7 @@ class inherit_control_budget(models.Model):
             code = self.env['ir.sequence'].next_by_code('control.budget')
             default.update({'budget_code':code})
         
-        return super(inherit_control_budget, self).copy(default=default)
+        return super(ControlBudget, self).copy(default=default)
 
     def action_select(self):
         '''
@@ -723,7 +721,7 @@ class inherit_control_budget(models.Model):
         '''
             Төсөл талбар солигдоход Батлах ажилчид , Ажлын даалгавар , ажлын зураг талбаруудад domain дамжуулна
         '''
-        group_id        = self.env['ir.model.data'].get_object_reference('project', 'group_project_confirmer')[1]
+        group_id        = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.group_project_confirmer')
         sel_user_ids    = self.env['res.users'].sudo().search([('groups_id','in',group_id)])
         emp_ids         = self.env['hr.employee'].sudo().search([('user_id','in',sel_user_ids.ids)])
         budgets         = self.env['control.budget'].sudo().search([('project_id','=',self.project_id.id)])
@@ -883,12 +881,8 @@ class inherit_control_budget(models.Model):
         '''
             Шалтгаан бичээд хойшлуулах товч
         '''
-        mod_obj = self.env['ir.model.data']
-
-        res = mod_obj.get_object_reference('nomin_project', 'action_budget_back')
         return {
             'name': 'Хяналтын төсөв хойшлуулах',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'back.control.budget',
             'context': self._context,
@@ -1046,12 +1040,8 @@ class inherit_control_budget(models.Model):
 
 
     def action_evaluate(self):
-        mod_obj = self.env['ir.model.data']
-
-        res = mod_obj.get_object_reference('nomin_project', 'action_rate_project_task')
         return {
             'name': 'Note',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'rate.control.budget',
             'context': self._context,
@@ -1066,12 +1056,8 @@ class inherit_control_budget(models.Model):
             Тендер үүсгэх товч
             Тендер үүсгэх цонх дуудах
         '''
-        mod_obj = self.env['ir.model.data']
-
-        res = mod_obj.get_object_reference('nomin_project', 'action_create_project_tender')
         return {
             'name': 'Note',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'create.project.tender',
             'context': self._context,
@@ -1085,12 +1071,8 @@ class inherit_control_budget(models.Model):
             Үнийн харьцуулалт үүсгэх товч
             Үнийн харьцуулалт үүсгэх цонх дуудах
         '''
-        mod_obj = self.env['ir.model.data']
-
-        res = mod_obj.get_object_reference('nomin_project', 'action_create_partner_comparison_wizard')
         return {
             'name': 'Note',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'create.partner.comparison.wizard',
             'context': self._context,
@@ -1188,11 +1170,8 @@ class inherit_control_budget(models.Model):
         '''
             Төсөл Цуцлах цонх дуудна
         '''
-        mod_obj = self.env['ir.model.data']
-        res = mod_obj.get_object_reference('nomin_project', 'action_budget_cancel')
         return {
             'name': 'Хяналтын төсөв цуцлах',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'cancel.control.budget',
             'context': self._context,
@@ -1207,14 +1186,9 @@ class inherit_control_budget(models.Model):
         '''
             Худалдан авалтын шаардах үүсгэх цонх дуудах
         '''
-        _logger.info(u'_______________________________________________________________________________________EEE3, %s ',self)
         for task in self:
-            mod_obj = task.env['ir.model.data']
-            res = mod_obj.get_object_reference('nomin_project', 'action_create_purchase_requisition')
-            _logger.info(u'_______________________________________________________________________________________EEE4, %s ',res)
             return {
                     'name': 'Note',
-                    'view_type': 'form',
                     'view_mode': 'form',
                     'res_model': 'create.purchase.requisition',
                     'context': task._context,
@@ -1227,12 +1201,9 @@ class inherit_control_budget(models.Model):
         '''
             Хяналтын төсвийн ажиллах хүчний зардал болон материалын зардал импортлох цонх дуудна
         '''
-        mod_obj = self.env['ir.model.data']
 
-        res = mod_obj.get_object_reference('nomin_project', 'action_import_control_budget')
         return {
             'name': 'Импорт хийх',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'import.control.budget',
             'context': self._context,
@@ -1251,14 +1222,14 @@ class CancelControlBudget(models.Model):
     budget_id = fields.Many2one('control.budget')
     description = fields.Text(u'Тайлбар')
     
-    def default_get(self, cr, uid, fields, context=None):
+    def default_get(self):
         result = []
         if context is None:
             context = {}
-        res = super(CancelControlBudget, self).default_get(cr, uid, fields, context=context)    
-        active_id = context and context.get('active_id', False) or False
-        perform_obj = self.pool.get('control.budget')
-        perform = perform_obj.browse(cr, uid, active_id)
+        res = super(CancelControlBudget, self).default_get()    
+        active_id = self.env.context and self.env.context.get('active_id', False) or False
+        perform_obj = self.env['control.budget']
+        perform = perform_obj.browse(active_id)
         res.update({
                     'budget_id' : perform.id,
                     })
@@ -1281,14 +1252,14 @@ class BackControlBudget(models.Model):
     budget_id = fields.Many2one('control.budget')
     description = fields.Text(u'Тайлбар')
     
-    def default_get(self, cr, uid, fields, context=None):
+    def default_get(self,fields):
         result = []
         if context is None:
             context = {}
-        res = super(BackControlBudget, self).default_get(cr, uid, fields, context=context)    
-        active_id = context and context.get('active_id', False) or False
-        perform_obj = self.pool.get('control.budget')
-        perform = perform_obj.browse(cr, uid, active_id)
+        res = super(BackControlBudget, self).default_get( fields)    
+        active_id = self.env.context and self.env.context.get('active_id', False) or False
+        perform_obj = self.env['control.budget']
+        perform = perform_obj.browse(active_id)
         res.update({
                     'budget_id' : perform.id,
                     })

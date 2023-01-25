@@ -8,12 +8,12 @@
                 <form string="labor cost settings">
                     <group>
                         <group >
-                            <field name="engineer_salary"/>
-                            <field name="extra_salary"/>
+                            <field name="engineer_salary" required="1"/>
+                            <field name="extra_salary" required="1"/>
                         </group>
                         <group>
-                            <field name="social_insurance_rate"/>
-                            <field name="habe_percent"/>
+                            <field name="social_insurance_rate" required="1"/>
+                            <field name="habe_percent" required="1"/>
                         </group>
                     </group>
                     <div class="oe_chatter">
@@ -45,7 +45,7 @@
         </record>
 
 
-        <menuitem id="menu_labor_cost_settings" action="nomin_project.action_labor_cost_settings" parent="nomin_project.menu_project_config2" groups="group_general_budgeter" sequence="15" />
+        <menuitem id="menu_labor_cost_settings" action="nomin_project.action_labor_cost_settings" parent="project.menu_project_config" groups="group_general_budgeter" sequence="15" />
 
 
     </data>

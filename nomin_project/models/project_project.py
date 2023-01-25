@@ -31,7 +31,7 @@ class main_line_budgets(models.Model):
     price = fields.Float(u'Төлөвлөсөн дүн',required=True)
     descrition = fields.Char(u'Тайлбар',required=False)
 
-class cancel_project(models.Model):
+class CancelProject(models.Model):
     '''
         Төсөл шалтгаан бичээд цуцлах
     '''
@@ -42,14 +42,13 @@ class cancel_project(models.Model):
     description = fields.Text('Description')
     project_id  = fields.Many2one('project.project', index=True)
     
-    def default_get(self, cr, uid, fields, context=None):
+    def default_get(self, fields):
         result = []
-        if context is None:
-            context = {}
-        res = super(cancel_project, self).default_get(cr, uid, fields, context=context)    
-        active_id = context and context.get('active_id', False) or False
-        perform_obj = self.pool.get('project.project')
-        perform = perform_obj.browse(cr, uid, active_id)
+        
+        res = super(CancelProject, self).default_get(fields)    
+        active_id = self.env.context and self.env.context.get('active_id', False) or False
+        perform_obj = self.env['project.project']
+        perform = perform_obj.browse(active_id)
  
         res.update({
                     'project_id' : perform.id,
@@ -79,7 +78,7 @@ class cancel_project(models.Model):
             raise UserError(_('Cannot send email: This project not choose partner.'))
         for partner in self.project_id.message_follower_ids:
             base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-            action_id = self.env['ir.model.data'].get_object_reference('project', 'open_view_project_all')[1]
+            action_id = self.env['ir.model.data']._xmlid_to_res_id('project.open_view_project_all')
             db_name = request.session.db
             email = partner.partner_id.email
             subject = u'"%s" нэртэй төсөл Цуцлагдсан төлөвт орлоо.'%(self.project_id.name)
@@ -114,7 +113,7 @@ class cancel_project(models.Model):
         self.project_id.write({'state':'cancelled'})
        
         
-class evaluate_tasks(models.Model):
+class EvaluateTasks(models.Model):
     _name = 'evaluate.tasks'
     '''
         Даалгаварыг үнэлсэн үнэлгээ харуулах
@@ -125,7 +124,7 @@ class evaluate_tasks(models.Model):
     percent     = fields.Float('Percent')
     
 
-class transfer_user(models.Model):
+class TransferUser(models.Model):
     _name = 'transfer.user'
     
     '''
@@ -135,14 +134,12 @@ class transfer_user(models.Model):
     project_id = fields.Many2one('project.project','Project', index=True,required=True)
     employee = fields.Many2one('hr.employee',u'Ацаглах ажилтан',required=True)
     
-    def default_get(self, cr, uid, fields, context=None):
+    def default_get(self, fields):
         result = []
-        if context is None:
-            context = {}
-        res = super(transfer_user, self).default_get(cr, uid, fields, context=context)    
-        active_id = context and context.get('active_id', False) or False
-        perform_obj = self.pool.get('project.project')
-        perform = perform_obj.browse(cr, uid, active_id)
+        res = super(TransferUser, self).default_get(fields)    
+        active_id = self.env.context and self.env.context.get('active_id', False) or False
+        perform_obj = self.env['project.project']
+        perform = perform_obj.browse(active_id)
  
         res.update({
                     'project_id' : perform.id,
@@ -151,7 +148,7 @@ class transfer_user(models.Model):
     
     @api.onchange('project_id')
     def onchange_evaluator(self):
-        group_id        = self.env['ir.model.data'].get_object_reference('project', 'group_project_checker')[1]
+        group_id        = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.group_project_checker')[1]
         sel_user_ids    = self.env['res.users'].sudo().search([('groups_id','in',group_id)])
         emp_ids         = self.env['hr.employee'].sudo().search([('user_id','in',sel_user_ids.ids)])
         project_checker_ids = []
@@ -185,7 +182,7 @@ class transfer_user(models.Model):
                     }
             main_specification_confirmers   = main_specification_confirmers.sudo().create(vals)
             
-class project_project(models.Model):
+class ProjectProject(models.Model):
     _inherit = 'project.project'
     _order = 'start_date' 
     '''
@@ -339,7 +336,12 @@ class project_project(models.Model):
                 for line in project.perform_line:
                     total += line.total_percent
                     count += 1
-                project.total_percent = total/count
+                if count!=0:
+                    project.total_percent = total/count
+                else:
+                    project.total_percent = 0
+            else:
+                    project.total_percent = 0
         
     
     def _is_done_all_task(self):
@@ -524,7 +526,8 @@ class project_project(models.Model):
     def _add_followers(self,user_ids):
         '''Add followers
         '''
-        self.message_subscribe_users(user_ids=user_ids)
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
     
     @api.depends('is_show_project_checkers')
     def _is_voter(self):
@@ -590,18 +593,17 @@ class project_project(models.Model):
     cancel_reason = fields.Char(string="Цуцалсан шалтгаан" , tracking=True )
     back_reason = fields.Char(string="Хойшлуулсан шалтгаан" , tracking=True )
     
-
-    def _project_flow_cron(self ,cr, uid):
+    @api.model
+    def _project_flow_cron(self):
         '''Төслийн явцийн хувь тооцох крон функц
         '''
         query = "SELECT id FROM project_project"
-        cr.execute(query)
-        records = cr.dictfetchall()
+        self.env.cr.execute(query)
+        records = self.env.cr.dictfetchall()
         for record in records:
             project_status = 0
-            project = self.pool.get('project.project').browse(cr,uid,record['id'])
-            status_tasks_id = self.pool.get('project.task').search(cr,uid,[('project_id','=',project.id)])
-            status_tasks = self.pool.get('project.task').browse(cr,uid,status_tasks_id)
+            project = self.env['project.project'].browse(record['id'])
+            status_tasks = self.env['project.task'].search([('project_id','=',project.id)])
             tasks_total_day = 0
             complete_percent_day = 0
             for task in status_tasks:
@@ -619,23 +621,23 @@ class project_project(models.Model):
                 project_status = 0
             project.project_flow = project_status
 
-
-    def create(self, cr, uid, vals, context=None):
+    @api.model
+    def create(self, vals):
         '''
           Төсөл үүсгэх дагагчид нэмэх
               мөн эхлэх огноо дуусах огнооноос бага байгаа эсэхийг шалгах
         '''
 
-        if context is None:
-            context = {}
-        create_context = dict(context, project_creation_in_progress=True,
+        if self.env.context is None:
+            self.env.context = {}
+        create_context = dict(self.env.context, project_creation_in_progress=True,
                               alias_model_name=vals.get('alias_model', 'project.task'),
                               alias_parent_model_name=self._name,
                               mail_create_nosubscribe=True)
 
-        ir_values = self.pool.get('ir.values').get_default(cr, uid, 'project.config.settings', 'generate_project_alias')
-        if ir_values:
-            vals['alias_name'] = vals.get('alias_name') or vals.get('name')
+        # ir_values = self.env['ir.values'].get_default('project.config.settings', 'generate_project_alias')
+        # if ir_values:
+        #     vals['alias_name'] = vals.get('alias_name') or vals.get('name')
         
 
         if vals['budget_line_ids'] and  vals['parent_project']:
@@ -665,8 +667,8 @@ class project_project(models.Model):
 
                 
              
-        project_id = super(project_project, self).create(cr, uid, vals, context=create_context)
-        project_rec = self.browse(cr, uid, project_id, context=context)
+        project_id = super(ProjectProject, self).create(vals, context=create_context)
+        project_rec = self.browse(project_id)
         project_rec._add_followers(project_rec.user_id.id)
         if vals.get('end_date') or vals.get('start_date'):
             if vals.get('end_date') < vals.get('start_date'):
@@ -696,7 +698,7 @@ class project_project(models.Model):
                 project_rec._add_followers(project_rec.project_verifier.user_id.id)
                 
         values = {'alias_parent_thread_id': project_id, 'alias_defaults': {'project_id': project_id}}
-        self.pool.get('mail.alias').write(cr, uid, [project_rec.alias_id.id], values, context=context)
+        self.env['mail.alias'].browse(project_rec.alias_id.id).write([], values)
         json_data = {
             'workflow_name' :'unknown',
             'next_state':'verify_by_economist',
@@ -704,17 +706,14 @@ class project_project(models.Model):
         project_rec.json_data = json.dumps(json_data)
         return project_id
 
-    def write(self, cr, uid, ids, vals, context=None):
+    def write(self, vals):
         '''
           Төсөлд дагагчид нэмэх
               мөн эхлэх огноо дуусах огнооноос бага байгаа эсэхийг шалгах
         '''
         
-        if vals.get('alias_model'):
-            model_ids = self.pool.get('ir.model').search(cr, uid, [('model', '=', vals.get('alias_model', 'project.task'))])
-            vals.update(alias_model_id=model_ids[0])
-        res = super(project_project, self).write(cr, uid, ids, vals, context=context)
-        project_id = self.browse(cr, uid, ids, context)
+        res = super(ProjectProject, self).write(vals)
+        project_id = self
         # json_data = {
         #     'workflow_name' :'unknown',
         #     'next_state':'verify_by_economist',
@@ -811,15 +810,15 @@ class project_project(models.Model):
             
         self.update({'document' : documents})
         
-        confirmer_group_id        = self.env['ir.model.data'].get_object_reference('project', 'group_project_confirmer')[1]
+        confirmer_group_id        = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.group_project_confirmer')
         conf_user_ids             = self.env['res.users'].sudo().search([('groups_id','in',confirmer_group_id)])
         conf_emp_ids              = self.env['hr.employee'].sudo().search([('user_id','in',conf_user_ids.ids)])
         
-        checker_group_id        = self.env['ir.model.data'].get_object_reference('project', 'group_project_checker')[1]
+        checker_group_id        = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.group_project_checker')
         check_user_ids          = self.env['res.users'].sudo().search([('groups_id','in',checker_group_id)])
         check_emp_ids           = self.env['hr.employee'].sudo().search([('user_id','in',check_user_ids.ids)])
         
-        manager_group_id        = self.env['ir.model.data'].get_object_reference('project', 'group_project_manager')[1]
+        manager_group_id        = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.group_project_manager')
         manager_user_ids          = self.env['res.users'].sudo().search([('groups_id','in',manager_group_id)])
         
         return {'domain':{
@@ -832,8 +831,6 @@ class project_project(models.Model):
     def transfer_button(self):
         '''Ацаглах товч
         '''
-        mod_obj = self.env['ir.model.data']
-        res = mod_obj.get_object_reference('nomin_project', 'action_transfer_user')
         return {
             'name': 'Note',
             'view_type': 'form',
@@ -865,9 +862,6 @@ class project_project(models.Model):
     def project_rate_button(self):
         '''Үнэлэх товч
         '''
-        mod_obj = self.env['ir.model.data']
-
-        res = mod_obj.get_object_reference('nomin_project', 'action_rate_project')
         return {
             'name': 'Note',
             'view_type': 'form',
@@ -917,9 +911,6 @@ class project_project(models.Model):
         for task in self:
             if not task.project_verifier == emp:
                 raise ValidationError(_(u'Төсөл батлах эрхтэй хүн цуцална'))
-            mod_obj = task.env['ir.model.data']
-
-            res = mod_obj.get_object_reference('nomin_project', 'action_project_cancel')
             return {
                 'name': 'Note',
                 'view_type': 'form',
@@ -1193,7 +1184,7 @@ class project_project(models.Model):
                     raise UserError(_('Cannot send email: This project not choose partner.'))
                 for checkers in project.project_checkers:
                     base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-                    action_id = self.env['ir.model.data'].get_object_reference('project', 'open_view_project_all')[1]
+                    action_id = self.env['ir.model.data']._xmlid_to_res_id('project.open_view_project_all')
                     db_name = request.session.db
                     email = checkers.work_email
                     subject = u'"%s" нэртэй төслийн хөрөнгө оруулалт батлахад санал өгнө үү.'%(project.name)
@@ -1373,7 +1364,7 @@ class project_project(models.Model):
         
         
     
-class project_stage(models.Model):
+class ProjectStage(models.Model):
     '''Төслийн даалгаврын үе шат
     '''
     
@@ -1386,29 +1377,29 @@ class project_stage(models.Model):
     description = fields.Text(u'Тайлбар' , tracking=True)
     project_ids = fields.Many2many('project.project', 'project_stage_relat', 'project_stage_id', 'project_id', 'Project_stages')
     
-    def create(self, cr, uid, vals, context=None):
+    @api.model
+    def create(self,vals):
         '''Төслийн даалгаврын үе шат үүсгэх нэрний давхардал шалгах
     '''
-        if context is None:
-            context = {}
-        tags = self.pool.get('project.stage').search(cr, uid, [('name', '=', vals.get('name'))])
+        
+        tags = self.env['project.stage'].search([('name', '=', vals.get('name'))])
         if not tags:
-            project_id = super(project_stage, self).create(cr, uid, vals, context=context)
+            project_id = super(ProjectStage, self).create(vals)
             return project_id
         else:
             raise ValidationError(_(u'Ийм нэртэй Төслийн даалгаварын үе үүссэн байна !'))
         
-    def unlink(self, cr, uid, ids, context=None):
+    def unlink(self):
         '''Төслийн даалгаврын үе шат устгах төсөлд ашигласан эсэхийг шалгах
         '''
-        issue_ids = self.pool.get('project.project').search(cr, uid, [('project_stage', '=', ids[0])])
+        issue_ids = self.env['project.project'].sudo().search([('project_stage', '=', self.id)])
         if len(issue_ids)==0:
-            res = super(project_stage, self).unlink(cr, uid, ids, context=context)
+            res = super(ProjectStage, self).unlink()
             return res
         else: 
             raise ValidationError(_(u'Энэхүү мэдээллийг бүртгэлд ашигласан тул устгах боломжгүй!'))
     
-class main_pec(models.Model):
+class MainSpecificationn(models.Model):
     '''Төслийн Хөрөнгө оруулалтын мөр
     '''
     _inherit = 'main.specification'
@@ -1777,7 +1768,7 @@ class main_pec(models.Model):
                     raise UserError(_('Cannot send email: This project not choose partner.'))
                 for verifier in project.parent_project_id.project_verifier:
                     base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-                    action_id = self.env['ir.model.data'].get_object_reference('project', 'open_view_project_all')[1]
+                    action_id = self.env['ir.model.data']._xmlid_to_res_id('project.open_view_project_all')[1]
                     db_name = request.session.db
                     email = verifier.work_email
                     subject = u'"%s" нэртэй төслийг батална уу.'%( project.parent_project_id.name)

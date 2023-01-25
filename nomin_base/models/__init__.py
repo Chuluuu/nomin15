@@ -17,7 +17,7 @@
 ##############################################################################
 from . import res
 # import ir
-# import request_template
+from . import request_template
 from . import hr_employee_location
 from . import hr
 # import work_service

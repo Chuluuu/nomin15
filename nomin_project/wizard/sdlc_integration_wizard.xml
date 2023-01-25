@@ -17,7 +17,7 @@
 							<field name="is_unauthorized" invisible="1"/>
 							<field name="is_unauthorized_error" invisible="1"/>
 						</group>
-						<group colspan="4">
+						<group colspan="2">
 							<div class="pull-left" attrs="{'invisible':['|',('is_unauthorized','=',True),('is_unauthorized_error','=',True)]}">
 								<h2 >
 									<font color="blue">http://sdlc.nomin.net/my/access_token цэс рүү ороод API түлхүүр үгээ аван доор хуулж тавина уу. </font>
@@ -29,27 +29,28 @@
 								</h2>
 							</div>
 						</group>
-						<group colspan="4">
+						<group colspan="2">
 							<field name="access_token" attrs="{'invisible':[('is_unauthorized','=',True)],'required':[('is_unauthorized','=',False)]}"/>
 						</group>
 					</group>
-					<button name="export_report" class="oe_highlight" string="Татах" attrs="{'invisible':[('type','=','update')]}" type="object" />
-					<button name="action_update_sdlc" class="oe_highlight" string="SDLC шинэчлэх" attrs="{'invisible':[('type','!=','update')]}" type="object" />
-					<button string="Cancel" class="oe_link" special="cancel" />
+					<footer>
+						<button name="export_report" class="oe_highlight" string="Татах" attrs="{'invisible':[('type','=','update')]}" type="object" />
+						<button name="action_update_sdlc" class="oe_highlight" string="SDLC шинэчлэх" attrs="{'invisible':[('type','!=','update')]}" type="object" />
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer>
 				</form>
 			</field>
 		</record>
 
 		<record id="action_sdlc_integration" model="ir.actions.act_window">
 			<field name="name">action.sdlc.integration</field>
-			<field name="type">ir.actions.act_window</field>
+			<!-- <field name="type">ir.actions.act_window</field> -->
 			<field name="res_model">sdlc.integration</field>
 			<field name="view_mode">form</field>
 			<field name="view_id" ref="sdlc_integration_view"/>
-			<field name="context">{}</field>
 			<field name="target">new</field>
 		</record>
 
-		<menuitem action="action_sdlc_integration" sequence="99" name="SDLC интеграци" id="sdlc_integration_menu" parent="project.menu_project_management" groups="group_program_admin,project.group_project_manager"/>
+		<menuitem id="sdlc_integration_menu" action="action_sdlc_integration" sequence="29" name="SDLC интеграци" parent="project.menu_project_management" groups="nomin_project.group_program_admin,project.group_project_manager"/>
 	</data>
 </odoo>

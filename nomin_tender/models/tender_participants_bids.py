@@ -7,7 +7,7 @@ from odoo import api, fields, models, SUPERUSER_ID, _
 from odoo.exceptions import UserError
 from odoo.http import request
 
-class tender_participants_bid(models.Model):
+class TenderParticipantsBid(models.Model):
     _name="tender.participants.bid"
     _description = "Tender participants bid"
     _inherit = ['mail.thread', 'mail.activity.mixin']
@@ -23,9 +23,9 @@ class tender_participants_bid(models.Model):
     def _compute_amount(self):
         self.amount_total = sum(line.line_total_amount for line in self.task_ids)
         
-    name                        = fields.Char('Name', track_visibility='always', copy=False, compute='_partic_name')
-    tender_id                   = fields.Many2one('tender.tender', 'Current tender', ondelete='restrict', track_visibility='always', index=True)
-    partner_id                  = fields.Many2one('res.partner', 'Current partner', ondelete='restrict', track_visibility='always')
+    name                        = fields.Char('Name', tracking=True, copy=False, compute='_partic_name')
+    tender_id                   = fields.Many2one('tender.tender', 'Current tender', ondelete='restrict', tracking=True, index=True)
+    partner_id                  = fields.Many2one('res.partner', 'Current partner', ondelete='restrict', tracking=True)
     document_id                 = fields.Many2one('res.partner.documents', 'Partner documents', ondelete='restrict')
     t_partner_cost_id           = fields.Many2one('ir.attachment', domain="[('res_model','=','tender.participants.bid'),('res_id', '=', id)]", string='Partner cost file') #Үнийн санал
     t_partner_schedule_id       = fields.Many2one('ir.attachment', domain="[('res_model','=','tender.participants.bid'),('res_id', '=', id)]", string='Partner schedule file') #Хугацаа, ажлын график
@@ -37,11 +37,11 @@ class tender_participants_bid(models.Model):
     t_partner_alternative_id    = fields.Many2one('ir.attachment', string='Partner alternative tender file') #Хувилбарт тендер
     t_partner_technical_id      = fields.Many2one('ir.attachment', string='Partner technical file') #Техникийн боломж
     task_ids                    = fields.One2many('participants.work.task.line', 'task_id', 'Work unit task', ondelete='restrict')
-    amount_total                = fields.Float(string='Total', compute='_compute_amount', track_visibility='always')
-    description                 = fields.Text('Description', track_visibility='always')
-    datetime                    = fields.Date('Date', track_visibility='always')
-    execute_time                = fields.Char('Execute Datetime', track_visibility='always') #гүйцэтгэх хугацаа
-    warranty_time               = fields.Char('Warranty Datetime', track_visibility='always') #Баталгаат хугацаа
+    amount_total                = fields.Float(string='Total', compute='_compute_amount', tracking=True)
+    description                 = fields.Text('Description', tracking=True)
+    datetime                    = fields.Date('Date', tracking=True)
+    execute_time                = fields.Char('Execute Datetime', tracking=True) #гүйцэтгэх хугацаа
+    warranty_time               = fields.Char('Warranty Datetime', tracking=True) #Баталгаат хугацаа
     state                       = fields.Selection([('draft', 'Draft'),('sent', u'Илгээсэн'),('open_document', u'Бичиг баримт нээлттэй'),('open_cost', u'Үнийн санал нээлттэй'),('close', u'Хаасан')]
                                                    ,string= "Status",tracking=True)
     
@@ -153,10 +153,10 @@ class tender_participants_bid(models.Model):
         for bid in self:
             if bid.state != 'draft':
                 raise UserError(_(u'Та ноорог үнийн саналыг устгах боломжтой.'))
-        return super(tender_participants_bid, self).unlink()
+        return super(TenderParticipantsBid, self).unlink()
 
     
-class participants_bid_line(models.Model):
+class ParticipantsWorkTaskLine(models.Model):
     _name = "participants.work.task.line"
     _description = "Tender participants line"
     
@@ -200,10 +200,10 @@ class participants_bid_line(models.Model):
     partner_id                  = fields.Many2one('res.partner', 'Current partner', default=_default_partner)
     qty                         = fields.Float(string='Qty', digits=(16, 4), default=1) #Тоо ширхэг
     unit_price                  = fields.Float(string='Unit Price') #Нэгж үнэ
-    amount                      = fields.Float(string='Amount', track_visibility='always',compute='_compute_amount', readonly=True,) #Нийт үнэ
+    amount                      = fields.Float(string='Amount', tracking=True,compute='_compute_amount', readonly=True,) #Нийт үнэ
     costs_of_materials          = fields.Float(string="Costs of materials")#МАтериалын үнэ
     other_costs                 = fields.Float(string="Other costs") #Бусад өртөг
-    line_total_amount           = fields.Float(string="Total amount", track_visibility='always', compute="_compute_total_amount", readonly=True) #Тухайн ажлын даалгаврын нийт зардал
+    line_total_amount           = fields.Float(string="Total amount", tracking=True, compute="_compute_total_amount", readonly=True) #Тухайн ажлын даалгаврын нийт зардал
     task_id                     = fields.Many2one('tender.participants.bid', 'Participants works', ondelete='cascade')
 
    

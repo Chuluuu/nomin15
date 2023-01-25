@@ -2,7 +2,6 @@
 
 from datetime import datetime, date
 import time
-import openerp.addons.decimal_precision as dp
 from odoo import api, fields, models, _
 from odoo.http import request
 from odoo.exceptions import UserError, ValidationError
@@ -560,10 +559,11 @@ class ProjectProject(models.Model):
 
     
     def _project_flag(self):
-        if self.create_date <= datetime.strptime('2022-03-28 09:00:00', '%Y-%m-%d %H:%M:%S'):
-            self.project_flag = False
-        else:
-            self.project_flag = True
+        for record in self:
+            if record.create_date <= datetime.strptime('2022-03-28 09:00:00', '%Y-%m-%d %H:%M:%S'):
+                record.project_flag = False
+            else:
+                record.project_flag = True
 
     
     def _compute_amount_new(self):
@@ -590,16 +590,16 @@ class ProjectProject(models.Model):
     start_date=fields.Date('Start Date', select=True, tracking=True) # Төслийн эхлэх хугацаа
     end_date=fields.Date('End Date', select=True, tracking=True) # Төслийн дуусах хугацаа
     benefits=fields.Text("Benefits", tracking=True) # Төслийн үр ашиг
-    project_categ=fields.Many2one('project.category', "Category", required = 'True', tracking=True, index=True) # Төслийн ангилал, readonly=True, states={'draft': [('readonly', False)]}
-    parent_project=fields.Many2one('project.project',string = 'Parent project', tracking=True, index=True)
+    project_categ=fields.Many2one('project.category', "Category", required = 'True', tracking=True) # Төслийн ангилал, readonly=True, states={'draft': [('readonly', False)]}
+    parent_project=fields.Many2one('project.project',string = 'Parent project', tracking=True, )
     project_checkers=fields.Many2many('hr.employee','project_project_project_hr_employee_ref','project_id_ids','employ_id',string = 'Project Checkers', tracking=True ,domain="['|',('active','=',True),('active','=',False)]")#төсөл хянах хүмүүс
     required_cost=fields.Integer("Required Cost")# Төслийн хянасан зардал
     project_cost=fields.Integer("Project Cost")# Төслийн бодит зардал
     comment=fields.Text('Comment', tracking=True) # Тайлбар
     team_users=fields.Many2many('hr.employee','project_project_hr_employee_ref_team','project_team_id','emp_id',string = 'Project team', tracking=True)#төслийн баг
-    project_verifier=fields.Many2one('hr.employee', index=True,string = 'Project verifier', tracking=True)#төсөл батлагч
+    project_verifier=fields.Many2one('hr.employee', string = 'Project verifier', tracking=True)#төсөл батлагч
     evaluator=fields.Many2many('hr.employee','project_project_project_hr_employee_ref_ref','project_id_id','empl_id',string = 'Project evaluators', tracking=True)#Төсөл үнэлэгчид
-    created_user_id=fields.Many2one('res.users', index=True,string=u'Үүсгэсэн хэрэглэгч', default=lambda self: self.env.user.id)
+    created_user_id=fields.Many2one('res.users', string=u'Үүсгэсэн хэрэглэгч', default=lambda self: self.env.user)
     privacy_visibility=fields.Selection(_get_visibility_selection, string='Төслийн хандалтын эрх', required=True,
             help="Holds visibility of the tasks or issues that belong to the current project:\n"
                     "- Portal : employees see everything;\n"
@@ -1115,7 +1115,7 @@ class ProjectProject(models.Model):
     def _project_alarm_cron(self):
         user_emails = []
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        action_id = self.env['ir.model.data'].get_object_reference('project', 'action_view_task')[1]
+        action_id = self.env['ir.model.data']._xmlid_to_res_id('project.action_view_task')
         #  Хяналтын огнооны өмнөх өдөр майл явуулах
         query = """select id from project_task where id in (
                             select B.id  from project_project A inner join project_task B ON B.project_id = A.id 
@@ -1421,7 +1421,6 @@ class control_budget(models.Model):
     #================================================================
     
     def _step_is_final(self):
-#         workflow_obj = self.pool.get('hr.expense.workflow')
         workflow_line_obj = self.env['confirm.workflow.transition']
         for budget in self:
             final = False
@@ -1529,9 +1528,9 @@ class control_budget(models.Model):
                                                           ('after',u'Хойшлуулсан')],
                                                          'Status',readonly=True, default='draft',tracking=True)
     main_id=fields.Many2one('main.specification','Project', index=True)
-    project_id=fields.Many2one('project.project','Project', required = True,domain="[('state', 'in',('comfirm','project_started')),('state_comfirm','=',True)]", tracking=True, index=True) # Төсөл
-    user_id=fields.Many2one('res.users', 'Budgeter',required = True, tracking=True, default=lambda self: self.env.user.id ) # Төсөвчин
-    task_id=fields.Many2one('project.task', 'Work Task' ,required = True, tracking=True, index=True)
+    project_id=fields.Many2one('project.project','Project', required = True,domain="[('state', 'in',('comfirm','project_started')),('state_comfirm','=',True)]", tracking=True) # Төсөл
+    user_id=fields.Many2one('res.users', 'Budgeter',required = True, tracking=True, default=lambda self: self.env.user ) # Төсөвчин
+    task_id=fields.Many2one('project.task', 'Work Task' ,required = True, tracking=True)
     name=fields.Char('Name', required = True) # Хяналтын төсвийн нэр
     budget_code=fields.Char('Code', required = True,readonly=True, default='New')
     res_model=fields.Char('Resource Model', readonly=True)
@@ -1542,16 +1541,14 @@ class control_budget(models.Model):
     date=fields.Date('Budget date', required = True, tracking=True) # Огноо
     confirm_date=fields.Date('Confirm date', tracking=True) # Баталсан Огноо
     res_id=fields.Integer('Resource ID', readonly=True)
-    
     material_cost=fields.Float(compute='_amount_material',string='Material Cost',type='float') # Бараа материалын зардал
-    
-    labor_cost=fields.Float(compute=_amount_labor, string='Labor Cost',type='float',digits_compute=dp.get_precision('Account')) #  Ажиллах хүчний зардал
-    carriage_cost=fields.Float(compute=_amount_carriage, string='Carriage Cost',digits_compute=dp.get_precision('Account')) # Тээврийн зардал
-    equipment_cost=fields.Float(compute=_amount_equipment, string='Equipment Cost',digits_compute=dp.get_precision('Account')) # Машин механизмын зардал,
-    postage_cost=fields.Float(compute=_amount_postage,string='Postage Cost',digits_compute=dp.get_precision('Account')) # Шууд зардал
+    labor_cost=fields.Float(compute=_amount_labor, string='Labor Cost',type='float',digits=0) #  Ажиллах хүчний зардал
+    carriage_cost=fields.Float(compute=_amount_carriage, string='Carriage Cost',digits=0) # Тээврийн зардал
+    equipment_cost=fields.Float(compute=_amount_equipment, string='Equipment Cost',digits=0) # Машин механизмын зардал,
+    postage_cost=fields.Float(compute=_amount_postage,string='Postage Cost',digits=0) # Шууд зардал
     other_cost=fields.Float(compute=_amount_other,string='Other Cost')# Бусад зардал
-    sub_total=fields.Float(compute=_amount_total, digits_compute=dp.get_precision('Account'), string='Sub Total', tracking=True)
-    total_balance=fields.Float(compute=_amount_total_balance, digits_compute=dp.get_precision('Account'), string='Total Balance', tracking=True)
+    sub_total=fields.Float(compute=_amount_total, digits=0, string='Sub Total', tracking=True)
+    total_balance=fields.Float(compute=_amount_total_balance, digits=0, string='Total Balance', tracking=True)
     check_sequence=fields.Integer('Workflow Step', copy=False, default=0)
     step_is_final=fields.Boolean(compute=_step_is_final, type='boolean', string='Is this accountant step?', store=False)
     show_confirm_button_user=fields.Boolean(compute=_show_confirm_button_user,string = 'show button',type='boolean')
@@ -1559,13 +1556,12 @@ class control_budget(models.Model):
     is_budget_confirmer=fields.Boolean(compute=_is_budget_confirmer,string = 'show button')
     is_show_confirmed=fields.Boolean(compute=_is_show_confirmed, string = 'confirmed',type='boolean' )
     is_show_evaluate=fields.Boolean(compute=_is_show_evaluate, string = 'evaluated',type='boolean' )
-
     total_engineer_salary= fields.Float(compute=_total_engineer_salary, string="Нийт инженер техникийн ажилчдын цалин")
     total_extra_salary = fields.Float(compute=_total_extra_salary, string="Нийт нэмэгдэл цалин")
     total_social_insurance = fields.Float(compute=_total_social_insurance, string="Нийт нийгмийн даатгал")
     total_habe = fields.Float(compute=_total_HABE, string="Нийт ХАБЭ")
     total_salary = fields.Float(compute=_amount_salary, string="Нийт цалин")
-    total_labor_cost=fields.Float(compute=_total_labor_cost, string='Нийт Үндсэн цалин',type='float',digits_compute=dp.get_precision('Account')) #  Ажиллах хүчний зардал
+    total_labor_cost=fields.Float(compute=_total_labor_cost, string='Нийт Үндсэн цалин',type='float',digits=0) #  Ажиллах хүчний зардал
 
     
     def send(self):
@@ -1574,7 +1570,7 @@ class control_budget(models.Model):
         for budget in self:
             next_user_ids = workflow_obj.assign_to_next(budget)
         if next_user_ids:
-                self.message_subscribe_users([budget.id], user_ids=next_user_ids)
+                self.message_subscribe(partner_ids=next_user_ids)
                 next_user_names = u', '.join(map(lambda x:x.name, user_obj.browse(next_user_ids)))
                 self.message_post([budget.id], body=u'Хүсэлт ажлын урсгалаар илгээгдлээ. Дараагийн шатанд хянагч:%s'%next_user_names)
                       
@@ -1592,8 +1588,8 @@ class control_budget(models.Model):
         if next_user_ids:
                 self.message_subscribe_users([budget.id], user_ids=next_user_ids)
                 next_user_names = u', '.join(map(lambda x:x.name, user_obj.browse(next_user_ids)))
-                expense.message_post(body=u'%s зөвшөөрөв. Ажлын урсгалын дараагийн шатанд илгээгдлээ. Дараагийн шатанд хянагч:%s' \
-                                       %( validator, next_user_names))
+                self.message_post(body=u'%s зөвшөөрөв. Ажлын урсгалын дараагийн шатанд илгээгдлээ. Дараагийн шатанд хянагч:%s' \
+                                       %( action_confirm.name, next_user_names))
                 for nuid in next_user_ids:
                     self.log_to_history(nuid, budget, activity, 'pending')
         else:
@@ -1601,9 +1597,7 @@ class control_budget(models.Model):
                 budget.write({'check_users':[],'check_sequence':0})
                 budget.signal_workflow('validate')
                 budget = self.browse(budget.id)
-                self.message_post([budget.id], 
-                        _('Expense request has been approved and payeble account entry generated with %s number.') % \
-                                      expense.account_move_id.name_get()[0][1])
+                
 
     
     def log_to_history(self,parent,action):
@@ -1611,7 +1605,7 @@ class control_budget(models.Model):
         todo_delete = []
         existing_pending = history_obj.search([('parent_id', '=', parent.id),
                                                         ('action','=','pending'),
-                                                        ('user_id','=',uid)])
+                                                        ('user_id','=',self.env.user.id)])
         if existing_pending:
             history_obj.write(existing_pending[0], {
                                 'action':action,
@@ -1623,7 +1617,7 @@ class control_budget(models.Model):
             history_obj.create({
                     'parent_id': parent.id,
                     'action':action,
-                    'user_id':uid,
+                    'user_id':self.env.user.id,
 #                     'name':activity,
                     'date':time.strftime('%Y-%m-%d %H:%M:%S'),
             })
@@ -1680,10 +1674,10 @@ class MaterialBudgetLine(models.Model):
     parent_id=fields.Many2one('control.budget', string='Control budget', index=True)
     main_id=fields.Many2one('main.specification',string='Project', index=True)
     product_id=fields.Many2one('product.product', string='Product',required = False, domain=[('product_tmpl_id.is_new','=',True),('product_tmpl_id.cost_price','>',0)])
-    product_uom=fields.Many2one('product.uom',string='Unit of Measure',required = False)
+    product_uom=fields.Many2one('uom.uom',string='Unit of Measure',required = False)
     product_uom_qty=fields.Float(string = 'Estimated Quantity',required = False,default=1)
     price_unit=fields.Float(string = 'Estimated price',required = False)
-    material_total=fields.Float(compute=_amount, digits_compute=dp.get_precision('Account'), string='Total', type='float', help="The material amount.")
+    material_total=fields.Float(compute=_amount, digits=0, string='Total', type='float', help="The material amount.")
     product_name = fields.Char(string = 'Барааны нэр')
 
     @api.onchange('product_id')
@@ -1812,12 +1806,12 @@ class LaborBudgetLine(models.Model):
     department_id=fields.Many2one('hr.department',u'Зардал гарах салбар',required = True,domain=[('is_sector', '=',True)])
     parent_id=fields.Many2one('control.budget', 'Control budget', index=True)
     main_id=fields.Many2one('main.specification','Project', index=True)
-    product_uom=fields.Many2one('product.uom', string='Unit of Measure')
+    product_uom=fields.Many2one('uom.uom', string='Unit of Measure')
     product_id=fields.Many2one('product.product',string = 'Names',domain=[('product_tmpl_id.is_new','=',True),('product_tmpl_id.cost_price','>',0)])
     product_name=fields.Char(string = 'Names' )
     product_uom_qty=fields.Float(string = 'Estimated Quantity',required = False, default=1)
     price_unit=fields.Float(string = 'Estimated price',required = True)
-    labor_total=fields.Float(compute=_amount, digits_compute=dp.get_precision('Account'), string='Total', type='float', help="The material amount.")
+    labor_total=fields.Float(compute=_amount, digits=0, string='Total', type='float', help="The material amount.")
     engineer_salary= fields.Float(compute=_engineer_salary, string="Инженер техникийн ажилчдын цалин")
     extra_salary = fields.Float(compute=_extra_salary, string="Нэмэгдэл цалин")
     social_insurance = fields.Float(compute=_social_insurance, string="Нийгмийн даатгал")
@@ -1891,10 +1885,10 @@ class EquipmentBudgetLine(models.Model):
     name=fields.Char('Name',required = True)
     parent_id=fields.Many2one('control.budget', 'Control budget', index=True)
     main_id=fields.Many2one('main.specification','Project', index=True)
-    product_uom=fields.Many2one('product.uom','Unit of Measure')
+    product_uom=fields.Many2one('uom.uom','Unit of Measure')
     product_uom_qty=fields.Float(string = 'Estimated Quantity',required = True, default=1)
     price_unit=fields.Float(string = 'Estimated price',required = True)
-    equipment_total=fields.Float(compute=_amount, digits_compute=dp.get_precision('Account'), string='Total', type='float', help="The material amount.")
+    equipment_total=fields.Float(compute=_amount, digits=0, string='Total', type='float', help="The material amount.")
     
 
     @api.onchange('price_unit','product_uom_qty')
@@ -2000,8 +1994,8 @@ class ConfirmWorkflowTransition(models.Model):
     
     def _default_sequence(self):
         seq = 0
-        if context.get('transitions', False):
-            transitions = context['transitions']
+        if self._context.get('transitions', False):
+            transitions = self._context['transitions']
             for x in transitions:
                 if not x[1] :
                     seq = max(x[2]['sequence'], seq)
@@ -2100,7 +2094,7 @@ class ProjectTask(models.Model):
         """ open Control budget view """
         mod_obj = self.env['ir.model.data']
         act_obj = self.env['ir.actions.act_window']
-        res_id = ids and ids[0] or False
+        res_id = self.ids and self.ids[0] or False
         project_task = self
         view_context = {
             'default_res_model': [self._name],
@@ -2108,8 +2102,8 @@ class ProjectTask(models.Model):
         }
         help = _("""<p class="oe_view_nocontent_create">Record your control budget for the task '%s'.</p>""") % (project_task.name,)
 
-        res = mod_obj.get_object_reference('nomin_project', 'action_control_budget')
-        id = res and res[1] or False
+        res = mod_obj._xmlid_to_res_id('nomin_project.action_control_budget')
+        id = res 
         result = act_obj.read()[0]
         result['name'] = _('Control budget')
         result['context'] = view_context

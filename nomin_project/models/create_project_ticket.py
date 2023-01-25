@@ -4,7 +4,7 @@ from odoo import api, fields, models, _
 import time
 import datetime
 
-class create_project_ticket(models.Model):
+class CreateProjectTicket(models.Model):
     _name ='create.project.ticket'
     
     '''
@@ -16,23 +16,9 @@ class create_project_ticket(models.Model):
     issue_id    = fields.Many2one('project.issue', index=True,string='Issue')
     category_id = fields.Many2one('knowledge.store.category',string='Category')
     
-    # def default_get(self, cr, uid, fields, context=None):
-    #     result = []
-    #     if context is None:
-    #         context = {}
-    #     res = super(create_project_ticket, self).default_get(cr, uid, fields, context=context)    
-    #     active_id = context and context.get('active_id', False) or False
-    #     perform_obj = self.pool.get('project.issue')
-    #     perform = perform_obj.browse(cr, uid, active_id)
- 
-    #     res.update({
-    #                 'issue_id' : perform.id,
-    #                 })
-    #     return res
-    
     @api.model
     def default_get(self, fields):
-        res = super(create_project_ticket, self).default_get(fields) 
+        res = super(CreateProjectTicket, self).default_get(fields) 
         context = dict(self._context or {})   
         active_id = context and context.get('active_id', False) or False
         perform_obj = self.env['project.issue']
@@ -85,7 +71,6 @@ class create_project_ticket(models.Model):
                      'type': 'ir.actions.act_window',
                      'name': _('Register Call'),
                      'res_model': 'crm.helpdesk',
-                     'view_type' : 'tree',
                      'view_mode' : 'form',
                      'search_view_id' : view_id,
                      'res_id':helpdesk.id,

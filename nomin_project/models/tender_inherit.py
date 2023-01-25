@@ -445,9 +445,7 @@ class create_project_tender(models.Model):
                  }
     
 class TenderTender(models.Model):
-    _name = 'tender.tender'
-    #TODO FIX LATER
-    # _inherit = 'tender.tender'
+    _inherit = 'tender.tender'
     
     '''
        Тендер 

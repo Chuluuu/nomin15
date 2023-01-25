@@ -19,7 +19,7 @@ class BudgetPartner(http.Controller):
         uid = request.uid
 
         if uid ==3:
-            return request.website.render("website.403")
+            return request.render("website.403")
         user_id = request.env['res.users'].browse(uid)
 
         url = '/quotations'
@@ -38,13 +38,13 @@ class BudgetPartner(http.Controller):
             'budgets':budgets,                  
             'pager': pager
             }
-        return request.website.render("nomin_project.budget_list", vals)
+        return request.render("nomin_project.budget_list", vals)
 
     @http.route('/quot_detail/<model("budget.partner.comparison"):budget>/', auth='public', website=True)
     def quot_detail(self, budget):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
         if uid ==3:
-            return request.website.render("website.403")			
+            return request.render("website.403")			
         user_id = request.env['res.users'].browse(uid)
         budget_partner_id = request.env['budget.partners'].sudo().search([('partner_id','=',user_id.partner_id.id),('budget_partner_id','=',budget.id)])
         vals ={			
@@ -58,17 +58,17 @@ class BudgetPartner(http.Controller):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
 
         if uid ==3:
-            return request.website.render("website.403")
+            return request.render("website.403")
         user_id = request.env['res.users'].browse(uid)
         budget_partner_id = request.env['budget.partners'].sudo().search([('partner_id','=',user_id.partner_id.id),('budget_partner_id','=',budget.id)])
         
-        return request.website.render("nomin_project.create_my_quotation", {'budget': budget,'budget_partner_id':budget_partner_id,'lines':{}})
+        return request.render("nomin_project.create_my_quotation", {'budget': budget,'budget_partner_id':budget_partner_id,'lines':{}})
     
     @http.route(['/quotation/save'], type='http', auth="public", website=True)
     def quotation_save(self, upload=None, **post):		
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
         if uid ==3:
-            return request.website.render("website.403")
+            return request.render("website.403")
         total_amount = 0
         budget_partner_id = False
         budget = False
@@ -116,7 +116,7 @@ class BudgetPartner(http.Controller):
             if total_amount!=0:				
                 budget_partner_id.sudo().write({'price_amount':total_amount})
 
-        return request.website.render("nomin_project.quotation_thanks")
+        return request.render("nomin_project.quotation_thanks")
 
     @http.route('/quotation/<model("ir.attachment"):document>/download', type='http', auth="public", website=True)    
     def quotation_document_download(self, document):
@@ -130,4 +130,4 @@ class BudgetPartner(http.Controller):
                   ('Content-Disposition', disposition)])
         elif not request.session.uid:
             return werkzeug.utils.redirect('/web?redirect=/quotations')
-        return request.website.render("website.403")
+        return request.render("website.403")

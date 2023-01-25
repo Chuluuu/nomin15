@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+	<t t-name="nomin_comparison.Comparison">
+		<div class="oe_comparison">
+			<table class="comparison">
+				<tr class="solid-top">
+					<th class="oe_comparison_first_col">
+					</th>
+					<th t-att-class="oe_comparison_date_head" class="oe_partner" t-att-colspan="3">
+						Төлөвлөсөн
+					</th>
+					<t t-foreach="widget.suppliers" t-as="supplier">
+						<th t-att-class="oe_comparison_date_head" class="oe_partner" t-att-colspan="3">
+								<a href="javascript:void(0)" t-att-data-id="JSON.stringify(widget.supplier_id[supplier])">
+								<t t-esc="widget.supplier_names[supplier]"/>
+								</a>
+						</th>
+					</t>
+				</tr>
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">Үнийн санал</td>
+					<td t-att-class="oe_comparison_date_head" t-att-colspan="3" class="oe_supplier td_background_color"></td>
+						<t t-foreach="widget.suppliers" t-as="supplier">
+							<td t-att-class="oe_comparison_date_head" t-att-colspan="3" class="oe_supplier td_background_color">
+								<a href="javascript:void(0)" t-att-data-id="JSON.stringify(widget.order_id[supplier])">
+									<t t-esc="supplier"/>
+								</a>
+							</td>
+						</t>
+				</tr>
+				<tr class="solid-top solid-bottom">
+                    <td class="bold td_background_color">Үнийн саналын төлөв</td>
+                    <td t-att-colspan="3" style="text-align: center;" class="bold td_background_color"></td>
+                    <t t-att-colspan="3" style="text-align: center;" class="bold td_background_color">
+						<t t-foreach="widget.suppliers" t-as="supplier">
+							<td t-att-colspan="3" style="text-align: center;" class="bold td_background_color">
+								<t t-esc="widget.states[supplier]"/>
+							</td>
+						</t>
+                    </t>
+                </tr>				
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">Материалын үнэ</td>
+					<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+						<t t-esc="widget.get_formatted_amount(widget.market_price_total)"/>
+					</td>
+					<t t-foreach="widget.untax_amount" t-as="supplier">
+						<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+							<t t-esc="widget.get_formatted_amount(widget.untax_amount[supplier])"/>
+						</td>
+					</t>
+				</tr>		
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">Хүргэлтийн нөхцөл</td>
+					<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+						<t t-esc="widget.delivery_condition"/>
+					</td>
+					<t t-foreach="widget.suppliers" t-as="supplier">
+						<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+							<t t-esc="widget.delivery_condition"/>
+						</td>
+					</t>
+				</tr>
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">Хүргэлтийн үнэ</td>
+					<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+						0
+					</td>
+					<t t-foreach="widget.delivery_cost" t-as="supplier">
+						<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+							<t t-esc="widget.get_formatted_amount(widget.delivery_cost[supplier])"/>
+						</td>
+					</t>
+				</tr>
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">Угсралт, суурилуулалтын нөхцөл</td>
+					<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+						<t t-esc="widget.installation_condition"/>
+					</td>
+					<t t-foreach="widget.suppliers" t-as="supplier">
+						<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+							<t t-esc="widget.installation_condition"/>
+						</td>
+					</t>
+				</tr>
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">Угсралтын үнэ</td>
+					<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+						0
+					</td>
+					<t t-foreach="widget.installation_cost" t-as="supplier">
+						<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+							<t t-esc="widget.get_formatted_amount(widget.installation_cost[supplier])"/>
+						</td>
+					</t>
+				</tr>
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">НӨАТ төлөгч эсэх</td>
+					<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+						<t t-esc="widget.vat_condition"/>
+					</td>
+					<t t-foreach="widget.suppliers" t-as="supplier">
+						<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+							<t t-esc="widget.vat_condition"/>
+						</td>
+					</t>
+				</tr>
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">НӨАТатвар</td>
+					<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+						0
+					</td>
+					<t t-foreach="widget.vat_amount" t-as="supplier">
+						<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+							<t t-esc="widget.get_formatted_amount(widget.vat_amount[supplier])"/>
+						</td>
+					</t>
+				</tr>
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">Үнийн санал /нийт/</td>
+					<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+						<t t-esc="widget.get_formatted_amount(widget.market_price_total)"/>
+					</td>
+					<t t-foreach="widget.total_amount" t-as="supplier">
+						<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+							<t t-esc="widget.get_formatted_amount(widget.total_amount[supplier])"/>
+						</td>
+					</t>
+				</tr>
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">Нийлүүлэх хугацаа /хоног/</td>
+					<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+						<t t-esc="widget.planned_delivery_term"/>
+					</td>
+					<t t-foreach="widget.delivery_term" t-as="supplier">
+						<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+							<t t-esc="widget.delivery_term[supplier]"/>
+						</td>
+					</t>
+				</tr>
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">Баталгаат хугацаа /хоног/</td>
+					<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+						<t t-esc="widget.planned_warranty_period"/>
+					</td>
+					<t t-foreach="widget.warranty_period" t-as="supplier">
+						<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+							<t t-esc="widget.warranty_period[supplier]"/>
+						</td>
+					</t>
+				</tr>
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">Буцаалтын нөхцөл</td>
+					<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+						<t t-esc="widget.planned_return_condition"/>
+					</td>
+					<t t-foreach="widget.return_condition" t-as="supplier">
+						<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+							<t t-esc="widget.return_condition[supplier]"/>
+						</td>
+					</t>
+				</tr>
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">Зээлийн хугацаа</td>
+					<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+						<t t-esc="widget.planned_loan_term"/>
+					</td>
+					<t t-foreach="widget.loan_term" t-as="supplier">
+						<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+							<t t-esc="widget.loan_term[supplier]"/>
+						</td>
+					</t>
+				</tr>
+				<tr class="oe_comparison_add_row solid-top">
+					<td class="bold td_background_color">Бартерийн хувь</td>
+					<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+						<t t-esc="widget.planned_barter_percentage"/>
+					</td>
+					<t t-foreach="widget.barter_percentage" t-as="supplier">
+						<td class="td_background_color" t-att-class="oe_comparison_date_head" t-att-colspan="3" t-att-data-calc-price-item="supplier+'_calc_price_item1'">
+							<t t-esc="widget.barter_percentage[supplier]"/>
+						</td>
+					</t>
+				</tr>
+				<tr>
+					<td class="bold" style="text-align: center;">Барааны нэр</td>
+					<td class="bold" style="text-align: center;">Нэгжийн үнэ</td>
+					<td class="bold" style="text-align: center;">Тоо хэмжээ</td>
+					<td class="bold" style="text-align: center;">Нийт дүн</td>
+					<t t-foreach="widget.suppliers" t-as="supplier">
+						<td class="bold" style="text-align: center;">Нэгжийн үнэ</td>
+						<td class="bold" style="text-align: center;">Тоо хэмжээ</td>
+						<td class="bold" style="text-align: center;">Нийт дүн</td>
+					</t>					
+				</tr>
+				
+				<t t-foreach="widget.products" t-as="product">
+					<tr>
+						<td class="oe_product" rowspan="2">
+							<!-- <t t-esc="widget.product_names[product]"/> -->
+							<a href="javascript:void(0)" t-att-data-id="JSON.stringify(widget.product_id[product])">
+								<t t-esc="product"/>
+							</a>
+						</td>
+						<t>
+							<td>
+								<t t-esc="widget.get_planned_price(product)"/>
+							</td>
+							<td>
+								<t t-esc="widget.get_planned_product_qty(product)"/>
+							</td>
+							<td>
+								<t t-esc="widget.get_planned_total(product)"/>
+							</td>
+						</t>
+						<t t-foreach="widget.suppliers" t-as="supplier">
+							<td>
+								<t t-esc="widget.get_price(supplier,product)"/>
+							</td>
+							<td>
+								<t t-esc="widget.get_qty(supplier,product)"/>
+							</td>
+							<td>
+								<t t-esc="widget.get_total(supplier,product)"/>
+							</td>
+						</t>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<t t-esc="widget.get_planned_description(product)"/>
+						</td>
+						<t t-foreach="widget.suppliers" t-as="supplier">
+							<td colspan="3">
+								<t t-esc="widget.get_description(supplier,product)"/>
+							</td>
+						</t>
+					</tr>
+				</t>
+			</table>
+		</div>
+	</t>
+</templates>

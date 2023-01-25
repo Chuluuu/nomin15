@@ -1,0 +1,1137 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* nomin_comparison
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0c-20160514\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-20 06:46+0000\n"
+"PO-Revision-Date: 2021-04-20 06:46+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.report_purchase_comparison
+msgid "0.0"
+msgstr "0.0"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_message_needaction
+msgid "Action Needed"
+msgstr "Action Needed"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_active_sequence
+msgid "Active sequence"
+msgstr "Дараалал"
+
+#. module: nomin_comparison
+#: model:ir.actions.act_window,name:nomin_comparison.add_comparison_partner_action
+#: model:ir.ui.view,arch_db:nomin_comparison.view_comparison_partner_form
+msgid "Add comparison partner"
+msgstr "Харилцагч нэмэх"
+
+#. module: nomin_comparison
+#: model:ir.actions.act_window,name:nomin_comparison.add_comparison_product_action
+#: model:ir.ui.view,arch_db:nomin_comparison.view_comparison_product_form
+msgid "Add comparison product"
+msgstr "Бараа нэмэх"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner_add_partner_id
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+#: model:ir.ui.view,arch_db:nomin_comparison.view_comparison_partner_form
+msgid "Add partner"
+msgstr "Харилцагч нэмэх"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_add_product_id
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+#: model:ir.ui.view,arch_db:nomin_comparison.view_comparison_product_form
+msgid "Add product"
+msgstr "Бараа нэмэх"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "Approve"
+msgstr "Зөвшөөрөх"
+
+#. module: nomin_comparison
+#: selection:purchase.comparison,state:0
+#: selection:purchase.partner.comparison,state:0
+msgid "Approved"
+msgstr "Зөвшөөрсөн"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_approved_person
+msgid "Approved Person"
+msgstr "Approved Person"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.view_purchase_order_comparison_create_wizard
+msgid "Are you sure you want to create comparison?"
+msgstr "Худалдан авалт харьцуулалт үүсгэх үү"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_barter_percentage
+msgid "Barter percentage"
+msgstr "Бартерийн хувь"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.form_purchase_comparison_report_wizard_view
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_participation_report_form
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+#: model:ir.ui.view,arch_db:nomin_comparison.view_comparison_partner_form
+#: model:ir.ui.view,arch_db:nomin_comparison.view_comparison_product_form
+#: model:ir.ui.view,arch_db:nomin_comparison.view_create_purchase_comparison_multiple
+#: model:ir.ui.view,arch_db:nomin_comparison.view_partner_without_email
+#: model:ir.ui.view,arch_db:nomin_comparison.view_purchase_order_comparison_create_wizard
+#: model:ir.ui.view,arch_db:nomin_comparison.view_wizard_rate_purchase_partner
+msgid "Cancel"
+msgstr "Цуцлах"
+
+#. module: nomin_comparison
+#: model:ir.actions.act_window,name:nomin_comparison.cancel_comparison_action
+#: model:ir.ui.view,arch_db:nomin_comparison.view_cancel_comparison_form
+msgid "Cancel comparison"
+msgstr "Харьцуулалт цуцлах"
+
+#. module: nomin_comparison
+#: selection:purchase.comparison,state:0
+#: selection:purchase.partner.comparison,state:0
+msgid "Canceled"
+msgstr "Цуцлагдсан"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_is_carriage
+msgid "Carriage"
+msgstr "Тээврийн зардал багтсан эсэх"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_evaluation_indicators_filter
+msgid "Category"
+msgstr "Ангилал"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner_comparison_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_comparison_id
+msgid "Comparison"
+msgstr "Харьцуулалт"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_partner_comparison_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_product_comparison_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_cancel_comparison_comparison_id
+msgid "Comparison id"
+msgstr "Comparison id"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "Confirm"
+msgstr "Батлах"
+
+#. module: nomin_comparison
+#: selection:purchase.comparison,state:0
+#: selection:purchase.partner.comparison,state:0
+msgid "Confirmed"
+msgstr "Баталсан"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_confirmed_person
+msgid "Confirmed Person"
+msgstr "Confirmed Person"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_cost_of_assembling
+msgid "Cost of assembling"
+msgstr "Угсралтын зардалтай эсэх"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_cost_of_machine
+msgid "Cost of machine"
+msgstr "Машин механизмийн зардал"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.view_create_purchase_comparison_multiple
+#: model:ir.ui.view,arch_db:nomin_comparison.view_purchase_order_comparison_create_wizard
+msgid "Create Purchase Order Comparison"
+msgstr "Худалдан авалт харьцуулалт үүсгэх"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_partner_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_product_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_cancel_comparison_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_partner_without_email_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_participation_report_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_report_wizard_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_employee_rate_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_indicators_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_infos_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicator_rate_employee_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicators_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_order_comparison_wizard_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_description_purchase_partner_line_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_create_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_line_create_uid
+msgid "Created by"
+msgstr "Үүсгэгч"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_partner_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_product_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_cancel_comparison_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_partner_without_email_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_participation_report_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_report_wizard_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_employee_rate_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_indicators_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_infos_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicator_rate_employee_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicators_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_order_comparison_wizard_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_description_purchase_partner_line_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_create_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_line_create_date
+msgid "Created on"
+msgstr "Үүсгэсэн"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_date
+msgid "Date"
+msgstr "Огноо"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,help:nomin_comparison.field_purchase_comparison_message_last_post
+msgid "Date of the last message posted on the record."
+msgstr "Бичлэгт хамгийн сүүлд илгээгдсэн зурвасын огноо."
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_delivery_condition
+msgid "Delivery condition"
+msgstr "Хүргэлтийн нөхцөл"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_delivery_term
+msgid "Delivery term /day/"
+msgstr "Нийлүүлэх хугацаа /хоног/"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_department_id
+msgid "Department"
+msgstr "Хэлтэс"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_description
+msgid "Description"
+msgstr "Тодорхойлолт"
+
+#. module: nomin_comparison
+#: selection:purchase.order,purchase_type:0
+msgid "Direct"
+msgstr "Шууд"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_partner_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_product_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_cancel_comparison_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_partner_without_email_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_participation_report_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_report_wizard_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_employee_rate_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_indicators_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_infos_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicator_rate_employee_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicators_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_order_comparison_wizard_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_report_nomin_comparison_report_purchase_comparison_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_description_purchase_partner_line_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_display_name
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_line_display_name
+msgid "Display Name"
+msgstr "Дэлгэцийн Нэр"
+
+#. module: nomin_comparison
+#: selection:purchase.indicator.rate.employee,state:0
+msgid "Done"
+msgstr "Дууссан"
+
+#. module: nomin_comparison
+#: selection:purchase.comparison,state:0
+#: selection:purchase.indicator.rate.employee,state:0
+#: selection:purchase.partner.comparison,state:0
+msgid "Draft"
+msgstr "Ноорог"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_comparison
+msgid "Email Thread"
+msgstr "Эмэйл Салбар"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_employee_rate_employee_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicator_rate_employee_employee_id
+msgid "Employee"
+msgstr "Ажилтан"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_evaluation_indicators_filter
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_evaluation_indicators_form
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_evaluation_indicators_tree
+msgid "Evaluation Indicators"
+msgstr "Үнэлгээний үзүүлэлтүүд"
+
+#. module: nomin_comparison
+#: model:ir.actions.act_window,name:nomin_comparison.purchase_evaluation_indicators_action
+#: model:ir.ui.menu,name:nomin_comparison.menu_purchase_indicators
+msgid "Evaluation Indicatorss"
+msgstr "Үнэлгээний үзүүлэлт тохиргоо"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_indicators_indicator_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_description_purchase_partner_line_indicator_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_line_indicator_id
+msgid "Evaluation indicators"
+msgstr "Evaluation indicators"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_infos_indicator_id
+msgid "Evaluation question"
+msgstr "Evaluation question"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicators_indicator_id
+msgid "Evalution indicators"
+msgstr "Үнэлгээ өгөх үзүүлэлтүүд"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.form_purchase_comparison_report_wizard_view
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_participation_report_form
+msgid "Export"
+msgstr "Экспорт"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_message_follower_ids
+msgid "Followers"
+msgstr "Дагагчид"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Followers (Channels)"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Followers (Partners)"
+
+#. module: nomin_comparison
+#: code:addons/nomin_comparison/models/purchase_comparison.py:526
+#: code:addons/nomin_comparison/wizard/add_comparison_partner.py:120
+#: code:addons/nomin_comparison/wizard/create_purchase_comparison_multiple.py:169
+#, python-format
+msgid "Followup "
+msgstr "Followup "
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_partner_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_product_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_cancel_comparison_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_partner_without_email_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_participation_report_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_report_wizard_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_employee_rate_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_indicators_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_infos_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicator_rate_employee_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicators_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_order_comparison_wizard_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_report_nomin_comparison_report_purchase_comparison_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_description_purchase_partner_line_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_line_id
+msgid "ID"
+msgstr "ID"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,help:nomin_comparison.field_purchase_comparison_message_unread
+msgid "If checked new messages require your attention."
+msgstr "Хэрэв тэмдэглэгдсэн бол таныг шинэ зурвасуудад анхаарал хандуулахыг шаардана."
+
+#. module: nomin_comparison
+#: model:ir.model.fields,help:nomin_comparison.field_purchase_comparison_message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "If checked, new messages require your attention."
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_infos_info
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_description_purchase_partner_line_info
+msgid "Info"
+msgstr "Info"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_info_ids
+msgid "Info line"
+msgstr "Info line"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_installation_condition
+msgid "Installation condition"
+msgstr "Угсралт, суурилуулалтын нөхцөл"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_message_is_follower
+msgid "Is Follower"
+msgstr "Дагагч эсэх"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_is_in_confirm_users
+msgid "Is in is_in_confirm_users"
+msgstr "Is in is_in_confirm_users"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_is_in_raters
+msgid "Is in raters"
+msgstr "Is in raters"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_is_in_approve
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_is_in_confirm
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_is_in_sent
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_is_in_verify
+msgid "Is in sent"
+msgstr "Is in sent"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicator_rate_employee_is_rater
+msgid "Is rate"
+msgstr "Is rate"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicator_rate_employee_job_position
+msgid "Job position"
+msgstr "Албан тушаал"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_message_last_post
+msgid "Last Message Date"
+msgstr "Сүүлийн зурвасын огноо"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_partner___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_product___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_cancel_comparison___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_partner_without_email___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_participation_report___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_report_wizard___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_employee_rate___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_indicators___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_infos___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicator_rate_employee___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicators___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_order_comparison_wizard___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_report_nomin_comparison_report_purchase_comparison___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_description_purchase_partner_line___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner___last_update
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_line___last_update
+msgid "Last Modified on"
+msgstr "Сүүлийн засвар хийсэн огноо"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_partner_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_product_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_cancel_comparison_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_partner_without_email_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_participation_report_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_report_wizard_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_employee_rate_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_indicators_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_infos_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicator_rate_employee_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicators_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_order_comparison_wizard_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_description_purchase_partner_line_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_line_write_uid
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_write_uid
+msgid "Last Updated by"
+msgstr "Сүүлийн засвар хийсэн"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_partner_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_product_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_cancel_comparison_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_partner_without_email_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_participation_report_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_report_wizard_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_employee_rate_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_indicators_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_infos_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicator_rate_employee_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicators_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_order_comparison_wizard_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_description_purchase_partner_line_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_line_write_date
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_write_date
+msgid "Last Updated on"
+msgstr "Сүүлийн засвар хийсэн огноо"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_warranty
+msgid "Length of warranty"
+msgstr "Баталгаат хугацаатай эсэх (сараар)"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_loan_term
+msgid "Loan term"
+msgstr "Зээлийн хугацаа"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_market_value
+msgid "Market price"
+msgstr "Зах зээлийн үнэ"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_market_price_total
+msgid "Market subtotal"
+msgstr "Зах зээлийн дэд дүн"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_message_ids
+msgid "Messages"
+msgstr "Зурвасууд"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.view_create_purchase_comparison_multiple
+msgid "Multiple Purchase Order Comparison Creation Wizard"
+msgstr "Худалдан авалт харьцуулалт олноор үүсгэх визард"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_name
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_evaluation_indicators_filter
+msgid "Name"
+msgstr "Нэр"
+
+#. module: nomin_comparison
+#: code:addons/nomin_comparison/models/purchase_order_inherit.py:30
+#, python-format
+msgid "New"
+msgstr "New"
+
+#. module: nomin_comparison
+#: selection:purchase.comparison.multiple.wizard,is_carriage:0
+msgid "No"
+msgstr "No"
+
+#. module: nomin_comparison
+#: selection:purchase.comparison.multiple.wizard,delivery_condition:0
+#: selection:purchase.comparison.multiple.wizard,installation_condition:0
+#: selection:purchase.comparison.multiple.wizard,vat_condition:0
+msgid "Not required"
+msgstr "Шаардлагагүй"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_message_needaction_counter
+msgid "Number of Actions"
+msgstr "Number of Actions"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,help:nomin_comparison.field_purchase_comparison_message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Үйлдэл шаардлагатай зурвасын тоо"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,help:nomin_comparison.field_purchase_comparison_message_unread_counter
+msgid "Number of unread messages"
+msgstr "Уншаагүй зурвасын тоо"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_other_cost
+msgid "Other cost"
+msgstr "Бусад зардал"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_partner_partner_ids
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner_partner_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_partner_ids
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_partner_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_partner_id
+#: model:ir.ui.view,arch_db:nomin_comparison.view_comparison_partner_form
+#: model:ir.ui.view,arch_db:nomin_comparison.view_create_purchase_comparison_multiple
+msgid "Partner"
+msgstr "Харилцагч"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_partner_ids
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "Partner comparisons"
+msgstr "Нийлүүлэгч нарын үнийн саналын харьцуулалт"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner_partner_email
+msgid "Partner email"
+msgstr "Имэйл"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner_partner_lastname
+msgid "Partner last name"
+msgstr "Овог"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner_partner_nomin_code
+msgid "Partner nomin code"
+msgstr "Номин код"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_partner_partner_phone
+msgid "Partner phone"
+msgstr "Утасны дугаар"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_partner_without_email_partners
+msgid "Partners"
+msgstr "Харилцагчид"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.view_partner_without_email
+msgid "Partners without emails"
+msgstr "Partners without emails"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_employee_rate_percent
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_line_percent
+msgid "Percent"
+msgstr "Эзлэх жин"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_postage
+msgid "Postage"
+msgstr "Шууд зардал"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_price_subtotal
+msgid "Price subtotal"
+msgstr "Дэд дүн"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_price_unit
+msgid "Price unit"
+msgstr "Нэгж үнэ"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_add_comparison_product_product_ids
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_product_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_product_ids
+#: model:ir.ui.view,arch_db:nomin_comparison.view_comparison_product_form
+#: model:ir.ui.view,arch_db:nomin_comparison.view_create_purchase_comparison_multiple
+msgid "Product"
+msgstr "Бараа"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_product_description
+msgid "Product description"
+msgstr "Тодорхойлолт"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_product_product_qty
+msgid "Product quantity"
+msgstr "Тоо хэмжээ"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.view_wizard_rate_purchase_partner
+#: selection:purchase.comparison,state:0
+msgid "Purchase"
+msgstr "Худалдан авалт"
+
+#. module: nomin_comparison
+#: code:addons/nomin_comparison/wizard/create_purchase_comparison.py:137
+#: model:ir.actions.act_window,name:nomin_comparison.action_purchase_comparison
+#: model:ir.actions.act_window,name:nomin_comparison.action_wizard_rate
+#: model:ir.ui.menu,name:nomin_comparison.menu_purchase_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.view_purchase_comparison_tree
+#, python-format
+msgid "Purchase Comparison"
+msgstr "Худалдан авалт харьцуулалт"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_order
+msgid "Purchase Order"
+msgstr "Худалдан авах захиалга"
+
+#. module: nomin_comparison
+#: model:ir.actions.act_window,name:nomin_comparison.action_purchase_order_comparison_wizard
+#: model:ir.model,name:nomin_comparison.model_purchase_order_comparison_wizard
+#: model:ir.ui.view,arch_db:nomin_comparison.view_purchase_order_comparison_create_wizard
+#: model:ir.ui.view,arch_db:nomin_comparison.view_wizard_rate_purchase_partner
+msgid "Purchase Order Comparison Creation Wizard"
+msgstr "Үнийн саналаар харьцуулалт үүсгэх"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_order_ids
+msgid "Purchase Orders"
+msgstr "Худалдан авах захиалгууд"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicator_rate_employee_comparison_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicators_comparison_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_order_comparison_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_comparison_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_request_history_comparison_id
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "Purchase comparison"
+msgstr "Худалдан авалт харьцуулалт"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_participation_report_form
+msgid "Purchase comparison participation report"
+msgstr "Purchase comparison participation report"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_indicators_partner_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_infos_partner_id
+msgid "Purchase comparison partner"
+msgstr "Худалдан авалт харьцуулалт харилцагч"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_comparison_report_wizard
+msgid "Purchase comparison report wizard"
+msgstr "Purchase comparison report wizard"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_cancel_comparison_partner_id
+msgid "Purchase employee"
+msgstr "Худалдан авалт хийх харилцагч"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_indicators_rate_ids
+msgid "Purchase employee indicators"
+msgstr "Үнэлгээ өгөх ажилтангууд"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "Purchase employee rate"
+msgstr "Худалдан авалт харьцуулалт ажилтан"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_employee_rate_evaluation_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_indicator_ids
+msgid "Purchase evaluation indicator"
+msgstr "Худалдан авалт үнэлгээ үзүүлэлтүүд"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+#: model:ir.ui.view,arch_db:nomin_comparison.view_wizard_rate_purchase_partner
+msgid "Purchase evaluation indicators"
+msgstr "Худалдан авалт үнэлгээ үзүүлэлтүүд"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_info_ids
+msgid "Purchase evaluation info"
+msgstr "Purchase evaluation info"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_purchase_indicator_ids
+msgid "Purchase indicator"
+msgstr "Худалдан авалт үзүүлэлт"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "Purchase indicators"
+msgstr "Худалдан авалт үзүүлэлт"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_order_id
+msgid "Purchase order"
+msgstr "Худалдан авалт захиалга"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_rate_employee_ids
+msgid "Purchase rate indicator rate employee"
+msgstr "Худалдан авалт үнэлгээ өгөх ажилтангууд"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_order_purchase_type
+msgid "Purchase type"
+msgstr "Худалдан авалт төрөл"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "RATE"
+msgstr "Үнэлгээ"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.view_wizard_rate_purchase_partner
+msgid "Rate"
+msgstr "Үнэлгээ"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "Rate employee_ids"
+msgstr "Үнэлгээ өгөх ажилтангууд"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "Rate employees"
+msgstr "Үнэлгээ өгөх ажилтангууд"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_request_history
+msgid "Request History"
+msgstr "Хүсэлтийн түүх"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_request_id
+msgid "Request config"
+msgstr "Урсгал тохиргоо"
+
+#. module: nomin_comparison
+#: selection:purchase.comparison.multiple.wizard,delivery_condition:0
+#: selection:purchase.comparison.multiple.wizard,installation_condition:0
+#: selection:purchase.comparison.multiple.wizard,vat_condition:0
+msgid "Required"
+msgstr "Шаардлагатай"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "Return"
+msgstr "Буцаах"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_return_condition
+msgid "Return condition"
+msgstr "Буцаалтын нөхцөл"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_report_wizard_save
+msgid "Save to document storage"
+msgstr "Save to document storage"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_sector_id
+msgid "Sector"
+msgstr "Салбар"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "Select"
+msgstr "Шууд шалгаруулах"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "Send"
+msgstr "Илгээх"
+
+#. module: nomin_comparison
+#: selection:purchase.comparison,state:0
+#: selection:purchase.partner.comparison,state:0
+msgid "Sent"
+msgstr "Илгээгдсэн"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_state
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_indicator_rate_employee_state
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_state
+msgid "State"
+msgstr "Төлөв"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_time_of_delivery
+msgid "Time of delivery"
+msgstr "Нийлүүлэх хугацаа (хоногоор)"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_indicators_total_percent
+msgid "Total Percent"
+msgstr "Нийт эзлэх жин"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_partner_comparison_total_percent
+msgid "Total percent"
+msgstr "Хувь"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_transportation_expense
+msgid "Transportation expense"
+msgstr "Тээвэрлэлтийн зардал"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_message_unread
+msgid "Unread Messages"
+msgstr "Уншаагүй Зурвасууд"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Unread Messages Counter"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_user_id
+msgid "User"
+msgstr "Хэрэглэгч"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_vat_condition
+msgid "VAT condition"
+msgstr "НӨАТ төлөгч байхыг шаардах эсэх"
+
+#. module: nomin_comparison
+#: selection:purchase.comparison,state:0
+#: selection:purchase.partner.comparison,state:0
+msgid "Verified"
+msgstr "Хянасан"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_verified_person
+msgid "Verified Person"
+msgstr "Verified Person"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "Verify"
+msgstr "Батлах"
+
+#. module: nomin_comparison
+#: code:addons/nomin_comparison/models/purchase_comparison.py:92
+#: code:addons/nomin_comparison/models/purchase_comparison.py:292
+#: code:addons/nomin_comparison/models/purchase_comparison.py:319
+#: code:addons/nomin_comparison/models/purchase_comparison.py:339
+#: code:addons/nomin_comparison/models/purchase_comparison.py:602
+#, python-format
+msgid "Warning !"
+msgstr "Анхааруулга !"
+
+#. module: nomin_comparison
+#: code:addons/nomin_comparison/models/purchase_comparison.py:54
+#: code:addons/nomin_comparison/wizard/create_purchase_comparison.py:56
+#: code:addons/nomin_comparison/wizard/create_purchase_comparison.py:58
+#: code:addons/nomin_comparison/wizard/create_purchase_comparison.py:63
+#: code:addons/nomin_comparison/wizard/create_purchase_comparison.py:105
+#, python-format
+msgid "Warning!"
+msgstr "Анхааруулга!"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_multiple_wizard_warranty_period
+msgid "Warranty period /day/"
+msgstr "Баталгаат хугацаа /хоног/"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_comparison_website_message_ids
+msgid "Website Messages"
+msgstr "Вебсайтын зурвасууд"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,help:nomin_comparison.field_purchase_comparison_website_message_ids
+msgid "Website communication history"
+msgstr "Вебсайтын харилцааны түүх"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_description_purchase_partner_line_wizard_id
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_line_wizard_id
+msgid "Wizard"
+msgstr "Визард"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_wizard_rate_purchase_partner_line_ids
+msgid "Wizard line"
+msgstr "Визард мөрүүд"
+
+#. module: nomin_comparison
+#: selection:purchase.comparison.multiple.wizard,is_carriage:0
+msgid "Yes"
+msgstr "Тийм"
+
+#. module: nomin_comparison
+#: code:addons/nomin_comparison/models/purchase_comparison.py:319
+#, python-format
+msgid "You don't have purchase requisition request configure !"
+msgstr "You don't have purchase requisition request configure !"
+
+#. module: nomin_comparison
+#: code:addons/nomin_comparison/models/purchase_comparison.py:54
+#, python-format
+msgid "You don't have related department. Please contact administrator."
+msgstr "You don't have related department. Please contact administrator."
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_add_comparison_partner
+msgid "add.comparison.partner"
+msgstr "add.comparison.partner"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_add_comparison_product
+msgid "add.comparison.product"
+msgstr "add.comparison.product"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_cancel_comparison
+msgid "cancel.comparison"
+msgstr "cancel.comparison"
+
+#. module: nomin_comparison
+#: selection:purchase.order,purchase_type:0
+msgid "compare"
+msgstr "Харьцуулах"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_comparison_view
+msgid "description"
+msgstr "Тодорхойлолт"
+
+#. module: nomin_comparison
+#: selection:purchase.comparison.multiple.wizard,is_VAT:0
+msgid "ebarimt-гүй хувь хүн"
+msgstr "ebarimt-гүй хувь хүн"
+
+#. module: nomin_comparison
+#: selection:purchase.comparison.multiple.wizard,is_VAT:0
+msgid "ebarimt-тай хувь хүн"
+msgstr "ebarimt-тай хувь хүн"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_evaluation_indicators_line
+msgid "evaluation.indicators.line"
+msgstr "evaluation.indicators.line"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.purchase_evaluation_indicators_form
+msgid "line_ids"
+msgstr "line_ids"
+
+#. module: nomin_comparison
+#: model:ir.ui.view,arch_db:nomin_comparison.form_purchase_comparison_report_wizard_view
+#: model:ir.ui.view,arch_db:nomin_comparison.view_create_purchase_comparison_multiple
+#: model:ir.ui.view,arch_db:nomin_comparison.view_purchase_order_comparison_create_wizard
+#: model:ir.ui.view,arch_db:nomin_comparison.view_wizard_rate_purchase_partner
+msgid "or"
+msgstr "эсвэл"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_partner_without_email
+msgid "partner.without.email"
+msgstr "partner.without.email"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_comparison_multiple_partner
+msgid "purchase.comparison.multiple.partner"
+msgstr "purchase.comparison.multiple.partner"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_comparison_multiple_product
+msgid "purchase.comparison.multiple.product"
+msgstr "purchase.comparison.multiple.product"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_comparison_multiple_wizard
+msgid "purchase.comparison.multiple.wizard"
+msgstr "purchase.comparison.multiple.wizard"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_comparison_participation_report
+msgid "purchase.comparison.participation.report"
+msgstr "purchase.comparison.participation.report"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_comparison_performance
+msgid "purchase.comparison.performance"
+msgstr "purchase.comparison.performance"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_employee_rate
+msgid "purchase.employee.rate"
+msgstr "purchase.employee.rate"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_evaluation_indicators
+msgid "purchase.evaluation.indicators"
+msgstr "purchase.evaluation.indicators"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_evaluation_infos
+msgid "purchase.evaluation.infos"
+msgstr "purchase.evaluation.infos"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_indicator_rate_employee
+msgid "purchase.indicator.rate.employee"
+msgstr "purchase.indicator.rate.employee"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_indicators
+msgid "purchase.indicators"
+msgstr "purchase.indicators"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_purchase_partner_comparison
+msgid "purchase.partner.comparison"
+msgstr "purchase.partner.comparison"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_report_nomin_comparison_report_purchase_comparison
+msgid "report.nomin_comparison.report_purchase_comparison"
+msgstr "report.nomin_comparison.report_purchase_comparison"
+
+#. module: nomin_comparison
+#: model:ir.model.fields,field_description:nomin_comparison.field_purchase_evaluation_infos_parent_state
+msgid "state"
+msgstr "Төлөв"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_wizard_description_purchase_partner_line
+msgid "wizard.description.purchase.partner.line"
+msgstr "wizard.description.purchase.partner.line"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_wizard_rate_purchase_partner
+msgid "wizard.rate.purchase.partner"
+msgstr "wizard.rate.purchase.partner"
+
+#. module: nomin_comparison
+#: model:ir.model,name:nomin_comparison.model_wizard_rate_purchase_partner_line
+msgid "wizard.rate.purchase.partner.line"
+msgstr "wizard.rate.purchase.partner.line"
+
+#. module: nomin_comparison
+#: code:addons/nomin_comparison/wizard/create_purchase_comparison.py:105
+#, python-format
+msgid "Та зөвхөн Үнийн санал ирсэн (RFQ back) төлөвтэй үнийн саналаас харьцуулалт үүсгэж болно"
+msgstr "Та зөвхөн Үнийн санал ирсэн (RFQ back) төлөвтэй үнийн саналаас харьцуулалт үүсгэж болно"
+

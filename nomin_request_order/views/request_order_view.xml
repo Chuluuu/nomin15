@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data> 
+		<!-- Request Order -->
+		
+		<record model="ir.ui.view" id="request_order_form">
+	        <field name="name">request.order.form</field>
+	        <field name="model">request.order</field>
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	            <form string="Request order">
+					<header>
+						<button name="action_sent" string="Илгээх" attrs="{'invisible':[('is_sent','=',False)]}" type="object" help="Send" />
+						<button name="calculate_exceed_day" string="Хэтрэлт тооцоолох"  type="object" help="Calculate exceeded day" invisible="1"/>
+						<button name="action_approve" string="Зөвшөөрөх" attrs="{'invisible':['|',('is_done','=',True),('is_approve_user','=',False)]}" type="object" help="Evaluate" />
+						<button name="action_cancel" string="Захиалга цуцлах" attrs="{'invisible':['|',('is_cancel','=',True),('is_approve_user','=',False)]}" type="object" help="Evaluate" />
+						<button name="return_draft" string="Ноорог төлөвт оруулах"  attrs="{'invisible':['|',('is_sent','=',True),'|',('is_draft','=',True),('is_approve_user','=',False)]}" type="object" help="Evaluate" />
+						<button name="action_return" string="Буцаах" attrs="{'invisible':['|','|','|',('is_done','=',True),('is_cancel','=',True),('is_approve_user','=',False),('is_invisible_field','=',True)]}" type="object" help="Evaluate" />
+						<field name="request_config_id" widget="statusbar"  options="{'fold_field': 'fold'}"/>
+					</header>
+	            	<sheet>	  
+						
+						<div class="pull-left">
+							<label for="name" class="oe_edit_only oe_inline"/>
+							<h1>
+								<field name="name" readonly="1"/>
+							</h1>
+							<h3 attrs="{'invisible':[('active_sequence','!=',1)]}"><font color="red">Яаралтай эсэхийг чеклэсэн тохиолдолд төлбөр 3 дахин нэмэгдэхийг анхаарна уу! </font></h3>
+						</div>    
+					
+						<group >							
+							<group> 
+								<field name="is_invisible_field" invisible="1"/> 
+								<field name="doctor_field" invisible="1"/>
+								<field name="request_name"  string="Захиалгын нэр" required="1" attrs="{'readonly':[('active_sequence','!=',1)]}"/>                         
+								<field name="sector_id" options="{'no_create': True}"/>		            			 	
+								<field name="department_id" readonly="1" />		            			
+								<field name="employee_id" attrs="{'readonly':[('is_readonly','=',True)]}" options="{'no_quick_create': True, 'no_create_edit' : True,
+                                'no_create':True}"/>
+								<field name="job_id" readonly="1"/>
+								<field name="age" readonly="1" attrs="{'invisible':[('doctor_field','=',False)]}"/>
+								<field name="gender" readonly="1" attrs="{'invisible':[('doctor_field','=',False)]}"/>
+								<field name="phone_number" readonly="1"/>
+								<field name="cost_sector_id" attrs="{'required':[('doctor_field','=',False)],'readonly':[('active_sequence','!=',1)],'invisible':[('doctor_field','=',True)]}" options="{'no_quick_create': True, 'no_create_edit' : True,
+                                'no_create':True}"/>											
+								
+								<field name="total_amount" readonly="1" invisible="1"/>  		
+							</group>
+							<group>
+								<field name="cost_share_id" attrs="{'invisible':[('cost_share_id','=',False)]}" readonly="1"/>     
+
+								<field name="perform_department_id" string="Гүйцэтгэгч хэлтэс" options="{'no_quick_create': True, 'no_create_edit' : True,
+                                'no_create':True}" required="1" attrs="{'readonly':[('active_sequence','not in',[1,2])]}"/>            					
+								<field name="confirm_employee_id" invisible="1" options="{'no_quick_create': True, 'no_create_edit' : True,
+                                'no_create':True}" attrs="{'readonly':[('is_readonly','=',True)]}"/>
+								<field name ="work_type" attrs="{'invisible':[('is_invisible_field','=',False)],'required':[('is_invisible_field','=',True)],'readonly':[('active_sequence','!=',1)]}"/>
+								<field name="date_due" required="1" attrs="{'readonly':[('active_sequence','not in',1,2,3,4)]}"/>
+								<field name="order_finished_date" readonly="1" />
+								<field name="exceeded_day" readonly="1" /> 
+								<field name="is_skip_control" attrs="{'invisible':['|',('is_invisible_field','=',False),('work_type','=','tarif')]}" /> 
+								<field name="description" attrs="{'readonly':[('is_readonly','=',True)]}" />
+								<field name="is_urgent" attrs="{'readonly':[('active_sequence','!=',1)]}"/>
+								<field name="active_sequence" invisible="1"/>
+								<field name="progress_percentage" widget="progressbar"/>
+								<field name="date_order" readonly="1" /> 
+								<field name="is_done" invisible="1"/>
+								<field name="is_sent" invisible="1"/>
+								<field name="is_approve_user" invisible="1"/>
+								<field name="is_cancel" invisible="1"/>
+								<field name="is_draft" invisible="1"/>
+								<field name ="is_readonly" invisible="1"/>
+								<field name ="is_invisible" invisible="1"/>
+							</group>
+						</group>	            
+
+						<notebook>
+							<page string="Ажил үйлчилгээ" >     
+								
+								<field name="line_ids" attrs="{'readonly':[('is_readonly','=',True)],'invisible':[('doctor_field','=',True)]}" context="{'default_department_id':perform_department_id,'default_is_urgent':is_urgent}" >
+									<tree  >
+												<field name = "id" invisible="1"/>
+												<field name="department_id" invisible="1"/>
+	                        					<field name ="is_urgent" invisible="1"/>
+												<field name ="all_done" invisible="1"/>
+												<field name ="enter_price" invisible="1"/>
+												
+												<field name="category_id" required="1"  options="{'no_quick_create': True, 'no_create_edit' : True,
+                                'no_create':True}"/>
+												<field name="service_id" options="{'no_quick_create': True, 'no_create_edit' : True,
+                                'no_create':True}" />										
+												
+												<field name="unit_price" readonly="1"/>
+												<field name="measurement"/>
+												<field name="qty" />
+												<field name="maintenance" />
+												<field name="percent_change" attrs="{'readonly':[('is_percent','=',True)]}"/>
+												<field name="amount" sum="Sum"/>
+												<field name="total_score" sum="Sum" invisible="1"/>
+												<field name="car_tarif" readonly="1"/>
+												<field name="perform_employee_id" attrs="{'required':[('is_required','=',True)]}" options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}"/>
+												<field name="project_id" options="{'no_create':True,'no_edit':True}"/>
+												<field name="task_id" options="{'no_create':True}" />
+												<field name="date" invisible="1"/>
+												<field name="date_evaluate" invisible="1" />
+												<field name ="rate" />												
+												<field name ="is_percent" invisible="1" />
+												<field name ="is_evaluate_user" invisible="1" />
+												<field name ="is_perform_user" invisible="1" />
+												<field name ="is_control_user" invisible="1" />
+												<field name ="description" />
+												<field name="state"/>
+												<field name ="is_evaluate" invisible="1"/>
+												<field name ="is_control" invisible="1"/>	
+												<field name="is_required" invisible="1"/>	
+												<field name="is_reject" invisible="1" />
+												<button name="action_evaluate" string="Үнэлэх" attrs="{'invisible':['|',('is_evaluate','=',False),('is_evaluate_user','=',False)]}" type="object" help="Evaluate"/>
+												<button name="action_return"  string="Буцаах" attrs="{'invisible':['|',('is_evaluate','=',False),('is_evaluate_user','=',False)]}" type="object" help="Return"/>
+												<!-- <button name="action_reject" string="Захиалга цуцлах" attrs="{'invisible':['|',('is_control','=',False),('is_perform_user','=',False)]}" type="object" help="Reject"/> -->
+												<button name="action_control" string="Хянах" attrs="{'invisible':['|',('is_control','=',False),('is_control_user','=',False)]}" type="object" help="Control"/>
+												<button name="line_reject"  string="Мөрөөр цуцлах"  type="object" help="Line reject" attrs="{'invisible':['|',('is_control_user','=',False),('state','in',['done','rejected'])]}" />
+												<button name="action_return"  string="Буцаах" attrs="{'invisible':['|',('is_control','=',False),('is_control_user','=',False)]}" type="object" help="Return"/>
+												
+									</tree>
+									<form >
+										<header>
+                                 			<field name="state" statusbar_colors="{&quot;draft&quot;:&quot;blue&quot;}" statusbar_visible="draft"
+												widget="statusbar"/>                            		
+                            			</header>
+                        				<group>
+	                        				<group>
+	                        					<field name="department_id" invisible="1"/>
+	                        					<field name ="is_urgent" invisible="1"/>
+												<field name ="all_done" invisible="1"/>
+												<field name ="enter_price" invisible="1"/>
+												
+												<field name="category_id" required="1"  options="{'no_quick_create': True, 'no_create_edit' : True,
+                                'no_create':True}"/>
+												<field name="service_id" options="{'no_quick_create': True, 'no_create_edit' : True,
+                                'no_create':True}" />
+												<field name="unit_price" attrs="{'readonly':[('enter_price','!=',True)]}"/>
+												<field name="measurement" options="{'no_quick_create': True, 'no_create_edit' : True,
+                                'no_create':True}"/>
+												<field name="perform_employee_id" attrs="{'required':[('is_required','=',True)],'invisible':[('state','=','draft')]}" options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}"/>
+												<field name="maintenance" />
+												<field name="project_id" options="{'no_create':True}" attrs="{'invisible':[('state','=','draft')]}" />
+												<field name="task_id" options="{'no_create':True}" attrs="{'invisible':['|',('project_id','=',True),('state','=','draft')]}" />
+											</group>
+											<group>
+												<field name="percent_change" attrs="{'readonly':[('is_percent','=',True)]}"/>
+												<field name="qty" attrs="{'readonly':[('state','not in',['open','draft'])]}"/>
+												<field name="amount" sum="Sum"/>
+												<field name="total_score" sum="Sum" invisible="1"/>
+												<field name="car_tarif" readonly="1"/>
+												<field name="date" invisible="1" />
+												<field name="date_evaluate" invisible="1" />
+												<field name ="rate" attrs="{'readonly':[('state','=','done')],'invisible':[('state','not in','done')]}"/>
+												<field name ="category_ids" widget="many2many_tags" invisible="1"/>
+												<field name ="is_percent" invisible="1" />
+												<field name ="is_evaluate_user" invisible="1" />
+												<field name ="is_perform_user" invisible="1" />
+												<field name ="is_control_user" invisible="1" />
+												<field name ="description" attrs="{'readonly':[('state','=','done')],'invisible':[('state','not in','done')]}" />
+												<!-- <field name="state"/> -->
+												<field name ="is_evaluate" invisible="1"/>
+												<field name ="is_control" invisible="1"/>
+												<field name="is_required" invisible="1"/>
+												<field name="is_reject" invisible="1" />
+												<button name="action_control" attrs="{'invisible':['|',('is_control','=',False),('is_control_user','=',False),('state','!=','verify')]}"/>
+												<button name="action_evaluate" attrs="{'invisible':['|',('is_evaluate','=',False),('is_evaluate_user','=',False)]}"/>
+												<button name="action_return"  attrs="{'invisible':['|',('is_evaluate','=',False),('is_evaluate_user','=',False)]}" />
+												<!-- <button name="action_reject"  attrs="{'invisible':['|',('is_control','=',False),('is_perform_user','=',False),('state','!=','verify')]}" /> -->
+												<button name="line_reject"  attrs="{'invisible':['|',('is_control_user','=',False),('state','in',['done','rejected'])]}" />
+												
+											</group>
+										</group>
+										<page string="Request order line history">
+			                                <group>                                 
+		                                        <field name="line_history_ids" attrs="{'invisible':[('state','in',['draft','open'])]}" readonly="1" nolabel="1">
+		                                           <tree string="History">
+		                                                <field name="service_id" />
+		                                                <field name="unit_price_20" sum="Sum" />
+		                                                <field name="maintenance"/>
+		                                                <field name="description" />
+		                                                <field name="state"/>
+		                                            </tree>
+		                                            <form string="History">
+	                                                    <field name="service_id" />
+	                                                    <field name="unit_price_20" />
+	                                                    <field name="maintenance"/>
+	                                                    <field name="description" />
+		                                            	<field name="state"/>
+		                                            </form>
+												</field>			                                    
+			                                </group>
+			                            </page>
+									</form>
+                             	
+								</field>
+								<field name="case_history_ids" attrs="{'readonly':[('is_readonly','=',True)],'invisible':[('doctor_field','=',False)]}" context="{'default_department_id':perform_department_id,'default_is_urgent':is_urgent}">
+									<tree>		
+										<field name="category_id" required="1"  options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}"/>
+										<field name="service_id" options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}" />								
+										<field name="pain"/>
+										<field name="vital_signs"/>
+										<field name="diagnosis" options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}"/>
+										<field name="treatment_adv"/>	
+										<field name="end_date"/>
+									</tree>
+									<form>
+										<header>
+                                 			<field name="state" statusbar_colors="{&quot;draft&quot;:&quot;blue&quot;}" statusbar_visible="draft"
+												widget="statusbar"/>                            		
+                            			</header>
+										<group>
+											<group>
+												<field name ="category_ids" widget="many2many_tags" invisible="1"/>
+												<field name="category_id" required="1"  options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}"/>
+												<field name="service_id" options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}" />
+												<field name="pain"/>
+												<field name="employee_id" readonly="1" invisible="1"/>																						
+											</group>
+											<group>
+												<field name="vital_signs"/>
+												<field name="diagnosis" options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}"/>
+												<field name="treatment_adv"/>
+												<field name="department_id" invisible="1"/>
+												<field name="end_date"/>
+											</group>
+										</group>
+									</form>
+								</field>
+									<field name="line_history_ids" readonly="1" attrs="{'invisible':[('doctor_field','=',False)]}" context="{'default_department_id':perform_department_id,'default_is_urgent':is_urgent}">
+										<tree>		
+											<field name="category_id" required="1"  options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}"/>
+											<field name="service_id" options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}" />								
+											<field name="pain"/>
+											<field name="vital_signs"/>
+											<field name="diagnosis" options="{'no_quick_create': True, 'no_create_edit' : True,'no_create':True}"/>
+											<field name="treatment_adv"/>	
+											<field name="end_date"/>	
+										</tree>
+									</field>
+								<group class="oe_subtotal_footer oe_right">                                  
+                                    <field name="total_amount" class="oe_subtotal_footer_separator"/>
+									<field name="sum_amount" class="oe_subtotal_footer_separator"/>
+                                </group>
+
+							</page>
+                         	<page string="Request order history">                       
+                                <group>                                 
+                                        <field name="history_ids" readonly="1" nolabel="1">
+                                           <tree string="History">
+                                           		<field name="user_id"/>
+                                                <field name="sequence" />
+                                                <field name="date" />
+                                                <field name="comment" />
+                                            </tree>
+                                            <form string="History">
+                                            	<field name="user_id"/>
+                                                <field name="sequence" />
+                                                <field name="date" />
+                                                <field name="comment" />
+                                            </form>
+                                         </field>
+                                    
+                                </group>
+                            </page>		
+							<page string="Хавсралтууд">						
+								<field name="attach_line_ids"  >
+                                    <tree string="Versions"  >
+                                        	<field name="date" readonly="1"/>
+                                        	<field name="description" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>                                            
+                                        	<field name="attachment_ids" attrs="{'readonly':[('state','!=','draft')]}"/>
+											<button name="action_confirm" string="Баталгаажуулах" attrs="{'invisible':[('state','!=','draft')]}" type="object"  />
+											<field name="state" readonly="1"/>
+                                        </tree>
+                                <form>
+                                    <group>
+                                        <group>
+                                          <field name="date" readonly="1"/>
+										  <field name="state" readonly="1"/>
+                                        </group>
+                                        <group>
+                                          <field name="description" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+											<field name="attachment_ids" widget="many2many_binary" attrs="{'readonly':[('state','!=','draft')]}"/>   
+                                        </group>
+                                    </group>
+                                    
+                                </form>
+                                </field>
+							</page>
+						</notebook>
+
+		       		</sheet>
+					<div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	               	</div>
+	            </form>
+	        </field>
+	    </record>
+
+        <record model="ir.ui.view" id="request_order_tree">
+		    <field name="name">request.order.tree</field>
+		    <field name="model">request.order</field>
+		    <field name="type">tree</field>
+		    <field name="arch" type="xml">
+		        <tree>
+		        	<field name="name" />
+		        	<field name="request_name" string="Захиалгын нэр"/>					
+					<field name="sector_id"/>
+	                <field name="department_id"/>
+	                <field name="employee_id"/>	 
+	                <field name="is_urgent" />
+	                <field name="date_order"/>
+					<field name="perform_department_id" string="Гүйцэтгэгч хэлтэс" />      
+					<field name="progress_percentage" widget="progressbar" />      					
+					<field name="cost_share_id"  />      					
+					<field name="request_config_id" /> 
+				</tree>
+		    </field>
+		</record>
+	   
+        <record id="view_request_order_filter" model="ir.ui.view">
+            <field name="name">request.order.search</field>
+            <field name="model">request.order</field>
+            <field name="arch" type="xml">
+                <search string="Search Order Page">  
+                    <field name="name"/>
+                    <field name="request_name"/>
+                    <field name="sector_id"/>
+                    <field name="department_id"/>
+                    <field name="perform_department_id"/>
+                    <field name="request_config_id"/>
+                    <group expand="0" name="group_by" string="Group By">
+                    	<filter name="group_name"  string="Захиалгын дугаар" domain="" context="{'group_by':'name'}"/>
+                    	<filter name="group_request_name" string="Захиалгын нэр" domain="" context="{'group_by':'request_name'}"/>
+                    	<filter name="group_sector_id" string="Захиалагч салбар" domain="" context="{'group_by':'sector_id'}"/>
+                    	<filter name="group_department_id"  string="Захиалагч хэлтэс" domain="" context="{'group_by':'department_id'}"/>
+                    	<filter name="group_perform_department_id"  string="Гүйцэтгэгч хэлтэс" domain="" context="{'group_by':'perform_department_id'}"/>
+                    	<filter name="group_request_config_id"  string="Төлөв" domain="" context="{'group_by':'request_config_id'}"/>
+                    </group>              
+                </search>
+            </field>
+        </record>
+    
+		<record id="action_request_order" model="ir.actions.act_window">
+	        <field name="name">Захиалгын хүсэлт</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">request.order</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="context">{'search_default_group_request_config_id': 1}</field>
+            <field name="search_view_id" ref="view_request_order_filter"/>
+	        <field name="view_id" ref="request_order_tree"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to define a new program ordering.
+	          </p>
+	        </field>
+	    </record>
+
+	    <!--Request order line -->
+
+		<record model="ir.ui.view" id="request_order_line_form">
+	        <field name="name">request.order.line.form</field>
+	        <field name="model">request.order.line</field>
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	            <form string="Request order" create="false"  delete="false">
+	            	<header>
+	            		<button name="action_start" string="Эхлэх" attrs="{'invisible':['|',('state','!=','open'),('is_perform_user','=',False)]}" type="object"  />
+	            		<button name="action_done" string="Дуусгах" attrs="{'invisible':[('state','!=','pending')]}" type="object"  />
+	            		<!-- <button name="action_reject" string="Цуцлах" attrs="{'invisible':['|',('state','in',['draft','rejected','done','open']),('is_perform_user','=',False)]}" type="object"  /> -->
+                        <button name="line_reject"  string="Ажил үйлчилгээг цуцлах"  type="object" help="Line reject" attrs="{'invisible':['|',('is_reject','=',True),('state','in',['done','rejected'])]}" />
+	            		<button name="file_attach" string="Даалгавар луу хавсралт бичих" type="object" help="File attach" attrs="{'invisible':['|',('state','!=','control'),('is_invisible_button','=',True)]}"/>
+						<button name="action_reject" string="Цуцлах" invisible="1" attrs="{'invisible':['|',('state','in',['draft','rejected','done','open']),('is_perform_user','=',False)]}" type="object"  />
+						<button name="to_change_price" string="Change price" type="object" attrs="{'invisible':['|',('state','!=','pending'),('is_invisible_button','=',True)]}"/>
+             			<field name="state" statusbar_colors="{&quot;open&quot;:&quot;blue&quot;}" statusbar_visible="open,control,pending,done"
+							widget="statusbar"/>                            		
+        			</header>
+					
+	            	<sheet>	  						
+							<group string="Work service" >    		
+								<group>
+									<field name ="is_invisible_button" invisible="1"/>
+									<field name="is_reject" invisible="1" />								
+									<field name="order_id" string="Захиалгын дугаар" readonly="1" />
+									<field name="category_id" required="1" readonly="1"/>
+									<field name="service_id" readonly="1"/>									
+									<field name="unit_price"/>
+									<field name="unit_price_change" readonly="1" attrs="{'invisible':[('is_invisible_button','=',False)]}"/>
+									<field name="change_description" readonly="1" attrs="{'invisible':[('is_invisible_button','=',False)]}"/>
+									<field name="measurement" readonly="1"/>
+									<field name="is_urgent" string="Яаралтай эсэх" readonly="1"/>
+									<field name="qty" readonly="1"/>
+                                    <field name="percent_change" readonly="1"/>
+									<field name="amount"/>
+									<field name="task_id" readonly="1"/>
+									<field name ="is_perform_user" invisible="1" />
+
+								</group>
+								<group>											            			 	
+									<field name="department_id" readonly="1" />		            			
+									<field name="employee_id" readonly="1"/>
+									<field name="job_id" readonly="1"/>
+									<field name="phone_number" readonly="1"/>
+									<!-- <field name="employee_id"/> -->
+									<field name="perform_employee_id" readonly="1"/>
+									<field name="maintenance"/>
+									<field name="date" readonly="1"/>
+									<field name="rate"/>
+									<field name ="description"/>
+									<field name="finished_date" readonly="1" />
+							
+								</group>
+							</group>
+							<notebook>
+								<page string="Хавсралтууд">						
+									<field name="attach_line_ids" attrs="{'required':[('state','=','pending')]}" >
+										<tree string="Versions"  >
+												<field name="date" readonly="1"/>
+												<field name="description" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>                                            
+												<field name="attachment_ids" attrs="{'readonly':[('state','!=','draft')]}"/>
+												<button name="action_confirm" string="Баталгаажуулах" attrs="{'invisible':[('state','!=','draft')]}" type="object"  />
+												<field name="state" readonly="1"/>
+											</tree>
+									<form>
+										<group>
+											<group>
+											<field name="date" readonly="1"/>
+											<field name="state" readonly="1"/>
+											</group>
+											<group>
+											<field name="description" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+												<field name="attachment_ids" widget="many2many_binary" attrs="{'readonly':[('state','!=','draft')]}"/>   
+											</group>
+										</group>
+										
+									</form>
+									</field>
+								</page>
+							</notebook>
+
+		       		</sheet>
+
+					<div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	               	</div>
+
+	            </form>
+	        </field>
+	    </record>
+
+        <record model="ir.ui.view" id="request_order_line_tree">
+		    <field name="name">request.order.line.tree</field>
+		    <field name="model">request.order.line</field>
+		    <field name="type">tree</field>
+		    <field name="arch" type="xml">
+				<tree create="false" edit="false" delete="false">
+					<field name="order_id"/>
+					<field name="employee_id"/>
+					<field name="perform_employee_id"/>
+					<field name="category_id"/>
+					<field name="service_id"/>
+					<field name="qty"/>
+					<field name="unit_price"/>
+					<field name="maintenance"/>
+					<field name="amount"/>
+					<field name="state"/>
+
+				</tree>
+		    </field>
+		</record>
+	   
+        <record id="view_request_order_line_filter" model="ir.ui.view">
+            <field name="name">request.order.line.search</field>
+            <field name="model">request.order.line</field>
+            <field name="arch" type="xml">
+                <search string="Search Order Page">  
+                    <field name="order_id"/>
+                    <field name="state"/>
+                    <field name="service_id"/>
+                    <group expand="0" name="group_by" string="Group By">
+                    	<filter name="group_request_name"  string="Захиалгын дугаар" domain="" context="{'group_by':'order_id'}"/>
+                    	<filter name="group_state" string="Төлөв" domain="" context="{'group_by':'state'}"/>
+                    	<filter name="group_service_id" string="Ажил үйлчилгээ" domain="" context="{'group_by':'service_id'}"/>
+                    	<!-- <filter name="group_order_name"  string="Захиалгын нэр" domain="" context="{'group_by':'order_name'}"/> -->
+                    </group>          
+                </search>
+            </field>
+        </record>
+
+
+
+
+        <record id="action_request_order_line" model="ir.actions.act_window">
+	        <field name="name">Захиалгын хүсэлтийн мөр</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">request.order.line</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <field name="context">{'search_default_group_state': 1}</field>
+            <field name="search_view_id" ref="view_request_order_line_filter"/>
+ 			<!-- <field name="domain">[('perform_employee_id.user_id','=',uid)]</field> -->
+			
+	        <field name="view_id" ref="request_order_line_tree"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to define a new program ordering.
+	          </p>
+	        </field>
+	    </record>
+
+	    <!-- Work Service Inherit -->
+
+        <record id="view_work_service_form_field_inherit" model="ir.ui.view">
+            <field name="name">work.service.form.inherit</field>
+            <field name="model">work.service</field>
+            <field name="inherit_id" ref="nomin_base.view_work_service_form"/>
+            <field name="arch" type="xml">
+                <field name="amount" position="after">
+                    <field name="is_calculated_percent"/>
+                </field>
+                <field name="amount" position="after">
+                    <field name="collect_amount"/>
+                </field>
+				<field name="amount" position="after">
+                    <field name="department_ids" widget="many2many_tags" string="Захиалгын хүсэлт хэрэглэх салбар/хэлтэс"/>
+                </field>
+
+            </field>
+        </record>
+        
+        <record id="view_work_service_tree_field_inherit" model="ir.ui.view">
+            <field name="name">work.service.tree.inherit</field>
+            <field name="model">work.service</field>
+            <field name="inherit_id" ref="nomin_base.view_work_service_tree"/>
+            <field name="arch" type="xml">
+                <field name="amount" position="after">
+                    <field name="collect_amount"/>
+                </field>
+                <field name="amount" position="after">
+                    <field name="is_calculated_percent"/>
+                </field>
+            </field>
+        </record>
+
+	    <!-- Category Inherit -->
+
+        <record id="view_category_form_field_inherit" model="ir.ui.view">
+            <field name="name">knowledge.store.category.form.inherit</field>
+            <field name="model">knowledge.store.category</field>
+            <field name="inherit_id" ref="nomin_helpdesk.view_knowledge_store_category_form"/>
+            <field name="arch" type="xml">
+				<field name="has_to_send_coupon" position="after">
+                    <field name="call_cost"/>
+                </field>
+				<field name="call_cost" position="after">
+                    <field name="call_cost_tarif" attrs="{'invisible':[('call_cost','=',False)],'required':[('call_cost','=',True)]}"/>
+                </field>
+				<field name="call_cost_tarif" position="after">
+                    <field name="enter_price"/>
+                </field>
+				<field name="call_cost_tarif" position="after">
+                    <field name="types"/>
+                </field>
+            </field>
+        </record>
+
+
+<!--Work Service Menu Inherit-->
+
+	    <record id="action_request_work_service" model="ir.actions.act_window">
+            <field name="name">Work Service</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">work.service</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+<!--             <field name="search_view_id" ref="view_work_service_filter"/>
+ -->        </record>
+
+		<record model="ir.ui.view" id="diagnosis_list_form">
+	        <field name="name">diagnosis.list.form</field>
+	        <field name="model">diagnosis.list</field>
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	            <form string="diagnosis">
+					<group string="Diagnosis" >    		
+						<group>
+							<field name ="name"/>
+						</group>
+					</group>
+					<div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	               	</div>
+	            </form>
+	        </field>
+	    </record>
+
+        <record model="ir.ui.view" id="diagnosis_list_tree">
+		    <field name="name">diagnosis.list.tree</field>
+		    <field name="model">diagnosis.list</field>
+		    <field name="type">tree</field>
+		    <field name="arch" type="xml">
+		        <tree>
+		        	<field name="name"/>
+				</tree>
+		    </field>
+		</record>
+
+		<record id="action_diagnosis_list" model="ir.actions.act_window">
+	        <field name="name">Онош</field>
+	        <field name="type">ir.actions.act_window</field>
+	        <field name="res_model">diagnosis.list</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+	        <!-- <field name="context">{'search_default_group_request_config_id': 1}</field> -->
+            <!-- <field name="search_view_id" ref="view_request_order_filter"/> -->
+	        <field name="view_id" ref="diagnosis_list_tree"/>
+	        <field name="help" type="html">
+	          <p class="oe_view_nocontent_create">
+	            Click to define a new diagnosis.
+	          </p>
+	        </field>
+	    </record>
+
+		<menuitem action="action_diagnosis_list" sequence="19" name="Оношийн бүртгэл" id="nomin_diagnosis_list_menu" parent="nomin_project.menu_project_config2" />
+
+        <menuitem id="menu_nomin_request_order"
+				name="Request order"   
+				parent="base.menu_main_pm"
+				groups="base.group_user" 
+				sequence="15"  />	
+	
+
+	    <menuitem action="action_request_order" sequence="30" name="Захиалгын хүсэлт" id="nomin_request_order_menu" parent="menu_nomin_request_order" />  
+
+        <menuitem
+            id= "menu_requestorder"            
+            sequence="40"
+            groups = "project.group_project_admin"
+            action="action_request_work_service"
+            parent="menu_nomin_request_order"
+            name="Work Service"/>
+
+		<menuitem action="action_request_order_line" sequence="31" name="Миний ажлууд" id="nomin_request_order_line_menu" parent="menu_nomin_request_order" /> 
+
+		<menuitem name="Report" id="menu_nomin_request_report"  parent="base.menu_main_pm" sequence="25"  />       
+       
+   	</data>
+</openerp>
+   	

@@ -19,7 +19,6 @@
 		<record id="view_res_partner_documents_tree" model="ir.ui.view">
 			<field name="name">Partner document tree</field>
 			<field name="model">res.partner.documents</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Tender">
 					<field name="name"/>
@@ -32,7 +31,6 @@
 		<record id="view_res_partner_documents_form" model="ir.ui.view">
 			<field name="name">Partner document form</field>
 			<field name="model">res.partner.documents</field>
-			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Partner Attachment">
 					<header>
@@ -465,7 +463,7 @@
 
 		<record model="ir.actions.act_window" id="tender_partner_list_action">
 			<field name="name">Tender Partner Document</field>
-			<field name="type">ir.actions.act_window</field>
+			<!-- <field name="type">ir.actions.act_window</field> -->
 			<field name="res_model">res.partner.documents</field>
 			<field name="view_mode">tree,form</field>
 			<field name="view_id" ref="view_res_partner_documents_filter"></field>
@@ -475,7 +473,6 @@
 		<record id="view_document_duration_config_form" model="ir.ui.view">
 			<field name="name">partner.file.duration.form</field>
 			<field name="model">partner.file.duration</field>
-			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Documents duration config form" create="false">
 					<!-- <header>
@@ -522,7 +519,6 @@
 		<record id="view_document_duration_config_tree" model="ir.ui.view">
 			<field name="name">partner.file.duration.tree</field>
 			<field name="model">partner.file.duration</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Documents duration config tree" create="false">
 					<field name="name"/>

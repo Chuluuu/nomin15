@@ -2,16 +2,16 @@
 
 from datetime import datetime,date, timedelta
 import datetime,time
+from odoo.osv import expression
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
 from odoo.tools.translate import _
 import odoo.addons.decimal_precision as dp
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError,ValidationError
 from odoo import api, fields, models, SUPERUSER_ID, _
 import logging
 _logger = logging.getLogger(__name__)
 from odoo.http import request
-
-class tender_work_task(models.Model):
+class TenderWorkTask(models.Model):
     _name="tender.work.task"
     _description = "Tender Work Task"
     '''
@@ -21,7 +21,7 @@ class tender_work_task(models.Model):
     tender_work_document_id     = fields.Many2one('ir.attachment', string=u"Батлагдсан хавсралтууд")
     
     
-class tender_committee_member(models.Model):
+class TenderCommitteeMember(models.Model):
     _name="tender.committee.member"
     _description = "Tender committee members"
     '''
@@ -73,7 +73,7 @@ class tender_committee_member(models.Model):
         self.write({'read_state':'read'})
 
 
-class tender_employee_line(models.Model):
+class TenderEmployeeLine(models.Model):
     _name="tender.employee.line"
     _description = "Tender employee line"
     '''
@@ -117,7 +117,7 @@ class tender_employee_line(models.Model):
             #dids = [x.id for x in employee_ids]
             return {'domain':{'employee_id':[('id','in',employee_ids.ids)]}}
 
-class tender_type(models.Model):
+class TenderType(models.Model):
     _name = "tender.type"
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = "tender type"
@@ -141,7 +141,7 @@ class tender_type(models.Model):
             
         if parent_id == self.id:
            raise UserError(_(u'Өөрөө өөрийгөө эцэг ангиллаар сонгох боломжгүй !'))
-        result = super(tender_type, self).write(vals)
+        result = super(TenderType, self).write(vals)
         return result
     
     
@@ -150,9 +150,9 @@ class tender_type(models.Model):
         for order in self:
             if order.child_ids:
                 raise UserError(_(u'Та дэд төрөлтэй тендерийн ангиллыг устгах боломжгүй.'))
-        return super(tender_type, self).unlink()
+        return super(TenderType, self).unlink()
 
-class tender_tender(models.Model):
+class TenderTender(models.Model):
     _name = "tender.tender"
     _description = "Tenders"
     _inherit = ['mail.thread', 'mail.activity.mixin']
@@ -257,10 +257,10 @@ class tender_tender(models.Model):
     name                    = fields.Char(string='Call for Tenders Reference', required=True, copy=False, readonly=True, index=True, default='New')
     color                   = fields.Integer('Color Index')
     desc_name               = fields.Char(string = "Tender name",tracking=True, required=False, copy=False)
-    company_id              = fields.Many2one('res.company', string = "Company", default=_default_company, tracking=True, ondelete='restrict', index=True)
+    company_id              = fields.Many2one('res.company', string = "Company", default=_default_company, tracking=True, ondelete='restrict')
     sector_id               = fields.Many2one('hr.department', string="Sector department", default=_default_sector, tracking=True, ondelete='restrict', domain=[('is_sector','=',True)], index=True)
-    department_id           = fields.Many2one('hr.department', string='Department', default=_default_department, tracking=True, ondelete='restrict', index=True)
-    user_id                 = fields.Many2one('res.users', string ='Respondent',default=lambda self: self.env.user.id,tracking=True, ondelete='restrict', index=True)
+    department_id           = fields.Many2one('hr.department', string='Department', default=_default_department, tracking=True, ondelete='restrict')
+    user_id                 = fields.Many2one('res.users', string ='Respondent',default=lambda self: self.env.user,tracking=True, ondelete='restrict')
     #employee_id            = fields.Many2one('hr.employee', string='Creater employee',tracking=True)
     origin                  = fields.Char(string ='Source Document')
     type_id                 = fields.Many2one('tender.type', string='Tender Category',tracking=True, ondelete='restrict')
@@ -290,7 +290,7 @@ class tender_tender(models.Model):
     tender_line_ids         = fields.One2many('tender.line', 'tender_id', string = "Required Products")#Бараа
     tender_labor_ids         = fields.One2many('tender.labor.line', 'tender_id', string = "Required Products")#Бараа
     participants_ids        = fields.One2many('tender.participants.bid', 'tender_id', string = "vendors of Tender", domain=[('state','not in',['draft'])])#оролцогчид
-    committee_member_ids    = fields.One2many('tender.committee.member', 'tender_id', string="Committee members")#Хорооны гишүүд
+    committee_member_ids    = fields.One2many(comodel_name='tender.committee.member', inverse_name='tender_id', string="Committee members")#Хорооны гишүүд
     #member_ids             = fields.Many2many('hr.employee', relation = "tender_committee_member_rel", string='Members of Tender')#
     protocol_ids            = fields.One2many('tender.protocol', 'tender_id', string="Meeting protocol of tender")#хурлын протокол
     close_remaining         = fields.Char(compute='_get_remaining', string = "Remaing For BID Selection")
@@ -358,11 +358,12 @@ class tender_tender(models.Model):
                 
     def _add_followers(self,user_ids): 
         '''Тендер дээр дагагч нарыг нэмнэ'''
-        self.message_subscribe_users(user_ids=user_ids)
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
         if self.state in ['draft','bids','open','confirmed']:
-            self.project_id.sudo().message_subscribe_users(user_ids=user_ids)
-            self.work_graph_id.sudo().message_subscribe_users(user_ids=user_ids)
-            self.work_task_id.sudo().message_subscribe_users(user_ids=user_ids)
+            self.project_id.sudo()._add_followers(user_ids=user_ids)
+            self.work_graph_id.sudo()._add_followers(user_ids=user_ids)
+            self.work_task_id.sudo()._add_followers(user_ids=user_ids)
             
     @api.model
     def create(self, vals):
@@ -371,7 +372,7 @@ class tender_tender(models.Model):
         '''
         if vals.get('name','New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('tender.tender') or 'New'
-        tender_id = super(tender_tender, self).create(vals)
+        tender_id = super(TenderTender, self).create(vals)
         if vals.get('date_open_deadline') or vals.get('date_end'):
             if vals.get('date_open_deadline') >= vals.get('date_end'):
                 raise ValidationError(_(u'Тендер зарлах огноо хаах огнооноос хэтэрсэн байна!!!'))
@@ -612,17 +613,6 @@ class tender_tender(models.Model):
                 emp_ids=self.env['hr.employee'].browse(vals.get('respondent_employee_id'))
                 if emp_ids:
                     this._add_followers(emp_ids.user_id.id)
-#         if 'member_ids' in values:
-#             member_ids = values.get("member_ids")
-#             for employee in self.browse(cr, uid, ids).member_ids:
-#                 employee_ids = self.pool.get('hr.employee').search(cr,uid,[('id','=',employee.id)])
-#                 if employee_ids:
-#                     for employee_id in employee_ids:
-#                         emp_ids.append(employee_id)
-#                         employee=self.pool.get('hr.employee').browse(cr,uid,employee_id)
-#                         if employee.user_id:
-#                             self.add_follower(cr,employee.user_id.id,ids)
-#                         else:
         
         if vals.get('date_open_deadline'):
             date_open_deadline=False
@@ -639,7 +629,7 @@ class tender_tender(models.Model):
         if date_open_deadline or date_end:
             if date_open_deadline > date_end:
                 raise UserError(_(u'Тендер зарлах огноо хаах огнооноос хэтэрсэн байна.'))
-        tender_id = super(tender_tender, self).write(vals)    
+        tender_id = super(TenderTender, self).write(vals)    
                  
         return tender_id
     
@@ -811,7 +801,6 @@ class tender_tender(models.Model):
     
     def action_back(self):
         """Тендерийн хүсэлтийг тендерийн нарийн бичиг буцаах"""
-        #mod_obj = self.pool.get('ir.model.data')
         res = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_tender_note')
         
         return {
@@ -856,19 +845,6 @@ class tender_tender(models.Model):
                 self.env['tender.invitation.guide'].browse(tender.invitation_id.id).write({'state':'open'})
         self.write({'state':'send_to_manager'})
         # self.send_notification('send_to_manager')
-        
-        
-#===============================================================================
-# if tender_obj.requisition_id.id:
-#             purchase_obj = self.pool.get('purchase.requisition')
-#             purchase_id=purchase_obj.search(cr, SUPERUSER_ID, [('id','=',tender_obj.requisition_id.id)])
-#             if purchase_id: 
-#                 pur_obj = self.pool.get('purchase.requisition').browse(cr, uid, purchase_id)
-#                 if pur_obj.state == 'confirmed':
-#                     #self.send_notif_to_followers(cr, uid, ids, 'send_to_manager')
-#                     #self.send_notification(cr, uid, ids, 'send_to_manager')
-#                     self.write(cr, uid, ids, {'state':'send_to_manager'},context=context)
-#===============================================================================
     
     def action_to_publish(self):
         """Тендерийг веб-д байршуулах"""
@@ -926,7 +902,6 @@ class tender_tender(models.Model):
     
     def action_to_extend(self):
         """Тендерийн хугацаа сунгах хүсэлт үүсгэх"""
-        #mod_obj = self.pool.get('ir.model.data')
         res = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_extend_menu')
         context = self.env.context.copy()
         context.update({'tender_tender': self.id})
@@ -943,7 +918,6 @@ class tender_tender(models.Model):
     
     def action_to_protocol(self):
         """Тендерийн протокол"""
-        #mod_obj = self.pool.get('ir.model.data')
         res = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_protocol_menu')
         self.env.context.update({'tender_tender': self.id})
         
@@ -1190,77 +1164,6 @@ class tender_tender(models.Model):
         }
         
     
-    #------------------------------------------- def _tender_alarm(self,cr,uid):
-        #------------------------------------- '''Тендерийн хаах огноо болох үед
-           #------------------------------------- систем автоматаар төлөв солино
-        #------------------------------------------------------------------- '''
-        # query = "select tender.id as tid, tender.name as tnumber, tender.desc_name tname, type.name as parent_type, child_type.name as child_type, \
-                    # tender.ordering_date orderdate, tender.state state, tender.date_end \
-                    # from tender_tender as tender, tender_type as type, tender_type as child_type \
-                    # where tender.state = 'published' and type.id = tender.type_id and child_type.id = tender.child_type_id"
-        #----------------------------------------------------- cr.execute(query)
-        #------------------------------------------- records = cr.dictfetchall()
-        # template_id = self.pool['ir.model.data'].get_object_reference(cr, SUPERUSER_ID,'nomin_tender', 'tender_tender_closed_state_email_template')[1]
-        #--------------------------------- tender_obj=self.pool['tender.tender']
-#------------------------------------------------------------------------------ 
-        #----------------------------------------------------------- if records:
-            #-------------------------------------------- for record in records:
-                #--------------------------------- date_end = record['date_end']
-                #------------------- date_now=time.strftime('%Y-%m-%d %H:%M:%S')
-                #-------------------------------------- if date_end <= date_now:
-                    # tender_obj.write(cr, SUPERUSER_ID, record['tid'], {'state':'bid_expire'}, context=None)
-                    #-------------------------------------------------- data = {
-                        #---------------------------- 'name': record['tnumber'],
-                        #------------------------- 'desc_name': record['tname'],
-                        #------------------- 'type_name': record['parent_type'],
-                        #------------------- 'child_type': record['child_type'],
-                        #------------------ 'ordering_date':record['orderdate'],
-                        #---------- 'state': u'Бичиг баримт хүлээн авч дууссан',
-                        # 'base_url': self.pool['ir.config_parameter'].get_param(cr, uid,'web.base.url'),
-                        # 'action_id': self.pool['ir.model.data'].get_object_reference(cr, uid,'nomin_tender', 'action_tender_list')[1],
-                        #---------------------------------- 'id': record['tid'],
-                        #------------------------ 'db_name': request.session.db,
-                        #- 'menu_path': u'Тендер / Тендер / Тендерийн жагсаалт',
-                        #----------------------------------------------------- }
-#------------------------------------------------------------------------------ 
-                    #----------------------------------------------- groups = []
-                    # notif_groups = self.pool['ir.model.data'].get_object_reference(cr, uid,'nomin_tender', 'group_tender_manager')
-                    #---------------------------- groups.append(notif_groups[1])
-                    # notif_groups = self.pool['ir.model.data'].get_object_reference(cr, uid,'nomin_tender', 'group_tender_secretary')
-                    #---------------------------- groups.append(notif_groups[1])
-#------------------------------------------------------------------------------ 
-                    #--------------------------------------- group_user_ids = []
-#------------------------------------------------------------------------------ 
-                    # sel_user_ids = self.pool.get('res.users').search(cr,uid,[('groups_id','in',groups)])
-                    # group_user_ids = self.pool.get('res.users').search(cr,uid,[('id','in',sel_user_ids)])
-                    #---------------------------------------- if group_user_ids:
-                        # users = self.pool.get('res.users').browse(cr,uid,group_user_ids)
-                        #------------------------------------ for user in users:
-                            # self.pool.get('mail.template').send_mail(cr, uid, template_id, user.id, force_send=True, context=date)
-
-    def _tender_alarm(self):
-        _logger.info(u'\n\n\n\n\nТендерийн cron ажиллаж байна')
-        '''Тендерийн хаах огноо болох үед 
-           систем автоматаар төлөв солино
-        '''
-        query = "select tender.id as tid, tender.name as tnumber, tender.desc_name tname, type.name as parent_type, child_type.name as child_type, \
-                    tender.ordering_date orderdate, tender.state state, tender.date_end \
-                    from tender_tender as tender, tender_type as type, tender_type as child_type \
-                    where tender.state = 'published' and type.id = tender.type_id and child_type.id = tender.child_type_id"
-        self.env.cr.execute(query)
-        records = self.env.cr.dictfetchall()
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_tender_closed_state_email_template')[1]
-        tender_obj=self.env['tender.tender']
-        if records:
-            for record in records:
-                # date_end = record['date_end']
-                # ADD time 8 hours
-                date_end =datetime.datetime.strptime(record['date_end'], "%Y-%m-%d %H:%M:%S")
-                date_now=datetime.datetime.now()
-                if date_end <= date_now:
-                    tender_obj.sudo().browse(record['tid']).write( {'state':'bid_expire'})
-                    self.env.cr.commit()
-                            
     
     def _get_remaining(self):
         '''Тендерийн хаах хугацааг тооцоолох'''
@@ -1513,7 +1416,6 @@ class tender_tender(models.Model):
             хүсэлтийг буцааж ноорог болгох
         """
         # self.write({'date_open_deadline':time.strftime('%Y-%m-%d %H:%M:%S'),'date_end':time.strftime('%Y-%m-%d %H:%M:%S')})
-        #mod_obj = self.pool.get('ir.model.data')
         res = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_tender_note')
         
         return {
@@ -1559,7 +1461,6 @@ class tender_tender(models.Model):
     
     def action_cancel(self):
         """Тендерийн хүсэлт батлах удирдлагууд цуцлах"""
-        #mod_obj = self.pool.get('ir.model.data')
         res = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_tender_note')
         
         return {
@@ -1804,9 +1705,9 @@ class tender_tender(models.Model):
 
 
                 
-        return super(tender_tender, self).unlink()
+        return super(TenderTender, self).unlink()
 
-class contract_management(models.Model):
+class ContractManagement(models.Model):
     ''' Тендерээс үүссэн гэрээ
     '''
     # TODO FIX LATER
@@ -1814,7 +1715,7 @@ class contract_management(models.Model):
     # _inherit = 'contract.management'
     
     tender_id               = fields.Many2one('tender.tender', string='Tender')
-class mail_sent_partner(models.Model):
+class MailSentPartners(models.Model):
     _name = 'mail.sent.partners'
     '''Урилга имэйл хүлээн авсан харилцагчид
     '''
@@ -1862,7 +1763,7 @@ class mail_sent_partner(models.Model):
             
         return True
         
-class tender_partner_history(models.Model):
+class TenderPartnerHistory(models.Model):
     _name = 'tender.partner.history'
     _description = "Partner history"
     '''Тендер оролцогчдын оролцсон байдал түүх
@@ -1876,14 +1777,14 @@ class tender_partner_history(models.Model):
     is_selected             = fields.Boolean(string='Is Win', tracking=True)
     
     
-class tender_line(models.Model):
+class TenderLine(models.Model):
     _name = "tender.line"
     _description = "Tender Line"
     _rec_name = 'product_id'
     '''Тендер дээр сонгож байгаа бараанууд
     '''
     product_id = fields.Many2one('product.product', 'Product', domain=[('product_tmpl_id.is_new','=',True),('product_tmpl_id.cost_price','>',0)], ondelete='restrict', index=True)
-    product_uom_id = fields.Many2one('product.uom', 'Product Unit of Measure', ondelete='restrict')
+    product_uom_id = fields.Many2one('uom.uom', 'Product Unit of Measure', ondelete='restrict')
     product_name = fields.Char(string = 'Барааны нэр' )
     product_qty = fields.Float('Quantity', digits_compute=dp.get_precision('Product Unit of Measure'))
     tender_id = fields.Many2one('tender.tender', 'Call for Tenders', ondelete='cascade', index=True)
@@ -1900,14 +1801,14 @@ class tender_line(models.Model):
             self.update({'product_uom_id':  prod.uom_id.id, 'product_qty': 1.0})
         
     
-class tender_labor_line(models.Model):
+class TenderLaborLine(models.Model):
     _name = "tender.labor.line"
     _description = "Tender Labor Line"
     _rec_name = 'product_name'
     '''Тендер дээр сонгож байгаа бараанууд
     '''
     # product_id = fields.Many2one('product.product', 'Product', domain=[('purchase_ok', '=', True)], ondelete='restrict', index=True)
-    product_uom_id = fields.Many2one('product.uom', 'Product Unit of Measure', ondelete='restrict')
+    product_uom_id = fields.Many2one('uom.uom', 'Product Unit of Measure', ondelete='restrict')
     product_name = fields.Char(string = 'Names' )
     product_qty = fields.Float('Quantity', digits_compute=dp.get_precision('Product Unit of Measure'))
     tender_id = fields.Many2one('tender.tender', 'Call for Tenders', ondelete='cascade', index=True)
@@ -1923,38 +1824,21 @@ class tender_labor_line(models.Model):
             prod = self.env['product.product'].browse(self.product_id.id)
             self.update({'product_uom_id':  prod.uom_id.id, 'product_qty': 1.0})
             
-#     def onchange_product_id(self, cr, uid, ids, product_id, product_uom_id, parent_analytic_account, analytic_account, parent_date, date, context=None):
-#         """ Changes UoM and name if product_id changes.
-#         @param name: Name of the field
-#         @param product_id: Changed product_id
-#         @return:  Dictionary of changed values
-#         """
-#         value = {'product_uom_id': ''}
-#         if product_id:
-#             prod = self.pool.get('product.product').browse(cr, 1, product_id, context=context)
-#             value = {'product_uom_id': prod.uom_id.id, 'product_qty': 1.0}
-#         if not analytic_account:
-#             value.update({'account_analytic_id': parent_analytic_account})
-#         if not date:
-#             value.update({'schedule_date': parent_date})
-#              
-#         return {'value': value}
-
-class product_template(models.Model):
-    _inherit = 'product.template'
+# class product_template(models.Model):
+#     _inherit = 'product.template'
     
-    purchase_tender = fields.Selection(
-        [('rfq', 'Create a draft purchase order'),
-         ('tenders', 'Propose a call for tenders')],
-        string='Procurement',
-        help="Check this box to generate Call for Tenders instead of generating "
-             "requests for quotation from procurement.")
+#     purchase_tender = fields.Selection(
+#         [('rfq', 'Create a draft purchase order'),
+#          ('tenders', 'Propose a call for tenders')],
+#         string='Procurement',
+#         help="Check this box to generate Call for Tenders instead of generating "
+#              "requests for quotation from procurement.")
     
-    _defaults = {
-        'purchase_tender': 'rfq',
-    }
+#     _defaults = {
+#         'purchase_tender': 'rfq',
+#     }
 
-class choose_department(models.TransientModel):
+class ChooseDepartment(models.TransientModel):
     _name = 'choose.department'
     '''Тендер зарлах ажилтан, салбар хэлтэсийг сонгох
     '''

@@ -127,17 +127,6 @@ class OrderArchived(models.TransientModel):
                 order_id.write({'state':'archived',
                                 'previous_state':order.state
                                 })
-
-            
-                
-            
-
-          
-        
-        
-
-
-
 class OrderPage (models.Model):
     """ Order page """
 
@@ -151,7 +140,8 @@ class OrderPage (models.Model):
     def _add_followers(self,user_ids):
         '''Add followers
         '''
-        self.message_subscribe_users(user_ids=user_ids)
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
 
 
     
@@ -173,12 +163,10 @@ class OrderPage (models.Model):
         '''Хянах
         '''
 
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_project', 'email_template_of_ordering')[1]
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.email_template_of_ordering')
         title = unicode(' Захиалгын мэдэгдэл','utf-8')
 
         for exec1 in self.confirm_user_ids:
-
-
             data = {
                     'email_title': title,
                     'request': self.request_type.name,
@@ -206,9 +194,7 @@ class OrderPage (models.Model):
     def action_to_approved1(self):
         '''Хянах
         '''       
-       
         self.write({'state':'approved1'})
-    
     
     def skip_state(self):
         '''төлөв алгасах
@@ -238,12 +224,10 @@ class OrderPage (models.Model):
         '''Хянах
         '''
 
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_project', 'email_template_of_ordering')[1]
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.email_template_of_ordering')
         title = unicode(' Захиалгын мэдэгдэл','utf-8')
 
         for exec1 in self.confirmed_employee_id:
-
-
             data = {
                     'email_title': title,
                     'request': self.request_type.name,
@@ -313,7 +297,6 @@ class OrderPage (models.Model):
            
         return {
             'name': 'Note',            
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'implemented.tasks',          
             'type': 'ir.actions.act_window',
@@ -328,7 +311,6 @@ class OrderPage (models.Model):
        
         return {
             'name': 'Note',            
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'order.page.receive',          
             'type': 'ir.actions.act_window',
@@ -361,12 +343,6 @@ class OrderPage (models.Model):
                 if user:
                     order.sudo()._add_followers(user.id)
        
-
-        
-
-
-
-    
     def action_to_estimate(self):
         '''Ирсэн захиалгыг хянуулах төлөвт оруулж байна.
         '''
@@ -386,14 +362,15 @@ class OrderPage (models.Model):
 
         if confirm_user_ids != []:
             self.write({'confirm_user_ids':[(6,0,confirm_user_ids)]})
-            self.message_subscribe_users(confirm_user_ids)  
+            partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+            self.message_subscribe(partner_ids=partner_ids)
            
         else:
             raise UserError(('Confirm users not found.'))
         
         self.write({'state': 'estimated', 'project_progress_percentage':100})
 
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_project', 'email_template_of_ordering')[1]
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.email_template_of_ordering')
         title = unicode(' Захиалгын мэдэгдэл','utf-8')
 
         for exec1 in self.confirm_user_ids:
@@ -429,10 +406,6 @@ class OrderPage (models.Model):
 
         if self.accountant_id:
             self.sudo()._add_followers(self.accountant_id.user_id.id)
-
-
-
-
         self.message_post(cbody= body)
         self.write({'state':'approved'})
 
@@ -456,42 +429,12 @@ class OrderPage (models.Model):
         else:
             self.write({'state':'rejected'})
 
-
-
-
-
-    # 
-    # def reject_to_director(self):
-    #     '''Ирсэн захиалгыг цуцлагдсан төлөвт оруулж байна.
-    #     '''
-    #     if self.rejection_reason == False:
-    #         raise UserError(('Шалтгаан талбарыг бөглөнө үү!'))
-    #     else:
-    #         self.write({'state':'sent_director'})
-
-    # 
-    # def slow_up_to_director(self):
-    #     '''Ирсэн захиалгыг цуцлагдсан төлөвт оруулж байна.
-    #     '''
-    #     if self.rejection_reason == False:
-    #         raise UserError(('Шалтгаан талбарыг бөглөнө үү!'))
-    #     else:
-    #         self.write({'state':'sent_director'})
-
-
-    
     def action_to_done_cost(self):
-
         # body = u'Төлөв: → ' + u' Зардал батлуулах. '
-
         # self.message_post(body=u"Зардал баталсан огноо %s " %(self.create_date))
         self.message_post(body=u"Зардал баталсан огноо %s " %(time.strftime("%Y-%m-%d")))
-
-
-
         # self.message_post(cbody= body)
         count = []        
-
         for order in self:
             if self._uid not in order.confirmed_user_ids2.ids:
                order.write({'confirmed_user_ids2':[(6,0,[self._uid]+order.confirmed_user_ids2.ids)]})
@@ -500,50 +443,26 @@ class OrderPage (models.Model):
                 count.append(order.confirmed_employee_id.id) 
             if order.confirmed_employee_id2.id and order.confirmed_employee_id2.id not in count:
                 count.append(order.confirmed_employee_id2.id) 
-
-
         if len(order.confirmed_user_ids2)== len(count) : 
             order.write({'state':'cost_done',
                         'confirmed_date1':time.strftime("%Y-%m-%d")
             		    })
-
-
-
     
     def action_to_done_cost_in(self):
-
-        # body = u'Төлөв: → ' + u' Дотоодод зардал батлуулах. '
-
-        # self.message_post(cbody= body)
-
-        # self.message_post(body=u"Зардал баталсан огноо %s " %(self.create_date))
         self.message_post(body=u"Зардал баталсан огноо %s " %(time.strftime("%Y-%m-%d")))
-        
-
         count = []        
-
         for order in self:
             if self._uid not in order.confirmed_user_ids2.ids:
                order.write({'confirmed_user_ids2':[(6,0,[self._uid]+order.confirmed_user_ids2.ids)]})
-
             if order.confirmed_employee_id.id and order.confirmed_employee_id.id not in count:
                 count.append(order.confirmed_employee_id.id) 
             if order.confirmed_employee_id2.id and order.confirmed_employee_id2.id not in count:
                 count.append(order.confirmed_employee_id2.id) 
-            
-
-
         if len(order.confirmed_user_ids2)== len(count) : 
-
             order.write({'state':'cost_done',
                         'confirmed_date1':time.strftime("%Y-%m-%d")
             		    })
 
-
-       
-
-
-    
     def action_to_allocate(self):
         '''Ирсэн захиалгыг хуваарилагдсан төлөвт оруулж байна.
         '''
@@ -561,7 +480,7 @@ class OrderPage (models.Model):
 
         self.message_post(cbody= body)
         self.write({'state':'allocated','assigned_date':time.strftime("%Y-%m-%d")})
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_project', 'email_template_of_ordering')[1]
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.email_template_of_ordering')
         title = unicode(' Захиалгын мэдэгдэл','utf-8')
 
         data = {
@@ -589,18 +508,12 @@ class OrderPage (models.Model):
         '''
         body = u'Төлөв: → ' + u' Систем админ руу хуваарилах. '
         if self.request_type.id == 2 or self.request_type.id == 3 or self.request_type.id == 51 or self.request_type.id == 6:
-
             if self.system_admin_id:
                     self.sudo()._add_followers(self.system_admin_id.user_id.id)
-
-    
-
             self.message_post(cbody= body)
             self.write({'state':'allocated','assigned_date':time.strftime("%Y-%m-%d")})
-
-            template_id = self.env['ir.model.data'].get_object_reference('nomin_project', 'email_template_of_ordering')[1]
+            template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.email_template_of_ordering')[1]
             title = unicode(' Захиалгын мэдэгдэл','utf-8')
-
             data = {
                         'email_title': title,
                         'request': self.request_type.name,
@@ -619,16 +532,12 @@ class OrderPage (models.Model):
             self.pool['mail.template'].send_mail(self.env.cr, 1, template_id, self.system_admin_id.user_id.id, force_send=True, context=self.env.context)
 
         if self.request_type.id == 17:
-
             if self.project_manager_id:
                     self.sudo()._add_followers(self.project_manager_id.user_id.id)
-
             self.message_post(cbody= body)
             self.write({'state':'allocated','assigned_date':time.strftime("%Y-%m-%d")})
-
-            template_id = self.env['ir.model.data'].get_object_reference('nomin_project', 'email_template_of_ordering')[1]
+            template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.email_template_of_ordering')[1]
             title = unicode(' Захиалгын мэдэгдэл','utf-8')
-
             data = {
                         'email_title': title,
                         'request': self.request_type.name,
@@ -646,16 +555,12 @@ class OrderPage (models.Model):
             self.env.context = data
             self.pool['mail.template'].send_mail(self.env.cr, 1, template_id, self.project_manager_id.user_id.id, force_send=True, context=self.env.context)
 
-
-
-    
     def action_to_done(self):
         '''Ирсэн захиалгыг done төлөвт оруулж байна.
         '''
         body = u'Төлөв: → ' + u' Дуусгах. '
         self.message_post(cbody= body)
         self.write({'state':'done'})
-    
     
     def training_done(self):
         '''Сургалтын захиалгыг дуусгах
@@ -664,14 +569,12 @@ class OrderPage (models.Model):
         self.message_post(cbody= body)
         self.write({'state':'done'})
     
-    
     def action_done(self):
         '''Эрхийн хүсэлтийн захиалгыг дуусгах
         '''
         body = u'Төлөв: → ' + u' Дуусгах. '
         self.message_post(cbody= body)
         self.write({'state':'done'})
-
     
     def action_to_done1(self):
         '''Ирсэн захиалгыг дууссан төлөвт оруулж байна.
@@ -679,7 +582,6 @@ class OrderPage (models.Model):
         body = u'Төлөв: → ' + u' дуусгах. '
         self.message_post(cbody= body)
         self.write({'state':'done'})
-
     
     def action_to_order_done(self):
         '''Ирсэн захиалгыг цуцлагдсан төлөвт оруулж байна.
@@ -687,8 +589,6 @@ class OrderPage (models.Model):
         body = u'Төлөв: → ' + u' дуусгах. '
         self.message_post(cbody= body)
         self.write({'state':'done'})
-
-
     
     def action_to_draft(self):
         '''Ирсэн захиалгыг ноорог төлөвт оруулж байна.
@@ -697,20 +597,14 @@ class OrderPage (models.Model):
         self.message_post(cbody= body)       
         self.write({'state':'draft','sequence':0, 'rejection_reason':' '})
 
-
-    
     def action_to_stop(self):
         '''Ирсэн захиалгыг зогссон төлөвт оруулж байна.
         '''
         body = u'Төлөв: → ' + u' Буцаасан. '
-
         if self.rejection_reason == False:
             raise UserError(('Зогсох төлөвт оруулах болсон шалтгаанаа бичнэ үү!'))
         else:
             self.write({'state':'stop'})
-
-
-
     
     def action_to_allocated(self):
         '''Ирсэн захиалгыг зогссон төлөвт оруулж байна.
@@ -718,11 +612,6 @@ class OrderPage (models.Model):
         body = u'Төлөв: → ' + u' Буцаасан. '
         self.message_post(cbody= body)       
         self.write({'state':'allocated'})
-
-
-
-
-
     
     def unlink(self):
         '''Нооргоос бусад үед устгахгүй байх.
@@ -733,10 +622,6 @@ class OrderPage (models.Model):
             check_attachment(self, 'order.page', main.id)
         return super(OrderPage, self).unlink()
     
-
-
-
-
     def _set_employee1(self):
         '''хэрэглэгчийн ажилтныг авна
         '''
@@ -746,89 +631,36 @@ class OrderPage (models.Model):
         else:
             raise UserError((u'Хэлтэс дээр урсгал тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу'))
 
-    # @api.model
-    # def _set_department(self):
-    #     if self.env.user.department_id:
-    #         return self.env.user.department_id.id
-    #     return None
-
-    # def _set_employee_telephone(self):
-    #     '''хэрэглэгчийн ажилтаныг авна
-    #     '''
-    #     employee_ids = self.env['hr.employee'].search([('user_id','=',self.env.user.id)])
-    #     if employee_ids:
-    #         return employee_ids.mobile_phone
-    #     else:
-    #         raise UserError(('You don\'t have mobile phone employee.'))
-
-    # def _set_employee_email(self):
-    #     '''хэрэглэгчийн ажилтаныг авна
-    #     '''
-    #     employee_ids = self.env['hr.employee'].search([('user_id','=',self.env.user.id)])
-    #     if employee_ids:
-    #         return employee_ids.work_email
-    #     else:
-    #         raise UserError(('You don\'t have email.'))
-
-
-
     def _request_id(self):
-
-
-        if self.request_type.id == 1 :
+        if self.request_type and self.request_type.id == 1 :
             config = self.env['request.config'].search([('department_ids','in',self.env.user.department_id.id),('process','=','program.order.flow'),('ordering_type_id','=','program')])
-        elif (self.request_type.id == 2 or self.request_type.id == 3 or self.request_type.id == 51 or self.request_type.request_name == 'installation_order'):
+        elif (self.request_type and self.request_type.id == 2 or self.request_type.id == 3 or self.request_type.id == 51 or self.request_type.request_name == 'installation_order'):
             config = self.env['request.config'].search([('department_ids','in',self.env.user.department_id.id),('process','=','program.order.flow'),('ordering_type_id','=','system')])
-        elif (self.request_type.id == 16 or self.request_type.id == 17 ):
+        elif (self.request_type and self.request_type.id == 16 or self.request_type.id == 17 ):
             config = self.env['request.config'].search([('department_ids','in',self.env.user.department_id.id),('process','=','program.order.flow'),('ordering_type_id','=','training')])
         else:
             config = self.env['request.config'].search([('department_ids','in',self.env.user.department_id.id),('process','=','program.order.flow'),('ordering_type_id','=','system_senior')])
-
         if config:
-
             return config.id
-
         else:
             raise UserError((u'Хэлтэс дээр урсгал тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу'))
 
-
-
-    
     def _show_control_button(self):       
-
         if self.control_employee_id:         
             if self.control_employee_id.user_id.id == self.env.user.id:
-
                 self.show_control_button = True
 
-    
     def _is_employee (self):       
-
         if self.employee_id:         
             if self.employee_id.user_id.id == self.env.user.id:
-
                 self.is_employee = True
 
-
-
-    # 
-    # def _show_confirm_button(self):
-    #     '''
-    #        Батлах хэрэглэгчид харуулах эсэх тооцох
-    #     '''
-    #     if self.confirm_employee_id or self.approve_employee_id:
-    #          if self.confirm_employee_id.user_id.id == self.env.user.id or  self.approve_employee_id.user_id.id == self.env.user.id  :
-    #            self.show_confirm_button = True
-
-    
     def _show_confirm_button(self):
         for order in self:
             if self._uid not in order.confirmed_user_ids2.ids and self._uid == order.confirm_employee_id.user_id.id:                
                 order.show_confirm_button =True
             if self._uid not in order.confirmed_user_ids2.ids and self._uid == order.approve_employee_id.user_id.id:                
                 order.show_confirm_button =True
-          
-
     
     def _show_done_button(self):
         '''
@@ -838,47 +670,29 @@ class OrderPage (models.Model):
              if self.accountant_id.user_id.id == self.env.user.id :
                self.show_done_button = True
 
-
-
-    
     def _is_inlist(self):        
-
         for line in self.project_manager_id:
-         
             if line.user_id.id == self.env.user.id:                
                 self.is_inlist = True
     
-    
     def _senior_manager(self):        
-        
         for line in self.project_senior_manager_id:
-         
             if line.user_id.id == self.env.user.id:                
                 self.senior_manager = True
-
-
-
-
     
     def _is_list(self):        
-
         for line in self.system_admin_id:
-         
             if line.user_id.id == self.env.user.id:                
                 self.is_list = True
     
-    
     def _is_training_manager(self):        
-
         if self.training_manager_id:
             if self.training_manager_id.user_id.id == self.env.user.id:                
                 self.is_training_manager = True
 
-
-    
     def _is_project_manager(self):
         for line in self.request_id.program_order_flow_lines:
-            if self.request_type.id == 1:
+            if self.request_type and self.request_type.id == 1:
                 if line.state == 'approved1' or line.state == 'estimated':
                     for user in line.group_id.users:
                         if user.id == self.env.user.id:
@@ -892,14 +706,14 @@ class OrderPage (models.Model):
     
     def _is_system_admin(self):
         for order in self:
-            if order.request_type.request_name == 'installation_order':
+            if self.request_type and order.request_type.request_name == 'installation_order':
                 for user in order.engineer_ids:                    
                     if user.id == self.env.user.id:
                         order.is_system_admin = True
                         break
             else:
                 for line in order.request_id.program_order_flow_lines:
-                    if order.request_type.id == 2 or order.request_type.id == 3 or order.request_type.id == 51:
+                    if self.request_type and order.request_type.id == 2 or order.request_type.id == 3 or order.request_type.id == 51:
                         if line.state == 'approved1':
                             for user in line.group_id.users:
                                 if user.id == order.env.user.id:
@@ -909,7 +723,7 @@ class OrderPage (models.Model):
     
     def _is_system_senior(self):
        for line in self.request_id.program_order_flow_lines:
-            if self.request_type.id == 4 or self.request_type.id == 5 or self.request_type.id == 6 or self.request_type.id == 11 or self.request_type.id == 12 or self.request_type.id == 13:
+            if self.request_type and self.request_type.id == 4 or self.request_type.id == 5 or self.request_type.id == 6 or self.request_type.id == 11 or self.request_type.id == 12 or self.request_type.id == 13:
                 if line.state == 'approved1':
                     for user in line.group_id.users:
                         if user.id == self.env.user.id:
@@ -919,21 +733,16 @@ class OrderPage (models.Model):
     
     def _is_system_quality_assurance(self):
        for line in self.request_id.program_order_flow_lines:
-            if self.request_type.id == 17 or self.request_type.id == 16:
+            if self.request_type and self.request_type.id == 17 or self.request_type.id == 16:
                 if line.state == 'approved1':
                     for user in line.group_id.users:
                         if user.id == self.env.user.id:
                             self.is_system_quality_assurance = True
                             break
             
-
-
-
     @api.onchange('request_type')
     def onchange_request_type(self):
-
-        if self.env.user.department_id.id != 88:
-
+        if self.env.user.department_id and self.env.user.department_id.id != 88:
             return {'domain':
                             {'request_type':[('attr','=', True)]}}
 
@@ -1085,19 +894,12 @@ class OrderPage (models.Model):
     system_admin_id = fields.Many2one('hr.employee', string='Систем админ',domain=[('department_id','in',[89,1786])])
     system_quality_assurance = fields.Many2one('res.users', string='Системийн чанар баталгаажуулагч',domain="[('groups_id','=',1001)]")
     choose_batch = fields.Many2one('batch.name', string='Багцын нэр')
-    
     project_state_name = fields.Many2one('project.state.name' , string='Ажлын явц' )
-
     time_cost_info = fields.Integer(string="Time cost info" , compute="planned_time_cost")
-
-
-
     cost_type = fields.Selection([('cost1','Нэг удаагийн төлбөр'),('cost2','Тарифт тусгах'),('cost3','Дэмжлэг')], string='Зардлын төрөл' , default="cost1")
     cost_types = fields.Selection([('cost_in','Дотоод зардал'),('payment','Нэг удаагийн төлбөр'),('rent_cost','Түрээсийн зардалд шингээх (МТС)'),('rent_cost_other','Түрээсийн зардалд шингээх (Бусад: __________________)')], string='Зардлын төрөл')
-
     accountant_id = fields.Many2one('hr.employee',string='Accountant name')
     accountant_description = fields.Char(string='Accountant description')
-    
     job_selection = fields.Selection([
                                 ('network',u'Сүлжээ'),
                                 ('control_box',u'Узель'),
@@ -1108,17 +910,13 @@ class OrderPage (models.Model):
                                 ('entrance_conrol',u'Орохын камер'),
                                 ('other',u'Бусад'),
                                 ], u'Хийгдэх ажил', tracking=True, default = 'network')   
-
     location = fields.Char (string='Байршил')
-
     is_confirm = fields.Boolean(string='Зардал батлах ажилтан нэмэх', default=False,tracking=True)
-
     approve_employee_id = fields.Many2one('hr.employee' , string='Батлах ажилтан')
     # system_line_ids              = fields.One2many('list.other.systems.line','order_id', string="List other systems line")
     line_ids              = fields.One2many('order.page.line','order_id', string="Work Service")
     description = fields.Char(string="Тайлбар")
     is_invisible = fields.Boolean(string="Is invisible" ,default=False)
-
     previous_state = fields.Selection([
                                 ('draft',u'Ноорог'),
                                 ('control',u'Хянах'),
@@ -1196,8 +994,6 @@ class OrderPage (models.Model):
                                     ('33day',u'33 өдөр'),
                                     ('34day',u'34 өдөр'),
                                     ], u'Хэрэгжүүлэх хугацаа', default='1-2hour',compute='_rate_risk')
-
-
     determine_degree_importance = fields.Selection([
                                 ('very_important',u'Нэн чухал'),
                                 ('important',u'Чухал'),
@@ -1456,7 +1252,7 @@ class OrderPage (models.Model):
     @api.model
     def create(self, vals):
         result = super(OrderPage, self).create(vals)
-        name = self.env['ir.sequence'].get('order.page')
+        name = self.env['ir.sequence'].next_by_code('order.page')
         result.update({'name': name})
         result.handle_serv_info()
 
@@ -1511,7 +1307,8 @@ class OrderPage (models.Model):
 
         if confirm_user_ids != []:
             self.write({'confirm_user_ids':[  (6,0,confirm_user_ids)]})
-            self.message_subscribe_users(confirm_user_ids)             
+            partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+            self.message_subscribe(partner_ids=partner_ids)
 
         else:
             raise UserError(('Confirm users not found.'))
@@ -1523,7 +1320,7 @@ class OrderPage (models.Model):
             
             
 
-            template_id = self.env['ir.model.data'].get_object_reference('nomin_project', 'email_template_of_ordering')[1]
+            template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.email_template_of_ordering')
             title = unicode(' Захиалгын мэдэгдэл','utf-8')
 
             for exec1 in self.confirm_employee_id:
@@ -1545,14 +1342,14 @@ class OrderPage (models.Model):
 
                 self.env.context = data
                 if template_id and exec1:
-                    self.pool['mail.template'].send_mail(self.env.cr, 1, template_id, exec1.user_id.id, force_send=True, context=self.env.context)
+                    self.env['mail.template'].send_mail(self.env.cr, 1, template_id, exec1.user_id.id, force_send=True, context=self.env.context)
         else:
             self.write({'state':'control',
                         'request_id': self._request_id()
             })
 
 
-            template_id = self.env['ir.model.data'].get_object_reference('nomin_project', 'email_template_of_ordering')[1]
+            template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.email_template_of_ordering')
             title = unicode(' Захиалгын мэдэгдэл','utf-8')
 
             for exec1 in self.control_employee_id:

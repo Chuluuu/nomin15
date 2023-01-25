@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data> 
+        <!-- Үнэ өөрчлөх -->
+        <record id="to_change_price_form" model="ir.ui.view">
+            <field name="name">to.change.price</field>
+            <field name="model">to.change.price</field>
+            <field name="arch" type="xml">
+                <form string="Change price"> 
+                    <group>
+                        <group>
+                            <field name="change_price"/>
+                            <field name="change_description" required="1"/>
+                            <field name="amount" invisible="1"/>
+                        </group> 
+                    </group>
+
+                    
+                    <footer>
+                        <button name="to_change_price" string="Үнэ өөрчлөх" type="object" />
+                        or
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>   
+        <!-- Мөрөөр цуцлах -->
+        <record id="to_line_reject_form" model="ir.ui.view">
+            <field name="name">line.reject</field>
+            <field name="model">line.reject</field>
+            <field name="arch" type="xml">
+                <form string="Line reject"> 
+                    <group>
+                        <group>
+                            <field name="reject_description" required="1"/>                           
+                        </group> 
+                    </group>
+
+                    
+                    <footer>
+                        <button name="line_reject" string="Ажил үйлчилгээ цуцлах" type="object" />
+                        or
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>       
+
+    </data>
+</openerp>
+

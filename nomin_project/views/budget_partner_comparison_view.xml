@@ -7,7 +7,6 @@
 		<record id="budget_partner_comparison_tree" model="ir.ui.view">
 			<field name="name">budget.partner.comparison.tree</field>
 			<field name="model">budget.partner.comparison</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="budget partner comparison" create="false">
 					<field name="name" />
@@ -24,7 +23,6 @@
 		<record id="view_budget_partner_comparison_form" model="ir.ui.view">
 			<field name="name">budget.partner.comparison.form</field>
 			<field name="model">budget.partner.comparison</field>
-			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Parity of prices" create="false">
 					<header>
@@ -35,279 +33,279 @@
 						<button name="action_vote" class ="oe_highlight" string="Санал өгөх" type="object" attrs="{'invisible': ['|',('state','!=','management'),('is_voter','=',False)]}"/>
 						<field name="state" widget="statusbar" statusbar_visible="draft,quotation,end_quotation,comparison,winner"/>
 					</header>
-					<div class="oe_title">
-						<h1>
-							<field name="name" readonly="1"/>
-							<field name="desc_name" placeholder="Үнийн харьцуулалтын нэр" readonly="1" required="1" attrs = "{'readonly':[('state','not in','draft')]}"/>
-						</h1>
-					</div>
-					<group>
+					<sheet>
+						<div class="oe_title">
+							<h1>
+								<field name="name" readonly="1"/>
+								<field name="desc_name" placeholder="Үнийн харьцуулалтын нэр" readonly="1" required="1" attrs = "{'readonly':[('state','not in','draft')]}"/>
+							</h1>
+						</div>
 						<group>
-							<field name="control_budget_id" readonly="1" options="{'no_open': True}" />
-							<field name="project_id" readonly="1" options="{'no_open': True}"/>
-							<field name="task_id" readonly="1"/>
-							<field name="task_graph_id" readonly="1"/>
-							<field name="employee_id" readonly="1"/>
-							<field name="department_id" readonly="1" />
-						</group>
-						<group>
-							<field name="contract_id" attrs = "{'invisible':[('contract_id', '=',False)]}" options="{'no_create': True}" readonly="1" />
-							<field name="type_id" required="1" attrs = "{'readonly':[('state', '!=','draft')]}" options="{'no_create': True}" readonly="1" />
-							<!-- TODO FIX LATER -->
-							<!-- <field name="child_type_id" options="{'no_create': True}" required="1" domain="[('parent_id','!=',False)]" attrs = "{'readonly':[('state', '!=','draft')]}" readonly="1"/> -->
-							<field name="date_start" required="1" attrs = "{'readonly':[('state','not in','draft')]}"/>
-							<field name="date_end" required="1" attrs = "{'readonly':[('state','not in',('draft','end_quotation'))]}"/>
-							<field name="is_verify" attrs = "{'readonly':[('state', '!=','draft')]}"/>
-							<field name="confirmed_time" attrs="{'required':[('is_verify','=',True)],'readonly':[('state', '!=','draft')]}"/>
-							<!-- <field name="is_performance_percent" attrs = "{'readonly':[('state', '!=','draft')]}"/>
+							<group>
+								<field name="control_budget_id" readonly="1" options="{'no_open': True}" />
+								<field name="project_id" readonly="1" options="{'no_open': True}"/>
+								<field name="task_id" readonly="1"/>
+								<field name="task_graph_id" readonly="1"/>
+								<field name="employee_id" readonly="1"/>
+								<field name="department_id" readonly="1" />
+							</group>
+							<group>
+								<field name="contract_id" attrs = "{'invisible':[('contract_id', '=',False)]}" options="{'no_create': True}" readonly="1" />
+								<field name="type_id" required="1" attrs = "{'readonly':[('state', '!=','draft')]}" options="{'no_create': True}" readonly="1" />
+								<field name="child_type_id" options="{'no_create': True}" required="1" domain="[('parent_id','!=',False)]" attrs = "{'readonly':[('state', '!=','draft')]}" readonly="1"/>
+								<field name="date_start" required="1" attrs = "{'readonly':[('state','not in','draft')]}"/>
+								<field name="date_end" required="1" attrs = "{'readonly':[('state','not in',('draft','end_quotation'))]}"/>
+								<field name="is_verify" attrs = "{'readonly':[('state', '!=','draft')]}"/>
+								<field name="confirmed_time" attrs="{'required':[('is_verify','=',True)],'readonly':[('state', '!=','draft')]}"/>
+								<!-- <field name="is_performance_percent" attrs = "{'readonly':[('state', '!=','draft')]}"/>
 							<field name="performance_percent" attrs="{'required':[('is_performance_percent','=',True)],'readonly':[('state', '!=','draft')]}"/> -->
-							<field name="is_voter" invisible="1"/>
-							<field name="is_employee" invisible="1"/>
-							<field name="date_win" invisible="1"/>
-							<field name="is_old" invisible="1"/>
+								<field name="is_voter" invisible="1"/>
+								<field name="is_employee" invisible="1"/>
+								<field name="date_win" invisible="1"/>
+								<field name="is_old" invisible="1"/>
+							</group>
 						</group>
-					</group>
-					<group>
-						<field name="description" attrs = "{'readonly':[('state', '!=','draft')]}"/>
-						<field name="rejection_reason" readonly="1" attrs = "{'invisible':[('state', '!=','cancelled')]}"/>
-					</group>
+						<group>
+							<field name="description" attrs = "{'readonly':[('state', '!=','draft')]}"/>
+							<field name="rejection_reason" readonly="1" attrs = "{'invisible':[('state', '!=','cancelled')]}"/>
+						</group>
 
-					<notebook>
-						<page string="Үнийн санал өгсөн харилцагч">
-							<separator string="Үнийн санал өгсөн харилцагч" colspan="2"/>
-							<field name="participants_ids" colspan="2" nolabel="1" attrs="{'readonly':[('state', 'not in','quotation' )], 'invisible':[('state', 'in', ['quotation','end_quotation','draft'])]}">
-								<tree string="budget partner" editable="bottom" colors="blue:is_winner==True">
-									<field name="partner_id" required="1" options="{'no_create': True}"/>
-									<field name="price_amount" required="1"/>
-									<field name="document_id" required="1" options="{'no_create': True}"/>
-									<field name="price_percent" readonly = "1"/>
-									<field name="is_voter" invisible="1"/>
-									<field name="is_winner" invisible="1"/>
-									<button name="action_vote" string="Санал өгөх" type="object" attrs="{'invisible':[('is_voter', '=', False)]}" />
-								</tree>
-								<form string="participants_ids">
-									<group>
+						<notebook>
+							<page string="Үнийн санал өгсөн харилцагч">
+								<separator string="Үнийн санал өгсөн харилцагч" colspan="2"/>
+								<field name="participants_ids" colspan="2" nolabel="1" attrs="{'readonly':[('state', 'not in','quotation' )], 'invisible':[('state', 'in', ['quotation','end_quotation','draft'])]}">
+									<tree string="budget partner" editable="bottom" colors="blue:is_winner==True">
+										<field name="partner_id" required="1" options="{'no_create': True}"/>
+										<field name="price_amount" required="1"/>
+										<field name="document_id" required="1" options="{'no_create': True}"/>
+										<field name="price_percent" readonly = "1"/>
 										<field name="is_voter" invisible="1"/>
-										<field name="partner_id" />
-										<field name="price_amount"/>
-										<field name="price_percent"/>
-										<field name="document_id" />
-									</group>
-								</form>
-							</field>
+										<field name="is_winner" invisible="1"/>
+										<button name="action_vote" string="Санал өгөх" type="object" attrs="{'invisible':[('is_voter', '=', False)]}" />
+									</tree>
+									<form string="participants_ids">
+										<group>
+											<field name="is_voter" invisible="1"/>
+											<field name="partner_id" />
+											<field name="price_amount"/>
+											<field name="price_percent"/>
+											<field name="document_id" />
+										</group>
+									</form>
+								</field>
 
-							<field name="participants_ids2" colspan="2" nolabel="1" attrs="{'readonly':[('state', 'not in','quotation' )], 'invisible':[('state', 'not in', ['quotation','end_quotation','draft'])] }">
-								<tree string="budget partner" editable="bottom" colors="blue:is_winner==True">
-									<field name="partner_id" required="1" options="{'no_create': True}"/>
-									<field name="price_amount" required="1"/>
-									<field name="document_id" required="1" options="{'no_create': True}"/>
-									<field name="is_voter" invisible="1"/>
-									<field name="is_winner" invisible="1"/>
-									<button name="action_vote" string="Санал өгөх" type="object" attrs="{'invisible':[('is_voter', '=', False)]}" />
-								</tree>
-								<form string="participants_ids">
-									<group>
+								<field name="participants_ids2" colspan="2" nolabel="1" attrs="{'readonly':[('state', 'not in','quotation' )], 'invisible':[('state', 'not in', ['quotation','end_quotation','draft'])] }">
+									<tree string="budget partner" editable="bottom" colors="blue:is_winner==True">
+										<field name="partner_id" required="1" options="{'no_create': True}"/>
+										<field name="price_amount" required="1"/>
+										<field name="document_id" required="1" options="{'no_create': True}"/>
 										<field name="is_voter" invisible="1"/>
-										<field name="partner_id" />
-										<field name="price_amount"/>
-										<field name="document_id" />
-									</group>
-								</form>
-							</field>
+										<field name="is_winner" invisible="1"/>
+										<button name="action_vote" string="Санал өгөх" type="object" attrs="{'invisible':[('is_voter', '=', False)]}" />
+									</tree>
+									<form string="participants_ids">
+										<group>
+											<field name="is_voter" invisible="1"/>
+											<field name="partner_id" />
+											<field name="price_amount"/>
+											<field name="document_id" />
+										</group>
+									</form>
+								</field>
 
-						</page>
-						<page string="Шаардлагатай бүтээгдэхүүн" attrs="{'invisible':[('state','not in',('comparison','management','winner'))]}">
-							<group>
+							</page>
+							<page string="Шаардлагатай бүтээгдэхүүн" attrs="{'invisible':[('state','not in',('comparison','management','winner'))]}">
 								<group>
-									<field name="equipment_cost" readonly="1"/>
-									<field name="carriage_cost" readonly="1"/>
+									<group>
+										<field name="equipment_cost" readonly="1"/>
+										<field name="carriage_cost" readonly="1"/>
+									</group>
+									<group>
+										<field name="postage_cost" readonly="1"/>
+										<field name="other_cost" readonly="1"/>
+									</group>
 								</group>
+								<separator string="Материалын зардал" colspan="2"/>
+								<field name="material_cost_ids" readonly="1">
+									<tree>
+										<field name="product_id"/>
+										<field name="product_uom"/>
+										<field name="product_uom_qty"/>
+										<field name="price_unit"/>
+										<field name="material_total"/>
+										<field name="name"/>
+									</tree>
+								</field>
+								<field name="new_material_cost_ids" readonly="1">
+									<tree>
+										<field name="product_name"/>
+										<field name="product_uom"/>
+										<field name="product_uom_qty"/>
+										<field name="price_unit"/>
+										<field name="material_total"/>
+										<field name="name"/>
+									</tree>
+								</field>
+								<separator string="Ажиллах хүчний зардал" colspan="2"/>
+								<field name="labor_cost_ids" attrs="{'invisible':[('is_old','!=',True)]}" readonly="1">
+									<tree>
+										<field name="product_id"/>
+										<field name="product_uom"/>
+										<field name="product_uom_qty"/>
+										<field name="price_unit"/>
+										<field name="labor_total"/>
+										<field name="labor_cost_basic"/>
+										<field name="name"/>
+									</tree>
+									<form>
+										<group>
+											<group>
+												<field name="product_id" readonly="1"/>
+												<field name="name" readonly="1"/>
+												<field name="product_uom" readonly="1"/>
+												<field name="product_uom_qty" readonly="1"/>
+												<field name="price_unit" readonly="1"/>
+											</group>
+											<group>
+												<field name="labor_total" sum="Нийт"/>
+												<field name="engineer_salary" readonly="1"/>
+												<field name="extra_salary" readonly="1"/>
+												<field name="social_insurance" readonly="1"/>
+												<field name="habe" readonly="1"/>
+												<field name="total_salary" readonly="1"/>
+												<field name="labor_cost_basic" readonly="1"/>
+											</group>
+										</group>
+										<separator string="Ажиллах хүчний зардалын хувь" colspan="2"/>
+										<group>
+											<group>
+												<field name="engineer_salary_percent" readonly="1"/>
+												<field name="extra_salary_percent" readonly="1"/>
+											</group>
+											<group>
+												<field name="social_insurance_rate" readonly="1"/>
+												<field name="habe_percent" readonly="1"/>
+											</group>
+										</group>
+									</form>
+								</field>
+								<field name="labor_cost_ids1" attrs="{'invisible':[('is_old','=',True)]}" readonly="1">
+									<tree>
+										<field name="product_name"/>
+										<field name="product_uom"/>
+										<field name="product_uom_qty"/>
+										<field name="price_unit"/>
+										<field name="labor_total"/>
+										<field name="labor_cost_basic"/>
+										<field name="name"/>
+									</tree>
+									<form>
+										<group>
+											<group>
+												<field name="product_name" readonly="1"/>
+												<field name="name" readonly="1"/>
+												<field name="product_uom" readonly="1"/>
+												<field name="product_uom_qty" readonly="1"/>
+												<field name="price_unit" readonly="1"/>
+											</group>
+											<group>
+												<field name="labor_total" sum="Нийт"/>
+												<field name="engineer_salary" readonly="1"/>
+												<field name="extra_salary" readonly="1"/>
+												<field name="social_insurance" readonly="1"/>
+												<field name="habe" readonly="1"/>
+												<field name="total_salary" readonly="1"/>
+												<field name="labor_cost_basic" readonly="1"/>
+											</group>
+										</group>
+										<separator string="Ажиллах хүчний зардалын хувь" colspan="2"/>
+										<group>
+											<group>
+												<field name="engineer_salary_percent" readonly="1"/>
+												<field name="extra_salary_percent" readonly="1"/>
+											</group>
+											<group>
+												<field name="social_insurance_rate" readonly="1"/>
+												<field name="habe_percent" readonly="1"/>
+											</group>
+										</group>
+									</form>
+								</field>
 								<group>
-									<field name="postage_cost" readonly="1"/>
-									<field name="other_cost" readonly="1"/>
+									<field name="total_amount" readonly="1"/>
 								</group>
-							</group>
-							<separator string="Материалын зардал" colspan="2"/>
-							<field name="material_cost_ids" readonly="1">
-								<tree>
-									<field name="product_id"/>
-									<field name="product_uom"/>
-									<field name="product_uom_qty"/>
-									<field name="price_unit"/>
-									<field name="material_total"/>
-									<field name="name"/>
-								</tree>
-							</field>
-							<field name="new_material_cost_ids" readonly="1">
-								<tree>
-									<field name="product_name"/>
-									<field name="product_uom"/>
-									<field name="product_uom_qty"/>
-									<field name="price_unit"/>
-									<field name="material_total"/>
-									<field name="name"/>
-								</tree>
-							</field>
-							<separator string="Ажиллах хүчний зардал" colspan="2"/>
-							<field name="labor_cost_ids" attrs="{'invisible':[('is_old','!=',True)]}" readonly="1">
-								<tree>
-									<field name="product_id"/>
-									<field name="product_uom"/>
-									<field name="product_uom_qty"/>
-									<field name="price_unit"/>
-									<field name="labor_total"/>
-									<field name="labor_cost_basic"/>
-									<field name="name"/>
-								</tree>
-								<form>
-									<group>
+							</page>
+							<page string="Комиссийн гишүүд">
+								<separator string="Комиссийн гишүүд" colspan="2"/>
+								<field name="committee_member_ids" colspan="2" nolabel="1" attrs="{'readonly':[('state', '!=', 'draft')]}">
+									<tree string="committee member " editable="bottom">
+										<field name="employee_id" required="1"/>
+										<field name="vote_date" readonly="1"/>
+										<field name="partner_id" readonly="1"/>
+									</tree>
+									<form string="committee member">
 										<group>
-											<field name="product_id" readonly="1"/>
-											<field name="name" readonly="1"/>
-											<field name="product_uom" readonly="1"/>
-											<field name="product_uom_qty" readonly="1"/>
-											<field name="price_unit" readonly="1"/>
+											<field name="employee_id" />
+											<field name="vote_date"/>
+											<field name="partner_id" />
 										</group>
-										<group>
-											<field name="labor_total" sum="Нийт"/>
-											<field name="engineer_salary" readonly="1"/>
-											<field name="extra_salary" readonly="1"/>
-											<field name="social_insurance" readonly="1"/>
-											<field name="habe" readonly="1"/>
-											<field name="total_salary" readonly="1"/>
-											<field name="labor_cost_basic" readonly="1"/>
-										</group>
-									</group>
-									<separator string="Ажиллах хүчний зардалын хувь" colspan="2"/>
-									<group>
-										<group>
-											<field name="engineer_salary_percent" readonly="1"/>
-											<field name="extra_salary_percent" readonly="1"/>
-										</group>
-										<group>
-											<field name="social_insurance_rate" readonly="1"/>
-											<field name="habe_percent" readonly="1"/>
-										</group>
-									</group>
-								</form>
-							</field>
-							<field name="labor_cost_ids1" attrs="{'invisible':[('is_old','=',True)]}" readonly="1">
-								<tree>
-									<field name="product_name"/>
-									<field name="product_uom"/>
-									<field name="product_uom_qty"/>
-									<field name="price_unit"/>
-									<field name="labor_total"/>
-									<field name="labor_cost_basic"/>
-									<field name="name"/>
-								</tree>
-								<form>
-									<group>
-										<group>
-											<field name="product_name" readonly="1"/>
-											<field name="name" readonly="1"/>
-											<field name="product_uom" readonly="1"/>
-											<field name="product_uom_qty" readonly="1"/>
-											<field name="price_unit" readonly="1"/>
-										</group>
-										<group>
-											<field name="labor_total" sum="Нийт"/>
-											<field name="engineer_salary" readonly="1"/>
-											<field name="extra_salary" readonly="1"/>
-											<field name="social_insurance" readonly="1"/>
-											<field name="habe" readonly="1"/>
-											<field name="total_salary" readonly="1"/>
-											<field name="labor_cost_basic" readonly="1"/>
-										</group>
-									</group>
-									<separator string="Ажиллах хүчний зардалын хувь" colspan="2"/>
-									<group>
-										<group>
-											<field name="engineer_salary_percent" readonly="1"/>
-											<field name="extra_salary_percent" readonly="1"/>
-										</group>
-										<group>
-											<field name="social_insurance_rate" readonly="1"/>
-											<field name="habe_percent" readonly="1"/>
-										</group>
-									</group>
-								</form>
-							</field>
-							<group>
-								<field name="total_amount" readonly="1"/>
-							</group>
-						</page>
-						<page string="Комиссийн гишүүд">
-							<separator string="Комиссийн гишүүд" colspan="2"/>
-							<field name="committee_member_ids" colspan="2" nolabel="1" attrs="{'readonly':[('state', '!=', 'draft')]}">
-								<tree string="committee member " editable="bottom">
-									<field name="employee_id" required="1"/>
-									<field name="vote_date" readonly="1"/>
-									<field name="partner_id" readonly="1"/>
-								</tree>
-								<form string="committee member">
-									<group>
-										<field name="employee_id" />
-										<field name="vote_date"/>
-										<field name="partner_id" />
-									</group>
-								</form>
-							</field>
-						</page>
-						<page string = "Батлагдсан хавсралтууд">
-							<separator string="Ажлын даалгаврын батлагдсан хавсралтууд" colspan="2"/>
-							<field name="document_ids" readonly="1">
-								<tree string="Files" delete="false">
-									<field name="name"/>
-									<field name="store_fname" string="Файлын нэр"/>
-									<field name="datas" filename="store_fname" string="Файл" readonly="1"/>
-									<field name="create_date" readonly="1"/>
-								</tree>
-								<form>
-									<label for="name" class="oe_edit_only"/>
-									<h1>
+									</form>
+								</field>
+							</page>
+							<page string = "Батлагдсан хавсралтууд">
+								<separator string="Ажлын даалгаврын батлагдсан хавсралтууд" colspan="2"/>
+								<field name="document_ids" readonly="1">
+									<tree string="Files" delete="false">
 										<field name="name"/>
-									</h1>
-									<group string="Өгөгдөл">
-										<field name="type" invisible="1"/>
-										<field name="datas" string="Файл" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
-										<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-										<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-									</group>
-								</form>
-							</field>
-							<separator string="Ажлын зургийн батлагдсан хавсралтууд" colspan="2"/>
-							<field name="task_graph_document" readonly="1">
-								<tree string="Files" delete="false">
-									<field name="name"/>
-									<field name="store_fname" string="Файлын нэр"/>
-									<field name="datas" filename="store_fname" string="Файл" readonly="1"/>
-									<field name="create_date" readonly="1"/>
-								</tree>
-								<form>
-									<label for="name" class="oe_edit_only"/>
-									<h1>
+										<field name="store_fname" string="Файлын нэр"/>
+										<field name="datas" filename="store_fname" string="Файл" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Өгөгдөл">
+											<field name="type" invisible="1"/>
+											<field name="datas" string="Файл" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+									</form>
+								</field>
+								<separator string="Ажлын зургийн батлагдсан хавсралтууд" colspan="2"/>
+								<field name="task_graph_document" readonly="1">
+									<tree string="Files" delete="false">
 										<field name="name"/>
-									</h1>
-									<group string="Өгөгдөл">
-										<field name="type" invisible="1"/>
-										<field name="datas" string="Файл" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
-										<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
-										<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
-									</group>
-								</form>
-							</field>
-						</page>
-						<page string="Урилга хүлээн авсан харилцагчид">
-							<separator string="Урилга хүлээн авсан харилцагчид" colspan="2"/>
-							<group>
-								<field name="invitation_type" required="1" attrs="{'readonly': [('state','not in','draft')]}"/>
-								<field name="requirement_partner_ids" widget="many2many_tags" options="{'no_create': True}" colspan="2" attrs="{'readonly': [('state','not in','draft')], 'invisible':[('invitation_type','!=','requirement_partner')] , 'required':[('invitation_type','=','requirement_partner')]}" />
-							</group>
-							<field name="invitation_template" required="1"/>
-						</page>
-					</notebook>
-
+										<field name="store_fname" string="Файлын нэр"/>
+										<field name="datas" filename="store_fname" string="Файл" readonly="1"/>
+										<field name="create_date" readonly="1"/>
+									</tree>
+									<form>
+										<label for="name" class="oe_edit_only"/>
+										<h1>
+											<field name="name"/>
+										</h1>
+										<group string="Өгөгдөл">
+											<field name="type" invisible="1"/>
+											<field name="datas" string="Файл" filename="store_fname" attrs="{'invisible':[('type','=','url')]}"/>
+											<field name="store_fname" invisible="1" attrs="{'invisible':[('type','=','url')]}" class="oe_inline oe_right"/>
+											<field name="url" widget="url" attrs="{'invisible':[('type','=','binary')]}"/>
+										</group>
+									</form>
+								</field>
+							</page>
+							<page string="Урилга хүлээн авсан харилцагчид">
+								<separator string="Урилга хүлээн авсан харилцагчид" colspan="2"/>
+								<group>
+									<field name="invitation_type" required="1" attrs="{'readonly': [('state','not in','draft')]}"/>
+									<field name="requirement_partner_ids" widget="many2many_tags" options="{'no_create': True}" colspan="2" attrs="{'readonly': [('state','not in','draft')], 'invisible':[('invitation_type','!=','requirement_partner')] , 'required':[('invitation_type','=','requirement_partner')]}" />
+								</group>
+								<field name="invitation_template" required="1"/>
+							</page>
+						</notebook>
+					</sheet>
 					<div class="oe_chatter">
 						<field name="message_follower_ids" widget="mail_followers"/>
 						<field name="message_ids" widget="mail_thread"/>
@@ -325,9 +323,9 @@
 					<field name="desc_name" string="Тодорхойлох нэр"/>
 					<field name="type_id" string="Ангилал"/>
 					<field name="employee_id" string="Хариуцагч"/>
-					<field name="state" string="Төлөв"/>
+					<!-- <field name="state" string="Төлөв"/> -->
 					<group expand="0" string="Group By">
-						<filter string="Төлөв" name="state" context="{'group_by':'state'}"/>
+						<filter string="Төлөв" name="state" domain="[]" context="{'group_by':'state'}"/>
 					</group>
 				</search>
 			</field>
@@ -337,7 +335,7 @@
 			<field name="name">budget.partner.comparison</field>
 			<field name="res_model">budget.partner.comparison</field>
 			<field name="view_mode">tree,form</field>
-			<field name="context">{'search_default_state': 1}</field>
+			<field name="context">{'search_default_state':1}</field>
 			<field name="search_view_id" ref="view_budget_partner_comparison_filter"/>
 			<field name="view_id" ref="budget_partner_comparison_tree"/>
 		</record>

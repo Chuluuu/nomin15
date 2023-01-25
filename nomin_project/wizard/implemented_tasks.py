@@ -11,9 +11,6 @@ class ImplementedTasks(models.TransientModel):
 
 	@api.model
 	def default_get(self, fields):
-
-		
-
 		res = super(ImplementedTasks, self).default_get(fields)	
 		active_id = self._context.get('active_id')
 		order_id= self.env['order.page'].browse(active_id)
@@ -35,47 +32,22 @@ class ImplementedTasks(models.TransientModel):
 	def _add_followers(self,user_ids):
 		'''Add followers
 		'''
-		self.message_subscribe_users(user_ids=user_ids)
+		partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+		self.message_subscribe(partner_ids=partner_ids)
 
 	def action_send(self):
 
 		active_id = self._context.get('active_id')
 		order_id = self.env['order.page'].browse(active_id)
-		# if self.employee_id.user_id.partner_id.id not in order_id.message_partner_ids.ids:
-		# 	order_id.update({'employee_id':self.employee_id.id})
-		# 	order_id.message_subscribe_users(user_ids=self.employee_id.user_id.id)
-
-
 		if self.employee_id.user_id.id :
 			order_id.write({'receive_employee_id1':self.employee_id.id})
 			order_id.sudo()._add_followers(self.employee_id.user_id.id)
-		
-		
 		if self.control_employee_id.user_id.id :
 			order_id.write({'receive_employee_id2':self.control_employee_id.id})
 			order_id.sudo()._add_followers(self.control_employee_id.user_id.id)
-		
-		
-
 		if self.confirm_employee_id.user_id.id :
 			order_id.write({'receive_employee_id3':self.confirm_employee_id.id})
 			order_id.sudo()._add_followers(self.confirm_employee_id.user_id.id)
-
-		
-
-		
-		
-
-		# if self.control_employee_id.user_id.partner_id.id not in order_id.message_partner_ids.ids:
-		# 	order_id.update({'control_employee_id':self.control_employee_id.id})
-		# 	order_id.message_subscribe_users(user_ids=self.control_employee_id.user_id.id)
-
-		# if self.confirm_employee_id.user_id.partner_id.id not in order_id.message_partner_ids.ids:
-		# 	order_id.update({'confirm_employee_id':self.confirm_employee_id.id})
-		# 	order_id.message_subscribe_users(user_ids=self.confirm_employee_id.user_id.id)
-			
-		
-
 		request_id = self.env['order.page'].browse(self._context.get('active_ids', []))	
 		if self.line_ids:	
 			for line in self.line_ids:
@@ -83,8 +55,6 @@ class ImplementedTasks(models.TransientModel):
 												'implemented_task':line.task , 
 												'explanation' : line.description ,
 												})
-
-				
 		request_id.write({'state':'handover',
 						'handover_date':time.strftime("%Y-%m-%d")			
 						})
@@ -145,8 +115,8 @@ class OrderPageReceive(models.TransientModel):
 	order_name = fields.Char(string='Захиалгын нэр')
 	order_description = fields.Char(string='Зорилт')
 	cost_type = fields.Selection([('cost_in','Дотоод зардал'),('payment','Нэг удаагийн төлбөр'),('rent_cost','Түрээсийн зардалд шингээх (МТС)'),('rent_cost_other','Түрээсийн зардалд шингээх (Бусад: __________________)')], string='Зардлын төрөл')
-	is_approve = fields.Boolean(string='Захиалгатай холбоотой ажлуудыг хүлээн авч баталгаажуулж байна', default=False,tracking=True)
-	is_reject = fields.Boolean(string='Дээр дутуу хэмээн тэмдэглэгдсэн ажлуудын гүйцэтгэлийг хүлээн авахаас өмнө баталгаажуулах боломжгүй', default=False,tracking=True)
+	is_approve = fields.Boolean(string='Захиалгатай холбоотой ажлуудыг хүлээн авч баталгаажуулж байна', default=False)
+	is_reject = fields.Boolean(string='Дээр дутуу хэмээн тэмдэглэгдсэн ажлуудын гүйцэтгэлийг хүлээн авахаас өмнө баталгаажуулах боломжгүй', default=False)
 	line_ids = fields.One2many('order.page.receive.line','line_id',string="Order page receive line")
 
 	

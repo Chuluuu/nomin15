@@ -25,7 +25,6 @@
     <record id="control_budget_tree" model="ir.ui.view">
       <field name="name">control.budget.tree</field>
       <field name="model">control.budget</field>
-      <field name="type">tree</field>
       <field name="arch" type="xml">
         <tree string="Control budget">
           <field name="budget_code"/>
@@ -43,7 +42,6 @@
     <record id="control_budget_form" model="ir.ui.view">
       <field name="name">control.budget.form</field>
       <field name="model">control.budget</field>
-      <field name="type">form</field>
       <field name="arch" type="xml">
         <form string="Control budget">
           <header>
@@ -618,17 +616,16 @@
     </record>
 
 
-
     <record id="view_control_budget_filter" model="ir.ui.view">
       <field name="name">control.budget.select</field>
       <field name="model">control.budget</field>
       <field name="arch" type="xml">
         <search string="Search control budget">
-          <field name="name" filter_domain="['|', ('name','ilike',self), ('desc_name','ilike',self)]" string="Дугаар"/>
-          <field name="budget_code" string="Код"/>
-          <field name="state" string="Төлөв"/>
+          <field name="name" filter_domain="['|', ('name','ilike',self), ('desc_name','ilike',self)]" />
+          <field name="budget_code" />
+          <!-- <field name="state" /> -->
           <group expand="0" string="Group By">
-            <filter string="Төлөв" name="state" context="{'group_by':'state'}"/>
+            <filter string="State" name="state" domain="[]" context="{'group_by':'state'}"/>
           </group>
         </search>
       </field>
@@ -640,7 +637,7 @@
       <field name="type">ir.actions.act_window</field>
       <field name="res_model">control.budget</field>
       <field name="view_mode">tree,form</field>
-      <field name="context">{'search_default_state': 1}</field>
+      <field name="context">{'search_default_state':1}</field>
       <field name="search_view_id" ref="view_control_budget_filter"/>
       <field name="view_id" ref="control_budget_tree"/>
       <field name="help" type="html">

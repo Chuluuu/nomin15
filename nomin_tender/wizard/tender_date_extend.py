@@ -34,7 +34,8 @@ class tender_date_extend(models.Model):
     
     def _add_followers(self,user_ids): 
         '''Дагагч нэмнэ'''
-        self.message_subscribe_users(user_ids=user_ids)
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
         
     @api.model
     def create(self, vals):
@@ -309,7 +310,8 @@ class tender_meeting(models.Model):
     
     def _add_followers(self,user_ids): 
         '''Дагагч нэмнэ'''
-        self.message_subscribe_users(user_ids=user_ids)
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
         
 #     Түр коммент болгов
     @api.model
@@ -326,11 +328,7 @@ class tender_meeting(models.Model):
              
         if meet.tender_id:
             users = self.env['res.users'].search([('partner_id', 'in', meet.tender_id.message_partner_ids.ids)])
-            if users:
-                user = []
-                for line in users:
-                    user.append(line.id)
-                meet_id.message_subscribe_users(user_ids=user)
+            meet_id.message_subscribe(user_ids=meet.tender_id.message_partner_ids.ids)
         return meet_id
     
      
@@ -472,6 +470,7 @@ class tender_meeting(models.Model):
                 
 #   Cron job ni huuchin @api deer suurilsan uchir hurvuuleh bolomjgui
 #    shine api_aar bichegdsen base deer hurvunu
+    @api.model
     def meeting_notif(self):
         query = "select id from tender_meeting where state='confirmed' and \
          now() between (meeting_from_date - interval '16 hour') and (meeting_from_date - interval '15 hour')"
@@ -531,42 +530,7 @@ class tender_meeting(models.Model):
                 self.env['mail.template'].send_mail(self.env.cr, 1, template_id, user.id, force_send=True, context=self.env.context)
         return True
        
-    #---------------------------------------------------------------- 
-    #----------------------------------------- def running_meet(self, cr , uid):
-        #----------- '''Товлогдсон хурлын хугацаа болсон эсэхийг шалгаж байна'''
-        # self.env.cr.execute("select tender.id, tender.is_meet_start_date, meeting.* \
-                #----- from tender_meeting as meeting, tender_tender as tender \
-                # where tender.id = meeting.tender_id and meeting.meeting_to_date is not null \
-                # and meeting.state = 'confirmed' and tender.is_meet_start_date = false \
-                #----------- group by tender.id, meeting.id, meeting.tender_id")
-        # _logger.info(u'----------------Батлагдсан хурал-- %s', self.env.cr.execute)
-        #---------------------------------------------------- #cr.execute(query)
-#------------------------------------------------------------------------------ 
-        #---------------------------------- records = self.env.cr.dictfetchall()
-        #----------------------------------------------------------- if records:
-            #-------------------------------------------- for record in records:
-# #                 bid_ids=self.pool.get('tender.participants.bid').search(cr, 1, [('tender_id','=',record['tender_id'])])
-                #---------------------- date_start = record['meeting_from_date']
-                #-------------------------- date_end = record['meeting_to_date']
-                #------------------- date_now=time.strftime('%Y-%m-%d %H:%M:%S')
-                #------------------------------------ if date_start <= date_now:
-                    # self.env['tender.tender'].browse(record['tender_id']).write({'is_meet_start_date': True})
-#------------------------------------------------------------------------------ 
-        # self.env.cr.execute("select A.id as id,B.state from tender_date_extend A inner join tender_tender B ON A.tender_id =B.id where A.state in ('draft','pending') and \
-        # B.state in ('closed','finished','cancelled','delay','in_selection','contract_request') and A.extend_date_start >=now()")
-        #---------------------------------------------------- #cr.execute(query)
-        #---------------------------------- records = self.env.cr.dictfetchall()
-        #------------------------------------------------------------ states = {
-        # 'closed':u'Хаагдсан','finished':u'Дууссан','cancelled':u'Цуцлагдсан','delay':u'Хойцлуулсан','in_selection':u'Сонгон шалгаруулалт',
-        #--------------------------------- 'contract_request':u'Гэрээний хүсэлт'
-#------------------------------------------------------------------------------ 
-        #--------------------------------------------------------------------- }
-        #----------------------------------------------------------- if records:
-            #-------------------------------------------- for record in records:
-                # self.env['tender.date.extend'].browse(record['id']).write({'state':'cancelled'})
-                # self.env['tender.date.extend'].message_post(body=u'Үндсэн тендер бичиг баримт хүлээн авч буйгаас %s төлөвт шилжив '%(states[record['state']]))
-
-
+    @api.model
     def running_meet(self):
         '''Товлогдсон хурлын хугацаа болсон эсэхийг шалгаж байна'''
         query= "select tender.id, tender.is_meet_start_date, meeting.* \
@@ -574,13 +538,11 @@ class tender_meeting(models.Model):
                 where tender.id = meeting.tender_id and meeting.meeting_to_date is not null \
                 and meeting.state = 'confirmed' and tender.is_meet_start_date = false \
                 group by tender.id, meeting.id, meeting.tender_id";
-        _logger.info(u'----------------Батлагдсан хурал-- %s', query)
         self.env.cr.execute(query)
 
         records = self.env.cr.dictfetchall()
         if records:
             for record in records:
-#                 bid_ids=self.pool.get('tender.participants.bid').search(cr, 1, [('tender_id','=',record['tender_id'])])
                 date_start = record['meeting_from_date']
                 date_end = record['meeting_to_date']
                 date_now=time.strftime('%Y-%m-%d %H:%M:%S')

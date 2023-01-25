@@ -30,7 +30,7 @@ CATEG_SELECTION = [
 class evaluation_indicators_line (models.Model):
     _name = 'evaluation.indicators.line'
     
-    model_id = fields.Many2one('ir.model', string='Object', required=True)
+    model_id = fields.Many2one('ir.model', string='Object', required=True, ondelete='cascade')
     indicator_id = fields.Many2one('evaluation.indicators', string='Evaluation indicators')
     is_default = fields.Boolean('Is default')
     # scale = fields.Float(string='Indicator scale')
@@ -39,7 +39,7 @@ class EvaluationIndicators(models.Model):
     _name = 'evaluation.indicators'
     _description = 'Evaluation Indicators'
     _table = "evaluation_indicators"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     name = fields.Char(string='Name', required=True, size=128)
     category = fields.Selection(CATEG_SELECTION, string='Category',default='contract', )

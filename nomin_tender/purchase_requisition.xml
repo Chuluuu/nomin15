@@ -42,7 +42,7 @@
 
 		<record id="action_purchase_tender_config" model="ir.actions.act_window">
 			<field name="name">Үнийн дүнгийн тохиргоо</field>
-			<field name="type">ir.actions.act_window</field>
+			<!-- <field name="type">ir.actions.act_window</field> -->
 			<field name="res_model">purchase.tender.config</field>
 			<field name="view_mode">tree,form</field>
 			<field name="view_id" ref="purchase_tender_config_tree"/>

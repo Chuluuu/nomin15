@@ -1,0 +1,1026 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* nomin_request_order
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-11-25 07:35+0000\n"
+"PO-Revision-Date: 2022-11-25 07:35+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_message_needaction
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_message_needaction
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_message_needaction
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_message_needaction
+msgid "Action Needed"
+msgstr "Action Needed"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_age
+msgid "Age"
+msgstr "Нас"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_request_order_config
+msgid "All Request Configure"
+msgstr "Урсгалийн тохиргоонууд"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_rate
+msgid "Assessment"
+msgstr "Үнэлгээ"
+
+#. module: nomin_request_order
+#: code:addons/nomin_request_order/wizard/request_cost_sharing.py:144
+#, python-format
+msgid "Budget filter"
+msgstr "Budget filter"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_knowledge_store_category_call_cost
+msgid "Call cost"
+msgstr "Тээврийн зардал тооцох"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_knowledge_store_category_call_cost_tarif
+msgid "Call cost tarif"
+msgstr "Тээврийн зардлын үнэ"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_cost_sharing_form_view
+#: model:ir.ui.view,arch_db:nomin_request_order.return_work_service_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_change_price_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_control_work_service_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_evaluate_employee_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_line_reject_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_reject_work_service_form
+msgid "Cancel"
+msgstr "Цуцлах"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_hr_employee_case_history_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_case_history_ids
+msgid "Case history"
+msgstr "Өвчний түүх"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_change_description
+msgid "Change description"
+msgstr "Үнэ өөрчилсөн тайлбар"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_line_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_change_price_form
+msgid "Change price"
+msgstr "Үнэ өөрчлөх"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_change_price_change_description
+msgid "Change price description"
+msgstr "Үнэ өөрчилсөн тайлбар"
+
+#. module: nomin_request_order
+#: model:ir.actions.act_window,help:nomin_request_order.action_diagnosis_list
+msgid "Click to define a new diagnosis."
+msgstr "Оношийн бүртгэл үүсгэнэ үү."
+
+#. module: nomin_request_order
+#: model:ir.actions.act_window,help:nomin_request_order.action_request_order
+#: model:ir.actions.act_window,help:nomin_request_order.action_request_order_line
+msgid "Click to define a new program ordering."
+msgstr "Click to define a new program ordering."
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_work_service_collect_amount
+msgid "Collect amount"
+msgstr "Цуцалсан үед дүн тооцох хувь"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_form
+msgid "Control"
+msgstr "Тойрох хуудас зурагдаж буй"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_doctor_report_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_line_reject_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_performance_work_report_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_reject_work_service_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_line_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_attachment_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_report_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_return_work_service_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_sum_work_service_report_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_change_price_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_control_work_service_create_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_evaluate_employee_create_uid
+msgid "Created by"
+msgstr "Үүсгэгч"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_doctor_report_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_line_reject_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_performance_work_report_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_reject_work_service_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_line_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_attachment_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_report_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_return_work_service_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_sum_work_service_report_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_change_price_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_control_work_service_create_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_evaluate_employee_create_date
+msgid "Created on"
+msgstr "Үүсгэсэн"
+
+#. module: nomin_request_order
+#: selection:request.order.config,select_dep:0
+msgid "Customer"
+msgstr "Захиалагч"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_date_evaluate
+msgid "Date evaluate"
+msgstr "Date evaluate"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_doctor_report_date_from
+#: model:ir.model.fields,field_description:nomin_request_order.field_performance_work_report_date_from
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_report_date_from
+#: model:ir.model.fields,field_description:nomin_request_order.field_sum_work_service_report_date_from
+msgid "Date from"
+msgstr "Эхлэх огноо"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,help:nomin_request_order.field_diagnosis_list_message_last_post
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_config_message_last_post
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_line_message_last_post
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_message_last_post
+msgid "Date of the last message posted on the record."
+msgstr "Бичлэгт хамгийн сүүлд илгээгдсэн зурвасын огноо."
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_doctor_report_date_to
+#: model:ir.model.fields,field_description:nomin_request_order.field_performance_work_report_date_to
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_report_date_to
+#: model:ir.model.fields,field_description:nomin_request_order.field_sum_work_service_report_date_to
+msgid "Date to"
+msgstr "Дуусах огноо"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_department_id
+#: selection:request.order.config,type:0
+msgid "Department"
+msgstr "Хэлтэс"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_description
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_description
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_control_work_service_description
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_evaluate_employee_description
+msgid "Description"
+msgstr "Тодорхойлолт"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_diagnosis
+#: model:ir.ui.view,arch_db:nomin_request_order.diagnosis_list_form
+msgid "Diagnosis"
+msgstr "Онош"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_doctor_report_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_line_reject_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_performance_work_report_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_reject_work_service_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_line_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_attachment_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_report_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_return_work_service_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_sum_work_service_report_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_change_price_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_control_work_service_display_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_evaluate_employee_display_name
+msgid "Display Name"
+msgstr "Дэлгэцийн Нэр"
+
+#. module: nomin_request_order
+#: selection:request.order.config,type:0
+msgid "Distribute"
+msgstr "Хуваарилах хэрэглэгч"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_doctor_field
+msgid "Doctor flow"
+msgstr "Эмчийн урсгал"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_hr_employee
+#: model:ir.model.fields,field_description:nomin_request_order.field_case_history_line_employee_id
+#: selection:sum.work.service.report,type:0
+msgid "Employee"
+msgstr "Захиалагч"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_enter_price
+msgid "Enter price"
+msgstr "Нэгж үнэ"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_knowledge_store_category_enter_price
+msgid "Enter unit price "
+msgstr "Нэгж үнэ гараас оруулах "
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_form
+msgid "Evaluate"
+msgstr "Үнэлгээ"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.to_control_work_service_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_evaluate_employee_form
+msgid "Evaluate employee"
+msgstr "Evaluate employee"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_line_form
+msgid "File attach"
+msgstr "Хавсралт оруулах"
+
+#. module: nomin_request_order
+#: selection:request.order.config,type:0
+msgid "Fixed"
+msgstr "Тогтмол"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_message_follower_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_message_follower_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_message_follower_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_message_follower_ids
+msgid "Followers"
+msgstr "Дагагчид"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_message_channel_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_message_channel_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_message_channel_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Followers (Channels)"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_message_partner_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_message_partner_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_message_partner_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Followers (Partners)"
+
+#. module: nomin_request_order
+#: code:addons/nomin_request_order/models/request_order.py:401
+#, python-format
+msgid "Followup "
+msgstr "Followup "
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_gender
+msgid "Gender"
+msgstr "Хүйс"
+
+#. module: nomin_request_order
+#: selection:request.order.config,type:0
+msgid "Group"
+msgstr "Групп"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.view_request_order_config_filter
+#: model:ir.ui.view,arch_db:nomin_request_order.view_request_order_filter
+#: model:ir.ui.view,arch_db:nomin_request_order.view_request_order_line_filter
+msgid "Group By"
+msgstr "Бүлэглэх"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_form
+msgid "History"
+msgstr "Түүх"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_history_line
+msgid "History line"
+msgstr "Өмнөх түүх"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_doctor_report_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_line_reject_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_performance_work_report_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_reject_work_service_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_line_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_attachment_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_report_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_return_work_service_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_sum_work_service_report_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_change_price_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_control_work_service_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_evaluate_employee_id
+msgid "ID"
+msgstr "ID"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,help:nomin_request_order.field_diagnosis_list_message_unread
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_config_message_unread
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_line_message_unread
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_message_unread
+msgid "If checked new messages require your attention."
+msgstr "Хэрэв тэмдэглэгдсэн бол таныг шинэ зурвасуудад анхаарал хандуулахыг шаардана."
+
+#. module: nomin_request_order
+#: model:ir.model.fields,help:nomin_request_order.field_diagnosis_list_message_needaction
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_config_message_needaction
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_line_message_needaction
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "If checked, new messages require your attention."
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_is_invisible_field
+msgid "Invisible field"
+msgstr "Invisible field"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_message_is_follower
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_message_is_follower
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_message_is_follower
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_message_is_follower
+msgid "Is Follower"
+msgstr "Дагагч эсэх"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_is_urgent
+msgid "Is Urgent"
+msgstr "Яаралтай эсэх"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_is_approve_user
+msgid "Is approve user"
+msgstr "Is approve user"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_work_service_is_calculated_percent
+msgid "Is calculated percent"
+msgstr "Хувиар тооцох эсэх"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_is_control
+msgid "Is control"
+msgstr "Хянах процессыг алгасах эсэх"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_is_done
+msgid "Is done"
+msgstr "Is done"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_is_draft
+msgid "Is draft"
+msgstr "Is draft"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_is_evaluate
+msgid "Is evaluate"
+msgstr "Is evaluate"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_is_fold
+msgid "Is fold"
+msgstr "Цуцлах төлөвт оруулах эсэх"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_is_invisible
+msgid "Is invisible"
+msgstr "Is invisible"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_is_invisible_button
+msgid "Is invisible button"
+msgstr "Is invisible button"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_is_percent
+msgid "Is percent"
+msgstr "Is percent"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_is_readonly
+msgid "Is readonly"
+msgstr "Is readonly"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_is_reject
+msgid "Is reject"
+msgstr "Is reject"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_is_required
+msgid "Is required"
+msgstr "Is required"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_is_cancel
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_is_sent
+msgid "Is sent"
+msgstr "Is sent"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_is_skip_control
+msgid "Is skip control"
+msgstr "Хянах төлөв алгасах"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_is_urgent
+msgid "Is urgent"
+msgstr "Is urgent"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_performance_work_report_job_ids
+msgid "Jobs"
+msgstr "Ажлын байрууд"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_knowledge_store_category
+msgid "Knowledge Store Category"
+msgstr "Ангилал"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_message_last_post
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_message_last_post
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_message_last_post
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_message_last_post
+msgid "Last Message Date"
+msgstr "Сүүлийн зурвасын огноо"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_doctor_report___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_line_reject___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_performance_work_report___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_reject_work_service___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_line___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_attachment___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_report___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_return_work_service___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_sum_work_service_report___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_change_price___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_control_work_service___last_update
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_evaluate_employee___last_update
+msgid "Last Modified on"
+msgstr "Сүүлийн засвар хийсэн огноо"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_doctor_report_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_line_reject_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_performance_work_report_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_reject_work_service_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_line_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_attachment_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_report_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_return_work_service_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_sum_work_service_report_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_change_price_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_control_work_service_write_uid
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_evaluate_employee_write_uid
+msgid "Last Updated by"
+msgstr "Сүүлийн засвар хийсэн"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_doctor_report_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_line_reject_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_performance_work_report_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_reject_work_service_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_line_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_attachment_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_report_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_return_work_service_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_sum_work_service_report_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_change_price_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_control_work_service_write_date
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_evaluate_employee_write_date
+msgid "Last Updated on"
+msgstr "Сүүлийн засвар хийсэн огноо"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_ids
+msgid "Line history"
+msgstr "Line history"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_form
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_line_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_line_reject_form
+msgid "Line reject"
+msgstr "Ажил үйлчилгээ цуцлах"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_line_ids
+msgid "Lines"
+msgstr "Мөрүүд"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_maintenance
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_maintenance
+msgid "Maintenance"
+msgstr "Засвар"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_message_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_message_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_message_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_message_ids
+msgid "Messages"
+msgstr "Зурвасууд"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_name
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_name
+msgid "Name"
+msgstr "Нэр"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_message_needaction_counter
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_message_needaction_counter
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_message_needaction_counter
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_message_needaction_counter
+msgid "Number of Actions"
+msgstr "Үйлдлийн тоо"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,help:nomin_request_order.field_diagnosis_list_message_needaction_counter
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_config_message_needaction_counter
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_line_message_needaction_counter
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Үйлдэл шаардлагатай зурвасын тоо"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,help:nomin_request_order.field_diagnosis_list_message_unread_counter
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_config_message_unread_counter
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_line_message_unread_counter
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_message_unread_counter
+msgid "Number of unread messages"
+msgstr "Уншаагүй зурвасын тоо"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_pain
+msgid "Pain"
+msgstr "Зовиур"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_percent_change
+msgid "Percentage of change"
+msgstr "Үржүүлэгч"
+
+#. module: nomin_request_order
+#: selection:request.order.config,select_dep:0
+msgid "Perform"
+msgstr "Гүйцэтгэгч"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_perform_department_id
+msgid "Perform department"
+msgstr "Гүйцэтгэх хэлтэс"
+
+#. module: nomin_request_order
+#: selection:performance.work.report,type:0
+msgid "Perform employee"
+msgstr "Гүйцэтгэгч"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_progress_percentage
+msgid "Progress percentage"
+msgstr "Явцын хувь"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_project_id
+msgid "Project"
+msgstr "Төсөл"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_python_code
+#: model:ir.ui.view,arch_db:nomin_request_order.view_request_order_config_form
+msgid "Python code"
+msgstr "Python Код бичих"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_reject_work_service_reason
+#: model:ir.model.fields,field_description:nomin_request_order.field_return_work_service_reason
+msgid "Reason"
+msgstr "Шалтгаан"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_reject_work_service_form
+msgid "Reject"
+msgstr "Татгалзах"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_line_reject_reject_description
+msgid "Reject description"
+msgstr "Татгалзах шалтгаан"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.to_reject_work_service_form
+msgid "Reject work service"
+msgstr "Reject work service"
+
+#. module: nomin_request_order
+#: model:ir.ui.menu,name:nomin_request_order.menu_nomin_request_report
+msgid "Report"
+msgstr "Тайлан"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_performance_work_report_report_type
+msgid "Report type"
+msgstr "Тайлангийн төрөл"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_cost_sharing_line_request_cost_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_order_line_id
+msgid "Request"
+msgstr "Урсгал"
+
+#. module: nomin_request_order
+#: model:ir.actions.act_window,name:nomin_request_order.action_request_config
+#: model:ir.ui.view,arch_db:nomin_request_order.view_request_order_config_filter
+#: model:ir.ui.view,arch_db:nomin_request_order.view_request_order_config_form
+#: model:ir.ui.view,arch_db:nomin_request_order.view_request_order_config_tree
+msgid "Request Configure"
+msgstr "Урсгал тохиргоо"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_request_history
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_history_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_line_history_ids
+msgid "Request History"
+msgstr "Хүсэлтийн түүх"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_request_name
+msgid "Request name"
+msgstr "Захиалгын нэр"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_attachment_order_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_attachment_order_line_id
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_order_id
+#: model:ir.ui.menu,name:nomin_request_order.menu_nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_form
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_line_form
+msgid "Request order"
+msgstr "Захиалгын Хүсэлт"
+
+#. module: nomin_request_order
+#: model:ir.ui.menu,name:nomin_request_order.request_order_config
+msgid "Request order config"
+msgstr "Захиалгын хүсэлтийн тохиргоо"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_history_request_order_id
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_form
+msgid "Request order history"
+msgstr "Төлвийн түүх"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_request_order_line
+msgid "Request order line"
+msgstr "Миний ажлууд мөр"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_request_order_line_history
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_form
+msgid "Request order line history"
+msgstr "Миний ажлууд мөрийн түүх"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_return_work_service_request_order_line_id
+msgid "Request order line id"
+msgstr "Миний ажлууд мөрийн дугаар"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_id_41470
+msgid "Request order1"
+msgstr "Түүх"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_form
+msgid "Return"
+msgstr "Буцаах"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.view_request_order_filter
+#: model:ir.ui.view,arch_db:nomin_request_order.view_request_order_line_filter
+msgid "Search Order Page"
+msgstr "Search Order Page"
+
+#. module: nomin_request_order
+#: selection:doctor.report,type:0
+#: selection:performance.work.report,type:0
+#: selection:request.order.report,type:0
+#: selection:sum.work.service.report,type:0
+msgid "Sector"
+msgstr "Салбар"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_select_dep
+msgid "Selection department"
+msgstr "Энэ төлөвт зөвшөөрөгч тал"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_form
+msgid "Send"
+msgstr "Илгээх"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_active_sequence
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_sequence
+msgid "Sequence"
+msgstr "Дараалал"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_state
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_state
+msgid "Status"
+msgstr "Төлөв"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_cost_sharing_form_view
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_form
+msgid "Sum"
+msgstr "Нийлбэр"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.return_work_service_form
+msgid "To back work service"
+msgstr "To back work service"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_total_score
+msgid "Total score"
+msgstr "Нийт оноо"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_treatment_adv
+msgid "Treatment adv"
+msgstr "Эмчилгээ зөвлөгөө"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_doctor_report_type
+#: model:ir.model.fields,field_description:nomin_request_order.field_performance_work_report_type
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_type
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_report_type
+#: model:ir.model.fields,field_description:nomin_request_order.field_sum_work_service_report_type
+msgid "Type"
+msgstr "Төрөл"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_to_change_price_change_price
+msgid "Unit price"
+msgstr "Нэгж үнэ"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_message_unread
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_message_unread
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_message_unread
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_message_unread
+msgid "Unread Messages"
+msgstr "Уншаагүй Зурвасууд"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_message_unread_counter
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_message_unread_counter
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_message_unread_counter
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Unread Messages Counter"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_user_id
+msgid "User"
+msgstr "Хэрэглэгч"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_user_ids
+msgid "Users"
+msgstr "Хэрэглэгчид"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_vital_signs
+msgid "VItal signs"
+msgstr "Амин үзүүлэлт"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_form
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_line_form
+msgid "Versions"
+msgstr "Гэрээ /хавсралт/"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_diagnosis_list_website_message_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_config_website_message_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_website_message_ids
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_website_message_ids
+msgid "Website Messages"
+msgstr "Вебсайтын зурвасууд"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,help:nomin_request_order.field_diagnosis_list_website_message_ids
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_config_website_message_ids
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_line_website_message_ids
+#: model:ir.model.fields,help:nomin_request_order.field_request_order_website_message_ids
+msgid "Website communication history"
+msgstr "Вебсайтын харилцааны түүх"
+
+#. module: nomin_request_order
+#: model:ir.actions.act_window,name:nomin_request_order.action_request_work_service
+#: model:ir.model,name:nomin_request_order.model_work_service
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_ids
+#: model:ir.ui.menu,name:nomin_request_order.menu_requestorder
+msgid "Work Service"
+msgstr "Ажил үйлчилгээ"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.request_order_line_form
+msgid "Work service"
+msgstr "Ажил үйлчилгээ"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_work_type
+msgid "Work type"
+msgstr "Ажлын зардлын төрөл"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_all_done
+msgid "all done"
+msgstr "all done"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_case_history_line
+msgid "case.history.line"
+msgstr "case.history.line"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_category_ids
+msgid "category ids"
+msgstr "category ids"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.diagnosis_list_form
+msgid "diagnosis"
+msgstr "diagnosis"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_diagnosis_list
+msgid "diagnosis.list"
+msgstr "diagnosis.list"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_doctor_report
+msgid "doctor.report"
+msgstr "doctor.report"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_line_reject
+msgid "line.reject"
+msgstr "line.reject"
+
+#. module: nomin_request_order
+#: model:ir.ui.view,arch_db:nomin_request_order.doctor_report_view
+#: model:ir.ui.view,arch_db:nomin_request_order.form_nomin_request_order_report_view
+#: model:ir.ui.view,arch_db:nomin_request_order.form_performance_work_report_view
+#: model:ir.ui.view,arch_db:nomin_request_order.form_sum_work_service_report_view
+#: model:ir.ui.view,arch_db:nomin_request_order.request_cost_sharing_form_view
+#: model:ir.ui.view,arch_db:nomin_request_order.return_work_service_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_change_price_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_control_work_service_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_evaluate_employee_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_line_reject_form
+#: model:ir.ui.view,arch_db:nomin_request_order.to_reject_work_service_form
+msgid "or"
+msgstr "эсвэл"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_performance_work_report
+msgid "performance.work.report"
+msgstr "performance.work.report"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_reject_work_service
+msgid "reject.work.service"
+msgstr "reject.work.service"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_request_cost_sharing
+msgid "request account cost sharing"
+msgstr "request account cost sharing"
+
+#. module: nomin_request_order
+#: selection:doctor.report,type:0
+#: selection:request.order.report,type:0
+msgid "request employee"
+msgstr "Захиалагч"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_request_cost_sharing_line
+msgid "request.cost.sharing.line"
+msgstr "request.cost.sharing.line"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_request_order_attachment
+msgid "request.order.attachment"
+msgstr "request.order.attachment"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_request_order_report
+msgid "request.order.report"
+msgstr "request.order.report"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_return_work_service
+msgid "return.work.service"
+msgstr "return.work.service"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_sum_work_service_report
+msgid "sum.work.service.report"
+msgstr "sum.work.service.report"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_to_change_price
+msgid "to.change.price"
+msgstr "to.change.price"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_to_control_work_service
+msgid "to.control.work.service"
+msgstr "to.control.work.service"
+
+#. module: nomin_request_order
+#: model:ir.model,name:nomin_request_order.model_to_evaluate_employee
+msgid "to.evaluate.employee"
+msgstr "to.evaluate.employee"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_service_id
+msgid "work service"
+msgstr "Ажил үйлчилгээ"
+
+#. module: nomin_request_order
+#: model:ir.model.fields,field_description:nomin_request_order.field_request_order_line_history_unit_price_20
+msgid "Нэгж үнэ * 20%"
+msgstr "Нэгж үнэ * 20%"

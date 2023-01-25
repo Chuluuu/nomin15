@@ -20,7 +20,6 @@ from openerp import api, fields, models, _
 from openerp.exceptions import UserError
 from fnmatch import translate
 from openerp.osv import osv
-from pychart.color import steelblue
 
 integraition_user_id=462
 
@@ -29,7 +28,7 @@ class RequestConfig(models.Model):
     
     _name = 'request.config'
     _description = "All Request Configure"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = "id desc"
     
     TYPE_SELECTION =[('payment.request','Төлбөрийн хүсэлт'),
@@ -92,7 +91,7 @@ class RequestConfig(models.Model):
     loan_request_type_id = fields.Selection([('impecs','Impecs')], string="Loan request type")
     
     
-    @api.multi
+    
     @api.onchange('process','department_id')
     def onchange_process(self):
         values = {}
@@ -542,7 +541,7 @@ class RequestConfigLine(models.Model):
     
     _name = 'request.config.line'
     _description = 'All request Config Line'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'sequence'
     STATE_SELECTION = [
                        #('draft','Draft'),
@@ -569,7 +568,7 @@ class RequestConfigLine(models.Model):
                          'group_id':  False,
                         'state':False,
                          })
-    @api.multi
+    
     def write(self, vals):
         if vals.get('type') =='fixed':
             vals.update({
@@ -592,7 +591,7 @@ class RequestConfigPaymentLine(models.Model):
     
     _name = 'request.config.payment.line'
     _description = 'All request Config Line'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'sequence'
     # STATE_SELECTION = [
     #                    #('draft','Draft'),
@@ -626,7 +625,7 @@ class RequestConfigPaymentLine(models.Model):
                          'group_id':  False,
                         'state':False,
                          })
-    @api.multi
+    
     def write(self, vals):
         if vals.get('type') =='fixed':
             vals.update({
@@ -649,7 +648,7 @@ class RequestConfigOtherBudgetLine(models.Model):
     
     _name = 'request.config.other.budget.line'
     _description = 'All request Config Line'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'sequence'
     # STATE_SELECTION = [
     #                    #('draft','Draft'),
@@ -690,7 +689,7 @@ class RequestConfigOtherBudgetLine(models.Model):
                          'group_id':  False,
                         'state':False,
                          })
-    @api.multi
+    
     def write(self, vals):
         if vals.get('type') =='fixed':
             vals.update({
@@ -712,7 +711,7 @@ class RequestConfigPurchasetLine(models.Model):
     
     _name = 'request.config.purchase.line'
     _description = 'All request Config Line'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'sequence'
     # STATE_SELECTION = [
     #                    #('draft','Draft'),
@@ -754,7 +753,7 @@ class RequestConfigPurchasetLine(models.Model):
                          'group_id':  False,
                         'state':False,
                          })
-    @api.multi
+    
     def write(self, vals):
         if vals.get('type') =='fixed':
             vals.update({
@@ -778,7 +777,7 @@ class RequestHistory(models.Model):
     
     _name = 'request.history'
     _description = 'Request History'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'id desc'
     STATE_SELECTION = [('draft','Draft'),
                        ('sent','Sent'),#Илгээгдсэн
@@ -824,7 +823,7 @@ class RequestNewHistory(models.Model):
     
     _name = 'request.new.history'
     _description = 'Request History'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'id asc'
     
     STATE_SELECTION = [('verify','Verify'),

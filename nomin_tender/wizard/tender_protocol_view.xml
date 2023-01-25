@@ -5,7 +5,6 @@
 		<record id="view_tender_protocol_form" model="ir.ui.view">
 			<field name="name">Tender Protocol form</field>
 			<field name="model">tender.protocol</field>
-			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Tender Protocol form">
 					<header>
@@ -77,7 +76,7 @@
 							<field name="tender_id" readonly="1" colspan="2" options="{'no_create': True}"/>
 							<!-- <field name="meeting_id" colspan="2" options="{'no_create': True}"/> -->
 							<!-- <field name="member_ids" colspan="2" invisible="1" options="{'no_create': True}" widget="many2many_tags"/> -->
-							<field name="committee_member_ids" colspan="2" invisible="1" options="{'no_create': True}"/>
+							<!-- <field name="committee_member_ids" colspan="2" invisible="1" options="{'no_create': True}"/> -->
 							<field name="meet_protocol" colspan="4" rowspan="8" required="1"/>
 							<field name="user_id" readonly="1" colspan="2"/>
 							<field name="state" readonly="1" colspan="2"/>
@@ -94,7 +93,6 @@
 		<record id="view_tender_protocol_tree" model="ir.ui.view">
 			<field name="name">tender.protocol.tree</field>
 			<field name="model">tender.protocol</field>
-			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Tender Protocol tree">
 					<field name="tender_id"/>

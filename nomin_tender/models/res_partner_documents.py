@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 
 
 from odoo import api, fields, models, tools
-class ir_attachment(models.Model):
+class IrtAttachment(models.Model):
     _inherit = 'ir.attachment'
     '''Хавсралт файлууд'''
 
@@ -30,7 +30,7 @@ class ir_attachment(models.Model):
     p_audit_report_id = fields.Many2one('res.partner.documents','Audit report pdf')
     date_end = fields.Date(string="Date end")
 
-class res_partner_documents(models.Model):
+class ResPartnerDocuments(models.Model):
     _name="res.partner.documents"
     _description = 'Basic registration'
     _inherit = ['mail.thread', 'mail.activity.mixin']
@@ -79,7 +79,7 @@ class res_partner_documents(models.Model):
         for doc in self:
             doc.partner_id.document_id = doc.id
 
-    
+    @api.model
     def check_document_expiredates(self):
         self.env.cr.execute("select A.id from res_partner_documents A inner join ir_attachment B ON A.id =B.p_tax_id and B.date_end is not null order by B.date_end desc limit 1 ")
         records = self.env.cr.dictfetchall()
@@ -248,9 +248,6 @@ class res_partner_documents(models.Model):
             end_date = end_date.strftime(DATE_FORMAT)
             if end_date <= date_now:
                 is_in_cer = True
-                #self.pool.get('ir.attachment').write(cr, uid, cer_document['attachment_id'],{'status': False}, context=None)
-             
-                 
                 if is_in_cer == True:
                     self.env['res.partner.documents'].browse(cer_document['document_id']).write({'state': 'incomplete'})
                     
@@ -467,7 +464,7 @@ class res_partner_documents(models.Model):
         return super(res_partner_documents, self).unlink()  
 
 
-class res_partner(models.Model):
+class ResPartner(models.Model):
     _name="res.partner"
     _inherit = 'res.partner'
     _description = 'Basic registration'
@@ -477,7 +474,7 @@ class res_partner(models.Model):
     
     
     
-class partner_file_type(models.Model):
+class PartnerFileType(models.Model):
     _name="partner.file.type"
     _description = "Partner File Type"
     _inherit = ['mail.thread', 'mail.activity.mixin']
@@ -494,7 +491,7 @@ class partner_file_type(models.Model):
     file_id = fields.Many2one('partner.file.duration', 'Partner file', ondelete='restrict',tracking=True)
     
                     
-class partner_file_duration(models.Model):
+class PartnerFileDuration(models.Model):
     _name = "partner.file.duration"
     _description = "File duration"
     _inherit = ['mail.thread', 'mail.activity.mixin']

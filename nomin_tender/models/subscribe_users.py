@@ -14,7 +14,7 @@ from odoo.http import request
 import logging
 _logger = logging.getLogger(__name__)
     
-class subscribe_users(models.Model):
+class SubscribeUsers(models.Model):
     _name='subscribe.users'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     

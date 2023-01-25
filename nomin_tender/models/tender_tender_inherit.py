@@ -14,7 +14,7 @@ from odoo.http import request
 import logging
 _logger = logging.getLogger(__name__)
 
-class tender_tender(models.Model):
+class TenderTender(models.Model):
     _inherit = ['tender.tender']
     
     
@@ -98,4 +98,26 @@ class tender_tender(models.Model):
     is_tender_disabled_user  = fields.Boolean('Is tender disabled user', compute=_is_tender_disabled_user)
 
 
-    
+    @api.model
+    def tender_tender_alarm(self):
+        _logger.info(u'\nТендерийн cron ажиллаж байна')
+        '''Тендерийн хаах огноо болох үед 
+           систем автоматаар төлөв солино
+        '''
+        query = "select tender.id as tid, tender.name as tnumber, tender.desc_name tname, type.name as parent_type, child_type.name as child_type, \
+                    tender.ordering_date orderdate, tender.state state, tender.date_end \
+                    from tender_tender as tender, tender_type as type, tender_type as child_type \
+                    where tender.state = 'published' and type.id = tender.type_id and child_type.id = tender.child_type_id"
+        self.env.cr.execute(query)
+        records = self.env.cr.dictfetchall()
+        # template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_tender_closed_state_email_template')[1]
+        tender_obj=self.env['tender.tender']
+        if records:
+            for record in records:
+                # date_end = record['date_end']
+                # ADD time 8 hours
+                date_end =datetime.datetime.strptime(record['date_end'], "%Y-%m-%d %H:%M:%S")
+                date_now=datetime.datetime.now()
+                if date_end <= date_now:
+                    tender_obj.sudo().browse(record['tid']).write( {'state':'bid_expire'})
+                    self.env.cr.commit()   

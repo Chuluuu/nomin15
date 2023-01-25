@@ -35,6 +35,6 @@
 			<field name="view_mode">tree,form</field>
 		</record>
 
-		<menuitem action="nomin_project.action_project_issue_reason" id="menu_project_issue_reason" parent="nomin_project.menu_project_config2" groups="project.group_project_admin" sequence="14" />
+		<menuitem action="nomin_project.action_project_issue_reason" id="menu_project_issue_reason" parent="project.menu_project_config" groups="project.group_project_admin" sequence="14" />
 	</data>
 </odoo>

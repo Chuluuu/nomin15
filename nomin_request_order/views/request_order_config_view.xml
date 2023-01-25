@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <!-- Request Config -->
+        
+        <record id="view_request_order_config_tree" model="ir.ui.view">
+            <field name="name">request.order.config.tree</field>
+            <field name="model">request.order.config</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree string="Request Configure">
+                    <field name="name"/>                    
+                    <field name="sequence"/>                    
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_request_order_config_form" model="ir.ui.view">
+            <field name="name">request.order.config.form</field>
+            <field name="model">request.order.config</field>
+            <field name="arch" type="xml">
+                <form string="Request Configure">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>                            
+                            <field name="sequence" required="1"/>
+                            <field name="is_fold" />
+                            <field name="type" />  
+                            <field name="field_invisible"/>                         
+                        </group>
+                        <group>
+                            <field name="field_doctor"/>
+                            <field name="select_dep"/>
+                            <field name="department_ids" widget="many2many_tags" options="{'no_create': True}" />
+                            <field name="group_ids" attrs="{'invisible':[('type','!=','group')],'required':[('type','in','group')]}" widget="many2many_tags"/> 
+                            <field name="user_ids" attrs="{'invisible':[('type','!=','distribute')],'required':[('type','=','distribute')]}" widget="many2many_tags"/>
+                            <field name="user_id" attrs="{'invisible':[('type','!=','fixed')],'required':[('type','=','fixed')]}"/>
+                       </group>
+
+                    </group>
+                        <h1>
+                            <field name="python_code" placeholder="Python code"/>
+                        </h1>
+
+
+                     <div class="oe_chatter">
+	                    <field name="message_follower_ids" widget="mail_followers"/>
+	                    <field name="message_ids" widget="mail_thread"/>
+	               	</div>   
+                </sheet>
+                </form>
+            </field>
+        </record>
+       
+        <record id="view_request_order_config_filter" model="ir.ui.view">
+            <field name="name">request.order.config.list.select</field>
+            <field name="model">request.order.config</field>
+            <field name="arch" type="xml">
+                <search string="Request Configure">
+                    <field name="name"/>
+                    <field name="type"/>
+                    <group expand="0" string="Group By">
+                        <filter name="type" domain="" context="{'group_by':'type'}"/>
+                        <filter name="name" domain="" context="{'group_by':'name'}"/>
+                    </group>
+               </search>
+            </field>
+        </record>
+
+        <record id="action_request_config" model="ir.actions.act_window">
+            <field name="name">Request Configure</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">request.order.config</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_request_order_config_filter"/>
+             <field name="context">{"search_default_object":1}</field>
+        </record>
+		
+		<menuitem 
+            id="request_order_config" action="action_request_config" name="Request order config" parent="nomin_base.menu_request_config"
+            sequence="3"/>
+            
+      
+        
+        
+    </data>
+</openerp>

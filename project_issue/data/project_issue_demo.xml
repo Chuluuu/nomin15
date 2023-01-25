@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-        <record id="project.project_project_1" model="project.project">
-            <field name="use_issues" eval="True"/>
-        </record>
-        <record id="project.project_project_2" model="project.project">
-            <field name="use_issues" eval="True"/>
-            <field name="label_issues">Bugs</field>
-        </record>
-        <record id="project.project_project_3" model="project.project">
-            <field name="use_issues" eval="True"/>
-            <field name="label_issues">Feedbacks</field>
-        </record>
-        <record id="project.project_project_4" model="project.project">
+    <record id="project.project_project_1" model="project.project">
+        <field name="use_issues" eval="True"/>
+    </record>
+    <record id="project.project_project_2" model="project.project">
+        <field name="use_issues" eval="True"/>
+        <field name="label_issues">Bugs</field>
+    </record>
+    <record id="project.project_project_3" model="project.project">
+        <field name="use_issues" eval="True"/>
+        <field name="label_issues">Feedbacks</field>
+    </record>
+    <!-- <record id="project.project_project_4" model="project.project">
             <field name="use_issues" eval="True"/>
             <field name="label_issues">Bugs</field>
         </record>
         <record id="project.project_project_5" model="project.project">
             <field name="use_issues" eval="True"/>
-        </record>
+        </record> -->
 
     <data noupdate="1">
 
@@ -217,8 +217,7 @@
 
         <!-- Call function to set some issues as 'unread' -->
 
-<!--         <function model="project.issue" name="message_mark_as_unread"
-            eval="[ ref('crm_case_improvereportsinhrms0'), ref('crm_case_createnewobject0')], {}"/> -->
+        <!--         <function model="project.issue" name="message_mark_as_unread" eval="[ ref('crm_case_improvereportsinhrms0'), ref('crm_case_createnewobject0')], {}"/> -->
 
     </data>
 </odoo>
