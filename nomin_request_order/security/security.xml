@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
 	<data noupdate="0">
 
 
@@ -11,63 +11,63 @@
 		</record>
 
 		<record id="group_nomin_request_order_rule_followers_id" model="ir.rule">
-	        <field name="name">Followers see their followed order page</field>
-	        <field ref="nomin_request_order.model_request_order" name="model_id"/>
-	        <field name="domain_force">['|',('message_partner_ids','in',[user.partner_id.id]), ('message_channel_ids.channel_partner_ids', 'in', [user.partner_id.id])]</field>
-	        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-	    </record>
+			<field name="name">Followers see their followed order page</field>
+			<field ref="nomin_request_order.model_request_order" name="model_id"/>
+			<field name="domain_force">[('message_partner_ids','in',[user.partner_id.id])]</field>
+			<field name="groups" eval="[(4, ref('base.group_user'))]"/>
+		</record>
 
 
 		<record id="group_nomin_request_order_rule_see_sectors_id" model="ir.rule">
-	        <field name="name">Зөвшөөрөгдсөн салбараар  харах</field>
-	        <field ref="nomin_request_order.model_request_order" name="model_id"/>
-	        <field name="domain_force">[('sector_id','in',user.project_allowed_departments.ids)]</field>
-	        <field name="groups" eval="[(4, ref('project.group_project_user'))]"/>
-    	</record>
+			<field name="name">Зөвшөөрөгдсөн салбараар  харах</field>
+			<field ref="nomin_request_order.model_request_order" name="model_id"/>
+			<field name="domain_force">[('sector_id','in',user.project_allowed_departments.ids)]</field>
+			<field name="groups" eval="[(4, ref('project.group_project_user'))]"/>
+		</record>
 
 		<record id="group_nomin_budget_partner_comparison_rule_see_departments_id" model="ir.rule">
-	        <field name="name">Зөвшөөрөгдсөн хэлтсээр  харах</field>
-	        <field ref="nomin_project.model_budget_partner_comparison" name="model_id"/>
-	        <field name="domain_force">[('department_id','in',user.project_allowed_departments.ids)]</field>
-	        <field name="groups" eval="[(4, ref('project.group_project_manager'))]"/>
-    	</record>
-		
-    	<record id="group_nomin_request_order_rule_see_departments_id" model="ir.rule">
-	        <field name="name">Зөвшөөрөгдсөн хэлтсээр  харах</field>
-	        <field ref="nomin_request_order.model_request_order" name="model_id"/>
-	        <field name="domain_force">[('department_id','in',user.project_allowed_departments.ids)]</field>
-	        <field name="groups" eval="[(4, ref('project.group_project_user'))]"/>
-    	</record>
+			<field name="name">Зөвшөөрөгдсөн хэлтсээр  харах</field>
+			<field ref="nomin_project.model_budget_partner_comparison" name="model_id"/>
+			<field name="domain_force">[('department_id','in',user.project_allowed_departments.ids)]</field>
+			<field name="groups" eval="[(4, ref('project.group_project_manager'))]"/>
+		</record>
 
-    	<record id="group_nomin_request_order_rule_see_perfomr_department_id" model="ir.rule">
-	        <field name="name">Зөвшөөрөгдсөн хэлтсээр  харах</field>
-	        <field ref="nomin_request_order.model_request_order" name="model_id"/>
-	        <field name="domain_force">[('perform_department_id','in',user.project_allowed_departments.ids)]</field>
-	        <field name="groups" eval="[(4, ref('project.group_project_user'))]"/>
-    	</record>
+		<record id="group_nomin_request_order_rule_see_departments_id" model="ir.rule">
+			<field name="name">Зөвшөөрөгдсөн хэлтсээр  харах</field>
+			<field ref="nomin_request_order.model_request_order" name="model_id"/>
+			<field name="domain_force">[('department_id','in',user.project_allowed_departments.ids)]</field>
+			<field name="groups" eval="[(4, ref('project.group_project_user'))]"/>
+		</record>
+
+		<record id="group_nomin_request_order_rule_see_perfomr_department_id" model="ir.rule">
+			<field name="name">Зөвшөөрөгдсөн хэлтсээр  харах</field>
+			<field ref="nomin_request_order.model_request_order" name="model_id"/>
+			<field name="domain_force">[('perform_department_id','in',user.project_allowed_departments.ids)]</field>
+			<field name="groups" eval="[(4, ref('project.group_project_user'))]"/>
+		</record>
 
 
-    	<record id="group_nomin_request_order_rule_see_all_id" model="ir.rule">
-	        <field name="name">Бүх захиалга харах</field>
-	        <field ref="nomin_request_order.model_request_order" name="model_id"/>
-	        <field name="domain_force">[(1,'=',1)]</field>
-	        <field name="groups" eval="[(4, ref('project.group_project_admin'))]"/>
-    	</record>
+		<record id="group_nomin_request_order_rule_see_all_id" model="ir.rule">
+			<field name="name">Бүх захиалга харах</field>
+			<field ref="nomin_request_order.model_request_order" name="model_id"/>
+			<field name="domain_force">[(1,'=',1)]</field>
+			<field name="groups" eval="[(4, ref('nomin_project.group_project_admin'))]"/>
+		</record>
 
 		<record id="group_nomin_request_order_rule_see_sectors_accountant_id" model="ir.rule">
-	        <field name="name">Зөвшөөрөгдсөн салбараар  харах-Ахлах нягтлан</field>
-	        <field ref="nomin_request_order.model_request_order" name="model_id"/>
-	        <field name="domain_force">[('sector_id','child of',user.hr_allowed_departments.ids)]</field>
-	        <field name="groups" eval="[(4, ref('nomin_base.group_financial_account_user')),]"/>
-    	</record>
+			<field name="name">Зөвшөөрөгдсөн салбараар  харах-Ахлах нягтлан</field>
+			<field ref="nomin_request_order.model_request_order" name="model_id"/>
+			<field name="domain_force">[('sector_id','child of',user.hr_allowed_departments.ids)]</field>
+			<field name="groups" eval="[(4, ref('nomin_base.group_financial_account_user')),]"/>
+		</record>
 
 
 		<record id="request_order_line_followers" model="ir.rule">
-	        <field name="name">Followers see their followed order page</field>
-	        <field ref="nomin_request_order.model_request_order_line" name="model_id"/>
-	        <field name="domain_force">['|',('message_partner_ids','in',[user.partner_id.id]), ('message_channel_ids.channel_partner_ids', 'in', [user.partner_id.id])]</field>
-	        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-	    </record>
+			<field name="name">Followers see their followed order page</field>
+			<field ref="nomin_request_order.model_request_order_line" name="model_id"/>
+			<field name="domain_force">[('message_partner_ids','in',[user.partner_id.id])]</field>
+			<field name="groups" eval="[(4, ref('base.group_user'))]"/>
+		</record>
 
 
 		<record id="group_request_order_line_perform_employee" model="ir.rule">
@@ -80,7 +80,7 @@
 
 
 
-    </data>
-	
-</openerp>
+	</data>
+
+</odoo>
     

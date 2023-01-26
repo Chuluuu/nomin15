@@ -1,2 +1,2 @@
-import request_order
-import request_order_config
+from . import request_order
+from . import request_order_config

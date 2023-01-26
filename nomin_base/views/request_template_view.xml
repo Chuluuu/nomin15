@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
-        
+
         <!-- Request Config -->
-        
+
         <record id="view_request_config_tree" model="ir.ui.view">
             <field name="name">request.config.tree</field>
             <field name="model">request.config</field>
@@ -16,113 +16,112 @@
                 </tree>
             </field>
         </record>
-        
+
         <record id="view_request_config_form" model="ir.ui.view">
             <field name="name">request.config.form</field>
             <field name="model">request.config</field>
             <field name="arch" type="xml">
                 <form string="Request Configure">
-                <sheet>
-                	 <div class="oe_button_box" name="button_box">
-	                        <button name="toggle_active" type="object"
-	                                class="oe_stat_button" icon="fa-archive">
-	                            <field name="active" widget="boolean_button"
-	                                options='{"terminology": "archive"}'/>
-	                        </button>
-	                </div>
-                    <group>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
                         <group>
-                            <field name="name"/>
-                            <field name="process" required="1"/>
-                            <field name="sequence" required="1"/>
-                            <field name="max_limit" attrs="{'invisible':[('process','not in',['contract','loan.request.for.department'])],'required':[('process','in',['contract','loan.request.for.department'])]}"/>
-                            <field name="min_limit" attrs="{'invisible':[('process','not in',['contract','loan.request.for.department'])],'required':[('process','in',['contract','loan.request.for.department'])]}"/>
+                            <group>
+                                <field name="name"/>
+                                <field name="process" required="1"/>
+                                <field name="sequence" required="1"/>
+                                <field name="max_limit" attrs="{'invisible':[('process','not in',['contract','loan.request.for.department'])],'required':[('process','in',['contract','loan.request.for.department'])]}"/>
+                                <field name="min_limit" attrs="{'invisible':[('process','not in',['contract','loan.request.for.department'])],'required':[('process','in',['contract','loan.request.for.department'])]}"/>
+                            </group>
+                            <group>
+                                <field name="department_id" options="{'no_create': True}"/>
+                                <field name="object_id" required="1"/>
+                                <!--                             <field name="payrollworkflow_type" attrs="{'invisible':[('process','!=','nomin.payroll')],'required':[('process','=','nomin.payroll')]}"/>
+ -->
+                                <field name="is_show_parent" attrs="{'invisible':[('process','!=','contract')]}"/>
+                            </group>
                         </group>
                         <group>
-                            <field name="department_id" options="{'no_create': True}"/>
-                            <field name="object_id" required="1"/>
-<!--                             <field name="payrollworkflow_type" attrs="{'invisible':[('process','!=','nomin.payroll')],'required':[('process','=','nomin.payroll')]}"/>
- -->                            <field name="is_show_parent" attrs="{'invisible':[('process','!=','contract')]}"/>
+                            <group>
+                                <field name="department_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                            </group>
                         </group>
-                    </group>
-                    <group>
-                        <group>
-                        	<field name="department_ids" widget="many2many_tags" options="{'no_create': True}"/>
-                        </group>
-                    </group>
-                    <notebook colspan="4">
-                        <page string="Workflow">
-                            <field name="lines" nolabel="1" attrs="{'invisible':[('process','in',['payment.request','nomin.other.budget','purchase.requisition','purchase.order','purchase.comparison','assignment.order','hr.disciplinary.punishment','hr.job.position.move','loans.list','hr.award.proposal','hr.leave.request','hr.leave.flow','hr.annualleave.request','program.order.flow','employment.termination.checkout.flow','stock.requisition','loan.request.for.department','archive.flow'])]}" colspan="4">
-                                <tree editable="bottom" string="Workflow">
-                                    <field name="sequence"/>
-                                    <field name="name"/>
-                                    <field name="type" />
-                                    <field name="user_id" attrs="{'readonly':[('type','in',['depart','group'])],'required':[('type','=','fixed')]}"/>
-                                    <field name="group_id" attrs="{'readonly':[('type','in',['depart','fixed'])],'required':[('type','=','group')]}"/>
-                                    <field name="state"/>
-                                </tree>
-                            </field>
+                        <notebook colspan="4">
+                            <page string="Workflow">
+                                <field name="lines" nolabel="1" attrs="{'invisible':[('process','in',['payment.request','nomin.other.budget','purchase.requisition','purchase.order','purchase.comparison','assignment.order','hr.disciplinary.punishment','hr.job.position.move','loans.list','hr.award.proposal','hr.leave.request','hr.leave.flow','hr.annualleave.request','program.order.flow','employment.termination.checkout.flow','stock.requisition','loan.request.for.department','archive.flow'])]}" colspan="4">
+                                    <tree editable="bottom" string="Workflow">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="type" />
+                                        <field name="user_id" attrs="{'readonly':[('type','in',['depart','group'])],'required':[('type','=','fixed')]}"/>
+                                        <field name="group_id" attrs="{'readonly':[('type','in',['depart','fixed'])],'required':[('type','=','group')]}"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
 
-                            <field name="payment_lines" nolabel="1" attrs="{'invisible':[('process','!=','payment.request')]}" colspan="4">
-                                <tree editable="bottom" string="Workflow">
-                                    <field name="sequence"/>
-                                    <field name="name"/>
-                                    <field name="type" />
-                                    <field name="user_id" attrs="{'readonly':[('type','in',['depart','group'])],'required':[('type','=','fixed')]}"/>
-                                    <field name="group_id" attrs="{'readonly':[('type','in',['depart','fixed'])],'required':[('type','=','group')]}"/>
-                                    <field name="limit"/>
-                                    <field name="state"/>
-                                    <field name="signature_sequence"/>
-                                </tree>
-                            </field>
+                                <field name="payment_lines" nolabel="1" attrs="{'invisible':[('process','!=','payment.request')]}" colspan="4">
+                                    <tree editable="bottom" string="Workflow">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="type" />
+                                        <field name="user_id" attrs="{'readonly':[('type','in',['depart','group'])],'required':[('type','=','fixed')]}"/>
+                                        <field name="group_id" attrs="{'readonly':[('type','in',['depart','fixed'])],'required':[('type','=','group')]}"/>
+                                        <field name="limit"/>
+                                        <field name="state"/>
+                                        <field name="signature_sequence"/>
+                                    </tree>
+                                </field>
 
-                            <field name="other_budget_lines" nolabel="1" attrs="{'invisible':[('process','!=','nomin.other.budget')]}" colspan="4">
-                                <tree editable="bottom" string="Workflow">
-                                    <field name="sequence"/>
-                                    <field name="name"/>
-                                    <field name="type" />
-                                    <field name="user_id" attrs="{'readonly':[('type','in',['depart','group'])],'required':[('type','=','fixed')]}"/>
-                                    <field name="group_id" attrs="{'readonly':[('type','in',['depart','fixed'])],'required':[('type','=','group')]}"/>
-                                    <field name="limit"/>
-                                    <field name="state"/>
-                                    <field name="signature_sequence"/>
-                                </tree>
-                            </field>
-                            <field name="purchase_lines" nolabel="1" attrs="{'invisible':[('process','not in',['purchase.requisition','purchase.order','purchase.comparison','stock.requisition'])]}" colspan="4">
-                                <tree editable="bottom" string="Workflow">
-                                    <field name="sequence"/>
-                                    <field name="name"/>
-                                    <field name="type" />
-                                    <field name="user_id" attrs="{'readonly':[('type','in',['depart','group'])],'required':[('type','=','fixed')]}"/>
-                                    <field name="group_id" attrs="{'readonly':[('type','in',['depart','fixed'])],'required':[('type','=','group')]}"/>
-                                    <field name="limit"/>
-                                    <field name="state"/>
-                                    <field name="signature_sequence"/> 
-                                </tree>
-                            </field>
+                                <field name="other_budget_lines" nolabel="1" attrs="{'invisible':[('process','!=','nomin.other.budget')]}" colspan="4">
+                                    <tree editable="bottom" string="Workflow">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="type" />
+                                        <field name="user_id" attrs="{'readonly':[('type','in',['depart','group'])],'required':[('type','=','fixed')]}"/>
+                                        <field name="group_id" attrs="{'readonly':[('type','in',['depart','fixed'])],'required':[('type','=','group')]}"/>
+                                        <field name="limit"/>
+                                        <field name="state"/>
+                                        <field name="signature_sequence"/>
+                                    </tree>
+                                </field>
+                                <field name="purchase_lines" nolabel="1" attrs="{'invisible':[('process','not in',['purchase.requisition','purchase.order','purchase.comparison','stock.requisition'])]}" colspan="4">
+                                    <tree editable="bottom" string="Workflow">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="type" />
+                                        <field name="user_id" attrs="{'readonly':[('type','in',['depart','group'])],'required':[('type','=','fixed')]}"/>
+                                        <field name="group_id" attrs="{'readonly':[('type','in',['depart','fixed'])],'required':[('type','=','group')]}"/>
+                                        <field name="limit"/>
+                                        <field name="state"/>
+                                        <field name="signature_sequence"/>
+                                    </tree>
+                                </field>
 
-                            <field name="assignment_type_id" nolabel="1" attrs="{'invisible':[('process','not in',['assignment.order'])]}" colspan="4"/>
-                            <field name="assignment_lines" nolabel="1" attrs="{'invisible':[('process','not in',['assignment.order','hr.disciplinary.punishment','hr.job.position.move'])]}" colspan="4">
-                                <tree editable="bottom" string="Workflow">
-                                    <field name="sequence"/>
-                                    <field name="name"/>                                 
-                                    <field name="group_id" />                                    
-                                    <field name="state"/>                                    
-                                </tree>
-                            </field>
+                                <field name="assignment_type_id" nolabel="1" attrs="{'invisible':[('process','not in',['assignment.order'])]}" colspan="4"/>
+                                <field name="assignment_lines" nolabel="1" attrs="{'invisible':[('process','not in',['assignment.order','hr.disciplinary.punishment','hr.job.position.move'])]}" colspan="4">
+                                    <tree editable="bottom" string="Workflow">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="group_id" />
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
 
 
-                            <field name="award_proposal_lines" nolabel="1" attrs="{'invisible':[('process','not in',['hr.award.proposal'])]}" colspan="4">
-                                        <tree editable="bottom" string="Workflow">
-                                            <field name="sequence"/>
-                                            <field name="name"/>                                 
-                                            <field name="group_id" />                                    
-                                            <field name="state"/>                                    
-                                        </tree>
-                            </field>
+                                <field name="award_proposal_lines" nolabel="1" attrs="{'invisible':[('process','not in',['hr.award.proposal'])]}" colspan="4">
+                                    <tree editable="bottom" string="Workflow">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="group_id" />
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
 
 
-  <!--                           <field name="leave_request_lines" nolabel="1" attrs="{'invisible':[('process','not in',['hr.leave.request'])]}" colspan="4">
+                                <!--                           <field name="leave_request_lines" nolabel="1" attrs="{'invisible':[('process','not in',['hr.leave.request'])]}" colspan="4">
                                         <tree editable="bottom" string="Workflow">
                                             <field name="sequence"/>
                                             <field name="name"/>                                 
@@ -131,41 +130,41 @@
                                         </tree>
                             </field> -->
 
-                            <field name="leave_flow_lines" nolabel="1" attrs="{'invisible':[('process','not in',['hr.leave.flow'])]}" colspan="4">
-                                        <tree editable="bottom" string="Workflow">
-                                            <field name="sequence"/>
-                                            <field name="name"/>                                 
-                                            <field name="group_id" />                                    
-                                            <field name="state"/>                                    
-                                            <field name="approvable_days"/>
-                                        </tree>
-                            </field>
+                                <field name="leave_flow_lines" nolabel="1" attrs="{'invisible':[('process','not in',['hr.leave.flow'])]}" colspan="4">
+                                    <tree editable="bottom" string="Workflow">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="group_id" />
+                                        <field name="state"/>
+                                        <field name="approvable_days"/>
+                                    </tree>
+                                </field>
 
 
-                            <field name="ordering_type_id" nolabel="1" attrs="{'invisible':[('process','not in',['program.order.flow'])]}" colspan="4"/>
-                            <field name="program_order_flow_lines" nolabel="1" attrs="{'invisible':[('process','!=','program.order.flow')]}" colspan="4">
-                                        <tree editable="bottom" string="Workflow">
-                                            <field name="sequence"/>
-                                            <field name="name"/>                                 
-                                            <field name="group_id" />                                    
-                                            <field name="state"/>                                    
-                                        </tree>
-                            </field>
+                                <field name="ordering_type_id" nolabel="1" attrs="{'invisible':[('process','not in',['program.order.flow'])]}" colspan="4"/>
+                                <field name="program_order_flow_lines" nolabel="1" attrs="{'invisible':[('process','!=','program.order.flow')]}" colspan="4">
+                                    <tree editable="bottom" string="Workflow">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="group_id" />
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
 
-                            <field name="turn_around_page_type_id" nolabel="1" attrs="{'invisible':[('process','not in','employment.termination.checkout.flow')]}" colspan="4"/>
-                            <field name="turn_around_page_flow_lines" nolabel="1" attrs="{'invisible':[('process','!=','employment.termination.checkout.flow')]}" colspan="4">
-                                        <tree editable="bottom" string="Workflow">
-                                            <field name="sequence"/>
-                                            <field name="name"/>                                 
-                                            <field name="group_id" />                                    
-                                            <field name="state"/>  
-                                            <field name="department_id" options="{'no_create': True}"/> 
-                                            <field name="job_id" options="{'no_create': True}"/> 
-                                                                              
-                                        </tree>
-                            </field>
+                                <field name="turn_around_page_type_id" nolabel="1" attrs="{'invisible':[('process','not in','employment.termination.checkout.flow')]}" colspan="4"/>
+                                <field name="turn_around_page_flow_lines" nolabel="1" attrs="{'invisible':[('process','!=','employment.termination.checkout.flow')]}" colspan="4">
+                                    <tree editable="bottom" string="Workflow">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="group_id" />
+                                        <field name="state"/>
+                                        <field name="department_id" options="{'no_create': True}"/>
+                                        <field name="job_id" options="{'no_create': True}"/>
 
-<!--                             <field name="annualleave_request_lines" nolabel="1" attrs="{'invisible':[('process','not in',['hr.annualleave.request'])]}" colspan="4">
+                                    </tree>
+                                </field>
+
+                                <!--                             <field name="annualleave_request_lines" nolabel="1" attrs="{'invisible':[('process','not in',['hr.annualleave.request'])]}" colspan="4">
                                         <tree editable="bottom" string="Workflow">
                                             <field name="sequence"/>
                                             <field name="name"/>                                 
@@ -174,49 +173,49 @@
                                         </tree>
                             </field> -->
 
-                            <field name="loans_type_id" nolabel="1" attrs="{'invisible':[('process','not in',['loans.list'])]}" colspan="4"/>
-                            <field name="loans_lines" nolabel="1" attrs="{'invisible':[('process','!=','loans.list')]}" colspan="4">
-                                <tree editable="bottom" string="Workflow">
-                                    <field name="sequence"/>
-                                    <field name="name"/>                                 
-                                    <field name="group_id" />                                    
-                                    <field name="state"/>                                    
-                                </tree>
-                            </field>
-                             <field name="loan_request_type_id" nolabel="1" attrs="{'invisible':[('process','!=','loan.request.for.department')]}" colspan="4"/>
-                            <field name="loans_request_department_id" nolabel="1" attrs="{'invisible':[('process','!=','loan.request.for.department')]}" colspan="4">
-                                <tree editable="bottom" string="Workflow">
-                                    <field name="sequence"/>
-                                    <field name="name"/>
-                                    <field name="group_id" />                                    
-                                    <field name="state"/>                                    
-                                </tree>
-                            </field>
+                                <field name="loans_type_id" nolabel="1" attrs="{'invisible':[('process','not in',['loans.list'])]}" colspan="4"/>
+                                <field name="loans_lines" nolabel="1" attrs="{'invisible':[('process','!=','loans.list')]}" colspan="4">
+                                    <tree editable="bottom" string="Workflow">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="group_id" />
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                                <field name="loan_request_type_id" nolabel="1" attrs="{'invisible':[('process','!=','loan.request.for.department')]}" colspan="4"/>
+                                <field name="loans_request_department_id" nolabel="1" attrs="{'invisible':[('process','!=','loan.request.for.department')]}" colspan="4">
+                                    <tree editable="bottom" string="Workflow">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="group_id" />
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
 
-                            <field name="archive_flow_lines" nolabel="1" attrs="{'invisible':[('process','not in',['archive.flow'])]}" colspan="4">
-                                        <tree editable="bottom" string="Workflow">
-                                            <field name="sequence"/>
-                                            <field name="name"/>                                 
-                                            <field name="group_id" />                                    
-                                            <field name="state"/>    
-                                            <field name="job_id"/> 
-                                                                            
-                                        </tree>
-                            </field>
+                                <field name="archive_flow_lines" nolabel="1" attrs="{'invisible':[('process','not in',['archive.flow'])]}" colspan="4">
+                                    <tree editable="bottom" string="Workflow">
+                                        <field name="sequence"/>
+                                        <field name="name"/>
+                                        <field name="group_id" />
+                                        <field name="state"/>
+                                        <field name="job_id"/>
+
+                                    </tree>
+                                </field>
 
 
 
-                        </page>
-                    </notebook>
-                     <div class="oe_chatter">
-	                    <field name="message_follower_ids" widget="mail_followers"/>
-	                    <field name="message_ids" widget="mail_thread"/>
-	               	</div>   
-                </sheet>
+                            </page>
+                        </notebook>
+                        <div class="oe_chatter">
+                            <field name="message_follower_ids" widget="mail_followers"/>
+                            <field name="message_ids" widget="mail_thread"/>
+                        </div>
+                    </sheet>
                 </form>
             </field>
         </record>
-       
+
         <record id="view_request_config_filter" model="ir.ui.view">
             <field name="name">request.config.list.select</field>
             <field name="model">request.config</field>
@@ -228,9 +227,9 @@
                     <field name="department_ids"/>
                     <group expand="0" string="Group By">
                         <filter string="Object" name="object" domain="[]" context="{'group_by':'object_id'}"/>
-                        <filter string="Department" domain="[]" context="{'group_by':'department_id'}"/>
+                        <filter string="Department" name="department" domain="[]" context="{'group_by':'department_id'}"/>
                     </group>
-               </search>
+                </search>
             </field>
         </record>
 
@@ -238,24 +237,17 @@
             <field name="name">Request Configure</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">request.config</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="view_request_config_filter"/>
-             <field name="context">{"search_default_object":1}</field>
+            <field name="context">{"search_default_object":1}</field>
         </record>
-		
-		<menuitem 
-            id="nomin_configure" name="Nomin Configure" parent="base.menu_administration"
-            sequence="3" groups="group_config_manager"/>
-            
-        <menuitem 
-            id="menu_request_config" name="Request Configure" parent="nomin_configure"
-            sequence="1" groups="group_config_manager"/>
-        
-        <menuitem action="action_request_config"
-            id="menu_request_configure" parent="menu_request_config"
-            sequence="1"/>
-        
-        
+
+        <menuitem id="nomin_configure" name="Nomin Configure" parent="base.menu_administration" sequence="3" />
+
+        <menuitem id="menu_request_config" name="Request Configure" parent="nomin_configure" sequence="1" />
+
+        <menuitem action="action_request_config" id="menu_request_configure" parent="menu_request_config" sequence="1"/>
+
+
     </data>
-</openerp>
+</odoo>

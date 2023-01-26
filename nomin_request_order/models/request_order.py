@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # from typing import DefaultDict
-from openerp import tools, api, models, fields ,_
-from openerp.exceptions import UserError 
+from odoo import tools, api, models, fields ,_
+from odoo.exceptions import UserError 
 from time import strftime
 import time
-from openerp.http import request
+from odoo.http import request
 from datetime import date
 from datetime import datetime, timedelta
 
@@ -15,14 +15,14 @@ class RequestOrder (models.Model):
     _order = "create_date DESC"
 
 
-    @api.multi
+    
     def _add_followers(self,user_ids):
         '''Add followers
         '''
         self.message_subscribe_users(user_ids=user_ids)
 
 
-    @api.multi
+    
     def create_history(self,state,sequence,note):
         history_obj = self.env['request.history']
         history_obj.create({'user_id':self._uid,
@@ -116,7 +116,7 @@ class RequestOrder (models.Model):
                     order.write({'exceeded_day':days-1})
 
 
-    @api.multi
+    
     def _is_approve_user(self):
         user_ids = []
         for order in self:
@@ -148,7 +148,7 @@ class RequestOrder (models.Model):
                     #             for user in group.users:
                     #                 user_ids.append( user.id)
 
-    @api.multi
+    
     @api.depends('line_ids.state')
     def _compute_percent(self):
         for order in self:
@@ -194,27 +194,27 @@ class RequestOrder (models.Model):
 
 
     name            = fields.Char(string='Захиалгын дугаар', readonly=True , default="New")
-    request_name    = fields.Char(string='Request name', track_visibility='always')
-    sector_id       = fields.Many2one('hr.department', string = 'Захиалагч Салбар', ondelete="restrict", track_visibility='always', readonly="1" ,default=lambda self: self._set_sector())
-    department_id   = fields.Many2one('hr.department', string = 'Захиалагч хэлтэс', ondelete="restrict", track_visibility='always', default=lambda self: self._set_department())
-    job_id     = fields.Many2one('hr.job',string = 'Албан тушаал', ondelete="restrict", track_visibility='always', default=lambda self: self._set_job())
-    phone_number   = fields.Char(string = 'Утасны дугаар', ondelete="restrict", track_visibility='always', related='employee_id.mobile_phone')
-    employee_id     = fields.Many2one('hr.employee',string = 'Захиалагч', ondelete="restrict", track_visibility='always', default=_set_employee)
-    cost_sector_id  = fields.Many2one('hr.department', string = 'Зардал гаргах Салбар', ondelete="restrict", track_visibility='always', default=lambda self: self._set_sector())
-    date_order      = fields.Date(string='Захиалга өгсөн огноо', track_visibility='onchange', required=True, default=time.strftime("%Y-%m-%d"))
-    perform_department_id = fields.Many2one('hr.department' , string='Perform department' , track_visibility='onchange')
-    confirm_employee_id   = fields.Many2one('hr.employee', string='Батлах ажилтан',track_visibility='onchange')
+    request_name    = fields.Char(string='Request name', tracking=True)
+    sector_id       = fields.Many2one('hr.department', string = 'Захиалагч Салбар', ondelete="restrict", tracking=True, readonly="1" ,default=lambda self: self._set_sector())
+    department_id   = fields.Many2one('hr.department', string = 'Захиалагч хэлтэс', ondelete="restrict", tracking=True, default=lambda self: self._set_department())
+    job_id     = fields.Many2one('hr.job',string = 'Албан тушаал', ondelete="restrict", tracking=True, default=lambda self: self._set_job())
+    phone_number   = fields.Char(string = 'Утасны дугаар', ondelete="restrict", tracking=True, related='employee_id.mobile_phone')
+    employee_id     = fields.Many2one('hr.employee',string = 'Захиалагч', ondelete="restrict", tracking=True, default=_set_employee)
+    cost_sector_id  = fields.Many2one('hr.department', string = 'Зардал гаргах Салбар', ondelete="restrict", tracking=True, default=lambda self: self._set_sector())
+    date_order      = fields.Date(string='Захиалга өгсөн огноо', tracking=True, required=True, default=time.strftime("%Y-%m-%d"))
+    perform_department_id = fields.Many2one('hr.department' , string='Perform department' , tracking=True)
+    confirm_employee_id   = fields.Many2one('hr.employee', string='Батлах ажилтан',tracking=True)
     date_due              =fields.Date(string='Дуусах хугацаа')
-    description           = fields.Text(string='Тайлбар' , track_visibility='always')
-    request_config_id     = fields.Many2one('request.order.config',string="Төлөв", domain="[('department_ids','=',perform_department_id)]",default=_get_default_request_id, track_visibility='onchange')
+    description           = fields.Text(string='Тайлбар' , tracking=True)
+    request_config_id     = fields.Many2one('request.order.config',string="Төлөв", domain="[('department_ids','=',perform_department_id)]",default=_get_default_request_id, tracking=True)
     line_ids              = fields.One2many('request.order.line','order_id', string="Work Service")
     case_history_ids      = fields.One2many('request.order.line','order_id', string="Case history")
     line_history_ids      = fields.One2many('request.order.line','history_id',string = 'Line history')
     attach_line_ids              = fields.One2many('request.order.attachment','order_id', string="Хавсралт")
     history_ids              = fields.One2many('request.history','request_order_id', string="Request History")
     is_invisible             = fields.Boolean(string='Is invisible' , default=False)
-    is_urgent             = fields.Boolean(string='Is Urgent' , default=False , track_visibility='onchange')
-    is_skip_control       = fields.Boolean(string='Is skip control' , default=False , track_visibility='onchange')
+    is_urgent             = fields.Boolean(string='Is Urgent' , default=False , tracking=True)
+    is_skip_control       = fields.Boolean(string='Is skip control' , default=False , tracking=True)
     active_sequence       = fields.Integer(string="Sequence", default=1)
     is_done               = fields.Boolean(string='Is done' , default=False)
     is_sent               = fields.Boolean(string='Is sent' , default=True )
@@ -223,16 +223,18 @@ class RequestOrder (models.Model):
     is_approve_user      = fields.Boolean(string='Is approve user' , default=False , compute="_is_approve_user")
     is_readonly = fields.Boolean(string="Is readonly" , default=False )
     progress_percentage = fields.Float(string="Progress percentage" , compute='_compute_percent' ,store=True)
-    total_amount = fields.Float(string="Дүн" , track_visibility='onchange' , compute="_total_amount" , store=True)
-    sum_amount = fields.Float(string="Нийт дүн" , track_visibility='onchange' , compute="_sum_amount")
+    total_amount = fields.Float(string="Дүн" , tracking=True , compute="_total_amount" , store=True)
+    sum_amount = fields.Float(string="Нийт дүн" , tracking=True , compute="_sum_amount")
     cost_share_id = fields.Many2one('account.cost.sharing', string="Зардал хувиарлалт")
     work_type = fields.Selection([('tarif','Тарифт ажлууд'),('order','Захиалгат ажлууд')],string='Зардлын төрөл')
     is_invisible_field = fields.Boolean(string="Invisible field" , default=False)
     doctor_field = fields.Boolean(string="Doctor flow" , default=False)
-    age = fields.Integer(string="Age" , related="employee_id.age")
+    # TODO FIX LATER
+    # age = fields.Integer(string="Age" , related="employee_id.age")
+    age = fields.Integer(string="Age" )
     gender = fields.Selection([('male', 'Male'), ('female', 'Female')], string='Gender',related="employee_id.gender")
-    order_finished_date = fields.Date(string='Дуусгасан огноо',track_visibility='onchange')
-    exceeded_day = fields.Integer(string='Хэтэрсэн хоног',track_visibility='onchange',store=True,compute ="_exceeded_day")
+    order_finished_date = fields.Date(string='Дуусгасан огноо',tracking=True)
+    exceeded_day = fields.Integer(string='Хэтэрсэн хоног',tracking=True,store=True,compute ="_exceeded_day")
 
     @api.model
     def create(self, vals):                              
@@ -240,7 +242,6 @@ class RequestOrder (models.Model):
             vals['name'] = self.env['ir.sequence'].next_by_code('request.order') or '/'       
         if vals.get('employee_id'):
             emp = self.env['hr.employee'].browse(vals.get('employee_id'))
-            print '\n\n\n vals emp' , emp 
             vals.update({
 				'employee_id': emp.id,
 				'department_id': emp.department_id.id,
@@ -253,7 +254,7 @@ class RequestOrder (models.Model):
         result = super(RequestOrder, self).create(vals)
         return result
     
-    @api.multi
+    
     def stage_find(self, section_id, domain=[], order='sequence asc'):
         """ Override of the base.stage method
         """
@@ -325,7 +326,7 @@ class RequestOrder (models.Model):
         self.update({'line_history_ids':line_ids.ids})
    
 
-    @api.multi
+    
     def action_approve(self):
         for order in self:
             config_id = self.env['request.order.config'].search([('sequence','=',order.active_sequence+1),('department_ids','=',order.perform_department_id.id),('is_fold','=',False)])
@@ -338,12 +339,12 @@ class RequestOrder (models.Model):
                 exec(order.request_config_id.python_code)
         self.create_history('Approve',self.active_sequence,'Approve')
 
-    @api.multi
+    
     def calculate_exceed_day(self):
         for order in self:
             order._exceeded_day()
 
-    @api.multi
+    
     def action_sent(self):
         employee_obj = self.env['case.history.line']
         for order in self:   
@@ -381,7 +382,7 @@ class RequestOrder (models.Model):
             
             self.mail_send(user_ids)
 
-    @api.multi
+    
     def action_cancel(self):
         for order in self:
             config_id = self.env['request.order.config'].search([('department_ids','=',order.perform_department_id.id),('is_fold','=',True)])
@@ -393,7 +394,7 @@ class RequestOrder (models.Model):
                 exec(order.request_config_id.python_code)
     
 
-    @api.multi
+    
     def return_draft(self):
         for order in self:
             config_id = self.env['request.order.config'].search([('department_ids','=',order.perform_department_id.id)])
@@ -407,7 +408,7 @@ class RequestOrder (models.Model):
                 exec(order.request_config_id.python_code)
            
 
-    @api.multi
+    
     def action_return(self):
         for order in self:
             config_id = self.env['request.order.config'].search([('sequence','=',order.active_sequence-1),('department_ids','=',order.perform_department_id.id),('is_fold','=',False)])
@@ -420,7 +421,7 @@ class RequestOrder (models.Model):
 
 
 
-    @api.multi
+    
     def mail_send(self, user_ids):
 
         
@@ -474,9 +475,7 @@ class RequestOrder (models.Model):
             if email.login and email.login.strip():
                 email_template.write({'body_html':body_html,'subject':subject,'email_to':email.login})
                 email_template.send()
-               # print '\n\n\n\n email_template',email_template
                 # email_template.sudo().unlink()
-                #print '\n\n\n\n email_template sadsadsa',email_template
         email = u'\n Дараах хэрэглэгчид рүү имэйл илгээгдэв: ' + ('<b>' + ('</b>, <b>'.join(user_emails)) + '</b>')
         
         self.message_subscribe_users(user_ids)
@@ -485,7 +484,7 @@ class RequestOrder (models.Model):
         return True
 
 
-    @api.multi
+    
     def unlink(self):
         for order in self:
             if order.active_sequence !=1:
@@ -494,7 +493,7 @@ class RequestOrder (models.Model):
         return super(RequestOrder, self).unlink()
 
 
-    @api.one
+    
     def copy(self):
         raise UserError((u"Хуулбарлан үүсгэх боломжгүй!"))
         return super(RequestOrder, self).copy()
@@ -568,13 +567,13 @@ class RequestOrderLine(models.Model):
     _order = 'create_date desc'
 
 
-    @api.multi
+    
     def _add_followers(self,user_ids):
         '''Add followers
         '''
         self.message_subscribe_users(user_ids=user_ids)
 
-    @api.multi
+    
     def action_reject(self):
         '''Цуцлах
         '''      
@@ -586,13 +585,12 @@ class RequestOrderLine(models.Model):
         if is_change:
             self.order_id.action_cancel()
     
-    @api.multi
+    
     def line_reject(self):
         '''Ажил үйлчилгээг мөрөөр цуцлах
         '''      
         return {
             'name': 'Note',            
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'line.reject',          
             'type': 'ir.actions.act_window',
@@ -601,13 +599,12 @@ class RequestOrderLine(models.Model):
         } 
 
 
-    @api.multi
+    
     def to_change_price(self):
         '''Нэгж үнэ өөрчлөх
         '''   
         return {
             'name': 'Note',            
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'to.change.price',          
             'type': 'ir.actions.act_window',
@@ -616,7 +613,7 @@ class RequestOrderLine(models.Model):
         }       
         
 
-    @api.multi
+    
     def action_start(self):
         '''Эхлэх
         '''      
@@ -630,7 +627,7 @@ class RequestOrderLine(models.Model):
             self.order_id.action_approve()
 
 
-    @api.multi
+    
     def action_done(self):
         '''Дуусгах
         '''       
@@ -677,7 +674,7 @@ class RequestOrderLine(models.Model):
                                                                         'datas':attach.attachment_ids.datas,
                                                                         'project_task_document':self.task_id.id,
                                                                         })
-    @api.multi
+    
     def file_attach(self):
         '''Хавсралт даалгавар луу бичих
         ''' 
@@ -694,12 +691,11 @@ class RequestOrderLine(models.Model):
                                                                         })
             self.is_invisible_button = True
     
-    @api.multi
+    
     def action_evaluate(self):
         
         return {
             'name': 'Note',            
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'to.evaluate.employee',          
             'type': 'ir.actions.act_window',
@@ -707,13 +703,12 @@ class RequestOrderLine(models.Model):
             'target': 'new',            
         }
 
-    @api.multi
+    
     def action_reject(self):
         
         return {
             'name': 'Note',
             'context':{'reject':'reject'},
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'reject.work.service',          
             'type': 'ir.actions.act_window',
@@ -722,13 +717,12 @@ class RequestOrderLine(models.Model):
             'state' : 'rejected' ,
         }
 
-    @api.multi
+    
     def action_control(self):
         
         return {
             'name': 'Note',
             'context':{'control':'control'},
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'to.control.work.service',          
             'type': 'ir.actions.act_window',
@@ -737,13 +731,12 @@ class RequestOrderLine(models.Model):
             'state' : 'rejected' ,
         }
 
-    @api.multi
+    
     def action_return(self):
 
         return {
             'name': 'Note',
             'context':{'return':'return'},
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'return.work.service',          
             'type': 'ir.actions.act_window',
@@ -790,29 +783,30 @@ class RequestOrderLine(models.Model):
 
 
 
-    @api.multi
+    
     def _is_perform_user(self):
         for line in self:
             if line.perform_employee_id.user_id.id == self._uid:
                 line.is_perform_user = True
 
-    @api.multi
+    
     def _is_evaluate_user(self):
         for line in self:
             if line.order_id.employee_id.user_id.id == self._uid:
                 line.is_evaluate_user = True
 
-    @api.multi
+    
     def _is_control_user(self):
         for line in self:
             line.is_control_user = line.order_id.is_approve_user
 
-    
-    category_id = fields.Many2one('knowledge.store.category', string="Ангилал" , domain="[('id','in',category_ids[0][2])]" )
+    # TODO FIX LATER
+    # category_id = fields.Many2one('knowledge.store.category', string="Ангилал" , domain="[('id','in',category_ids[0][2])]" )
+    category_id = fields.Many2one('knowledge.store.category', string="Ангилал" ,  )
     service_id = fields.Many2one('work.service',string="Ажил үйлчилгээ" , domain = "[('category_id','=',category_id)]" , required="1")
     order_id = fields.Many2one('request.order', string="Request order" ,ondelete='cascade')
     unit_price = fields.Float(string="Нэгж үнэ" , related='service_id.unit_price')
-    unit_price_change = fields.Float(string="Өөрчилсөн үнэ" , track_visibility='onchange' )
+    unit_price_change = fields.Float(string="Өөрчилсөн үнэ" , tracking=True )
     measurement = fields.Many2one('work.service.measurement',string="Хэмжих нэгж" , related='service_id.measurement')
     employee_id = fields.Many2one('hr.employee',string = 'Захиалагч', ondelete="restrict", related='order_id.employee_id')
     phone_number = fields.Char(string='Утасны дугаар', ondelete="restrict",related='order_id.phone_number')
@@ -821,12 +815,12 @@ class RequestOrderLine(models.Model):
     qty  = fields.Integer(string="Тоо хэмжээ" , required="1" , default=1)
     amount  = fields.Float(string="Дүн" , compute="_total_amount", store=True)
     department_id = fields.Many2one('hr.department' , string='Department' )
-    perform_employee_id   = fields.Many2one('hr.employee', string='Гүйцэтгэгч ажилтан',track_visibility='onchange')
-    date  = fields.Date(string='Хуваариласан  огноо', track_visibility='onchange', required=True, default=time.strftime("%Y-%m-%d"))
+    perform_employee_id   = fields.Many2one('hr.employee', string='Гүйцэтгэгч ажилтан',tracking=True)
+    date  = fields.Date(string='Хуваариласан  огноо', tracking=True, required=True, default=time.strftime("%Y-%m-%d"))
     date_evaluate = fields.Datetime(string='Date evaluate')
     percent_change = fields.Float(string='Percentage of change' , default=1)    
-    maintenance = fields.Integer(string='Maintenance' , track_visibility='always' )
-    rate = fields.Float(string="Assessment" , track_visibility="always")
+    maintenance = fields.Integer(string='Maintenance' , tracking=True )
+    rate = fields.Float(string="Assessment" , tracking=True)
     description = fields.Text(string="Description")
     change_description = fields.Text(string="Change description")
     is_evaluate = fields.Boolean(string="Is evaluate", default=False)
@@ -834,7 +828,7 @@ class RequestOrderLine(models.Model):
     is_percent = fields.Boolean(string="Is percent" , default=False )
     is_urgent = fields.Boolean(string="Is urgent" , default=False , ondelete="restrict", related='order_id.is_urgent')
     is_control = fields.Boolean(string="Is control" , default=False)
-    finished_date = fields.Date(string='Дуусгасан огноо',track_visibility='onchange')
+    finished_date = fields.Date(string='Дуусгасан огноо',tracking=True)
     attach_line_ids              = fields.One2many('request.order.attachment','order_line_id', string="Хавсралт")
     total_score = fields.Integer(string="Total score" ,compute="_total_score",  store=True)
 
@@ -845,7 +839,7 @@ class RequestOrderLine(models.Model):
                  ('verify', 'Шалгуулах'),
                  ('control', 'Хянах'),
                  ('done', 'Хаагдсан'),
-                 ('rejected', 'Цуцалсан')], string='Status', readonly=True, track_visibility='always', copy=False, index=True, default='draft')
+                 ('rejected', 'Цуцалсан')], string='Status', readonly=True, tracking=True, copy=False, index=True, default='draft')
 
     line_history_ids     = fields.One2many('request.order.line.history','order_line_id', string="Request History")
     category_ids = fields.Many2many('knowledge.store.category','knowledge_store_category_order_line_rel','request_line_id','categ_id' ,string='category ids')
@@ -865,7 +859,7 @@ class RequestOrderLine(models.Model):
     pain = fields.Char(string="Pain")
     vital_signs =  fields.Char(string="VItal signs")
     history_id = fields.Many2one('request.order',string = 'Request order1')
-    end_date = fields.Date(string='Хаасан огноо', track_visibility='onchange', required=True, default=time.strftime("%Y-%m-%d"))
+    end_date = fields.Date(string='Хаасан огноо', tracking=True, required=True, default=time.strftime("%Y-%m-%d"))
 
 
     @api.onchange('state')
@@ -901,7 +895,6 @@ class RequestOrderLine(models.Model):
     #     category_ids = []
     #     category_ids1 = []
     #     for line in self:
-    #         print '\n\n\n line type' , line
     #         service_ids = self.env['work.service'].search([('department_ids','in',line.department_id.id)])
     #         for service in service_ids:
     #             if service.category_id:
@@ -975,7 +968,7 @@ class RequestOrderLine(models.Model):
 
 
 
-    @api.multi
+    
     def write(self, vals):
         result = super(RequestOrderLine, self).write(vals)  
         if  vals.get('service_id') or vals.get('unit_price'):
@@ -994,21 +987,26 @@ class WorkService(models.Model):
     '''
     _inherit = "work.service"
     
-    is_calculated_percent = fields.Boolean(string='Is calculated percent' , default=False , track_visibility='onchange')
-    collect_amount = fields.Float(string='Collect amount', track_visibility='always')
+    is_calculated_percent = fields.Boolean(string='Is calculated percent' , default=False , tracking=True)
+    collect_amount = fields.Float(string='Collect amount', tracking=True)
     department_ids = fields.Many2many('hr.department' , string='Хэлтсүүд')
-    
-
+    # TODO FIX LATER REMOVE BELOW FIELDS
+    unit_price = fields.Float(string='Unit price')
+    category_id = fields.Many2one('knowledge.store.category',string='Measure')
 class WorkServiceCategory(models.Model):
     '''Ангилал
     '''
-    _inherit = "knowledge.store.category"
+    # TODO FIX LATER
+    # _inherit = "knowledge.store.category"
+    _name = "knowledge.store.category"
     
     
     call_cost = fields.Boolean(string="Call cost" , default=False)
     call_cost_tarif = fields.Float(string="Call cost tarif")
     enter_price = fields.Boolean(string="Enter unit price ")
     types = fields.Selection([('tarif','Тарифт ажлууд'),('order','Захиалгат ажлууд')],string='Зардлын төрөл')
+    # TODO FIX LATER REMOVE BELOW FIELDS
+    
 
 class RequestOrderHistory(models.Model):
     _inherit = 'request.history'
@@ -1021,7 +1019,7 @@ class DiagnosisList(models.Model):
     _name = "diagnosis.list"
     _inherit = ['mail.thread']
     
-    name = fields.Char(string='Name', track_visibility='onchange')
+    name = fields.Char(string='Name', tracking=True)
  
     
 
@@ -1033,9 +1031,9 @@ class RequestOrderLineHistory(models.Model):
 
     order_line_id = fields.Many2one('request.order.line' , string='Request')
     service_id = fields.Many2one('work.service', string="work service")
-    maintenance = fields.Integer(string='Maintenance' , track_visibility='always' )
+    maintenance = fields.Integer(string='Maintenance' , tracking=True )
     description = fields.Text(string="Description")
-    unit_price_20 = fields.Float(string="Нэгж үнэ * 20%" , track_visibility="onchange") 
+    unit_price_20 = fields.Float(string="Нэгж үнэ * 20%" , tracking=True) 
     state = fields.Selection(
                 [('draft', 'Ноорог'),
                 ('open', 'Хариуцагчтай'),
@@ -1043,7 +1041,7 @@ class RequestOrderLineHistory(models.Model):
                  ('verify', 'Шалгуулах'),
                  ('control', 'Хянах'),
                  ('done', 'Хаагдсан'),
-                 ('rejected', 'Цуцалсан')], string='Status', readonly=True, track_visibility='always', copy=False, index=True, default='draft')
+                 ('rejected', 'Цуцалсан')], string='Status', readonly=True, tracking=True, copy=False, index=True, default='draft')
 
 class RequestOrderAttachment(models.Model):
     _name = 'request.order.attachment'
@@ -1057,14 +1055,14 @@ class RequestOrderAttachment(models.Model):
     state= fields.Selection([('draft','Ноорог'),('confirmed','Баталгаажсан')],string="Төлөв",default='draft')
 
 
-    @api.multi
+    
     def action_confirm(self):
         self.write({'state':'confirmed'})
         if self.order_line_id:
             self.write({'order_id':self.order_line_id.order_id.id})
 
 
-    @api.multi
+    
     def unlink(self):
         for order in self:
             if order.state !='draft' :

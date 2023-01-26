@@ -1441,9 +1441,7 @@ class OrderPageLine(models.Model):
 class WorkService(models.Model):
     '''Ажил үйлчилгээ
     '''
-    _name = "work.service"
-    #TODO FIX LATER
-    # _inherit = "work.service"
+    _inherit = "work.service"
     
     latin_name = fields.Char(string='Latin name')
 

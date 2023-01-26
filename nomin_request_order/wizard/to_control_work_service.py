@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 import time
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 
 class ToControlWorkService(models.TransientModel):
 	'''
@@ -24,7 +24,7 @@ class ToControlWorkService(models.TransientModel):
 	# rate = fields.Float(string='Assessment' , defaut=100)
 
 
-	@api.multi
+	
 	def action_control(self):
 
 		request_line_id = self.env['request.order.line'].browse(self.env.context.get('active_id'))

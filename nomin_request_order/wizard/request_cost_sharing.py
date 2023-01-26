@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models, _, modules
-from openerp.exceptions import UserError
+from odoo import api, fields, models, _, modules
+from odoo.exceptions import UserError
 from datetime import datetime, timedelta
 import logging , time
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 from operator import itemgetter
 class RequestCostSharing(models.TransientModel):
     _name = 'request.cost.sharing'
@@ -78,20 +78,26 @@ class RequestCostSharing(models.TransientModel):
 
     date = fields.Datetime(string='Гүйлгээний огноо', default=fields.Date.context_today)
     paid_due_date = fields.Datetime(string='Төлбөр төлөх огноо', default=fields.Date.context_today)
-    credit_account_id = fields.Many2one('account.account', string="Авлага данс",domain="[('department_id','=',sector_id),('internal_type','=','receivable'),('type','=','account')]")
-    debit_account_id = fields.Many2one('account.account', string="Орлого данс",domain="[('department_id','=',sector_id),('type','=','account')]")
-    vat_account_id = fields.Many2one('account.account', string="НӨАТ-ын данс",domain="[('department_id','=',sector_id),('type','=','account'),('internal_type','=','payable')]")
-    
-    journal_id = fields.Many2one('account.journal', string="Журнал", domain="[('department_id','=',sector_id),('type','not in',['bank','cash'])]")
     sector_id = fields.Many2one('hr.department', string="Салбар")
     is_tax = fields.Boolean(string="НӨАТ-тэй эсэх?", default=True)
-    
     desc = fields.Char(string="Гүйлгээний утга")
     currency_id = fields.Many2one('res.currency', string="Гүйлгээний валют", default=_default_currency)
-    tax_id = fields.Many2one('account.tax', string="Татвар",domain="[('department_id','=',sector_id),('type_tax_use','=','sale')]")
     line_ids = fields.One2many('request.cost.sharing.line','request_cost_id', string="Lines")
 
-    @api.multi
+    # TODO FIX LATER
+    # journal_id = fields.Many2one('account.journal', string="Журнал", domain="[('department_id','=',sector_id),('type','not in',['bank','cash'])]")
+    # credit_account_id = fields.Many2one('account.account', string="Авлага данс",domain="[('department_id','=',sector_id),('internal_type','=','receivable'),('type','=','account')]")
+    # debit_account_id = fields.Many2one('account.account', string="Орлого данс",domain="[('department_id','=',sector_id),('type','=','account')]")
+    # vat_account_id = fields.Many2one('account.account', string="НӨАТ-ын данс",domain="[('department_id','=',sector_id),('type','=','account'),('internal_type','=','payable')]")
+    # tax_id = fields.Many2one('account.tax', string="Татвар",domain="[('department_id','=',sector_id),('type_tax_use','=','sale')]")
+    credit_account_id = fields.Many2one('account.account', string="Авлага данс")
+    debit_account_id = fields.Many2one('account.account', string="Орлого данс")
+    vat_account_id = fields.Many2one('account.account', string="НӨАТ-ын данс")
+    journal_id = fields.Many2one('account.journal', string="Журнал")
+    tax_id = fields.Many2one('account.tax', string="Татвар")
+
+
+    
     def action_create(self):
 
         cost_obj=self.env['account.cost.sharing']

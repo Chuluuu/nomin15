@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 import time
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 
 class RejectWorkService(models.TransientModel):
 	'''
@@ -23,7 +23,7 @@ class RejectWorkService(models.TransientModel):
 	
 	reason = fields.Text(string="Reason")
 
-	@api.multi
+	
 	def action_reject(self):
 
 		request_line_id = self.env['request.order.line'].browse(self.env.context.get('active_id'))

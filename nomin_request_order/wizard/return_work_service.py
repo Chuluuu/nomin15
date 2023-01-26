@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 import time
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 
 class ReturnWorkService(models.TransientModel):
 	'''
@@ -25,7 +25,7 @@ class ReturnWorkService(models.TransientModel):
 	request_order_line_id  = fields.Many2one('request.order.line')
 
 
-	@api.multi
+	
 	def action_to_return(self):
 		total = 0
 		unit = 0

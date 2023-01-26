@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 import time
-from lxml import etree
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 
 class ToEvaluateEmployee(models.TransientModel):
 	'''
@@ -25,7 +24,7 @@ class ToEvaluateEmployee(models.TransientModel):
 	assessment = fields.Float(string='Үнэлгээ' , default=100)
 
 
-	@api.multi
+	
 	def action_to_evaluate(self):
 
 		request_line_id = self.env['request.order.line'].browse(self.env.context.get('active_id'))

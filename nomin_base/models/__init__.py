@@ -20,7 +20,7 @@ from . import res
 from . import request_template
 from . import hr_employee_location
 from . import hr
-# import work_service
+from . import work_service
 # import import_master_data
 from . import configure
 # import fingerprint_lottery

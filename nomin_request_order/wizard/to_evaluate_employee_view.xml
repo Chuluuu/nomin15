@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
+<odoo>
+    <data>
         <!-- Үнэлгээ өгөх -->
         <record id="to_evaluate_employee_form" model="ir.ui.view">
             <field name="name">to.evaluate.employee</field>
             <field name="model">to.evaluate.employee</field>
             <field name="arch" type="xml">
-                <form string="Evaluate employee"> 
+                <form string="Evaluate employee">
                     <group>
                         <group>
                             <field name="description" required="1"/>
                             <field name="assessment" required="1"/>
-                        </group> 
+                        </group>
                     </group>
-
-                    
                     <footer>
                         <button name="action_to_evaluate" string="Үнэлгээ өгөх" type="object" />
                         or
@@ -22,8 +20,8 @@
                     </footer>
                 </form>
             </field>
-        </record>     
+        </record>
 
     </data>
-</openerp>
+</odoo>
 

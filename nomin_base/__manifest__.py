@@ -33,8 +33,8 @@
             #   'views/res/res_bank_view.xml',
             #   'views/res/res_groups_view.xml',
 
-            #   'views/request_template_view.xml',
-            #   'views/work_service_view.xml',
+              'views/request_template_view.xml',
+              'views/work_service_view.xml',
             #   'views/hr_employee_location_view.xml',
             #   'views/hr_view.xml',
             #   'views/import_master_data_view.xml',

@@ -1,16 +1,13 @@
 
 # -*- coding: utf-8 -*-
 
-from openerp.tools.translate import _
-from openerp import api, fields, models, _,modules
+from odoo.tools.translate import _
+from odoo import api, fields, models, _,modules
 from datetime import datetime,timedelta
 from operator import itemgetter
 import xlsxwriter
 from io import BytesIO
 import base64
-import pdfkit
-# from openerp.addons.nomin_payroll.report.nomin_payroll_salary_report import encode_for_xml ,_xmlcharref_encode
-from openerp.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
 import logging
 _logger = logging.getLogger(__name__)
 class RequestOrderReport(models.TransientModel):
@@ -30,7 +27,7 @@ class RequestOrderReport(models.TransientModel):
 
     @api.onchange('type')
     def onchange_type(self):
-        is_true= self.env.user.has_group('project.group_project_admin')
+        is_true= self.env.user.has_group('nomin_project.group_project_admin')
         if not is_true:
             return {'domain':{
                             'perform_department_ids': [('id','in',self.env.user.project_allowed_departments.ids)],                         
@@ -54,7 +51,7 @@ class RequestOrderReport(models.TransientModel):
         return ''.join(chars)
 
 
-    @api.multi
+    
     def action_export(self):
         output = BytesIO()
         workbook = xlsxwriter.Workbook(output)
@@ -517,7 +514,6 @@ class RequestOrderReport(models.TransientModel):
 
         return {
 		'name': 'Export Report',
-		'view_type':'form',
 		'view_mode':'form',
 		'res_model':'report.excel.output',
 		'res_id':excel_id.id,

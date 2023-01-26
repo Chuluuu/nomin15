@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 import time
 from lxml import etree
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 
 class ChangePrice(models.TransientModel):
 	'''
@@ -26,7 +26,7 @@ class ChangePrice(models.TransientModel):
 	
 
 
-	@api.multi
+	
 	def to_change_price(self):
 
 		request_line_id = self.env['request.order.line'].browse(self.env.context.get('active_id'))
@@ -60,7 +60,7 @@ class LineReject(models.TransientModel):
 	
 
 
-	@api.multi
+	
 	def line_reject(self):
 
 		request_line_id = self.env['request.order.line'].browse(self.env.context.get('active_id'))

@@ -1,26 +1,31 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
 access_request_order_user,request.order.user,model_request_order,project.group_project_user,1,1,1,1
-access_request_order_admin,request.order.admin,model_request_order,project.group_project_admin,1,1,1,1
-access_request_order_leader,request.order.leader,model_request_order,project.group_project_leader,1,1,1,1
-access_request_order_accountant,request.order.accountant,model_request_order,nomin_budget.group_account_cost_sharing_user,1,0,0,0
-
+access_request_order_admin,request.order.admin,model_request_order,nomin_project.group_project_admin,1,1,1,1
+access_request_order_leader,request.order.leader,model_request_order,nomin_project.group_project_leader,1,1,1,1
 
 access_request_order_line_user,request.order.line,model_request_order_line,project.group_project_user,1,1,1,0
-access_request_order_line_admin,request.order.line,model_request_order_line,project.group_project_admin,1,1,1,0
-
-
+access_request_order_line_admin,request.order.line,model_request_order_line,nomin_project.group_project_admin,1,1,1,0
 
 access_request_order_config_user,request.order.config.user,model_request_order_config,project.group_project_user,1,0,0,0
-access_request_order_config_admin,request.order.config.admin,model_request_order_config,project.group_project_admin,1,1,1,1
-
-
+access_request_order_config_admin,request.order.config.admin,model_request_order_config,nomin_project.group_project_admin,1,1,1,1
 
 access_request_order_work_service_user,work.service.user,model_work_service,project.group_project_user,1,0,0,0
-access_request_order_work_service_admin,work.service.admin,model_work_service,project.group_project_admin,1,0,0,0
+access_request_order_work_service_admin,work.service.admin,model_work_service,nomin_project.group_project_admin,1,0,0,0
 
 access_request_order_line_history_user,request.order.line.history.user,model_request_order_line_history,project.group_project_user,1,1,1,1
 
 access_request_order_attachment,request.order.attachment,model_request_order_attachment,project.group_project_user,1,1,1,1
 
 access_diagnosis_list,diagnosis.list,model_diagnosis_list,project.group_project_user,1,1,1,1
+access_reject_work_service,reject.work.service,model_reject_work_service,project.group_project_user,1,1,1,1
+access_request_cost_sharing,reject.work.service,model_request_cost_sharing,project.group_project_user,1,1,1,1
+access_return_work_service,return.work.service,model_return_work_service,project.group_project_user,1,1,1,1
+access_to_change_price,to.change.price,model_to_change_price,project.group_project_user,1,1,1,1
+access_to_control_work_service,to.control_work_service,model_to_control_work_service,project.group_project_user,1,1,1,1
+access_to_evaluate_employee,to.change.price,model_to_evaluate_employee,project.group_project_user,1,1,1,1
+access_to_doctor_reportt,doctor.report,model_doctor_report,project.group_project_user,1,1,1,1
+access_performance_work_report,performance.work.report,model_performance_work_report,project.group_project_user,1,1,1,1
+access_request_order_report,request.order.report,model_request_order_report,project.group_project_user,1,1,1,1
+access_sum_work_service_report,sum.work.service.report,model_sum_work_service_report,project.group_project_user,1,1,1,1
+

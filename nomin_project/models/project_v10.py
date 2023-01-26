@@ -98,9 +98,7 @@ class InvestmentBreakdown(models.Model):
     control_budget=fields.Many2one('control.budget', index=True, string = 'Control Budget')
 
 class ProjectHistory(models.Model):
-    _name = 'request.history'
-    #TODO fix later 
-    # _inherit = 'request.history'
+    _inherit = 'request.history'
     project_id = fields.Many2one('project.project', string='Project history', ondelete="cascade")
 
 

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
+<odoo>
+    <data>
         <!-- Буцаах -->
         <record id="return_work_service_form" model="ir.ui.view">
             <field name="name">return.work.service</field>
             <field name="model">return.work.service</field>
             <field name="arch" type="xml">
-                <form string="To back work service"> 
+                <form string="To back work service">
                     <group>
                         <group>
                             <field name="reason" required="1" />
-                        </group> 
+                        </group>
                     </group>
 
                     <footer>
@@ -22,5 +22,5 @@
             </field>
         </record>
     </data>
-</openerp>
+</odoo>
 

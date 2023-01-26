@@ -42,7 +42,7 @@ class WorkService(models.Model):
     _name = 'work.service'
     _description = "Work Service"
     _order = "id desc"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     
     name = fields.Char(string='Name', required=True, size=128,track_visibility='onchange')
     department_id = fields.Many2one('hr.department', string='Department',track_visibility='onchange')

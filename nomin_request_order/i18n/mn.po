@@ -681,7 +681,7 @@ msgstr "Reject work service"
 #. module: nomin_request_order
 #: model:ir.ui.menu,name:nomin_request_order.menu_nomin_request_report
 msgid "Report"
-msgstr "Тайлан"
+msgstr "Захиалгын хүсэлтийн тайлан"
 
 #. module: nomin_request_order
 #: model:ir.model.fields,field_description:nomin_request_order.field_performance_work_report_report_type

@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
+<odoo>
+    <data>
         <!-- Үнэлгээ өгөх -->
         <record id="to_control_work_service_form" model="ir.ui.view">
             <field name="name">to.control.work.service</field>
             <field name="model">to.control.work.service</field>
             <field name="arch" type="xml">
-                <form string="Evaluate employee"> 
+                <form string="Evaluate employee">
                     <group>
                         <group>
                             <field name="description" required="1"/>
-                        </group> 
+                        </group>
                     </group>
                     <footer>
-                    <button name="action_control" string="Хянах" type="object" />
+                        <button name="action_control" string="Хянах" type="object" />
                     or
-                    <button string="Cancel" class="btn-default" special="cancel"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
                 </form>
             </field>
         </record>
-        
-
     </data>
-</openerp>
+</odoo>
 
