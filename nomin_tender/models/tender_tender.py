@@ -1711,9 +1711,10 @@ class ContractManagement(models.Model):
     ''' Тендерээс үүссэн гэрээ
     '''
     # TODO FIX LATER
-    _name = 'contract.management'
     # _inherit = 'contract.management'
-    
+    _name = 'contract.management'
+    state                   = fields.Selection([('draft', 'Draft'),('canceled','Rejected tender requist')], string='Status')
+
     tender_id               = fields.Many2one('tender.tender', string='Tender')
 class MailSentPartners(models.Model):
     _name = 'mail.sent.partners'

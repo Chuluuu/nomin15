@@ -180,8 +180,8 @@
 							</button>
 							<button class="oe_stat_button" name="%(nomin_project.action_project_project_forecast)d" type="action" icon="fa-tasks" string="Project Forecast">
 							</button>
-							<button name="toggle_active" type="object" confirm="(Un)archiving a project automatically (un)archives its tasks and issues. Do you want to proceed?" class="oe_stat_button" icon="fa-archive">
-								<field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+							<button string="Archive" name="toggle_active" type="object" confirm="(Un)archiving a project automatically (un)archives its tasks and issues. Do you want to proceed?" class="oe_stat_button" icon="fa-archive">
+								<field string="Archive" name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
 							</button>
 							<button class="oe_stat_button" name="%(nomin_project.action_parent_project_tree)d" type="action" icon="fa-tasks">
 								<field string="Дэд төслүүд" name="subproject_count" widget="statinfo"/>
@@ -219,9 +219,8 @@
 						<group>
 							<notebook>
 								<page string="Ерөнхий">
-									<group colspan="2" col="2">
+									<group colspan="2">
 										<group  >
-											<!-- <field name="test"/> -->
 											<field name="project_purpose" placeholder="Төслийн зорилго..." attrs = "{'readonly':['|',('state_new','not in',['draft','request']),('state','not in',['draft','request'])],'required':[('project_flag','=',True)]}"/>
 											<field name="benefits" placeholder="Үр ашиг" attrs = "{'readonly':['|',('state_new','not in',['draft','request']),('state','not in',['draft','request'])],'required':[('project_flag','=',True)]}"/>
 											<field name="project_objectives" placeholder="Төслийн зорилт..." attrs = "{'readonly':['|',('state_new','not in',['draft','request']),('state','not in',['draft','request'])],'required':[('project_flag','=',True)]}"/>
@@ -235,7 +234,6 @@
 											<field name="is_done_all_control_budget" invisible="1"/>
 										</group>
 										<group >
-
 											<field name="start_date" attrs = "{'readonly':['|',('state_new','not in',['draft','request','comfirm','implement_project','ready']),('state','not in',['draft','request'])]}"/>
 											<field name="end_date" attrs = "{'readonly':['|',('state_new','not in',['draft','request','comfirm','implement_project','ready']),('state','not in',['draft','request'])]}"/>
 											<field name="project_categ" attrs = "{'readonly':['|',('state_new','not in',['draft','request']),('state','not in',['draft','request'])]}" options="{'no_create': True}"/>
@@ -285,9 +283,7 @@
 								</page>
 
 								<page string="Хөрөнгө оруулалт" attrs="{'invisible':[('is_raci_user','=',False)]}">
-
-									<group colspan="2" col="2">
-
+									<group col="2">
 										<group attrs="{'invisible':[('project_flag','=',False)]}">
 											<field name="sales_revenue" attrs="{'required':[('project_type','not in',['general_project','operational_project'])],'readonly':[('state_new','!=','draft')]}"/>
 											<field name="average_annual_sales_revenue_growth" attrs="{'required':[('project_type','not in',['general_project','operational_project'])],'readonly':[('state_new','!=','draft')]}"/>
@@ -295,37 +291,16 @@
 											<field name="average_percentage_of_sales_of_operating_expenses" attrs="{'required':[('project_type','not in',['general_project','operational_project'])],'readonly':[('state_new','!=','draft')]}"/>
 											<field name="total_limit" readonly="1" invisible="0"/>
 										</group>
-
 										<group attrs="{'invisible':[('project_flag','=',False)]}">
 											<field name="return_of_investment" attrs="{'required':[('project_type','not in',['general_project','operational_project'])],'readonly':[('state_new','!=','draft')]}" />
 											<field name="average_cost_of_resources" attrs="{'required':[('project_type','not in',['general_project','operational_project'])],'readonly':[('state_new','!=','draft')]}" />
 											<field name="compensate_of_investment" attrs="{'required':[('project_type','not in',['general_project','operational_project'])],'readonly':[('state_new','!=','draft')]}"/>
 											<field name="present_value" attrs="{'required':[('project_type','not in',['general_project','operational_project'])],'readonly':[('state_new','!=','draft')]}"/>
 											<field name="area_m" attrs="{'readonly':[('state_new','!=','draft')]}"/>
-
-
 										</group>
-
 									</group>
-									<!-- <group colspan="8" col="8">
-
-												<group colspan="2">
-													<field name="total_investment" readonly="1"/>
-													<field name="total_budget" readonly="1"/>
-													<field name="total_possible_balance" readonly="1"/>														
-												</group>
-
-												<group colspan="2">
-													<field name="total_performance" readonly="1"/>
-													<field name="total_actual_balance" readonly="1"/>														
-												</group>
-												
-											</group> -->
-
-
 									<button name="action_import" string="Экселээс татах" type="object" attrs="{'invisible':[('project_flag','=',True)]}" />
 									<notebook>
-
 										<page string="Төлөвлөлт" attrs="{'invisible':['|',('is_parent_project','=',False),('project_flag','=',False)]}">
 											<field name="parent_budget_line_ids" attrs="{'readonly':['|',('state_new','!=','draft'),('project_type','in',['general_project','operational_project'])]}" string="Хөрөнгө оруулалтын мэдээлэл" context="{'default_attrs':is_parent_project,'default_type':parent_project}">
 												<tree>
@@ -335,27 +310,20 @@
 													<field name="approximate_amount" />
 													<field name="surplus_amount" readonly="1" />
 													<field name="sum_of_subproject" readonly="1" />
-													<field name="possible_amount_create_project" />
-													<field name="sum_of_control_budget"/>
-													<field name="sum_of_purchase_requisition"/>
-													<field name="sum_of_budget_and_purchase"/>
-													<field name="possible_budgeting"/>
-													<field name="sum_of_contract"/>
-													<field name="sum_of_payment_request"/>
+													<field name="possible_amount_create_project" optional="hide"/>
+													<field name="sum_of_control_budget" optional="hide"/>
+													<field name="sum_of_purchase_requisition" optional="hide"/>
+													<field name="sum_of_budget_and_purchase" optional="hide"/>
+													<field name="possible_budgeting" optional="hide"/>
+													<field name="sum_of_contract" optional="hide"/>
+													<field name="sum_of_payment_request" optional="hide"/>
 													<field name="amount_that_can_be_spent"/>
-
-
-
 													<field name="state" invisible="1"/>
 													<field name="project_id" invisible="1" options="{'no_create': True}"/>
 													<field name="parent_project_id" invisible="1" options="{'no_create': True}"/>
-													<!-- <field name="is_required" invisible="0"/>
-													<field name="is_readonly" invisible="0"/>
-													<field name="is_invisible" invisible="0"/> -->
 													<field name="default_attrs" invisible="1"/>
 													<field name="default_type" invisible="1"/>
 													<field name="invisible_button" invisible="1"/>
-
 												</tree>
 												<form>
 													<group>
@@ -364,13 +332,11 @@
 															<field name="investment_pattern" options="{'no_create': True}" />
 															<field name="department_id" options="{'no_create': True}" />
 															<field name="approximate_amount" sum="Sum"/>
-
 														</group>
 														<group>
 															<field name="surplus_amount" readonly="1"/>
 															<field name="sum_of_subproject" readonly="1"/>
 															<field name="possible_amount_create_project" readonly="1"/>
-
 														</group>
 														<group>
 															<field name="sum_of_control_budget" readonly="1"/>
@@ -384,23 +350,14 @@
 															<field name="amount_that_can_be_spent" readonly="1"/>
 															<field name="default_attrs" invisible="1"/>
 															<field name="default_type" invisible="1"/>
-															<!-- <field name="is_required" invisible="1"/>
-															<field name="is_readonly" invisible="1" />
-															<field name="is_invisible" invisible="1"/> -->
 														</group>
-
 													</group>
-
 												</form>
 											</field>
 										</page>
-
 										<page string="Төлөвлөлт" attrs="{'invisible':[('is_parent_project','=',True)]}">
 											<field name="budget_line_ids" attrs="{'readonly':['|',('state_new','!=','draft'),('state','!=','draft')]}" string="Хөрөнгө оруулалтын мэдээлэл" context="{'default_attrs':is_parent_project,'default_type':parent_project}">
 												<tree>
-													<!-- <field name="is_required" invisible="1"/>
-													<field name="is_readonly" invisible="1"/>
-													<field name="is_invisible" invisible="1"/> -->
 													<field name="default_attrs" invisible="1"/>
 													<field name="default_type" invisible="1"/>
 													<field name="invisible_button" invisible="1"/>
@@ -410,16 +367,12 @@
 													<field name="approximate_amount" sum="Sum" />
 													<field name="sum_of_budgeted_amount" readonly="1"/>
 													<field name="possible_amount_create_project" readonly="1"/>
-													<!-- <field name="surplus_amount" readonly="1"/> -->
 													<field name="state" invisible="1"/>
 													<field name="project_id" invisible="1" options="{'no_create': True}"/>
 												</tree>
 												<form>
 													<group>
 														<group>
-															<!-- <field name="is_required" invisible="1"/>
-															<field name="is_readonly" invisible="1"/>
-															<field name="is_invisible" invisible="1"/> -->
 															<field name="default_attrs" invisible="1"/>
 															<field name="default_type" invisible="1"/>
 															<field name="invisible_button" invisible="1"/>
@@ -427,12 +380,10 @@
 															<field name="investment_pattern" options="{'no_create': True}" attrs="{'readonly':[('default_type','=',True)],'required':[('default_type','=',False)]}"/>
 															<field name="department_id" options="{'no_create': True}" attrs="{'readonly':[('default_type','=',True)],'required':[('default_type','=',False)]}"/>
 															<field name="approximate_amount" attrs="{'readonly':[('default_type','=',True)],'required':[('default_type','=',False)]}" sum="Sum"/>
-
 														</group>
 														<group>
 															<field name="sum_of_budgeted_amount" readonly="1"/>
 															<field name="possible_amount_create_project" readonly="1"/>
-															<!-- <field name="surplus_amount" readonly="1"/> -->
 														</group>
 													</group>
 													<notebook>
@@ -463,43 +414,14 @@
 																			<field name="state" readonly="1"/>
 																		</group>
 																	</group>
-																	<group>
-																		<group invisible="1">
-																			<field name="material_line_limit_new"/>
-																			<field name="labor_line_limit_new"/>
-																			<field name="equipment_line_limit_new"/>
-																			<field name="postage_line_limit_new"/>
-																			<field name="other_line_limit_new"/>
-																			<field name="carriage_limit_new"/>
-																		</group>
-
-
+																	<group invisible="1">
+																		<field name="material_line_limit_new"/>
+																		<field name="labor_line_limit_new"/>
+																		<field name="equipment_line_limit_new"/>
+																		<field name="postage_line_limit_new"/>
+																		<field name="other_line_limit_new"/>
+																		<field name="carriage_limit_new"/>
 																	</group>
-																	<notebook>
-																		<!-- <page string="Дэд төслийн гүйцэтгэл" invisible="1">
-																		<field name="performance_line_ids" invisible="1">
-																			<tree>																
-																				<field name="type"/>
-																				<field name="source"/>
-																				<field name="amount"/>
-																				<field name="create_date"/>																
-																		
-																			</tree>
-																			<form >
-																				<group>
-																					<group>																		
-																						<field name="type"/>
-																						<field name="source"/>																						
-																					</group>
-																					<group>																						
-																						<field name="amount"/>
-																						<field name="create_date"/>
-																					</group>
-																				</group>																	
-																			</form>
-																		</field>
-																	</page> -->
-																	</notebook>
 																</form>
 															</field>
 														</page>
@@ -543,21 +465,16 @@
 													<field name="department_id" options="{'no_create': True}" />
 													<field name="project_id" options="{'no_create': True}"/>
 													<field name="parent_project_id" options="{'no_create': True}" invisible="1"/>
-
 													<field name="budgeted_amount" required="1" sum="Sum"/>
-													<field name="surplus_amount"/>
-													<field name="total_amount_of_control_budget"/>
-													<field name="total_amount_of_purchase_requisition"/>
-													<field name="total_possible_balance"/>
-
-													<field name="total_amount_of_contract"/>
-													<field name="total_amount_of_payment_request"/>
-													<field name="actual_balance"/>
-
-
-													<field name="surplus_number"/>
+													<field name="surplus_amount" optional="hide"/>
+													<field name="total_amount_of_control_budget" optional="hide"/>
+													<field name="total_amount_of_purchase_requisition" optional="hide"/>
+													<field name="total_possible_balance" optional="hide"/>
+													<field name="total_amount_of_contract" optional="hide"/>
+													<field name="total_amount_of_payment_request" optional="hide"/>
+													<field name="actual_balance" optional="hide"/>
+													<field name="surplus_number" optional="hide"/>
 													<field name="state" string="Тодотголын төлөв"/>
-
 													<button name="confirm_surplus" string="Тодотгох" type="object" attrs="{'invisible':[('state','!=','surplus_request')]}" />
 													<button name="reject_surplus" string="Татгалзах" type="object" attrs="{'invisible':[('state','!=','surplus_request')]}" confirm="Тодотгол татгалзахдаа итгэлтэй байна уу?"/>
 												</tree>
@@ -584,61 +501,25 @@
 
 														</group>
 													</group>
-
-													<!-- <notebook>
-													<page string="Хөрөнгө оруулалт">
-														<field name="line_ids">
-															<tree>
-																<field name="department_id" options="{'no_create': True}" required="1"/>
-																<field name="material_cost"/>
-																<field name="labor_cost"/>
-																<field name="equipment_cost"/>
-																<field name="carriage_cost"/>
-																<field name="postage_cost"/>
-																<field name="other_cost"/>
-															</tree>
-															<form >
-																<group>
-																	<group>
-																		<field name="department_id" required="1"/>
-																		<field name="material_cost"/>
-																		<field name="labor_cost"/>
-																		<field name="equipment_cost"/>
-																	</group>
-																	<group>
-																		<field name="carriage_cost"/>
-																		<field name="postage_cost"/>
-																		<field name="other_cost"/>
-																	</group>
-																</group>
-																
-															</form>
-														</field>
-													</page>
-												</notebook> -->
 												</form>
 											</field>
 										</page>
 										<page string="Төсөвлөсөн" attrs="{'invisible':['|',('is_parent_project','=',True),('project_flag','=',False)]}">
-											<field name="budgeted_line_ids" readonly="1">
-												<tree>
+											<field name="budgeted_line_ids" readonly="1" style="overflow:auto">
+												<tree >
 													<field name="id" invisible="1"/>
 													<field name="investment_pattern" options="{'no_create': True}"/>
 													<field name="department_id" options="{'no_create': True}" invisible="1"/>
 													<field name="project_id" options="{'no_create': True}" invisible="1"/>
 													<field name="parent_project_id" options="{'no_create': True}" invisible="1"/>
 													<field name="budgeted_amount" required="1" sum="Sum"/>
-													<!-- <field name="surplus_amount"/> -->
-													<field name="total_amount_of_control_budget"/>
-													<field name="total_amount_of_purchase_requisition"/>
-
-													<field name="total_possible_balance"/>
-													<field name="total_amount_of_contract"/>
-													<field name="total_amount_of_payment_request"/>
-
+													<field name="total_amount_of_control_budget" optional="hide"/>
+													<field name="total_amount_of_purchase_requisition" optional="hide"/>
+													<field name="total_possible_balance" optional="hide"/>
+													<field name="total_amount_of_contract" optional="hide"/>
+													<field name="total_amount_of_payment_request" optional="hide"/>
 													<field name="actual_balance"/>
 													<field name="surplus_number"/>
-
 												</tree>
 												<form>
 													<group>
@@ -649,7 +530,6 @@
 															<field name="parent_project_id" options="{'no_create': True}" invisible="1"/>
 															<field name="budgeted_amount" required="1" sum="Sum"/>
 															<field name="surplus_number"/>
-															<!-- <field name="surplus_amount"/> -->
 														</group>
 														<group>
 															<field name="total_amount_of_control_budget"/>
@@ -657,43 +537,9 @@
 															<field name="total_possible_balance"/>
 															<field name="total_amount_of_contract"/>
 															<field name="total_amount_of_payment_request"/>
-
 															<field name="actual_balance"/>
-
 														</group>
 													</group>
-
-													<!-- <notebook>
-													<page string="Хөрөнгө оруулалт">
-														<field name="line_ids">
-															<tree>
-																<field name="department_id" options="{'no_create': True}" required="1"/>
-																<field name="material_cost"/>
-																<field name="labor_cost"/>
-																<field name="equipment_cost"/>
-																<field name="carriage_cost"/>
-																<field name="postage_cost"/>
-																<field name="other_cost"/>
-															</tree>
-															<form >
-																<group>
-																	<group>
-																		<field name="department_id" required="1"/>
-																		<field name="material_cost"/>
-																		<field name="labor_cost"/>
-																		<field name="equipment_cost"/>
-																	</group>
-																	<group>
-																		<field name="carriage_cost"/>
-																		<field name="postage_cost"/>
-																		<field name="other_cost"/>
-																	</group>
-																</group>
-																<field name="description"/>
-															</form>
-														</field>
-													</page>
-												</notebook> -->
 												</form>
 											</field>
 										</page>
@@ -708,7 +554,6 @@
 													<field name="surplus_amount"/>
 													<field name="surplus_date"/>
 													<field name="state"/>
-
 												</tree>
 												<form>
 													<group>
@@ -716,13 +561,11 @@
 															<field name="id" invisible="1"/>
 															<field name="project_id"/>
 															<field name="budgeted_amount" required="1"/>
-
 														</group>
 														<group>
 															<field name="surplus_amount"/>
 															<field name="surplus_date"/>
 															<field name="state"/>
-
 														</group>
 													</group>
 												</form>
@@ -809,7 +652,6 @@
 											<button name="vote_button" string="Санал өгөх" type="object" attrs="{'invisible':[('is_checker', '=', False)]}"/>
 											<button name="modify_button" string="Тодотгох" type="object" attrs="{'invisible':[('is_editable_user', '=', False)]}"/>
 											<button name="modify_confirm_button" string="Баталгаажуулах" type="object" attrs="{'invisible':['|',('state', '!=', 'ready'),('is_modify_user', '=', False)]}"/>
-
 										</tree>
 										<form string="Main specifications">
 											<group>
@@ -877,84 +719,75 @@
 													<field name="modify_click" invisible="1"/>
 													<field name="edit_click" invisible="1"/>
 												</group>
-
 											</group>
 										</form>
 									</field>
-
 									<separator string="Төслийн зарцуулалт" colspan="2"/>
-
-									<group groups="nomin_project.group_project_admin,project.group_project_manager,project.group_project_leader">
-										<group colspan="8" col="8">
-
-											<group colspan="2">
-												<field name="expenditure_ratio"/>
-												<field name="project_budget"/>
-												<field name="estimated_budget" />
-
-
-											</group>
-											<group colspan="2">
-												<field name="overrun_counts"/>
-												<field name="total_expenditure"/>
-											</group>
-											<group colspan="2">
-												<field name="overrun_ratio"/>
-												<field name="total_remaining_amount"/>
-											</group>
-
+									<group string="Group 1" col="3" groups="nomin_project.group_project_admin,project.group_project_manager,project.group_project_leader">
+										<group >
+											<field name="expenditure_ratio"/>
+											<field name="project_budget"/>
+											<field name="estimated_budget" />
 										</group>
-										<group colspan="8" col="8" attrs="{'invisible':[('project_flag','=',True)]}">
-											<group colspan="2">
-												<field name="material_budget"/>
-												<field name="labour_budget"/>
-												<field name="equipment_budget"/>
-												<field name="transport_budget"/>
-												<field name="direct_budget"/>
-												<field name="other_budget"/>
-											</group>
-											<group colspan="2">
-												<field name="material_expenditure"/>
-												<field name="labour_expenditure"/>
-												<field name="equipment_expenditure"/>
-												<field name="transport_expenditure"/>
-												<field name="direct_expenditure"/>
-												<field name="other_expenditure"/>
-											</group>
-											<group colspan="2">
-												<field name="material_remaining_amount"/>
-												<field name="labour_remaining_amount"/>
-												<field name="equipment_remaining_amount"/>
-												<field name="transport_remaining_amount"/>
-												<field name="direct_remaining_amount"/>
-												<field name="other_remaining_amount"/>
-											</group>
+										<group >
+											<field name="overrun_counts"/>
+											<field name="total_expenditure"/>
 										</group>
-										<group colspan="8" col="8" attrs="{'invisible':[('project_flag','=',False)]}">
-											<group colspan="2">
-												<field name="material_budget_new"/>
-												<field name="labour_budget_new"/>
-												<field name="equipment_budget_new"/>
-												<field name="transport_budget_new"/>
-												<field name="direct_budget_new"/>
-												<field name="other_budget_new"/>
-											</group>
-											<group colspan="2">
-												<field name="material_expenditure_new"/>
-												<field name="labour_expenditure_new"/>
-												<field name="equipment_expenditure_new"/>
-												<field name="transport_expenditure_new"/>
-												<field name="direct_expenditure_new"/>
-												<field name="other_expenditure_new"/>
-											</group>
-											<group colspan="2">
-												<field name="material_remaining_amount_new"/>
-												<field name="labour_remaining_amount_new"/>
-												<field name="equipment_remaining_amount_new"/>
-												<field name="transport_remaining_amount_new"/>
-												<field name="direct_remaining_amount_new"/>
-												<field name="other_remaining_amount_new"/>
-											</group>
+										<group >
+											<field name="overrun_ratio"/>
+											<field name="total_remaining_amount"/>
+										</group>
+									</group>
+									<group string="Group 2" col="3" groups="nomin_project.group_project_admin,project.group_project_manager,project.group_project_leader">
+										<group attrs="{'invisible':[('project_flag','=',False)]}">
+											<field name="material_budget"/>
+											<field name="labour_budget"/>
+											<field name="equipment_budget"/>
+											<field name="transport_budget"/>
+											<field name="direct_budget"/>
+											<field name="other_budget"/>
+										</group>
+										<group attrs="{'invisible':[('project_flag','=',False)]}">
+											<field name="material_expenditure"/>
+											<field name="labour_expenditure"/>
+											<field name="equipment_expenditure"/>
+											<field name="transport_expenditure"/>
+											<field name="direct_expenditure"/>
+											<field name="other_expenditure"/>
+										</group>
+										<group attrs="{'invisible':[('project_flag','=',False)]}">
+											<field name="material_remaining_amount"/>
+											<field name="labour_remaining_amount"/>
+											<field name="equipment_remaining_amount"/>
+											<field name="transport_remaining_amount"/>
+											<field name="direct_remaining_amount"/>
+											<field name="other_remaining_amount"/>
+										</group>
+									</group>
+									<group string="Group 3" col="3" groups="nomin_project.group_project_admin,project.group_project_manager,project.group_project_leader">
+										<group attrs="{'invisible':[('project_flag','=',False)]}">
+											<field name="material_budget_new"/>
+											<field name="labour_budget_new"/>
+											<field name="equipment_budget_new"/>
+											<field name="transport_budget_new"/>
+											<field name="direct_budget_new"/>
+											<field name="other_budget_new"/>
+										</group>
+										<group attrs="{'invisible':[('project_flag','=',False)]}">
+											<field name="material_expenditure_new"/>
+											<field name="labour_expenditure_new"/>
+											<field name="equipment_expenditure_new"/>
+											<field name="transport_expenditure_new"/>
+											<field name="direct_expenditure_new"/>
+											<field name="other_expenditure_new"/>
+										</group>
+										<group attrs="{'invisible':[('project_flag','=',False)]}">
+											<field name="material_remaining_amount_new"/>
+											<field name="labour_remaining_amount_new"/>
+											<field name="equipment_remaining_amount_new"/>
+											<field name="transport_remaining_amount_new"/>
+											<field name="direct_remaining_amount_new"/>
+											<field name="other_remaining_amount_new"/>
 										</group>
 									</group>
 								</page>
@@ -988,14 +821,12 @@
 									</group>
 									<group >
 										<group>
-											<group>
-												<field name="r_user_ids" attrs="{'invisible':[('privacy_visibility','not in',['portal','followers'])],'readonly':[('is_project_manager','=',False)]}" widget="many2many_tags" options="{'no_create': True}" />
-												<field name="a_user_ids" attrs="{'invisible':[('privacy_visibility','not in',['portal','followers'])],'readonly':[('is_project_manager','=',False)]}" widget="many2many_tags" options="{'no_create': True}" />
-											</group>
-											<group>
-												<field name="c_user_ids" attrs="{'invisible':[('privacy_visibility','not in',['portal','followers'])],'readonly':[('is_project_manager','=',False)]}" widget="many2many_tags" options="{'no_create': True}" />
-												<field name="i_user_ids" attrs="{'invisible':[('privacy_visibility','not in',['portal','followers'])],'readonly':[('is_project_manager','=',False)]}" widget="many2many_tags" options="{'no_create': True}" />
-											</group>
+											<field name="r_user_ids" attrs="{'invisible':[('privacy_visibility','not in',['portal','followers'])],'readonly':[('is_project_manager','=',False)]}" widget="many2many_tags" options="{'no_create': True}" />
+											<field name="a_user_ids" attrs="{'invisible':[('privacy_visibility','not in',['portal','followers'])],'readonly':[('is_project_manager','=',False)]}" widget="many2many_tags" options="{'no_create': True}" />
+										</group>
+										<group>
+											<field name="c_user_ids" attrs="{'invisible':[('privacy_visibility','not in',['portal','followers'])],'readonly':[('is_project_manager','=',False)]}" widget="many2many_tags" options="{'no_create': True}" />
+											<field name="i_user_ids" attrs="{'invisible':[('privacy_visibility','not in',['portal','followers'])],'readonly':[('is_project_manager','=',False)]}" widget="many2many_tags" options="{'no_create': True}" />
 										</group>
 									</group>
 								</page>
@@ -1032,18 +863,13 @@
 												<label for="create_uid" string="Creation"/>
 												<div name="creation_div">
 													<field name="create_uid" readonly="1" class="oe_inline"/>
- on 
 													<field name="create_date" readonly="1" class="oe_inline"/>
- from 
 													<field name="confirmed_employee" readonly="1"/>
 													<field name="confirmed_date" readonly="1"/>
 													<field name="is_invisible" invisible="1" />
 													<field name="find_confirm_user" invisible="1"/>
 													<field name="attach_required" invisible="0"/>
 													<field name="confirm_attachment"/>
-
-
-
 												</div>
 											</group>
 										</form>

@@ -2,21 +2,31 @@
 
 
 from odoo import api, fields, models, _
-class contract_management(models.Model):
-	_name = 'contract.management'
-	# TODO FIX LATER
-	# _inherit = 'contract.management'
+class contract_management(models.Model):	
+	_inherit = 'contract.management'
 	'''
         Гэрээн дээр гэрээ зөрчсөн асуудал бүртгэх
     '''
-	
 	issue_ids = fields.One2many('project.issue','contract_id', string="Contract Issues")
-# TODO FIX LATER
+	# TODO FIX LATER REmove project_id 
+	project_id = fields.Many2one('project.project', stirng="Project")
 class ContractPerformance(models.Model):
+	# TODO FIX LATER
+	# _inherit = 'contract.performance'
 	_name ='contract.performance'
-# TODO FIX LATER
+	contract_id = fields.Many2one('contract.management',string="Contract")
+	state =  fields.Selection(selection=[('draft',u'Ноорог'), 
+                                ('sent',u'Илгээгдсэн'), 
+                                ('approved',u'Зөвшөөрсөн'),
+                                ('confirmed',u'Баталсан'),
+                                ('modified',u'Тодотгосон'),
+                                ('rejected',u'Татгалзсан'),
+                                ('closed',u'Хаагдсан'),
+                                ],
+                                string = 'State',  copy=False, default='draft', tracking=True)
 class PaymentRequest(models.Model):
-	_name ='payment.request'
+	# TODO FIX LATER
+	_name = 'payment.request'
 
 class project_ticket(models.Model):
 	_name = "crm.helpdesk"

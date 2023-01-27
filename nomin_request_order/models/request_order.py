@@ -19,7 +19,8 @@ class RequestOrder (models.Model):
     def _add_followers(self,user_ids):
         '''Add followers
         '''
-        self.message_subscribe_users(user_ids=user_ids)
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
 
 
     
@@ -120,6 +121,7 @@ class RequestOrder (models.Model):
     def _is_approve_user(self):
         user_ids = []
         for order in self:
+            order.is_approve_user = False
             if not order.is_sent:
                 if order.request_config_id.select_dep =='perform':
                     if order.request_config_id.type =='group':
@@ -225,12 +227,13 @@ class RequestOrder (models.Model):
     progress_percentage = fields.Float(string="Progress percentage" , compute='_compute_percent' ,store=True)
     total_amount = fields.Float(string="Дүн" , tracking=True , compute="_total_amount" , store=True)
     sum_amount = fields.Float(string="Нийт дүн" , tracking=True , compute="_sum_amount")
-    cost_share_id = fields.Many2one('account.cost.sharing', string="Зардал хувиарлалт")
     work_type = fields.Selection([('tarif','Тарифт ажлууд'),('order','Захиалгат ажлууд')],string='Зардлын төрөл')
     is_invisible_field = fields.Boolean(string="Invisible field" , default=False)
     doctor_field = fields.Boolean(string="Doctor flow" , default=False)
     # TODO FIX LATER
     # age = fields.Integer(string="Age" , related="employee_id.age")
+    # cost_share_id = fields.Many2one('account.cost.sharing', string="Зардал хувиарлалт")
+    
     age = fields.Integer(string="Age" )
     gender = fields.Selection([('male', 'Male'), ('female', 'Female')], string='Gender',related="employee_id.gender")
     order_finished_date = fields.Date(string='Дуусгасан огноо',tracking=True)
@@ -247,9 +250,7 @@ class RequestOrder (models.Model):
 				'department_id': emp.department_id.id,
 				'sector_id': emp.department_id.parent_id.id,
 				'job_id': emp.job_id.id,
-				'salary_grade_id': emp.contract_id.grade_id.id,
-				'salary': emp.contract_id.grade_id.salary,
-				'employee_phone_number': emp.mobile_phone,
+				'phone_number': emp.mobile_phone,
 				})
         result = super(RequestOrder, self).create(vals)
         return result
@@ -346,22 +347,23 @@ class RequestOrder (models.Model):
 
     
     def action_sent(self):
-        employee_obj = self.env['case.history.line']
+        
         for order in self:   
                     
             if not order.line_ids :
                 raise UserError((u'Ажил үйлчилгээ  сонгоогүй байна.'))
-        
-        request_config_doctor = self.env['request.order.config'].search([('department_ids','in',order.perform_department_id.id),('field_doctor','=',True)],limit=1)
-        if request_config_doctor:
-            for line in self.case_history_ids:
-                employee_obj.create({
-                'diagnosis':line.diagnosis,
-                'treatment_adv':line.treatment_adv,
-                'pain': line.pain,
-                'vital_signs':line.vital_signs,
-                'employee_id':line.employee_id.id,
-            }) 
+        # TODO FIX LATER
+        # employee_obj = self.env['case.history.line']
+        # request_config_doctor = self.env['request.order.config'].search([('department_ids','in',order.perform_department_id.id),('field_doctor','=',True)],limit=1)
+        # if request_config_doctor:
+        #     for line in self.case_history_ids:
+        #         employee_obj.create({
+        #         'diagnosis':line.diagnosis,
+        #         'treatment_adv':line.treatment_adv,
+        #         'pain': line.pain,
+        #         'vital_signs':line.vital_signs,
+        #         'employee_id':line.employee_id.id,
+        #     }) 
             
         for order in self:
             config_id = self.env['request.order.config'].search([('sequence','=',order.active_sequence+1),('department_ids','=',order.perform_department_id.id),('is_fold','=',False)])
@@ -478,7 +480,7 @@ class RequestOrder (models.Model):
                 # email_template.sudo().unlink()
         email = u'\n Дараах хэрэглэгчид рүү имэйл илгээгдэв: ' + ('<b>' + ('</b>, <b>'.join(user_emails)) + '</b>')
         
-        self.message_subscribe_users(user_ids)
+        self._add_followers(user_ids)
         self.message_post(body=email)
 
         return True
@@ -507,10 +509,8 @@ class RequestOrder (models.Model):
         possible_user_ids = []
         for this in self:
             for user in user_ids:
-                
                 department_ids = self.env['hr.department'].search([('id','child_of',user.project_allowed_departments.ids)])
                 if department_ids:
-                    
                     if this.perform_department_id.id in department_ids.ids:
                         possible_user_ids.append(user.id)    
         
@@ -520,21 +520,15 @@ class RequestOrder (models.Model):
     def mail_users(self):
         sel_user_ids= []
         user_ids = []
-        
         for order in self:
-            
             if order.request_config_id.select_dep =='perform':
-                
                 if order.request_config_id.type =='group':
                     for group in order.request_config_id.group_ids:   
-
                             for user in group.users:
                                 sel_user_ids.append( user.id)
                 elif order.request_config_id.type =='distribute':
-                    
                     for user in order.request_config_id.user_ids:                        
                         sel_user_ids.append( user.id)
-
                 elif order.request_config_id.type == 'fixed':
                     sel_user_ids.append(order.request_config_id.user_id.id)
                 elif order.request_config_id.type == 'department':
@@ -553,9 +547,7 @@ class RequestOrder (models.Model):
                     if user_id :
                         sel_user_ids.append(user_id)
         if sel_user_ids:   
-                     
             user_ids = self.get_possible_users(sel_user_ids)
-           
         return user_ids
 
 
@@ -571,7 +563,8 @@ class RequestOrderLine(models.Model):
     def _add_followers(self,user_ids):
         '''Add followers
         '''
-        self.message_subscribe_users(user_ids=user_ids)
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
 
     
     def action_reject(self):
@@ -754,20 +747,14 @@ class RequestOrderLine(models.Model):
             if line.service_id.is_calculated_percent and line.order_id.is_urgent:
                 line.percent_change = 3
                 line.amount = (line.unit_price * line.qty * line.percent_change)
-
                 if line.maintenance >0:
                     line.amount = (((line.unit_price * line.qty) + ((line.maintenance * line.unit_price) * 0.2)) * line.percent_change )
-
-
             elif line.service_id.is_calculated_percent and not line.order_id.is_urgent:
                 line.amount = (line.unit_price * line.qty) 
-
                 if line.maintenance >0:                    
                     line.amount = (((line.unit_price * line.qty) + ((line.maintenance * line.unit_price) * 0.2)) * line.percent_change ) 
-
             elif not line.service_id.is_calculated_percent and not line.order_id.is_urgent:
                 line.amount = (line.qty * line.unit_price * line.percent_change)
-
             elif not line.service_id.is_calculated_percent and  line.order_id.is_urgent:
                 line.amount = (line.qty * line.unit_price * line.percent_change)
     
@@ -778,24 +765,18 @@ class RequestOrderLine(models.Model):
             if line.amount:
                 line.total_score = line.amount/1000
 
-
-
-
-
-
-    
     def _is_perform_user(self):
         for line in self:
+            line.is_perform_user = False
             if line.perform_employee_id.user_id.id == self._uid:
                 line.is_perform_user = True
-
     
     def _is_evaluate_user(self):
         for line in self:
+            line.is_evaluate_user = False
             if line.order_id.employee_id.user_id.id == self._uid:
                 line.is_evaluate_user = True
 
-    
     def _is_control_user(self):
         for line in self:
             line.is_control_user = line.order_id.is_approve_user
@@ -927,12 +908,6 @@ class RequestOrderLine(models.Model):
             else:
                 line.enter_price = False
             
-            
-
-                
-            
-
-
     @api.onchange('service_id')
     def onchange_service(self):
         for line in self:
@@ -942,14 +917,11 @@ class RequestOrderLine(models.Model):
             else:
                 line.percent_change = 1
                 line.is_percent = True
-            
-
-    
 
     @api.model
     def create(self, vals):
+        
         result =  super(RequestOrderLine, self).create(vals)
-
         if result.order_id.is_urgent and result.service_id.is_calculated_percent :
             result.percent_change = 3
             result.is_percent = True
@@ -960,14 +932,7 @@ class RequestOrderLine(models.Model):
         for line in result:
             if line.order_id.active_sequence !=1 and line.order_id.active_sequence !=2:
                 raise UserError((u'Энэ төлөв дээр зүйл нэмэх боломжгүй.'))
-            
-
-                
-
         return result
-
-
-
     
     def write(self, vals):
         result = super(RequestOrderLine, self).write(vals)  
@@ -1020,11 +985,6 @@ class DiagnosisList(models.Model):
     _inherit = ['mail.thread']
     
     name = fields.Char(string='Name', tracking=True)
- 
-    
-
-
-
 class RequestOrderLineHistory(models.Model): 
     _name = 'request.order.line.history'
     _description = "Request order line history"
@@ -1054,20 +1014,15 @@ class RequestOrderAttachment(models.Model):
     date = fields.Datetime(string='Огноо', default=fields.Date.context_today)
     state= fields.Selection([('draft','Ноорог'),('confirmed','Баталгаажсан')],string="Төлөв",default='draft')
 
-
-    
     def action_confirm(self):
         self.write({'state':'confirmed'})
         if self.order_line_id:
             self.write({'order_id':self.order_line_id.order_id.id})
 
-
-    
     def unlink(self):
         for order in self:
             if order.state !='draft' :
                 raise UserError((u'Ноорог төлөвтэй хавсралт устгах боломжтой.'))
-
         return super(RequestOrderAttachment, self).unlink()
 
 

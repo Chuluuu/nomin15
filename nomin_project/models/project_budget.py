@@ -66,6 +66,7 @@ class ProjectBudget(models.Model):
     def _compute_sum_control_budget(self):
         for budget in self:
             total = 0
+            budget.sum_of_control_budget = 0
             for line in budget.parent_project_id.parent_budgeted_line_ids:
                 if line.investment_pattern == budget.investment_pattern and line.department_id == budget.department_id :
                     total += line.total_amount_of_control_budget
@@ -75,6 +76,7 @@ class ProjectBudget(models.Model):
     @api.depends('budgeted_ids.budgeted_amount') 
     def _compute_sum_of_subproject(self):
         for budget in self:
+            budget.sum_of_subproject = 0
             total = 0
             for line in budget.parent_project_id.parent_budgeted_line_ids:
                 if line.investment_pattern == budget.investment_pattern and line.department_id == budget.department_id :
@@ -86,6 +88,7 @@ class ProjectBudget(models.Model):
     def _compute_sum_pur_req(self):
         for budget in self:
             total = 0
+            budget.sum_of_purchase_requisition= 0
             for line in budget.parent_project_id.parent_budgeted_line_ids:
                 if line.investment_pattern == budget.investment_pattern and line.department_id == budget.department_id :
                     total += line.total_amount_of_purchase_requisition
@@ -96,6 +99,7 @@ class ProjectBudget(models.Model):
     def _compute_sum_contract(self):
         for budget in self:
             total = 0
+            budget.sum_of_contract = 0
             for line in budget.parent_project_id.parent_budgeted_line_ids:
                 if line.investment_pattern == budget.investment_pattern and line.department_id == budget.department_id :
                     total += line.total_amount_of_contract
@@ -107,6 +111,7 @@ class ProjectBudget(models.Model):
     def _compute_sum_payment(self):
         for budget in self:
             total = 0
+            budget.sum_of_payment_request = 0
             for line in budget.parent_project_id.parent_budgeted_line_ids:
                 if line.investment_pattern == budget.investment_pattern and line.department_id == budget.department_id :
                     total += line.total_amount_of_payment_request
@@ -291,7 +296,7 @@ class ProjectBudgetLine(models.Model):
             if line.project_budget_id.project_id.id:
                 self.env.cr.execute("select sum(product_uom_qty*price_unit) from equipment_budget_line where parent_id in (select id from control_budget where project_id= %s )"%(line.project_budget_id.project_id.id))
                 res = self.env.cr.fetchone()[0] or 0.0
-                line.equipment_line_total = line.equipment_line_limit_new - res
+                line.equipment_line_total_new = line.equipment_line_limit_new - res
     
 
     
@@ -309,17 +314,21 @@ class ProjectBudgetLine(models.Model):
                                                     from labor_budget_line where parent_id in \
                                                         (select id from control_budget where project_id= %s )"%(line.project_budget_id.project_id.id))
                 res = self.env.cr.fetchone()[0] or 0.0
-                line.labor_line_total = line.labor_line_limit_new - res
+                line.labor_line_total_new = line.labor_line_limit_new - res
     
     
     def _carriage_cost_total_new(self):
         '''Хөрөнгө оруулалтын батлагдахаар хүлээж буй хяналтын төсвүүдийн тээврийн зардлын нийт дүн
         '''
         for line in self:
+            # line.carriage_cost = 0
+            line.carriage_cost_new = 0
             if line.project_budget_id.project_id.id:
                 self.env.cr.execute("select sum(price) from carriage_budget_line where parent_id in (select id from control_budget where project_id= %s )"%(line.project_budget_id.project_id.id))
                 res = self.env.cr.fetchone()[0] or 0.0
                 line.carriage_cost = line.carriage_limit_new - res
+                line.carriage_cost_new = line.carriage_limit_new - res
+
     
 
     
@@ -330,7 +339,7 @@ class ProjectBudgetLine(models.Model):
             if line.project_budget_id.project_id.id:
                 self.env.cr.execute("select sum(price) from postage_budget_line where parent_id in (select id from control_budget where project_id= %s )"%(line.project_budget_id.project_id.id))
                 res = self.env.cr.fetchone()[0] or 0.0
-                line.postage_line_total = line.postage_line_limit_new - res
+                line.postage_line_total_new = line.postage_line_limit_new - res
     
 
     
@@ -341,7 +350,7 @@ class ProjectBudgetLine(models.Model):
             if line.project_budget_id.project_id.id:
                 self.env.cr.execute("select sum(price) from other_cost_budget_line where parent_id in (select id from control_budget where project_id= %s )"%(line.project_budget_id.project_id.id))
                 res = self.env.cr.fetchone()[0] or 0.0
-                line.other_line_total = line.other_line_limit_new - res
+                line.other_line_total_new = line.other_line_limit_new - res
 
 
 
@@ -443,12 +452,12 @@ class ProjectBudgetLine(models.Model):
             budget = self.project_budget_id
             budget.project_id.total_limit = total
             budget.sum_of_budgeted_amount = total
-            budget.possible_amount_of_create_project = budget.approximate_amount - budget.sum_of_budgeted_amount
+            budget.possible_amount_create_project = budget.approximate_amount - budget.sum_of_budgeted_amount
             # if budget.surplus_amount == 0:
             #     budget.possible_amount_create_project = budget.approximate_amount - total
             # else:
             #     budget.possible_amount_create_project = budget.surplus_amount - total
-            if budget.approximate_amount < self.total_cost:
+            if self.total_cost>0 and budget.approximate_amount < self.total_cost:
                 raise ValidationError(_(u'Төлөвлөсөн дүнгийн утга батлагдсан дүнгээс хэтэрсэн байна'))
 
             for line in budget.project_id.budgeted_line_ids:

@@ -378,13 +378,17 @@ class ControlBudget(models.Model):
     
     
     def _is_old(self):
-        if self.create_date < datetime.strptime('2021-12-09 00:00:00', '%Y-%m-%d %H:%M:%S'):
-            self.is_old = True
+        for record in self:
+            record.is_old= False
+            if record.create_date < datetime.strptime('2021-12-09 00:00:00', '%Y-%m-%d %H:%M:%S'):
+                record.is_old = True
 
     
     def _is_old2(self):
-        if self.create_date < datetime.strptime('2022-12-28 00:00:00', '%Y-%m-%d %H:%M:%S'):
-            self.is_old2 = True
+        for record in self:
+            record.is_old2=False
+            if record.create_date < datetime.strptime('2022-12-28 00:00:00', '%Y-%m-%d %H:%M:%S'):
+                record.is_old2 = True
 
     project_budget_material         = fields.Float(u'Жинхэнэ үлдэгдэл', compute=_get_all)
     project_budget_carriage         = fields.Float(u'Жинхэнэ үлдэгдэл', compute=_get_all)

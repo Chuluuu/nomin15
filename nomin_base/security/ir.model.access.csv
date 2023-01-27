@@ -21,6 +21,13 @@ access_proactive_notification,proactive_notification,model_proactive_notificatio
 access_proactive_line,proactive_line,model_proactive_line,group_project_user,1,1,1,0
 access_integration_config,integration_config,model_integration_config,group_project_user,1,1,1,0
 
-
-
-
+access_request_config_user,request.config.user,model_request_config,base.group_user,1,0,0,0
+access_request_config_manage,request.config.manage,model_request_config,nomin_base.group_config_manager,1,1,1,1
+access_request_config_line_user,request.config.line.user,model_request_config_line,base.group_user,1,0,0,0
+access_request_config_line_manage,request.config.line.manage,model_request_config_line,nomin_base.group_config_manager,1,1,1,1
+access_request_config_payment_line_user,request.config.line.user,model_request_config_payment_line,base.group_user,1,0,0,0
+access_request_config_payment_line_manager,request.config.line.manage,model_request_config_payment_line,nomin_base.group_config_manager,1,1,1,1
+access_request_history,request.history.user,model_request_history,base.group_user,1,1,1,1
+access_work_service_time,work.service.time.user,model_work_service_time,base.group_user,1,1,1,1
+access_work_service,work.service.user,model_work_service,base.group_user,1,0,0,0
+access_evaluation_indicators_users,evalution.indicators,model_evaluation_indicators,base.group_user,1,0,0,0

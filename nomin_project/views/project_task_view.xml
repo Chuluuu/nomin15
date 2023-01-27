@@ -170,36 +170,37 @@
                                 <!--	                		<field name="agreed_price" attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph','tariff_task'))], 'readonly': [('task_state', 'not in', ('t_new','t_cheapen'))]}"/>-->
                                 <!--	                		<field name="work_name" attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph'))], 'readonly': [('task_state', 'not in', ('t_new','t_cheapen'))]}"/>-->
                                 <!--	                		<field name="work_description" attrs="{'invisible':[('task_type','not in', ('work_task','work_graph'))], 'readonly': [('task_state', 'not in', ('t_new','t_cheapen'))]}"/>-->
-                                <field name="tarif_line" attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph','tariff_task'))], 'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}">
-                                    <tree editable="bottom">
-                                        <field name="task_id" invisible="1"/>
-                                        <field name="work_id" required="1"/>
-                                        <field name="qty" required="1"/>
-                                        <field name="price" required="1" readonly="1"/>
-                                        <field name="total_price" required="1" sum="Нийт"/>
-                                        <field name="agreed_price" required="1" sum="Нийт"/>
-                                        <field name="description" required="1"/>
-                                    </tree>
-                                    <form>
-                                        <group>
-                                            <group>
-                                                <field name="task_id" invisible="1"/>
-                                                <field name="work_id"/>
-                                                <field name="qty"/>
-                                                <field name="price"/>
-                                            </group>
-                                            <group>
-                                                <field name="total_price"/>
-                                                <field name="agreed_price"/>
-                                                <field name="description"/>
-                                            </group>
-                                        </group>
-                                    </form>
-                                </field>
+
                                 <field name="tag_ids" widget="many2many_tags" attrs="{'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}" options="{'no_create': True}"/>
                                 <field name="done_date"/>
                             </group>
                         </group>
+                        <field name="tarif_line" attrs="{'invisible':[('task_type', 'not in', ('work_task','work_graph','tariff_task'))], 'readonly': [('task_state', 'in', ('t_confirm','t_evaluate','t_done','t_cancel'))]}">
+                            <tree editable="bottom">
+                                <field name="task_id" invisible="1"/>
+                                <field name="work_id" required="1"/>
+                                <field name="qty" required="1"/>
+                                <field name="price" required="1" readonly="1"/>
+                                <field name="total_price" required="1" sum="Нийт"/>
+                                <field name="agreed_price" required="1" sum="Нийт"/>
+                                <field name="description" required="1"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <group>
+                                        <field name="task_id" invisible="1"/>
+                                        <field name="work_id"/>
+                                        <field name="qty"/>
+                                        <field name="price"/>
+                                    </group>
+                                    <group>
+                                        <field name="total_price"/>
+                                        <field name="agreed_price"/>
+                                        <field name="description"/>
+                                    </group>
+                                </group>
+                            </form>
+                        </field>
                         <notebook>
                             <page name="description_page" string="Description">
                                 <field name="description" type="html" attrs="{'readonly': [('task_state', 'in', ('t_done'))]}"/>

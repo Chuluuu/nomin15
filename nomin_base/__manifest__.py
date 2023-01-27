@@ -13,7 +13,7 @@
     "version" : "1.0",
     "author" : "Managewall LLC",
     "category" : "Mongolian Modules",
-    "website": "http://www.managewall.mn",
+    "website": "asdasdas",
     "summary": "Odoo Base Module",
     "depends" : ['base','hr'],
     "init": [],

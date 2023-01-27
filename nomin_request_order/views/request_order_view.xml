@@ -49,8 +49,8 @@
 								<field name="total_amount" readonly="1" invisible="1"/>
 							</group>
 							<group>
-								<field name="cost_share_id" attrs="{'invisible':[('cost_share_id','=',False)]}" readonly="1"/>
-
+								<!-- TODO FIX LATER -->
+								<!-- <field name="cost_share_id" attrs="{'invisible':[('cost_share_id','=',False)]}" readonly="1"/> -->
 								<field name="perform_department_id" string="Гүйцэтгэгч хэлтэс" options="{'no_quick_create': True, 'no_create_edit' : True,
                                 'no_create':True}" required="1" attrs="{'readonly':[('active_sequence','not in',[1,2])]}"/>
 								<field name="confirm_employee_id" invisible="1" options="{'no_quick_create': True, 'no_create_edit' : True,
@@ -313,7 +313,7 @@
 					<field name="date_order"/>
 					<field name="perform_department_id" string="Гүйцэтгэгч хэлтэс" />
 					<field name="progress_percentage" widget="progressbar" />
-					<field name="cost_share_id" />
+					<!-- <field name="cost_share_id" /> -->
 					<field name="request_config_id" />
 				</tree>
 			</field>
@@ -498,7 +498,7 @@
 			<field name="view_mode">tree,form</field>
 			<field name="context">{'search_default_group_state': 1}</field>
 			<field name="search_view_id" ref="view_request_order_line_filter"/>
-			<!-- <field name="domain">[('perform_employee_id.user_id','=',uid)]</field> -->
+			<field name="domain">[('perform_employee_id.user_id','=',uid)]</field>
 
 			<field name="view_id" ref="request_order_line_tree"/>
 			<field name="help" type="html">
@@ -631,7 +631,7 @@
 
 		<menuitem action="action_request_order_line" sequence="31" name="Миний ажлууд" id="nomin_request_order_line_menu" parent="menu_nomin_request_order" />
 
-		<menuitem name="Report" id="menu_nomin_request_report" parent="project.menu_project_report" sequence="25" />
+		<menuitem name="Report" id="menu_nomin_request_report" parent="project.menu_project_report" sequence="41" />
 
 	</data>
 </odoo>

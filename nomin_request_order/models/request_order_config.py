@@ -23,7 +23,9 @@ class RequestOrderConfig(models.Model):
     type = fields.Selection([('fixed','Fixed'),('department','Department'),('group','Group'),('distribute','Distribute')], string='Type', required=True, default='group')
     user_ids = fields.Many2many('res.users', string='Users')
     user_id = fields.Many2one('res.users', string='User')
-    is_fold =fields.Boolean(string="Is fold",default=False)
+    is_fold =fields.Boolean(string="Is fold",default=False,help="Цуцалсан төлөв, чагталсан тохиолдолд цуцалсан товч дарахад орно.")
+    fold = fields.Boolean('Folded in Pipeline',
+        help='This stage is folded in the kanban view when there are no records in that stage to display.')
     field_invisible =fields.Boolean(string="Дизайны захиалга",default=False)
     field_doctor =fields.Boolean(string="Эмчийн тохиргоо",default=False)
 

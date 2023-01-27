@@ -16,7 +16,8 @@ class tender_protocol(models.Model):
     tender_id           = fields.Many2one('tender.tender', string="Current Tender", tracking=True,ondelete='restrict' )
     meeting_id          = fields.Many2one('tender.meeting', string ="Meeting of tender", tracking=True, ondelete='restrict')
     member_ids          = fields.Many2many("hr.employee", string ="Member", store=True, tracking=True)
-    committee_member_ids= fields.One2many(related="tender_id.committee_member_ids", string='Committee Members', readonly=False,store=True)
+    # TODO FIX LATER
+    # committee_member_ids= fields.One2many(related="tender_id.committee_member_ids", string='Committee Members', readonly=False,store=True)
 #     comment             = fields.Text(string= "Comment",tracking=True)
     meet_protocol       = fields.Html(string= "Comment",tracking=True)
     user_id             = fields.Many2one('res.users', string ='User',default=lambda self: self.env.user, readonly=True,tracking=True)

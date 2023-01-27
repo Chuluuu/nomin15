@@ -27,6 +27,7 @@
                                 <field name="name"/>
                                 <field name="sequence" required="1"/>
                                 <field name="is_fold" />
+                                <field name="fold"/>
                                 <field name="type" />
                                 <field name="field_invisible"/>
                             </group>

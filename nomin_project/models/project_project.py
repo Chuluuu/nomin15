@@ -433,7 +433,9 @@ class ProjectProject(models.Model):
         '''Дэд төсөл дээрх төлбөрийн хүсэлтийн тоо
         '''
         for order in self:
-            order.payment_request_count = len(self.env['payment.request'].sudo().search([('project_id','=',order.id),('state','not in',['draft','cancel'])])) or 0
+            # TODO FIX LATER
+            # order.payment_request_count = len(self.env['payment.request'].sudo().search([('project_id','=',order.id),('state','not in',['draft','cancel'])])) or 0
+            order.payment_request_count = 0
         return True
     
     
@@ -441,7 +443,9 @@ class ProjectProject(models.Model):
         '''эцэг төслөөс үүссэн дэд төслүүдийн төлбөрийн хүсэлтийн тоо
         '''
         for order in self:
-            order.payment_request_count_of_parent = len(self.env['payment.request'].sudo().search([('project_id.parent_project','=',order.id),('state','not in',['draft','cancel'])])) or 0
+            # TODO FIX LATER
+            # order.payment_request_count_of_parent = len(self.env['payment.request'].sudo().search([('project_id.parent_project','=',order.id),('state','not in',['draft','cancel'])])) or 0
+            order.payment_request_count_of_parent = 0
         return True
 
     
@@ -449,7 +453,9 @@ class ProjectProject(models.Model):
         '''Худалдан авалтын шаардахын тоо
         '''
         for order in self:
-            order.purchase_requisition_count = len(self.env['purchase.requisition'].sudo().search([('project_id','=',order.id),('state','not in',['draft','canceled'])])) or 0
+            # TODO FIX LATER
+            # order.purchase_requisition_count = len(self.env['purchase.requisition'].sudo().search([('project_id','=',order.id),('state','not in',['draft','canceled'])])) or 0
+            order.purchase_requisition_count = 0
         return True
     
 
@@ -458,7 +464,9 @@ class ProjectProject(models.Model):
         '''Эцэг төслөөс үүссэн дэд төслүүдийн худалдан авалтын шаардахын тоо
         '''
         for order in self:
-            order.purchase_requisition_count_of_parent = len(self.env['purchase.requisition'].sudo().search([('project_id.parent_project','=',order.id),('state','not in',['draft','canceled'])])) or 0
+            # TODO FIX LATER
+            # order.purchase_requisition_count_of_parent = len(self.env['purchase.requisition'].sudo().search([('project_id.parent_project','=',order.id),('state','not in',['draft','canceled'])])) or 0
+            order.purchase_requisition_count_of_parent - 0
         return True
 
     
@@ -667,8 +675,8 @@ class ProjectProject(models.Model):
 
                 
              
-        project_id = super(ProjectProject, self).create(vals, context=create_context)
-        project_rec = self.browse(project_id)
+        project_id = super(ProjectProject, self).create(vals)        
+        project_rec = project_id
         project_rec._add_followers(project_rec.user_id.id)
         if vals.get('end_date') or vals.get('start_date'):
             if vals.get('end_date') < vals.get('start_date'):
@@ -697,8 +705,10 @@ class ProjectProject(models.Model):
             if project_rec.project_verifier.address_home_id.id:
                 project_rec._add_followers(project_rec.project_verifier.user_id.id)
                 
-        values = {'alias_parent_thread_id': project_id, 'alias_defaults': {'project_id': project_id}}
-        self.env['mail.alias'].browse(project_rec.alias_id.id).write([], values)
+        
+        # if project_rec.alias_id:
+        #     values = {'alias_parent_thread_id': project_id, 'alias_defaults': {'project_id': project_id}}
+        #     project_rec.alias_id.write(values)
         json_data = {
             'workflow_name' :'unknown',
             'next_state':'verify_by_economist',
@@ -1036,19 +1046,12 @@ class ProjectProject(models.Model):
                 project.transport_budget_new = total_carriage_cost
                 project.direct_budget_new = total_postage_cost
                 project.other_budget_new = total_other_cost
-
-
-                            
-                
-
-
                 # query = """UPDATE 
                 #     project_budget pb
                 # SET                 
                 #     surplus_amount = %s,
                 #     sum_of_budgeted_amount = %s,
                 #     possible_amount_create_project = %s - %s
-
                 # FROM 
                 #     project_project pp
                 # WHERE 
@@ -1057,12 +1060,6 @@ class ProjectProject(models.Model):
                 # if self.is_parent_project:
 
                 #     self.env.cr.execute(query)   
-                                     
-                                               
-                                
-        
-
-
             project.state_handler(project.state_new,'next_state')
             # project.write({'previous_state':project.state,
             #     'state':json.loads(project.json_data)['next_state']})

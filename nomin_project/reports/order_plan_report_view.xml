@@ -36,7 +36,7 @@
             <field name="target">new</field>
         </record>
 
-        <menuitem name="Захиалгын ерөнхий тайлан" id="menu_order_plan_export" parent="project.menu_project_management" action="order_plan_report" groups="group_program_admin" sequence="17" />
+        <menuitem name="МТС Захиалгын ерөнхий тайлан" id="menu_order_plan_export" parent="nomin_project.menu_project_reports" action="order_plan_report" groups="group_program_admin" sequence="17" />
 
     </data>
 </odoo>

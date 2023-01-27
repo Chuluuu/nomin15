@@ -16,6 +16,7 @@ access_request_order_work_service_admin,work.service.admin,model_work_service,no
 access_request_order_line_history_user,request.order.line.history.user,model_request_order_line_history,project.group_project_user,1,1,1,1
 
 access_request_order_attachment,request.order.attachment,model_request_order_attachment,project.group_project_user,1,1,1,1
+access_knowledge_store_category,knowledge.store.category,model_knowledge_store_category,project.group_project_user,1,0,0,0
 
 access_diagnosis_list,diagnosis.list,model_diagnosis_list,project.group_project_user,1,1,1,1
 access_reject_work_service,reject.work.service,model_reject_work_service,project.group_project_user,1,1,1,1

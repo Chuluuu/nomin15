@@ -306,8 +306,8 @@ class hr_department(models.Model):
                 employee = self.env['hr.employee'].browse(manager_id)
                 # print employee.user_id
                 
-            if employee.user_id:
-                    self.message_subscribe_users(employee.user_id.id)            
+            if employee.user_id and employee.user_id.partner_id:
+                    self.message_subscribe(partner_ids = [employee.user_id.partner_id.id])            
         return super(hr_department, self).write(vals)
 
 

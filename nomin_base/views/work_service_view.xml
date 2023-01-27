@@ -192,5 +192,9 @@
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="view_work_service_filter"/>
         </record>
+        <!-- Тохиргоо ->  Ажил үйлчилгээ -> Ажил үйлчилгээ -->
+        <menuitem id= "menu_workservice" parent="nomin_base.nomin_configure" sequence= "100" name= "Work Service" />
+        <menuitem id= "menu_work_service" parent="menu_workservice" action="nomin_base.action_work_service" sequence= "2" name= "Work Service" />
+        <menuitem id= "menu_work_service_time" parent="menu_workservice" action="nomin_base.action_work_service_time" sequence= "1" name= "Work Service Time" />
     </data>
 </odoo>

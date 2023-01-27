@@ -55,7 +55,7 @@ class WorkService(models.Model):
     @api.constrains('name')
     def _check_name(self):
         if self.name:
-            self._cr.execute("select count(id) from helpdesk_default where name = %s "
+            self._cr.execute("select count(id) from work_service where name = %s "
                        "and id <> %s",(self.name,self.id))
             fetched = self._cr.fetchone()
             if fetched and fetched[0] and fetched[0] > 0:

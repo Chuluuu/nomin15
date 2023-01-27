@@ -116,6 +116,7 @@ class ProjectIrAttachment(models.Model):
         employee = self.env['hr.employee']
         employee_id = employee.sudo().search([('user_id','=',self._uid)])
         for attach in self:
+            attach.find_confirm_user = False
             config_id = self.env['project.category'].search([('name','=',attach.project_document.project_categ.name)])
             config_line_id = self.env['project.category.line'].search([('parent_id','=',config_id.id),('project_type','=',attach.project_document.project_type),('project_state','=',attach.project_document.state)])
             if config_line_id:
@@ -1584,7 +1585,7 @@ class control_budget(models.Model):
                 next_user_ids, activity = workflow_obj.assign_to_next(budget)
 
         if next_user_ids:
-                self.message_subscribe_users([budget.id], user_ids=next_user_ids)
+                self._add_followers( user_ids=next_user_ids)
                 next_user_names = u', '.join(map(lambda x:x.name, user_obj.browse(next_user_ids)))
                 self.message_post(body=u'%s зөвшөөрөв. Ажлын урсгалын дараагийн шатанд илгээгдлээ. Дараагийн шатанд хянагч:%s' \
                                        %( action_confirm.name, next_user_names))
