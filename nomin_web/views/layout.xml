@@ -127,14 +127,14 @@
 											<span t-esc="(len(user_id.name)&gt;25) and (user_id.name[:23]+'...') or user_id.name"/>
 										</b>
 									</a>
-									<ul id="o_logout" class="dropdown-menu js_usermenu" role="menu">
-										<li>
+									<ul id="o_logout" class="dropdown-menu js_usermenu" style="position:absolute !important" role="menu">
+										<li class="dropdown-item">
 											<a t-attf-href="/my/tender" role="menuitem">Миний бүртгэл</a>
 										</li>
-										<li groups="base.group_portal">
+										<li class="dropdown-item" groups="base.group_portal">
 											<a t-attf-href="/web" role="menuitem">Систем</a>
 										</li>
-										<li id="o_logout">
+										<li class="dropdown-item" id="o_logout">
 											<a t-attf-href="/web/session/logout?redirect=/" role="menuitem">Гарах</a>
 										</li>
 									</ul>
@@ -158,10 +158,10 @@
 										</b>
 									</a>
 									<ul class="dropdown-menu js_usermenu" role="menu" style="font-size: 13px;margin-left: 20px;">
-										<li>
+										<li class="dropdown-item">
 											<a t-attf-href="/my/tender" role="menuitem">Миний бүртгэл</a>
 										</li>
-										<li id="o_logout">
+										<li class="dropdown-item" id="o_logout">
 											<a t-attf-href="/web/session/logout?redirect=/" role="menuitem">Гарах</a>
 										</li>
 									</ul>

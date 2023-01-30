@@ -93,7 +93,7 @@
         ]
         },
     'depends': [
-        'website', 'portal', 'website_slides'
+        'website', 'portal',
     ],
     'description': """
     """,
