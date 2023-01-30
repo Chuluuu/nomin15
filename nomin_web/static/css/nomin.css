@@ -415,7 +415,7 @@ footer .social a:hover i {
 		width: 100%;
 		overflow: hidden;
 	    white-space: nowrap;
-	    background: #FFF url('images/nomin-seperator.png') no-repeat top left;
+	    /* background: #FFF url('images/nomin-seperator.png') no-repeat top left; */
 		background-size: 100%;
 	}
 	.logo-wrapper{
@@ -927,6 +927,8 @@ ul.nav-tabs li a {
 .navbar {
 	min-height:30px !important;
 	border: none;
+	padding: 0;
+	margin: 0;
 }
 .navbar.navbar-static-top {
     border-bottom: 3px solid #ffc801;

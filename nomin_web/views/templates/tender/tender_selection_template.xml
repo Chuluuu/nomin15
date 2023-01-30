@@ -2,39 +2,60 @@
 <odoo>
     <data>
         <template id="tender_selection">
-	
+
             <div class="blockItem">
-                <h4 class="block-title">Тендер шалгаруулалт<span></span></h4>
+                <h4 class="block-title">Тендер шалгаруулалт                    <span></span>
+                </h4>
                 <ul class="branch-menu">
-                    <li><a id="a_li_tender_list" href="/tender_list"><span class="fa fa-chevron-right" aria-hidden="true"></span>Тендерийн урилга</a></li>
-                    <li><a id="a_li_" class="disabled"><span class="fa fa-chevron-right" aria-hidden="true"></span>Тендерийн төрөл</a>      
-                           <ul class="branch-menu">
+                    <li>
+                        <a id="a_li_tender_list" href="/tender_list">
+                            <span class="fa fa-chevron-right" aria-hidden="true"></span>Тендерийн урилга
+                        </a>
+                    </li>
+                    <li>
+                        <a id="a_li_" class="disabled">
+                            <span class="fa fa-chevron-right" aria-hidden="true"></span>Тендерийн төрөл
+                        </a>
+                        <ul class="branch-menu">
                             <t t-foreach="tender_types" t-as="tender_type">
-                               <t t-if="not tender_type.parent_id">
-                                   <!-- <li><t t-if="not tender_type.parent_id"><a t-attf-href="##{tender_type.id}"><t t-esc="tender_type.name"/></a></t></li> -->
-                                <li>
-                                    <t t-if="not tender_type.parent_id"><!-- <a data-toggle="tab" t-att-href="'#category_tab%d'%tender_type.id"><t t-esc='tender_type.name'/></a> -->
-                                    <a id="a_li_" t-att-href="'/tender_list/category_id/link_%s' % slug(tender_type)">
-                                        <span class="fa fa-chevron-right" aria-hidden="true"></span><span t-att-data-pl_id="tender_type.id" t-esc="tender_type.name"/>
-                                    </a>
-                                    </t>
-                                    <!-- <t t-if="not tender_type.parent_id"><a t-att-href="'#details-tab%d'%tender_type.id"><t t-esc="tender_type.name"/></a></t> -->
-                                </li>
-                               </t>
+                                <t t-if="not tender_type.parent_id">
+                                    <!-- <li><t t-if="not tender_type.parent_id"><a t-attf-href="##{tender_type.id}"><t t-esc="tender_type.name"/></a></t></li> -->
+                                    <li>
+                                        <t t-if="not tender_type.parent_id">                                            <!-- <a data-toggle="tab" t-att-href="'#category_tab%d'%tender_type.id"><t t-esc='tender_type.name'/></a> -->
+                                            <a id="a_li_" t-att-href="'/tender_list/category_id/link_%s' % slug(tender_type)">
+                                                <span class="fa fa-chevron-right" aria-hidden="true"></span>
+                                                <span t-att-data-pl_id="tender_type.id" t-esc="tender_type.name"/>
+                                            </a>
+                                        </t>
+                                        <!-- <t t-if="not tender_type.parent_id"><a t-att-href="'#details-tab%d'%tender_type.id"><t t-esc="tender_type.name"/></a></t> -->
+                                    </li>
+                                </t>
                             </t>
                         </ul>
                     </li>
-                    <li><a class="disabled"><span class="fa fa-chevron-right" aria-hidden="true"></span>Тендерийн урилгын статус</a>
+                    <li>
+                        <a class="disabled">
+                            <span class="fa fa-chevron-right" aria-hidden="true"></span>Тендерийн урилгын статус
+                        </a>
                         <ul class="branch-menu">
-                            <li><a id="a_li_/tender_list/published" t-att-href="'/tender_list/published'"><span class="fa fa-chevron-right" aria-hidden="true"></span>Хүлээж авах хугацаа дуусаагүй</a></li>
-                            <li><a id="a_li_/tender_list/unpublished" t-att-href="'/tender_list/unpublished'"><span class="fa fa-chevron-right" aria-hidden="true"></span>Хүлээж авах хугацаа дууссан</a></li>
+                            <li>
+                                <a id="a_li_/tender_list/published" t-att-href="'/tender_list/published'">
+                                    <span class="fa fa-chevron-right" aria-hidden="true"></span>Хүлээж авах хугацаа дуусаагүй
+                                </a>
+                            </li>
+                            <li>
+                                <a id="a_li_/tender_list/unpublished" t-att-href="'/tender_list/unpublished'">
+                                    <span class="fa fa-chevron-right" aria-hidden="true"></span>Хүлээж авах хугацаа дууссан
+                                </a>
+                            </li>
                             <!-- <li><a t-att-href="'/tender_list/published/#{ slug(t) }">Хүлээж авах хугацаа дуусаагүй</a></li>
                             <li><a t-att-href="'/tender_list/published/#{ slug(f) }">Хүлээж авах хугацаа дууссан</a></li> -->
                         </ul>
                     </li>
                 </ul>
             </div>
-            <script type="text/javascript">
+            <!-- <script type="text/javascript">
+                <![CDATA[
                 $('.branch-menu li a').click(function() {
                   $('li a').removeClass("current");
                   $(this).addClass("current");
@@ -43,7 +64,8 @@
                 
                 var ele = localStorage.getItem('active');
                 $('.branch-menu li:eq(' + ele + ')').find('a').addClass('current');
-            </script>
+                ]]>
+</script> -->
         </template>
     </data>
 </odoo>

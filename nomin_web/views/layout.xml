@@ -28,6 +28,11 @@
 		</xpath>
 	</template>
 
+	<template id="nomin_login_layout" inherit_id="web.login" name="Website Login Layout">
+		<xpath expr="//t[@t-if='debug']" position="replace">
+		</xpath>
+	</template>
+
 	<template id="search_all_form" name="Search All Form">
 		<form class="form_search" id="search_all_form" role="search" t-attf-action="/allresults" method="get">
 			<div class="input-group">
@@ -51,13 +56,17 @@
 					<div class="row">
 						<div class="container">
 							<div class="col-xs-7 col-md-3 logo-wrapper m-logo-wrapper">
-								<a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a>
+								<!-- <a class="navbar-brand" href="/" t-if="website" t-field="website.name">My Website</a> -->
+								<a href="/" class="navbar-brand logo" style="width:100%;height:100%">
+									<img src="/nomin_web/static/img/logo_mn.png" style="width:100%;height:100%" alt="Logo of Номин Холдинг ХХК" title="Номин Холдинг ХХК"/>
+								</a>
 							</div>
 							<div class="col-xs-1 col-md-5 hidden-sm hidden-xs">
 								<img src="/nomin_web/static/img/header-not.png" class="garchig"/>
 							</div>
 							<div class="col-xs-3 col-md-4 pull-right tools" align="right">
-								<div class="row">
+								<!-- <div class="row"> -->
+								<div style="margin-right:-15px;margin-left:80px">
 									<div class="hidden-xs hidden-sm">
 										<t t-call="nomin_web.search_all_form"/>
 									</div>
@@ -129,6 +138,11 @@
 											<a t-attf-href="/web/session/logout?redirect=/" role="menuitem">Гарах</a>
 										</li>
 									</ul>
+								</li>
+								<li t-ignore="true" t-if="website.user_id == user_id" groups="base.group_public">
+									<a t-attf-href="/web/login">
+										<b>Нэвтрэх</b>
+									</a>
 								</li>
 							</ul>
 
@@ -237,27 +251,27 @@
 										<ul class="links">
 											<li>
 												<a href="/new_tenders/">
-													<span class="fa fa-chevron-right" aria-hidden="true"></span>Нүүр хуудас
+													<span class="fa fa-chevron-right"></span>Нүүр хуудас
 												</a>
 											</li>
 											<li>
 												<a href="/tender_list">
-													<span class="fa fa-chevron-right" aria-hidden="true"></span>Тендерийн урилга
+													<span class="fa fa-chevron-right"></span>Тендерийн урилга
 												</a>
 											</li>
 											<li>
 												<a href="/result_list/">
-													<span class="fa fa-chevron-right" aria-hidden="true"></span>Тендерийн үр дүн
+													<span class="fa fa-chevron-right"></span>Тендерийн үр дүн
 												</a>
 											</li>
 											<li>
 												<a href="/suggestion/">
-													<span class="fa fa-chevron-right" aria-hidden="true"></span>Зөвлөгөө
+													<span class="fa fa-chevron-right"></span>Зөвлөгөө
 												</a>
 											</li>
 											<li>
 												<a href="/page/contactus">
-													<span class="fa fa-chevron-right" aria-hidden="true"></span>Бидэнтэй холбогдох
+													<span class="fa fa-chevron-right"></span>Бидэнтэй холбогдох
 												</a>
 											</li>
 
@@ -275,22 +289,22 @@
 										<ul class="links">
 											<li>
 												<a target="_blank" href="https://www.nomin.mn/mn/">
-													<span class="fa fa-chevron-right" aria-hidden="true"></span>Номин Холдинг
+													<span class="fa fa-chevron-right"></span>Номин Холдинг
 												</a>
 											</li>
 											<li>
 												<a target="_blank" href="https://card.nomin.mn/">
-													<span class="fa fa-chevron-right" aria-hidden="true"></span>Номин Бонус Карт
+													<span class="fa fa-chevron-right"></span>Номин Бонус Карт
 												</a>
 											</li>
 											<li>
 												<a target="_blank" href="https://eshop.nomin.mn/">
-													<span class="fa fa-chevron-right" aria-hidden="true"></span>Онлайн Дэлгүүр
+													<span class="fa fa-chevron-right"></span>Онлайн Дэлгүүр
 												</a>
 											</li>
 											<li>
 												<a target="_blank" href="https://www.nomin.mn/mn/c/61">
-													<span class="fa fa-chevron-right" aria-hidden="true"></span>Хэрэглэгчийн Төв
+													<span class="fa fa-chevron-right"></span>Хэрэглэгчийн Төв
 												</a>
 											</li>
 										</ul>

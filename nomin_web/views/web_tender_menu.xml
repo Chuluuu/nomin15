@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data noupdate="1">
-		
-        <record id="website_eshop_menu" model="website.menu">
-            <field name="name">ESHOP</field>
-            <field name="url" >https://eshop.nomin.mn/</field>
-            <field name="parent_id" ref="website.main_menu"/>
-            <field name="new_window" >True</field>
-            <field name="sequence" type="int">2</field>
-        </record>
-
-		<record id="website_new_tender_menu" model="website.menu">
+    <data noupdate="1">
+        <record id="website_new_tender_menu" model="website.menu">
             <field name="name">New Tenders</field>
             <field name="url">/new_tenders/</field>
             <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">2</field>
+        </record>
+
+        <record id="website_eshop_menu" model="website.menu">
+            <field name="name">ESHOP</field>
+            <field name="url">https://eshop.nomin.mn/</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="new_window">True</field>
             <field name="sequence" type="int">3</field>
         </record>
-        
-		<record id="website_tender_list_menu" model="website.menu">
+
+
+        <record id="website_tender_list_menu" model="website.menu">
             <field name="name">Tenders</field>
             <field name="url">/tender_list</field>
             <field name="parent_id" ref="website.main_menu"/>
             <field name="sequence" type="int">4</field>
         </record>
-        
-		<record id="website_tender_result_list_menu" model="website.menu">
+
+        <record id="website_tender_result_list_menu" model="website.menu">
             <field name="name">Tender Result</field>
             <field name="url">/result_list/</field>
             <field name="parent_id" ref="website.main_menu"/>
             <field name="sequence" type="int">5</field>
         </record>
-        
-		<record id="website_tender_suggestion_menu" model="website.menu">
+
+        <record id="website_tender_suggestion_menu" model="website.menu">
             <field name="name">Suggestion</field>
             <field name="url">/suggestion/</field>
             <field name="parent_id" ref="website.main_menu"/>
             <field name="sequence" type="int">6</field>
         </record>
-        
-	</data>
+
+    </data>
 </odoo>

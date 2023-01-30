@@ -219,7 +219,7 @@
 																	<!-- <t t-esc="answer_dict[question]['count']"/>
 															<t t-esc="sum_dict[question]['answered']"/> -->
 																	<span t-esc="round(count_qty*100.0/(sum_dict[question]['answered'] or 1),2)"></span> %
-																																																																																			<!-- </t> -->
+																																																																																																				<!-- </t> -->
 																</td>
 															</tr>
 														</t>
@@ -251,7 +251,6 @@
 	                        // Set the delay function time in milliseconds
 	                        window.setTimeout(show_modal, 10);
 				  });
-				
 			]]>
 			</script>
 			<!-- <div class = "jumbotron">

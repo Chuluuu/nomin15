@@ -470,8 +470,8 @@ class NominTender(http.Controller):
         else:
             ppg = PPG
             
-        tender_obj = request.env('tender.tender')
-        tender_type_obj = request.env('tender.type')
+        tender_obj = request.env['tender.tender']
+        tender_type_obj = request.env['tender.type']
         
         values = {}
         url = "/tender_list/unpublished"
@@ -986,7 +986,7 @@ class NominTender(http.Controller):
         tender_obj = request.env['tender.tender']
         tender_type_obj = request.env['tender.type']
         
-        tender_types = tender_type_obj.search(SUPERUSER_ID, [])
+        tender_types = tender_type_obj.search([])
         
         # Define search scope
         search_on_pages=self._search_on_pages
@@ -1179,7 +1179,7 @@ class NominTender(http.Controller):
         if sorting:
             url_args['sorting'] = sorting
             pager = request.website.pager(url=url, total=results_count, page=page, step=ppg, scope=7, url_args=url_args)
-            t_ids = tender_obj.sudo().search([('id','in',tender_ids)], limit=ppg, offset=pager['offset'], order='name desc') 
+            tenders = tender_obj.sudo().search([('id','in',tender_ids)], limit=ppg, offset=pager['offset'], order='name desc') 
 
         if not tenders:
             tenders = tender_obj.sudo().search([], limit=ppg, offset=pager['offset'], order='name desc')     

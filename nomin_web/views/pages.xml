@@ -17,7 +17,7 @@
 			<div class="form-group row">
 				<label class="col-md-4 col-sm-4 text-right" for="date"> Материал хүлээн авах хугацаа:</label>
 				<div class="row" style="padding: 0 15px;">
-					<div class="col-md-4 col-sm-4 col-xs-6 text-left">
+					<div class="col-md-6 col-sm-4 col-xs-6 text-left">
 						<input type="date" name="startdate" class="form-control input-sm" placeholder="Хайх утгаа оруулна уу ..." t-att-value="startdate or start_date"/>
 						<!-- <span class="input-group-addon">
 					                        <span class="icon-calendar"></span>
@@ -28,7 +28,7 @@
 				                    </span> -->
 						<!-- <input type="text" class="form-control input-sm" value="02/16/12" data-date-format="mm/dd/yy" id="dp2"/> -->
 					</div>
-					<div class="col-md-4 col-sm-4 col-xs-6 text-left">
+					<div class="col-md-6 col-sm-4 col-xs-6 text-left">
 						<input type="date" name="enddate" class="form-control input-sm" placeholder="Хайх утгаа оруулна уу ..." t-att-value="enddate or end_date"/>
 					</div>
 				</div>

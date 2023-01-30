@@ -3,25 +3,32 @@
     <data>
         <template id="nomin_sub_menu_subscribe">
             <div class="blockItem">
-                <h5 class="block-title">Мэйл хаягаараа тендерийн урилга хүлээн авах<span></span></h5>
-                    <form action="/subscribe/" method="post" class="s_website_form" enctype="multipart/form-data">
-                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                        <div class="form-group">
-                          <span style="color: #1660ab">Тендерийн төрлүүд</span><br/>
-        <!-- 				  <label class="control-label" for="tender_type" style="font-weight:normal;">Тендерийн төрлүүд </label> -->
-                              <t t-if="tender_types">
-                                <table class="table table-responsive table-hover">
-                                  <tbody>
-                                      <tr>
-                                          <td>
-                                              <input type="checkbox" class="check" id="checkAll"/>Бүгд
-                                          </td>
-                                      </tr>
-                                      <t t-foreach="tender_types" t-as="tender_type">
+                <h5 class="block-title">
+                    <div style="font-size:10px">Мэйл хаягаараа тендерийн урилга хүлээн авах                   </div>
+                    <!-- <span></span> -->
+                </h5>
+                <form action="/subscribe/" method="post" class="s_website_form" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="form-group">
+                        <span style="color: #1660ab">Тендерийн төрлүүд</span>
+                        <br/>
+                        <!-- 				  <label class="control-label" for="tender_type" style="font-weight:normal;">Тендерийн төрлүүд </label> -->
+                        <t t-if="tender_types">
+                            <table class="table table-responsive table-hover">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" class="check" id="checkAll"/>
+Бүгд
+                                        </td>
+                                    </tr>
+                                    <t t-foreach="tender_types" t-as="tender_type">
                                         <t t-if="not tender_type.parent_id">
                                             <tr class="clickable" data-toggle="collapse" id="tender_type.id" data-target=".tender_type.id">
                                                 <td>
-                                                    <input type="checkbox" class="check" t-att-value="tender_type.id" t-att-name="'type_id-%d'%(tender_type.id)" id="type_id"><t t-esc="tender_type.name"/></input>
+                                                    <input type="checkbox" class="check" t-att-value="tender_type.id" t-att-name="'type_id-%d'%(tender_type.id)" id="type_id">
+                                                        <t t-esc="tender_type.name"/>
+                                                    </input>
                                                 </td>
                                             </tr>
                                             <!-- <tr class="collapse tender_type.id">
@@ -31,27 +38,29 @@
                                             </tr> -->
                                         </t>
                                     </t>
-                                  </tbody>
-                                </table>
-                              </t>
-                         </div>
-                         <div class="input-group">
-                            <input required="" type="email" name="email" id="email" class="form-control input-sm o_website_form_required_custom" placeholder="И-Мэйл хаяг..." value="" />
-                            <span class="input-group-btn">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="arrow_carrot-right_alt2"></i>
-                                </button>
-                              </span>
-                         </div>
-                      </form>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                    <div class="input-group">
+                        <input required="" type="email" name="email" id="email" class="form-control input-sm o_website_form_required_custom" placeholder="И-Мэйл хаяг..." value="" />
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="arrow_carrot-right_alt2"></i>
+                            </button>
+                        </span>
+                    </div>
+                </form>
             </div>
             <script type="text/javascript">
-                $("#checkAll").click(function () {
-                    $(".check").prop('checked', $(this).prop('checked'));
-                });
+                <![CDATA[
+                    $("#checkAll").click(function () {
+                        $(".check").prop('checked', $(this).prop('checked'));
+                    });
+                ]]>
             </script>
-            
-            
+
+
         </template>
     </data>
 </odoo>

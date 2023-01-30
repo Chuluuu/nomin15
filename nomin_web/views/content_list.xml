@@ -3,66 +3,69 @@
 	<!-- Хайлт -->
 	<template id="search_result_form" name="Search Result Form">
 		<form class="s_website_form" id="search_result_form" role="search" t-attf-action="/result/search_results/" method="get">
-				<div class="form-group row">
-					<label class="col-md-4 col-sm-4 text-right" for="date"> Материал хүлээн авах хугацаа:</label>
-					<div class="row" style="padding: 0 15px;">
-						<div class="col-md-4 col-sm-4 col-xs-6 text-left">
-							<input type="date" name="startdate" class="form-control input-sm" placeholder="Хайх утгаа оруулна уу ..." t-att-value="startdate or start_date"/>
-						</div>
-						<div class="col-md-4 col-sm-4 col-xs-6 text-left">
-							<input type="date" name="enddate" class="form-control input-sm" placeholder="Хайх утгаа оруулна уу ..." t-att-value="enddate or end_date"/>
-						</div>
+			<div class="form-group row">
+				<label class="col-md-4 col-sm-4 text-right" for="date"> Материал хүлээн авах хугацаа:</label>
+				<div class="row" style="padding: 0 15px;">
+					<div class="col-md-6 col-sm-4 col-xs-6 text-left">
+						<input type="date" name="startdate" class="form-control input-sm" placeholder="Хайх утгаа оруулна уу ..." t-att-value="startdate or start_date"/>
+					</div>
+					<div class="col-md-6 col-sm-4 col-xs-6 text-left">
+						<input type="date" name="enddate" class="form-control input-sm" placeholder="Хайх утгаа оруулна уу ..." t-att-value="enddate or end_date"/>
 					</div>
 				</div>
-				<div class="form-group row">
-					<label class="col-md-4 col-sm-4 text-right" for="category"> Тендер шалгаруулалтын дугаар:</label>
-					<div class="col-md-8 col-sm-8 text-left">
-						<input type="search" name="category" class="form-control input-sm" placeholder="Хайх утгаа оруулна уу ..." t-att-value="category or ''"/>
-					</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-md-4 col-sm-4 text-right" for="category"> Тендер шалгаруулалтын дугаар:</label>
+				<div class="col-md-8 col-sm-8 text-left">
+					<input type="search" name="category" class="form-control input-sm" placeholder="Хайх утгаа оруулна уу ..." t-att-value="category or ''"/>
 				</div>
-				<div class="form-group row">
-					<label class="col-md-4 col-sm-4 text-right" for="tendername"> Тендер шалгаруулалтын нэр:</label>
-					<div class="col-md-8 col-sm-8 text-left">
-						<input type="search" name="tendername" class="form-control input-sm" placeholder="Хайх утгаа оруулна уу ..." t-att-value="tendername or ''"/>
-					</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-md-4 col-sm-4 text-right" for="tendername"> Тендер шалгаруулалтын нэр:</label>
+				<div class="col-md-8 col-sm-8 text-left">
+					<input type="search" name="tendername" class="form-control input-sm" placeholder="Хайх утгаа оруулна уу ..." t-att-value="tendername or ''"/>
 				</div>
-				<div class="form-group row">
-					<label class="col-md-4 col-sm-4 text-right" for="category_id"> Тендерийн төрөл:</label>
-					<div class="col-md-8 col-sm-8 text-left">
-						<select name="category_id" class="form-control input-sm" t-att-value="category_id or ''">
-							<option value="">.:Сонгох:.</option>
-							<t t-foreach="tender_types or []" t-as="type">
-								<option t-if="not type.parent_id" t-att-value="type.id" t-att-selected="type.id == category_id"><t t-esc="type.name"/></option>
-							</t>
-						</select>
-					</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-md-4 col-sm-4 text-right" for="category_id"> Тендерийн төрөл:</label>
+				<div class="col-md-8 col-sm-8 text-left">
+					<select name="category_id" class="form-control input-sm" t-att-value="category_id or ''">
+						<option value="">.:Сонгох:.</option>
+						<t t-foreach="tender_types or []" t-as="type">
+							<option t-if="not type.parent_id" t-att-value="type.id" t-att-selected="type.id == category_id">
+								<t t-esc="type.name"/>
+							</option>
+						</t>
+					</select>
 				</div>
-				<div class="form-group row">
-					<label class="col-md-4 col-sm-4 text-right" for="child_cate_id"> Тендерийн ангилал:</label>
-					<div class="col-md-8 col-sm-8 text-left">
-						<select name="child_cate_id" class="form-control input-sm" t-att-value="child_cate_id or ''">
-							<option value="">.:Сонгох:.</option>
-							<t t-foreach="tender_types or []" t-as="cate">
-								<option t-if="cate.parent_id" t-att-value="cate.id" t-att-selected="cate.id == child_cate_id"><t t-esc="cate.name"/></option>
-							</t>
-						</select>
-					</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-md-4 col-sm-4 text-right" for="child_cate_id"> Тендерийн ангилал:</label>
+				<div class="col-md-8 col-sm-8 text-left">
+					<select name="child_cate_id" class="form-control input-sm" t-att-value="child_cate_id or ''">
+						<option value="">.:Сонгох:.</option>
+						<t t-foreach="tender_types or []" t-as="cate">
+							<option t-if="cate.parent_id" t-att-value="cate.id" t-att-selected="cate.id == child_cate_id">
+								<t t-esc="cate.name"/>
+							</option>
+						</t>
+					</select>
 				</div>
-				<div class="form-group row">
-					<label class="col-md-4 col-sm-4 text-right" for="state"> Төлөв:</label>
-					<div class="col-md-8 col-sm-8 text-left">
-						<select name="state" class="form-control input-sm" t-att-value="state or ''">
-							<option value="">.:Сонгох:.</option>
-							<option value="published" t-att-selected="state == 'published'">Хүлээн авч дуусаагүй</option>
-							<option value="closed" t-att-selected="state == 'closed'">Хүлээн авч дууссан</option>
-						</select>
-					</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-md-4 col-sm-4 text-right" for="state"> Төлөв:</label>
+				<div class="col-md-8 col-sm-8 text-left">
+					<select name="state" class="form-control input-sm" t-att-value="state or ''">
+						<option value="">.:Сонгох:.</option>
+						<option value="published" t-att-selected="state == 'published'">Хүлээн авч дуусаагүй</option>
+						<option value="closed" t-att-selected="state == 'closed'">Хүлээн авч дууссан</option>
+					</select>
 				</div>
-				<div class="form-group text-center">
-					<button t-attf-href="/result/search_results?{{keep_query('sorting', 'search_on_pages', 'case_sensitive', search=search, search_advanced='0')}}" 
-					class="btn btn-primary">Хайх</button>
-						<!-- <a class="col-md-offset-1" t-attf-href="/search_results">Дэлгэрэнгүй Хайлт</a> -->
-				</div>
+			</div>
+			<div class="form-group text-center">
+				<button t-attf-href="/result/search_results?{{keep_query('sorting', 'search_on_pages', 'case_sensitive', search=search, search_advanced='0')}}" class="btn btn-primary">Хайх</button>
+				<!-- <a class="col-md-offset-1" t-attf-href="/search_results">Дэлгэрэнгүй Хайлт</a> -->
+			</div>
 		</form>
 	</template>
 
