@@ -72,7 +72,7 @@
         # "/website_slides/static/src/js/slides.js",
         # "/web/static/lib/jquery/jquery.js",
         # "/website_slides/static/src/js/context_tunnel.js",
-        "/website_slides/static/src/scss/website_slides.scss",
+        # "/website_slides/static/src/scss/website_slides.scss",
         ],
         "web.assets_frontend":[
             # "/web/static/lib/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js",
@@ -85,10 +85,10 @@
             "/nomin_web/static/css/responsive.css",
             "/nomin_web/static/css/icons.css",
             "/nomin_web/static/css/website.css",
-            "/nomin_web/static/js/custom.js",
+            "/nomin_web/static/src/js/custom.js",
             "/nomin_web/static/src/js/survey_result.js",
             "/nomin_web/static/src/css/survey_result.css",
-            "/website_slides/static/src/scss/website_slides.scss",
+            # "/website_slides/static/src/scss/website_slides.scss",
 
         ]
         },
