@@ -1046,7 +1046,7 @@
 			<field name="model">project.project</field>
 			<field name="mode">primary</field>
 			<field name="priority">1</field>
-			<field name="inherit_id" ref="project.view_project_kanban"/>
+			<!-- <field name="inherit_id" ref="project.view_project_kanban"/> -->
 			<field name="arch" type="xml">
 				<kanban class="oe_background_grey o_kanban_dashboard o_project_kanban o_emphasize_colors" js_class="project_project_kanban" sample="1">
 					<field name="name"/>
@@ -1069,6 +1069,9 @@
 					<field name="end_date"/>
 					<field name="total_percent"/>
 					<field name="main_line_ids"/>
+					<field name="privacy_visibility" invisible="1"/>
+					<field name="last_update_color" invisible="1"/>
+					<field name="last_update_status" invisible="1"/>
 					<templates>
 						<t t-name="kanban-box">
 							<div t-attf-class="#{kanban_color(record.color.raw_value)} oe_kanban_global_click o_has_icon oe_kanban_content oe_kanban_card">
@@ -1110,10 +1113,10 @@
 														<field name="total_remaining_amount"/>
 													</span>
 												</div>
-												<div t-if="record.start_date.raw_value or record.start_date.raw_value" class="text-muted o_row">
+												<div t-if="record.start_date and record.start_date.raw_value" class="text-muted o_row">
 													<span class="fa fa-clock-o mr-2" title="Dates"/>
 													<field name="start_date"/>
-													<i t-if="record.end_date.raw_value and record.end_date.raw_value" class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon" title="Arrow"/>
+													<i t-if="record.end_date and record.end_date.raw_value" class="fa fa-long-arrow-right mx-2 oe_read_only" aria-label="Arrow icon" title="Arrow"/>
 													<field name="end_date"/>
 												</div>
 												<div t-if="record.alias_name.value and record.alias_domain.value" class="text-muted">
@@ -1406,6 +1409,44 @@
 				</p>
 			</field>
 		</record>
+		<record id="project.open_view_project_all" model="ir.actions.act_window">
+			<field name="name">Projects</field>
+			<field name="res_model">project.project</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">kanban,form</field>
+			<!-- <field name="inherit_id" ref="project.open_view_project_all"/> -->
+			<field name="view_id" ref="view_project_kanban_inherit"/>
+			<field name="search_view_id" ref="project.view_project_project_filter"/>
+			<field name="target">main</field>
+			<field name="help" type="html">
+				<p class="o_view_nocontent_smiling_face">
+                    No projects found. Let's create one!
+				</p>
+				<p>
+                    Projects regroup tasks on the same topic, and each has its dashboard.
+				</p>
+			</field>
+		</record>
+		<record id="project.open_view_project_all_group_stage" model="ir.actions.act_window">
+			<field name="name">Projects</field>
+			<field name="res_model">project.project</field>
+			<field name="domain">[]</field>
+			<field name="view_mode">kanban,form</field>
+			<!-- <field name="inherit_id" ref="project.open_view_project_all_group_stage"/> -->
+			<field name="view_id" ref="view_project_kanban_inherit"/>
+			<field name="search_view_id" ref="project.view_project_project_filter"/>
+			<field name="target">main</field>
+			<field name="context">{'search_default_groupby_stage': 1}</field>
+			<field name="help" type="html">
+				<p class="o_view_nocontent_smiling_face">
+                    No projects found. Let's create one!
+				</p>
+				<p>
+                    Projects regroup tasks on the same topic, and each has its dashboard.
+				</p>
+			</field>
+		</record>
+
 		<!--         
         <menuitem name="Хянах самбар" id="portal_services_projects" parent="portal.portal_projects" action="project.open_view_project_all" sequence="1"/>
         
