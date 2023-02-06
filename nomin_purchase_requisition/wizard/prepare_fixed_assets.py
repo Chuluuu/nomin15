@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 from datetime import date, datetime,timedelta
 from dateutil.relativedelta import relativedelta
-from openerp.exceptions import UserError, ValidationError, RedirectWarning
+from odoo.exceptions import UserError, ValidationError, RedirectWarning
 
 import requests
 import json
@@ -102,7 +102,7 @@ class AssetPreparation(models.TransientModel):
 
 
 
-    @api.multi
+    
     def button_accept(self):
 
         active_obj = self.get_active_object()
@@ -155,7 +155,7 @@ class AssetPreparation(models.TransientModel):
 
 
 
-    @api.multi
+    
     def get_assets(self,active_obj):
 
         url = self.env['integration.config'].sudo().search([('name','=','handle_asset_transfer')]).server_ip
@@ -208,7 +208,6 @@ class AssetPreparation(models.TransientModel):
         })
 
        
-        print 'active_obj',active_obj.json_data
 
 
 
@@ -304,9 +303,7 @@ class AssetSolution(models.TransientModel):
     @api.model
     def default_get(self, fields):
         res = super(AssetSolution, self).default_get(fields)		
-        print "\nActive ids\n",self._context.get('active_ids', []),"\n\n"
         line_id = self.env['fixed.asset.counting.line'].sudo().browse(self._context.get('active_ids', []))
-        print 'Active idsline',line_id
 
 
         detail_ids= []
@@ -321,16 +318,10 @@ class AssetSolution(models.TransientModel):
             if line_id.employee_id.id == 215:
                 passport_id = line_id.asset_name[0:10]
 
-            print 'line_id.request_id.start_date',line_id.request_id.start_date
-            print 'line_id.request_id.department_id.nomin_code',line_id.request_id.department_id.nomin_code
-            print 'line_id.asset_id',line_id.asset_id
-            print 'passport_id',passport_id
 
             response = client.service.AssetCountGetDetail("1",line_id.request_id.start_date,line_id.request_id.department_id.nomin_code,"1","","1","","1","","0",line_id.asset_id,"0",passport_id)
-            print 'response',response
             if response:
                 try:
-                    print 'responseddddddd',response
                     result_dict = json.loads(response)
                     line_id.diamond_json = response
                 except ValueError as e:
@@ -342,7 +333,6 @@ class AssetSolution(models.TransientModel):
                     if "Assets" in result_dict:
                         for dictionary in result_dict[u'Assets']:
 
-                            print 'dictionary',dictionary
                             employee_id_id = 215
                             employee_id = self.env['hr.employee'].sudo().search([('passport_id','=',dictionary[u'CustomerID'].upper())])
 
@@ -375,7 +365,6 @@ class AssetSolution(models.TransientModel):
                             }
 
                             detail_ids.append((0,0,struct_value))
-                            print "\nIF\n",line_id.id,detail_ids,"\n\n"
 
                         #     dictionary.update({'SaleQty':"100"})
                         #     # dictionary[u'ToSupplyLocationInfID'] = line_id.id
@@ -388,13 +377,7 @@ class AssetSolution(models.TransientModel):
 
         else:
 
-
-            print 'line_id', line_id
-            print 'line_id.sudo().detail_ids', line_id.sudo().detail_ids
             for detail in line_id.sudo().detail_ids:	
-
-
-                print 'line_id',line_id
                 start_date = False
                 account_move_id = False
                 account_move_id_for_accountant = False
@@ -422,7 +405,6 @@ class AssetSolution(models.TransientModel):
                     'account_move_id_for_accountant':account_move_id_for_accountant,
                 }))
 
-                print "\nELSE\n",line_id.id,detail_ids,"\n\n"
 
 
 
@@ -431,19 +413,14 @@ class AssetSolution(models.TransientModel):
         account_receivable_id = line_id.sudo().account_receivable_id
         receivable_income_account_id = line_id.sudo().receivable_income_account_id
 
-        print 'line_id',line_id
-        
-
         if not depreciation_account:
             prev_line_id = self.env['fixed.asset.counting.line'].sudo().search([('department_id','=',line_id.request_id.department_id.id),('state','in',['count','verify','verified']),('account_id','=',account_id.id),('depreciation_account','!=',False)],limit=1,order="id desc")
-            print 'prev_line_id',prev_line_id
             if prev_line_id:
 
                 depreciation_account = prev_line_id.sudo().depreciation_account
                 account_receivable_id = prev_line_id.sudo().account_receivable_id
                 receivable_income_account_id = prev_line_id.sudo().receivable_income_account_id
 
-        print 'detail_ids',detail_ids
         res.update({
             'employee_id':line_id.employee_id.id,
             'department_id':line_id.request_id.department_id.id,
@@ -527,7 +504,7 @@ class AssetSolution(models.TransientModel):
                 return self.env['fixed.asset.counting.line'].browse(context['active_id'])
 
 
-    @api.multi
+    
     def button_to_save(self):
 
         expense_cnt = 0
@@ -537,7 +514,6 @@ class AssetSolution(models.TransientModel):
 
 
         detail_ids=[]
-        print 'self.sudo().detail_ids',self.sudo().detail_ids
         for detail in self.sudo().detail_ids:
 
             if detail.employee_id and detail.is_expense :
@@ -547,7 +523,6 @@ class AssetSolution(models.TransientModel):
             elif detail.is_expense:
                 expense_cnt += 1  
 
-            print 'detail.is_expense',detail.is_expense
 
             detail_ids.append((0,0,{
                 'accumulated_depreciation':detail.accumulated_depreciation,
@@ -568,7 +543,6 @@ class AssetSolution(models.TransientModel):
 
         if active_obj.detail_ids:
             active_obj.detail_ids.sudo().unlink()
-        print 'detail_ids',detail_ids
 
         if detail_ids:
             active_obj.sudo().write({
@@ -601,7 +575,7 @@ class AssetSolution(models.TransientModel):
 
 
 
-    @api.multi
+    
     def button_to_handle(self):
 
 
@@ -671,7 +645,6 @@ class AssetDisposal(models.TransientModel):
         line_ids= []
         total_amt = 0
         if request_id.detail_ids:
-            print 'request_id.detail_ids',request_id.detail_ids
             
             for line in request_id.detail_ids:	
 
@@ -813,7 +786,7 @@ class AssetDisposal(models.TransientModel):
     
 
 
-    @api.multi
+    
     def button_accept(self):
 
         expense_cnt = 0
@@ -826,15 +799,11 @@ class AssetDisposal(models.TransientModel):
         line_ids=[]
         total_amt = 0
         profit_or_loss_amount = 0
-        print 'self.detail_ids',self.detail_ids
         for line in self.detail_ids:
-
-            print 'line',line
             charge_amount = 0
             amount_ids=[]
             for ln in line.amount_ids:
                 charge_amount += ln.charge_amount
-                print 'ln',ln.charge_amount
                 if ln.charge_amount<=0:
                     raise UserError('Дахин үнэлгээ оруулаагүй мөр байна!!!')
                 else:
@@ -858,9 +827,6 @@ class AssetDisposal(models.TransientModel):
                 }))
             total_amt += charge_amount
             profit_or_loss_amount = line.amount - line.sale_price 
-
-        print 'line_ids',line_ids
-        #return
 
         if active_obj.detail_ids:
             active_obj.detail_ids.sudo().unlink()
@@ -1149,7 +1115,7 @@ class AssetTransaction(models.TransientModel):
 
 
 
-    @api.multi
+    
     def button_accept(self):
         context = self._context
 

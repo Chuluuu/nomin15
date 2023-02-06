@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
-        <report
-            string="Зарлагын баримт"
-            id="action_report_picking_all"
-            model="stock.picking"
-            report_type="qweb-pdf"
-            name="nomin_purchase.report_picking_all"
-            file="nomin_purchase.report_picking_all"
-        />
+        <report string="Зарлагын баримт" id="action_report_picking_all" model="stock.picking" report_type="qweb-pdf" name="nomin_purchase.report_picking_all" file="nomin_purchase.report_picking_all" />
     </data>
-</openerp>
+</odoo>

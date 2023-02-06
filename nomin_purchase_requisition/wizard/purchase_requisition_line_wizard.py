@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api, _
-from openerp.tools.translate import _
-from openerp.exceptions import UserError, ValidationError
-import openerp.addons.decimal_precision as dp
+from odoo import models, fields, api, _
+from odoo.tools.translate import _
+from odoo.exceptions import UserError, ValidationError
+import odoo.addons.decimal_precision as dp
 import time
 from datetime import datetime, timedelta
-from openerp.http import request
+from odoo.http import request
 
 class PurchaseRequisitionLineWizard(models.TransientModel):
     _name = 'purchase.requisition.line.wizard'
@@ -51,7 +51,7 @@ class PurchaseRequisitionLineWizard(models.TransientModel):
         
         return res
     
-    @api.multi
+    
     def _compute_allowed_amount(self):
         for purchase in self:
             purchase.allowed_amount = purchase.allowed_qty * purchase.product_price
@@ -74,7 +74,7 @@ class PurchaseRequisitionLineWizard(models.TransientModel):
     assign_cat = fields.Many2one('assign.category',string="Хуваарилалтын ангилал",domain=[('is_active','=',True)])
     
     
-    @api.multi
+    
     def action_create(self):
         count = 0.00
         supplied_obj = self.env['purchase.requisition.supplied.quantity']
@@ -94,13 +94,10 @@ class PurchaseRequisitionLineWizard(models.TransientModel):
                 'supplied_amount':line.supplied_amount,
                 'user_id':line.user_id.id
             }
-            print '\n\nasdasdas',line.supplied_id.id
             if line.supplied_id.id == False:
                 supplied_obj = supplied_obj.create(vals)
             if line.supplied_id in supplied_ids:
                 line.supplied_id.update(vals)
-            else:
-                print '\n\n line.supplied_id',line.supplied_id
                 # line.supplied_id.unlink()
                 # if len(supplied_ids) > len(self.supplied_quantities)
             # elif :
@@ -119,16 +116,14 @@ class PurchaseRequisitionLineWizard(models.TransientModel):
         #              'type': 'ir.actions.act_window',
         #              'name': _('Register Call'),
         #              'res_model': 'budget.partner.comparison',
-        #              'view_type' : 'tree',
         #              'view_mode' : 'form',
         #              'search_view_id' : view_id,
         #              'res_id':budget_partner_comparison.id,
         #              'target' : 'current',
         #              'nodestroy' : True,
         #          }
-    @api.multi
+    
     def write(self, vals):
-        print '\n\n vals', vals
         return super(PurchaseRequisitionLineWizard, self).write(vals)
 class PurchaseRequisitionSuppliedQuantityWizard(models.TransientModel):
     _name = 'purchase.requisition.supplied.quantity.wizard'
@@ -169,7 +164,7 @@ class PurchaseRequisitionSuppliedQuantityWizard(models.TransientModel):
         
 
 
-    @api.multi
+    
     def write(self, vals):
         if vals.get('supplied_product_id'):
             vals.update({'supplied_product_price':self.supplied_product_id.sudo().cost_price})
@@ -182,9 +177,7 @@ class PurchaseRequisitionSuppliedQuantityWizard(models.TransientModel):
 
         
 
-    @api.multi
+    
     def unlink(self):
-        print '\n\n aaaaaaaaaawawawawaw'
         for self1 in self:
-            print '\n\n aaaaaaa',self1
             return super(PurchaseRequisitionSuppliedQuantityWizard, self1).unlink() 

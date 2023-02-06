@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 from datetime import date, datetime,timedelta
 from dateutil.relativedelta import relativedelta
-from openerp.exceptions import UserError, ValidationError, RedirectWarning
+from odoo.exceptions import UserError, ValidationError, RedirectWarning
 
 import requests
 import json
@@ -204,7 +204,7 @@ class DamageAssetDescription(models.TransientModel):
                 return self.env['fixed.asset.counting.line'].browse(context['active_id'])
 
 
-    @api.multi
+    
     def button_to_save(self):
 
         expense_cnt = 0
@@ -268,7 +268,7 @@ class DamageAssetDescription(models.TransientModel):
 
 
 
-    @api.multi
+    
     def button_to_handle(self):
 
 

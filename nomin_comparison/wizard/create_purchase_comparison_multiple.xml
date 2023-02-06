@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <record id="view_create_purchase_comparison_multiple" model="ir.ui.view">
             <field name="name">Multiple Purchase Order Comparison Creation Wizard</field>
             <field name="model">purchase.comparison.multiple.wizard</field>
             <field name="arch" type="xml">
-                <form string="Multiple Purchase Order Comparison Creation Wizard" >
+                <form string="Multiple Purchase Order Comparison Creation Wizard">
                     <group col="2" invisible="1">
                         <group>
                             <field name="cost_of_machine"/>
@@ -45,7 +45,7 @@
                                     <field name="partner_phone" readonly="1"/>
                                     <field name="partner_email" readonly="1"/>
                                 </tree>
-                            </field> 
+                            </field>
                         </page>
                         <page string="Бараа">
                             <field name="product_ids">
@@ -58,7 +58,7 @@
                                     <field name="market_price_total" readonly="1"/>
                                     <field name="price_subtotal" readonly="1" invisible="1"/>
                                 </tree>
-                            </field> 
+                            </field>
                         </page>
                     </notebook>
                     <footer>
@@ -83,22 +83,19 @@
             <field name="name">Partner without email</field>
             <field name="model">partner.without.email</field>
             <field name="arch" type="xml">
-                <form string="Partners without emails" >                   
-                    <sheet>                        
+                <form string="Partners without emails">
+                    <sheet>
                         <field name="partners"/>
                     </sheet>
-                    <footer>                        
+                    <footer>
                         <button string="Cancel" class="oe_link" special="cancel" />
                     </footer>
                 </form>
             </field>
         </record>
-    
-        <!-- <menuitem action="action_create_purchase_comparison_multiple" 
-            id="menu_create_purchase_comparison_multiple"
-            groups="nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_procurement_buyer"
-            parent="purchase.menu_procurement_management"
+
+        <!-- <menuitem action="action_create_purchase_comparison_multiple" id="menu_create_purchase_comparison_multiple" groups="nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_procurement_buyer" parent="purchase.menu_procurement_management"
             sequence = "11"/> -->
 
     </data>
-</openerp>
+</odoo>

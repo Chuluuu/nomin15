@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding='UTF-8'?>
-<openerp>
+<odoo>
     <data>
         <record id="requisition_assignee_notif_email_template" model="mail.template">
             <field name="name">Танд ХА хүсэлт хуваариллаа</field>
@@ -32,13 +32,13 @@
 
 <pre>
 -- 
-OpenERP Автомат Имэйл
+Odoo Автомат Имэйл
 
 </pre>
-            ]]></field>
+            ]]>            </field>
         </record>
 
-   
+
         <record id="requisition_helper_notif_email_template" model="mail.template">
             <field name="name">Purchase Requisition Assignment Notification</field>
             <field name="email_from">${(user.company_id.email or '')|safe}</field>
@@ -66,10 +66,10 @@ OpenERP Автомат Имэйл
 
 <pre>
 -- 
-OpenERP Автомат Имэйл
+Odoo Автомат Имэйл
 
 </pre>
-            ]]></field>
+            ]]>            </field>
         </record>
     </data>
-</openerp>
+</odoo>

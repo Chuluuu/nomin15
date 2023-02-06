@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
-<openerp>
-    <data>
-  		<record id="view_purchase_plan_form" model="ir.ui.view">
-  			<field name="name">purchase.plan</field>
+<odoo>
+	<data>
+		<record id="view_purchase_plan_form" model="ir.ui.view">
+			<field name="name">purchase.plan</field>
 			<field name="model">purchase.plan</field>
 			<field name="arch" type="xml">
 				<form string="Purchase plan">
@@ -39,37 +39,34 @@
 					</sheet>
 				</form>
 			</field>
-  		</record>
-
-
-  		<record id="view_purchase_plan_tree" model="ir.ui.view">
-  			<field name="name">purchase.plan</field>
-  			<field name="model">purchase.plan</field>
-  			<field name="arch" type="xml">
-  				<tree string="Purcase plan">
-  					<field name="department_id"/>
-  					<field name="user_id"/>
-  					<field name="year_id"/>
-  					<field name="date"/>
-  				</tree>
-  			</field>
-  		</record>
-
-  		<record id="action_purchase_plan1" model="ir.actions.act_window">
-  			<field name="name">purchase.plan</field>
-  			<field name="res_model">purchase.plan</field>
-  			<!-- <field name="type">ir.actions.act_window</field> -->
-			<field name="view_mode">tree,form</field>
-			<field name="view_type">form</field>
-			<field name="context">{}</field>
-            <field name="domain">[]</field>
-            <field name="view_id" ref="view_purchase_plan_tree"/>
 		</record>
 
-		<!--     <menuitem id="menu_purchase_plan_management" name="Purchase Plan"
-            parent="base.menu_purchase_root" sequence="0" />
-		        <menuitem action="action_purchase_plan1" name="Purchase plan" id="menu_purchase_plan"
-            parent="menu_purchase_plan_management"/> -->
 
-  	</data>
- </openerp>
+		<record id="view_purchase_plan_tree" model="ir.ui.view">
+			<field name="name">purchase.plan</field>
+			<field name="model">purchase.plan</field>
+			<field name="arch" type="xml">
+				<tree string="Purcase plan">
+					<field name="department_id"/>
+					<field name="user_id"/>
+					<field name="year_id"/>
+					<field name="date"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_purchase_plan1" model="ir.actions.act_window">
+			<field name="name">purchase.plan</field>
+			<field name="res_model">purchase.plan</field>
+			<!-- <field name="type">ir.actions.act_window</field> -->
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_id" ref="view_purchase_plan_tree"/>
+		</record>
+
+		<!--     <menuitem id="menu_purchase_plan_management" name="Purchase Plan" parent="base.menu_purchase_root" sequence="0" />
+		        <menuitem action="action_purchase_plan1" name="Purchase plan" id="menu_purchase_plan" parent="menu_purchase_plan_management"/> -->
+
+	</data>
+</odoo>

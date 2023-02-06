@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<openerp>
+<odoo>
     <data>
         <record id="purchase_evaluation_indicators_form" model="ir.ui.view">
             <field name="name">evaluation.indicators.form</field>
@@ -8,30 +8,30 @@
             <field name="arch" type="xml">
                 <form string="Evaluation Indicators">
                     <sheet>
-                            <group col="4">
-                                <field name="name"/>
-                                <field name="category" invisible="1"/>
-                            </group>
-                            <group>
-                                <field name="line_ids">
-                                    <tree string="line_ids" editable="bottom">
+                        <group col="4">
+                            <field name="name"/>
+                            <field name="category" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="line_ids">
+                                <tree string="line_ids" editable="bottom">
+                                    <field name="model_id"/>
+                                    <field name="is_default"/>
+                                    <field name="evalution_method"/>
+                                    <field name="scale"/>
+                                    <field name="indicator_id" invisible="1"/>
+                                </tree>
+                                <form string="line_ids">
+                                    <group>
                                         <field name="model_id"/>
                                         <field name="is_default"/>
                                         <field name="evalution_method"/>
                                         <field name="scale"/>
                                         <field name="indicator_id" invisible="1"/>
-                                    </tree>
-                                    <form string="line_ids">
-                                        <group>
-                                            <field name="model_id"/>
-                                            <field name="is_default"/>
-                                            <field name="evalution_method"/>
-                                            <field name="scale"/>
-                                            <field name="indicator_id" invisible="1"/>
-                                        </group>
-                                    </form>
-                                </field>
-                            </group>
+                                    </group>
+                                </form>
+                            </field>
+                        </group>
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
@@ -40,7 +40,7 @@
                 </form>
             </field>
         </record>
-        
+
         <record id="purchase_evaluation_indicators_tree" model="ir.ui.view">
             <field name="name">evaluation.indicators.tree</field>
             <field name="model">evaluation.indicators</field>
@@ -60,22 +60,19 @@
                     <field name="name" string="Name"/>
                     <field name="category" invisible="1" string="Category"/>
                 </search>
-             </field>
+            </field>
         </record>
 
-    <record id="purchase_evaluation_indicators_action" model="ir.actions.act_window">
-        <field name="name">Evaluation Indicatorss</field>
-        <field name="res_model">evaluation.indicators</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="purchase_evaluation_indicators_tree"/>
-    </record>
+        <record id="purchase_evaluation_indicators_action" model="ir.actions.act_window">
+            <field name="name">Evaluation Indicatorss</field>
+            <field name="res_model">evaluation.indicators</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="purchase_evaluation_indicators_tree"/>
+        </record>
 
-    <menuitem action="purchase_evaluation_indicators_action" 
-        id="menu_purchase_indicators"
-      groups="nomin_purchase_requisition.group_haaa_director"
-        parent="purchase.menu_purchase_config"/>
-            
-            
-	</data>
-</openerp>
+        <menuitem action="purchase_evaluation_indicators_action" id="menu_purchase_indicators" groups="nomin_purchase_requisition.group_haaa_director" parent="purchase.menu_purchase_config"/>
+
+
+    </data>
+</odoo>

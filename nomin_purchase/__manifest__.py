@@ -1,13 +1,4 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Asterisk Technologies LLC, Enterprise Management Solution    
-#    Copyright (C) 2013-2013 Asterisk Technologies LLC (<http://www.erp.mn>). All Rights Reserved
-#
-#    Email : unuruu25@gmail.com
-#    Phone : 976 + 88005462
-#
-##############################################################################
 
 {
     "name" : "nomin - Purchase",
@@ -19,7 +10,7 @@
 """,
     "website" : False,
     "category" : "Purchase",
-    "depends" : ['purchase','nomin_budget','purchase_requisition'],
+    "depends" : ['purchase','purchase_requisition'],
     "init": [],
     "data" : [
         'security/security.xml',

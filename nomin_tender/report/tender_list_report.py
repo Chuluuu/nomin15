@@ -11,11 +11,12 @@ import xlsxwriter
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from operator import itemgetter
-from odoo.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
+from odoo.addons.nomin_base.report_helper import verbose_numeric, comma_me, convert_curr
 
 class bidding_list_report(models.TransientModel):
     _name = 'bidding.list.report'
-    _inherit = 'abstract.report.model'
+    # TODO FIX LATER
+    # _inherit = 'abstract.report.model'
     
     @api.model
     def _get_start_date(self):

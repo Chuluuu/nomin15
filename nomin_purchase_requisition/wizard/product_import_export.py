@@ -1,35 +1,16 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2014-Today OpenERP SA (<http://www.openerp.com>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-from openerp.tools.translate import _
-# from openerp.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
-from openerp import api, fields, models, _
+
+from odoo.tools.translate import _
+from odoo import api, fields, models, _
 from operator import itemgetter
 from io import BytesIO
 import base64, os
 import xlrd
-from openerp.osv import  osv
+from odoo.osv import  osv
 from tempfile import NamedTemporaryFile
 from xlrd import sheet
 import xlsxwriter
-from openerp.exceptions import UserError
+from odoo.exceptions import UserError
 
 class ProductImportExport(models.TransientModel):
 	_name ='product.import.export'
@@ -39,14 +20,14 @@ class ProductImportExport(models.TransientModel):
 	is_import = fields.Boolean(string="Бараа оруулах",default=False)
 
 
-	@api.multi
+	
 	def action_check(self):
 		fileobj = NamedTemporaryFile('w+')
 		
 		fileobj.write(base64.decodestring(self.data))
 		fileobj.seek(0)
 		if not os.path.isfile(fileobj.name):
-			raise osv.except_osv(u'Алдаа',u'Мэдээллийн файлыг уншихад алдаа гарлаа.\nЗөв файл эсэхийг шалгаад дахин оролдоно уу!')
+			raise UserError(u'Алдаа',u'Мэдээллийн файлыг уншихад алдаа гарлаа.\nЗөв файл эсэхийг шалгаад дахин оролдоно уу!')
 		
 		book = xlrd.open_workbook(fileobj.name)
 		sheet = book.sheet_by_index(0)
@@ -75,13 +56,13 @@ class ProductImportExport(models.TransientModel):
 		"type": "set_scrollTop",
 		}
 
-	@api.multi
+	
 	def action_update(self):
 		fileobj = NamedTemporaryFile('w+')
 		fileobj.write(base64.decodestring(self.data))
 		fileobj.seek(0)
 		if not os.path.isfile(fileobj.name):
-			raise osv.except_osv(u'Алдаа',u'Мэдээллийн файлыг уншихад алдаа гарлаа.\nЗөв файл эсэхийг шалгаад дахин оролдоно уу!')
+			raise UserError(u'Алдаа',u'Мэдээллийн файлыг уншихад алдаа гарлаа.\nЗөв файл эсэхийг шалгаад дахин оролдоно уу!')
 		book = xlrd.open_workbook(fileobj.name)
 		sheet = book.sheet_by_index(0)
 
@@ -100,7 +81,7 @@ class ProductImportExport(models.TransientModel):
 			rowi+=1
 			
 			
-	@api.multi
+	
 	def action_export(self):
 		output = BytesIO()
 		workbook = xlsxwriter.Workbook(output)
@@ -153,7 +134,6 @@ class ProductImportExport(models.TransientModel):
 
 		return {
 		'name': 'Export Report',
-		'view_type':'form',
 		'view_mode':'form',
 		'res_model':'report.excel.output',
 		'res_id':excel_id.id,

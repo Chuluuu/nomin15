@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-	<data noupdate="0">
-	
-
-	
+<odoo>
+    <data noupdate="0">
 
 
 
-	<record id="purchase_order_followers" model="ir.rule">
+
+
+
+        <record id="purchase_order_followers" model="ir.rule">
             <field name="name">Followers see their followed orders</field>
             <field ref="model_purchase_comparison" name="model_id"/>
             <field name="domain_force">['|',('message_channel_ids.channel_partner_ids', 'in', [user.partner_id.id]),('message_partner_ids','=',user.partner_id.id)]</field>
             <field name="groups" eval="[(4, ref('purchase.group_purchase_user'))]"/>
-    </record>  
+        </record>
 
 
 
 
 
-	</data>
-</openerp>
+    </data>
+</odoo>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<openerp>
+<odoo>
     <data>
 
         <!-- Merge Opportunities  -->
@@ -8,7 +8,7 @@
             <field name="model">action.create.tender.request</field>
             <field name="arch" type="xml">
                 <form string="Tender">
-                    <field name="description" required="1"/>                    
+                    <field name="description" required="1"/>
                     <footer>
                         <button name="action_tender_request" type="object" string="Илгээх" class="btn-primary"/>
                         <button string="Cancel" class="btn-default" special="cancel"/>
@@ -22,7 +22,7 @@
             <field name="model">action.create.tender.request.return</field>
             <field name="arch" type="xml">
                 <form string="Tender">
-                    <field name="description" required="1"/>                    
+                    <field name="description" required="1"/>
                     <footer>
                         <button name="action_tender_return" type="object" string="Буцаах" class="btn-primary"/>
                         <button string="Cancel" class="btn-default" special="cancel"/>
@@ -31,5 +31,5 @@
             </field>
         </record>
 
-       </data>
-</openerp>
+    </data>
+</odoo>

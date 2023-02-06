@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
+#    odoo, Open Source Management Solution
 #    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -19,12 +19,12 @@
 #
 ##############################################################################
 import time
-from openerp.osv import fields, osv
-from openerp.tools.translate import _
-from openerp import SUPERUSER_ID
+from odoo.osv import fields, osv
+from odoo.tools.translate import _
+from odoo import SUPERUSER_ID
 from datetime import datetime, timedelta
-from openerp import api, fields, models, _
-
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 
                     
@@ -46,22 +46,20 @@ class purchase_order_comparison_wizard(osv.osv_memory):
         if context is None:
             context={}
         res = super(purchase_order_comparison_wizard, self).fields_view_get(cr, uid, view_id=view_id, view_type=view_type, context=context, toolbar=toolbar,submenu=False)
-#         print 'context[active_ids]: ', context['active_ids']
         orders = self.pool.get('purchase.order').browse(cr, uid, context['active_ids'])
         #for order in orders:
         #    if order.user_id.id != uid:
-        #        raise osv.except_osv(_('Warning!'), _('Please select your own orders only.'))
+        #        raise UserError(_('Warning!'), _('Please select your own orders only.'))
         for order in orders: 
             if order.purchase_type == 'direct' and len(orders) > 1:
-               raise osv.except_osv(_('Warning!'),_(u'Та 1 болон Шууд төрөлтэй худалдан авалтыг харьцуулалт боломжгүй'))
+               raise UserError(_('Warning!'),_(u'Та 1 болон Шууд төрөлтэй худалдан авалтыг харьцуулалт боломжгүй'))
             if order.comparison_id:
-               raise osv.except_osv(_('Warning!'),_(u'%s дугаартай харьцуулалт үүссэн байна. Үүссэн харьцуулалтыг устгана уу.')%(order.comparison_id.name))
+               raise UserError(_('Warning!'),_(u'%s дугаартай харьцуулалт үүссэн байна. Үүссэн харьцуулалтыг устгана уу.')%(order.comparison_id.name))
             if context.get('active_model','') == 'purchase.order' and len(orders) < 2:               
                 # if orders[0].state not in ['draft']:
-                #     raise osv.except_osv(_('Warning!'), _(u'Та зөвхөн ноорог төлөвтэй үнийн саналаас харьцуулалт үүсгэж болно'))
+                #     raise UserError(_('Warning!'), _(u'Та зөвхөн ноорог төлөвтэй үнийн саналаас харьцуулалт үүсгэж болно'))
                 if order.purchase_type not in ['direct']:                                    
-                    raise osv.except_osv(_('Warning!'), _(u'1 ээс олон нийлүүлэгч харьцуулах хэрэгтэй'))
-#             print 'orders.special_condition_reason: ', orders[0].special_condition_reason
+                    raise UserError(_('Warning!'), _(u'1 ээс олон нийлүүлэгч харьцуулах хэрэгтэй'))
           
 #         else:
 #             orders = self.pool.get('purchase.order').browse(cr, uid, context['active_ids'])
@@ -69,7 +67,7 @@ class purchase_order_comparison_wizard(osv.osv_memory):
 #             deps = []
             # for order in orders:
             #     if order.state not in ['draft','sent']:
-            #         raise osv.except_osv(_('Warning!'), _(u'Та зөвхөн ноорог төлөвтэй үнийн саналаас харьцуулалт үүсгэж болно'))
+            #         raise UserError(_('Warning!'), _(u'Та зөвхөн ноорог төлөвтэй үнийн саналаас харьцуулалт үүсгэж болно'))
         return res
 
    
@@ -102,7 +100,7 @@ class purchase_order_comparison_wizard(osv.osv_memory):
 
         for order in orders:
           if order.state !='back':
-            raise osv.except_osv(_('Warning!'), _(u'Та зөвхөн Үнийн санал ирсэн (RFQ back) төлөвтэй үнийн саналаас харьцуулалт үүсгэж болно'))
+            raise UserError(_('Warning!'), _(u'Та зөвхөн Үнийн санал ирсэн (RFQ back) төлөвтэй үнийн саналаас харьцуулалт үүсгэж болно'))
           for line in order.order_line:
                 req_line_hist_id = self.pool.get('purchase.requisition.line.state.history').create(cr, SUPERUSER_ID, {
                                                             'state': 'draft',
@@ -111,7 +109,6 @@ class purchase_order_comparison_wizard(osv.osv_memory):
                                                             'requisition_line_id': line.requisition_line_id.id
                                                             })
            
-#         print "\n\n\sdgasfasd",orders[0].logistic_supplier.id if orders[0].is_transport else "\n\n\safdasdfdasf"
         comparison_id = self.pool.get('purchase.comparison').create(cr, uid, {
                                                               'date': time.strftime('%Y-%m-%d'),
                                                               # 'date': orders[0].date_order,
@@ -128,7 +125,6 @@ class purchase_order_comparison_wizard(osv.osv_memory):
               'comparison_id':comparison_id,
             }
             self.pool.get('purchase.partner.comparison').create(cr, SUPERUSER_ID, vals)
-#         print "\n\n\n\n\ddfd",orders[0].requisition_id.research_by_proc_dep
         self.pool.get('purchase.order').write(cr, uid, [order.id for order in orders], {'comparison_id': comparison_id,
                                                                                         'state': 'comparison_created'})
         

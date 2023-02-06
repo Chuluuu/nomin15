@@ -1,6 +1,6 @@
 
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models
+from odoo import api, fields, models
 
 class purchase_requisition_line_state_history(models.Model):
     _name = "purchase.requisition.line.state.history"
@@ -64,5 +64,5 @@ class purchase_requisition_state_history(models.Model):
     name =  fields.Char('Name')
     type =  fields.Char('Type')
     group_id= fields.Char('Group')
-    state = fields.Selection(STATE_SELECTION,'State', readonly=True, select=True, track_visibility='onchange')
+    state = fields.Selection(STATE_SELECTION,'State', readonly=True, select=True, tracking=True)
         

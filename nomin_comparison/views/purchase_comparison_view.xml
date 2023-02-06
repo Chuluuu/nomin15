@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
-<openerp>
+<odoo>
     <data>
         <record id ="purchase_comparison_view" model="ir.ui.view">
             <field name="name">purchase.comparison</field>
             <field name="model">purchase.comparison</field>
             <field name="arch" type="xml">
                 <form string="Purchase comparison" create="false">
-                    <header>              
+                    <header>
                         <button name="action_send" class="oe_highlight" type="object" string="Send" attrs="{'invisible':[('is_in_sent','=',False)]}"/>
                         <button name="action_canceled" class="oe_highlight" type="object" string="Cancel" attrs="{'invisible':[('state','!=','draft')]}"/>
                         <button name="action_verify" class="oe_highlight" type="object" string="Verify" attrs="{'invisible':[('is_in_verify','=',False)]}"/>
@@ -16,152 +16,152 @@
                         <button name="action_confirm" class="oe_highlight" type="object" string="Confirm" attrs="{'invisible':['|',('state','=','purchase'),('is_in_confirm','=',False)]}"/>
                         <button name="action_cancel" class="oe_highlight" type="object" string="Return" attrs="{'invisible':['|',('state','=','purchase'),('is_in_confirm','=',False)]}"/>
                         <button invisible="1" name="%(action_purchase_comparison_report_wizard)d" type="action" string="Харьцуулалт" class="oe_highlight"/>
-					    <button name="add_comparison_partner_action" string="Add partner" type="object" context="{'comparison_id': context.get('id')}" attrs="{'invisible':[('state','not in',['draft','sent'])]}"/>
-					    <button name="add_comparison_product_action" string="Add product" type="object" context="{'comparison_id': context.get('id')}" attrs="{'invisible':['|',('state','not in','draft'),('is_from_purchase','=',True)]}"/>
-					    
+                        <button name="add_comparison_partner_action" string="Add partner" type="object" context="{'comparison_id': context.get('id')}" attrs="{'invisible':[('state','not in',['draft','sent'])]}"/>
+                        <button name="add_comparison_product_action" string="Add product" type="object" context="{'comparison_id': context.get('id')}" attrs="{'invisible':['|',('state','not in','draft'),('is_from_purchase','=',True)]}"/>
+
                         <button name="action_cancel_wizard" string="Select" class="oe_highlight" type="object" context="{'comparison_id': context.get('id')}" attrs="{'invisible':['|',('state','not in',['sent','approved','verified']),('is_in_confirm','=',False)]}"/>
-                        
+
                         <field name="state" widget="statusbar" statusbar_visible="draft,sent,approved,verified,confirmed" />
                     </header>
-                <sheet>
-                    <div class="pull-left">
-                        <label for="name" class="oe_edit_only oe_inline"/>
-                        <h1>
-                            <field name="name" />
-                        </h1>
-                    </div>
-                     <div class="pull-right">
-                          <label for="request_id"  class="oe_inline" />
-                          <field name="request_id" options="{'no_create': True}" attrs="{'readonly':[('state','!=','draft')]}" required="1"/>
-                    </div>
-                    <group>
+                    <sheet>
+                        <div class="pull-left">
+                            <label for="name" class="oe_edit_only oe_inline"/>
+                            <h1>
+                                <field name="name" />
+                            </h1>
+                        </div>
+                        <div class="pull-right">
+                            <label for="request_id" class="oe_inline" />
+                            <field name="request_id" options="{'no_create': True}" attrs="{'readonly':[('state','!=','draft')]}" required="1"/>
+                        </div>
                         <group>
-                            <field name="user_id" readonly="1"/>
-                            <field name="date" readonly="1"/>
+                            <group>
+                                <field name="user_id" readonly="1"/>
+                                <field name="date" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="sector_id" readonly="1" required="1"/>
+                                <field name="department_id" readonly="1"/>
+                            </group>
+                            <field name="is_from_purchase" invisible="1"/>
+                            <field name="is_in_sent" invisible="1"/>
+                            <field name="is_in_approve" invisible="1"/>
+                            <field name="is_in_verify" invisible="1"/>
+                            <field name="is_in_confirm" invisible="1"/>
+                            <field name="active_sequence" invisible="1"/>
+                            <field name="confirmed_person" invisible="1"/>
+                            <field name="verified_person" invisible="1"/>
+                            <field name="approved_person" invisible="1"/>
+
                         </group>
-                        <group>
-                            <field name="sector_id" readonly="1" required="1"/>
-                            <field name="department_id" readonly="1"/>
-                        </group>
-                        <field name="is_from_purchase" invisible="1"/>
-                        <field name="is_in_sent" invisible="1"/>
-                        <field name="is_in_approve" invisible="1"/>
-                        <field name="is_in_verify" invisible="1"/>
-                        <field name="is_in_confirm" invisible="1"/>
-                        <field name="active_sequence" invisible="1"/>
-                        <field name="confirmed_person" invisible="1"/>
-                        <field name="verified_person" invisible="1"/>
-                        <field name="approved_person" invisible="1"/>
-                        
-                    </group>
-                    <notebook>
-                        <page string="Partner comparisons">
-                            <widget type="comparison_widget">
-                            </widget>
-                            <field name="order_ids" invisible="1"/>
-                            <separator string="Partner comparisons"/>
-                            <field name="partner_ids">
-                                <tree string="Partner comparisons" create="false" delete="false">
-                                    <field name="is_winner" attrs="{'readonly':[('is_in_confirm_users','=',False)]}"/>
-                                    <field name="partner_id"/>
-                                    <field name="order_id"/>
-                                    <field name="comparison_id" invisible="1"/>
-                                    <field name="total_percent"/>
-                                    <field  name="is_in_confirm_users" invisible="1"/>
-                                    <field name="description"/>
-                                    <field name="is_in_raters" invisible="1"/>
-                                    <field name="win_date"/>
-                                    <field name="state" invisible="1"/>
-                                    <button name="%(nomin_comparison.action_wizard_rate)d" class="oe_highlight" type="action" attrs="{'invisible':['|',('is_in_raters','=',False),('state','=','draft')]}" string="RATE" />
-                                </tree>
-                              <form string="Partner comparisons">
-                                <group>
-                                    <group>
-                                        <field name="partner_id" readonly="1"/>
-                                        <field name="order_id" readonly="1"/>
-                                    </group>
-                                    <group>
-                                        <field name="total_percent" readonly="1"/>
+                        <notebook>
+                            <page string="Partner comparisons">
+                                <widget type="comparison_widget">
+                                </widget>
+                                <field name="order_ids" invisible="1"/>
+                                <separator string="Partner comparisons"/>
+                                <field name="partner_ids">
+                                    <tree string="Partner comparisons" create="false" delete="false">
                                         <field name="is_winner" attrs="{'readonly':[('is_in_confirm_users','=',False)]}"/>
-                                        <field  name="is_in_confirm_users" invisible="1"/>
-                                        <field name="state" invisible="1"/>
+                                        <field name="partner_id"/>
+                                        <field name="order_id"/>
+                                        <field name="comparison_id" invisible="1"/>
+                                        <field name="total_percent"/>
+                                        <field name="is_in_confirm_users" invisible="1"/>
+                                        <field name="description"/>
+                                        <field name="is_in_raters" invisible="1"/>
                                         <field name="win_date"/>
-                                    </group>
-                                </group>
-                                <separator string="description"/>
-                                <field name="description"/>
-                                <notebook>
-                                     <page string="Purchase evaluation indicators">
-                                        <field name="indicator_ids">
-                                            <tree string="Purchase evaluation indicators" create="false" delete="false">
-                                                <field name="indicator_id" readonly="1"/>
+                                        <field name="state" invisible="1"/>
+                                        <button name="%(nomin_comparison.action_wizard_rate)d" class="oe_highlight" type="action" attrs="{'invisible':['|',('is_in_raters','=',False),('state','=','draft')]}" string="RATE" />
+                                    </tree>
+                                    <form string="Partner comparisons">
+                                        <group>
+                                            <group>
+                                                <field name="partner_id" readonly="1"/>
+                                                <field name="order_id" readonly="1"/>
+                                            </group>
+                                            <group>
                                                 <field name="total_percent" readonly="1"/>
-                                            </tree>
-                                            <form string="Purchase evaluation indicators">
-                                                <group>
-                                                    <group>
+                                                <field name="is_winner" attrs="{'readonly':[('is_in_confirm_users','=',False)]}"/>
+                                                <field name="is_in_confirm_users" invisible="1"/>
+                                                <field name="state" invisible="1"/>
+                                                <field name="win_date"/>
+                                            </group>
+                                        </group>
+                                        <separator string="description"/>
+                                        <field name="description"/>
+                                        <notebook>
+                                            <page string="Purchase evaluation indicators">
+                                                <field name="indicator_ids">
+                                                    <tree string="Purchase evaluation indicators" create="false" delete="false">
                                                         <field name="indicator_id" readonly="1"/>
-                                                    </group>
-                                                    <group>
-                                                        <field name="total_percent"/>
-                                                    </group>
-                                                </group>
-                                                <notebook>
-                                                    <page string="Purchase employee rate">
-                                                        <field name="rate_ids" >
-                                                            <tree string="Purchase employee rate" create="false" delete="false">
-                                                                <field name="employee_id"/>
-                                                                <field name="percent"/>
-                                                            </tree>
-                                                            <form string="Purchase employee rate">
-                                                                <group>
-                                                                    <field name="employee_id" readonly="1"/>
-                                                                </group>
-                                                                <group>
-                                                                    <field name="percent" readonly="1" />
-                                                                </group>
-                                                            </form>
-                                                        </field>
-                                                    </page>
-                                                </notebook>
+                                                        <field name="total_percent" readonly="1"/>
+                                                    </tree>
+                                                    <form string="Purchase evaluation indicators">
+                                                        <group>
+                                                            <group>
+                                                                <field name="indicator_id" readonly="1"/>
+                                                            </group>
+                                                            <group>
+                                                                <field name="total_percent"/>
+                                                            </group>
+                                                        </group>
+                                                        <notebook>
+                                                            <page string="Purchase employee rate">
+                                                                <field name="rate_ids">
+                                                                    <tree string="Purchase employee rate" create="false" delete="false">
+                                                                        <field name="employee_id"/>
+                                                                        <field name="percent"/>
+                                                                    </tree>
+                                                                    <form string="Purchase employee rate">
+                                                                        <group>
+                                                                            <field name="employee_id" readonly="1"/>
+                                                                        </group>
+                                                                        <group>
+                                                                            <field name="percent" readonly="1" />
+                                                                        </group>
+                                                                    </form>
+                                                                </field>
+                                                            </page>
+                                                        </notebook>
 
-                                            </form>
-                                        </field>
+                                                    </form>
+                                                </field>
 
 
-                                        <field name="info_ids">
-                                            <tree string="Purchase evaluation indicators" editable="bottom" create="false" delete="false">
-                                                <field name="indicator_id" readonly="1"/>
-                                                <field name="info" attrs="{'readonly':[('parent_state','!=','draft')],'required':[('parent_state','=','draft')]}"/>
-                                                <field name="parent_state" invisible = "1"/>
-                                            </tree>
+                                                <field name="info_ids">
+                                                    <tree string="Purchase evaluation indicators" editable="bottom" create="false" delete="false">
+                                                        <field name="indicator_id" readonly="1"/>
+                                                        <field name="info" attrs="{'readonly':[('parent_state','!=','draft')],'required':[('parent_state','=','draft')]}"/>
+                                                        <field name="parent_state" invisible = "1"/>
+                                                    </tree>
 
-                                        </field>
+                                                </field>
 
-                                    </page>
-                                </notebook>
-                            </form>
-                            </field>
-                        </page>
-                         <page string="Rate employee_ids">
-                            <field name="rate_employee_ids" attrs="{'readonly':[('state','!=','draft')]}" >
-                                <tree string="Rate employees" editable="bottom">
-                                    <field name="employee_id"/>
-                                    <field name="job_position" readonly="1"/>
-                                    <field name="is_rater" invisible="1"/>
-                                    <field name="state" readonly="1"/>
-                                </tree>
-                            </field>
-                        </page>
-                        <page string="Purchase indicators" >
-                            <field name="purchase_indicator_ids" attrs="{'readonly':[('state','!=','draft')]}">
-                                <tree string="Purchase indicators" editable="bottom">
-                                    <field name="indicator_id" required="1"/>
-                                </tree>
-                            </field>
-                        </page>
+                                            </page>
+                                        </notebook>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Rate employee_ids">
+                                <field name="rate_employee_ids" attrs="{'readonly':[('state','!=','draft')]}">
+                                    <tree string="Rate employees" editable="bottom">
+                                        <field name="employee_id"/>
+                                        <field name="job_position" readonly="1"/>
+                                        <field name="is_rater" invisible="1"/>
+                                        <field name="state" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Purchase indicators">
+                                <field name="purchase_indicator_ids" attrs="{'readonly':[('state','!=','draft')]}">
+                                    <tree string="Purchase indicators" editable="bottom">
+                                        <field name="indicator_id" required="1"/>
+                                    </tree>
+                                </field>
+                            </page>
 
-                        <!-- <page string="Purchase comparison history">
+                            <!-- <page string="Purchase comparison history">
                             <field name="history_ids" readonly="1">
                                 <tree string="history">
                                     <field name="user_id" />
@@ -170,19 +170,19 @@
                                 </tree>
                             </field>
                         </page> -->
-                </notebook>
-                </sheet>
-                <div class="oe_chatter">
-                      <field name="message_follower_ids" widget="mail_followers"/>
-                      <field name="message_ids" widget="mail_thread"/>
-                </div> 
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
 
 
         </record>
-       	
-     <record id="view_purchase_comparison_tree" model="ir.ui.view">
+
+        <record id="view_purchase_comparison_tree" model="ir.ui.view">
             <field name="name">purchase.comparison.tree</field>
             <field name="model">purchase.comparison</field>
             <field name="view_type">tree</field>
@@ -194,51 +194,48 @@
                     <field name="department_id"/>
                     <field name="date"/>
                     <field name="state"/>
-                     <field name="message_unread"/>
-                    
+                    <field name="message_unread"/>
+
                 </tree>
             </field>
         </record>
 
-    <record id="action_purchase_comparison" model="ir.actions.act_window">
+        <record id="action_purchase_comparison" model="ir.actions.act_window">
             <field name="name">Purchase Comparison</field>
             <field name="res_model">purchase.comparison</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="context">{}</field>
-    </record>
+        </record>
 
-    <record id="view_cancel_comparison_form" model="ir.ui.view">
-        <field name="name">cancel.comparison.form</field>
-        <field name="model">cancel.comparison</field>
-        <field name="arch" type="xml">
-            <form string="Cancel comparison">
-                <group>
-                    <field name="comparison_id" invisible="1"/>
-                    <field name="partner_id" required="1" options="{'no_create': True}"/>
-                </group>
-                <footer>
-                    <button string="Шалгаруулах" name="action_cancel" type="object" class="btn-primary"/>
-                    <button string="Болих" class="btn-default" special="cancel"/>
-                </footer>
-            </form>
-        </field>
-    </record>
+        <record id="view_cancel_comparison_form" model="ir.ui.view">
+            <field name="name">cancel.comparison.form</field>
+            <field name="model">cancel.comparison</field>
+            <field name="arch" type="xml">
+                <form string="Cancel comparison">
+                    <group>
+                        <field name="comparison_id" invisible="1"/>
+                        <field name="partner_id" required="1" options="{'no_create': True}"/>
+                    </group>
+                    <footer>
+                        <button string="Шалгаруулах" name="action_cancel" type="object" class="btn-primary"/>
+                        <button string="Болих" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
 
-    <record id="cancel_comparison_action" model="ir.actions.act_window" >
-        <field name="name">Cancel comparison</field>
-        <field name="res_model">cancel.comparison</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_cancel_comparison_form"/>
-        <field name="target">new</field>
-    </record>
+        <record id="cancel_comparison_action" model="ir.actions.act_window">
+            <field name="name">Cancel comparison</field>
+            <field name="res_model">cancel.comparison</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_cancel_comparison_form"/>
+            <field name="target">new</field>
+        </record>
 
-    <menuitem action="action_purchase_comparison" 
-        id="menu_purchase_comparison"
-      groups="nomin_purchase_requisition.group_procurement_buyer,nomin_base.group_department_chief,nomin_base.group_department_chief1,nomin_base.group_business_development_chief,nomin_base.group_department_manager,nomin_base.group_division_chief,nomin_base.group_nomin_branch_economist,nomin_base.group_department_senior_manager,nomin_base.group_financial_account_user,nomin_purchase_requisition.group_supply_import_manager,nomin_base.group_president,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_nyrav_department,capitalLease.group_regular_accountant"
-        parent="purchase.menu_procurement_management"/>
-            
-            
-	</data>
-</openerp>
+        <menuitem action="action_purchase_comparison" id="menu_purchase_comparison" groups="nomin_purchase_requisition.group_procurement_buyer,nomin_base.group_department_chief,nomin_base.group_department_chief1,nomin_base.group_business_development_chief,nomin_base.group_department_manager,nomin_base.group_division_chief,nomin_base.group_nomin_branch_economist,nomin_base.group_department_senior_manager,nomin_base.group_financial_account_user,nomin_purchase_requisition.group_supply_import_manager,nomin_base.group_president,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_nyrav_department,capitalLease.group_regular_accountant" parent="purchase.menu_procurement_management"/>
+
+
+    </data>
+</odoo>

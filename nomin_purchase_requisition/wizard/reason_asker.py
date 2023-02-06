@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 
 class ReasonAsker(models.TransientModel):
     _name = 'nomin.purchase.requisition.asker'
@@ -10,7 +10,7 @@ class ReasonAsker(models.TransientModel):
                         ], 'Reason', default = 'missing_something')
     description = fields.Text('Description')
 
-    @api.multi
+    
     def button_accept(self):
         context = self._context
         if not context.get('active_model') and not context.get('active_id'):

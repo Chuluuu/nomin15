@@ -419,7 +419,6 @@ class ProjectBudgetLine(models.Model):
         # else:
         #     budget.possible_amount_create_project = budget.surplus_amount - total
             # if line.possible_amount_create_project < result.total_cost:
-            #     print '\n\n\n hahaha ' , line.possible_amount_create_project , result.total_cost
             #     raise ValidationError(_(u'Төлөвлөсөн дүн батлагдсан дүнгийн үлдэгдлээс хэтэрсэн байна'))
             line.possible_amount_create_project = line.approximate_amount - total
         budget = result.project_budget_id

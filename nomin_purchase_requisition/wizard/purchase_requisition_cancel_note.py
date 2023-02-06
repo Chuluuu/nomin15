@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 
-from openerp import models, fields, api
-from openerp.tools.translate import _
+from odoo import models, fields, api
+from odoo.tools.translate import _
 from datetime import date ,datetime
 import time
+from odoo.exceptions import UserError
 class purchase_requisition_cancel_note(models.TransientModel):
     _name = "purchase.requisition.cancel.note"
     _description = "Purchase Requisition cancel Note"
     
     note = fields.Text('Note', required=True)
     
-    @api.multi
+    
     def req_cancel(self):
         active_ids = self._context and self._context.get('active_ids', [])
         requisition = self.pool.get('purchase.requisition')    
@@ -20,12 +21,12 @@ class purchase_requisition_cancel_note(models.TransientModel):
         requistions.write( {'state':'draft','active_sequence':1})
         requistions.message_post(body=body)
     
-    @api.multi
+    
     def req_reject(self):
         active_ids = self._context and self._context.get('active_ids', [])
 
         if not active_ids:
-            raise osv.except_osv(_(u'Анхааруулга'), _(u'ACTIVE id хоосон байна.')) 
+            raise UserError(_(u'Анхааруулга'), _(u'ACTIVE id хоосон байна.')) 
         today = date.today()
         period_id = self.env['account.period'].search([('date_start','<=',today),('date_stop','>=',today)])
         reason=self.note
@@ -44,7 +45,7 @@ class purchase_requisition_cancel_note(models.TransientModel):
             notif_groups = self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_haaa_director')[1]
             group_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups])])
             if not group_user_ids:
-                  raise osv.except_osv(_(u'Анхааруулга'), _(u'Хангамж аж ахуйн албаны захирал грүпд хэрэглэгч нар алга байна.')) 
+                  raise UserError(_(u'Анхааруулга'), _(u'Хангамж аж ахуйн албаны захирал грүпд хэрэглэгч нар алга байна.')) 
             if group_user_ids:
                 for user in group_user_ids:          
                     user_emails.append(user.login)
@@ -58,7 +59,7 @@ class purchase_requisition_cancel_note(models.TransientModel):
             for user in requisition.history_lines:
                 group_user_ids.append(user.user_id)
             if not group_user_ids:
-                  raise osv.except_osv(_(u'Анхааруулга'), _(u'Хангамж аж ахуйн албаны захирал грүпд хэрэглэгч нар алга байна.')) 
+                  raise UserError(_(u'Анхааруулга'), _(u'Хангамж аж ахуйн албаны захирал грүпд хэрэглэгч нар алга байна.')) 
             if group_user_ids:
                 for user in group_user_ids:
                         user_emails.append(user.login)
@@ -70,7 +71,7 @@ class purchase_requisition_cancel_note(models.TransientModel):
             state = 'draft'
             active_sequence = 1
             if not group_user_ids:
-                  raise osv.except_osv(_(u'Анхааруулга'), _(u'Хангамж аж ахуйн албаны захирал грүпд хэрэглэгч нар алга байна.')) 
+                  raise UserError(_(u'Анхааруулга'), _(u'Хангамж аж ахуйн албаны захирал грүпд хэрэглэгч нар алга байна.')) 
             for user in group_user_ids:          
                     if user:
                         user_emails.append(user.login)
@@ -89,7 +90,7 @@ class purchase_requisition_cancel_note(models.TransientModel):
                         month_limit = month_limit+requisition.amount
                         user_month_id.write({'purchase_month_limit':month_limit})
                     else:
-                         raise osv.except_osv(_(u'Анхааруулга'), _(u'Өмнөх сарын лимит алга')) 
+                         raise UserError(_(u'Анхааруулга'), _(u'Өмнөх сарын лимит алга')) 
                          
         requisition.write({'state':state,'active_sequence':active_sequence})
 

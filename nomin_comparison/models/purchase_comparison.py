@@ -16,12 +16,12 @@
 #
 ##############################################################################
 
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 from fnmatch import translate
-from openerp.osv import osv
+from odoo.osv import osv
 import time
-from openerp.http import request    
+from odoo.http import request    
 import requests 
 from datetime import datetime
 import logging
@@ -47,16 +47,16 @@ class purchase_comparison(models.Model):
                                    ]
     
 
-	@api.multi
+	
 	def _set_department(self):
 		employee_id = self.env['hr.employee'].sudo().search([('user_id', '=', self._uid)])
 		if employee_id:
 			return employee_id.department_id.id
 		else:
-			raise osv.except_osv(_('Warning!'), _('You don\'t have related department. Please contact administrator.'))
+			raise UserError(_('Warning!'), _('You don\'t have related department. Please contact administrator.'))
 		return None
 
-	@api.one
+	
 	def set_request(self):
 		config_obj = self.env['request.config']
 		config_id = config_obj.sudo().search([('department_ids', '=', self.department_id.id), ('process', '=', 'purchase.comparison')])
@@ -66,7 +66,7 @@ class purchase_comparison(models.Model):
 			return False
     
 
-	@api.multi
+	
 	def _check_user_in_request(self, state):
 		sel_user_ids = []
 		user_ids = []
@@ -91,12 +91,12 @@ class purchase_comparison(models.Model):
 							if user_id :
 								sel_user_ids.append(user_id)
 							else :
-								raise osv.except_osv(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
+								raise UserError(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
 		
 		user_ids = self.get_possible_users(sel_user_ids)
 		return user_ids
 
-	@api.one
+	
 	def _is_in_sent(self):
 		if self.state == 'draft':
 			sel_user_ids = self._check_user_in_request('sent')
@@ -105,7 +105,7 @@ class purchase_comparison(models.Model):
 					self.is_in_sent = True
 				else:
 					self.is_in_sent = False
-	@api.one
+	
 	def _is_in_approve(self):
 		sel_user_ids = []
 		sel_user_ids = self._check_user_in_request('approved')
@@ -115,7 +115,7 @@ class purchase_comparison(models.Model):
 		else:
 			self.is_in_approve = False	
     
-	@api.one
+	
 	def _is_in_verify(self):
 
 		sel_user_ids = []
@@ -125,7 +125,7 @@ class purchase_comparison(models.Model):
 		else:
 			self.is_in_verify = False	
 
-	@api.one
+	
 	def _is_in_confirm(self):
 		sel_user_ids = []
 		sel_user_ids = self._check_user_in_request('confirmed')
@@ -137,15 +137,15 @@ class purchase_comparison(models.Model):
     
 
 	name = fields.Char(string='Name', readonly=True)
-	date = fields.Date(string="Date", track_visibility='onchange')
-	user_id = fields.Many2one('res.users', string="User" , readonly=True ,track_visibility='onchange')
-	department_id = fields.Many2one('hr.department', string="Department", domain="[('id','in',sector_id)]", required=True, readonly=True,track_visibility='onchange')
-	sector_id = fields.Many2one('hr.department', string="Sector", domain="[('is_sector','!=',False)]", track_visibility='onchange')
-	state = fields.Selection(STATE_SELECTION, string="State" , default='draft', track_visibility='onchange')
+	date = fields.Date(string="Date", tracking=True)
+	user_id = fields.Many2one('res.users', string="User" , readonly=True ,tracking=True)
+	department_id = fields.Many2one('hr.department', string="Department", domain="[('id','in',sector_id)]", required=True, readonly=True,tracking=True)
+	sector_id = fields.Many2one('hr.department', string="Sector", domain="[('is_sector','!=',False)]", tracking=True)
+	state = fields.Selection(STATE_SELECTION, string="State" , default='draft', tracking=True)
 	partner_ids = fields.One2many('purchase.partner.comparison', 'comparison_id', string='Partner comparisons')
 	rate_employee_ids = fields.One2many('purchase.indicator.rate.employee', 'comparison_id', string='Purchase rate indicator rate employee')
 	purchase_indicator_ids = fields.One2many('purchase.indicators', 'comparison_id', string="Purchase indicator")
-	request_id = fields.Many2one('request.config', string='Request config' , domain="[('department_ids','=',sector_id),('process','=','purchase.comparison')]", track_visibility='onchange')
+	request_id = fields.Many2one('request.config', string='Request config' , domain="[('department_ids','=',sector_id),('process','=','purchase.comparison')]", tracking=True)
 	active_sequence = fields.Integer(string="Active sequence", default=1)
 	is_in_sent = fields.Boolean(string='Is in sent', compute=_is_in_sent, default=False)
 	is_in_approve = fields.Boolean(string='Is in sent' , compute=_is_in_approve, default=False)
@@ -179,14 +179,14 @@ class purchase_comparison(models.Model):
 
 
 
-	@api.multi
+	
 	def write(self, vals):
 		result = super(purchase_comparison, self).write(vals)
 		self.insert_indicators()
 		return result
 
 
-	@api.multi
+	
 	def get_possible_users(self, sel_user_ids):
 		department_ids = []
 		user_ids = self.env['res.users'].browse(sel_user_ids)
@@ -199,21 +199,18 @@ class purchase_comparison(models.Model):
 					possible_user_ids.append(user.id)
 		return possible_user_ids
     
-	@api.multi
+	
 	def action_send(self):
 	
 		if not self.rate_employee_ids:
-			raise osv.except_osv(_(u'Анхааруулга!'), _(u"Үнэлгээ өгөх ажилтан сонгож өгнө үү!"))
+			raise UserError(_(u'Анхааруулга!'), _(u"Үнэлгээ өгөх ажилтан сонгож өгнө үү!"))
 		if not self.purchase_indicator_ids:
-			raise osv.except_osv(_(u'Анхааруулга!'), _(u"Үнэлгээ өгөх үзүүлэлт сонгож өгнө үү!"))
+			raise UserError(_(u'Анхааруулга!'), _(u"Үнэлгээ өгөх үзүүлэлт сонгож өгнө үү!"))
 		
-		# print 'self.partner_ids\n\n\n\n',self.partner_ids
 		for line in self.partner_ids:
-			# print 'line.info_ids\n\n\n\n', line.info_ids
 			for info_id in line.info_ids:
-				# print 'info_id.info\n\n\n\n', info_id.info
 				if not info_id.info:
-					raise osv.except_osv(_(u'Анхааруулга!'), _(u"Зарим үнэлгээнд тайлбар бичээгүй бн"))
+					raise UserError(_(u'Анхааруулга!'), _(u"Зарим үнэлгээнд тайлбар бичээгүй бн"))
 		
 		purchase_orders = self.env['purchase.order'].search([('comparison_id','=',self.id)])
 		
@@ -238,37 +235,37 @@ class purchase_comparison(models.Model):
 		# purchase_line = self.env['request.config.purchase.line']		
 		
 		
-	@api.multi
+	
 	def action_verify(self):
 		for com in self:
 			for emp in com.rate_employee_ids:
 				if emp.state =='draft':
-					raise osv.except_osv(_(u'Анхааруулга!'), _(u"Үнэлгээ өгөх ажилтангууд үнэлгээ өгч дуусаагүй байна.!"))
+					raise UserError(_(u'Анхааруулга!'), _(u"Үнэлгээ өгөх ажилтангууд үнэлгээ өгч дуусаагүй байна.!"))
 		self.change_state()
 		self.verified_person = self.env['hr.employee'].search([('user_id','=',self.env.user.id)])
 		# self.send_notification('verified')
-	@api.multi
+	
 	def action_approve(self):
 		for com in self:
 			for emp in com.rate_employee_ids:
 				if emp.state =='draft':
-					raise osv.except_osv(_(u'Анхааруулга!'), _(u"Үнэлгээ өгөх ажилтангууд үнэлгээ өгч дуусаагүй байна.!"))
+					raise UserError(_(u'Анхааруулга!'), _(u"Үнэлгээ өгөх ажилтангууд үнэлгээ өгч дуусаагүй байна.!"))
 		self.change_state()
 		self.approved_person = self.env['hr.employee'].search([('user_id','=',self.env.user.id)])
 		# self.send_notification('approved')
 
-	@api.multi
+	
 	def action_confirm(self):
 		for com in self:
 			for emp in com.rate_employee_ids:
 				if emp.state =='draft':
-					raise osv.except_osv(_(u'Анхааруулга!'), _(u"Үнэлгээ өгөх ажилтангууд үнэлгээ өгч дуусаагүй байна.!"))
+					raise UserError(_(u'Анхааруулга!'), _(u"Үнэлгээ өгөх ажилтангууд үнэлгээ өгч дуусаагүй байна.!"))
 		self.send_prices_info()
 		self.change_state()
 		self.confirmed_person = self.env['hr.employee'].search([('user_id','=',self.env.user.id)])
 		# self.send_notification('confirmed')
 
-	@api.multi
+	
 	def change_state(self):
 
 		total_percent = 0
@@ -292,7 +289,7 @@ class purchase_comparison(models.Model):
 		else:			
 			if count > 1 or count ==0:
 				_logger.info(u'\n\n\n\n\n\nНийлүүлэгч  %s Ажилтаны тоо %s \n\n\n'%(is_winner,count))
-				raise osv.except_osv(_(u'Warning !'), _(u"Та шалгаруулах нэг нийлүүлэгч чагталж өгнө үү  !"))
+				raise UserError(_(u'Warning !'), _(u"Та шалгаруулах нэг нийлүүлэгч чагталж өгнө үү  !"))
 			self.change_purchase(order_id)
 			self.write({'state':'confirmed', 'active_sequence':99})
 			requisition_line = self.env['purchase.requisition.line'].sudo().search([('comparison_id','=',self.id)])
@@ -305,7 +302,7 @@ class purchase_comparison(models.Model):
 				})
 			self.partner_ids.write({'state':'confirmed'})
 
-	@api.multi
+	
 	def change_purchase(self, order_id):
 		for order in self.order_ids:
 			if order.id == order_id:
@@ -314,7 +311,7 @@ class purchase_comparison(models.Model):
 			else:
 				order.write({'state':'cancel', 'active_sequence':99})
     
-	@api.multi
+	
 	def get_token (self):
 		url='https://il1.nomin.mn/Inventory/api/auth'
 		params = { 
@@ -330,7 +327,7 @@ class purchase_comparison(models.Model):
 		r = result.json()
 		return r[u'token']
 
-	@api.multi
+	
 	def action_connect(self,url,params=None, data_type=None):
 		bearer_token = self.get_token()
 		header = {'Authorization': "Bearer "+bearer_token,
@@ -339,7 +336,7 @@ class purchase_comparison(models.Model):
 		res = requests.post(url, data=params, headers=header)
 		return res
   
-	@api.multi
+	
 	def send_prices_info(self):	
 		url = 'https://il1.nomin.mn/Inventory/api/ItemPurchasePrices'
 		for partner in self.partner_ids:
@@ -362,7 +359,7 @@ class purchase_comparison(models.Model):
 			
 
 
-	@api.multi
+	
 	def send_request(self):
 		if self._context is None:
 			self._context = {}
@@ -374,7 +371,7 @@ class purchase_comparison(models.Model):
 			config_id = request.request_id.id
 			vals = {}
 			if not config_id:
-				raise osv.except_osv(_('Warning !'), _("You don't have purchase requisition request configure !"))
+				raise UserError(_('Warning !'), _("You don't have purchase requisition request configure !"))
 			next_user_ids, next_seq, next_state = config_obj.purchase_forward('purchase.comparison', request.active_sequence, request.user_id.id, config_id, request.department_id.id)
 			next_user_ids1, next_seq1, next_state1 = config_obj.purchase_forward('purchase.comparison', request.active_sequence+1, request.user_id.id, config_id, request.department_id.id)
 			user = request.user_id
@@ -406,7 +403,7 @@ class purchase_comparison(models.Model):
          	if not next_user_ids1:
 	         	if count > 1 or count ==0:
 					_logger.info(u'\n\n\n\n\n\nНийлүүлэгч тоо %s \n\n\n'%(count))
-					raise osv.except_osv(_(u'Warning !'), _(u"Та шалгаруулах нэг нийлүүлэгч чагталж өгнө үү  !"))
+					raise UserError(_(u'Warning !'), _(u"Та шалгаруулах нэг нийлүүлэгч чагталж өгнө үү  !"))
 			history_obj.create(
 				{'comparison_id': request.id,
 				'user_id': self._uid,
@@ -417,7 +414,7 @@ class purchase_comparison(models.Model):
 		self.partner_ids.write({'state':next_state})
 		# self.send_notification(next_state)
 
-	@api.multi
+	
 	def unlink(self):
 		for order in self:
 			if order.state != 'draft':
@@ -431,7 +428,7 @@ class purchase_comparison(models.Model):
 					line.state = 'compare'
 		return super(purchase_comparison, self).unlink()
 
-	@api.multi
+	
 	def action_cancel(self):
 		for part  in self.partner_ids:
 			for ind in part.indicator_ids:
@@ -441,7 +438,7 @@ class purchase_comparison(models.Model):
 		self.write({'state':'draft', 'active_sequence':1})
 		self.partner_ids.write({'state':'draft'})
 
-	@api.multi
+	
 	def action_canceled(self):
 		for part  in self.partner_ids:
 			for ind in part.indicator_ids:
@@ -460,7 +457,7 @@ class purchase_comparison(models.Model):
 
 
 	
-	@api.multi
+	
 	def insert_indicators(self):
 
 		request_obj = self.env['ir.model'].search([('model', '=', 'purchase.comparison')])
@@ -477,7 +474,7 @@ class purchase_comparison(models.Model):
 						if not exists:
 							self.env['purchase.evaluation.infos'].create({'indicator_id':purch.indicator_id.id, 'partner_id':partner.id})
 
-	@api.multi
+	
 	def add_comparison_partner_action(self):
 		return {
 			'name': 'Note',
@@ -490,7 +487,7 @@ class purchase_comparison(models.Model):
 			'target': 'new',
 		}
 
-	@api.multi
+	
 	def add_comparison_product_action(self):
 		return {
 			'name': 'Note',
@@ -503,7 +500,7 @@ class purchase_comparison(models.Model):
 			'target': 'new',
 		}
 
-	@api.multi
+	
 	def action_cancel_wizard(self):
 		return {
 			'name': 'Note',
@@ -518,7 +515,7 @@ class purchase_comparison(models.Model):
 
 
 	def send_notification(self,state):
-#         model_obj = openerp.pooler.get_pool(cr.dbname).get('ir.model.data')
+#         model_obj = odoo.pooler.get_pool(cr.dbname).get('ir.model.data')
 		sel_user_ids = []
 		conf_line = self.env['request.config.purchase.line']
 		groups = self.env['res.groups']
@@ -626,7 +623,7 @@ class purchase_partner_comparison(models.Model):
                        ('canceled', 'Canceled'),  # Цуцлагдсан
                                    ]
 
-	@api.multi
+	
 	def get_possible_users(self, sel_user_ids):
 		department_ids = []
 		user_ids = self.env['res.users'].browse(sel_user_ids)
@@ -639,7 +636,7 @@ class purchase_partner_comparison(models.Model):
 					possible_user_ids.append(user.id)
 		return possible_user_ids
 
-	@api.multi
+	
 	def _check_user_in_request(self):
 		sel_user_ids = []
 		user_ids = []
@@ -674,12 +671,12 @@ class purchase_partner_comparison(models.Model):
 							if user_id :
 								sel_user_ids.append(user_id)
 							else :
-								raise osv.except_osv(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
+								raise UserError(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
 		user_ids = self.get_possible_users(sel_user_ids)
 		return user_ids
 
 
-	@api.one
+	
 	def _total_percent(self):
 		total_percent = 0.0
 		count = 0
@@ -690,7 +687,7 @@ class purchase_partner_comparison(models.Model):
 			count = 1
 		self.total_percent = total_percent / 	count
 
-	@api.one
+	
 	def _is_in_raters(self):
 		employee_ids = []
 		rate_employee_ids = []
@@ -711,7 +708,7 @@ class purchase_partner_comparison(models.Model):
 				else:
 					self.is_in_raters = True
 
-	@api.one
+	
 	def _is_in_confirm_users(self):
 		employee_ids = []
 		rate_employee_ids = []
@@ -743,20 +740,20 @@ class purchase_partner_comparison(models.Model):
 	info_ids = fields.One2many('purchase.evaluation.infos', 'partner_id', string='Purchase evaluation info')
 	is_in_raters = fields.Boolean(string='Is in raters', default=False, compute=_is_in_raters)
 	is_in_confirm_users = fields.Boolean(string='Is in is_in_confirm_users', default=False, compute=_is_in_confirm_users)
-	state = fields.Selection(STATE_SELECTION, string="State" , default='draft' , track_visibility='onchange')
+	state = fields.Selection(STATE_SELECTION, string="State" , default='draft' , tracking=True)
 	is_winner = fields.Boolean(string=u'Шалгарсан')
 	description = fields.Text(string="Description")
 	win_date = fields.Date(string='Шалгарсан огноо')
 
 
-	@api.multi
+	
 	def action_rate(self):
-		       raise osv.except_osv(_(u'Анхааруулга'), _(u'Үнэлгээ өгөх хэсэг хийгдээгүй байнa'))
+		       raise UserError(_(u'Анхааруулга'), _(u'Үнэлгээ өгөх хэсэг хийгдээгүй байнa'))
 
 class purchase_evaluation_indicators(models.Model):
 	_name = 'purchase.evaluation.indicators'
 	
-	@api.one
+	
 	def _total_percent(self):
 		total_percent = 0.0
 		count = 0
@@ -804,7 +801,7 @@ class purchase_indicator_rate_employee(models.Model):
 	_name = 'purchase.indicator.rate.employee'
 
 
-	@api.one
+	
 	def _compute_state(self):
 		employee_ids = []
 		rate_employee_ids = []
@@ -878,7 +875,7 @@ class CancelComparison(models.TransientModel):
 	comparison_id = fields.Many2one('purchase.comparison', default=_get_comparison)
 	partner_id = fields.Many2one('res.partner',string='Purchase employee')
 
-	@api.multi
+	
 	def action_cancel(self):
 		partner_id = self.comparison_id.partner_ids.search([('partner_id','=',self.partner_id.id),('comparison_id','=',self.comparison_id.id)])
 		if partner_id:

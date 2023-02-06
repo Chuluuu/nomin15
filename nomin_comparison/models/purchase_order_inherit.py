@@ -3,18 +3,18 @@
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, AccessError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, AccessError
 
 
 class PurchaseOrder(models.Model):
   _inherit = 'purchase.order'
 
-  contract_id = fields.Many2one('contract.management', string="Contract" , domain="[('customer_company','=',partner_id)]",track_visibility='onchange') #Гэрээ
+  contract_id = fields.Many2one('contract.management', string="Contract" , domain="[('customer_company','=',partner_id)]",tracking=True) #Гэрээ
 
 
 
-  @api.multi
+  
   def create_contract(self):
     vals = {
            'customer_company':self.partner_id.id,

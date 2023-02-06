@@ -16,10 +16,10 @@
 #
 ##############################################################################
 
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 from fnmatch import translate
-from openerp.osv import osv
+from odoo.osv import osv
 
 
 class purchase_order(models.Model):
@@ -52,9 +52,9 @@ class purchase_order(models.Model):
 #         ('done', 'Done'),
 #         ('cancel', 'Cancelled')
         ]
-	purchase_type= fields.Selection([('direct','Direct',),('compare','compare')],string="Purchase type",default='direct',track_visibility='onchange')
-	state = fields.Selection(STATE_SELECTION, string='Status', readonly=True, select=True, copy=False, default='draft', track_visibility='onchange')
+	purchase_type= fields.Selection([('direct','Direct',),('compare','compare')],string="Purchase type",default='direct',tracking=True)
+	state = fields.Selection(STATE_SELECTION, string='Status', readonly=True, select=True, copy=False, default='draft', tracking=True)
 	# comparison_id= fields.Many2one('purchase.comparison',string='Purchase Comparison')
-	comparison_id = fields.Many2one('purchase.comparison', string="Purchase comparison",track_visibility='onchange')
+	comparison_id = fields.Many2one('purchase.comparison', string="Purchase comparison",tracking=True)
 
 

@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <record id="view_purchase_requisition_line_distributed_work_report" model="ir.ui.view">
-                <field name="name">Хуваарилагдсан ажил</field>
-                <field name="model">distributed.purchase.requisition</field>
-                <field name="arch" type="xml">
-                    <form string="Distributed Purchase Requisition Line" >
-                        <group>
-                             <separator string="Миний хуваарилагдсан ажлууд"/>
-                        </group>
-                        <footer>
-                            <button name="export_report" string="Export" type="object" class="oe_highlight"/>
+            <field name="name">Хуваарилагдсан ажил</field>
+            <field name="model">distributed.purchase.requisition</field>
+            <field name="arch" type="xml">
+                <form string="Distributed Purchase Requisition Line">
+                    <group>
+                        <separator string="Миний хуваарилагдсан ажлууд"/>
+                    </group>
+                    <footer>
+                        <button name="export_report" string="Export" type="object" class="oe_highlight"/>
                             or
-                            <button string="Cancel" class="oe_link" special="cancel" />
-                        </footer>
-                    </form>
-                </field>
-            </record>
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
 
-        <act_window name="Хуваарилагдсан ажлын тайлан"
-            context="{}"
-            res_model="distributed.purchase.requisition"
-            src_model="purchase.requisition.line"
-            view_mode="form"
-            target="new"
-            multi="True"
-            key2="client_action_multi"
-            id="action_purchase_order_comparison_wizard"/>
+        <act_window name="Хуваарилагдсан ажлын тайлан" context="{}" res_model="distributed.purchase.requisition" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" key2="client_action_multi" id="action_purchase_order_comparison_wizard"/>
 
     </data>
-</openerp>
+</odoo>
 

@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, ValidationError
+from odoo import api, fields, models, _
 
 class ComparisonRatingSetting(models.Model):
 	_name = 'comparison.rating.setting'
-	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_inherit = ['mail.thread', 'mail.activity.mixin']
 	_description = 'Comparison rating setting'
 
-	name = fields.Char(string='Comparison rating name',track_visibility='onchange')
-	is_default = fields.Boolean(string='Is default',track_visibility='onchange')
-	purchase_comparison_id = fields.Many2one('purchase.comparison',string='Purchase comparison',track_visibility='onchange')
+	name = fields.Char(string='Comparison rating name',tracking=True)
+	is_default = fields.Boolean(string='Is default',tracking=True)
+	purchase_comparison_id = fields.Many2one('purchase.comparison',string='Purchase comparison',tracking=True)
 
 class InheritPurchaseComparison(models.Model):
 	_inherit = 'purchase.comparison'

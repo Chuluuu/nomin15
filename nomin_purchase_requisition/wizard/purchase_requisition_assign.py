@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from openerp import models, fields, api
-from openerp.tools.translate import _
-from openerp.http import request
+from odoo import models, fields, api
+from odoo.tools.translate import _
+from odoo.http import request
 import time
 import datetime
-import openerp.pooler
-import openerp.addons.decimal_precision as dp
-
+from odoo.exceptions import UserError
 class purchase_requisition_assign(models.TransientModel):
     _name = "purchase.requisition.assign"
     _description = "Purchase Requisition Assign"
@@ -15,7 +13,7 @@ class purchase_requisition_assign(models.TransientModel):
     buyer = fields.Many2one('res.users', 'Buyer', required=True)
     helper = fields.Many2one('res.users', 'Helper')
     
-    @api.multi
+    
     def add_req_line_state_history(self,line, state):
         self.env['purchase.requisition.line.state.history'].create({
                                                                 'requisition_line_id': line.id,
@@ -23,7 +21,7 @@ class purchase_requisition_assign(models.TransientModel):
                                                                 'date': time.strftime('%Y-%m-%d %H:%M:%S'),
                                                                 'state': state
                                                                 })
-    @api.multi
+    
     def create_assignment(self):
         active_ids = self._context and self._context.get('active_ids', [])
         requisition_ids = []
@@ -42,7 +40,7 @@ class purchase_requisition_assign(models.TransientModel):
                         'partner_id':data.buyer.partner_id.id})
                 self.add_req_line_state_history( line, 'assigned')
             else:
-                raise osv.except_osv(_(u'Анхааруулга!'), _(u'Та зөвхөн биелүүлэх төлөв дээр ажилтан хувиарлаж болно'))
+                raise UserError (_(u'Анхааруулга!'), _(u'Та зөвхөн биелүүлэх төлөв дээр ажилтан хувиарлаж болно'))
         is_state = False
         if buyers:
             buyers = list(set(buyers))

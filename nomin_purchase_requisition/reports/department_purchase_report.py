@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models
+from odoo import api, fields, models
 from datetime import datetime,timedelta
 from dateutil.relativedelta import relativedelta
 from operator import itemgetter
@@ -16,7 +16,7 @@ class DepartmentPurchaseReport(models.TransientModel):
 	department_ids = fields.Many2many(comodel_name = 'hr.department',string=u'Хэлтэс')
 
 
-	@api.multi
+	
 	def export_chart(self):
 		output = BytesIO()
 		workbook = xlsxwriter.Workbook(output)
@@ -328,7 +328,6 @@ class DepartmentPurchaseReport(models.TransientModel):
 
 		return {
 		'name': 'Export Report',
-		'view_type':'form',
 		'view_mode':'form',
 		'res_model':'report.excel.output',
 		'res_id':excel_id.id,

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api, _
-from openerp.tools.translate import _
+from odoo import models, fields, api, _
+from odoo.tools.translate import _
 import time
-from openerp.http import request    
-from openerp.exceptions import UserError, ValidationError
+from odoo.http import request    
+from odoo.exceptions import UserError, ValidationError
 
 class AddComparisonPartner(models.TransientModel):
 	_name = 'add.comparison.partner'
@@ -17,7 +17,7 @@ class AddComparisonPartner(models.TransientModel):
 	comparison_id = fields.Many2one('purchase.comparison', default=_get_comparison)
 	partner_ids = fields.One2many('purchase.comparison.multiple.partner','add_partner_id',string='Partner')
 
-	@api.multi
+	
 	def action_add_partner(self):
 		mail_user_ids = []
 		employee_id = self.env['hr.employee'].search([('user_id','=',self.env.user.id)])
@@ -143,7 +143,6 @@ class AddComparisonPartner(models.TransientModel):
 				# 	'message': (u'Хүлээн авах харилцагч сонгогдсон байх шаардлагтай!'),
 				# }
 		# if partners_without_emails:
-		# 	print '\n\n\n\partners_without_emails',partners_without_emails
 			
 		# 	# return {
 		# 	# 	'name': 'Note',

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <record id="view_purchase_order_inherit" model="ir.ui.view">
             <field name="name">Purchase Order</field>
             <field name="model">purchase.order</field>
             <field name="inherit_id" ref ="purchase.purchase_order_form"/>
             <field name="arch" type="xml">
-               <xpath expr="//field[@name='partner_ref']" position='after'>
+                <xpath expr="//field[@name='partner_ref']" position='after'>
                     <field name="purchase_type" groups="purchase.group_purchase_user" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
-                    <field name="comparison_id"  groups="purchase.group_purchase_user" attrs="{'invisible':[('comparison_id','=',False)],'readonly':[('state','!=','draft')]}"/>
+                    <field name="comparison_id" groups="purchase.group_purchase_user" attrs="{'invisible':[('comparison_id','=',False)],'readonly':[('state','!=','draft')]}"/>
                     <!-- <field name="comparison_id" invisible="1"/> -->
                 </xpath>
-                  
+
             </field>
         </record>
 
 
-         <record id="purchase.purchase_order_tree" model="ir.ui.view">
+        <record id="purchase.purchase_order_tree" model="ir.ui.view">
             <field name="name">purchase.order.tree</field>
             <field name="model">purchase.order</field>
             <field name="arch" type="xml">
@@ -38,4 +38,4 @@
             </field>
         </record>
     </data>
-</openerp>
+</odoo>

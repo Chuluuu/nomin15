@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models
+from odoo import api, fields, models
 from datetime import datetime,timedelta
 from operator import itemgetter
 import xlsxwriter
@@ -16,7 +16,7 @@ class PurchaseComparisonPerformanceReport(models.TransientModel):
 	user_ids = fields.Many2many(comodel_name='res.users', string=u'Ажилчид')
 
 
-	@api.multi
+	
 	def export_chart(self):
 		output = BytesIO()
 		workbook = xlsxwriter.Workbook(output)

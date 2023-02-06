@@ -377,7 +377,6 @@ class NominTender(http.Controller):
         pager = request.website.pager(url=url, total=tender_count, page=page, step=ppg, scope=7, url_args=post)
         tenders = tender_obj.search( domain, limit=ppg, offset=pager['offset'], order='name desc')
         
-#         print '\n\n\n\n\\n\n\ntender_count', tender_count
         if category:
             url = "/tender_list/category_id/link_%s" %int(category)
             tender_count = tender_obj.search_count(domain)
@@ -586,7 +585,6 @@ class NominTender(http.Controller):
         
         values = {}
         url = "/result_list"
-        print("domain",domain)
         tender_count = tender_obj.sudo().search_count(domain)
         pager = request.website.pager(url=url, total=tender_count, page=page, step=ppg, scope=7, url_args=post)
         

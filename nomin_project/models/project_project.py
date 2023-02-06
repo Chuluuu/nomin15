@@ -997,9 +997,7 @@ class ProjectProject(models.Model):
                         if project.department_id == budget_line.department_id :                
                             
                             # if budget_line:        
-                            #     print '\n\n\n line hahaha' , budget_line , budget_line.approximate_amount , budget_line.sum_of_subproject , budget_line.possible_amount_create_project            
                             #     if project.total_limit > budget_line.possible_budgeting:
-                            #         print '\n\n\n sonin in' , budget_line.possible_budgeting , budget_line
                             #         raise ValidationError(_(u'Төлөвлөсөн дүнгийн утга батлагдсан дүнгээс хэтэрсэн байна'))
                             if budget_line:
 

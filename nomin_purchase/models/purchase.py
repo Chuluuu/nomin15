@@ -1,25 +1,16 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Asterisk Technologies LLC, Enterprise Management Solution    
-#    Copyright (C) 2013-2013 Asterisk Technologies LLC (<http://www.erp.mn>). All Rights Reserved
-#
-#    Email : unuruu25@gmail.com
-#    Phone : 976 + 88005462
-#
-##############################################################################
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from openerp import api, fields, models,SUPERUSER_ID, _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp.tools.translate import _
-from openerp.tools.float_utils import float_is_zero, float_compare
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import UserError, AccessError
+from odoo import api, fields, models,SUPERUSER_ID, _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools.translate import _
+from odoo.tools.float_utils import  float_compare
+import odoo.addons.decimal_precision as dp
+from odoo.exceptions import UserError, AccessError
 import time
-from openerp.osv import osv
-from openerp.http import request    
+from odoo.osv import osv
+from odoo.http import request    
 
 
 
@@ -37,14 +28,14 @@ class PurchaseOrderEvaluationIndicators(models.Model):
         if vals.get('order_id'):
             order_id = self.env['purchase.order'].browse(vals.get('order_id'))
             if order_id.state!='draft':
-                raise osv.except_osv(_('Warning!'), _('Ноорог төлөв дээр үзүүлэлт нэмэх боломжтой.'))
+                raise UserError( _('Ноорог төлөв дээр үзүүлэлт нэмэх боломжтой.'))
 
         return super(PurchaseOrderEvaluationIndicators, self).create(vals)
 
 class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
-    @api.multi
+    
     def _set_sector(self):
             department_ids = self.env['hr.department'].get_sector(self.env.user.department_id.id)
             if department_ids :
@@ -52,25 +43,23 @@ class PurchaseOrder(models.Model):
             else :      
               return self.env.user.department_id.id
             return None
-    @api.one
+    
     def set_request(self):
         config_obj = self.env['request.config']
-        config_id = config_obj.sudo().search([('department_ids','=',self.department_id.id),('process','=','purchase.comparison')])
+        config_id = config_obj.sudo().search([('department_ids','=',self.department_id.id),('process','=','purchase.comparison')],limit = 1)
         if config_id:
-            return config_id[0]
+            return config_id
         else:
             return False
     
-    @api.multi
+    
     def _set_department(self):
         employee_id = self.env['hr.employee'].sudo().search([('user_id','=',self._uid)])
-        if employee_id:
+        if employee_id and employee_id.department_id:
             return employee_id.department_id.id
-        else:
-            raise osv.except_osv(_('Warning!'), _('You don\'t have related department. Please contact administrator.'))
         return None
 
-    @api.multi
+    
     def _check_user_in_request(self, state):
         sel_user_ids= []
         user_ids = []
@@ -95,11 +84,11 @@ class PurchaseOrder(models.Model):
                             if user_id :
                                 sel_user_ids.append( user_id)
                             else :
-                                raise osv.except_osv(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
+                                raise UserError( _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
         user_ids = self.get_possible_users( sel_user_ids)
         return user_ids
 
-    @api.one
+    
     def _is_in_sent(self):
         if self.state=='draft':
             sel_user_ids = self._check_user_in_request('sent')
@@ -108,7 +97,7 @@ class PurchaseOrder(models.Model):
                     self.is_in_sent = True
                 else:
                     self.is_in_sent = False
-    @api.one
+    
     def _is_in_approve(self):
         sel_user_ids = []
         sel_user_ids = self._check_user_in_request('approved')
@@ -117,7 +106,7 @@ class PurchaseOrder(models.Model):
         else:
             self.is_in_approve = False  
     
-    @api.one
+    
     def _is_in_verify(self):
 
         sel_user_ids = []
@@ -127,7 +116,7 @@ class PurchaseOrder(models.Model):
         else:
             self.is_in_verify = False   
 
-    @api.one
+    
     def _is_in_confirm(self):
         sel_user_ids = []
         sel_user_ids = self._check_user_in_request('confirmed')
@@ -136,16 +125,17 @@ class PurchaseOrder(models.Model):
         else:
             self.is_in_confirm = False  
 
-    @api.multi
+    
     def _set_request(self):
         config_id = False
         employee_id = self.env['hr.employee'].sudo().search([('user_id','=',self._uid)])
         sector_id = self.env['hr.department'].get_sector(self.env.user.department_id.id)
         sector_obj = self.env['hr.department'].browse(sector_id)
-        config_id = self.env['request.config'].search([('department_ids','=',sector_id),('process','=','purchase.order')])   
+        config_id = self.env['request.config'].search([('department_ids','=',sector_id),('process','=','purchase.order')],limit = 1)   
         if not config_id:
-                raise osv.except_osv(_('Warning !'), _(u"Таны %s хэлтэс дээр урсгал тохиргоо хийгдээгүй байна." % sector_obj.name))
-        return config_id[0]
+            return False
+                # raise UserError( _(u"Таны %s хэлтэс дээр урсгал тохиргоо хийгдээгүй байна." % sector_obj.name))
+        return config_id
 
     @api.model
     def _is_portal_user(self):
@@ -160,23 +150,23 @@ class PurchaseOrder(models.Model):
         'done': [('readonly', True)],
         'cancel': [('readonly', True)],
     }
-    request_id = fields.Many2one('request.config',string='Workflow config' ,domain="[('department_ids','=',sector_id),('process','=','purchase.order')]", track_visibility='onchange', default=_set_request) #Урсгал тохиргоо    
+    request_id = fields.Many2one('request.config',string='Workflow config' ,domain="[('department_ids','=',sector_id),('process','=','purchase.order')]", tracking=True, default=_set_request) #Урсгал тохиргоо    
 
-    payment_request_id = fields.Many2one('payment.request', string='Payment request',index=True,track_visibility='onchange') #Төлбөрийн хүсэлт
-    indicator_lines = fields.One2many('purchase.order.evaluation.indicators','order_id', string='Rates',track_visibility='onchange') #Үзүүлэлтүүд
+    payment_request_id = fields.Many2one('payment.request', string='Payment request',index=True,tracking=True) #Төлбөрийн хүсэлт
+    indicator_lines = fields.One2many('purchase.order.evaluation.indicators','order_id', string='Rates',tracking=True) #Үзүүлэлтүүд
     active_sequence = fields.Integer(string="Active sequence", default=1)
-    user_id = fields.Many2one('res.users', string="User", index=True,default=lambda self: self.env.user.id,track_visibility='onchange') #Хэрэглэгч
-    sector_id = fields.Many2one('hr.department', 'Performer sector',index=True,domain="[('is_sector','=',True)]", default=_set_sector,track_visibility='onchange') #Гүйцэтгэгч салбар 
-    department_id = fields.Many2one('hr.department', 'Performer department',index=True,default=_set_department, track_visibility='onchange') #Гүйцэтгэгч хэлтэс
-    rfq_department_id = fields.Many2one('hr.department', 'Order department', index=True,default=_set_department, track_visibility='onchange') #Захиалагч хэлтэс
-    confirmed_date  = fields.Date(string='Confirmed date',track_visibility='onchange') #Батлагдсан огноо
-    rfq_date_term  = fields.Date(string='The Quotation valid date',track_visibility='onchange') #Үнийн саналын хүчинтэй хугацаа
-    is_rfq_closed = fields.Boolean(string='Is RFQ Closed',track_visibility='onchange') #RFQ хаалттай авах эсэх
+    user_id = fields.Many2one('res.users', string="User", index=True,default=lambda self: self.env.user.id,tracking=True) #Хэрэглэгч
+    sector_id = fields.Many2one('hr.department', 'Performer sector',index=True,domain="[('is_sector','=',True)]", default=_set_sector,tracking=True) #Гүйцэтгэгч салбар 
+    department_id = fields.Many2one('hr.department', 'Performer department',index=True,default=_set_department, tracking=True) #Гүйцэтгэгч хэлтэс
+    rfq_department_id = fields.Many2one('hr.department', 'Order department', index=True,default=_set_department, tracking=True) #Захиалагч хэлтэс
+    confirmed_date  = fields.Date(string='Confirmed date',tracking=True) #Батлагдсан огноо
+    rfq_date_term  = fields.Date(string='The Quotation valid date',tracking=True) #Үнийн саналын хүчинтэй хугацаа
+    is_rfq_closed = fields.Boolean(string='Is RFQ Closed',tracking=True) #RFQ хаалттай авах эсэх
     is_open_date = fields.Boolean(string='Is RFQ opening day', default=True) #RFQ нээх өдөр мөн эсэх
     rfq_close_date = fields.Datetime(string='RFQ deadline') #Үнийн санал авах сүүлийн хугацаа
     rfq_open_date = fields.Datetime(string='RFQ opening date') #Үнийн санал нээх хугацаа
     currency_id = fields.Many2one('res.currency', 'Currency', required=True, states=READONLY_STATES,\
-        default=lambda self: self.env.user.company_id.currency_id.id, track_visibility='onchange')
+        default=lambda self: self.env.user.company_id.currency_id.id, tracking=True)
     related_currency_id = fields.Many2one('res.currency', 'Currency', related='currency_id')
 #     tender_id = fields.Many2one('tender.tender', string=u"Тендер")
 
@@ -187,7 +177,7 @@ class PurchaseOrder(models.Model):
              "delivery order sent by your vendor.")
 
     date_order = fields.Datetime('Order Date', required=True, states=READONLY_STATES, select=True, copy=False, default=fields.Datetime.now,\
-        help="Depicts the date where the Quotation should be validated and converted into a purchase order.",track_visibility='onchange')
+        help="Depicts the date where the Quotation should be validated and converted into a purchase order.",tracking=True)
     state = fields.Selection([
         ('draft', 'Draft PO'), #Ноорог PO
         ('sent', 'Sent'), #Илгээгдсэн
@@ -200,68 +190,68 @@ class PurchaseOrder(models.Model):
         ('confirmed','Confirmed'), #Батласан
         ('done', 'Done'), #Дууссан
         ('cancel', 'Canceled') #Цуцлагдсан
-        ], string='Status', readonly=True, select=True, copy=False, default='draft', track_visibility='onchange')
+        ], string='Status', readonly=True, select=True, copy=False, default='draft', tracking=True)
     
 
     is_in_sent = fields.Boolean(string='Is in sent', compute= _is_in_sent, default=False)
-    is_in_approve = fields.Boolean(string='Is in sent' ,compute= _is_in_approve, default=False)
-    is_in_confirm = fields.Boolean(string='Is in sent', compute= _is_in_confirm, default=False)
-    is_in_verify = fields.Boolean(string='Is in sent',compute= _is_in_verify, default=False)
+    is_in_approve = fields.Boolean(string='Is in approve' ,compute= _is_in_approve, default=False)
+    is_in_confirm = fields.Boolean(string='Is in confirm', compute= _is_in_confirm, default=False)
+    is_in_verify = fields.Boolean(string='Is in verify',compute= _is_in_verify, default=False)
 
-    length_of_warranty = fields.Integer(string='Length of warranty', default = 0,track_visibility='onchange') #Баталгаат хугацаатай эсэх (сараар)
-    is_carriage = fields.Selection([('yes', u"Yes"),('no', u"No"),], string='Carriage',track_visibility='onchange') #Тээврийн зардал багтсан эсэх
+    length_of_warranty = fields.Integer(string='Length of warranty', default = 0,tracking=True) #Баталгаат хугацаатай эсэх (сараар)
+    is_carriage = fields.Selection([('yes', u"Yes"),('no', u"No"),], string='Carriage',tracking=True) #Тээврийн зардал багтсан эсэх
     is_VAT = fields.Selection(
         [('has_VAT', u"Тийм"),
         ('hasnt_VAT', u"Үгүй"),
         ('has_ebarimt', u"ebarimt-тай хувь хүн"),
         ('hasnt_ebarimt', u"ebarimt-гүй хувь хүн")
-        ], string=u'НӨАТ төлөгч эсэх',track_visibility='onchange')
-    cost_of_assembling = fields.Integer(string='Cost of assembling', default = 0,track_visibility='onchange' )#Угсралтын зардалтай эсэх
-    time_of_delivery = fields.Integer(string='Time of delivery', default = 0,track_visibility='onchange') #Нийлүүлэх хугацаа (хоногоор)
+        ], string=u'НӨАТ төлөгч эсэх',tracking=True)
+    cost_of_assembling = fields.Integer(string='Cost of assembling', default = 0,tracking=True )#Угсралтын зардалтай эсэх
+    time_of_delivery = fields.Integer(string='Time of delivery', default = 0,tracking=True) #Нийлүүлэх хугацаа (хоногоор)
 
-    equipment_amount    = fields.Float('Machine expense',track_visibility='onchange') #Машин механизмын зардал
-    carriage_amount     = fields.Float('Transportation expense',track_visibility='onchange') #Тээврийн зардал
-    postage_amount      = fields.Float('Direct expense',track_visibility='onchange') #Шууд зардал
-    other_amount        = fields.Float('Other expense',track_visibility='onchange') #Бусад зардал
+    equipment_amount    = fields.Float('Machine expense',tracking=True) #Машин механизмын зардал
+    carriage_amount     = fields.Float('Transportation expense',tracking=True) #Тээврийн зардал
+    postage_amount      = fields.Float('Direct expense',tracking=True) #Шууд зардал
+    other_amount        = fields.Float('Other expense',tracking=True) #Бусад зардал
 
-    rfq_equipment_amount    = fields.Float('RFQ machine expense',track_visibility='onchange') #Үнийн санал машин механизмын зардал
-    rfq_carriage_amount     = fields.Float('RFQ transportation expense',track_visibility='onchange') #Үнийн санал тээврийн зардал
-    rfq_postage_amount      = fields.Float('RFQ direct expense',track_visibility='onchange') #Үнийн санал шууд зардал
-    rfq_other_amount        = fields.Float('RFQ other expense',track_visibility='onchange') #Үнийн санал бусад зардал
+    rfq_equipment_amount    = fields.Float('RFQ machine expense',tracking=True) #Үнийн санал машин механизмын зардал
+    rfq_carriage_amount     = fields.Float('RFQ transportation expense',tracking=True) #Үнийн санал тээврийн зардал
+    rfq_postage_amount      = fields.Float('RFQ direct expense',tracking=True) #Үнийн санал шууд зардал
+    rfq_other_amount        = fields.Float('RFQ other expense',tracking=True) #Үнийн санал бусад зардал
     history_emp   = fields.Many2one('hr.employee', string = 'History employee')
 
-    delivery_condition      = fields.Selection([('required', u"Required"),('not_required', u"Not required")], string='Delivery condition', track_visibility='onchange') # Хүргэлтийн нөхцөл
-    rfq_delivery_condition  = fields.Selection([('free', u"Free"),('paid', u"Paid"),('no_delivery',u'No delivery')], string='RFQ delivery condition', track_visibility='onchange') # Үнийн санал хүргэлтийн  нөхцөл
-    delivery_cost           = fields.Integer('Delivery cost', track_visibility='onchange') # Хүргэлтийн үнэ
-    installation_condition   = fields.Selection([('required', u"Required"),('not_required', u"Not required")], string='Installation condition', track_visibility='onchange') # Угсралт, суурилуулалтын нөхцөл
-    rfq_installation_condition = fields.Selection([('free', u"Free"),('paid', u"Paid")], string='RFQ installation condition', track_visibility='onchange') # Үнийн санал угсралт, суурилуулалтын нөхцөл
-    installation_cost       = fields.Integer('Installation cost', track_visibility='onchange') # Угсралтын үнэ
+    delivery_condition      = fields.Selection([('required', u"Required"),('not_required', u"Not required")], string='Delivery condition', tracking=True) # Хүргэлтийн нөхцөл
+    rfq_delivery_condition  = fields.Selection([('free', u"Free"),('paid', u"Paid"),('no_delivery',u'No delivery')], string='RFQ delivery condition', tracking=True) # Үнийн санал хүргэлтийн  нөхцөл
+    delivery_cost           = fields.Integer('Delivery cost', tracking=True) # Хүргэлтийн үнэ
+    installation_condition   = fields.Selection([('required', u"Required"),('not_required', u"Not required")], string='Installation condition', tracking=True) # Угсралт, суурилуулалтын нөхцөл
+    rfq_installation_condition = fields.Selection([('free', u"Free"),('paid', u"Paid")], string='RFQ installation condition', tracking=True) # Үнийн санал угсралт, суурилуулалтын нөхцөл
+    installation_cost       = fields.Integer('Installation cost', tracking=True) # Угсралтын үнэ
 
-    delivery_term       = fields.Char('Delivery term /day/', track_visibility='onchange') # Нийлүүлэх хугацаа /хоног/
-    rfq_delivery_term   = fields.Char('RFQ delivery term /day/', track_visibility='onchange')# Үнийн санал нийлүүлэх хугацаа /хоног/
-    warranty_period     = fields.Char('Warranty period /day/', track_visibility='onchange') # Баталгаат хугацаа /хоног/
-    rfq_warranty_period = fields.Char('RFQ warranty period /day/', track_visibility='onchange') # Үнийн санал баталгаат хугацаа /хоног/
-    return_condition    = fields.Char('Return condition', track_visibility='onchange') # Буцаалтын нөхцөл
-    rfq_return_condition = fields.Char('RFQ return condition', track_visibility='onchange') # Үнийн санал буцаалтын нөхцөл
+    delivery_term       = fields.Char('Delivery term /day/', tracking=True) # Нийлүүлэх хугацаа /хоног/
+    rfq_delivery_term   = fields.Char('RFQ delivery term /day/', tracking=True)# Үнийн санал нийлүүлэх хугацаа /хоног/
+    warranty_period     = fields.Char('Warranty period /day/', tracking=True) # Баталгаат хугацаа /хоног/
+    rfq_warranty_period = fields.Char('RFQ warranty period /day/', tracking=True) # Үнийн санал баталгаат хугацаа /хоног/
+    return_condition    = fields.Char('Return condition', tracking=True) # Буцаалтын нөхцөл
+    rfq_return_condition = fields.Char('RFQ return condition', tracking=True) # Үнийн санал буцаалтын нөхцөл
 
-    loan_term           = fields.Char('Loan term', track_visibility='onchange') # Зээлийн хугацаа
-    rfq_loan_term       = fields.Char('RFQ loan term', track_visibility='onchange') # Үнийн санал зээлийн хугацаа
-    barter_percentage   = fields.Char('Barter percentage', track_visibility='onchange') # Бартерийн хувь
-    rfq_barter_percentage = fields.Char('RFQ barter percentage', track_visibility='onchange') # Үнийн санал бартерийн хувь
+    loan_term           = fields.Char('Loan term', tracking=True) # Зээлийн хугацаа
+    rfq_loan_term       = fields.Char('RFQ loan term', tracking=True) # Үнийн санал зээлийн хугацаа
+    barter_percentage   = fields.Char('Barter percentage', tracking=True) # Бартерийн хувь
+    rfq_barter_percentage = fields.Char('RFQ barter percentage', tracking=True) # Үнийн санал бартерийн хувь
 
-    vat_condition       = fields.Selection([('required', u"Required"),('not_required', u"Not required")], string='VAT condition', track_visibility='onchange') # НӨАТ төлөгч байхыг шаардах эсэх
+    vat_condition       = fields.Selection([('required', u"Required"),('not_required', u"Not required")], string='VAT condition', tracking=True) # НӨАТ төлөгч байхыг шаардах эсэх
     vat_amount          = fields.Integer('VAT value') #НӨАТатвар
 
     is_portal_user = fields.Boolean('Portal User', compute='_is_portal_user', default = False)
     is_created_in_sent = fields.Boolean('Created in sent', default = False)
     
-    @api.multi
+    
     def get_request(self, department_id):
         config_id = False
         config_id = self.env['request.config'].search([('department_ids','=',department_id),('process','=','purchase.order')])
         return config_id
 
-    @api.multi
+    
     def get_possible_users(self, sel_user_ids):
         department_ids = []
         user_ids = self.env['res.users'].sudo().browse(sel_user_ids)
@@ -278,40 +268,32 @@ class PurchaseOrder(models.Model):
     def onchange_department(self):
         self.request_id = self.get_request(self.sector_id.id)
 
-    @api.multi
+    
     def action_send(self):
         self.send_request()
 
-    @api.multi
+    
     def action_verify(self):
         self.change_state()
-    @api.multi
+    
     def action_approve(self):
         self.change_state()
 
-    @api.multi
+    
     def action_confirm(self):
         self.change_state()
         history_obj = self.env['request.history'].search([('order_id','=',self.id)])
-        print'______________history_obj______________',history_obj
         count = 0;
         for qqq in history_obj:
             if count == 0:
                 employee_id = self.env['hr.employee'].sudo().search([('user_id','=',qqq.user_id.id)])
-                print'______________employee_id______________',employee_id.job_id
                 self.update({
-                                'history_emp': employee_id.id,
-                             
-                                # 'tobe_job_id': obj.job_id.id,
-                                # 'tobe_department_id':obj.department_id.id,
-                                # 'tobe_salary_grade_id':obj.contract_id.grade_id.id,
-                                # 'tobe_salary':obj.contract_id.grade_id.salary,
+                                'history_emp': employee_id.id,                  
                                 })
-                print'__________HISTORY_EMP___________',self.history_emp
             count+=1
         
 
-    @api.multi
+    
     def action_rfq_back(self):
         for order in self.order_line:
             if not order.price_unit > 0:
@@ -336,7 +318,6 @@ class PurchaseOrder(models.Model):
 #         self.send_notification(cr, uid, ids,'rejected',context=context)
         return {
             'name': 'Note',
-            'view_type': 'form',
             'view_mode': 'form',
             #'view_id': [res and res[1] or False],
             'res_model': 'purchase.order.cancel',
@@ -346,7 +327,7 @@ class PurchaseOrder(models.Model):
             'target': 'new',
             #'res_id': ids[0]  or False,
         }
-    @api.multi
+    
     def change_state(self):
         purchase_line = self.env['request.config.purchase.line']
         line_ids = purchase_line.search([('sequence','=',self.active_sequence),('request_id','=',self.request_id.id)])
@@ -370,7 +351,7 @@ class PurchaseOrder(models.Model):
                 self.create_history('purchase')
                 self._create_picking()
 
-    @api.multi
+    
     def send_request(self):
         if self._context is None:
             self._context = {}
@@ -381,14 +362,14 @@ class PurchaseOrder(models.Model):
             config_id = request.request_id.id
             vals = {}
             if not config_id:
-                raise osv.except_osv(_('Warning !'), _("You don't have purchase requisition request configure !"))
+                raise UserError( _("You don't have purchase requisition request configure !"))
             user = request.user_id
             next_user_ids, next_seq, next_state = config_obj.purchase_forward('purchase.order',request.active_sequence, request.user_id.id,config_id,request.department_id.id)
             next_user_ids1, next_seq1, next_state1 = config_obj.purchase_forward('purchase.requistion',request.active_sequence+1, request.user_id.id,config_id,request.department_id.id)
         next_user_ids1 = self.get_possible_users(next_user_ids1)
 
         if not next_user_ids1:
-            raise osv.except_osv(_('Warning !'), _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))           
+            raise UserError( _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))           
         if next_user_ids:
                 vals.update({'state':next_state,'active_sequence':request.active_sequence+1})
         
@@ -406,17 +387,17 @@ class PurchaseOrder(models.Model):
                 cr.execute("update purchase_order set is_open_date =True ,state='back' where id =%s" %fetch)
                 cr.execute("update purchase_order_line set is_rfq_closed = False where order_id =%s" %fetch)
 
-    @api.multi
+    
     def print_quotation(self):
         
         return self.env['report'].get_action(self, 'purchase.report_purchasequotation')
 
-    @api.multi
+    
     def action_processed(self):
         pass
         return {}
     
-    @api.multi
+    
     def action_back_supply(self):
         for order in self:
             order.write({'state': 'back'})
@@ -460,7 +441,7 @@ class PurchaseOrder(models.Model):
         }
 
     
-    @api.multi
+    
     def _create_picking(self):
         for order in self:
             if any([ptype in ['product', 'consu'] for ptype in order.order_line.mapped('product_id.type')]):
@@ -483,7 +464,7 @@ class PurchaseOrder(models.Model):
 
         return True
     
-    @api.multi
+    
     def create_history(self,state):
         history_obj = self.env['request.history']
         history_obj.create(
@@ -493,14 +474,14 @@ class PurchaseOrder(models.Model):
                 'type': state,
                 })
 
-    @api.multi
+    
     def unlink(self):
         for order in self:
            
             if order.state != 'draft':
                 raise UserError(_(u'Ноорог төлөвтэй захиалга устгаж болно.'))
         return super(PurchaseOrder, self).unlink()
-    @api.multi
+    
     def action_rfq_send_partner(self):
         '''
         This function opens a window to compose an email, with the edi purchase template message loaded by default
@@ -529,7 +510,6 @@ class PurchaseOrder(models.Model):
         return {
             'name': _('Compose Email'),
             'type': 'ir.actions.act_window',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'mail.compose.message',
             'views': [(compose_form_id, 'form')],
@@ -540,7 +520,7 @@ class PurchaseOrder(models.Model):
         
 
 
-    @api.multi
+    
     def _check_user(self, state):
         sel_user_ids= []
         user_ids = []
@@ -565,11 +545,11 @@ class PurchaseOrder(models.Model):
                             if user_id :
                                 sel_user_ids.append( user_id)
                             else :
-                                raise osv.except_osv(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
+                                raise UserError( _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
         user_ids = self.get_possible_users( sel_user_ids)
         return user_ids
     def send_notification(self,state):
-#         model_obj = openerp.pooler.get_pool(cr.dbname).get('ir.model.data')
+#         model_obj = odoo.pooler.get_pool(cr.dbname).get('ir.model.data')
         sel_user_ids = []
         conf_line = self.env['request.config.purchase.line']
         groups = self.env['res.groups']
@@ -624,7 +604,7 @@ class PurchaseOrder(models.Model):
                             <p><b><li> Салбар: %s</li></b></p>
                             <p><b><li> Хэлтэс: %s</li></b></p>
                             <p><b><li> Хүсч буй хугацаа: %s</li></b></p>
-                            <p><li> <b><a href=%s/web?db=%s#id=%s&view_type=form&model=purchase.order&action=%s>Захиалгын мэдэгдэл</a></b> цонхоор дамжин харна уу.</li></p>
+                            <p><li> <b><a href=%s/web?db=%s#id=%s&model=purchase.order&action=%s>Захиалгын мэдэгдэл</a></b> цонхоор дамжин харна уу.</li></p>
 
                             </br>
                             <p>---</p>
@@ -675,7 +655,7 @@ class purchase_order_inherit(models.Model):
     _inherit = 'purchase.order'
 
     @api.depends('order_line.market_price_total')
-    @api.one
+    
     def _market_price_total(self):
         total = 0.0
         for order in self:
@@ -683,7 +663,7 @@ class purchase_order_inherit(models.Model):
                 total =total+ line.market_price_total
             order.market_price_total = total
 
-    @api.multi
+    
     def _expense_total(self):
         total = 0.0
         for order in self:
@@ -720,7 +700,7 @@ class purchase_order_inherit(models.Model):
     history_lines = fields.One2many('request.history','order_id', string='State history',  readonly=True) #Төлөвийн түүх
 
 
-    @api.one
+    
     def copy(self, default=None):
         """ Need to set origin after copy because original copy clears origin
         """
@@ -751,16 +731,16 @@ class purchase_order_inherit(models.Model):
         #                 'base_url': self.pool.get('ir.config_parameter').get_param(cr, uid, 'web.base.url'),
         #                 'action_id': self.pool.get('ir.model.data').get_object_reference(cr, uid, 'purchase', 'purchase_form_action')[1],
         #                 'id': order.id,
-        #                 'db_name': cr.dbname, #openerp.http.request.session.db
+        #                 'db_name': cr.dbname, #odoo.http.request.session.db
         #                 'menu_path': u'Худалдан авалт / Худалдан авалт / Худалдан авах захиалгууд',
         #                 }
             
         #         self.pool.get('mail.template').send_mail(cr, uid, template_id, order.user_id.id, force_send=True, context=data)
     
-class MailComposeMessage(models.Model):
+class MailComposeMessage(models.TransientModel):
     _inherit = 'mail.compose.message'
 
-    @api.multi
+    
     def send_mail(self, auto_commit=False):
         if self._context.get('default_model') == 'purchase.order' and self._context.get('default_res_id'):
             order = self.env['purchase.order'].browse([self._context['default_res_id']])
@@ -773,12 +753,12 @@ class purchase_order_line(models.Model):
 
 
 
-    @api.multi
+    
     def _market_price_total(self):
         
         for line in self:
             line.market_price_total = line.market_price * line.product_qty
-    @api.multi
+    
     def _is_portal_user(self):
         user_id = self.env['res.users'].browse(self._uid)
         for line in self:
@@ -806,7 +786,7 @@ class purchase_order_line(models.Model):
         self.price_unit = self.product_id.sudo().cost_price
         
 
-    @api.multi
+    
     def unlink(self):
         for order in self:
            
@@ -825,7 +805,7 @@ class purchase_order_line(models.Model):
 
         return super(purchase_order_line, self).create(vals)
 
-    @api.one
+    
     def copy(self, default=None):
         """ Need to set origin after copy because original copy clears origin
 
@@ -845,7 +825,7 @@ class purchase_order_line(models.Model):
         return newpo
 
 
-    @api.multi
+    
     def _create_stock_moves(self, picking):
         moves = self.env['stock.move']
         done = self.env['stock.move'].browse()

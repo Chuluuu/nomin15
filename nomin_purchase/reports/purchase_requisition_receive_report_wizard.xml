@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
 
 
-    <record id="form_purchase_requisition_receive_report_wizard_view" model="ir.ui.view">
-        <field name="name">Бараа хүлээн авалтын тайлан</field>
-        <field name="model">purchase.receive.report.wizard</field>
-        <field name="arch" type="xml">
-            <form string="Бараа хүлээн авалтын тайлан">
-                <group>
+        <record id="form_purchase_requisition_receive_report_wizard_view" model="ir.ui.view">
+            <field name="name">Бараа хүлээн авалтын тайлан</field>
+            <field name="model">purchase.receive.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Бараа хүлээн авалтын тайлан">
                     <group>
-                        <field name="start_date" required="1"/>
-                        
-                    </group>
-                    <group>
-                            <field name="end_date" required="1"/>
-                    </group>
-                </group>
-                <notebook>
-                    <page string="Хэлтэс">
-                        <field name="department_ids" widget="many2many_tags" options="{'no_create': True}"/>
-                    </page>
-                    
-                </notebook>
+                        <group>
+                            <field name="start_date" required="1"/>
 
-                     <footer>
+                        </group>
+                        <group>
+                            <field name="end_date" required="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Хэлтэс">
+                            <field name="department_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        </page>
+
+                    </notebook>
+
+                    <footer>
                         <button name="export_report" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/>
                         or
                         <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
-            </form>
-        </field>
-    </record>
+                </form>
+            </field>
+        </record>
 
 
 
@@ -39,10 +39,9 @@
 
 
 
-     <record model="ir.actions.act_window" id="action_purchase_requisition_receive_report_wizard">
+        <record model="ir.actions.act_window" id="action_purchase_requisition_receive_report_wizard">
             <field name="name">Бараа хүлээн авалтын тайлан</field>
             <field name="res_model">purchase.receive.report.wizard</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="form_purchase_requisition_receive_report_wizard_view"/>
             <field name="target">new</field>
@@ -50,7 +49,6 @@
 
 
 
-    <!-- <menuitem name="Бараа хүлээн авалтын тайлан" id="menu_purchase_requisition_receive_report_wizard" parent="nomin_purchase.parent_menu_purchase_report_wizard"
-            action="action_purchase_requisition_receive_report_wizard" sequence="6" /> -->
+        <!-- <menuitem name="Бараа хүлээн авалтын тайлан" id="menu_purchase_requisition_receive_report_wizard" parent="nomin_purchase.parent_menu_purchase_report_wizard" action="action_purchase_requisition_receive_report_wizard" sequence="6" /> -->
     </data>
-</openerp>
+</odoo>

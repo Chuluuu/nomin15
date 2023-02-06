@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<openerp>
+<odoo>
     <data>
 
         <record id="product.product_product_tree_view" model="ir.ui.view">
@@ -30,7 +30,7 @@
         </record>
 
 
-         <record id="stock.view_stock_product_tree" model="ir.ui.view">
+        <record id="stock.view_stock_product_tree" model="ir.ui.view">
             <field name="name">product.stock.tree.inherit</field>
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_product_tree_view"/>
@@ -50,4 +50,4 @@
         <menuitem id="menut_purchase_order_line" name="Захиалгын мөр" groups="nomin_purchase_requisition.group_procurement_admin" parent="purchase.menu_procurement_management" action="nomin_purchase.action_purchase_order_line" sequence="7" />
 
     </data>
-</openerp>
+</odoo>

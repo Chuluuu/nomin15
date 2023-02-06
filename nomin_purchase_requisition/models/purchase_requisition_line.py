@@ -2,10 +2,9 @@
 # from email.policy import default
 #from email.policy import default
 from this import d
-from openerp import api, fields, models, _
 from datetime import date, datetime, timedelta
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 class PurchaseRequisitionLine(models.Model):
 	_inherit = 'purchase.requisition.line'
@@ -13,14 +12,14 @@ class PurchaseRequisitionLine(models.Model):
 	_rec_name = 'product_id'
 	
 
-	# @api.multi
+	# 
 	# @api.depends('supplied_quantities.supplied_product_quantity')
 	# def _supplied_quantity(self):
 
 	# 	for obj in self:
 	# 		obj.supplied_quantity = sum([line.supplied_product_quantity for line in obj.supplied_quantities])
 
-	# @api.multi
+	# 
 	# @api.depends('supplied_quantities.supplied_amount')
 	# def _supplied_amount(self):
 
@@ -60,7 +59,7 @@ class PurchaseRequisitionLine(models.Model):
 				else:
 					raise UserError(u'Урьтамж сонгогдоогүй байна.')
 	
-	@api.multi
+	
 	def _is_new_requisition(self):
 		if datetime.now() > datetime.strptime('2022-09-29','%Y-%m-%d'):
 			return True
@@ -179,15 +178,15 @@ class PurchaseRequisitionLine(models.Model):
 	the_size = fields.Char( string='The size of work')
 	country = fields.Char(string='Country')
 	product_price = fields.Float(string='Product unit price')
-	buyer = fields.Many2one('res.users', string='Buyer', track_visibility='onchange',domain=_get_buyer)
+	buyer = fields.Many2one('res.users', string='Buyer', tracking=True,domain=_get_buyer)
 	state = fields.Selection(STATE_SELECTION,
-				string='Status', track_visibility='onchange', required=True)
+				string='Status', tracking=True, required=True)
 	user_id = fields.Many2one(related='requisition_id.user_id',string='User', store=True, readonly=True)
-	date_start = fields.Date(string='date start', track_visibility='onchange')
-	date_end = fields.Date(string='date end', track_visibility='onchange')
+	date_start = fields.Date(string='date start', tracking=True)
+	date_end = fields.Date(string='date end', tracking=True)
 	reg_file = fields.Many2one('ir.attachment',string='Ir attachment')
-	accountant_id = fields.Many2one('res.users', string='Accountant', track_visibility='onchange')
-	accountant_ids = fields.Many2many('res.users', string='Accountant', track_visibility='onchange')
+	accountant_id = fields.Many2one('res.users', string='Accountant', tracking=True)
+	accountant_ids = fields.Many2many('res.users', string='Accountant', tracking=True)
 	supplied_quantities = fields.One2many('purchase.requisition.supplied.quantity', 'line_id', string='Supplied Quantities')
 	_defaults = {
 							'product_qty':1,
@@ -195,7 +194,7 @@ class PurchaseRequisitionLine(models.Model):
 							'state':'draft',
 								 }
 
-	comparison_user_id = fields.Many2one('res.users',string='Comparison employee', domain=_get_comparison_users , track_visibility='onchange')
+	comparison_user_id = fields.Many2one('res.users',string='Comparison employee', domain=_get_comparison_users , tracking=True)
 	comparison_id = fields.Many2one('purchase.comparison',string='Comparison')
 	comparison_state = fields.Selection(COMPARISON_STATE_SELECTION, string='Comparison state')
 	comparison_date_end = fields.Date(string='Comparison date end')
@@ -237,7 +236,7 @@ class PurchaseRequisitionLine(models.Model):
 	# 		result.update({'supplied_amount': vals.get('supplied_quantity') * result.supplied_price})
 
 
-	@api.multi
+	
 	def write(self, vals):
 		if vals.get('state'):
 			for line in self:
@@ -265,7 +264,6 @@ class PurchaseRequisitionLine(models.Model):
 					'supplied_amount':self.supplied_amount,
 					'user_id':self.env.user.id
 				}
-				print '\n\n vals',vals
 				supplied_obj = self.env['purchase.requisition.supplied.quantity'].create(vals)
 			elif len(self.supplied_quantities) == 1: 
 				self.supplied_quantities.update({'partner_id': vals.get('partner_id'),
@@ -282,7 +280,7 @@ class PurchaseRequisitionLine(models.Model):
 
 		return result
 
-	@api.multi
+	
 	def action_purchase_line_open(self):
 
 		mod_obj = self.env['ir.model.data']
@@ -290,7 +288,6 @@ class PurchaseRequisitionLine(models.Model):
 		res = mod_obj.get_object_reference('nomin_purchase_requisition', 'action_purchase_requisition_line_wizard')
 		return {
 			'name': 'Note',
-			'view_type': 'form',
 			'view_mode': 'form',
 			'res_model': 'purchase.requisition.line.wizard',
 			'context': self._context,
@@ -336,7 +333,7 @@ class purchase_requisition_supplied_quantity(models.Model):
 		
 
 
-	@api.multi
+	
 	def write(self, vals):
 
 
@@ -360,7 +357,7 @@ class purchase_requisition_supplied_quantity(models.Model):
 		self.supplied_amount = self.supplied_product_quantity * self.supplied_product_price
 		
 
-	@api.multi
+	
 	def unlink(self):
 
 		for self1 in self:

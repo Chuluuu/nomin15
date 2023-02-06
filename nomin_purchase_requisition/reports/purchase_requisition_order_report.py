@@ -12,19 +12,18 @@
 from datetime import datetime,timedelta,date
 from dateutil import parser
 from dateutil.relativedelta import relativedelta
-from openerp import api, fields, models, _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp.tools.translate import _
-from openerp.tools.float_utils import float_is_zero, float_compare
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import UserError, AccessError
+from odoo import api, fields, models, _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools.translate import _
+from odoo.tools.float_utils import float_is_zero, float_compare
+import odoo.addons.decimal_precision as dp
+from odoo.exceptions import UserError, AccessError
 import time
-from openerp.osv import osv
-from openerp.http import request    
+from odoo.osv import osv
+from odoo.http import request    
 import xlwt
 from xlwt import *
-from StringIO import StringIO
-from openerp.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError, ValidationError
 from operator import itemgetter
 import xlsxwriter
 from io import BytesIO
@@ -33,7 +32,8 @@ import base64
 
 class PurchaseRequisitionOrderReport(models.TransientModel):
     _name = 'purchase.requisition.order.report'
-    _inherit = 'abstract.report.model'
+    # TODO FIX LATER
+    # _inherit = 'abstract.report.model'
     _description = 'Purchase requisition order report'
 
 
@@ -43,7 +43,7 @@ class PurchaseRequisitionOrderReport(models.TransientModel):
     user_ids = fields.Many2many(comodel_name='res.users', string='User ids')
     state= fields.Selection([('done','Done',),('assigned','Assigned')],string="State")
 
-    @api.multi
+    
     def export_report(self,report_code,context=None):
         if context is None:
             context = {}
@@ -332,7 +332,6 @@ class PurchaseRequisitionOrderReport(models.TransientModel):
 
                 }
             fetchedAll[parent]['departments'][department]['partners'][partner]['req_states'][req_state]['name'] = req_state
-            print'_________qqq________',fetchedAll[parent]['departments'][department]['partners'][partner]['req_states']
             if dic['ordering_date']:
                 if dic['daydiff']<=0:
                     fetchedAll[parent]['departments'][department]['partners'][partner]['req_states'][req_state]['normal']+=1
@@ -379,7 +378,6 @@ class PurchaseRequisitionOrderReport(models.TransientModel):
 
         return {
         'name': 'Export Report',
-        'view_type':'form',
         'view_mode':'form',
         'res_model':'report.excel.output',
         'res_id':excel_id.id,

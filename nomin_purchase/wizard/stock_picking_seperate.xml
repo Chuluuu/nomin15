@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
-         <act_window name="Худалдан авалт шаардахаар салгах"
-            res_model="stock.picking.seperate"
-            view_mode="form"
-            target="new"
-            id="act_stock_purchase_seperate"/>
+        <act_window name="Худалдан авалт шаардахаар салгах" res_model="stock.picking.seperate" view_mode="form" target="new" id="act_stock_purchase_seperate"/>
 
         <record id="view_stock_picking_seperate_form" model="ir.ui.view">
             <field name="name">Худалдан авалт шаардах</field>
@@ -13,14 +9,14 @@
             <field name="arch" type="xml">
                 <form>
                     <group>
-                        <field name="requisition_ids" >
+                        <field name="requisition_ids">
                             <tree string='Шаардах мөрүүд' create="false" delete="false">
                                 <field name="requisition_id"/>
 
                             </tree>
                             <form create="false" delete="false">
                                 <field name="requisition_id" readonly="1"/>
-                                <field name="requisition_line_ids" >
+                                <field name="requisition_line_ids">
                                     <tree create="false" editable="bottom" delete="false">
                                         <field name="requisition_line_id" readonly="1"/>
                                         <field name="product_qty" readonly="1"/>
@@ -30,9 +26,9 @@
                             </form>
                         </field>
 
-                       
+
                     </group>
-                  
+
                     <footer>
                         <button name="create_seperate_stock" string="Шаардах мөрөөр хүлээлгэн өгөх" type="object" class="btn-primary"/>
                         <button string="Cancel" class="btn-default" special="cancel" />
@@ -41,9 +37,9 @@
             </field>
         </record>
 
-        
 
 
-        
+
+
     </data>
-</openerp>
+</odoo>

@@ -1,24 +1,9 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Asterisk Technologies LLC, Enterprise Management Solution    
-#    Copyright (C) 2013-2013 Asterisk Technologies LLC (<http://www.erp.mn>). All Rights Reserved
-#
-#    Email : unuruu25@gmail.com
-#    Phone : 976 + 88005462
-#
-##############################################################################
 
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-from openerp import api, fields, models, _
-from openerp.tools.translate import _
-import time
-from openerp.osv import osv
-from openerp.http import request    
-import xlwt
-from xlwt import *
-from StringIO import StringIO
+from odoo import api, fields, models, _
+from odoo.tools.translate import _
+
+
 from io import BytesIO
 import base64
 import xlsxwriter
@@ -39,7 +24,8 @@ def get_sector(self,department_id):
 
 class purchase_order_report_wizard(models.TransientModel):
 	_name = 'purchase.comparison.report.wizard'
-	_inherit = 'abstract.report.model'
+	# TODO FIX LATER
+	# _inherit = 'abstract.report.model'
 	_description = 'Purchase comparison report wizard'
 
 	comparison_id = fields.Many2one('purchase.comparison',string=u'Худалдан авалт харьцуулалт')
@@ -74,7 +60,7 @@ class purchase_order_report_wizard(models.TransientModel):
 	
 		return res
 
-	@api.multi
+	
 	def export_comparison(self,report_code,context=None):
 		if context is None:
 			context = {}
@@ -345,8 +331,8 @@ class purchase_order_report_wizard(models.TransientModel):
 		
 		for order in order_ids:
 			product_prices [order.partner_id.id] = {}
- 			product_qtys [order.partner_id.id] = {}
- 			suppliers.append(order.partner_id.id)
+			product_qtys [order.partner_id.id] = {}
+			suppliers.append(order.partner_id.id)
 			for line in order.order_line:
 				if line.product_id.name not in products:
 					products.append(line.product_id.name)

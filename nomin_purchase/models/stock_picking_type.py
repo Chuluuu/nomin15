@@ -11,15 +11,15 @@
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from openerp import api, fields, models, _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp.tools.translate import _
-from openerp.tools.float_utils import float_is_zero, float_compare
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import UserError, AccessError
+from odoo import api, fields, models, _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools.translate import _
+from odoo.tools.float_utils import float_is_zero, float_compare
+import odoo.addons.decimal_precision as dp
+from odoo.exceptions import UserError, AccessError
 import time
-from openerp.osv import osv
-from openerp.http import request    
+from odoo.osv import osv
+from odoo.http import request    
 
 
 class stock_picking_out_line(models.Model):
@@ -31,7 +31,7 @@ class stock_picking_out_line(models.Model):
 class stock_picking(models.Model):
     _inherit = 'stock.picking'
     
-    @api.multi
+    
     def _set_sector(self):
             department_ids = self.env['hr.department'].get_sector(self.env.user.department_id.id)
             if department_ids :
@@ -40,13 +40,13 @@ class stock_picking(models.Model):
               return self.env.user.department_id.id
             return None
     
-    @api.multi
+    
     def _set_department(self):
         employee_id = self.env['hr.employee'].sudo().search([('user_id','=',self._uid)])
         if employee_id:
             return employee_id.department_id.id
         else:
-            raise osv.except_osv(_('Warning!'), _('You don\'t have related department. Please contact administrator.'))
+            raise UserError(_('Warning!'), _('You don\'t have related department. Please contact administrator.'))
         return None
     
     sector_id = fields.Many2one('hr.department',u'Гүйцэтгэгч салбар', domain="[('is_sector','=',True)]", default=_set_sector)
@@ -60,7 +60,7 @@ class stock_picking(models.Model):
     is_out = fields.Boolean(string='Is out',default=False)
     is_in = fields.Boolean(string='Is in',default=False)
     is_direct = fields.Boolean(string="Direct" , default=False)
-    @api.multi
+    
     def action_to_hand_over(self):
         
         sector_id = self.env['hr.department'].get_sector(self.env.user.department_id.id)     
@@ -113,7 +113,6 @@ class stock_picking(models.Model):
         # return {
         #         'res_id': picking.id,
         #         'name': _('New'),
-        #         'view_type': 'form',
         #         'view_mode': 'tree,form',
         #         'res_model': 'stock.picking',
         #         'view_id': False,

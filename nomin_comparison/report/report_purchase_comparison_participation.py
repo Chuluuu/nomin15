@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models
+from odoo import api, fields, models
 from datetime import datetime,timedelta
 from operator import itemgetter
 import xlsxwriter
@@ -15,7 +15,7 @@ class PurchaseComparisonParticipationReport(models.TransientModel):
     partner_ids = fields.Many2many('res.partner',string=u'Нийлүүлэгч')
     product_ids = fields.Many2many('product.product',string=u'Бараа' )
 
-    @api.multi
+    
     def export(self):
         output = BytesIO()
         workbook = xlsxwriter.Workbook(output)

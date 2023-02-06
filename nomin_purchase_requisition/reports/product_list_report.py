@@ -1,26 +1,7 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2014-Today OpenERP SA (<http://www.openerp.com>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-from openerp.tools.translate import _
-from openerp.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
-from openerp import api, fields, models, _
+
+from odoo.tools.translate import _
+from odoo import api, fields, models, _
 from datetime import datetime,date
 from dateutil import parser
 from dateutil.relativedelta import relativedelta
@@ -42,7 +23,7 @@ class ProductRegistrationReport(models.TransientModel):
     # department_ids = fields.Many2many(comodel_name = 'hr.department',string=u'Departments')
     # state= fields.Selection([('done','Done',),('assigned','Assigned')],string="State")
 
-    @api.multi
+    
     def export_report(self,report_code,context=None):
         if context is None:
             context = {}
@@ -291,7 +272,6 @@ class ProductRegistrationReport(models.TransientModel):
 
         return {
         'name': 'Export Report',
-        'view_type':'form',
         'view_mode':'form',
         'res_model':'report.excel.output',
         'res_id':excel_id.id,

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<openerp>
+<odoo>
     <data>
         <record model="ir.ui.view" id="purchase_comparison_participation_report_form">
             <field name="name">purchase.comparison.participation.report.form</field>
@@ -7,10 +7,10 @@
             <field name="arch" type="xml">
                 <form string="Purchase comparison participation report">
                     <group>
-                        <group>                         
+                        <group>
                             <field name="date_from" required="1"/>
                         </group>
-                        <group>                         
+                        <group>
                             <field name="date_to" required="1"/>
                         </group>
                     </group>
@@ -40,14 +40,8 @@
         </record>
 
 
-        <menuitem 
-            name="Үнийн харьцуулалтанд оролцсон түүх" 
-            id="menu_purchase_comparison_participation_report" 
-            parent="nomin_purchase.parent_menu_purchase_report_wizard"
-            action="action_purchase_comparison_participation_report" 
-            sequence="105" 
-            groups="capitalLease.group_regular_accountant,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_buyer" />
+        <menuitem name="Үнийн харьцуулалтанд оролцсон түүх" id="menu_purchase_comparison_participation_report" parent="nomin_purchase.parent_menu_purchase_report_wizard" action="action_purchase_comparison_participation_report" sequence="105" groups="capitalLease.group_regular_accountant,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_buyer" />
 
 
     </data>
-</openerp>
+</odoo>

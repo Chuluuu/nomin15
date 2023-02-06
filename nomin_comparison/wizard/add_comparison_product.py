@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields, api, _
+from odoo import models, fields, api, _
 import time
-from openerp.tools.translate import _
-from openerp.exceptions import UserError, ValidationError
+from odoo.tools.translate import _
+from odoo.exceptions import UserError, ValidationError
 
 class AddComparisonProduct(models.TransientModel):
     _name = 'add.comparison.product'
@@ -16,7 +16,7 @@ class AddComparisonProduct(models.TransientModel):
     comparison_id = fields.Many2one('purchase.comparison', default=_get_comparison)
     product_ids = fields.One2many('purchase.comparison.multiple.product','add_product_id',string='Product')
 
-    @api.multi
+    
     def action_add_product(self):
         is_product_created = None
         for line in self.comparison_id.order_ids:

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
-    
-    	<record id="view_comparison_product_form" model="ir.ui.view">
+
+        <record id="view_comparison_product_form" model="ir.ui.view">
             <field name="name">add.comparison.product.form</field>
             <field name="model">add.comparison.product</field>
             <field name="arch" type="xml">
@@ -19,17 +19,17 @@
                                 <field name="market_price_total" readonly="1"/>
                                 <field name="price_subtotal" invisible="1"/>
                             </tree>
-                        </field> 
+                        </field>
                     </group>
                     <footer>
                         <button string="Add product" name="action_add_product" type="object" class="btn-primary"/>
                         <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
-               </form>
+                </form>
             </field>
         </record>
 
-        <record id="add_comparison_product_action" model="ir.actions.act_window" >
+        <record id="add_comparison_product_action" model="ir.actions.act_window">
             <field name="name">Add comparison product</field>
             <field name="res_model">add.comparison.product</field>
             <field name="view_type">form</field>
@@ -37,6 +37,6 @@
             <field name="view_id" ref="view_comparison_product_form"/>
             <field name="target">new</field>
         </record>
-    		
+
     </data>
-</openerp>
+</odoo>

@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
-<openerp>
-    <data>
-  		<record id="view_purchase_priority_form" model="ir.ui.view">
-  			<field name="name">purchase.priority</field>
+<odoo>
+	<data>
+		<record id="view_purchase_priority_form" model="ir.ui.view">
+			<field name="name">purchase.priority</field>
 			<field name="model">purchase.priority</field>
 			<field name="arch" type="xml">
 				<form string="Purchase priority">
@@ -10,7 +10,7 @@
 						<group>
 							<group>
 								<field name="name"/>
-								
+
 							</group>
 							<group>
 								<field name="priority_day"/>
@@ -18,40 +18,39 @@
 							</group>
 						</group>
 					</sheet>
-					<div class="oe_chatter">	            
-	                  	 <field name="message_follower_ids" widget="mail_followers"/>
-	                  	 <field name="message_ids" widget="mail_thread"/>
-      				</div>
+					<div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"/>
+						<field name="message_ids" widget="mail_thread"/>
+					</div>
 
 				</form>
 			</field>
-  		</record>
-
-
-  		<record id="view_purchase_priority_tree" model="ir.ui.view">
-  			<field name="name">purchase.priority</field>
-  			<field name="model">purchase.priority</field>
-  			<field name="arch" type="xml">
-  				<tree string="Purcase priority">
-  					<field name="name"/>
-  					<field name="priority_day"/>
-  				</tree>
-  			</field>
-  		</record>
-
-  		<record id="action_purchase_priority" model="ir.actions.act_window">
-  			<field name="name">purchase.priority</field>
-  			<field name="res_model">purchase.priority</field>
-  			<!-- <field name="type">ir.actions.act_window</field> -->
-			<field name="view_mode">tree,form</field>
-			<field name="view_type">form</field>
-			<field name="context">{}</field>
-            <field name="domain">[]</field>
-            <field name="view_id" ref="view_purchase_priority_tree"/>
 		</record>
 
-	    <menuitem id="menu_purchase_priority" action="action_purchase_priority" name="Purchase Priority menu" parent="purchase.menu_purchase_config" groups="nomin_purchase_requisition.group_procurement_admin"/>
+
+		<record id="view_purchase_priority_tree" model="ir.ui.view">
+			<field name="name">purchase.priority</field>
+			<field name="model">purchase.priority</field>
+			<field name="arch" type="xml">
+				<tree string="Purcase priority">
+					<field name="name"/>
+					<field name="priority_day"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_purchase_priority" model="ir.actions.act_window">
+			<field name="name">purchase.priority</field>
+			<field name="res_model">purchase.priority</field>
+			<!-- <field name="type">ir.actions.act_window</field> -->
+			<field name="view_mode">tree,form</field>
+			<field name="context">{}</field>
+			<field name="domain">[]</field>
+			<field name="view_id" ref="view_purchase_priority_tree"/>
+		</record>
+
+		<menuitem id="menu_purchase_priority" action="action_purchase_priority" name="Purchase Priority menu" parent="purchase.menu_purchase_config" groups="nomin_purchase_requisition.group_procurement_admin"/>
 
 
-  	</data>
- </openerp>
+	</data>
+</odoo>

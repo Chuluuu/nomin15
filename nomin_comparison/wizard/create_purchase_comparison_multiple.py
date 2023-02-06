@@ -16,13 +16,13 @@
 #
 ##############################################################################
 
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError,ValidationError,Warning
-from openerp import SUPERUSER_ID
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError,ValidationError,Warning
+from odoo import SUPERUSER_ID
 from fnmatch import translate
-from openerp.osv import osv
+from odoo.osv import osv
 import time
-from openerp.http import request    
+from odoo.http import request    
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -51,12 +51,12 @@ class purchaseComparisonMultiple(models.TransientModel):
 	return_condition    	= fields.Char('Return condition') # Буцаалтын нөхцөл
 	loan_term           	= fields.Char('Loan term') # Зээлийн хугацаа
 	barter_percentage   	= fields.Char('Barter percentage') # Бартерийн хувь
-	vat_condition       	= fields.Selection([('required', u"Required"),('not_required', u"Not required")], string='VAT condition', track_visibility='onchange') # НӨАТ төлөгч байхыг шаардах эсэх
+	vat_condition       	= fields.Selection([('required', u"Required"),('not_required', u"Not required")], string='VAT condition', tracking=True) # НӨАТ төлөгч байхыг шаардах эсэх
 
 	partner_ids = fields.One2many('purchase.comparison.multiple.partner','comparison_id',string='Partner')
 	product_ids = fields.One2many('purchase.comparison.multiple.product','comparison_id',string='Product')
 
-	@api.multi
+	
 	def create_comparison(self):
 		#Үүсгэж буй хэрэглэгчийн дараах мэдээллүүдийг автоматаар авч үүснэ. Хэрэглэгч, огноо, салбар, хэлтэс
 
@@ -184,8 +184,6 @@ class purchaseComparisonMultiple(models.TransientModel):
 				# 	'title': (u'Анхааруулга!'),
 				# 	'message': (u'Хүлээн авах харилцагч сонгогдсон байх шаардлагтай!'),
 				# }
-		# if partners_without_emails:
-		# 	print '\n\n\n\partners_without_emails',partners_without_emails
 			
 		# 	# return {
 		# 	# 	'name': 'Note',
@@ -265,7 +263,6 @@ class PartnerWithoutEmail(models.TransientModel):
 	def default_get(self, fields):
 		res = super(PartnerWithouthEmail, self).default_get(fields)	
 		partners_without_emails = self._context.get('partners_without_emails', [])
-		print '\n\n\n\partners_without_emails',partners_without_emails
 		if partners_without_emails:		   
 			res.update({'partners':partners_without_emails})
 		return res

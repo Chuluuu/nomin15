@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-	<data>
-		<template id="verification_report">
-			<html>
-				<head>
-					<script type="text/javascript">
+<odoo>
+    <data>
+        <template id="verification_report">
+            <html>
+                <head>
+                    <script type="text/javascript">
 					function getAndroidVersion() {
 						var ua = navigator.userAgent; 
 						var match = ua.match(/Android\s([0-9\.]*)/);
@@ -21,27 +21,27 @@
 					{
 					//Check to see if user wants to save I used some ajax to save the file if necesarry
 					}
-				</script>
-					<link rel='stylesheet' href='/website_insurance/static/src/css/demo.css'/>
-					<link rel="stylesheet" href="/web/static/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css"/>
-					<link rel="stylesheet" href="/web/static/lib/bootstrap/css/bootstrap-theme.css"/>
-					<link rel="stylesheet" href="/web/static/lib/bootstrap/css/bootstrap.css"/>
-					<link rel="stylesheet" href="/web/static/lib/bootstrap/css/bootstrap.css.map"/>
-					<link rel="stylesheet" href="/web/static/lib/bootstrap/css/bootstrap.min.css"/>
-					<link rel="stylesheet" href="/web/static/lib/less/panels.less"/>
-					<link id="bootstrap_css" rel="stylesheet" href="/website/static/lib/bootstrap/css/bootstrap.css" t-ignore="true"/>
-					<link id="website_css" rel="stylesheet" href="/website/static/src/css/website.css" t-ignore="true"/>
-					<script type="text/javascript" src="/web/static/lib/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
-				
-				</head>
-				<body style="background-color:#3D3533">				
-						<t t-foreach="docs" t-as="o">
-							<div class="oe_structure"/>
-							<div style="width:100%;padding-top:100px;padding-bottom:100px;" >
-							<div  style="padding-left:100px;padding-right:100px;padding-top:150px;padding-bottom:50px" class="panel panel-default" id="about_forum">
-							
-							<t t-call="report.layout">
-								<div class="page">
+                    </script>
+                    <link rel='stylesheet' href='/website_insurance/static/src/css/demo.css'/>
+                    <link rel="stylesheet" href="/web/static/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css"/>
+                    <link rel="stylesheet" href="/web/static/lib/bootstrap/css/bootstrap-theme.css"/>
+                    <link rel="stylesheet" href="/web/static/lib/bootstrap/css/bootstrap.css"/>
+                    <link rel="stylesheet" href="/web/static/lib/bootstrap/css/bootstrap.css.map"/>
+                    <link rel="stylesheet" href="/web/static/lib/bootstrap/css/bootstrap.min.css"/>
+                    <link rel="stylesheet" href="/web/static/lib/less/panels.less"/>
+                    <link id="bootstrap_css" rel="stylesheet" href="/website/static/lib/bootstrap/css/bootstrap.css" t-ignore="true"/>
+                    <link id="website_css" rel="stylesheet" href="/website/static/src/css/website.css" t-ignore="true"/>
+                    <script type="text/javascript" src="/web/static/lib/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+
+                </head>
+                <body style="background-color:#3D3533">
+                    <t t-foreach="docs" t-as="o">
+                        <div class="oe_structure"/>
+                        <div style="width:100%;padding-top:100px;padding-bottom:100px;">
+                            <div style="padding-left:100px;padding-right:100px;padding-top:150px;padding-bottom:50px" class="panel panel-default" id="about_forum">
+
+                                <t t-call="report.layout">
+                                    <div class="page">
 
 
 
@@ -51,7 +51,7 @@
 
 
 
-                 <!-- <table width="100%" style="padding: 1px; font-size: 23px; border:0px">
+                                        <!-- <table width="100%" style="padding: 1px; font-size: 23px; border:0px">
                     <tr>
                         <td align="center" colspan="2" style="vertical-align: text-center; font-size: 23px">
                             <h5>Худалдан авалтын шаардах</h5>
@@ -67,67 +67,111 @@
 
 
 
-                <style  type="text/css" media="all" t-esc="background" /> 
+                                        <style type="text/css" media="all" t-esc="background" />
 
-                 <table width="100%" style="padding: 1px; font-size: 23px; border:0px">
-                    <tr>
-                        <td align="center" colspan="2" style="vertical-align: text-center; font-size: 23px">
-                            <h5>ШААРДАХ ХУУДАС</h5>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="left" style="font-size: 10"><b>НХ Маягт №:</b>........</td>
-                    </tr>
-                 </table>              
-                 <table width="100%">
-                     <tr><td width="70%">
-                         <table style="font-size: 10;">
-                             <tr><td><b>Зориулалт: </b><span t-field="o.comment"/></td></tr>
-                             <tr><td><b>Захиалагч: </b><span t-field="o.sector_id.name"/> / <span t-field="o.user_id.job_id.name"/> / <span t-field="o.user_id.name"/><span> /...............</span></td>
-                             </tr>
-                         </table></td>
-                         <td width="30%">
-                         <table style="font-size: 10;">
-                             <tr><td><b>Үүсгэсэн огноо : </b><span t-field="o.create_date"/> </td></tr>
-                             <tr><td><b>Хэвлэсэн огноо : </b><span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/> </td></tr>
-                         </table>
-                         </td>
-                     </tr>
-                 </table>
-                 <t t-set="number" t-value="1"/>
-                 <table class="table table-l10n_mn-grid" style="font-size: 10;border: 0px solid #000000;">
-                     <tr style="border: 1px solid #000000;">
-                        <th align="center" style="width:10px; text-align: center; padding: 0px; border: 1px solid #000000;">№</th>
-                        <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Код</th>
-                        <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Нэр</th>
-                        <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Тодорхойлолт</th>
-                        <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Хэмжих нэгж</th>
-                        <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Хүссэн тоо</th>
-                        <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Зөвш тоо</th>
-                        <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Нэгж үнэ</th>
-                        <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Нийт үнэ</th>
-                        <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Бараа олголтын төлөв</th>
-                     </tr>
+                                        <table width="100%" style="padding: 1px; font-size: 23px; border:0px">
+                                            <tr>
+                                                <td align="center" colspan="2" style="vertical-align: text-center; font-size: 23px">
+                                                    <h5>ШААРДАХ ХУУДАС</h5>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="left" style="font-size: 10">
+                                                    <b>НХ Маягт №:</b>........
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="70%">
+                                                    <table style="font-size: 10;">
+                                                        <tr>
+                                                            <td>
+                                                                <b>Зориулалт: </b>
+                                                                <span t-field="o.comment"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <b>Захиалагч: </b>
+                                                                <span t-field="o.sector_id.name"/>
+ /                                                                <span t-field="o.user_id.job_id.name"/>
+ /                                                                <span t-field="o.user_id.name"/>
+                                                                <span> /...............</span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td width="30%">
+                                                    <table style="font-size: 10;">
+                                                        <tr>
+                                                            <td>
+                                                                <b>Үүсгэсэн огноо : </b>
+                                                                <span t-field="o.create_date"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <b>Хэвлэсэн огноо : </b>
+                                                                <span t-esc="time.strftime('%Y-%m-%d %H:%M:%S')"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <t t-set="number" t-value="1"/>
+                                        <table class="table table-l10n_mn-grid" style="font-size: 10;border: 0px solid #000000;">
+                                            <tr style="border: 1px solid #000000;">
+                                                <th align="center" style="width:10px; text-align: center; padding: 0px; border: 1px solid #000000;">№</th>
+                                                <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Код</th>
+                                                <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Нэр</th>
+                                                <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Тодорхойлолт</th>
+                                                <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Хэмжих нэгж</th>
+                                                <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Хүссэн тоо</th>
+                                                <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Зөвш тоо</th>
+                                                <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Нэгж үнэ</th>
+                                                <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Нийт үнэ</th>
+                                                <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Бараа олголтын төлөв</th>
+                                            </tr>
 
-                     <tbody style="border: 1px solid #000000;" t-foreach="o.line_ids" t-as="l">
-                         <tr style="border: 1px solid #000000;">
-                            <td style="vertical-align: text-center; width:10px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;" t-esc="number"></td>
-                            <td style="vertical-align: text-center; width:60px;text-align: left;padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-field="l.product_id.product_code"/></td>
+                                            <tbody style="border: 1px solid #000000;" t-foreach="o.line_ids" t-as="l">
+                                                <tr style="border: 1px solid #000000;">
+                                                    <td style="vertical-align: text-center; width:10px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;" t-esc="number"></td>
+                                                    <td style="vertical-align: text-center; width:60px;text-align: left;padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;">
+                                                        <span t-field="l.product_id.product_code"/>
+                                                    </td>
 
-                            <td style="vertical-align: text-center; text-align: left; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-field="l.product_id.name"/></td>
-                            <td style="vertical-align: text-center; text-align: left; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-field="l.product_desc"/></td>
-                            <td style="vertical-align: text-center; width:60px; text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-field="l.product_uom_id.name"/></td>
-                            <td style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-field="l.product_qty"/></td>
-                            <td style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-field="l.allowed_qty"/></td>
-                            <td style="vertical-align: text-center; width:60px; text-align: right;padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-field="l.product_price"/></td>
-                            <td  style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-field="l.allowed_amount"/></td>     
-                            <td  style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-field="l.state"/></td>     
-                            <t t-set="number" t-value="number + 1"/>
-                        </tr>
-                    </tbody>
+                                                    <td style="vertical-align: text-center; text-align: left; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                                        <span t-field="l.product_id.name"/>
+                                                    </td>
+                                                    <td style="vertical-align: text-center; text-align: left; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                                        <span t-field="l.product_desc"/>
+                                                    </td>
+                                                    <td style="vertical-align: text-center; width:60px; text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;">
+                                                        <span t-field="l.product_uom_id.name"/>
+                                                    </td>
+                                                    <td style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;">
+                                                        <span t-field="l.product_qty"/>
+                                                    </td>
+                                                    <td style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;">
+                                                        <span t-field="l.allowed_qty"/>
+                                                    </td>
+                                                    <td style="vertical-align: text-center; width:60px; text-align: right;padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;">
+                                                        <span t-field="l.product_price"/>
+                                                    </td>
+                                                    <td style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                                        <span t-field="l.allowed_amount"/>
+                                                    </td>
+                                                    <td style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;">
+                                                        <span t-field="l.state"/>
+                                                    </td>
+                                                    <t t-set="number" t-value="number + 1"/>
+                                                </tr>
+                                            </tbody>
 
 
-<!-- 
+                                            <!-- 
                                         line[pr_line.id] = {'name': pr_line.product_id.product_code or '',
                                         'desc':pr_line.product_id.name or '',
                                         'test':comma_me(pr_line.product_desc),
@@ -139,7 +183,7 @@
                                       'state': product_state -->
 
 
-                     <!-- <tbody style="border: 1px solid #000000;" t-foreach="o.line_ids" t-as="l">
+                                            <!-- <tbody style="border: 1px solid #000000;" t-foreach="o.line_ids" t-as="l">
                          <tr style="border: 1px solid #000000;">
                             <td style="vertical-align: text-center; width:10px;text-align: center; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;" t-esc="number"></td>
                             <td style="vertical-align: text-center; width:60px;text-align: left;padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-field="l.name"/></td>
@@ -150,8 +194,8 @@
                             <td style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-field="l.qty"/></td>
                             <td style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-field="l.allow_qty"/></td>
                             <td style="vertical-align: text-center; width:60px; text-align: right;padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;; border: 1px solid #000000;"><span t-field="l.price"/> </td>
-                            <td  style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-field="l.amount"/></td>     
-                            <td  style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-field="l.state"/></td>     
+                            <td style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-field="l.amount"/></td>     
+                            <td style="vertical-align: text-center; width:60px; text-align: right; padding-left: 1px;padding-right: 1px;padding-top: 0px;padding-bottom: 0px;;border: 1px solid #000000;"><span t-field="l.state"/></td>     
                             <t t-set="number" t-value="number + 1"/>
                         </tr>
                     </tbody> -->
@@ -159,7 +203,7 @@
 
 
 
-												<!-- <tbody >
+                                            <!-- <tbody >
 														<t t-set="count" t-value="1"/>
 														<t t-foreach="o.line_ids" t-as="line">
 														<tr>
@@ -186,18 +230,20 @@
 
 
 
-                </table> 
-                <p align="right">Нийт дүн:<span t-field="o.allowed_amount"/></p>
-                <p></p>
-                <!-- <p align="right" style="padding-top: 0px; font-size: 10px;">Нийт дүн (үсгээр): <b><t t-esc="verbose_total.get(o.id, '')"/></b></p> -->
-                <p></p><p></p>
+                                        </table>
+                                        <p align="right">Нийт дүн:                                            <span t-field="o.allowed_amount"/>
+                                        </p>
+                                        <p></p>
+                                        <!-- <p align="right" style="padding-top: 0px; font-size: 10px;">Нийт дүн (үсгээр): <b><t t-esc="verbose_total.get(o.id, '')"/></b></p> -->
+                                        <p></p>
+                                        <p></p>
 
 
 
 
-                <!-- <table  style="padding-top: 0px;padding-left: 0px;padding-right: 0px;padding-bottom: 0px; font-size: 10px;">
+                                        <!-- <table style="padding-top: 0px;padding-left: 0px;padding-right: 0px;padding-bottom: 0px; font-size: 10px;">
 
-                        <t t-foreach="emp_list" t-as="e" >
+                        <t t-foreach="emp_list" t-as="e">
 
                                 
                                     <tr>
@@ -236,7 +282,7 @@
 
                 </table> -->
 
-                <br/>
+                                        <br/>
 
 
 
@@ -255,39 +301,40 @@
 
 
 
-									<footer style="position:relative;bottom:0" >
-										<div>
-											<table class="table-footer" style="border-bottom-style:solid;width:100%;font-size:9px;">
-												<tr>
-													<td style="padding-left:0px;" >
-													<img class="image" t-att-src="'data:image/png;base64,%s' %o.qr_code" style="height:100px;width:100px;"/>
-													</td>
-												<td style="text-align:left">
-													<span>Шаардахыг баталгаажуулахдаа QR кодыг уншуулах эсвэл доорх холбоосоор орж баталгаажуулах кодыг оруулж шалгана уу.</span>
-													<br/>
-													<span>
+                                        <footer style="position:relative;bottom:0">
+                                            <div>
+                                                <table class="table-footer" style="border-bottom-style:solid;width:100%;font-size:9px;">
+                                                    <tr>
+                                                        <td style="padding-left:0px;">
+                                                            <img class="image" t-att-src="'data:image/png;base64,%s' %o.qr_code" style="height:100px;width:100px;"/>
+                                                        </td>
+                                                        <td style="text-align:left">
+                                                            <span>Шаардахыг баталгаажуулахдаа QR кодыг уншуулах эсвэл доорх холбоосоор орж баталгаажуулах кодыг оруулж шалгана уу.</span>
+                                                            <br/>
+                                                            <span>
 													Холбоос: https://erp.nomin.mn/verification</span>
-													<br/>
-													<span>Баталгаажуулах код:<span t-field="o.verify_code"/></span>
-												</td>								
-												</tr>
-											</table>
-											<span style="text-align:left; font-size:9px">Энэхүү шаардах хуудас зөвхөн тухайн худалдан авалтанд хамаарна. Худалдан авалтын шаардахыг зөвшөөрөлгүй хуулбарлахыг хориглоно.</span>
-										</div>
+                                                            <br/>
+                                                            <span>Баталгаажуулах код:                                                                <span t-field="o.verify_code"/>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <span style="text-align:left; font-size:9px">Энэхүү шаардах хуудас зөвхөн тухайн худалдан авалтанд хамаарна. Худалдан авалтын шаардахыг зөвшөөрөлгүй хуулбарлахыг хориглоно.</span>
+                                            </div>
 
-									</footer>
+                                        </footer>
 
 
-								</div>
+                                    </div>
 
-							</t>
-							</div>
-							</div>
-					
-						</t>
+                                </t>
+                            </div>
+                        </div>
 
-				</body>
-			</html>
-		</template>
-	</data>
-</openerp>
+                    </t>
+
+                </body>
+            </html>
+        </template>
+    </data>
+</odoo>

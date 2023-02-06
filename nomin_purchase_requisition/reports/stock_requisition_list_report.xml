@@ -1,48 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
+        <record id="form_stock_requisition_list_report_view" model="ir.ui.view">
+            <field name="name">Хөдөлгөөний шаардахын тайлан</field>
+            <field name="model">stock.requisition.list.report</field>
+            <field name="arch" type="xml">
+                <form string="Хөдөлгөөний шаардахын тайлан">
+                    <group>
+                        <group>
+                            <field name="start_date" required="1"/>
+                        </group>
+                        <group>
 
- 
-    
-    <record id="form_stock_requisition_list_report_view" model="ir.ui.view">
-        <field name="name">Хөдөлгөөний шаардахын тайлан</field>
-        <field name="model">stock.requisition.list.report</field>
-        <field name="arch" type="xml">
-            <form string="Хөдөлгөөний шаардахын тайлан">
-                <group>
-                    <group>
-                        <field name="start_date" required="1"/>
+                            <field name="end_date" required="1"/>
+                        </group>
                     </group>
-                    <group>
-                        
-                        <field name="end_date"  required="1"/>
-                    </group>
-                </group>
 
                     <notebook>
-                    <page string="Хүлээлгэн өгсөн хэлтэсүүд">
-                        <field name="department_ids" widget="many2many_tags" options="{'no_create': True}"/>
-                    </page>
-                    <page string="Хүлээн авсан хэлтэсүүд">
-                        <field name="receive_department_ids" widget="many2many_tags" options="{'no_create': True}"/>
-                    </page>
-                    
-                </notebook>
+                        <page string="Хүлээлгэн өгсөн хэлтэсүүд">
+                            <field name="department_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        </page>
+                        <page string="Хүлээн авсан хэлтэсүүд">
+                            <field name="receive_department_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        </page>
 
-                     <footer>
+                    </notebook>
+
+                    <footer>
                         <button name="export_chart" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/>
                         or
                         <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
-            </form>
-        </field>
-    </record>
+                </form>
+            </field>
+        </record>
 
 
-     <record model="ir.actions.act_window" id="action_stock_requisition_list_report">
+        <record model="ir.actions.act_window" id="action_stock_requisition_list_report">
             <field name="name">Хөдөлгөөний шаардахын тайлан</field>
             <field name="res_model">stock.requisition.list.report</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <!-- <field name="view_id" ref="form_purchase_order_supplier_report_wizard_view"/> -->
             <field name="target">new</field>
@@ -50,7 +46,6 @@
 
 
 
-    <menuitem name="Хөдөлгөөний шаардахын тайлан" id="menu_stock_requisition_list_report" parent="nomin_purchase.parent_menu_purchase_report_wizard"
-            action="action_stock_requisition_list_report" sequence="3" />
+        <menuitem name="Хөдөлгөөний шаардахын тайлан" id="menu_stock_requisition_list_report" parent="nomin_purchase.parent_menu_purchase_report_wizard" action="action_stock_requisition_list_report" sequence="3" />
     </data>
-</openerp>
+</odoo>

@@ -1,5 +1,5 @@
-<openerp>
-      <data>
+<odoo>
+    <data>
 
         <record id="view_purchase_requisition_assign" model="ir.ui.view">
             <field name="name">Худалдан авалт хувиарлалт</field>
@@ -7,8 +7,8 @@
             <field name="arch" type="xml">
                 <form string="Purchase Requisition Assign" version="7.0">
                     <group>
-                    	<group>
-                        	<field name="buyer"/>
+                        <group>
+                            <field name="buyer"/>
                         </group>
                     </group>
                     <footer>
@@ -21,24 +21,14 @@
         </record>
 
         <record id="action_purchase_requisition_assign" model="ir.actions.act_window">
-               <field name="name">Худалдан авалт хувиарлалт</field>
-               <field name="type">ir.actions.act_window</field>
-               <field name="res_model">purchase.requisition.assign</field>
-               <field name="view_type">form</field>
-               <field name="view_mode">form</field>
-               <field name="context">{'record_id' : active_id}</field>
-               <field name="target">new</field>
+            <field name="name">Худалдан авалт хувиарлалт</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.requisition.assign</field>
+            <field name="view_mode">form</field>
+            <field name="context">{'record_id' : active_id}</field>
+            <field name="target">new</field>
         </record>
 
-        <act_window name="Худалдан авалт хувиарлалт"
-            res_model="purchase.requisition.assign"
-            src_model="purchase.requisition.line"
-            view_mode="form"
-            target="new"
-            multi="True"
-            key2="client_action_multi"
-            id="action_requisition_to_assign_wizard"
-      groups="nomin_purchase_requisition.group_supply_import_manager"
-            />
-</data>
-</openerp>
+        <act_window name="Худалдан авалт хувиарлалт" res_model="purchase.requisition.assign" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" key2="client_action_multi" id="action_requisition_to_assign_wizard" groups="nomin_purchase_requisition.group_supply_import_manager" />
+    </data>
+</odoo>

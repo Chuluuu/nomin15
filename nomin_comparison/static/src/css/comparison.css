@@ -4,40 +4,40 @@
   padding: 0px 20px;
 }
 
-.openerp .oe_form_readonly .oe_comparison .oe_comparison_button_add {
+.odoo .oe_form_readonly .oe_comparison .oe_comparison_button_add {
   display: none;
 }
-.openerp .oe_form_readonly .oe_comparison div.oe_view_nocontent {
+.odoo .oe_form_readonly .oe_comparison div.oe_view_nocontent {
   display: none;
 }
-.openerp .oe_comparison {
+.odoo .oe_comparison {
   overflow-x: auto;
 }
-.openerp .oe_comparison table {
+.odoo .oe_comparison table {
   width: 99.99%;
   /*border-collapse: separate;
   border-spacing: 4px;*/
 }
-.openerp .oe_comparison table input[type='text']{
+.odoo .oe_comparison table input[type='text']{
   width: 100%;
   margin: 0px;
   border: 1px solid red;
 }
-.openerp .oe_comparison input[type=checkbox]{
+.odoo .oe_comparison input[type=checkbox]{
   width: 30px;
   height: 30px;
   border:1px solid red;
 }
-.openerp .oe_comparison td {
+.odoo .oe_comparison td {
   padding: 3px 5px;
   /*padding: 2px;*/
   font-size: 12px;
   text-align: right;
 }
-.openerp .oe_comparison td.border-red{
+.odoo .oe_comparison td.border-red{
   border:1px solid red;
 }
-.openerp .oe_comparison td{
+.odoo .oe_comparison td{
 /*  border-left: 1px solid #999;
   border-right: 1px solid #999;*/
   border-width: 1px !important;
@@ -84,17 +84,17 @@ tr.solid-bottom td{
   padding-bottom: 4px !important;
 }
 
-.openerp .oe_comparison tr th:first-child,
-.openerp .oe_comparison tr th:last-child,
-.openerp .oe_comparison tr td:first-child,
-.openerp .oe_comparison tr td:last-child{
+.odoo .oe_comparison tr th:first-child,
+.odoo .oe_comparison tr th:last-child,
+.odoo .oe_comparison tr td:first-child,
+.odoo .oe_comparison tr td:last-child{
   border-left-width: 0px;
   border-right-width: 0px;
 }
 
 
 
-.openerp .oe_comparison th {
+.odoo .oe_comparison th {
   text-align: center;
   color: #006699;
   width: 18%;
@@ -103,43 +103,43 @@ tr.solid-bottom td{
   background: #eeeeee;
   min-width: 47px;
 }
-.openerp .oe_comparison .oe_comparison_total {
+.odoo .oe_comparison .oe_comparison_total {
   background: #eeeeee;
 }
-.openerp .oe_comparison .oe_comparison_account {
+.odoo .oe_comparison .oe_comparison_account {
   text-align: left;
 }
-.openerp .oe_comparison .oe_comparison_first_col {
+.odoo .oe_comparison .oe_comparison_first_col {
   min-width: 130px;
 }
-.openerp .oe_comparison td input.oe_comparison_input {
+.odoo .oe_comparison td input.oe_comparison_input {
   padding-right: 2px !important;
   /*width: 58px;*/
   text-align: right;
   min-width: 0 !important;
 }
-.openerp .oe_comparison td.oe_comparison_total {
+.odoo .oe_comparison td.oe_comparison_total {
   font-weight: bold;
   padding: 5px 3px !important;
 }
-.openerp .oe_comparison .oe_comparison_adding_tot {
+.odoo .oe_comparison .oe_comparison_adding_tot {
   display: table;
   width: 100%;
 }
-.openerp .oe_comparison .oe_comparison_adding {
+.odoo .oe_comparison .oe_comparison_adding {
   display: table-cell;
   text-align: left;
 }
-.openerp .oe_comparison .oe_comparison_tottot {
+.odoo .oe_comparison .oe_comparison_tottot {
   display: table-cell;
 }
-.openerp .oe_comparison .oe_comparison_add_row td {
+.odoo .oe_comparison .oe_comparison_add_row td {
   text-align: right;
 }
-.openerp .oe_comparison .oe_comparison_add_row .oe_form_field_many2one {
+.odoo .oe_comparison .oe_comparison_add_row .oe_form_field_many2one {
   display: inline-block;
   width: 200px;
 }
-.openerp .oe_comparison .oe_comparison_today {
+.odoo .oe_comparison .oe_comparison_today {
   background: #ffddee;
 }

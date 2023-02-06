@@ -1,11 +1,11 @@
 
 # -*- coding: utf-8 -*-
 
-from openerp.tools.translate import _
-from openerp import api, fields, models, _,modules
+from odoo.tools.translate import _
+from odoo import api, fields, models, _,modules
 from datetime import datetime,timedelta,date
 from operator import itemgetter
-from openerp.exceptions import UserError, ValidationError, RedirectWarning
+from odoo.exceptions import UserError, ValidationError, RedirectWarning
 import xlsxwriter
 from io import BytesIO
 import base64
@@ -13,8 +13,6 @@ import requests
 from zeep import Client
 import json
 import pdfkit
-# from openerp.addons.nomin_payroll.report.nomin_payroll_salary_report import encode_for_xml ,_xmlcharref_encode
-from openerp.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -115,7 +113,7 @@ class PropertyReport(models.TransientModel):
 
 
 
-	@api.multi
+	
 	def button_accept(self):
 
 		active_obj = self.get_active_object()
@@ -161,7 +159,7 @@ class PropertyReport(models.TransientModel):
 
 
 
-	@api.multi
+	
 	def export_chart(self,active_obj):
 		output = BytesIO()
 		workbook = xlsxwriter.Workbook(output)				
@@ -420,7 +418,6 @@ class PropertyReport(models.TransientModel):
 		return {
         'name': _('Download contract'),
         'context': self._context,
-        'view_type': 'form',
         'view_mode': 'form',
         'res_model': 'report.excel.output',
         'res_id': excel_id.id,

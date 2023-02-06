@@ -1,33 +1,32 @@
 # -*- coding: utf-8 -*-
 
-from openerp.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, AccessError
+from odoo import api, fields, models, _
 
 class PurchaseCategoryConfig(models.Model):
 	_name ='purchase.category.config'
-	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_inherit = ['mail.thread', 'mail.activity.mixin']
 	_description = 'Purchase category config'
 	
-	name 	= fields.Char(string="Нэр",track_visibility='onchange')
+	name 	= fields.Char(string="Нэр",tracking=True)
 	category_ids = fields.Many2many(comodel_name='assign.category',string="Ангилал",domain=[('is_active','=','True')])
 	product_category_ids = fields.Many2many(comodel_name='product.category',string="Дотоод ангилал")
-	user_id = fields.Many2one('res.users',string="Хэрэглэгч",track_visibility='onchange')
-	before_accountant_id = fields.Many2one('res.users',string="Хуучин нягтлан",track_visibility='onchange')
-	new_accountant_id = fields.Many2one('res.users',string="Шинэ нягтлан",track_visibility='onchange')
-	team_id = fields.Many2one('team.registration',string="Team registration",track_visibility='onchange')
+	user_id = fields.Many2one('res.users',string="Хэрэглэгч",tracking=True)
+	before_accountant_id = fields.Many2one('res.users',string="Хуучин нягтлан",tracking=True)
+	new_accountant_id = fields.Many2one('res.users',string="Шинэ нягтлан",tracking=True)
+	team_id = fields.Many2one('team.registration',string="Team registration",tracking=True)
 	sector_ids = fields.Many2many(comodel_name='hr.department',string="Салбар",domain=[('is_sector','=',True)])
 	department_ids = fields.Many2many(comodel_name='hr.department',string="Хэлтэс")
 
-	@api.multi
+	
 	def action_change(self):
 		if self.new_accountant_id:
 			self._cr.execute('UPDATE purchase_requisition_line set accountant_id=%s WHERE id in (select id from purchase_requisition_line where state = \'assigned\' and accountant_id = %s)'%(self.new_accountant_id.id,self.before_accountant_id.id))
 	
-	@api.multi
+	
 	def action_change_buyer(self):
 		if self.user_id and self.department_ids:
 			requisition_line = self.env['purchase.requisition.line'].search([('state','in',['sent','assigned','ready']),('assign_cat','in',self.category_ids.ids),('department_id','in',self.department_ids.ids)])
@@ -73,7 +72,7 @@ class PurchaseCategoryConfig(models.Model):
 		result = super(PurchaseCategoryConfig,self).create(vals)
 		return result
 
-	@api.multi
+	
 	def write(self, vals):
 		category_config = self.env['purchase.category.config']
 		if vals.get('category_ids'):
@@ -119,10 +118,10 @@ class PurchaseCategoryConfig(models.Model):
 
 class AssignCategory(models.Model):
 	_name="assign.category"
-	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_inherit = ['mail.thread', 'mail.activity.mixin']
 	_order = 'name asc'
 
-	name = fields.Char(string="Нэр",required="1",track_visibility='onchange')
+	name = fields.Char(string="Нэр",required="1",tracking=True)
 	product_type = fields.Selection([('furniture','Тавилга эд хогшил Үзүүлэлт '),#
                                          ('other_asset','Бусад хөрөнгө Үзүүлэлт'),#Бусад хөрөнг
                                          ('computer_equip','Компьютер тоног төхөөрөмж Үзүүлэлт'),#Компьютор тоног төхөөрөмж
@@ -146,7 +145,7 @@ class AssignCategory(models.Model):
 	is_active = fields.Boolean('Is active', default=True)
 	product_categ_ids = fields.Many2many(comodel_name='product.category',string='Product Category')
 
-	@api.multi
+	
 	def write(self, vals):
 		res = super(AssignCategory, self).write(vals)
 		
@@ -178,7 +177,7 @@ class AssignCategory(models.Model):
 
 class ComparisonEmployeeConfig(models.Model):
 	_name="comparison.employee.config"
-	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_inherit = ['mail.thread', 'mail.activity.mixin']
 	# _order = 'create_date desc'
 
 	name = fields.Char(string="Нэр",required="1")
@@ -189,7 +188,7 @@ class ComparisonEmployeeConfig(models.Model):
 	product_category_ids = fields.Many2many(comodel_name='product.category',string="Дотоод ангилал")
 
 
-	@api.multi
+	
 	def action_change_employee(self):
 		requisition_line = self.env['purchase.requisition.line'].search([('state','in',['compare','sent_to_supply_manager']),('assign_cat','in',self.category_ids.ids)])
 		for line in requisition_line:
@@ -198,7 +197,7 @@ class ComparisonEmployeeConfig(models.Model):
 					'comparison_user_id': self.user_id.id,
 				})
 	
-	@api.multi
+	
 	def write(self, vals):
 		res = super(ComparisonEmployeeConfig, self).write(vals)
 		
@@ -220,10 +219,10 @@ class ComparisonEmployeeConfig(models.Model):
 
 class TeamRegistration(models.Model):
         _name="team.registration"
-        _inherit = ['mail.thread', 'ir.needaction_mixin']
+        _inherit = ['mail.thread', 'mail.activity.mixin']
         _order = 'name asc'
 
-        name = fields.Char(string="Name",required="1",track_visibility='onchange')
+        name = fields.Char(string="Name",required="1",tracking=True)
         code = fields.Char(string="Code")
 
 
@@ -236,7 +235,7 @@ class TeamRegistration(models.Model):
                 else:
                         raise ValidationError(_(u'Ийм нэр үүссэн байна !'))
 
-        @api.multi
+        
         def write(self, vals):
                 if vals.get("name"):
                         obj = self.env['team.registration'].search([('name', '=', vals.get('name'))])
@@ -252,7 +251,7 @@ class TeamRegistration(models.Model):
                                 return reason_id
                         else:
                                 raise ValidationError(_(u'Ийм нэр үүссэн байна !'))
-        @api.multi
+        
         def unlink(self):
                 '''
                         Ийм нэр ашигласан эсэхийг шалгах

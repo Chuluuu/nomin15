@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data noupdate="0">
-    
-    	<!-- Худалдан авалт хугацаа болмогч автомат нээх  -->
+
+        <!-- Худалдан авалт хугацаа болмогч автомат нээх  -->
         <record id="ir_cron_purchase_open_action" model="ir.cron">
             <field name="name">purchase quoatation open</field>
             <field name="user_id" ref="base.user_root"/>
@@ -13,8 +13,8 @@
             <field eval="'purchase.order'" name="model"/>
             <field eval="'_purchase_alarm'" name="function"/>
         </record>
-        
-    	<!-- Худалдан авалт хугацаа болмогч автомат имэйл илгээх  -->
+
+        <!-- Худалдан авалт хугацаа болмогч автомат имэйл илгээх  -->
         <record id="ir_cron_purchase_order_alert_action" model="ir.cron">
             <field name="name">purchase order alert</field>
             <field name="user_id" ref="base.user_root"/>
@@ -25,8 +25,8 @@
             <field eval="'purchase.order'" name="model"/>
             <field eval="'_purchase_order_alarm'" name="function"/>
         </record>
-        
-    	
-        
-   </data>
-</openerp>
+
+
+
+    </data>
+</odoo>

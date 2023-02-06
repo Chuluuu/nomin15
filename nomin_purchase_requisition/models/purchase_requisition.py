@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 from re import L
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 from fnmatch import translate
-from openerp.osv import osv
+from odoo.osv import osv
 from datetime import date
 from datetime import datetime, timedelta
-from openerp.http import request
+from odoo.http import request
 import time
 import logging
 _logger = logging.getLogger(__name__)
-from openerp.exceptions import UserError, AccessError
+from odoo.exceptions import UserError, AccessError
 from PIL import Image
 import string
 import random
@@ -45,7 +45,7 @@ class purchase_rate_employee(models.TransientModel):
         if self.percent >100 or self.percent <0:
             self.percent = 0
 
-    @api.multi
+    
     def rate(self):
         active_id = self.env.context.get('active_id', False)
         requisition_id = self.env['purchase.requisition.line'].browse(active_id)
@@ -55,7 +55,7 @@ class purchase_rate_employee(models.TransientModel):
 class purchase_requision_line(models.Model):
     _inherit = 'purchase.requisition.line'
     
-    # @api.multi
+    # 
     # def _compute_users(self):
 
 
@@ -70,7 +70,7 @@ class purchase_requision_line(models.Model):
     #     res['arch'] = etree.tostring(doc)
     #     return res
 
-    @api.multi
+    
     def _is_in_supply_manager(self):
         for line in self:
             notif_groups = self.env['ir.model.data'].get_object_reference( 'nomin_purchase_requisition', 'group_supply_import_manager')[1]
@@ -93,7 +93,7 @@ class purchase_requision_line(models.Model):
             else:
                 if line.requisition_id.is_in_confirm:
                     line.is_in_supply_chiefs = True
-    @api.multi
+    
     def _compute_amount(self):
         
         for purchase in self:
@@ -116,12 +116,12 @@ class purchase_requision_line(models.Model):
 
             purchase.amount = purchase.product_qty * purchase.product_price
        
-    @api.multi
+    
     def _compute_allowed_amount(self):
         for purchase in self:
             purchase.allowed_amount = purchase.allowed_qty * purchase.product_price
 
-    @api.multi
+    
     def _compute_received_qty(self):
         employee_id = self.env['hr.employee'].sudo().search([('user_id','=',self._uid)])
         company_id = employee_id.department_id.company_id.id
@@ -135,7 +135,7 @@ class purchase_requision_line(models.Model):
                 received_qty = received_qty+move.product_uom_qty 
             line.received_qty = received_qty
 
-    @api.multi
+    
     def _is_control(self):
         for line in self:
             
@@ -146,7 +146,7 @@ class purchase_requision_line(models.Model):
             
                 line.is_control =False
 
-    @api.multi
+    
     def _is_accountant(self):
         for line in self:
             if line.state == 'sent_nybo':
@@ -157,13 +157,13 @@ class purchase_requision_line(models.Model):
      
 
 
-    @api.multi
+    
     def _product_mark(self):
         
         for line in self:
             if line.product_id:
                 line.product_mark = line.product_id.product_mark
-    @api.multi
+    
     def _compute_purchase_users(self):
         purchase_user_ids = []
         group_ids=[]
@@ -198,7 +198,7 @@ class purchase_requision_line(models.Model):
     is_accountant = fields.Boolean(string='Is accountant', compute=_is_accountant)
     # user_ids = fields.Many2many('res.users', 'user_id', 'requisition_id', 'Project_stages')
 
-    @api.multi
+    
     def write(self, vals):
         states = []
         product_obj = self.env['product.product']
@@ -392,7 +392,7 @@ class purchase_requision_line(models.Model):
     @api.onchange('allowed_qty')
     def onchange_allowed_qty(self):
         self.allowed_amount = self.allowed_qty * self.product_price
-    @api.multi
+    
     def unlink(self):
         for order in self:
             if order.state != 'draft':
@@ -437,7 +437,7 @@ class purchase_requision_line(models.Model):
 
 
 
-    @api.multi
+    
     def action_sent_nybo(self):        
         user_ids = self.requisition_id._check_user_in_request('sent_nybo', True)
         if not self.partner_id:
@@ -457,7 +457,7 @@ class purchase_requision_line(models.Model):
                         
 
 
-    @api.multi
+    
     def action_done(self):
         self.write({'state':'done','date_end':time.strftime('%Y-%m-%d')})
         is_false= True
@@ -472,7 +472,7 @@ class purchase_requision_line(models.Model):
                 # line.requisition_id.action_send_email('done',[line.requisition_id.user_id.id])
         # self.update_sap_account_assignment_category()
 
-    @api.multi
+    
     def action_send(self):
         #Хангамжийн мэргэжилтэн бараа тодорхойлоод илгээх
         for line in self:
@@ -516,12 +516,11 @@ class purchase_requision_line(models.Model):
 
 
                 
-    @api.multi
+    
     def rate_employee(self):
 
         return {
             'name': 'Note',
-            'view_type': 'form',
             'view_mode': 'form',
             #'view_id': [res and res[1] or False],
             'res_model': 'purchase.rate.employee',
@@ -532,12 +531,11 @@ class purchase_requision_line(models.Model):
             #'res_id': ids[0]  or False,
         }
     
-    @api.multi
+    
     def action_user_return(self):
 
         return {
             'name': 'Note',
-            'view_type': 'form',
             'view_mode': 'form',
             #'view_id': [res and res[1] or False],
             'res_model': 'purchase.requisition.set.done',
@@ -548,7 +546,7 @@ class purchase_requision_line(models.Model):
             #'res_id': ids[0]  or False,
         }   
 
-    # @api.multi
+    # 
     # def update_sap_account_assignment_category(self):
     #     for lines in self:
     #         for line in lines:
@@ -557,13 +555,12 @@ class purchase_requision_line(models.Model):
     #                 print '\n\n\n baraa' , line.product_id.account_assignment_category
     #                 line.product_id.account_assignment_category = line.sap_account_assignment_category
 
-    @api.multi
+    
     def action_skip_comparison(self):
         for line in self:
             line.write({
                 'state': 'ready'
             })
-        print '\n\n\n aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
         # self.update_sap_account_assignment_category()
 
     
@@ -591,7 +588,7 @@ class job_position_limit_config(models.Model):
     year_id = fields.Many2one('account.fiscalyear','Fiscal year')
     line_id = fields.One2many('job.position.limit.line','config_id','Job position limit line', copy=True)
 
-    @api.one
+    
     def copy(self, default=None):
         """ Need to set origin after copy because original copy clears origin
 
@@ -605,7 +602,7 @@ class job_position_limit_config(models.Model):
         newpo = super(job_position_limit_config, self).copy(default=default)
 
         return newpo    
-    @api.one
+    
     @api.constrains('name', 'year_id')
     def _check_description(self):
         if self.name:
@@ -651,7 +648,7 @@ class purchase_requisition(models.Model):
                        ('done','Дууссан'),
                                    ]
     
-    @api.multi
+    
     def _color_change(self):
         today = datetime.strptime(time.strftime('%Y-%m-%d'), "%Y-%m-%d")
         for purchase in self:
@@ -688,7 +685,7 @@ class purchase_requisition(models.Model):
     
     
 
-    @api.multi
+    
     def _exceed_days_1(self):
         days = 0
         for purchase in self:
@@ -707,7 +704,7 @@ class purchase_requisition(models.Model):
                                 # his_date = datetime.strptime(his.date, '%Y-%m-%d')
                                 # all_days = (his_date -datetime.strptime(purchase.ordering_date_new,'%Y-%m-%d')).days 
 
-    @api.multi
+    
     def _ordering_date_new(self):
         sum_day = 0
         conf_day = 0
@@ -721,7 +718,7 @@ class purchase_requisition(models.Model):
                 purchase.ordering_date_new = working_days 
                 purchase.write({'ordering_date_new':working_days})
 
-    @api.multi
+    
     def unlink(self):
         for order in self:
             if order.state != 'draft':
@@ -729,7 +726,7 @@ class purchase_requisition(models.Model):
             check_attachment(self, self._cr, self._uid, 'purchase.requisition', order.id)
         return super(purchase_requisition, self).unlink()
 
-    @api.multi
+    
     def _check_user_in_request(self, state, from_line = False):
         sel_user_ids= []
         user_ids = []
@@ -760,7 +757,7 @@ class purchase_requisition(models.Model):
                             if user_id :
                                 sel_user_ids.append( user_id)
                             else :
-                                raise osv.except_osv(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
+                                raise UserError(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
         # if self.state=='sent_to_supply' or self.state=='fulfil_request':
         #     user_ids = sel_user_ids
         # else:
@@ -785,7 +782,7 @@ class purchase_requisition(models.Model):
         user_ids = list(set(user_ids))
         return user_ids
 
-    @api.one
+    
     def _is_in_sent(self):
         # if self.state=='draft':
             sel_user_ids = self._check_user_in_request('sent')
@@ -795,7 +792,7 @@ class purchase_requisition(models.Model):
                 self.is_in_sent = True
             else:
                 self.is_in_sent = False
-    @api.one
+    
     def _is_in_approve(self):
         sel_user_ids = []
         sel_user_ids = self._check_user_in_request('approved')
@@ -804,7 +801,7 @@ class purchase_requisition(models.Model):
         else:
             self.is_in_approve = False  
     
-    @api.one
+    
     def _is_in_verify(self):
         self._ordering_date_new()
         self._exceed_days_1()
@@ -815,7 +812,7 @@ class purchase_requisition(models.Model):
         else:
             self.is_in_verify = False   
 
-    @api.one
+    
     def _auto_change_statee(self):
         states = []
         self.auto_change_state=False
@@ -828,7 +825,7 @@ class purchase_requisition(models.Model):
             if 'done' in states:
                 self.state ='done'
 
-    @api.one
+    
     def _is_in_confirm(self):
         sel_user_ids = []
 #         sel_user_ids = self._check_user_in_request('confirmed')
@@ -841,7 +838,7 @@ class purchase_requisition(models.Model):
         else:
             self.is_in_confirm = False  
 
-#     @api.one
+#     
 #     def _is_in_sent_supply(self):
 #         sel_user_ids = []
 # #         sel_user_ids = self._check_user_in_request('confirmed')
@@ -857,7 +854,7 @@ class purchase_requisition(models.Model):
 #         else:
 #             self.is_in_sent_supply = False  
 
-#     @api.one
+#     
 #     def _is_in_fullfil(self):
 #         sel_user_ids = []
 # #         sel_user_ids = self._check_user_in_request('confirmed')
@@ -874,27 +871,27 @@ class purchase_requisition(models.Model):
 
 
 
-    @api.multi
+    
     def zzzzzzzzz(self):
         self.run_years(2017)
     
-    @api.multi
+    
     def z2018(self):
         self.run_years(2018)  
 
-    @api.multi
+    
     def z2019(self):
         self.run_years(2019) 
 
-    @api.multi
+    
     def z2020(self):
         self.run_years(2020) 
 
-    @api.multi
+    
     def z2021(self):
         self.run_years(2021) 
     
-    @api.multi
+    
     def total_amount(self):
         '''
             Боломжит үлдэгдэл шалгах
@@ -919,7 +916,7 @@ class purchase_requisition(models.Model):
    
         
     
-    @api.multi
+    
     def run_years(self,year):
     
         date_str = str(year) + '-01-01'
@@ -942,7 +939,7 @@ class purchase_requisition(models.Model):
 
 
 
-    @api.one
+    
     @api.depends('line_ids.amount','line_ids.allowed_amount','line_ids.allowed_qty','line_ids.product_price')
     def _requisition_amount(self):
         res = {}
@@ -958,41 +955,41 @@ class purchase_requisition(models.Model):
             req.allowed_amount = amount +control_amount
 
 
-    @api.one        
+            
     def _is_sent_user(self):
         if  self.user_id.id ==self._uid:
             
             self.is_sent_user= True
              
-    @api.multi
+    
     def _set_sector(self):
             department_ids = self.env['hr.department'].get_sector(self.env.user.department_id.id)
             if department_ids :
                 return department_ids
             else :      
               return self.env.user.department_id.id
-    @api.multi          
+              
     def _set_department(self):
         
         if self.env.user.department_id.id:
             
             return self.env.user.department_id.id
         else:
-            raise osv.except_osv(_('Warning!'), _('You don\'t have related employee. Please contact administrator.'))
+            raise UserError(_('Warning!'), _('You don\'t have related employee. Please contact administrator.'))
     
     # sector_id = fields.Many2one('hr.department', string='Sector'), #Салбар
 
-    @api.multi
+    
     def _set_request(self):
         config_id = False
         if self.product_list_type == 'normalized':
             config_id = self.env['request.config'].search([('process','=','purchase.requisition'),('is_purchase_normalized','=',True)])
             if not config_id:
-                raise osv.except_osv(_('Warning !'), _(u"Нормчилогдсон барааны урсгал хийгдээгүй байна. Систем админтайгаа холбогдоно уу"))
+                raise UserError(_('Warning !'), _(u"Нормчилогдсон барааны урсгал хийгдээгүй байна. Систем админтайгаа холбогдоно уу"))
         else:
             config_id = self.env['request.config'].search([('department_ids','=',self.env.user.department_id.id),('process','=','purchase.requisition')])
             if not config_id:
-                raise osv.except_osv(_('Warning !'), _(u"Хэлтэсийн дээр урсгал %s тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу")%(self.env.user.department_id.name))
+                raise UserError(_('Warning !'), _(u"Хэлтэсийн дээр урсгал %s тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу")%(self.env.user.department_id.name))
         return config_id[0]
 
 
@@ -1018,7 +1015,7 @@ class purchase_requisition(models.Model):
                 return day
             work_day += 1
     
-    @api.multi
+    
     def _is_new_requisition(self):
         if datetime.now() > datetime.strptime('2022-09-29','%Y-%m-%d'):
             return True
@@ -1028,7 +1025,7 @@ class purchase_requisition(models.Model):
     is_in_control_budget = fields.Boolean(string="Is in control budget" ,default=False)
     payment_request_id = fields.Many2one('payment.request',string='Payment request', index=True,rack_visibility='onchange') #Төлбөрийн хүсэлт
     
-    request_id=fields.Many2one('request.config',track_visibility='onchange',string='Workflow config',domain="[('department_ids','=',department_id),('process','=','purchase.requisition')]",default = _set_request) #Урсгал тохиргоо
+    request_id=fields.Many2one('request.config',tracking=True,string='Workflow config',domain="[('department_ids','=',department_id),('process','=','purchase.requisition')]",default = _set_request) #Урсгал тохиргоо
     is_sent_user = fields.Boolean(string='Is sent user', compute= _is_sent_user, default= False)
     is_in_sent = fields.Boolean(string='Is in sent', compute= _is_in_sent, default=False)
     is_in_approve = fields.Boolean(string='Is in sent' ,compute= _is_in_approve, default=False)
@@ -1045,46 +1042,46 @@ class purchase_requisition(models.Model):
     # user_id = fields.Many2one('res.users', u'Захиал'),
     auto_change_state = fields.Boolean(string='Is in sent',compute= _auto_change_statee, default=False)
     # amount_total = fields.Float(string='Amount',compute =_requisition_amount, default= 0), 
-    amount = fields.Float(string='Confirmed amount',track_visibility='onchange', compute=_requisition_amount, store=True) #Батлагдсан дүн
-    allowed_amount = fields.Float('Confirmed total amount', track_visibility='onchange',compute=_requisition_amount, store=True) #Зөвшөөрөгдсөн нийт дүн
-    exceed_days = fields.Float('Exceed day',track_visibility='onchange',compute = _color_change)
-    exceed_days_1 = fields.Float('Хэтэрсэн хоног',track_visibility='onchange',store=True, compute = _exceed_days_1 )
-    ordering_date_new = fields.Date(string='Шаардахын эцсийн хугацаа',track_visibility='onchange',store=True ,compute = _ordering_date_new)
-    priority = fields.Selection([('general','General'),('urgent','Urgent')], string='Priority',track_visibility='onchange', default='general')
-    priority_id = fields.Many2one('purchase.priority',string='Purchase priority',track_visibility='onchange')
-    project_id = fields.Many2one('project.project', string='Project',track_visibility='onchange',)
-    helpdesk_id = fields.Many2one('crm.helpdesk', string='Ticket',track_visibility='onchange',) #Тиккет
-    tender_id = fields.Many2one('tender.tender', string='Tender',index=True,track_visibility='onchange',) #Тендер
-    task_id = fields.Many2one('project.task', string='Task',   index=True,  domain="[('project_id','=',project_id)]",track_visibility='onchange', )
-    contract_id = fields.Many2one('contract.management', string="Contract",index=True, domain ="[('state','in',['confirmed','warranty','certified'])]",track_visibility='onchange',)
-    control_budget_id = fields.Many2one('control.budget', stirng='Control budget' ,domain="[('project_id','=',project_id),('state','=','done')]",track_visibility='onchange',)
-    sector_id = fields.Many2one('hr.department', string='Sector',index=True, domain="[('company_id','=',company_id),('is_sector','!=',False)]" ,track_visibility='onchange',default= _set_sector) #Салбар
+    amount = fields.Float(string='Confirmed amount',tracking=True, compute=_requisition_amount, store=True) #Батлагдсан дүн
+    allowed_amount = fields.Float('Confirmed total amount', tracking=True,compute=_requisition_amount, store=True) #Зөвшөөрөгдсөн нийт дүн
+    exceed_days = fields.Float('Exceed day',tracking=True,compute = _color_change)
+    exceed_days_1 = fields.Float('Хэтэрсэн хоног',tracking=True,store=True, compute = _exceed_days_1 )
+    ordering_date_new = fields.Date(string='Шаардахын эцсийн хугацаа',tracking=True,store=True ,compute = _ordering_date_new)
+    priority = fields.Selection([('general','General'),('urgent','Urgent')], string='Priority',tracking=True, default='general')
+    priority_id = fields.Many2one('purchase.priority',string='Purchase priority',tracking=True)
+    project_id = fields.Many2one('project.project', string='Project',tracking=True,)
+    helpdesk_id = fields.Many2one('crm.helpdesk', string='Ticket',tracking=True,) #Тиккет
+    tender_id = fields.Many2one('tender.tender', string='Tender',index=True,tracking=True,) #Тендер
+    task_id = fields.Many2one('project.task', string='Task',   index=True,  domain="[('project_id','=',project_id)]",tracking=True, )
+    contract_id = fields.Many2one('contract.management', string="Contract",index=True, domain ="[('state','in',['confirmed','warranty','certified'])]",tracking=True,)
+    control_budget_id = fields.Many2one('control.budget', stirng='Control budget' ,domain="[('project_id','=',project_id),('state','=','done')]",tracking=True,)
+    sector_id = fields.Many2one('hr.department', string='Sector',index=True, domain="[('company_id','=',company_id),('is_sector','!=',False)]" ,tracking=True,default= _set_sector) #Салбар
     control_selection = fields.Selection([('material','Material expense'),('labor','Labor expense'),('equipment','Equipment expense'), 
-        ('carriage','Carriage expense'),('postage','Direct expense'),('other','Other')], string="Expense type",track_visibility='onchange',) 
+        ('carriage','Carriage expense'),('postage','Direct expense'),('other','Other')], string="Expense type",tracking=True,) 
     #Материалын зардал Ажиллах хүчний зардал Машин механизмын зардал Тээврийн зардал Шууд зардал Бусад Зардлын төрөл
 
     # partner_id = fields.Many2one('res.partner',string=u'Хүлээн авах байршил',required=False, default= _set_partner),
-    location = fields.Char(string='Хүлээн авах байршил',track_visibility='onchange',)
-    confirmed_date = fields.Date(string='Confirmed date',track_visibility='onchange',) #Батлагдсан огноо
+    location = fields.Char(string='Хүлээн авах байршил',tracking=True,)
+    confirmed_date = fields.Date(string='Confirmed date',tracking=True,) #Батлагдсан огноо
     confirm_history_lines = fields.One2many('purchase.confirm.history.lines','requisition_id', string='Confirm history lines')
     supply_date = fields.Date(string='Supply date', write=[
         ("nomin_purchase_requisition.group_supply_import_manager"),
         ("nomin_purchase_requisition.group_haaa_head"),
         ("nomin_purchase_requisition.group_haaa_director")])
 
-    state = fields.Selection(STATE_SELECTION,string='Status', track_visibility='onchange', required=True)
-    department_id = fields.Many2one('hr.department',string='Department',track_visibility='onchange',default= _set_department)
+    state = fields.Selection(STATE_SELECTION,string='Status', tracking=True, required=True)
+    department_id = fields.Many2one('hr.department',string='Department',tracking=True,default= _set_department)
     active_sequence = fields.Integer(string='Active sequence',default=1)
-    comment = fields.Text(string='Бараа материалын зориулалт',track_visibility='onchange')
-    warehouse_id = fields.Many2one('stock.warehouse',string='Warehouse', track_visibility='onchange')
+    comment = fields.Text(string='Бараа материалын зориулалт',tracking=True)
+    warehouse_id = fields.Many2one('stock.warehouse',string='Warehouse', tracking=True)
     history_lines = fields.One2many('request.history','requisition_id', 'History',  readonly=True)
     state_history_ids = fields.One2many('purchase.requisition.state.history', 'requisition_id', string="History", readonly=True)
     verify_code = fields.Char(string="Verification code") 
     qr_code = fields.Binary("Signature Image", attachment=True) 
-    goods_description = fields.Text(string='Бараа материалын тодорхойлолт',track_visibility='onchange')
-    source_of_goods = fields.Text(string='Бараа материалыг нийлүүлэх боломжтой суваг',track_visibility='onchange')
+    goods_description = fields.Text(string='Бараа материалын тодорхойлолт',tracking=True)
+    source_of_goods = fields.Text(string='Бараа материалыг нийлүүлэх боломжтой суваг',tracking=True)
     line_ids_1 = fields.One2many('purchase.requisition.line' ,'requisition_id', 'Products to Purchase' )
-    product_list_type = fields.Selection([('normalized','Нормчилогдсон бараа'),('new_set','Шинэ дэлгүүрийн багц')], string='Барааны төрөл',track_visibility='onchange') 
+    product_list_type = fields.Selection([('normalized','Нормчилогдсон бараа'),('new_set','Шинэ дэлгүүрийн багц')], string='Барааны төрөл',tracking=True) 
     product_list = fields.Many2one('standart.product.list', string='Барааны төрлийн нэр') 
     is_new_requisition = fields.Boolean(string='is old',default =_is_new_requisition)
 
@@ -1095,13 +1092,13 @@ class purchase_requisition(models.Model):
             if self.product_list_type == 'normalized':
                 config_id = self.env['request.config'].search([('process','=','purchase.requisition'),('is_purchase_normalized','=',True)])
                 if not config_id:
-                    raise osv.except_osv(_('Warning !'), _(u"Нормчилогдсон барааны урсгал хийгдээгүй байна. Систем админтайгаа холбогдоно уу"))
+                    raise UserError(_('Warning !'), _(u"Нормчилогдсон барааны урсгал хийгдээгүй байна. Систем админтайгаа холбогдоно уу"))
                 else:
                     self.request_id = config_id[0]
             else:
                 config_id = self.env['request.config'].search([('department_ids','=',self.env.user.department_id.id),('process','=','purchase.requisition')])
                 if not config_id:
-                    raise osv.except_osv(_('Warning !'), _(u"Хэлтэсийн дээр урсгал %s тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу")%(self.env.user.department_id.name))
+                    raise UserError(_('Warning !'), _(u"Хэлтэсийн дээр урсгал %s тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу")%(self.env.user.department_id.name))
                 else:
                     self.request_id = config_id[0]
 
@@ -1136,7 +1133,7 @@ class purchase_requisition(models.Model):
             self.line_ids = [(6,0, new_lines)]
 
 
-    @api.multi
+    
     def action_get_val(self):
         for obj in self:
             purchase_obj = obj.env['purchase.requisition'].search([('state','=','assigned')])
@@ -1144,16 +1141,16 @@ class purchase_requisition(models.Model):
                 item._ordering_date_new()
                 item._exceed_days_1()
 
-    @api.multi
+    
     def _set_company(self):
         
         if self.env.user.company_id:           
             return self.env.user.company_id.id
         else:
-            raise osv.except_osv(_('Warning!'), _('You don\'t have related employee. Please contact administrator.'))
+            raise UserError(_('Warning!'), _('You don\'t have related employee. Please contact administrator.'))
         return None
 
-    @api.multi
+    
     def _get_picking_in(self):
         picking_obj = self.env['stock.picking.type']
         employee_id = self.env['hr.employee'].search([('user_id','=',self._uid)])[0]
@@ -1173,7 +1170,7 @@ class purchase_requisition(models.Model):
 
         picking_ids = picking_obj.sudo().search([('code','=','incoming'),('warehouse_id.department_of_id','=',sector_id)])
         if not picking_ids:
-             raise osv.except_osv(_('Warning !'), _(u"%s салбар агуулах үүсгэнэ үү!",)%(department_name))
+             raise UserError(_('Warning !'), _(u"%s салбар агуулах үүсгэнэ үү!",)%(department_name))
         return picking_ids[0]
     _defaults = {
     
@@ -1189,7 +1186,7 @@ class purchase_requisition(models.Model):
 
 
 
-    @api.multi
+    
     def get_request(self, department_id):
         config_id = False
         config_id = self.env['request.config'].search([('department_ids','=',department_id),('process','=','purchase.requisition')])
@@ -1203,7 +1200,7 @@ class purchase_requisition(models.Model):
             vals['name'] = self.env['ir.sequence'].next_by_code('purchase.order.requisition') or '/'
         return super(purchase_requisition,self).create(vals)
     
-    @api.one
+    
     def copy(self, default=None):
         is_true = True
         if not self.is_new_requisition:
@@ -1260,12 +1257,12 @@ class purchase_requisition(models.Model):
             purchase.other_amount = purchase.control_budget_id.other_cost
 
 
-    @api.multi
+    
     def action_purchase_flow(self):
         self.write({'is_purchase':True})
         self.write_state('confirmed')
 
-    @api.multi
+    
     def get_possible_users(self, sel_user_ids):
         department_ids = []
         user_ids = self.env['res.users'].browse(sel_user_ids)
@@ -1278,7 +1275,7 @@ class purchase_requisition(models.Model):
                     possible_user_ids.append(user.id)
         return possible_user_ids
 
-    @api.multi
+    
     def get_confirm_users(self,state):
 
         purchase_line = self.env['request.config.purchase.line']
@@ -1300,7 +1297,7 @@ class purchase_requisition(models.Model):
                     if user_id :
                         sel_user_ids.append( user_id)
                     else :
-                        raise osv.except_osv(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
+                        raise UserError(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
         
         for his in self.confirm_history_lines:
             his_user_ids.append(his.user_id.id)
@@ -1316,7 +1313,7 @@ class purchase_requisition(models.Model):
 
         return confirm_user_ids
 
-    @api.multi
+    
     def action_send_manager(self):
         is_product_null = False
         for requisition in self:
@@ -1328,7 +1325,7 @@ class purchase_requisition(models.Model):
             else :    
                 raise UserError(_(u'Тодорхой бус барааны мэдээллийг оруулж өгнө үү.!'))
     
-    @api.multi
+    
     def action_update(self):
         query="select B.id as id,D.assign_categ_id as assign from purchase_requisition A inner join purchase_requisition_line B on A.id =B.requisition_id \
          left join product_product C ON C.id=B.product_id left join product_template D on D.id=C.product_tmpl_id \
@@ -1349,7 +1346,7 @@ class purchase_requisition(models.Model):
                         
         
     #Хангамж руу илгээх
-    # @api.multi
+    # 
     # def action_sent_to_supply(self):
         
     #     # if self.priority =='urgent':
@@ -1364,7 +1361,7 @@ class purchase_requisition(models.Model):
             
     #         next_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups])])
     #         if not next_user_ids:
-    #               raise osv.except_osv(_(u'Анхааруулга'), _(u'Хангамж аж ахуйн албаны дарга грүпд хэрэглэгч нар алга байна.')) 
+    #               raise UserError(_(u'Анхааруулга'), _(u'Хангамж аж ахуйн албаны дарга грүпд хэрэглэгч нар алга байна.')) 
 
     #         self.action_send_email('sent_to_supply',next_user_ids.ids)
     #         history_obj = self.env['request.history']
@@ -1377,13 +1374,12 @@ class purchase_requisition(models.Model):
     #                 )
 
 
-    @api.multi
+    
     def action_direct_purchase(self):
         mod_obj = self.env['ir.model.data']
         res = mod_obj.get_object_reference('nomin_purchase_requisition', 'action_create_purchase_order')
         return {
             'name': 'Note',
-            'view_type': 'form',
             'view_mode': 'form',
             #'view_id': [res and res[1] or False],
             'res_model': 'create.purchase.order.wizard',
@@ -1394,7 +1390,7 @@ class purchase_requisition(models.Model):
             #'res_id': ids[0]  or False,
         }
     #Баталсан төлөвт оруулах
-    # @api.multi
+    # 
     # def action_set_confirm(self):
         
     #     self.check_user_limit()
@@ -1405,7 +1401,7 @@ class purchase_requisition(models.Model):
 
     #     self.write(vals)
     #     self.action_sent_to_supply()
-    @api.multi
+    
     def action_reject(self):
         for purchase in self:
             balance = 0
@@ -1418,7 +1414,6 @@ class purchase_requisition(models.Model):
         
         return {
             'name': 'Note',
-            'view_type': 'form',
             'view_mode': 'form',
             #'view_id': [res and res[1] or False],
             'res_model': 'purchase.requisition.cancel.note',
@@ -1428,12 +1423,11 @@ class purchase_requisition(models.Model):
             'target': 'new',
             #'res_id': ids[0]  or False,
         }
-    @api.multi
+    
     def action_cancel(self):
         
         return {
             'name': 'Note',
-            'view_type': 'form',
             'view_mode': 'form',
             #'view_id': [res and res[1] or False],
             'res_model': 'purchase.requisition.cancel.note',
@@ -1443,15 +1437,14 @@ class purchase_requisition(models.Model):
             'target': 'new',
             #'res_id': ids[0]  or False,
         }
-    @api.multi
+    
     def action_set_confirm(self):
         self.write({'state':'confirmed'})
 
-    @api.multi
+    
     def action_return_product(self):
         return {
         'name': u'Тэмдэглэл',
-        'view_type': 'form',
         'view_mode': 'form',
         #'view_id': [res and res[1] or False],
         'res_model': 'action.create.tender.request.return',
@@ -1462,26 +1455,25 @@ class purchase_requisition(models.Model):
         #'res_id': ids[0]  or False,
         }
 
-    @api.multi
+    
     def action_tender_request(self):
         return {
         'type': 'ir.actions.act_window',
         'name': _('Тендер зарлуулах хүсэлт'),
         'res_model': 'action.create.tender.request',
-        'view_type' : 'form',
         'view_mode' : 'form',
         'context'   :self._context,      
         'nodestroy': True,
         'target': 'new',           
         }
-    @api.multi
+    
     def action_approve_purchase(self):
         
         
         sequence = self.active_sequence+1
         self.write({'state':'approved','active_sequence':sequence})
 
-    @api.multi
+    
     def check_user_limit(self):
         month_obj = self.env['purchase.limit.month']
         employee = self.env['hr.employee']
@@ -1492,7 +1484,7 @@ class purchase_requisition(models.Model):
             if employee_id.job_id:
                     line_id = job_config_line.search([('job_id','=',employee_id.job_id.id)])[0]
                     if not line_id:
-                      raise osv.except_osv(_(u'Анхааруулга'), _(u'Таны албан тушаал дээр худалдан авалтын лимит тохируулдаагүй байна.'))                    
+                      raise UserError(_(u'Анхааруулга'), _(u'Таны албан тушаал дээр худалдан авалтын лимит тохируулдаагүй байна.'))                    
                     data = {
                                 'employee_id':employee_id.id,
                                 'purchase_month_limit':line_id.purchase_month_limit
@@ -1510,7 +1502,7 @@ class purchase_requisition(models.Model):
                         }
         limit_id.write(vals)
     
-    @api.multi
+    
     def sap_integration(self):
 
 
@@ -1556,7 +1548,6 @@ class purchase_requisition(models.Model):
                     category = 'A'
                 else:
                     category = 'K'
-                print '\n\n\n category:' ,category 
                 item = {
                     'Bsart': 'NB',
                     'Banfn': '0010000007',
@@ -1600,21 +1591,16 @@ class purchase_requisition(models.Model):
             ItInput = {
                 'item': items
             }
-            print 
-
-
-
         
         session = Session()
         session.auth = HTTPBasicAuth("ws_user", "Ws_user123")
         client = Client(url, transport=Transport(session=session))
         response = client.service.ZnmmmfmPrCreate(EtOutput,IInfo,ItAnln1, ItInput)
-        print "\n\n",response,"\n\n"
 
 
 
 
-    @api.multi
+    
     def action_send(self):
         #Шаардах хүсэгч бараа сонгоод илгээх
         is_product_null = False
@@ -1628,9 +1614,9 @@ class purchase_requisition(models.Model):
                     
                     if line.product_id:
                         if line.product_price ==0:
-                            raise osv.except_osv(_(u'Анхааруулга'), _(u'%s барааны үнэ мөр дээр 0 байна.')%line.product_id.name)
+                            raise UserError(_(u'Анхааруулга'), _(u'%s барааны үнэ мөр дээр 0 байна.')%line.product_id.name)
                         if line.product_qty ==0:
-                            raise osv.except_osv(_(u'Анхааруулга'), _(u'%s барааны тоо хэмжээ 0 байна.')%line.product_id.name)
+                            raise UserError(_(u'Анхааруулга'), _(u'%s барааны тоо хэмжээ 0 байна.')%line.product_id.name)
                         if not self.is_new_requisition:
                             if self.control_budget_id:
                                 if line.product_id.assign_categ_id:
@@ -1692,7 +1678,7 @@ class purchase_requisition(models.Model):
                     else:
                         line.write({'state':'sent'})
             else:
-                raise osv.except_osv(_(u'Анхааруулга'), _(u'Та шаардах гэж буй бараагаа сонгoно уу.'))
+                raise UserError(_(u'Анхааруулга'), _(u'Та шаардах гэж буй бараагаа сонгoно уу.'))
 
         if not self.verify_code and not self.qr_code:
             qr_verify = random_generator()
@@ -1711,7 +1697,7 @@ class purchase_requisition(models.Model):
 
 
 
-    @api.multi
+    
     def action_create_tender(self):
         tender_obj = self.env['tender.tender']
         tender_line_obj = self.env['tender.line']
@@ -1740,7 +1726,7 @@ class purchase_requisition(models.Model):
         vals={'state':'tender_created','tender_id':tender_id.id,'active_sequence':99}
         self.write(vals)
 
-    @api.multi
+    
     def action_payment_request (self):
         model_obj = self.env['ir.model.data']
         # res = mod_obj.get_object_reference('nomin_purchase_requisition', 'action_create_purchase_order')
@@ -1785,7 +1771,7 @@ class purchase_requisition(models.Model):
                      'type': 'ir.actions.act_window',
                      'name': _('Create payment request'),
                      'res_model': 'payment.request',
-                     'view_type' : 'tree',
+                    #  'view_type' : 'tree',
                      'view_mode' : 'form',
                      'search_view_id' : view_id,
                      'res_id':request_id.id,
@@ -1794,12 +1780,12 @@ class purchase_requisition(models.Model):
                 }
 
     
-    @api.multi
+    
     def action_approve(self):
         self.change_state()
 
 
-    @api.multi
+    
     def action_confirm(self):
 
         if not self.verify_code and not self.qr_code:
@@ -1816,11 +1802,11 @@ class purchase_requisition(models.Model):
         self.change_state()
         
 
-    @api.multi
+    
     def action_verify(self):
         self.change_state()
     
-    @api.multi
+    
     def find_month_limit(self):
         config_obj = self.env['job.position.limit.config']
         line_obj = self.env['job.position.limit.line']
@@ -1837,16 +1823,16 @@ class purchase_requisition(models.Model):
                         limit = line.purchase_limit_month
                
                 if limit ==0:
-                    raise osv.except_osv(_(u'Анхааруулга!'), _(u"Энэ жилийн албан тушаалын сарын лимит тохиргоо хийгдээгүй байна"))
+                    raise UserError(_(u'Анхааруулга!'), _(u"Энэ жилийн албан тушаалын сарын лимит тохиргоо хийгдээгүй байна"))
 
             else:
-                 raise osv.except_osv(_(u'Анхааруулга!'), _(u"Энэ жилийн албан тушаалын сарын лимит тохиргоо хийгдээгүй байна"))
+                 raise UserError(_(u'Анхааруулга!'), _(u"Энэ жилийн албан тушаалын сарын лимит тохиргоо хийгдээгүй байна"))
 
         else:
-             raise osv.except_osv(_(u'Анхааруулга!'), _(u"Энэ жилийн албан тушаалын сарын лимит тохиргоо хийгдээгүй байна"))
+             raise UserError(_(u'Анхааруулга!'), _(u"Энэ жилийн албан тушаалын сарын лимит тохиргоо хийгдээгүй байна"))
         return limit
 
-    @api.multi
+    
     def minus_month_limit(self):
         config_obj = self.env['job.position.limit.config']
         line_obj = self.env['job.position.limit.line']
@@ -1862,13 +1848,13 @@ class purchase_requisition(models.Model):
                     if line.job_id.id ==employee_id.job_id.id:
                         limit = line.purchase_limit_month
             else:
-                 raise osv.except_osv(_(u'Анхааруулга!'), _(u"Энэ жилийн албан тушаалын сарын лимит тохиргоо хийгдээгүй байна"))
+                 raise UserError(_(u'Анхааруулга!'), _(u"Энэ жилийн албан тушаалын сарын лимит тохиргоо хийгдээгүй байна"))
 
         period_id = self.env['account.period'].search([('date_start','<=',today),('date_stop','>=',today)])
         limit_id = self.env['purchase.limit.month'].search([('employee_id','=',employee_id.id),('month_id','=',period_id.id)])
         limit_id.write({'purchase_month_limit':limit_id.purchase_month_limit-self.allowed_amount}) 
     
-    @api.multi
+    
     def search_confirm_user_group(self):
         purchase_line = self.env['request.config.purchase.line']
         line_ids = purchase_line.search([('state','=','confirmed'),('request_id','=',self.request_id.id)])
@@ -1879,7 +1865,7 @@ class purchase_requisition(models.Model):
                     sequences.append(line.sequence)
                 
         return sequences
-    @api.multi
+    
     def is_in_month_limit(self):
         employee_id = self.env['hr.employee'].sudo().search([('user_id','=',self._uid)])
         purchase_line = self.env['request.config.purchase.line']
@@ -1897,14 +1883,14 @@ class purchase_requisition(models.Model):
                 if limit!=0 :
                     limit_id = self.env['purchase.limit.month'].create({'employee_id':employee_id.id,'month_id':period_id.id,'purchase_month_limit':limit,'month_limit':limit})
                 else:
-                    raise osv.except_osv(_(u'Анхааруулга!'), _(u"Энэ жилийн албан тушаалын сарын лимит тохиргоо хийгдээгүй байна"))
+                    raise UserError(_(u'Анхааруулга!'), _(u"Энэ жилийн албан тушаалын сарын лимит тохиргоо хийгдээгүй байна"))
         else:
                 if limit!=0 :
                     amount =0
                     amount = limit_id.month_limit - limit_id.purchase_month_limit
                     limit_id.write({'purchase_month_limit':limit-amount,'month_limit':limit})
                 else:
-                    raise osv.except_osv(_(u'Анхааруулга!'), _(u"Энэ жилийн албан тушаалын сарын лимит тохиргоо хийгдээгүй байна"))
+                    raise UserError(_(u'Анхааруулга!'), _(u"Энэ жилийн албан тушаалын сарын лимит тохиргоо хийгдээгүй байна"))
         is_true = False
         _logger.info(u'\n\n\n\n\n\n\n\n-------------------------sequences', sequences,'\n\n\n\n')
         for line in line_ids:
@@ -1924,12 +1910,12 @@ class purchase_requisition(models.Model):
         if self.schedule_date:
             if datetime.strptime( self.schedule_date,'%Y-%m-%d') < today:
                 self.schedule_date = today
-#                 raise osv.except_osv(_(u'Анхааруулга'), _(u'Хүсч буй хугацаа өнөөдрөөс өмнө байж болохгүй'))
+#                 raise UserError(_(u'Анхааруулга'), _(u'Хүсч буй хугацаа өнөөдрөөс өмнө байж болохгүй'))
     
     
         
         
-    @api.multi
+    
     def write_state(self,state):
         today = datetime.strptime(time.strftime('%Y-%m-%d'), "%Y-%m-%d")
         
@@ -1939,7 +1925,7 @@ class purchase_requisition(models.Model):
         #     if line_ids:
         #         sequence = line_ids[0].sequence                
         #     else:
-        #         raise osv.except_osv(_(u'Анхааруулга'), _(u'Урсгал дээр Хангамжийн урсгал хийгдээгүй байна. Системийн админтайгаа холбогдоно уу !!!.'))         
+        #         raise UserError(_(u'Анхааруулга'), _(u'Урсгал дээр Хангамжийн урсгал хийгдээгүй байна. Системийн админтайгаа холбогдоно уу !!!.'))         
         # else:
         sequence = self.active_sequence+1
         
@@ -1977,7 +1963,7 @@ class purchase_requisition(models.Model):
         
         next_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups])])
         if not next_user_ids:
-              raise osv.except_osv(_(u'Анхааруулга'), _(u'Хангамж руу илгээх эсэх грүпд хэрэглэгч нар алга байна.')) 
+              raise UserError(_(u'Анхааруулга'), _(u'Хангамж руу илгээх эсэх грүпд хэрэглэгч нар алга байна.')) 
         users = []
         for user in self.env['res.users'].search([('partner_id','in', self.message_partner_ids.ids)]):
             users.append(user.id)
@@ -1985,7 +1971,7 @@ class purchase_requisition(models.Model):
         # self.action_send_email(state,users)       
         self.create_history(state)
 
-    @api.multi
+    
     def change_state(self):
         purchase_line = self.env['request.config.purchase.line']
         line_ids = purchase_line.search([('sequence','=',self.active_sequence),('request_id','=',self.request_id.id)])
@@ -2029,11 +2015,11 @@ class purchase_requisition(models.Model):
                     else:
                             self.send_request()
 
-    @api.multi
+    
     def action_to_assign(self):
         for line in self.line_ids:
             if not line.buyer:
-                raise osv.except_osv(_('Warning !'), _(u"Шаардахын мөр дээрх Худалдан авалтын ажилтан хоосон байна"))      
+                raise UserError(_('Warning !'), _(u"Шаардахын мөр дээрх Худалдан авалтын ажилтан хоосон байна"))      
         self.write({'state':'assigned'})
         self.line_ids.write({'state':'assigned'})
         next_user_ids = []
@@ -2043,7 +2029,7 @@ class purchase_requisition(models.Model):
         self.message_subscribe_users(next_user_ids)
         # self.action_send_email('assigned',next_user_ids)
 
-    @api.multi
+    
     def send_request(self):
         if self._context is None:
             self._context = {}
@@ -2054,7 +2040,7 @@ class purchase_requisition(models.Model):
             config_id = request.request_id.id
             vals = {}
             if not config_id:
-                raise osv.except_osv(_('Warning !'), _("You don't have purchase requisition request configure !"))
+                raise UserError(_('Warning !'), _("You don't have purchase requisition request configure !"))
             user = request.user_id
             next_user_ids, next_seq, next_state = config_obj.purchase_forward('purchase.requistion',request.active_sequence, request.user_id.id,config_id,request.department_id.id)
             next_user_ids1, next_seq1, next_state1 = config_obj.purchase_forward('purchase.requistion',request.active_sequence+1, request.user_id.id,config_id,request.department_id.id)
@@ -2069,9 +2055,9 @@ class purchase_requisition(models.Model):
         if user_ids:
             next_user_ids1.extend(user_ids)
         if self._uid not in next_user_ids:
-            raise osv.except_osv(_('Warning !'), _(u"Таны эрх хүрэхгүй байна."))            
+            raise UserError(_('Warning !'), _(u"Таны эрх хүрэхгүй байна."))            
         if not next_user_ids1:
-            raise osv.except_osv(_('Warning !'), _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))            
+            raise UserError(_('Warning !'), _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))            
         # if self.state=='sent_to_supply':
         #     vals.update({'state':next_state1,'active_sequence':request.active_sequence+1})
         #     self.write(vals)
@@ -2084,7 +2070,7 @@ class purchase_requisition(models.Model):
         if next_user_ids:
             vals.update({'state':next_state,'active_sequence':request.active_sequence+1})
         else:
-            raise osv.except_osv(_('Warning !'), _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))
+            raise UserError(_('Warning !'), _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))
             
         self.write(vals)
         self.line_ids.write({'state':next_state})
@@ -2092,7 +2078,7 @@ class purchase_requisition(models.Model):
             self.create_history(next_state)
         # self.action_send_email(next_state,next_user_ids1)
 
-    @api.multi
+    
     def group_users1 (self):
         sel_user_ids= []
         user_ids = []
@@ -2119,7 +2105,7 @@ class purchase_requisition(models.Model):
                             if user_id :
                                 sel_user_ids.append( user_id)
                             else :
-                                raise osv.except_osv(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
+                                raise UserError(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
         # user_ids = self.get_possible_users( sel_user_ids)
         
         if group_ids :
@@ -2141,7 +2127,7 @@ class purchase_requisition(models.Model):
         user_ids = list(set(user_ids))
 
         return user_ids
-    @api.multi
+    
     def group_users (self,active_sequence):
         sel_user_ids= []
         user_ids = []
@@ -2168,7 +2154,7 @@ class purchase_requisition(models.Model):
                             if user_id :
                                 sel_user_ids.append( user_id)
                             else :
-                                raise osv.except_osv(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
+                                raise UserError(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
         user_ids = self.get_possible_users( sel_user_ids)
         if group_ids :
             group_id= self.env['ir.model.data'].get_object_reference('nomin_base', 'group_financial_business_chief')[1]
@@ -2189,7 +2175,7 @@ class purchase_requisition(models.Model):
            
         user_ids = list(set(user_ids))
         return user_ids
-    @api.multi
+    
     def send_next_request(self):
         if self._context is None:
             self._context = {}
@@ -2209,17 +2195,17 @@ class purchase_requisition(models.Model):
             if active_sequence==0:
                 active_sequence = request.active_sequence,
             if not config_id:
-                raise osv.except_osv(_('Warning !'), _("You don't have purchase requisition request configure !"))
+                raise UserError(_('Warning !'), _("You don't have purchase requisition request configure !"))
             user = request.user_id
             next_user_ids, next_seq, next_state = config_obj.purchase_forward('purchase.requisition',request.active_sequence, request.user_id.id,config_id,request.department_id.id)
             next_user_ids1, next_seq1, next_state1 = config_obj.purchase_forward('purchase.requisition',active_sequence+1, request.user_id.id,config_id,request.department_id.id)
             # if not next_user_ids1:
-            #     raise osv.except_osv(_('Warning !'), _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))            
+            #     raise UserError(_('Warning !'), _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))            
 
         next_user_ids1 = self.get_possible_users(next_user_ids1)
         next_user_ids1 = self.group_users(active_sequence+1)
         if self._uid not in next_user_ids:
-            raise osv.except_osv(_('Warning !'), _(u"Таны эрх хүрэхгүй байна."))            
+            raise UserError(_('Warning !'), _(u"Таны эрх хүрэхгүй байна."))            
         _logger.info(u'\n\n\n\n\n-------------------------active_sequence ', active_sequence+1,next_user_ids1,'\n\n\n\n\n\n\n\n')
 
         # if user_ids:
@@ -2227,14 +2213,14 @@ class purchase_requisition(models.Model):
         if next_user_ids1:
             vals.update({'state':'next_confirm_user','active_sequence':active_sequence+1})
         else:
-            raise osv.except_osv(_('Warning !'), _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна.!"))
+            raise UserError(_('Warning !'), _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна.!"))
             
         self.write(vals)
         self.line_ids.write({'state':'next_confirm_user'})
         self.create_history('next_confirm_user')
         # self.action_send_email('next_confirm_user',next_user_ids1)
 
-    @api.multi
+    
     def create_history(self,state):
         history_obj = self.env['request.history']
         if state in ['confirmed','next_confirm_user']:
@@ -2248,7 +2234,7 @@ class purchase_requisition(models.Model):
                 )
 
 
-    @api.multi
+    
     def action_send_email(self,state, group_user_ids):
        
         template = self.env.ref('nomin_purchase_requisition.requisition_notif_cron_email_template1')
@@ -2359,7 +2345,6 @@ class purchase_requisition(models.Model):
         return {
             'name': _('Compose Email'),
             'type': 'ir.actions.act_window',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'mail.compose.message',
             'views': [(compose_form.id, 'form')],
@@ -2368,7 +2353,7 @@ class purchase_requisition(models.Model):
             'context': ctx,
         }
 
-    @api.multi
+    
     def send_notification(self, signal ,group_user_ids):
         model_obj = openerp.pooler.get_pool(cr.dbname).get('ir.model.data')
         
@@ -2388,9 +2373,9 @@ class purchase_requisition(models.Model):
     #         self.env['purchase.requisition'].write(cr, uid, ids, {'confirm_user_ids':[(6,0,group_user_ids)]}, context=None)
     #         self.env['purchase.requisition'].message_post(cr, uid, ids, body=email, context=None)
     #     else:
-    #         raise osv.except_osv(_('Warning!'), _(u'Хүлээн авах хүн олдсонгүй. Систем админтайгаа холбогдоно уу'))
+    #         raise UserError(_('Warning!'), _(u'Хүлээн авах хүн олдсонгүй. Систем админтайгаа холбогдоно уу'))
     #     return True
-    # # @api.multi
+    # # 
     # def action_fulfil_request(self):
     #     #Шаардах шаардахын мөрийн төлөвийг өөрчлөх
     #     # self.change_state()
@@ -2412,13 +2397,12 @@ class purchase_requisition(models.Model):
     #             line.write({'state':'assigned','date_start':time.strftime('%Y-%m-%d')})                    
     #         self.write({'state':'assigned','ordering_date':day})
       
-    @api.multi            
+                
     def action_retrive_request(self):
         context = {}
         context.update({'retrive_request':'retrive_request'}) 
         return {
             'name': 'Note',
-            'view_type': 'form',
             'view_mode': 'form',
             #'view_id': [res and res[1] or False],
             'res_model': 'purchase.requisition.cancel.note',
@@ -2429,21 +2413,20 @@ class purchase_requisition(models.Model):
             #'res_id': ids[0]  or False,
         }
 
-    @api.multi
+    
     def action_retrived(self):
         context = {}
         notif_groups = self.env['ir.model.data'].get_object_reference( 'nomin_purchase_requisition', 'group_purchase_decide_sent_to_supply')[1]
         
         next_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups])])
         if not next_user_ids:
-              raise osv.except_osv(_(u'Анхааруулга'), _(u'Хангамж руу илгээх эсэх грүпд хэрэглэгч нар алга байна.')) 
+              raise UserError(_(u'Анхааруулга'), _(u'Хангамж руу илгээх эсэх грүпд хэрэглэгч нар алга байна.')) 
 
         # confirm_user_ids = self.get_possible_users(next_user_ids.ids)
         confirm_user_ids = self.message_partner_ids.ids
         context.update({'retrive':'retrive','confirm_user_ids':confirm_user_ids}) 
         return {
             'name': 'Note',
-            'view_type': 'form',
             'view_mode': 'form',
             #'view_id': [res and res[1] or False],
             'res_model': 'purchase.requisition.cancel.note',
@@ -2454,7 +2437,7 @@ class purchase_requisition(models.Model):
             #'res_id': ids[0]  or False,
         }
         
-    @api.multi            
+                
     def action_to_reject(self):
         context = {}
         confirm_user_ids = [self.user_id.id]
@@ -2462,7 +2445,6 @@ class purchase_requisition(models.Model):
         # self._context.update({'retrive_request':'retrive_request'})
         return {
             'name': 'Note',
-            'view_type': 'form',
             'view_mode': 'form',
             #'view_id': [res and res[1] or False],
             'res_model': 'purchase.requisition.cancel.note',
@@ -2472,7 +2454,7 @@ class purchase_requisition(models.Model):
             'target': 'new',
             #'res_id': ids[0]  or False,
         }
-    @api.multi        
+            
     def action_fulfill(self):
         today = date.today()
         month_limit = 0
@@ -2509,11 +2491,11 @@ class purchase_order(models.Model):
         ('confirmed','Confirmed'), #Батласан
         ('done', 'Done'), #Дууссан
         ('cancel', 'Canceled') #Цуцлагдсан
-        ], string='Status', readonly=True, select=True, copy=False, default='draft', track_visibility='onchange')
+        ], string='Status', readonly=True, select=True, copy=False, default='draft', tracking=True)
 
     payment_request_id = fields.Many2one('payment.request',string='Payment request') #Төлбөрийн хүсэлт
 
-    @api.multi
+    
     def write(self, vals):
         if vals.get('state'):
             for order in self:
@@ -2536,7 +2518,7 @@ class purchase_order(models.Model):
                             order.order_id.write({'state':'cancel'})
         return order_id  
 
-    @api.multi
+    
     def action_payment_request (self):
         model_obj = self.env['ir.model.data']
         # res = mod_obj.get_object_reference('nomin_purchase_requisition', 'action_create_purchase_order')
@@ -2582,7 +2564,7 @@ class purchase_order(models.Model):
                      'type': 'ir.actions.act_window',
                      'name': _('Create payment request'),
                      'res_model': 'payment.request',
-                     'view_type' : 'tree',
+                    #  'view_type' : 'tree',
                      'view_mode' : 'form',
                      'search_view_id' : view_id,
                      'res_id':request_id.id,
@@ -2606,9 +2588,9 @@ class purchase_order_line(models.Model):
         ('confirmed','Confirmed'),
         ('done', 'Done'),
         ('cancel', 'Cancelled')
-        ], string='Status', readonly=True, select=True, copy=False, default='draft', track_visibility='onchange')
+        ], string='Status', readonly=True, select=True, copy=False, default='draft', tracking=True)
 
-    @api.multi
+    
     def write(self, vals):
         if vals.get('state'):
             # if vals.get('state') =='purchase':
@@ -2655,10 +2637,8 @@ class InheritRequisitionProductTemplate(models.Model):
 
 
     product_mark = fields.Char(string=u'Барааны үзүүлэлт')
-    assign_categ_id = fields.Many2one('assign.category',string=u'Барааны хувиарлалт ангилал', track_visibility='onchange', required=True, change_default=True)
-    product_code = fields.Char(u'Барааны код', required = True,track_visibility='onchange' )
+    assign_categ_id = fields.Many2one('assign.category',string=u'Барааны хувиарлалт ангилал', tracking=True, required=True, change_default=True)
+    product_code = fields.Char(u'Барааны код', required = True,tracking=True )
 
 
-class InheritPurchaseComparison(models.Model):
-    _inherit = 'purchase.comparison'
 

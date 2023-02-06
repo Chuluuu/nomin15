@@ -8,7 +8,7 @@
             <form>
                 <group colspan="8" col="8">
 
-		            <group colspan="4">
+                    <group colspan="4">
 
 
                         <field name="department_id"/>
@@ -19,7 +19,7 @@
                         <field name="employee_id" attrs="{'invisible':[('filter_options','not in',['owner'])],'required':[('filter_options','in',['owner'])]}"/>
                         <field name="asset_type" attrs="{'invisible':[('filter_options','not in',['type'])],'required':[('filter_options','in',['type'])]}"/>
                         <field name="asset_code" attrs="{'invisible':[('filter_options','not in',['code'])],'required':[('filter_options','in',['code'])]}"/>
-                        
+
                         <!-- <field name="receiver_department_id" />    
                         <field name="sender_account_receivable_id" domain="[('department_id', '=', department_id)]"/>
                         <field name="sender_profit_account_id" domain="[('department_id', '=', department_id)]"/>
@@ -30,7 +30,7 @@
                         <!-- <field name="description"/> -->
                     </group>
                 </group>
-                <footer>                    
+                <footer>
                     <button name="export_chart"  class ="oe_highlight" string="Татах" type="object" icon="terp-graph"/>
                     or
                     <button string="Цуцлах" class="btn-default" special="cancel"/>
@@ -40,18 +40,13 @@
     </record>
 
     <record id="action_report_property" model="ir.actions.act_window">
-                <field name="name">Хөрөнгийн тайлан</field>           
-                <field name="res_model">property.report</field>
-                <field name="view_type">form</field>
-                <field name="view_mode">form</field>           
-                <field name="view_id" ref="report_property_form"/>                       
-                <field name="target">new</field>
+        <field name="name">Хөрөнгийн тайлан</field>
+        <field name="res_model">property.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="report_property_form"/>
+        <field name="target">new</field>
     </record>
 
-   <menuitem name="Хөрөнгийн тайлан" 
-            id="menu_report_property" 
-            parent="nomin_purchase.parent_menu_purchase_report_wizard"
-            action="action_report_property" 
-            sequence="45"/>
+    <menuitem name="Хөрөнгийн тайлан" id="menu_report_property" parent="nomin_purchase.parent_menu_purchase_report_wizard" action="action_report_property" sequence="45"/>
 
 </odoo>

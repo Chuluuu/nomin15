@@ -12,17 +12,13 @@
 from datetime import datetime,timedelta,date
 from dateutil import parser
 from dateutil.relativedelta import relativedelta
-from openerp import api, fields, models, _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp.tools.translate import _
-from openerp.tools.float_utils import float_is_zero, float_compare
-import openerp.addons.decimal_precision as dp
+from odoo import api, fields, models, _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools.translate import _
 import time
-from openerp.osv import osv
-from openerp.http import request    
-import xlwt
+from odoo.osv import osv
+from odoo.http import request    
 from xlwt import *
-from StringIO import StringIO
 from operator import itemgetter
 import xlsxwriter
 from io import BytesIO
@@ -32,7 +28,8 @@ import base64
 
 class PurchasePerformanceReport(models.TransientModel):
     _name = 'purchase.performance.report.wizard'
-    _inherit = 'abstract.report.model'
+    # TODO FIX LATER
+    # _inherit = 'abstract.report.model'
     _description = 'Purchase performance report'
 
 
@@ -43,9 +40,8 @@ class PurchasePerformanceReport(models.TransientModel):
     state= fields.Selection([('done','Done',),('assigned','Assigned')],string="State")
 
 
-    @api.multi
+    
     def export_report(self,report_code,context=None):
-        print'__________LOL________buyer_ids_',self.buyer_ids
         if context is None:
             context = {}
         datas={}
@@ -149,7 +145,6 @@ class PurchasePerformanceReport(models.TransientModel):
                     left join purchase_category_config J ON J.user_id=B.id \
                     inner join res_partner D ON D.id=B.partner_id " 
 
-        print'__________QUERY_________',query
         sheet = workbook.add_worksheet()
         sheet.portrait=True
         sheet.merge_range(0,3,0,6,u'Худалдан авалтын гүйцэтгэлийн тайлан', title1)
@@ -616,7 +611,6 @@ class PurchasePerformanceReport(models.TransientModel):
 
         return {
         'name': 'Export Report',
-        'view_type':'form',
         'view_mode':'form',
         'res_model':'report.excel.output',
         'res_id':excel_id.id,

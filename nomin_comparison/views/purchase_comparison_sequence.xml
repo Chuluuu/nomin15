@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data noupdate="1">
-        <!-- Sequences for purchase.order --> 
-<!--         <record id="seq_type_purchase_comparison" model="ir.sequence.type">
+        <!-- Sequences for purchase.order -->
+        <!--         <record id="seq_type_purchase_comparison" model="ir.sequence.type">
             <field name="name">Purchase Comparison</field>
             <field name="code">purchase.comparison</field>
         </record> -->
@@ -14,4 +14,4 @@
             <field name="reset_monthly">True</field>
         </record>
     </data>
-</openerp>
+</odoo>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <!-- <record id="view_purchase_order_create_wizard" model="ir.ui.view">
             <field name="name">Purchase Order Creation Wizard</field>
@@ -7,7 +7,7 @@
             <field name="arch" type="xml">
                <form string="Purchase Order Creation Wizard" version="8.0">
 	                	<group>
-	                		<field name="partners_ids" >
+	                		<field name="partners_ids">
 						     <tree editable="bottom">
 								<field name="partner_id" options="{'no_create': True}"/>
 							</tree>	   
@@ -29,7 +29,7 @@
             <field name="name">Purchase Order Creation Wizard</field>
             <field name="model">purchase.rate.employee</field>
             <field name="arch" type="xml">
-               <form string="Rate" >
+               <form string="Rate">
                         <group>
                             <field name="percent"/>
                         </group>
@@ -45,27 +45,11 @@
                 </form>
             </field>
         </record>
-        <act_window name="Purchase Order Creation Wizard"
-            context="{'search_default_draft': 1, 'search_default_approved': False}"
-            res_model="purchase.order.wizard"
-            src_model="purchase.requisition.line"
-            view_mode="form"
-            target="new"
-            multi="True"
-           groups="nomin_purchase_requisition.group_procurement_buyer,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager"
-            key2="client_action_multi"
-            id="mcsi_create_purchase_order"/>
+        <act_window name="Purchase Order Creation Wizard" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="purchase.order.wizard" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" groups="nomin_purchase_requisition.group_procurement_buyer,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager" key2="client_action_multi" id="mcsi_create_purchase_order"/>
 
         
-          <act_window name="Үнийн санал үүсгэх"
-            context="{'search_default_draft': 1, 'search_default_approved': False}"
-            res_model="purchase.order.wizard"
-            src_model="purchase.requisition.line"   
-            target="new"
-            view_mode="form"                
-           	groups="nomin_purchase_requisition.group_procurement_buyer,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager"
-            id="form_create_purchase_order1"/> -->
-        
+          <act_window name="Үнийн санал үүсгэх" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="purchase.order.wizard" src_model="purchase.requisition.line" target="new" view_mode="form" groups="nomin_purchase_requisition.group_procurement_buyer,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager" id="form_create_purchase_order1"/> -->
+
 
 
 
@@ -73,8 +57,8 @@
             <field name="name">Агуулахаас шууд гаргах</field>
             <field name="model">create.stock.picking</field>
             <field name="arch" type="xml">
-               <form string="Purchase Order Creation Wizard" >
-                   <footer>
+                <form string="Purchase Order Creation Wizard">
+                    <footer>
                         <button name="create_stock_picking" string="Зарлагын баримт үүсгэх" type="object" class="oe_highlight"/>
                         or
                         <button string="Cancel" class="oe_link" special="cancel" />
@@ -83,27 +67,11 @@
             </field>
         </record>
 
-        <act_window name="Агуулахаас шууд гаргах"
-            context="{'search_default_draft': 1, 'search_default_approved': False}"
-            res_model="create.stock.picking"
-            src_model="purchase.requisition.line"
-            view_mode="form"
-            target="new"
-            multi="True"
-           groups="nomin_purchase_requisition.group_procurement_buyer,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager"
-            key2="client_action_multi"
-            id="create_stock_picking"/>
-            
-            
-         <act_window name="Агуулахаас шууд гаргах"
-            context="{'search_default_draft': 1, 'search_default_approved': False}"
-            res_model="create.stock.picking"
-            src_model="purchase.requisition.line"
-            view_mode="form"
-            target="new"
-	        groups="nomin_purchase_requisition.group_procurement_buyer,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager"
-            id="form_create_stock_picking"/>
+        <act_window name="Агуулахаас шууд гаргах" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="create.stock.picking" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" groups="nomin_purchase_requisition.group_procurement_buyer,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager" key2="client_action_multi" id="create_stock_picking"/>
+
+
+        <act_window name="Агуулахаас шууд гаргах" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="create.stock.picking" src_model="purchase.requisition.line" view_mode="form" target="new" groups="nomin_purchase_requisition.group_procurement_buyer,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager" id="form_create_stock_picking"/>
 
     </data>
-</openerp>
+</odoo>
 

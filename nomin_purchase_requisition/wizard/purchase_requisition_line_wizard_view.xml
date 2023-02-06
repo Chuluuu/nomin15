@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data> 
-    	<!-- Төслийн үе шат -->
-    	<record id="view_purchase_requisition_line_wizard_form" model="ir.ui.view">
-            <field name="name">purchase.requisition.line.wizard.form</field>
-            <field name="model">purchase.requisition.line.wizard</field>
-            <field name="arch" type="xml">
-                <form string="Requisition Line"  create="false"  >
+<odoo>
+	<data>
+		<!-- Төслийн үе шат -->
+		<record id="view_purchase_requisition_line_wizard_form" model="ir.ui.view">
+			<field name="name">purchase.requisition.line.wizard.form</field>
+			<field name="model">purchase.requisition.line.wizard</field>
+			<field name="arch" type="xml">
+				<form string="Requisition Line" create="false">
 					<sheet>
 						<group>
-							<group>  
+							<group>
 								<!-- <field name="c_budget_type" attrs="{'readonly':[('state','not in',['draft'])],'invisible':[('is_control','=',False)]}"/> -->
 								<field name="product_id"/>
 								<field name="category_id" attrs="{'invisible':[('is_new_requisition','=',False)]}"/>
-								<field name="assign_cat" options="{'no_create': True}" 
-									attrs="{'invisible':[('is_new_requisition','=',True)]}"/>
+								<field name="assign_cat" options="{'no_create': True}" attrs="{'invisible':[('is_new_requisition','=',True)]}"/>
 								<field name="product_price" readonly="1"/>
 								<!-- <field name="product_qty" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}"/> -->
 								<field name="allowed_qty"/>
 								<field name="allowed_amount" readonly="1"/>
-								<field name="is_new_requisition"/> 
+								<field name="is_new_requisition"/>
 							</group>
-							<group>  
+							<group>
 								<field name="partner_id"/>
 								<field name="deliver_product_id"/>
 							</group>
 
 						</group>
-						<group  colspan="4" > 
+						<group colspan="4">
 							<field name="supplied_quantities" nolabel="1" context="{'id2':id}">
 								<tree string="Supplied Quantities" editable="bottom">
 									<field name="create_date" readonly="1"/>
@@ -35,31 +34,30 @@
 									<field name="partner_id"/>
 									<field name="supplied_id"/>
 									<field name="supplied_product_id"/>
-									<field name="supplied_product_quantity"  sum="Total supplied_product_quantity"/> 
+									<field name="supplied_product_quantity" sum="Total supplied_product_quantity"/>
 									<field name="supplied_product_price" readonly="1" sum="Total supplied_product_price"/>
 									<field name="supplied_amount" readonly="1" sum="Total supplied_amount"/>
 								</tree>
 							</field>
-						</group> 	
-						<button name="action_create" string="Үүсгэх"  class="oe_highlight" type="object" />
+						</group>
+						<button name="action_create" string="Үүсгэх" class="oe_highlight" type="object" />
 						<button string="Cancel" class="oe_link" special="cancel" />
 					</sheet>
 					<!-- <div class="oe_chatter">
 						<field name="message_follower_ids" widget="mail_followers"/>
 						<field name="message_ids" widget="mail_thread"/>
 					</div> -->
-                </form>
-            </field>
-        </record>
+				</form>
+			</field>
+		</record>
 
 		<record id="action_purchase_requisition_line_wizard" model="ir.actions.act_window">
 			<field name="name">action.purchase.requisition.line.wizard</field>
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">purchase.requisition.line.wizard</field>
-			<field name="view_type">form</field>
 			<field name="view_mode">form</field>
 			<field name="context">{'record_id' : active_id}</field>
 			<field name="target">new</field>
 		</record>
 	</data>
-</openerp>
+</odoo>

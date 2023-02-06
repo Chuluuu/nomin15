@@ -2,8 +2,8 @@
 
 # sarn8851code4212ai
 # from email.policy import default
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, ValidationError, RedirectWarning
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError, RedirectWarning
 from datetime import timedelta
 # from datetime import datetime
 from datetime import date, datetime,timedelta
@@ -13,7 +13,7 @@ import requests
 import json
 import xmlrpclib
 from zeep import Client, Settings
-from openerp.exceptions import UserError #
+from odoo.exceptions import UserError #
 import base64
 from zeep import Plugin
 class MyLoggingPlugin(Plugin):
@@ -137,7 +137,7 @@ class FixedAssetLine(models.Model):
         ('verify',u'Тоолсон'),       
         ('verified',u'Дууссан'),
         ('cancelled',u'Цуцлагдсан'),
-    ], u'State', default='draft', track_visibility='onchange')
+    ], u'State', default='draft', tracking=True)
 
     connection_state = fields.Selection([
                             ('unknown',u'Тодорхойгүй'),
@@ -145,7 +145,7 @@ class FixedAssetLine(models.Model):
                             ('confirmed',u'Баталгаажсан'),
                             ('connected_for_cycle_counter',u'Тоологчийн гүйлгээ холбогдсон'),
                             ('connected_for_accountant',u'Нягтлангийн гүйлгээ холбогдсон'),
-                            ], u'Холболтын төлөв', track_visibility='onchange', default = 'unknown')
+                            ], u'Холболтын төлөв', tracking=True, default = 'unknown')
 
     employee_id = fields.Many2one('hr.employee', required=True, string='Employee')
     department_id = fields.Many2one('hr.department', string='Department')
@@ -207,7 +207,7 @@ class FixedAssetLine(models.Model):
     @api.onchange('counted_qty')
     def onchange_counted_qty(self):
         self.difference = self.counted_qty
-        if self.counted_qty <> 0:
+        if self.counted_qty != 0:
             self.has_difference = 1
 
 
@@ -219,13 +219,13 @@ class FixedAssetLine(models.Model):
 
         return result
 
-    @api.multi
+    
     def write(self, vals):
 
         has_defference = 0
         if vals.get('counted_qty') or vals.get('counted_qty') == 0:
             defference = vals.get('counted_qty') - self.qty
-            if defference<>0:
+            if defference !=0:
                 has_defference = 1
             vals.update({
                 'difference':defference,
@@ -249,7 +249,7 @@ class FixedAssetLine(models.Model):
         result.department_id = result.employee_id.parent_department or None
 
 
-    @api.one
+    
     def get_solution(self):
 
         employee_id = self.env['hr.employee'].search([('user_id','=',self.env.user.id)])
@@ -268,7 +268,7 @@ class FixedAssetLine(models.Model):
 
 
 
-    @api.multi
+    
     def handle_journal_entries_for_cycle_counter(self):
         current_qty = 0
 
@@ -315,8 +315,8 @@ class FixedAssetLine(models.Model):
 
     def connect_account_moves_for_cycle_counter(self):
 
-        if self.account_move_id:
-            print 'connect_account_moves_for_counter'
+        self.account_move_id
+         
 
 
     def disconnect_account_moves_for_cycle_counter(self):
@@ -339,8 +339,8 @@ class FixedAssetLine(models.Model):
 
     def connect_account_moves_for_accountant(self):
 
-        if self.account_move_id_for_accountant:
-            print 'connect_account_moves_for_accountant'
+        self.account_move_id_for_accountant
+           
 
 
     def disconnect_account_moves_for_accountant(self):
@@ -359,19 +359,11 @@ class FixedAssetLine(models.Model):
 
                 diamond_json.update({'RcvAccountID':self.account_receivable_id.code,
                     'SaleAccountId':self.receivable_income_account_id.code})
-                # print '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n diamond_json',diamond_json
-                if self.employee_id.id <> 215:
+                if self.employee_id.id != 215:
                     diamond_json.update({'CustomerId':self.employee_id.passport_id,'SaleAccountCustomerID':self.employee_id.passport_id})
 
-                # print '\n\n\n\n\n\n\n\n\n\n\n\n\n=========3333333', len(self.sudo().detail_ids) ,detail.registry_number
-
-                # print '\n\n\n\n\n\ndicpt',diamond_json[u'Assets']
                 new_list = []
-                print 'diamond_json[uAssets]1', diamond_json[u'Assets']
                 for detail in self.sudo().detail_ids:
-                    # print 'detail',detail,detail.is_expense,dictionary[u'RegistryNumberID']
-
-                    
                     if detail.is_expense:
                         if "Assets" in diamond_json:
                             # print 'diamond_json[uAssets]', diamond_json[u'Assets']
@@ -379,41 +371,15 @@ class FixedAssetLine(models.Model):
                                 if dictionary[u'RegistryNumberID'] == detail.registry_number:
                                     dictionary.update({'SaleQty':"1"})
                                     new_list.append(dictionary)
-                    print 'new_list',new_list
                 diamond_json[u'Assets'] = new_list
-
-                print 'new_list',json.dumps(diamond_json)
-
-
-
-
-
-                
-                    # else:
-                    #     del dictionary
-                # print '\n\n\n\n\n\ndict',diamond_json[u'Assets']
-
-
-
-                # for dictionary in diamond_json[u'Assets']:
-                #     if dictionary[u'SaleQty'] == "1":
-                #         print '678555555555555555555555555555555555555555555555555555555'
-
-                     
-
-# ++++++++++++++++++++++++++++++++++++++++++++++++++=               
 
                 self.sudo().write(
                 {
                     'diamond_json':json.dumps(diamond_json),                
                 })
 
-
-                # self.diamond_json = json.dumps(diamond_json)
-                # print '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n self.diamond_json',self.diamond_json
                 response = client.service.AssetExpMod("1",self.diamond_json)
 
-                print '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n response',response
                 if response[:7] == 'Success':
                     self.sudo().write({'connection_state': 'confirmed' ,
                         'transaction_id':response[7:],
@@ -742,12 +708,11 @@ class FixedAssetLine(models.Model):
 
 
 
-    @api.multi
+    
     def action_connect_transactions(self):
 
         confirmed_transactions = self.env['fixed.asset.counting.line'].search([('connection_state','=','confirmed')])
-        for confirmed_transaction in confirmed_transactions:
-            print  'confirmed22222',confirmed_transaction.account_move_id.state
+        
             # if confirmed_transaction.account_move_id.state == 'draft':
 
             #     confirmed_transaction.account_move_id.sudo().self_post()
@@ -767,7 +732,7 @@ class FixedAssetCounting(models.Model):
 
     _name = 'fixed.asset.counting'
     _description = 'Fixed asset counting'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = "create_date desc"
     
     def _set_requested_employee(self): 
@@ -797,7 +762,7 @@ class FixedAssetCounting(models.Model):
         ('verify',u'Тоолсон'),       
         ('verified',u'Дууссан'),
         ('cancelled',u'Цуцлагдсан'),
-    ], u'State', default='draft', track_visibility='onchange')
+    ], u'State', default='draft', tracking=True)
 
 
     type = fields.Selection([
@@ -828,7 +793,7 @@ class FixedAssetCounting(models.Model):
         ('verifier',u'Хянагч'),
     ], u'Дүр', compute=_role)
 
-    name = fields.Char('Нэр',track_visibility='onchange')
+    name = fields.Char('Нэр',tracking=True)
     # is_same_company = fields.Boolean(string="Is same company", compute=_is_same_company, default=False)
 
     all_line_employees_are_same = fields.Boolean(string="All line employees are same", default=False)
@@ -839,12 +804,12 @@ class FixedAssetCounting(models.Model):
     requested_date = fields.Datetime('Requested date', default=fields.Date.today)
     department_id = fields.Many2one('hr.department', domain="[('is_sector', '=', True)]",string='Салбар')
     account_from = fields.Many2one('account.account', string='Account from')
-    approved_employee_id = fields.Many2one('hr.employee', 'Approved employee', track_visibility='onchange', readonly=True)
+    approved_employee_id = fields.Many2one('hr.employee', 'Approved employee', tracking=True, readonly=True)
     change_line_ids = fields.One2many('fixed.asset.counting.line', 'request_id', 'Lines')
     change_line_ids_for_counting = fields.One2many('fixed.asset.counting.line', 'request_id', 'Lines_for_emp' )
 
-    returned_reason = fields.Text('Returned reason', track_visibility='onchange', readonly=True)
-    returned_description = fields.Text('Returned description', track_visibility='onchange', readonly=True)
+    returned_reason = fields.Text('Returned reason', tracking=True, readonly=True)
+    returned_description = fields.Text('Returned description', tracking=True, readonly=True)
 
     description = fields.Text('Тайлбар')
 
@@ -891,7 +856,7 @@ class FixedAssetCounting(models.Model):
 
 
 
-    @api.multi
+    
     def write(self, vals):
         result = super(FixedAssetCounting, self).write(vals)
         # if vals.get('employee_id'):
@@ -904,25 +869,23 @@ class FixedAssetCounting(models.Model):
 
 
 
-    @api.multi
+    
     def unfilter_assets(self):
         # zzzz = self.env['fixed.asset.counting.line'].search([('backup_id','=',self.id)])
         # print 'zzzz',zzzz
         # self.change_line_ids_for_counting = zzzz
 
         string1 = "update fixed_asset_counting_line set request_id=backup_id where backup_id=%s "%(str(self.id))
-        print 'string1',string1
         self.env.cr.execute(string1)
 
         self.asset_code = ''
 
 
-    @api.multi
+    
     def filter_assets(self):
         # self.change_line_ids_for_counting = self.env['fixed.asset.counting.line'].search([('backup_id','=',self.id)])
 
         string1 = "update fixed_asset_counting_line set request_id=backup_id where backup_id=%s "%(str(self.id))
-        print 'string1',string1
         self.env.cr.execute(string1)
 
         extra_str = ')'
@@ -943,11 +906,10 @@ class FixedAssetCounting(models.Model):
 
         if self.employee_ids or self.asset_code:
             string1 = "update fixed_asset_counting_line set request_id=null where request_id=%s and ("%(str(self.id)) + emp_str + or_sign + extra_str
-            print 'string1',string1
             self.env.cr.execute(string1)
 
 
-    @api.multi
+    
     def filter_few_assets(self):
 
         string1 = "update fixed_asset_counting_line set request_id=null where request_id=%s"%(str(self.id))
@@ -956,7 +918,6 @@ class FixedAssetCounting(models.Model):
         string1 = "select count(id) id from fixed_asset_counting_line where backup_id=%s and filter_by30s=False and counted_qty = qty"%(str(self.id))
         self.env.cr.execute(string1)
         zzz = self.env.cr.fetchone()
-        print 'zzz',zzz[0]
 
         if zzz[0] == 0:
             string1 = "update fixed_asset_counting_line set filter_by30s=False where backup_id=%s"%(str(self.id))
@@ -970,13 +931,12 @@ class FixedAssetCounting(models.Model):
 
 
 
-    @api.multi
+    
     def filter_while_complete_counting(self):
 
         string1 = "update fixed_asset_counting_line set request_id=null where request_id=%s"%(str(self.id))
         self.env.cr.execute(string1)
         string1 = "update fixed_asset_counting_line set request_id=%s where difference < 0 and expense_cnt<>0 and backup_id=%s"%(str(self.id),str(self.id))
-        print 'string1',string1
         self.env.cr.execute(string1)
 
 
@@ -989,7 +949,7 @@ class FixedAssetCounting(models.Model):
 
 
 
-    @api.multi
+    
     def button_to_handle(self):
 
         for line in self.change_line_ids_for_counting:
@@ -1006,11 +966,11 @@ class FixedAssetCounting(models.Model):
                 raise UserError(_('%s-р мөр дээр орлогодсон болон зарлагадсан хөрөнгийн тоо нь баланслахгүй байна'%(str(line.id))))
         
 
-    @api.one
+    
     def action_get_asset_type(self):
         self.env['fixed.assets.type'].sudo().get_type(self.department_id.nomin_code, True)
 
-    @api.one
+    
     def action_request(self):
         count = 0
         for line in self.change_line_ids:
@@ -1019,7 +979,7 @@ class FixedAssetCounting(models.Model):
         self.sudo().write({'state': 'count','count_of_assets':count})
 
 
-    @api.one
+    
     def action_complete_counting(self): 
         jump = True
         self.unfilter_assets()
@@ -1087,7 +1047,7 @@ class FixedAssetCounting(models.Model):
             return {'type': 'ir.actions.act_window_close'}
         
  
-    @api.one
+    
     def action_verify(self): 
 
         self.unfilter_assets()
@@ -1139,7 +1099,7 @@ class FixedAssetCounting(models.Model):
 
 
 
-    # @api.one
+    # 
     # def cancel(self):
     #     print 'self.state',self.state
     #     if self.state == 'verified':
@@ -1150,7 +1110,7 @@ class FixedAssetCounting(models.Model):
     #         self.change_line_ids.sudo().write({'state': 'cancelled'})
 
 
-    @api.one
+    
     def reverse(self):
 
         self.unfilter_assets()
@@ -1223,7 +1183,7 @@ class FixedAssetCounting(models.Model):
 
 
 
-    @api.multi
+    
     def unlink(self):
 
         for line in self:
@@ -1231,7 +1191,7 @@ class FixedAssetCounting(models.Model):
                 raise UserError(u'Зөвхөн ноорог болон тоолох төлвөөс устгах боломжтой!')
         return super(FixedAssetCounting, self).unlink()
 
-    @api.multi
+    
     def action_expense(self):
         vals = {'report_type' : 'expense',
                 'start_date' : self.start_date,
@@ -1242,7 +1202,7 @@ class FixedAssetCounting(models.Model):
         expense_id = self.env['asset.counting.report'].create(vals)
         return expense_id.export_chart()
 
-    @api.multi
+    
     def action_income(self):
         vals = {'report_type' : 'income',
                 'start_date' : self.start_date,
@@ -1253,7 +1213,7 @@ class FixedAssetCounting(models.Model):
         expense_id = self.env['asset.counting.report'].create(vals)
         return expense_id.export_chart()
  
-    @api.multi
+    
     def action_transfer(self):
         vals = {'report_type' : 'transfer',
                 'start_date' : self.start_date,
@@ -1264,7 +1224,7 @@ class FixedAssetCounting(models.Model):
         expense_id = self.env['asset.counting.report'].create(vals)
         return expense_id.export_chart()
 
-    @api.multi
+    
     def action_damage_asset(self):
         vals = {'report_type' : 'damage_asset',
                 'start_date' : self.start_date,

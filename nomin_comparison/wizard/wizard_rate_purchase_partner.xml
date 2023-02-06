@@ -1,55 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
-            <record id="view_wizard_rate_purchase_partner" model="ir.ui.view">
-                <field name="name">Purchase Order Comparison Creation Wizard</field>
-                <field name="model">wizard.rate.purchase.partner</field>
-                <field name="arch" type="xml">
-                    <form string="Purchase Order Comparison Creation Wizard" >
-                        <group>
-                            <field name="partner_partner_id" readonly="1"/>
-                            <field name="order_id" readonly="1"/>
-                            <field name="partner_id" invisible="1"/>
-                            <field name="line_ids">
-                                <tree string="Purchase" editable="bottom" create="false" delete="false">
-                                    <field name="indicator_id" readonly="1"/>
-                                    <field name="percent" required="1"/>
-                                </tree>
-                            </field>
-                            <field name="info_ids">
-                                <tree string="Purchase evaluation indicators" editable="bottom" create="false" delete="false">
-                                    <field name="indicator_id" readonly="1"/>
-                                    <field name="info" readonly="1"/>
-                                </tree>
-                            </field>
-                        </group>
-                        <footer>
-                            <button name="rate" string="Rate" type="object" class="oe_highlight"/>
+        <record id="view_wizard_rate_purchase_partner" model="ir.ui.view">
+            <field name="name">Purchase Order Comparison Creation Wizard</field>
+            <field name="model">wizard.rate.purchase.partner</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Order Comparison Creation Wizard">
+                    <group>
+                        <field name="partner_partner_id" readonly="1"/>
+                        <field name="order_id" readonly="1"/>
+                        <field name="partner_id" invisible="1"/>
+                        <field name="line_ids">
+                            <tree string="Purchase" editable="bottom" create="false" delete="false">
+                                <field name="indicator_id" readonly="1"/>
+                                <field name="percent" required="1"/>
+                            </tree>
+                        </field>
+                        <field name="info_ids">
+                            <tree string="Purchase evaluation indicators" editable="bottom" create="false" delete="false">
+                                <field name="indicator_id" readonly="1"/>
+                                <field name="info" readonly="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <button name="rate" string="Rate" type="object" class="oe_highlight"/>
                             or
-                            <button string="Cancel" class="oe_link" special="cancel" />
-                        </footer>
-                    </form>
-                </field>
-            </record>
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
 
- <!--        <act_window name="Purchase Order Comparison Creation Wizard"
-            context="{}"
-            res_model="purchase.order.comparison.wizard"
-            src_model="purchase.order"
-            view_mode="form"
-            target="new"
-            multi="True"
-            key2="client_action_multi"
-            id="action_purchase_order_comparison_wizard"/> -->
-           <record id="action_wizard_rate" model="ir.actions.act_window">
-                    <field name="name">Purchase Comparison</field>
-                    <field name="res_model">wizard.rate.purchase.partner</field>
-                    <field name="view_type">form</field>
-                    <field name="view_mode">form</field>
-                    <field name="view_id" ref="view_wizard_rate_purchase_partner"/>
-                    <field name="context">{'record_id' : active_id}</field>
-                    <field name="target">new</field>
-            </record>
+        <!--        <act_window name="Purchase Order Comparison Creation Wizard" context="{}" res_model="purchase.order.comparison.wizard" src_model="purchase.order" view_mode="form" target="new" multi="True" key2="client_action_multi" id="action_purchase_order_comparison_wizard"/> -->
+        <record id="action_wizard_rate" model="ir.actions.act_window">
+            <field name="name">Purchase Comparison</field>
+            <field name="res_model">wizard.rate.purchase.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_wizard_rate_purchase_partner"/>
+            <field name="context">{'record_id' : active_id}</field>
+            <field name="target">new</field>
+        </record>
 
     </data>
-</openerp>
+</odoo>

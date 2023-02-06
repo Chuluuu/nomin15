@@ -1,30 +1,11 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+
 import time
-# from openerp.osv import fields, osv
-from openerp.tools.translate import _
-from openerp import models,  api, _,fields
+from odoo.tools.translate import _
+from odoo import models,  api, _,fields
 from datetime import timedelta
 from datetime import datetime, date
-from openerp.http import request
+from odoo.http import request
 
 
 class PurchaseRequisitionSetDone(models.TransientModel):
@@ -32,7 +13,7 @@ class PurchaseRequisitionSetDone(models.TransientModel):
 
 	note =  fields.Text(string=u'Тайлбар' ,required=True)
 
-	@api.multi
+	
 	def purchase_set_done(self):
 		active_ids = self.env.context.get('active_ids', [])
 		notif_groups_ids = self.env['ir.model.data'].get_object_reference( 'nomin_purchase_requisition', 'group_haaa_head')[1]
@@ -57,7 +38,7 @@ class PurchaseRequisitionSetDone(models.TransientModel):
 
 
 
-	@api.multi
+	
 	def action_send_email(self,requisition_id, group_user_ids):
 		
 		user_emails = []

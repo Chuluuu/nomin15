@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
-    
-    	<record id="view_comparison_partner_form" model="ir.ui.view">
+
+        <record id="view_comparison_partner_form" model="ir.ui.view">
             <field name="name">add.comparison.partner.form</field>
             <field name="model">add.comparison.partner</field>
             <field name="arch" type="xml">
@@ -17,17 +17,17 @@
                                 <field name="partner_phone" readonly="1"/>
                                 <field name="partner_email" readonly="1"/>
                             </tree>
-                        </field> 
+                        </field>
                     </group>
                     <footer>
                         <button string="Add partner" name="action_add_partner" type="object" class="btn-primary"/>
                         <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
-               </form>
+                </form>
             </field>
         </record>
 
-        <record id="add_comparison_partner_action" model="ir.actions.act_window" >
+        <record id="add_comparison_partner_action" model="ir.actions.act_window">
             <field name="name">Add comparison partner</field>
             <field name="res_model">add.comparison.partner</field>
             <field name="view_type">form</field>
@@ -35,6 +35,6 @@
             <field name="view_id" ref="view_comparison_partner_form"/>
             <field name="target">new</field>
         </record>
-    		
+
     </data>
-</openerp>
+</odoo>

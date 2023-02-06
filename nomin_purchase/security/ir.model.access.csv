@@ -7,8 +7,18 @@ access_purchase_order_line_portal,purchase order portal user,model_purchase_orde
 access_request_history_portal,purchase order portal user,model_request_history,base.group_portal,1,1,1,0
 access_purchase_order_evaluation_indicators_portal,purchase order portal user,model_purchase_order_evaluation_indicators,base.group_portal,1,1,0,0
 access_request_config_purchase_line,purchase order portal user,nomin_base.model_request_config_purchase_line,base.group_portal,1,0,0,0
-
 access_purchase_requisition_line_order_line,purchase_requisition_line_order_line,model_purchase_requisition_line_order_line,,1,0,0,0
+
+access_purchase_order_cancel_user,purchase.order.cancel,model_purchase_order_cancel,purchase.group_purchase_user,1,1,1,1
+access_stock_picking_requisition_line_user,stock.picking.requisition.line,model_stock_picking_requisition_line,purchase.group_purchase_user,1,1,1,1
+access_stock_picking_seperate_line_user,stock.picking.seperate.line,model_stock_picking_seperate_line,purchase.group_purchase_user,1,1,1,1
+access_stock_picking_seperate_user,stock.picking.seperate,model_stock_picking_seperate,purchase.group_purchase_user,1,1,1,1
+access_purchase_order_report_wizard_user,purchase.order.report.wizard,model_purchase_order_report_wizard,purchase.group_purchase_user,1,1,1,1
+access_purchase_order_supplier_report_wizard_user,purchase.order.supplier.report.wizard,model_purchase_order_supplier_report_wizard,purchase.group_purchase_user,1,1,1,1
+access_purchase_receive_report_wizard_user,purchase.receive.report.wizard,model_purchase_receive_report_wizard,purchase.group_purchase_user,1,1,1,1
+
+
+
 
 
 

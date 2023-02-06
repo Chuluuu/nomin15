@@ -1,12 +1,4 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Asterisk Technologies LLC, Enterprise Management Solution    
-#    Copyright (C) 2013-2014 Asterisk Technologies LLC Co.,ltd (<http://www.erp.mn>). All Rights Reserved
-#
-#    Email : unuruu25@gmail.com
-#    Phone : 976 + 88005462
-#
-##############################################################################
-import purchase_order_cancel
-import stock_picking_seperate
+
+from . import purchase_order_cancel
+from . import stock_picking_seperate

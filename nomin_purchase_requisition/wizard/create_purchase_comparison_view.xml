@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <record id="view_create_purchase_comparison" model="ir.ui.view">
             <field name="name">Multiple Purchase Order Comparison Creation Wizard</field>
             <field name="model">purchase.comparison.creation.wizard</field>
             <field name="arch" type="xml">
-                <form string="Multiple Purchase Order Comparison Creation Wizard" >
+                <form string="Multiple Purchase Order Comparison Creation Wizard">
                     <group col="2" invisible="1">
                         <group>
                             <field name="cost_of_machine"/>
@@ -45,7 +45,7 @@
                                     <field name="partner_phone" readonly="1"/>
                                     <field name="partner_email" readonly="1"/>
                                 </tree>
-                            </field> 
+                            </field>
                         </page>
                         <page string="Бараа">
                             <field name="product_ids" readonly="1">
@@ -58,7 +58,7 @@
                                     <field name="market_price_total" readonly="1"/>
                                     <field name="price_subtotal" readonly="1" invisible="1"/>
                                 </tree>
-                            </field> 
+                            </field>
                         </page>
                     </notebook>
                     <footer>
@@ -70,27 +70,11 @@
             </field>
         </record>
 
-        <act_window name="Харьцуулалт үүсгэх"
-            context="{'search_default_draft': 1, 'search_default_approved': False}"
-            res_model="purchase.comparison.creation.wizard"
-            src_model="purchase.requisition.line"
-            view_mode="form"
-            target="new"
-            multi="True"
-            groups="nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_procurement_buyer"
-            key2="client_action_multi"
-            id="create_purchase_comparison"/>
-            
-            
-         <act_window name="Харьцуулалт үүсгэх"
-            context="{'search_default_draft': 1, 'search_default_approved': False}"
-            res_model="purchase.comparison.creation.wizard"
-            src_model="purchase.requisition.line"
-            view_mode="form"
-            target="new"
-            groups="nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_procurement_buyer"
-            id="form_create_purchase_comparison"/>
-        
+        <act_window name="Харьцуулалт үүсгэх" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="purchase.comparison.creation.wizard" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" groups="nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_procurement_buyer" key2="client_action_multi" id="create_purchase_comparison"/>
+
+
+        <act_window name="Харьцуулалт үүсгэх" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="purchase.comparison.creation.wizard" src_model="purchase.requisition.line" view_mode="form" target="new" groups="nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_procurement_buyer" id="form_create_purchase_comparison"/>
+
     </data>
-</openerp>
+</odoo>
 

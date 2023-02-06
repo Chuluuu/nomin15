@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 from datetime import datetime, timedelta,date
 import time
-from openerp.http import request
+from odoo.http import request
 import logging
-from openerp.exceptions import UserError, AccessError
-from openerp.osv import osv
+from odoo.exceptions import UserError, AccessError
+from odoo.osv import osv
 _logger = logging.getLogger(__name__)
 
 
@@ -13,18 +13,18 @@ _logger = logging.getLogger(__name__)
 class StockRequisition(models.Model):
 	_name ='stock.requisition'
 	_description = 'Stock requisition'
-	_inherit = ['mail.thread', 'ir.needaction_mixin']
+	_inherit = ['mail.thread', 'mail.activity.mixin']
 	_order = 'create_date desc'
 
-	@api.multi
+	
 	def _set_company(self):
 		
 		if self.env.user.department_id.id:
 			return self.env.user.department_id.company_id.id
 		else:
-			raise osv.except_osv(_('Warning!'), _('You don\'t have related department. Please contact administrator.'))
+			raise UserError(_('Warning!'), _('You don\'t have related department. Please contact administrator.'))
 
-	@api.multi
+	
 	def _set_sector(self):
 		department_id = self.env['hr.department'].get_sector(self.env.user.department_id.id)
 		if department_id :
@@ -32,7 +32,7 @@ class StockRequisition(models.Model):
 		else :      
 			return self.env.user.department_id.id
 		
-	@api.one
+	
 	def set_request(self):
 		config_obj = self.env['request.config']
 		config_id = config_obj.sudo().search([('department_ids','=',self.department_id.id),('process','=','purchase.comparison')])
@@ -41,30 +41,30 @@ class StockRequisition(models.Model):
 		else:
 			return False
 
-	@api.multi
+	
 	def _set_department(self):
 		employee_id = self.env['hr.employee'].sudo().search([('user_id','=',self._uid)])
 		if employee_id:
 			return employee_id.department_id.id
 		else:
-			raise osv.except_osv(_('Warning!'), _('You don\'t have related department. Please contact administrator.'))
+			raise UserError(_('Warning!'), _('You don\'t have related department. Please contact administrator.'))
 		
-	@api.multi
+	
 	def _set_user(self):
 		
 		if self._uid:
 			return self._uid
 		else:
-			raise osv.except_osv(_('Warning!'), _('You don\'t have related user. Please contact administrator.'))
-	@api.multi
+			raise UserError(_('Warning!'), _('You don\'t have related user. Please contact administrator.'))
+	
 	def _set_request(self):
 		config_id = False
 		config_id = self.env['request.config'].search([('department_ids','=',self.env.user.department_id.id),('process','=','stock.requisition')])
 		if not config_id:
-			raise osv.except_osv(_('Warning !'), _(u"Хэлтэс дээр урсгал %s тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу")%(self.env.user.department_id.name))
+			raise UserError(_('Warning !'), _(u"Хэлтэс дээр урсгал %s тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу")%(self.env.user.department_id.name))
 		return config_id[0]
 	
-	@api.multi
+	
 	def check_user(self):
 		sel_user_ids= []
 		conf_line = self.env['request.config.purchase.line']
@@ -84,17 +84,16 @@ class StockRequisition(models.Model):
 						if user_id :
 							sel_user_ids.append( user_id)
 						else :
-							raise osv.except_osv(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
+							raise UserError(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
 		conf_users = []
 		for user in sel_user_ids:
 			if self.department_id.id in  user.purchase_allowed_departments.ids:
 				conf_users.append(user.id)
 		return conf_users
 
-	@api.multi
+	
 	def _is_confirm_user(self):
 		users = self.check_user()
-		print users
 		for requisition in self:
 			if self._uid in users:
 				requisition.is_confirm_user=True
@@ -103,7 +102,7 @@ class StockRequisition(models.Model):
 
 	
 
-	@api.multi
+	
 	def compute_total(self):
 		total=0
 		for requisition in self:
@@ -128,7 +127,7 @@ class StockRequisition(models.Model):
 	#state	= fields.Selection([('draft','Ноорог'),('sent_to_supply','Бараа Тодорхойлох'),('verify','Хянах'),('confirmed','Зөвшөөрөх'),('receive','Хүлээн авах'),('done','Дууссан'),('cancelled','Цуцлагдсан')],string='Төлөв',default='draft')
 	state	= fields.Selection([('draft','Draft'),('sent_to_supply','Sent to supply'),('verify','verify'),('confirmed','Confirmed'),('receive','receive'),('done','Done'),('cancelled','Cancelled')],string='State',default='draft')
 	total = fields.Float(string="Дүн",compute=compute_total)	
-	request_id=fields.Many2one('request.config',track_visibility='onchange',string='Workflow config',domain="[('department_ids','=',department_id),('process','=','stock.requisition')]",default=_set_request) #Урсгал тохиргоо
+	request_id=fields.Many2one('request.config',tracking=True,string='Workflow config',domain="[('department_ids','=',department_id),('process','=','stock.requisition')]",default=_set_request) #Урсгал тохиргоо
 	active_sequence = fields.Integer(string='sequence', default=1)
 
 	@api.model
@@ -142,14 +141,14 @@ class StockRequisition(models.Model):
 		return super(StockRequisition,self).create(vals)
 
 
-	@api.multi
+	
 	def unlink(self):
 		for order in self:
 			if order.state != 'draft':
 				raise UserError(_(u'Ноорог төлөвтэй шаардах устгаж болно.'))
 		return super(StockRequisition, self).unlink()
 
-	@api.multi
+	
 	def action_send(self):
 		self.write({'state':'sent_to_supply'})
 		if not self.line_ids:
@@ -168,7 +167,7 @@ class StockRequisition(models.Model):
 		# 	self.send_notification(user_ids)
 		self.create_history(self.state)	
 
-	@api.multi
+	
 	def action_verify(self):
 		
 		self.write({'state':'confirmed'})
@@ -185,7 +184,7 @@ class StockRequisition(models.Model):
 		# self.send_notification(users)
 		self.create_history('verify')	
 
-	@api.multi
+	
 	def action_confirm(self):
 		
 		self.write({'state':'receive','active_sequence':self.active_sequence+1})
@@ -205,14 +204,14 @@ class StockRequisition(models.Model):
 		# self.write( {'confirm_user_ids':[(6,0,[self.receiver_user_id.id])],})
 		self.create_history('confirmed')	
 
-	@api.multi
+	
 	def action_cancel(self):
 		
 		self.write({'state':'cancelled'})
 		# self.send_notification([self.user_id])
 		self.create_history(self.state)	
 
-	@api.multi
+	
 	def create_history(self,state):
 
 		self.env['request.history'].create({
@@ -222,7 +221,7 @@ class StockRequisition(models.Model):
 			'date': time.strftime('%Y-%m-%d %H:%M:%S'),
 			})
 
-	@api.multi
+	
 	def send_notification(self,sel_user_ids):
 		products={'draft':'Ноорог',
 		'sent_to_supply':'Бараа Тодорхойлох',
@@ -281,19 +280,19 @@ class StockRequisition(models.Model):
 class StockRequisitionLine(models.Model):
 	_name = 'stock.requisition.line'
 
-	@api.multi
+	
 	def compute_total(self):
 		for line in self:
 			line.total=line.product_qty*line.unit_price
 
-	@api.multi
+	
 	def compute_supply(self):
 		for line in self:
 			if line.supply_user_id.id==self._uid:
 				line.is_supply =True
 
 
-	@api.multi
+	
 	def _is_receive_user(self):
 		
 		for requisition in self:
@@ -322,7 +321,7 @@ class StockRequisitionLine(models.Model):
 	receiver_department_id = fields.Many2one('hr.department', string="Хүлээн авах Хэлтэс")
 
 
-	@api.multi
+	
 	def unlink(self):
 		for order in self:
 			if order.state != 'draft':
@@ -347,7 +346,7 @@ class StockRequisitionLine(models.Model):
 		self.receiver_sector_id =  self.env['hr.department'].get_sector(self.receiver_user_id.department_id.id)
 
 
-	@api.multi
+	
 	def action_send(self):
 		
 		self.write({'state':'verify'})
@@ -375,7 +374,7 @@ class StockRequisitionLine(models.Model):
 		'tag': 'reload',
 		}
 	
-	@api.multi
+	
 	def action_verify(self):
 		self.write({'state':'confirmed'})
 		is_send = True
@@ -395,7 +394,7 @@ class StockRequisitionLine(models.Model):
 		'type': 'ir.actions.client',
 		'tag': 'reload',
 		}
-	@api.multi
+	
 	def action_cancel(self):
 		self.write({'state':'cancelled'})
 		is_send =True
@@ -433,7 +432,7 @@ class StockRequisitionLine(models.Model):
 
 		return requisition_id
 
-	@api.multi
+	
 	def write(self,vals):
 
 		if vals.get('product_id'):
@@ -456,7 +455,7 @@ class StockRequisitionLine(models.Model):
 		return requisition_id
 
 
-	@api.multi
+	
 	def unlink(self):
 		for order in self:
 			if order.state != 'draft':
@@ -464,7 +463,7 @@ class StockRequisitionLine(models.Model):
 		return super(StockRequisitionLine, self).unlink()
 
 
-	@api.multi
+	
 	def action_receive(self):
 		self.write({'state':'done'})
 		is_true =True
@@ -480,7 +479,7 @@ class StockRequisitionLine(models.Model):
 		}
 
 
-	@api.multi
+	
 	def send_notification(self,sel_user_ids):
 		products={'draft':'Ноорог',
 		'sent_to_supply':'Бараа Тодорхойлох',

@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-<data>
-<report 
-            string="Худалдан авалт харьцуулалт" 
-            id="nomin_comparison.action_report_purchase_comparison" 
-            model="purchase.comparison" 
-            report_type="qweb-pdf"
-            name="nomin_comparison.report_purchase_comparison" 
-            file="nomin_comparison.report_purchase_comparison"
-         />
+<odoo>
+    <data>
+        <report string="Худалдан авалт харьцуулалт" id="nomin_comparison.action_report_purchase_comparison" model="purchase.comparison" report_type="qweb-pdf" name="nomin_comparison.report_purchase_comparison" file="nomin_comparison.report_purchase_comparison" />
 
-<record id="paperformat_purchase_comparison" model="report.paperformat">
+        <record id="paperformat_purchase_comparison" model="report.paperformat">
             <field name="name">Худалдан авалт харьцуулалт</field>
             <field name="default" eval="True"/>
             <field name="orientation">Portrait</field>
@@ -22,191 +15,278 @@
             <field name="header_spacing">35</field>
             <field name="dpi">90</field>
         </record>
-        
-<record id="nomin_comparison.action_report_purchase_comparison" model="ir.actions.report.xml">
-    <field name="paperformat_id" ref="nomin_comparison.paperformat_purchase_comparison" />
-</record>
 
-<template id="nomin_comparison.report_purchase_comparison">
-    <t t-foreach="docs" t-as="o">
-        <t t-call="report.layout">
-            <div class="page">
-                <div style="font-family: 'Mon Arial';font-size: 18px;" align="center">
-                    <strong><span style="font-family: 'Mon Arial';font-size: 18px;">Худалдан авалт харьцуулалт : <span t-field="o.name"/></span></strong>
-                </div>
-            <br></br>
-            <br></br>
-            <table  style="width:100%;font-family: 'Mon Arial';font-size: 15px;" >
-                <!-- <thead> -->
-                    <tr>
-                        <td><strong>Салбар: </strong><span t-field="o.sector_id.name" /></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Хэлтэс: </strong><span t-field="o.department_id.name"/></td>
-                    </tr>
-                    <tr>
-                        <td><strong>Хариуцагч: </strong><span t-field="o.user_id.name"/></td>
-                    </tr>
-                <!-- </thead>                 -->
-            </table>
-            <t t-set="count" t-value="1"/>
-            <t t-foreach="page_counts" t-as="page">
-                
-            <table  style="width:100%;font-family: 'Mon Arial';font-size: 15px;">
-                <thead  align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
-                    <tr >
-                        <td  align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;"><strong>Оролцогчид</strong></td>
-                        <t t-foreach="page['orders']" t-as="order">
-                            <td colspan="2"  align="center" style="width:20%;vertical-align:middle;padding: 1px;border: 1px solid #000000;">
-                                <b><span t-esc="order.partner_id.name"/></b></td>
-                        </t>
-                    </tr>
-                    <tr >
-                        <td   style="vertical-align:middle;padding: 1px;border: 1px solid #000000;"><strong>Үнийн саналын дугаар</strong></td>
-                        <t t-foreach="page['orders']" t-as="order">
-                            <td colspan="2"  align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;"><span t-esc="order.name"/></td>
-                        </t>
-                    </tr>
-                    <tr>
-                        <td   style="vertical-align:middle;padding: 1px;border: 1px solid #000000;"><strong>Үнийн саналын төлөв</strong></td>
-                         <t t-foreach="page['orders']" t-as="order">
-                            <td colspan="2"  align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
-                                <span t-if="order.state in ('done','confirmed','purchase')"><b>Шалгарсан</b></span> 
-                                <span t-if="order.state not in ('done','confirmed','purchase')">Шалгараагүй</span>
-                            </td>
-                        </t>
-                    </tr>
-                    <tr>
-                        <td    style="vertical-align:middle;padding: 1px;border: 1px solid #000000;"><strong>Үнийн саналын дүн</strong></td>
-                        <t t-foreach="page['orders']" t-as="order">
-                            <td colspan="2"  align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;"><span t-esc="'{0:,.2f}'.format(order.amount_total)"/></td>
-                        </t>
-                    </tr>
-                </thead> 
-                <tbody  align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">               
-                    <tr>
-                        <td  style="vertical-align:middle;padding: 1px;border: 1px solid #000000;"><strong>Бараа</strong></td>
-                        <t t-foreach="page['orders']" t-as="order">
-                            <td  align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">Нэгж үнэ</td>
-                            <td  align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">Тоо хэмжээ</td>
-                        </t>
-                    </tr>
-                    <t t-foreach="page['products']" t-as="prod">                        
-                        <tr>
-                            <td  align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;"><span t-esc="prod"/></td>
-                            <t t-foreach="page['suppliers']" t-as="supp">
-                                <td  align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
-                                    <t t-if="prod in page['product_prices'][supp]"><span t-esc="'{0:,.2f}'.format(page['product_prices'][supp][prod])"/></t>
-                                    <t t-if="prod not in page['product_prices'][supp]">0.0</t>
-                                </td>
-                                
-                                <td  align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
-                                    <t t-if="prod in page['product_qtys'][supp]"><span t-esc="'{0:,.2f}'.format(page['product_qtys'][supp][prod])"/></t>
-                                    <t t-if="prod not in page['product_qtys'][supp]">0.0</t>
-                                </td>                              
+        <record id="nomin_comparison.action_report_purchase_comparison" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="nomin_comparison.paperformat_purchase_comparison" />
+        </record>
 
-                                <!-- <td  align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;"><span t-esc="products[prod]['partners'][line]['product_qty']"/></td> -->
-                            </t>
-                        </tr>
-                    </t>
-                   <td  align="left" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
-                    <span><b>Үнэлгээ</b></span>
-
-                    </td>
-                    <td  align="right" colspan="6" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
-                    
-
-                    </td>
-                    <tr></tr>
-                        <t t-foreach="page['indicators']" t-as="rate">
-                            <tr>
-                                <td  align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;"><span t-esc="rate"/></td>
-                                <t t-foreach="page['suppliers']" t-as="supp">
-                                    <td colspan="2" align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
-                                        <span t-esc="page['partner_indicators'][supp][rate]"/>
-                                    </td>
-                                </t>
-                            </tr>
-                        </t>
-                    <tr>
-                        <td  align="right" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
-                        <span><b>Дундаж</b></span>
-                        </td>
-                        <t t-foreach="page['suppliers']" t-as="supp">
-                            <td  colspan="2" align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
-                        <b><span t-esc="page['averages'][supp]"></span></b>
-                        </td>
-                        </t>
-
-                    </tr>
-                    
-
-                    <t t-if="count%2==0">
-                        <p style="page-break-after:always"></p>
-                    </t>
-                    <t t-set="count" t-value="count+1"/>
-                </tbody>
-            </table>
-            
-
-            </t>
-                <table  style="font-size: 11;font-family: 'Arial';padding-top: 0px;padding-left: 0px;padding-right: 0px;padding-bottom: 0px; font-size: 11px;">
-
+        <template id="nomin_comparison.report_purchase_comparison">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.layout">
+                    <div class="page">
+                        <div style="font-family: 'Mon Arial';font-size: 18px;" align="center">
+                            <strong>
+                                <span style="font-family: 'Mon Arial';font-size: 18px;">Худалдан авалт харьцуулалт :                                    <span t-field="o.name"/>
+                                </span>
+                            </strong>
+                        </div>
                         <br></br>
-                        <br></br>                 
-                        <td><strong><span>Нийлүүлэгч сонгосон :</span></strong></td>
-                        <t t-foreach="employees" t-as="e">
+                        <br></br>
+                        <table style="width:100%;font-family: 'Mon Arial';font-size: 15px;">
+                            <!-- <thead> -->
                             <tr>
-                                
-                                        <td align="left" width="50%"><span style="vertical-align:middle;" t-field="e.employee_id.job_id.name"/><span> </span><img class="image" t-att-src="'data:image/png;base64,%s' %e.employee_id.signature_image" style="height:50px;width:100px;"/><span> / </span><span t-field="e.employee_id.name"/><span> /        </span><span t-field="e.write_date"    t-field-options='{"format":"YYYY.MM.dd"}' />
+                                <td>
+                                    <strong>Салбар: </strong>
+                                    <span t-field="o.sector_id.name" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Хэлтэс: </strong>
+                                    <span t-field="o.department_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Хариуцагч: </strong>
+                                    <span t-field="o.user_id.name"/>
+                                </td>
+                            </tr>
+                            <!-- </thead>                 -->
+                        </table>
+                        <t t-set="count" t-value="1"/>
+                        <t t-foreach="page_counts" t-as="page">
+
+                            <table style="width:100%;font-family: 'Mon Arial';font-size: 15px;">
+                                <thead align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                    <tr >
+                                        <td align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                            <strong>Оролцогчид</strong>
+                                        </td>
+                                        <t t-foreach="page['orders']" t-as="order">
+                                            <td colspan="2" align="center" style="width:20%;vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                                <b>
+                                                    <span t-esc="order.partner_id.name"/>
+                                                </b>
                                             </td>
-                                                        
-                            </tr>
+                                        </t>
+                                    </tr>
+                                    <tr >
+                                        <td style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                            <strong>Үнийн саналын дугаар</strong>
+                                        </td>
+                                        <t t-foreach="page['orders']" t-as="order">
+                                            <td colspan="2" align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                                <span t-esc="order.name"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                    <tr>
+                                        <td style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                            <strong>Үнийн саналын төлөв</strong>
+                                        </td>
+                                        <t t-foreach="page['orders']" t-as="order">
+                                            <td colspan="2" align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                                <span t-if="order.state in ('done','confirmed','purchase')">
+                                                    <b>Шалгарсан</b>
+                                                </span>
+                                                <span t-if="order.state not in ('done','confirmed','purchase')">Шалгараагүй</span>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                    <tr>
+                                        <td style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                            <strong>Үнийн саналын дүн</strong>
+                                        </td>
+                                        <t t-foreach="page['orders']" t-as="order">
+                                            <td colspan="2" align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                                <span t-esc="'{0:,.2f}'.format(order.amount_total)"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </thead>
+                                <tbody align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                    <tr>
+                                        <td style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                            <strong>Бараа</strong>
+                                        </td>
+                                        <t t-foreach="page['orders']" t-as="order">
+                                            <td align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">Нэгж үнэ</td>
+                                            <td align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">Тоо хэмжээ</td>
+                                        </t>
+                                    </tr>
+                                    <t t-foreach="page['products']" t-as="prod">
+                                        <tr>
+                                            <td align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                                <span t-esc="prod"/>
+                                            </td>
+                                            <t t-foreach="page['suppliers']" t-as="supp">
+                                                <td align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                                    <t t-if="prod in page['product_prices'][supp]">
+                                                        <span t-esc="'{0:,.2f}'.format(page['product_prices'][supp][prod])"/>
+                                                    </t>
+                                                    <t t-if="prod not in page['product_prices'][supp]">0.0</t>
+                                                </td>
+
+                                                <td align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                                    <t t-if="prod in page['product_qtys'][supp]">
+                                                        <span t-esc="'{0:,.2f}'.format(page['product_qtys'][supp][prod])"/>
+                                                    </t>
+                                                    <t t-if="prod not in page['product_qtys'][supp]">0.0</t>
+                                                </td>
+
+                                                <!-- <td align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;"><span t-esc="products[prod]['partners'][line]['product_qty']"/></td> -->
+                                            </t>
+                                        </tr>
+                                    </t>
+                                    <td align="left" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                        <span>
+                                            <b>Үнэлгээ</b>
+                                        </span>
+
+                                    </td>
+                                    <td align="right" colspan="6" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+
+
+                                    </td>
+                                    <tr></tr>
+                                    <t t-foreach="page['indicators']" t-as="rate">
+                                        <tr>
+                                            <td align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                                <span t-esc="rate"/>
+                                            </td>
+                                            <t t-foreach="page['suppliers']" t-as="supp">
+                                                <td colspan="2" align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                                    <span t-esc="page['partner_indicators'][supp][rate]"/>
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                    <tr>
+                                        <td align="right" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                            <span>
+                                                <b>Дундаж</b>
+                                            </span>
+                                        </td>
+                                        <t t-foreach="page['suppliers']" t-as="supp">
+                                            <td colspan="2" align="center" style="vertical-align:middle;padding: 1px;border: 1px solid #000000;">
+                                                <b>
+                                                    <span t-esc="page['averages'][supp]"></span>
+                                                </b>
+                                            </td>
+                                        </t>
+
+                                    </tr>
+
+
+                                    <t t-if="count%2==0">
+                                        <p style="page-break-after:always"></p>
+                                    </t>
+                                    <t t-set="count" t-value="count+1"/>
+                                </tbody>
+                            </table>
+
+
                         </t>
+                        <table style="font-size: 11;font-family: 'Arial';padding-top: 0px;padding-left: 0px;padding-right: 0px;padding-bottom: 0px; font-size: 11px;">
+
+                            <br></br>
+                            <br></br>
+                            <td>
+                                <strong>
+                                    <span>Нийлүүлэгч сонгосон :</span>
+                                </strong>
+                            </td>
+                            <t t-foreach="employees" t-as="e">
+                                <tr>
+
+                                    <td align="left" width="50%">
+                                        <span style="vertical-align:middle;" t-field="e.employee_id.job_id.name"/>
+                                        <span></span>
+                                        <img class="image" t-att-src="'data:image/png;base64,%s' %e.employee_id.signature_image" style="height:50px;width:100px;"/>
+                                        <span> / </span>
+                                        <span t-field="e.employee_id.name"/>
+                                        <span> /        </span>
+                                        <span t-field="e.write_date" t-field-options='{"format":"YYYY.MM.dd"}' />
+                                    </td>
+
+                                </tr>
+                            </t>
 
 
-                        <br></br>
-                        <br></br>    
-                        <t t-if="o.confirmed_person">             
-                            <td><strong><span>Зөвшөөрсөн :</span></strong></td>
-                            <tr>
-                                
-                                <td align="left" width="50%"><span style="vertical-align:middle;" t-field="o.confirmed_person.job_id.name"/><span> </span><img class="image" t-att-src="'data:image/png;base64,%s' %o.confirmed_person.signature_image" style="height:50px;width:100px;"/><span> / </span><span t-field="o.confirmed_person.name"/>
+                            <br></br>
+                            <br></br>
+                            <t t-if="o.confirmed_person">
+                                <td>
+                                    <strong>
+                                        <span>Зөвшөөрсөн :</span>
+                                    </strong>
                                 </td>
-                            </tr>
-                        </t>
-                        <t t-if="o.verified_person">
-                            <td><strong><span>Хянасан :</span></strong></td>
-                            <tr>
-                                
-                                <td align="left" width="50%"><span style="vertical-align:middle;" t-field="o.verified_person.job_id.name"/><span> </span><img class="image" t-att-src="'data:image/png;base64,%s' %o.verified_person.signature_image" style="height:50px;width:100px;"/><span> / </span><span t-field="o.verified_person.name"/>
+                                <tr>
+
+                                    <td align="left" width="50%">
+                                        <span style="vertical-align:middle;" t-field="o.confirmed_person.job_id.name"/>
+                                        <span></span>
+                                        <img class="image" t-att-src="'data:image/png;base64,%s' %o.confirmed_person.signature_image" style="height:50px;width:100px;"/>
+                                        <span> / </span>
+                                        <span t-field="o.confirmed_person.name"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="o.verified_person">
+                                <td>
+                                    <strong>
+                                        <span>Хянасан :</span>
+                                    </strong>
                                 </td>
-                            </tr>
-                        </t>
-                        <t t-if="o.approved_person"> 
-                            <td><strong><span>Баталсан :</span></strong></td>
-                            <tr>
-                            
-                                <td align="left" width="50%"><span style="vertical-align:middle;" t-field="o.approved_person.job_id.name"/><span> </span><img class="image" t-att-src="'data:image/png;base64,%s' %o.approved_person.signature_image" style="height:50px;width:100px;"/><span> / </span><span t-field="o.approved_person.name"/>
+                                <tr>
+
+                                    <td align="left" width="50%">
+                                        <span style="vertical-align:middle;" t-field="o.verified_person.job_id.name"/>
+                                        <span></span>
+                                        <img class="image" t-att-src="'data:image/png;base64,%s' %o.verified_person.signature_image" style="height:50px;width:100px;"/>
+                                        <span> / </span>
+                                        <span t-field="o.verified_person.name"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="o.approved_person">
+                                <td>
+                                    <strong>
+                                        <span>Баталсан :</span>
+                                    </strong>
                                 </td>
-                            </tr>
-                        </t>
-                        
-                </table>
+                                <tr>
+
+                                    <td align="left" width="50%">
+                                        <span style="vertical-align:middle;" t-field="o.approved_person.job_id.name"/>
+                                        <span></span>
+                                        <img class="image" t-att-src="'data:image/png;base64,%s' %o.approved_person.signature_image" style="height:50px;width:100px;"/>
+                                        <span> / </span>
+                                        <span t-field="o.approved_person.name"/>
+                                    </td>
+                                </tr>
+                            </t>
+
+                        </table>
 
 
+                    </div>
+                </t>
+            </t>
+            <div class="footer" align="right">
+                <ul class="list-inline">
+                    <li>Хуудас:</li>
+                    <li>
+                        <span class="page"/>
+                    </li>
+                    <li>/</li>
+                    <li>
+                        <span class="topage"/>
+                    </li>
+                </ul>
             </div>
-        </t>
-   </t>
-   <div class="footer" align="right">
-        <ul class="list-inline">
-          <li>Хуудас:</li>
-          <li><span class="page"/></li>
-          <li>/</li>
-          <li><span class="topage"/></li>
-        </ul>
-    </div>
 
-</template>
-</data>
-</openerp>
+        </template>
+    </data>
+</odoo>

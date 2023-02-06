@@ -134,7 +134,7 @@ def verbose_numeric(amount):
                     result += u'мянга '
             i = i1
         # ---------- end while i < len(amount)
-    except Exception, e :
+    except Exception as e :
         return e
     if len(subamount) > 0 and float(subamount) > 0 :
         result2 = verbose_numeric(subamount)

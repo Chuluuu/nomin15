@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 from datetime import date, datetime,timedelta
 from dateutil.relativedelta import relativedelta
-from openerp.exceptions import UserError, ValidationError, RedirectWarning
+from odoo.exceptions import UserError, ValidationError, RedirectWarning
 
 import requests
 import json
@@ -86,7 +86,7 @@ class SenderPreparation(models.TransientModel):
     type = fields.Selection([
         ('asset',u'Хөрөнгө'),
         ('supply',u'Эд материал'),
-    ], u'Tөрөл', required=True,  track_visibility='onchange', default = _type)
+    ], u'Tөрөл', required=True,  tracking=True, default = _type)
 
     is_same_company = fields.Boolean(string="Is same company", compute=_is_same_company, default=False)
     transfer_date = fields.Date('Гүйлгээний огноо', required=True, default=_transfer_date)
@@ -105,7 +105,7 @@ class SenderPreparation(models.TransientModel):
     employee_ids = fields.Many2many('hr.employee','rel_hr_employee_timesheet_change_request',\
                                         'employee_id','timesheet_change_request_add_multiple_id', string='Employees', required=True)
 
-    @api.multi
+    
     def button_accept(self):
 
         active_obj = self.get_active_object()
@@ -152,7 +152,7 @@ class SenderPreparation(models.TransientModel):
         return {'type': 'ir.actions.act_window_close'}
 
 
-    @api.multi
+    
     def get_assets(self,active_obj):
 
         url = self.env['integration.config'].sudo().search([('name','=','handle_asset_transfer')]).server_ip
@@ -165,7 +165,6 @@ class SenderPreparation(models.TransientModel):
         
         
         # if response.status_code == 200:	
-        print '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n response',response
         if response:
             try:
                 result_dict = json.loads(response)
@@ -261,7 +260,7 @@ class SenderPreparation(models.TransientModel):
                         })
 
 
-    @api.multi
+    
     def get_supplies(self,active_obj):
 
 
@@ -273,7 +272,6 @@ class SenderPreparation(models.TransientModel):
         # response = client.service.SupplyGet("1",self.transfer_date,"0U1","0","160701000000010000000001","1","","1","")
         
         # if response.status_code == 200:	
-        print '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n response',response        
         if response:
             try:
                 result_dict = json.loads(response)
@@ -289,7 +287,6 @@ class SenderPreparation(models.TransientModel):
                         # splts ---------------------------------------------------------------------------------
                         employee_id = self.env['hr.employee'].search([('passport_id','=',dictionary[u'FromCustomerID'].upper())])
                         # employee_id = self.env['hr.employee'].search([('passport_id','=','ЧЙ77040671')])
-                        print '\n\n\n\n\n\n\n\n\n\n\n\n\nzzzzz ',dictionary[u'ItemID']
                         
                         supply_name = dictionary[u'ItemDesc']
                         if employee_id:
@@ -466,7 +463,7 @@ class ReceiverPreparation(models.TransientModel):
     type = fields.Selection([
         ('asset',u'Хөрөнгө'),
         ('supply',u'Эд материал'),
-    ], u'Tөрөл', required=True,  track_visibility='onchange', default = _type)
+    ], u'Tөрөл', required=True,  tracking=True, default = _type)
 
 
     is_same_company = fields.Boolean(string="Is same company", compute=_is_same_company, default=False)
@@ -489,7 +486,7 @@ class ReceiverPreparation(models.TransientModel):
     
 
 
-    @api.multi
+    
     def button_accept(self):
         context = self._context
 
@@ -568,7 +565,7 @@ class PrepareTransferRequest(models.TransientModel):
         return None
 
 
-    @api.multi
+    
     def compute_asset_request(self):
         for line in self:
 
@@ -578,7 +575,7 @@ class PrepareTransferRequest(models.TransientModel):
     type = fields.Selection([
         ('asset',u'Хөрөнгө'),
         ('supply',u'Эд материал'),
-    ], u'Tөрөл', required=True,  track_visibility='onchange')
+    ], u'Tөрөл', required=True,  tracking=True)
 
     transfer_date = fields.Date('Transfer date', required=True, default=_transfer_date)
 
@@ -622,7 +619,7 @@ class PrepareTransferRequest(models.TransientModel):
         self.set_employee_information(result)
         return result
 
-    @api.multi
+    
     def write(self, vals):
         result = super(PrepareTransferRequest, self).write(vals)
         if vals.get('employee_id'):
@@ -635,7 +632,7 @@ class PrepareTransferRequest(models.TransientModel):
         result.receiver_job_id = result.receiver_employee_id.job_id or None
         result.receiver_department_id = result.receiver_employee_id.parent_department or None
             
-    @api.multi
+    
     def button_accept(self):
 
         # 
@@ -664,7 +661,7 @@ class PrepareTransferRequest(models.TransientModel):
 
 
 
-    @api.multi
+    
     def get_assets(self,active_obj):
 
         # if self.department_id == self.receiver_department_id:
@@ -674,9 +671,6 @@ class PrepareTransferRequest(models.TransientModel):
         url = self.env['integration.config'].sudo().search([('name','=','handle_asset_transfer')]).server_ip
         client = Client(url)
         if self.sudo().employee_id.passport_id:
-
-            print 'ddddddddddddddddddddddddddd+++++++++++++++++='
-
             if not self.search_string:
                 self.search_string = ""
             asset_type ="1"
@@ -705,9 +699,6 @@ class PrepareTransferRequest(models.TransientModel):
             except ValueError as e:
                 raise UserError(_('Мэдээлэл татахад алдаа гарлаа.\n Салбарын код [%s] Алдааны мессеж [%s] response [%s]'%(self.department_id.nomin_code,e,response)))
             if result_dict:
-                print '\n dddddddddd ',response
-
-
                 if "Assets" in result_dict:
 
                     if active_obj.change_line_ids and active_obj.state == 'draft':
@@ -759,7 +750,7 @@ class PrepareTransferRequest(models.TransientModel):
 
 
 
-    @api.multi
+    
     def get_supplies(self,active_obj):
 
         url = self.env['integration.config'].sudo().search([('name','=','handle_supply_transfer')]).server_ip
@@ -776,8 +767,6 @@ class PrepareTransferRequest(models.TransientModel):
             except ValueError as e:
                 raise UserError(_('Мэдээлэл татахад алдаа гарлаа.\n Салбарын код [%s] Дансны дугаар [%s] Алдааны мессеж [%s] response [%s]'%(self.department_id.nomin_code,self.account_from.code,e,response)))
             if result_dict:
-                print '\n dddddddddd ',response
-
                 if not active_obj.change_line_ids and "Supply" in result_dict:
                     for dictionary in result_dict[u'Supply']:
                         # print '\nffffffffff ',dictionary

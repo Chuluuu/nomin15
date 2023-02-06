@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
-<openerp>
-    <data>
-  		<record id="view_job_position_limit_config" model="ir.ui.view">
-  			<field name="name">job.position.limit.config</field>
+<odoo>
+	<data>
+		<record id="view_job_position_limit_config" model="ir.ui.view">
+			<field name="name">job.position.limit.config</field>
 			<field name="model">job.position.limit.config</field>
 			<field name="arch" type="xml">
 				<form string="Job position limit config">
@@ -24,85 +24,83 @@
 					</sheet>
 				</form>
 			</field>
-  		</record>
-  		
-  		<record id="tree_job_position_limit_config"  model="ir.ui.view">
-  			<field name="name">job.position.limit.config.list</field>
-  			<field name="model">job.position.limit.config</field>
-  			<field name="arch" type="xml">
-  				<tree>
+		</record>
+
+		<record id="tree_job_position_limit_config" model="ir.ui.view">
+			<field name="name">job.position.limit.config.list</field>
+			<field name="model">job.position.limit.config</field>
+			<field name="arch" type="xml">
+				<tree>
 					<field name="name"/>
-					<field name="year_id"/>  				
-  				</tree>
-  			</field>
-  		</record>
-  		
-  		<record id="action_job_position_limit_config" model="ir.actions.act_window">
-  			<field name="name">Худалдан авалт лимит</field>
-  			<field name="res_model">job.position.limit.config</field>
-  			<field name="type">ir.actions.act_window</field>
+					<field name="year_id"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_job_position_limit_config" model="ir.actions.act_window">
+			<field name="name">Худалдан авалт лимит</field>
+			<field name="res_model">job.position.limit.config</field>
+			<field name="type">ir.actions.act_window</field>
 			<field name="view_mode">tree,form</field>
-			<field name="view_type">form</field>
 			<field name="context">{}</field>
-            <field name="domain">[]</field>
-            <field name="view_id" ref="tree_job_position_limit_config"/>
-  		</record>
-  		
-  		<!-- Menu config  -->
-  		<menuitem id="menu_job_position_limit_config" action="action_job_position_limit_config" name="Job position limit config" parent="purchase.menu_purchase_config" groups="nomin_purchase_requisition.group_procurement_admin"/>
-  		
-  		
-  		<record id="view_purchase_limit_month" model="ir.ui.view">
-  			<field name="name">purchase.limit.month</field>
-  			<field name="model">purchase.limit.month</field>
-  			<field name="arch" type="xml">
-  				<form string="Purchase month limit">
-  					<!-- <header>
+			<field name="domain">[]</field>
+			<field name="view_id" ref="tree_job_position_limit_config"/>
+		</record>
+
+		<!-- Menu config  -->
+		<menuitem id="menu_job_position_limit_config" action="action_job_position_limit_config" name="Job position limit config" parent="purchase.menu_purchase_config" groups="nomin_purchase_requisition.group_procurement_admin"/>
+
+
+		<record id="view_purchase_limit_month" model="ir.ui.view">
+			<field name="name">purchase.limit.month</field>
+			<field name="model">purchase.limit.month</field>
+			<field name="arch" type="xml">
+				<form string="Purchase month limit">
+					<!-- <header>
   						<button name="action_pull" string="Pull balance" type="object" class="oe_highlight"/>
   					</header> -->
-  					<sheet>
-  					 	<group>
-  					 		<group>
-  					 			<field name="employee_id" readonly="1"/>
-  					 			<field name="month_id" readonly="1"/>
-					 		</group>
-  					 		<group>
-  					 			<field name="purchase_month_limit" readonly="1"/>
-  					 		</group>
-  					 	</group>
-  					</sheet>
-  				</form>
-  			</field>
+					<sheet>
+						<group>
+							<group>
+								<field name="employee_id" readonly="1"/>
+								<field name="month_id" readonly="1"/>
+							</group>
+							<group>
+								<field name="purchase_month_limit" readonly="1"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
 		</record>
-		
+
 		<record id="tree_purchase_limit_month" model="ir.ui.view">
 			<field name="name">purchase.limit.month</field>
 			<field name="model">purchase.limit.month</field>
 			<field name="arch" type="xml">
 				<tree string="List purchase limit month">
 					<field name="employee_id" readonly="1"/>
-          <field name="job_name" readonly="1"/>
-          <field name="department_id" readonly="1"/>
+					<field name="job_name" readonly="1"/>
+					<field name="department_id" readonly="1"/>
 					<field name="purchase_month_limit" readonly="1"/>
-          <field name="month_limit" readonly="1"/>
+					<field name="month_limit" readonly="1"/>
 					<field name="month_id" readonly="1"/>
 				</tree>
 			</field>
 		</record>
-		
+
 		<record id="action_purchase_month_limit" model="ir.actions.act_window">
 			<field name="name">Худалдан авалт лимит</field>
-  			<field name="res_model">purchase.limit.month</field>
-  			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">purchase.limit.month</field>
+			<field name="type">ir.actions.act_window</field>
 			<field name="view_mode">tree</field>
-			<field name="view_type">tree</field>
 			<field name="context">{}</field>
-            <field name="domain">[]</field>
-            <field name="view_id" ref="tree_purchase_limit_month"/>
+			<field name="domain">[]</field>
+			<field name="view_id" ref="tree_purchase_limit_month"/>
 		</record>
-		
+
 		<menuitem id="menu_purchase_month_limit" action="action_purchase_month_limit" name="Purchase month limit" parent="menu_purchase_requisition"/>
-		
+
 		<!--<record id="payment_request_form" model="ir.ui.view">
             <field name="name">payment.request.form</field>
             <field name="model">payment.request</field>
@@ -113,6 +111,6 @@
                   <field name="order_id" attrs="{'invisible':[('order_id','=',False)]}"/>
                </xpath>
              </field>-->
-		
-  </data>
-</openerp>
+
+	</data>
+</odoo>

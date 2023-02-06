@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
+#    odoo, Open Source Management Solution
 #    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -19,11 +19,11 @@
 #
 ##############################################################################
 import time
-from openerp.osv import fields, osv
-from openerp.tools.translate import _
-from openerp import SUPERUSER_ID
+from odoo.osv import fields, osv
+from odoo.tools.translate import _
+from odoo import SUPERUSER_ID
 from datetime import datetime, timedelta
-from openerp import api, fields, models, _
+from odoo import api, fields, models, _
 
 class wizard_rate_purchase_partner(models.TransientModel):
 	_name = 'wizard.rate.purchase.partner'
@@ -45,7 +45,6 @@ class wizard_rate_purchase_partner(models.TransientModel):
 		evaluation_indicator_ids = self.env['purchase.evaluation.indicators'].search([('partner_id', '=', record_id)])
 		for line in evaluation_indicator_ids:
 			wizard_ids.append((0,0,{ 'indicator_id':line.indicator_id.id}))
-		# print 'evaluation_indicator_ids\n',evaluation_indicator_ids
 		# request_obj = self.env['ir.model'].search([('model', '=', 'purchase.comparison')])
 		# for line in partner_id.comparison_id.purchase_indicator_ids:
 		# 	line_id = self.env['evaluation.indicators.line'].search([('indicator_id', '=', line.indicator_id.id), ('model_id', '=', request_obj.id)])[0]
@@ -55,7 +54,6 @@ class wizard_rate_purchase_partner(models.TransientModel):
 
 		info_ids = []
 		evaluation_info_ids = self.env['purchase.evaluation.infos'].search([('partner_id', '=', record_id)])
-		# print 'evaluation_info_ids\n',evaluation_info_ids
 		for line in evaluation_info_ids:
 
 			info_ids.append((0,0,{ 'indicator_id':line.indicator_id.id,'info':line.info}))
@@ -69,7 +67,7 @@ class wizard_rate_purchase_partner(models.TransientModel):
 			})
 		return rec
 
-	@api.multi
+	
 	def rate(self):
 		rate_obj = self.env['purchase.employee.rate']
 		# self.env['purchase.evaluation.indicators']

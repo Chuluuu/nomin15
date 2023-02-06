@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
+#    odoo, Open Source Management Solution
 #    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -19,14 +19,14 @@
 #
 ##############################################################################
 import time
-from openerp import fields, osv
-from openerp import api
-from openerp.tools.translate import _
-from openerp import models,  api, _
+from odoo import fields, osv
+from odoo import api
+from odoo.tools.translate import _
+from odoo import models,  api, _
 from datetime import timedelta
 from datetime import datetime, date
-from openerp.exceptions import UserError, AccessError
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
+from odoo.exceptions import UserError, AccessError
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
 
 class stock_picking_seperate(models.TransientModel):
 	_name = 'stock.picking.requisition.line'
@@ -127,18 +127,16 @@ class stock_picking_seperate(models.TransientModel):
 	
 
 
-	def create_seperate_stock(self,cr, uid, ids,context=None):
-		if context is None:
-			context = {}
-		record_id = context and context.get('active_id', False) or False
+	def create_seperate_stock(self):
+		record_id = self._context.get('active_id', False)
 
-		move_obj = self.pool.get('stock.move')
-		pick_obj = self.pool.get('stock.picking')
-		uom_obj = self.pool.get('product.uom')
-		data_obj = self.pool.get('stock.picking.seperate.line')
+		move_obj = self.env['stock.move']
+		pick_obj = self.env['stock.picking']
+		uom_obj = self.env['product.uom']
+		data_obj = self.env['stock.picking.seperate.line']
 
-		pick = pick_obj.browse(cr, uid, record_id)
-		datas = self.browse(cr, uid, ids[0],context=context)
+		pick = pick_obj.browse(record_id)
+		datas = self
 
 		returned_lines = 0
 		picking_ids = []
@@ -155,18 +153,15 @@ class stock_picking_seperate(models.TransientModel):
 			# pick_type_id = data.requisition_id.picking_type_id.return_picking_type_id and data.requisition_id.picking_type_id.return_picking_type_id.id or data.requisition_id.picking_type_id.id
 
 			sector_obj_id = False
-			record_type = context.get('order_type')
+			record_type = self._context.get('order_type',False)
 
 
 
-			sector_id = self.pool.get('hr.department').get_sector(cr, uid,[],pick.order_department_id.id) 
-			sector_obj_id = self.pool.get('hr.department').browse(cr, uid,sector_id)
-			picking_type_obj  = self.pool.get('stock.picking.type')
-			picking_type_ids = picking_type_obj.search(cr, 1,[('code','=','outgoing'),('warehouse_id.department_of_id','=',sector_id)])
+			sector_obj_id = pick.order_department_id
+			picking_type_obj  = self.env['stock.picking.type']
+			picking_type_id = picking_type_obj.sudo().search([('code','=','outgoing'),('warehouse_id.department_of_id','=',sector_obj_id.id)],limit = 1)
 
-			picking_type_id = picking_type_obj.browse(cr, 1,picking_type_ids)[0]		
-
-			new_picking = pick_obj.create(cr, uid, {
+			new_picking = pick_obj.create({
 				'partner_id': pick.partner_id.id if not data.requisition_id.sector_id.partner_id.id else data.requisition_id.sector_id.partner_id.id,
 				'picking_id':pick.id,
 				'order_department_id':data.requisition_id.department_id.id,
@@ -183,7 +178,7 @@ class stock_picking_seperate(models.TransientModel):
 				'origin': pick.name,
 				'location_id': pick.location_id.id if not picking_type_id.default_location_src_id.id else picking_type_id.default_location_src_id.id,
 				'location_dest_id': pick.location_dest_id.id if not picking_type_id.default_location_dest_id.id else picking_type_id.default_location_dest_id.id,
-			}, context=context)
+			})
 
 			for line in data.requisition_line_ids:
 				if new_picking:
@@ -204,8 +199,7 @@ class stock_picking_seperate(models.TransientModel):
 			       #     'restrict_lot_id': inventory_line.prod_lot_id.id,
 			         #   'restrict_partner_id': inventory_line.partner_id.id,
 			         }
-			        
-			        move_id = move_obj.create(cr, uid, vals, context=context)
+					move_id = move_obj.create(vals)
 
 			picking_ids.append(new_picking)																			
 			pick_obj.action_confirm(cr, uid, [new_picking], context=context)
@@ -223,7 +217,6 @@ class stock_picking_seperate(models.TransientModel):
 		# 'domain': "[('id','in', [" + ','.join(str(order) for order in order_ids) + "])]",
 		'domain': "[('id','in', [%s])]" % ','.join([str(p) for p in picking_ids]),
 		'name': _(u'Хүргэх захиалгууд'),
-		'view_type': 'form',
 		'view_mode': 'tree,form',
 		'res_model': 'stock.picking',
 		'view_id': False,

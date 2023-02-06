@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding='UTF-8'?>
-<openerp>
+<odoo>
     <data>
         <record id="purchase_mail_template" model="mail.template">
             <field name="name">${ctx["subject"]}</field>
@@ -14,7 +14,7 @@
 Сайн байна уу, ${object.name}, </br>
 </p>
 <p>
-<b>${ctx["department"]}</b> хэлтэсийн <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["name"]}</b></a>
+<b>${ctx["department"]}</b> хэлтэсийн <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&Odoomodel=${ctx["model"]}&action=${ctx["action_id"]}"><b>${ctx["name"]}</b></a>
  дугаартай баримтыг <b>${ctx["sender"]}</b> <b>${ctx["state"]}</b> төлөвт орууллаа.
 </p>
 <p>
@@ -27,7 +27,7 @@
 </ul>
 
 <p>
-    Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=purchase.order&action=${ctx["action_id"]}"><b>${ctx["name"]}</b></a> 
+    Та <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&Odoomodel=purchase.order&action=${ctx["action_id"]}"><b>${ctx["name"]}</b></a> 
 </p>
 <p>
     Баярлалаа,
@@ -38,9 +38,9 @@
 Odoo Автомат Имэйл
 
 </pre>
-            ]]></field>
+            ]]>            </field>
         </record>
-        
+
         <record id="purchase_order_alert_mail_template" model="mail.template">
             <field name="name">${ctx["subject"]}</field>
             <field name="email_from">${(user.company_id.email or '')|safe}</field>
@@ -62,7 +62,7 @@ Odoo Автомат Имэйл
     <li><b>Хэлтэс : ${ctx["department"]}</b></li>
 </ul>
 <p>
-    Та захиалгын мэдэгдэл цонхоор дамжин харна уу <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&view_type=form&model=purchase.order&action=${ctx["action_id"]}"><b>${ctx["name"]}</b></a> 
+    Та захиалгын мэдэгдэл цонхоор дамжин харна уу <a href="${ctx["base_url"]}/web?db=${ctx["db_name"]}#id=${ctx["id"]}&Odoomodel=purchase.order&action=${ctx["action_id"]}"><b>${ctx["name"]}</b></a> 
 </p>
 <p>
     Баярлалаа,
@@ -73,9 +73,9 @@ Odoo Автомат Имэйл
 Odoo Автомат Имэйл
 
 </pre>
-            ]]></field>
+            ]]>            </field>
         </record>
-        
-        
+
+
     </data>
-</openerp>
+</odoo>

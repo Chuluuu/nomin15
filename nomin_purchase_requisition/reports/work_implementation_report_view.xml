@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <!-- Худалдан авалтын дэлгэрэнгүй тайлан татах -->
         <record model="ir.ui.view" id="work_implementation_report_form">
@@ -8,18 +8,18 @@
             <field name="arch" type="xml">
                 <form string="Худалдан авалтын дэлгэрэнгүй тайлан">
                     <group>
-                    <group>
-                        <field name="department_ids" widget="many2many_tags" options="{'no_create': True}" required="1"/>
-                        <field name="state" required="1"/>
+                        <group>
+                            <field name="department_ids" widget="many2many_tags" options="{'no_create': True}" required="1"/>
+                            <field name="state" required="1"/>
+                        </group>
+
+                        <group>
+                            <field name="start_date" required="1"/>
+                            <field name="end_date" required="1"/>
+                        </group>
+
                     </group>
 
-                    <group>
-                        <field name="start_date" required="1"/>
-                        <field name="end_date" required="1"/>
-                    </group>
-                        
-                    </group>
-                   
                     <footer>
                         <button name="export_report" string="Export" type="object" icon="terp-graph"/>
                         <button string="Cancel" class="btn-default" special="cancel"/>
@@ -27,18 +27,16 @@
                 </form>
             </field>
         </record>
-        
+
         <record model="ir.actions.act_window" id="work_implementation_report">
             <field name="name">Худалдан авалтын дэлгэрэнгүй тайлан</field>
             <field name="res_model">work.implementation.report</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="work_implementation_report_form"/>
             <field name="target">new</field>
         </record>
-        
-    <menuitem name="Худалдан авалтын дэлгэрэнгүй тайлан" id="menu_work_implementation_export" parent="nomin_purchase.parent_menu_purchase_report_wizard"
-            action="work_implementation_report" sequence="101" />
-            
+
+        <menuitem name="Худалдан авалтын дэлгэрэнгүй тайлан" id="menu_work_implementation_export" parent="nomin_purchase.parent_menu_purchase_report_wizard" action="work_implementation_report" sequence="101" />
+
     </data>
-</openerp>
+</odoo>

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2014-Today OpenERP SA (<http://www.openerp.com>).
+#    odoo, Open Source Management Solution
+#    Copyright (C) 2014-Today odoo SA (<http://www.odoo.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,10 +19,11 @@
 #
 ##############################################################################
 
-from openerp.osv import osv
-from openerp.tools.translate import _
-from openerp.addons.l10n_mn_report_base.report_helper import verbose_numeric,comma_me, convert_curr
+from odoo.osv import osv
+from odoo.tools.translate import _
+from odoo.addons.nomin_base.report_helper import verbose_numeric,comma_me, convert_curr
 from operator import itemgetter
+from odoo.exceptions import UserError, AccessError
 
 class ReportRfq(osv.AbstractModel):
     '''Үний санал
@@ -43,7 +44,7 @@ class ReportRfq(osv.AbstractModel):
         
 #         for pur in purchases:
 #             if pick.picking_type_id.code == 'incoming':
-#                 raise osv.except_osv((u'Анхааруулга!'), (u'Хүргэх захиалга дээрээс хэвлэх боломжтой!'))
+#                 raise UserError((u'Анхааруулга!'), (u'Хүргэх захиалга дээрээс хэвлэх боломжтой!'))
         
         document_name = u"ҮНИЙН САНАЛ" 
         for pur in purchases:
@@ -62,7 +63,7 @@ class ReportRfq(osv.AbstractModel):
                 lines[pur.id] = sorted(line.values(), key=itemgetter('name'))
                 
         if not lines:
-            raise osv.except_osv((u'Анхааруулга!'), (u'Үнийн саналын мөр хоосон байна!'))
+            raise UserError((u'Анхааруулга!'), (u'Үнийн саналын мөр хоосон байна!'))
         
         docargs = {
             'doc_ids': ids,

@@ -168,7 +168,6 @@ class ProjectForecastTask(models.TransientModel):
 							roots[line]['group_color'] = "gtaskred"
 						roots[line]['root']=root					
 				for root in sorted(roots.values(), key=itemgetter('root')):				
-					# print '\n\n\n USER',root['root'],root['group_color'],root['task']
 					# vals = {
 					# 	'user':root['user'],		
 					# 	'roots':root['root'],

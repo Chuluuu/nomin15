@@ -1,39 +1,26 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Asterisk Technologies LLC, Enterprise Management Solution    
-#    Copyright (C) 2013-2013 Asterisk Technologies LLC (<http://www.erp.mn>). All Rights Reserved
-#
-#    Email : unuruu25@gmail.com
-#    Phone : 976 + 88005462
-#
-##############################################################################
 
 from datetime import datetime,timedelta,date
 from dateutil import parser
 from dateutil.relativedelta import relativedelta
-from openerp import api, fields, models, _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp.tools.translate import _
-from openerp.tools.float_utils import float_is_zero, float_compare
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import UserError, AccessError
+from odoo import api, fields, models, _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools.translate import _
+from odoo.tools.float_utils import float_is_zero, float_compare
+import odoo.addons.decimal_precision as dp
+from odoo.exceptions import UserError, AccessError
 import time
-from openerp.osv import osv
-from openerp.http import request    
+from odoo.osv import osv
+from odoo.http import request    
 import xlwt
 from xlwt import *
-from StringIO import StringIO
-from openerp.exceptions import UserError, ValidationError
-from operator import itemgetter
-import xlsxwriter
-from io import BytesIO
-import base64
+from odoo.exceptions import UserError, ValidationError
 
 
 class purchase_order_report_wizard(models.TransientModel):
     _name = 'purchase.order.report.wizard'
-    _inherit = 'abstract.report.model'
+    # TODO FIX LATER
+    # _inherit = 'abstract.report.model'
     _description = 'Purchase order report wizard'
 
     @api.model
@@ -56,7 +43,7 @@ class purchase_order_report_wizard(models.TransientModel):
     year_id     = fields.Selection([(num, str(num)) for num in range(2010, (datetime.now().year)+1 )], 'Choose year') #Сонгож харуулах жил
     
     
-    @api.multi
+    
     def get_export_data(self,report_code,context=None):
         if context is None:
             context = {}

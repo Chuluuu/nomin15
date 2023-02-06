@@ -42,7 +42,6 @@ class RateProjecTask(models.TransientModel):
         employee = self.env['hr.employee']
         employee_id = employee.sudo().search([('user_id','=',self._uid)])        
         task  = self.env['project.task'].browse(active_id)            
-        # print "\n\nRating",active_id,task_rating_user,employee,employee_id,task,"\n\n"
         if self.rate > 100 or self.rate == 0.0:
             raise ValidationError(_(u'1-ээс 100-н хооронд үнэлгээ өгнө үү'))
         vals = {
@@ -54,7 +53,6 @@ class RateProjecTask(models.TransientModel):
                 'state': 'rating'
                 }
         task_rating_user = task_rating_user.create(vals)
-        # print "\n\nOk it's ok\n\n"
         if task.is_rating == True:
                 task.write({'task_state':'t_done',
                             'done_date': time.strftime('%Y-%m-%d'),})

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2014-Today OpenERP SA (<http://www.openerp.com>).
+#    odoo, Open Source Management Solution
+#    Copyright (C) 2014-Today odoo SA (<http://www.odoo.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,11 +20,10 @@
 ##############################################################################
 import time
 import datetime
-import openerp
-#from openerp.osv import osv
-from openerp import api, fields, models, _, modules
-from openerp.tools.translate import _
-from openerp.addons.l10n_mn_report_base.report_helper import verbose_numeric,comma_me, convert_curr
+import odoo
+#from odoo.osv import osv
+from odoo import api, fields, models, _, modules
+from odoo.tools.translate import _
 from operator import itemgetter
 import logging
 _logger = logging.getLogger(__name__)
@@ -34,7 +33,7 @@ _logger = logging.getLogger(__name__)
 class ReportTenderRequest(models.AbstractModel):
     _name = 'report.nomin_comparison.report_purchase_comparison'
 
-    @api.multi
+    
     def render_html(self, data):
 
         comparison_id = self.env['purchase.comparison'].browse(self.id)
@@ -89,7 +88,6 @@ class ReportTenderRequest(models.AbstractModel):
 
 
                 
-        print '\n\n\averages',averages
         cat ={}
         for order in order_ids:
             
@@ -113,7 +111,6 @@ class ReportTenderRequest(models.AbstractModel):
             if order.partner_id.id in partner_indicators:            
                 cat[order.partner_id.id] = partner_indicators[order.partner_id.id]
                 # for part in partner_indicators[order.partner_id.id]:
-                #     print '\n\n\n\nPART', part
            
             
             if count==2 or len_orders-1==m_count:

@@ -1,20 +1,17 @@
 # -*- coding: utf-8 -*-
 
 
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError, ValidationError, RedirectWarning
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError, ValidationError, RedirectWarning
 from datetime import timedelta
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 
-import requests
 import json
-import xmlrpclib
-from zeep import Client, Settings
-from openerp.exceptions import UserError #
+from zeep import Client, Plugin
+from odoo.exceptions import UserError #
 import base64
-from zeep import Plugin
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -36,7 +33,7 @@ class AssetTransferLine(models.Model):
     _order = "employee_id,asset_name"
 
 
-    # @api.multi
+    # 
     # def _check_employee(self):
     #     for line in self:
     #         if line.employee_id and line.request_id and line.registry_number:
@@ -49,7 +46,7 @@ class AssetTransferLine(models.Model):
     #     (_check_employee, u'Нэг хөрөнгийг 2 удаа харуулах боломжгүй!', []),
     # ]
 
-    @api.multi
+    
     def compute_time_plan(self):
         for line in self:
             line.warning_type = "normal"
@@ -90,7 +87,7 @@ class AssetTransferLine(models.Model):
         ('approve',u'Батлах'),
         ('approved',u'Батлагдсан'),
 
-    ], u'State', default='draft', track_visibility='onchange')
+    ], u'State', default='draft', tracking=True)
 
 
 
@@ -141,7 +138,7 @@ class AssetTransferLine(models.Model):
 
         return result
 
-    @api.multi
+    
     def write(self, vals):
         result = super(AssetTransferLine, self).write(vals)
         if vals.get('employee_id'):
@@ -161,7 +158,7 @@ class AssetTransferLine(models.Model):
         # result.receiver_department_id = result.receiver_employee_id.parent_department or None
 
 
-    @api.one
+    
     def action_accept(self):
 
         employee_id = self.env['hr.employee'].search([('user_id','=',self.env.user.id)])
@@ -173,7 +170,7 @@ class AssetTransferLine(models.Model):
 
 
 
-    @api.one
+    
     def action_get_details(self):
 
 
@@ -210,7 +207,7 @@ class AssetTransferRequest(models.Model):
 
     _name = 'asset.transfer.request'
     _description = 'Asset transfer request'
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = "create_date desc"
 
     def _set_requested_employee(self): 
@@ -231,7 +228,7 @@ class AssetTransferRequest(models.Model):
         return None
 
 
-    @api.multi
+    
     @api.depends('change_line_ids.sale_price')
     def _total_sale_price(self):
 
@@ -247,7 +244,7 @@ class AssetTransferRequest(models.Model):
                 obj.total_sale_price = 0
 
 
-    @api.multi
+    
     @api.depends('change_line_ids.sale_price','change_line_ids.current_value')
     def _total_profit_n_loss_amount(self):
 
@@ -260,7 +257,7 @@ class AssetTransferRequest(models.Model):
 
 
 
-    @api.multi
+    
     @api.depends('change_line_ids.sale_price')
     def _total_vat_amount(self):
 
@@ -284,13 +281,13 @@ class AssetTransferRequest(models.Model):
         ('approve',u'Батлах'),        
         ('accept',u'Зөвшөөрөх'),
         ('approved',u'Батлагдсан'),
-    ], u'State', default='draft', track_visibility='onchange')
+    ], u'State', default='draft', tracking=True)
 
 
     type = fields.Selection([
         ('asset',u'Хөрөнгө'),
         ('supply',u'Эд материал'),
-    ], u'Tөрөл',   track_visibility='onchange')
+    ], u'Tөрөл',   tracking=True)
 
 
 
@@ -302,7 +299,7 @@ class AssetTransferRequest(models.Model):
             self.is_same_company = False 
 
 
-    @api.multi
+    
     def _compute_button_clickers(self):
         if self.state == 'verify':
             group_id = self.env['ir.model.data'].sudo().get_object_reference('nomin_base', 'group_financial_account_user')[1]
@@ -364,13 +361,13 @@ class AssetTransferRequest(models.Model):
     receiver_department_id = fields.Many2one('hr.department', string='Receiver department')
     receiver_vat_account_id = fields.Many2one('account.account',  string='Receiver vat account')
     receiver_account_payable_id = fields.Many2one('account.account',  string='Receiver account payable')
-    approved_employee_id = fields.Many2one('hr.employee', 'Approved employee', track_visibility='onchange', readonly=True)
+    approved_employee_id = fields.Many2one('hr.employee', 'Approved employee', tracking=True, readonly=True)
     change_line_ids = fields.One2many('asset.transfer.line', 'request_id', 'Employees')
     change_line_ids_for_sender = fields.One2many('asset.transfer.line', 'request_id', 'Employees')
     change_line_ids_for_receiver = fields.One2many('asset.transfer.line', 'request_id', 'Employees')
 
-    returned_reason = fields.Text('Returned reason', track_visibility='onchange', readonly=True)
-    returned_description = fields.Text('Returned description', track_visibility='onchange', readonly=True)
+    returned_reason = fields.Text('Returned reason', tracking=True, readonly=True)
+    returned_description = fields.Text('Returned description', tracking=True, readonly=True)
 
     description = fields.Text('Description')
 
@@ -394,7 +391,7 @@ class AssetTransferRequest(models.Model):
 
 
 
-    @api.multi
+    
     def write(self, vals):
         result = super(AssetTransferRequest, self).write(vals)
         if vals.get('employee_id'):
@@ -418,7 +415,7 @@ class AssetTransferRequest(models.Model):
 
 
 
-    @api.one
+    
     def action_delete_waiting_ones(self):
 
         if self.type == 'asset':
@@ -439,15 +436,13 @@ class AssetTransferRequest(models.Model):
 
 
 
-    @api.one
+    
     def send_received_confirmation(self):
         if self.diamond_json:
             result_dict = json.loads(self.diamond_json) if self.diamond_json else {}
         else:
             result_dict = json.loads(base64.decodestring(self.diamond_binary)) if self.diamond_binary else {}
 
-        print 'json.dumps(result_dict)',json.dumps(result_dict)
-        
         if self.type == 'asset':
 
             for dictionary in result_dict[u'Assets']:
@@ -497,7 +492,7 @@ class AssetTransferRequest(models.Model):
         
 
 
-    @api.one
+    
     def action_request(self):
 
         
@@ -529,7 +524,7 @@ class AssetTransferRequest(models.Model):
         
 
 
-    @api.one
+    
     def action_verify(self): 
         if not self.sender_account_receivable_id:
             raise UserError('Илгээгчийн авлагын дансыг бөглөнө үү!')
@@ -549,7 +544,7 @@ class AssetTransferRequest(models.Model):
                 return False
         return True
        
-    @api.one
+    
     def action_accept_all(self): 
         
         employee_id = self.env['hr.employee'].search([('user_id','=',self.env.user.id)])
@@ -602,7 +597,7 @@ class AssetTransferRequest(models.Model):
 
 
 
-    @api.multi
+    
     def action_approve(self):
 
 
@@ -658,7 +653,7 @@ class AssetTransferRequest(models.Model):
 
 
 
-    @api.multi
+    
     def cancel(self):
 
 
@@ -667,7 +662,7 @@ class AssetTransferRequest(models.Model):
         else:
             self.cancel_supplies()
 
-    @api.multi
+    
     def get_json(self):
         
         # print 'dddd'
@@ -677,7 +672,7 @@ class AssetTransferRequest(models.Model):
         print 'aaaa',self.diamond_binary
         raise UserError(base64.decodestring(self.diamond_binary))
 
-    @api.multi
+    
     def cancel_assets(self):
         
         url = self.env['integration.config'].sudo().search([('name','=','handle_asset_transfer')]).server_ip
@@ -738,7 +733,7 @@ class AssetTransferRequest(models.Model):
 
 
 
-    @api.multi
+    
     def cancel_supplies(self):
         
         url = self.env['integration.config'].sudo().search([('name','=','handle_supply_transfer')]).server_ip
@@ -776,7 +771,7 @@ class AssetTransferRequest(models.Model):
 
 
 
-    @api.one
+    
     def reverse(self):
 
         if self.diamond_json:
@@ -829,20 +824,20 @@ class AssetTransferRequest(models.Model):
         
 
  
-    @api.multi
+    
     def action_resend_(self):
         self.reverse()
         self.send_received_confirmation()
 
     
-    @api.multi
+    
     def action_reconfirm(self):
         self.cancel_assets()
         self.send_all_changes_to_diamond()
 
 
 
-    @api.multi
+    
     def unlink(self):
 
         for line in self:
@@ -853,7 +848,7 @@ class AssetTransferRequest(models.Model):
 
 
 
-    @api.multi
+    
     def send_all_changes_to_diamond(self):
 
         
@@ -939,7 +934,6 @@ class AssetTransferRequest(models.Model):
                         u'ToAccountantInfID': accountant_pkey, 
                         u'ToLocationInfID': location_pkey,              
                     })    
-                print "Line id",result[0],dictionary[u'RegistryNumberID'],dictionary['IsDeleted']
 
             elif dictionary[u'ToAccountantInfID'] == 999999999999:
                 dictionary.update({
@@ -991,8 +985,6 @@ class AssetTransferRequest(models.Model):
 #===========================================================================
         try:
 
-            print '\n\n\n\n\n\n\n\ndddddddddddddddsssssss34 ',result_dict
-            print '\n\n\n\n\n\n\n\ndddddddddddddddsssssss3 ',self.diamond_binary
             new_list = []
             for dictionary in result_dict[u'Assets']:
                 if not dictionary[u'IsDeleted']:
@@ -1014,10 +1006,8 @@ class AssetTransferRequest(models.Model):
                     result_send.update({'Assets':result_dict['Assets'][d:c]})
                     
                     if self.department_id == self.receiver_department_id:
-                        print "\n\nJson dumps mov holder",json.dumps(result_send),"\n\n"
                         response = client.service.AssetMovHolderMod("1",json.dumps(result_send))
                     else:
-                        print "\n\nJson dumps mov",json.dumps(result_send),"\n\n"
                         response = client.service.AssetMod("1",json.dumps(result_send))
 
                     d=c
@@ -1063,7 +1053,7 @@ class AssetTransferRequest(models.Model):
 
 
 
-    @api.multi
+    
     def send_all_supplies_to_diamond(self):
 
 

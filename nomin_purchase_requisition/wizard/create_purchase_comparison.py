@@ -1,28 +1,13 @@
 # -*- encoding: utf-8 -*-
-##############################################################################
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published
-#    by the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see http://www.gnu.org/licenses/.
-#
-##############################################################################
 
-from openerp import api, fields, models, _
-from openerp.exceptions import UserError,ValidationError,Warning
-from openerp import SUPERUSER_ID
+
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError,ValidationError,Warning
+from odoo import SUPERUSER_ID
 from fnmatch import translate
-from openerp.osv import osv
+from odoo.osv import osv
 import time
-from openerp.http import request    
+from odoo.http import request    
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -76,12 +61,12 @@ class purchaseComparisonCreation(models.TransientModel):
     return_condition    	= fields.Char('Return condition') # Буцаалтын нөхцөл
     loan_term           	= fields.Char('Loan term') # Зээлийн хугацаа
     barter_percentage   	= fields.Char('Barter percentage') # Бартерийн хувь
-    vat_condition       	= fields.Selection([('required', u"Required"),('not_required', u"Not required")], string='VAT condition', track_visibility='onchange') # НӨАТ төлөгч байхыг шаардах эсэх
+    vat_condition       	= fields.Selection([('required', u"Required"),('not_required', u"Not required")], string='VAT condition', tracking=True) # НӨАТ төлөгч байхыг шаардах эсэх
 
     partner_ids = fields.One2many('purchase.comparison.creation.partner','comparison_id',string='Partner')
     product_ids = fields.One2many('purchase.comparison.creation.product','comparison_id',string='Product')
 
-    @api.multi
+    
     def create_comparison(self):
         #Үүсгэж буй хэрэглэгчийн дараах мэдээллүүдийг автоматаар авч үүснэ. Хэрэглэгч, огноо, салбар, хэлтэс
         if not self.partner_ids:
@@ -170,7 +155,6 @@ class purchaseComparisonCreation(models.TransientModel):
 
         return {
             'name' : 'Худалдан авалт харьцуулалт',
-            'view_type' : 'form',
             'view_mode' : 'form',
             'view_id': False,
             'res_model' : 'purchase.comparison',
@@ -240,7 +224,6 @@ class purchaseComparisonCreation(models.TransientModel):
             
         # 	# return {
         # 	# 	'name': 'Note',
-        # 	# 	'view_type': 'form',
         # 	# 	'view_mode': 'form',
         # 	# 	'res_model': 'partner.without.email',
         # 	# 	# 'context':{'partners_without_emails':partners_without_emails},

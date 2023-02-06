@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<openerp>
+<odoo>
     <data>
 
         <!-- Merge Opportunities  -->
@@ -20,21 +20,15 @@
         </record>
 
         <!--  Merge leads/opportunities action -->
-    <!--     <record model="ir.actions.act_window" id="purchase_order_merge_act">
+        <!--     <record model="ir.actions.act_window" id="purchase_order_merge_act">
             <field name="name">Purchase Order Merge</field>
             <field name="res_model">purchase.order.merge</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="purchase_order_merge_form"/>
             <field name="target">new</field>
         </record>
 
-        <act_window id="action_purchase_order_merge"
-            multi="True"
-            key2="client_action_multi" name="Purchase Order Merge"
-            res_model="purchase.order.merge" src_model="purchase.order"
-            view_mode="form" target="new" view_type="form"
-            />
+        <act_window id="action_purchase_order_merge" multi="True" key2="client_action_multi" name="Purchase Order Merge" res_model="purchase.order.merge" src_model="purchase.order" view_mode="form" target="new" view_type="form" />
  -->
     </data>
-</openerp>
+</odoo>

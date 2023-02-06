@@ -1,30 +1,13 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+
 import time
-from openerp.osv import fields, osv
-from openerp import api
-from openerp.tools.translate import _
-from openerp import models,  api, _
+from odoo.osv import fields, osv
+from odoo import api
+from odoo.tools.translate import _
+from odoo import models,  api, _
 from datetime import timedelta
 from datetime import datetime, date
+from odoo.exceptions import UserError, AccessError
 
 
 class creat_stock_picking(models.TransientModel):
@@ -32,7 +15,7 @@ class creat_stock_picking(models.TransientModel):
     _description = "Purchase Order Creation Wizard"
 
 
-    @api.multi
+    
     def create_stock_picking(self):
 
         active_ids = self.env.context.get('active_ids', [])
@@ -58,10 +41,10 @@ class creat_stock_picking(models.TransientModel):
         picking_type_ids = picking_type_obj.search([('code','=','outgoing'),('warehouse_id.department_of_id','=',sector_id)])
         picking_type_ids = picking_type_ids[0]
         if not picking_type_ids:
-             raise osv.except_osv(_('Warning !'), _(u"%s компани дээр %s салбар агуулах үүсгэнэ үү!",)%(company_name,department_name))
+             raise UserError(_('Warning !'), _(u"%s компани дээр %s салбар агуулах үүсгэнэ үү!",)%(company_name,department_name))
         
         if not  picking_type_ids.default_location_dest_id.id:
-                  raise osv.except_osv(_('Warning !'), _(u"%s агуулахын %s бэлтгэх төрөл дээр анхны эх хүргэх байрлал алга байна!",)%(picking_type_ids.warehouse_id.name,picking_type_ids.name))
+                  raise UserError(_('Warning !'), _(u"%s агуулахын %s бэлтгэх төрөл дээр анхны эх хүргэх байрлал алга байна!",)%(picking_type_ids.warehouse_id.name,picking_type_ids.name))
         for line in self.env['purchase.requisition.line'].sudo().browse(active_ids[0]):
           
             line_values = {
@@ -83,18 +66,18 @@ class creat_stock_picking(models.TransientModel):
         requisition_ids = []
         for line in self.env['purchase.requisition.line'].browse(active_ids):
             if line.buyer.id !=self._uid:
-                raise osv.except_osv(_(u'Анхааруулга!'), _(u'Та зөвхөн өөрт хуваариласан шаардахын мөрөөр шууд хүргэх захиалга үүсгэх боломжтой'))
+                raise UserError(_(u'Анхааруулга!'), _(u'Та зөвхөн өөрт хуваариласан шаардахын мөрөөр шууд хүргэх захиалга үүсгэх боломжтой'))
             if line.state not in ['assigned']:
-                raise osv.except_osv(_(u'Анхааруулга!'), _(u'Та зөвхөн хуваарилагдсан шаардахын мөрөөр шууд хүргэх захиалга үүсгэх боломжтой'))
+                raise UserError(_(u'Анхааруулга!'), _(u'Та зөвхөн хуваарилагдсан шаардахын мөрөөр шууд хүргэх захиалга үүсгэх боломжтой'))
             if line.requisition_id.id not in requisition_ids:
                 requisition_ids.append(line.requisition_id.id)
             if line.sector_id.id not in department_ids:
                 department_ids.append(line.sector_id.id)
         
         if len(requisition_ids)>1:
-            raise osv.except_osv(_(u'Анхааруулга!'), _(u'Та зөвхөн нэг шаардахын дугаартай барааг агуулахаас гаргах боломжтой'))
+            raise UserError(_(u'Анхааруулга!'), _(u'Та зөвхөн нэг шаардахын дугаартай барааг агуулахаас гаргах боломжтой'))
         if len(department_ids)>1:
-            raise osv.except_osv(_(u'Анхааруулга!'), _(u'Та зөвхөн нэг шаардахын дугаартай барааг агуулахаас гаргах боломжтой'))
+            raise UserError(_(u'Анхааруулга!'), _(u'Та зөвхөн нэг шаардахын дугаартай барааг агуулахаас гаргах боломжтой'))
 
 
 
@@ -140,7 +123,6 @@ class creat_stock_picking(models.TransientModel):
         return {
                 'res_id': picking_id.id,
                 'name': _('New'),
-                'view_type': 'form',
                 'view_mode': 'tree,form',
                 'res_model': 'stock.picking',
                 'view_id': False,
@@ -179,7 +161,7 @@ class purchase_order_wizard(osv.osv_memory):
 
         picking_ids = picking_obj.search(cr, 1, [('code','=','incoming'),('warehouse_id.department_of_id','=',sector_id)])
         if not picking_ids:
-             raise osv.except_osv(_('Warning !'), _(u"%s компани дээр %s салбар агуулах үүсгэнэ үү!",)%(company_name,department_name))
+             raise UserError(_('Warning !'), _(u"%s компани дээр %s салбар агуулах үүсгэнэ үү!",)%(company_name,department_name))
 
         picking_id = picking_obj.browse(cr, uid, picking_ids[0])
 
@@ -198,18 +180,18 @@ class purchase_order_wizard(osv.osv_memory):
         for line in line_ids:
             
             if line.buyer.id !=uid:
-                raise osv.except_osv(_(u'Анхааруулга!'), _(u'Та зөвхөн өөрт хуваариласан шаардахын мөрөөр үнийн санал үүсгэх боломжтой'))
+                raise UserError(_(u'Анхааруулга!'), _(u'Та зөвхөн өөрт хуваариласан шаардахын мөрөөр үнийн санал үүсгэх боломжтой'))
             if line.state not in ['assigned','rfq_created']:
-                raise osv.except_osv(_(u'Анхааруулга!'), _(u'Та зөвхөн хуваариласан төлөвтэй шаардахын мөрөөр үнийн санал үүсгэх боломжтой'))
+                raise UserError(_(u'Анхааруулга!'), _(u'Та зөвхөн хуваариласан төлөвтэй шаардахын мөрөөр үнийн санал үүсгэх боломжтой'))
             if line.requisition_id.id not in requisition_ids:
                 requisition_ids.append(line.requisition_id.id)
             if line.sector_id.id not in department_ids:
                 department_ids.append(line.sector_id.id)
         
         # if len(requisition_ids)>1:
-        #     raise osv.except_osv(_(u'Анхааруулга!'), _('Cant perform this action. You can choose products from only one requisition'))
+        #     raise UserError(_(u'Анхааруулга!'), _('Cant perform this action. You can choose products from only one requisition'))
         # if len(department_ids)>1:
-        #     raise osv.except_osv(_(u'Анхааруулга!'), _(u'Та зөвхөн нэг салбарын барааг үүсгэх боломжтой'))
+        #     raise UserError(_(u'Анхааруулга!'), _(u'Та зөвхөн нэг салбарын барааг үүсгэх боломжтой'))
         requisition = self.pool.get('purchase.requisition').browse(cr,uid,requisition_ids)
         names ="" 
         for req in requisition :
@@ -291,7 +273,7 @@ class purchase_order_wizard(osv.osv_memory):
         active_ids = context and context.get('active_ids', [])
         data =  self.browse(cr, uid, ids, context=context)[0]
         if not  data.partners_ids:
-            raise osv.except_osv(_('Warning!'), _('Please select supplier'))
+            raise UserError(_('Warning!'), _('Please select supplier'))
         assert data.partners_ids, 'Supplier should be specified'
         dep_ids = []
         line_obj = self.pool.get('purchase.requisition.line')
@@ -299,7 +281,7 @@ class purchase_order_wizard(osv.osv_memory):
             lines = line_obj.browse(cr, uid, active_ids)
             for line in lines:
                 if line.state =='draft':
-                    raise osv.except_osv(_(u'Анхааруулга!'), _(u'Үнийн санал үүсгэж болохгүй'))    
+                    raise UserError(_(u'Анхааруулга!'), _(u'Үнийн санал үүсгэж болохгүй'))    
                 dep_ids.append(line.department_id.id)
                 # line_obj.write(cr, uid, line.id,{
                 #                                'state': 'rfq_created',
@@ -346,7 +328,6 @@ class purchase_order_wizard(osv.osv_memory):
            # 'domain': "[('id','in', [" + ','.join(str(order) for order in order_ids) + "])]",
                'domain': "[('id','in', [%s])]" % ','.join([str(p) for p in order_ids]),
             'name': _('Purchase Order'),
-            'view_type': 'form',
             'view_mode': 'tree,form',
             'res_model': 'purchase.order',
             'view_id': False,
@@ -391,7 +372,7 @@ class create_purchase_order_wizard(osv.osv_memory):
     #     res.update({'line_id': result})
     #     return res
 
-    @api.multi
+    
     def create_purchase_order(self):
         active_id = self._context and self._context.get('active_id', False) or False
         requisition = self.env['purchase.requisition'].search([('id','=',active_id)])
@@ -465,7 +446,6 @@ class create_purchase_order_wizard(osv.osv_memory):
         # #         # 'res_id':order_ids ,
         # #         'domain': "[('id','in', [" + str(order_id.values()[0]) + "])]",
         # #         'name': _('New'),
-        # #         'view_type': 'form',
         # #         'view_mode': 'tree,form',
         # #         'res_model': 'purchase.order',
         # #         'view_id': False,

@@ -128,7 +128,6 @@ class ProjectIrAttachment(models.Model):
                         
             # confirm_attach_lines = self.env['project.category.line'].search([('parent_id','=',config_id.id),('project_type','=',attach.project_document.project_type),('confirm_state','=',attach.project_document.state)])
             # for line in confirm_attach_lines:
-            #     print '\n\n\n test--' ,line.name 
             #     if line.is_confirm:
             #         raise ValidationError(_(u'%s - нэртэй хавсралтыг батлана уу.'%line.name)) 
                     
@@ -419,16 +418,12 @@ class ProjectProject(models.Model):
     # 
     # def _is_project_category(self):
     #     for project in self:
-    #         print '\n\n\n project' , project
     #         if project.is_parent_project :
     #             project.project_category = True
-    #             print '\n\n\n\n etseg',project.project_category
     #         elif not project.is_parent_project and not project.parent_project:   
     #             project.project_category = True
-    #             print '\n\n\n\n undsen',project.project_category
     #         elif not project.is_parent_project and  project.parent_project:
     #             project.project_category = False
-    #             print '\n\n\n\n ded',project.project_category
         
     
     # @api.onchange('is_parent_project')
@@ -436,13 +431,10 @@ class ProjectProject(models.Model):
     #     for project in self:
     #         if project.is_parent_project :
     #             project.project_category = True
-    #             print '\n\n\n\n onchange etseg',project.project_category
     #         elif not project.is_parent_project and not project.parent_project:   
     #             project.project_category = True
-    #             print '\n\n\n\n on undsen',project.project_category
     #         else:
     #             project.project_category = False
-    #             print '\n\n\n\n on ded',project.project_category
 
     
     def _is_raci_user(self):
@@ -471,18 +463,11 @@ class ProjectProject(models.Model):
 
 
         #     sod_id = project.env['sod.designer'].state_handler(project,current_state,project.department_id,project.created_user_id,target)
-        #     print 'sod_id',sod_id,project
-
-        
         # return  sod_id
-                
         # if self:
 
         project = self
         sod_id = project.env['sod.designer'].state_handler(project,current_state,project.department_id,project.created_user_id,target)
-            # print 'sod_id',sod_id,project
-
-        
         return  sod_id
 
 
@@ -492,7 +477,6 @@ class ProjectProject(models.Model):
     #     flow_id = self.env['sod.designer'].search([('model_name','=','project.project')])
     #     if flow_id:
     #         object_id = self.env['sod.state'].search([('designer_id','=',flow_id.id),('code','=',current_state)])
-    #         # print '\n\n\n\ haa----' , object_id 
     #         if object_id:
 
     #             if object_id.type[:2] == 'uv':
@@ -2021,7 +2005,7 @@ class ConfirmWorkflowTransition(models.Model):
         employees = employee_obj.search([('user_id','=',user.id)])
         if not employees:
             raise UserError(_('Configuration Error!'))
-            # raise osv.except_osv(_('Configuration Error!'), _('There is no employee defined for this user: %s(id=%s)') % (user.name, user.id))
+            # raise UserError(_('Configuration Error!'), _('There is no employee defined for this user: %s(id=%s)') % (user.name, user.id))
         employee = employee_obj.browse(employees.id)
         for transition in transition_obj.browse(next_steps):
             if next_step and next_step < transition.sequence:
@@ -2131,7 +2115,6 @@ class ProjectTask(models.Model):
     document_line=fields.One2many('task.work.document','task_id','Document line')
     
 #     def write(self, cr, uid, ids, vals, context=None):
-#         print 'WRITEEEEEE',vals
 #         result = super(project_task, self).write(cr, uid, ids, vals, context=context)
 #         return result
     _defaults = {
