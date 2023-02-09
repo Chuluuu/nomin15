@@ -353,14 +353,14 @@
                                     <field name="vat_condition" required="1" attrs="{'readonly':[('state','!=','draft')]}"/>
                                 </group>
                                 <group>
-                                    <field name="rfq_delivery_condition" attrs="{'invisible':['|',('delivery_condition','!=','required')], 'required':[('delivery_condition','=','required'),('state','in',['sent_rfq','comparison_created'])]}"/>
-                                    <field name="rfq_installation_condition" attrs="{'invisible':['|',('installation_condition','!=','required')], 'required':[('installation_condition','=','required'),('state','in',['sent_rfq','comparison_created'])]}"/>
-                                    <field name="is_VAT" attrs="{'invisible':['|',('vat_condition','!=','required')], 'required':[('vat_condition','=','required'),('state','in',['sent_rfq','comparison_created'])]}"/>
+                                    <field name="rfq_delivery_condition" attrs="{'invisible':[('delivery_condition','!=','required')], 'required':[('delivery_condition','=','required'),('state','in',['sent_rfq','comparison_created'])]}"/>
+                                    <field name="rfq_installation_condition" attrs="{'invisible':[('installation_condition','!=','required')], 'required':[('installation_condition','=','required'),('state','in',['sent_rfq','comparison_created'])]}"/>
+                                    <field name="is_VAT" attrs="{'invisible':[('vat_condition','!=','required')], 'required':[('vat_condition','=','required'),('state','in',['sent_rfq','comparison_created'])]}"/>
                                 </group>
                                 <group>
-                                    <field name="delivery_cost" attrs="{'invisible':['|',('rfq_delivery_condition','!=','paid')], 'required':[('rfq_delivery_condition','=','paid'),('state','in',['sent_rfq','comparison_created'])]}"/>
-                                    <field name="installation_cost" attrs="{'invisible':['|',('rfq_installation_condition','!=','paid')], 'required':[('rfq_installation_condition','=','paid'),('state','in',['sent_rfq','comparison_created'])]}"/>
-                                    <field name="vat_amount" attrs="{'invisible':['|',('is_VAT','!=','has_VAT')], 'required':[('is_VAT','=','has_VAT'),('state','in',['sent_rfq','comparison_created'])]}"/>
+                                    <field name="delivery_cost" attrs="{'invisible':[('rfq_delivery_condition','!=','paid')], 'required':[('rfq_delivery_condition','=','paid'),('state','in',['sent_rfq','comparison_created'])]}"/>
+                                    <field name="installation_cost" attrs="{'invisible':[('rfq_installation_condition','!=','paid')], 'required':[('rfq_installation_condition','=','paid'),('state','in',['sent_rfq','comparison_created'])]}"/>
+                                    <field name="vat_amount" attrs="{'invisible':[('is_VAT','!=','has_VAT')], 'required':[('is_VAT','=','has_VAT'),('state','in',['sent_rfq','comparison_created'])]}"/>
                                 </group>
                             </group>
                             <group name="delivery_condition" col="2" string="Нийлүүлэх нөхцөл">

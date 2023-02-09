@@ -9,10 +9,10 @@
                 <xpath expr="//sheet/group/group/field[@name='currency_id']" position="after">
                     <!-- TODO FIX LATER -->
                     <!-- <field name="contract_id" groups="purchase.group_purchase_user" attrs="{'readonly':[('state','!=','draft')]}" domain="[('customer_company','=',partner_id)]"/> -->
-                    <field name="contract_id" groups="purchase.group_purchase_user" attrs="{'readonly':[('state','!=','draft')]}" />
+                    <!-- <field name="contract_id" groups="purchase.group_purchase_user" attrs="{'readonly':[('state','!=','draft')]}" /> -->
                 </xpath>
                 <xpath expr="//header/button[@name='print_quotation']" position="after">
-                    <button name="create_contract" groups="purchase.group_purchase_user" class="oe_highlight" type="object" string="Гэрээ үүсгэх" attrs="{'invisible':['|',('contract_id','!=',False),('state','!=','purchase')]}" />
+                    <!-- <button name="create_contract" groups="purchase.group_purchase_user" class="oe_highlight" type="object" string="Гэрээ үүсгэх" attrs="{'invisible':['|',('contract_id','!=',False),('state','!=','purchase')]}" /> -->
                 </xpath>
             </field>
         </record>

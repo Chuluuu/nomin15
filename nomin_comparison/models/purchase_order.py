@@ -55,7 +55,8 @@ class purchase_order(models.Model):
 	state = fields.Selection(STATE_SELECTION, string='Status', readonly=True, select=True, copy=False, default='draft', tracking=True)
 	# comparison_id= fields.Many2one('purchase.comparison',string='Purchase Comparison')
 	comparison_id = fields.Many2one('purchase.comparison', string="Purchase comparison",tracking=True)
-	contract_id = fields.Many2one('contract.management', string="Contract" ,tracking=True) #Гэрээ
+	# TODO FIX LATER
+        # contract_id = fields.Many2one('contract.management', string="Contract" ,tracking=True) #Гэрээ
 
 	def create_contract(self):
 		vals = {

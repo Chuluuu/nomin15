@@ -95,40 +95,45 @@ class PurchaseOrder(models.Model):
 
     
     def _is_in_sent(self):
-        if self.state=='draft':
-            sel_user_ids = self._check_user_in_request('sent')
-            if self._uid in sel_user_ids:
-                if self.user_id.id ==self._uid:
-                    self.is_in_sent = True
-                else:
-                    self.is_in_sent = False
-    
+        for record in self:
+            record.is_in_sent=False
+            if record.state=='draft':
+                sel_user_ids = self._check_user_in_request('sent')
+                if self._uid in sel_user_ids:
+                    if self.user_id.id ==self._uid:
+                        record.is_in_sent = True
+                    else:
+                        record.is_in_sent = False
+        
     def _is_in_approve(self):
         sel_user_ids = []
         sel_user_ids = self._check_user_in_request('approved')
-        if self._uid in sel_user_ids:
-            self.is_in_approve = True
-        else:
-            self.is_in_approve = False  
+        for record in self:
+            if self._uid in sel_user_ids:
+                record.is_in_approve = True
+            else:
+                record.is_in_approve = False  
     
     
     def _is_in_verify(self):
 
         sel_user_ids = []
         sel_user_ids = self._check_user_in_request('verified')
-        if self._uid in sel_user_ids:
-            self.is_in_verify = True
-        else:
-            self.is_in_verify = False   
+        for record in self:
+            if self._uid in sel_user_ids:
+                record.is_in_verify = True
+            else:
+                record.is_in_verify = False   
 
     
     def _is_in_confirm(self):
         sel_user_ids = []
         sel_user_ids = self._check_user_in_request('confirmed')
-        if self._uid in sel_user_ids:
-            self.is_in_confirm= True
-        else:
-            self.is_in_confirm = False  
+        for record in self:
+            if self._uid in sel_user_ids:
+                record.is_in_confirm= True
+            else:
+                record.is_in_confirm = False  
 
     
     def _set_request(self):
