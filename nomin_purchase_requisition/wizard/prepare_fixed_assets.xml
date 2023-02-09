@@ -22,11 +22,9 @@
                             <div>
                                 <div>
                                     <field name="start_date" class="oe_inline" />
-                                    <label string="-" class="oe_inline" />
+                                    <span class="oe_form_label">-</span>
                                     <field name="end_date" class="oe_inline" />
-
                                 </div>
-
                             </div>
                             <field name="filter_options" />
                             <field name="location" attrs="{'invisible':[('filter_options','not in',['location'])],'required':[('filter_options','in',['location'])]}"/>
@@ -54,7 +52,14 @@
             </field>
         </record>
 
-        <act_window id="action_asset_preparation" name="Хөрөнгүүдийг бэлтгэх цонх" res_model="asset.preparation" view_mode="form" target="new" key2="client_action_multi"/>
+        <record id="action_asset_preparation" model="ir.actions.act_window">
+            <field name="name">Хөрөнгүүдийг бэлтгэх цонх</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">asset.preparation</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <!-- <act_window id="action_asset_preparation" name="Хөрөнгүүдийг бэлтгэх цонх" res_model="asset.preparation" view_mode="form" target="new" key2="client_action_multi"/> -->
 
 
 
@@ -215,7 +220,14 @@
             </field>
         </record>
 
-        <act_window id="action_asset_solution" name="Зөрүүг шийдэх цонх" res_model="asset.solution" view_mode="form" target="new" key2="client_action_multi"/>
+        <record id="action_asset_solution" model="ir.actions.act_window">
+            <field name="name">Зөрүүг шийдэх цонх</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">asset.solution</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <!-- <act_window id="action_asset_solution" name="Зөрүүг шийдэх цонх" res_model="asset.solution" view_mode="form" target="new" key2="client_action_multi"/> -->
 
 
 
@@ -268,7 +280,14 @@
             </field>
         </record>
 
-        <act_window id="action_asset_transaction" name="Зөрүүг шийдэх цонх" res_model="asset.transaction" view_mode="form" target="new" key2="client_action_multi"/>
+        <record id="action_asset_transaction" model="ir.actions.act_window">
+            <field name="name">Зөрүүг шийдэх цонх</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">asset.transaction</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <!-- <act_window id="action_asset_transaction" name="Зөрүүг шийдэх цонх" res_model="asset.transaction" view_mode="form" target="new" key2="client_action_multi"/> -->
 
 
 
@@ -326,12 +345,9 @@
             <field name="arch" type="xml">
                 <form string="Write your reason">
                     <group colspan="8" col="8">
-
-
                         <group colspan="8" col="8">
                             <field name="asset_name" readonly="1"/>
                         </group>
-
                         <group colspan="8" col="8">
                             <group colspan="4">
                                 <field name="employee_id" options="{'no_create': True}" readonly="1"/>
@@ -347,18 +363,11 @@
                                 <field name="transfer_cnt" invisible="1"/>
                             </group>
                             <group colspan="4">
-
-
-
                                 <field name="total_amt" readonly="1"/>
                                 <field name="profit_or_loss_amount" readonly="1"/>
-
-
                                 <!-- <field name="counted_qty" readonly="1"/>
                             <field name="difference" readonly="1"/>
                             <field name="current_qty" readonly="1"/> -->
-
-
                             </group>
                         </group>
                         <group colspan="7">
@@ -378,23 +387,18 @@
                             </group>
                         </group>
                         <group colspan="8" col="8">
-
-
-
                             <field name="detail_ids" default_focus="1" nolabel="1" colspan="8" options="{'no_create': True}">
                                 <tree default_order="employee_id">
                                     <field name="start_date" readonly="1"/>
                                     <field name="registry_number" readonly="1"/>
                                     <field name="amount" readonly="1"/>
                                     <field name="capitalized_value" readonly="1"/>
-
                                     <field name="accumulated_depreciation" readonly="1"/>
                                     <field name="current_value" readonly="1"/>
                                     <field name="sale_price" readonly="1"/>
                                     <!-- <field name="account_move_id" invisible="1"/> -->
                                     <field name="account_move_id_for_accountant" invisible="1"/>
                                 </tree>
-
                                 <form>
                                     <group colspan="8" col="8">
                                         <group colspan="4">
@@ -427,25 +431,7 @@
                                     <button special="cancel1" string="Cancel"/>
                                 </footer> -->
                                 </form>
-
-
                             </field>
-
-                            <!-- <field name="transfer_ids" default_focus="1" nolabel="1" colspan="8" options="{'no_create': True}">
-                            <tree default_order="department_id" editable="bottom">
-
-                                <field name="department_id" readonly="1"/>
-                                
-                                <field name="receiver_department_id" readonly="1"/> 
-                                
-                                <field name="request_id" readonly="1"/>
-
-                            </tree>
-
-                        </field> -->
-
-
-
                         </group>
 
                     </group>
@@ -459,19 +445,14 @@
             </field>
         </record>
 
-        <act_window id="action_asset_disposal" name="Үрэгдсэн хөрөнгийг зарлагадах цонх" res_model="asset.disposal" view_mode="form" target="new" key2="client_action_multi"/>
-
-
-
-
-
-
-
-
-
-
-
-
+        <record id="action_asset_disposal" model="ir.actions.act_window">
+            <field name="name">Үрэгдсэн хөрөнгийг зарлагадах цонх</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">asset.disposal</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <!-- <act_window id="action_asset_disposal" name="Үрэгдсэн хөрөнгийг зарлагадах цонх" res_model="asset.disposal" view_mode="form" target="new" key2="client_action_multi"/> -->
 
     </data>
 </odoo> 

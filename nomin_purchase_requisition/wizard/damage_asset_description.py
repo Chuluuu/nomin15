@@ -7,7 +7,6 @@ from odoo.exceptions import UserError, ValidationError, RedirectWarning
 
 import requests
 import json
-import xmlrpclib
 from zeep import Client
 import base64
 
@@ -191,10 +190,10 @@ class DamageAssetDescription(models.TransientModel):
     is_invisible = fields.Integer('Is invisible')
 
     department_id = fields.Many2one('hr.department', string='Салбар')
-    account_id = fields.Many2one('account.account',  string='Хөрөнгийн данс',domain="[('department_id', '=', department_id)]")
-    account_receivable_id = fields.Many2one('account.account',  string='Тооллого тооцооны авлага',domain="[('department_id', '=', department_id)]")
-    depreciation_account = fields.Many2one('account.account',  string='Хуримтлагдсан элэгдэл',domain="[('department_id', '=', department_id)]")
-    receivable_income_account_id = fields.Many2one('account.account',  string='Дахин үнэлгээний хойшлогдсон орлого',domain="[('department_id', '=', department_id)]")
+    account_id = fields.Many2one('account.account',  string='Хөрөнгийн данс',)
+    account_receivable_id = fields.Many2one('account.account',  string='Тооллого тооцооны авлага')
+    depreciation_account = fields.Many2one('account.account',  string='Хуримтлагдсан элэгдэл')
+    receivable_income_account_id = fields.Many2one('account.account',  string='Дахин үнэлгээний хойшлогдсон орлого')
     
     
     def get_active_object(self):

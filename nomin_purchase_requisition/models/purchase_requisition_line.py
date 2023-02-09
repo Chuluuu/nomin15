@@ -12,6 +12,11 @@ class PurchaseRequisitionLine(models.Model):
 	_rec_name = 'product_id'
 	
 
+	def _add_followers(self,user_ids): 
+		'''Дагагч нэмнэ'''
+		partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+		self.message_subscribe(partner_ids=partner_ids)
+
 	# 
 	# @api.depends('supplied_quantities.supplied_product_quantity')
 	# def _supplied_quantity(self):
@@ -72,7 +77,8 @@ class PurchaseRequisitionLine(models.Model):
 		if not context.get('is_new_requisition'):
 			domain = [(1,'=',1)]
 		else:
-			domain = [('product_tmpl_id.is_new','=',True),('product_tmpl_id.cost_price','>',0)]
+			domain = [('product_tmpl_id.cost_price','>',0)]
+			# domain = [('product_tmpl_id.is_new','=',True),('product_tmpl_id.cost_price','>',0)]
 		if context.get('product_list_type') == 'normalized':
 			domain += [('is_normalized','=',True)]
 		if context.get('product_list_type') == 'new_set':
@@ -82,7 +88,9 @@ class PurchaseRequisitionLine(models.Model):
 	
 	def _supplied_partner_count(self):
 		for obj in self:
-			return len(obj.supplied_quantities)
+			obj.supplied_partner_count = 0
+			if obj.supplied_quantities:
+				obj.supplied_partner_count= len(obj.supplied_quantities)
 	def _is_purchase_manager(self):
 		purchase_manager = self.env.user.has_group('purchase.group_purchase_manager')
 		if purchase_manager:
@@ -219,7 +227,12 @@ class PurchaseRequisitionLine(models.Model):
 
 	@api.onchange('deliver_product_id')
 	def onchange_deliver_product(self):
-		self.supplied_price = self.deliver_product_id.sudo().cost_price
+		try:
+			# USED Try except for cost_price field bcuz cost_price field is in other module
+			self.supplied_price = self.deliver_product_id.sudo().cost_price
+		except Exception:
+			self.supplied_price = self.deliver_product_id.sudo().standard_price
+			pass
 
 	@api.onchange('supplied_quantity','supplied_price')
 	def onchange_supplied_quantity(self):
@@ -248,7 +261,11 @@ class PurchaseRequisitionLine(models.Model):
 					}
 				self.env['purchase.requisition.line.state.history'].create(line_vals)
 		if vals.get('deliver_product_id'):
-			self.supplied_price = self.deliver_product_id.sudo().cost_price
+			try:
+				self.supplied_price = self.deliver_product_id.sudo().cost_price
+			except Exception:
+				self.supplied_price = self.deliver_product_id.sudo().standard_price
+				pass
 		if vals.get('supplied_quantity'):
 			self.update({'supplied_amount': vals.get('supplied_quantity') * self.supplied_price})
 				
@@ -285,7 +302,6 @@ class PurchaseRequisitionLine(models.Model):
 
 		mod_obj = self.env['ir.model.data']
 
-		res = mod_obj.get_object_reference('nomin_purchase_requisition', 'action_purchase_requisition_line_wizard')
 		return {
 			'name': 'Note',
 			'view_mode': 'form',
@@ -307,7 +323,9 @@ class purchase_requisition_supplied_quantity(models.Model):
 	user_id = fields.Many2one('res.users', string="Sales person",default=lambda self: self.env.user)
 	line_id = fields.Many2one('purchase.requisition.line', string="Requisition Line")
 	partner_id = fields.Many2one('res.partner', string="Харилцагч")
-	supplied_product_id = fields.Many2one('product.product', string='Нийлүүлсэн барааны нэр', domain=[('product_tmpl_id.is_new','=',True),('product_tmpl_id.cost_price','>',0)])
+
+	supplied_product_id = fields.Many2one('product.product', string='Нийлүүлсэн барааны нэр', domain=[('product_tmpl_id.cost_price','>',0)])
+	# supplied_product_id = fields.Many2one('product.product', string='Нийлүүлсэн барааны нэр', domain=[('product_tmpl_id.is_new','=',True),('product_tmpl_id.cost_price','>',0)])
 	# supplied_product_description = fields.Char(string='Нийлүүлсэн барааны тодорхойлолт')  
 	supplied_product_price = fields.Float(string='Supplied Product Price', default=_supplied_product_price)
 	supplied_product_quantity = fields.Float(string='Supplied Product Quantity')
@@ -320,7 +338,11 @@ class purchase_requisition_supplied_quantity(models.Model):
 		result = super(purchase_requisition_supplied_quantity, self).create(vals)
 
 		if result.supplied_product_id:
-			result.update({'supplied_product_price':result.supplied_product_id.sudo().cost_price})
+			try:
+				result.update({'supplied_product_price':result.supplied_product_id.sudo().cost_price})
+			except Exception:
+				result.update({'supplied_product_price':result.supplied_product_id.sudo().standard_price})
+				pass
 		if vals.get('supplied_product_quantity'):
 			result.update({'supplied_amount':result.supplied_product_quantity * result.supplied_product_price})
 

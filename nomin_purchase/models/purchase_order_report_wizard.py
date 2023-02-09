@@ -35,12 +35,12 @@ class purchase_order_report_wizard(models.TransientModel):
         weeks = rrule.rrule(rrule.WEEKLY, dtstart=start_date, until=end_date)
         return weeks.count()
     
-    department_ids = fields.Many2many(comodel_name='hr.department', string='Department') #Хэлтэс
+    department_ids = fields.Many2many(comodel_name='hr.department',relation="purchase_order_report_hr_department_rel", string='Department') #Хэлтэс
     start_date = fields.Date(string="Date start" , default=_get_start_date) #Эхлэх огноо
     end_date = fields.Date(string='Date end', default=_get_end_date) #Дуусах огноо
-    category_ids = fields.Many2many(comodel_name='product.category', string='Product category') #Барааны ангилал
-    product_ids = fields.Many2many(comodel_name='product.product', string='Products') #Бараанууд
-    year_id     = fields.Selection([(num, str(num)) for num in range(2010, (datetime.now().year)+1 )], 'Choose year') #Сонгож харуулах жил
+    category_ids = fields.Many2many(comodel_name='product.category',relation="purchase_order_report_product_category_rel", string='Product category') #Барааны ангилал
+    product_ids = fields.Many2many(comodel_name='product.product', relation="purchase_order_report_product_product_rel", string='Products') #Бараанууд
+    year_id     = fields.Selection([(str(num), str(num)) for num in range(2010, (datetime.now().year)+1)], string='Choose year') #Сонгож харуулах жил
     
     
     

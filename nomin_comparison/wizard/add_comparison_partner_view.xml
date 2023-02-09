@@ -30,7 +30,6 @@
         <record id="add_comparison_partner_action" model="ir.actions.act_window">
             <field name="name">Add comparison partner</field>
             <field name="res_model">add.comparison.partner</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_comparison_partner_form"/>
             <field name="target">new</field>

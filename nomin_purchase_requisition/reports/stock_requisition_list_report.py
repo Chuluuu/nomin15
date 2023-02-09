@@ -13,8 +13,8 @@ class StockRequisitionListReport(models.TransientModel):
 
 	start_date = fields.Date(string="Start date", required=True)
 	end_date = fields.Date(string="End date", required=True)
-	department_ids = fields.Many2many(comodel_name='hr.department', string='Хүлээлгэн өгсөн хэлтэсүүд')
-	receive_department_ids = fields.Many2many(comodel_name='hr.department', string='Хүлээн авсан хэлтэсүүд')
+	department_ids = fields.Many2many(comodel_name='hr.department',relation='stock_requisition_list_report_department_rel', string='Хүлээлгэн өгсөн хэлтэсүүд')
+	receive_department_ids = fields.Many2many(comodel_name='hr.department',relation='stock_requisition_list_report_received_department_rel', string='Хүлээн авсан хэлтэсүүд')
 
 
 	

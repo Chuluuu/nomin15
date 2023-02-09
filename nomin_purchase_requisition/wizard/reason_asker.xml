@@ -18,6 +18,12 @@
             </field>
         </record>
 
-        <act_window id="action_reason_asker_purchase" name="Write your reason" res_model="nomin.purchase.requisition.asker" view_mode="form" target="new" key2="client_action_multi"/>
+        <record model="ir.actions.act_window" id="action_reason_asker_purchase">
+            <field name="name">Write your reason</field>
+            <field name="res_model">nomin.purchase.requisition.asker</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="nomin_purchase_requisition_asker_form"/>
+            <field name="target">new</field>
+        </record>
     </data>
 </odoo>

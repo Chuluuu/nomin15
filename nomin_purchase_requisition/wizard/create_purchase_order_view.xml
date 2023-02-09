@@ -67,10 +67,18 @@
             </field>
         </record>
 
-        <act_window name="Агуулахаас шууд гаргах" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="create.stock.picking" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" groups="nomin_purchase_requisition.group_procurement_buyer,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager" key2="client_action_multi" id="create_stock_picking"/>
+        <record id="action_create_stock_picking" model="ir.actions.act_window">
+            <field name="name">Агуулахаас шууд гаргах</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">create.stock.picking</field>
+            <field name="view_mode">form</field>
+            <field name="binding_model_id" ref="model_purchase_requisition_line"/>
+            <field name="groups_id" eval="[(4, ref('nomin_purchase_requisition.group_procurement_buyer')),(4, ref('nomin_purchase_requisition.group_complex_manager')),(4, ref('nomin_purchase_requisition.group_supply_import_manager'))]"/>
+            <field name="target">new</field>
+        </record>
+        <!-- <act_window name="Агуулахаас шууд гаргах" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="create.stock.picking" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" groups="nomin_purchase_requisition.group_procurement_buyer,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager" key2="client_action_multi" id="create_stock_picking"/> -->
 
-
-        <act_window name="Агуулахаас шууд гаргах" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="create.stock.picking" src_model="purchase.requisition.line" view_mode="form" target="new" groups="nomin_purchase_requisition.group_procurement_buyer,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager" id="form_create_stock_picking"/>
+        <!-- <act_window name="Агуулахаас шууд гаргах" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="create.stock.picking" src_model="purchase.requisition.line" view_mode="form" target="new" groups="nomin_purchase_requisition.group_procurement_buyer,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager" id="form_create_stock_picking"/> -->
 
     </data>
 </odoo>

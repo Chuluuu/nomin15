@@ -282,7 +282,6 @@ class PurchaseComparisonPerformanceReport(models.TransientModel):
 
 		return {
 		'name': 'Export Report',
-		'view_type':'form',
 		'view_mode':'form',
 		'res_model':'report.excel.output',
 		'res_id':excel_id.id,

@@ -141,7 +141,7 @@ class tender_tender_note(models.Model):
                   }
 
         mail_obj = self.env['mail.followers']
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_state_change_followers_email_template')[1]
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_state_change_followers_email_template')
         active_id = self
         requist_obj = self.env['tender.tender'].browse(active_id.tender_id.id)
         
@@ -165,7 +165,7 @@ class tender_tender_note(models.Model):
                     'desc_name': requist_obj.desc_name,
                     'model': 'tender.tender',
                     'base_url': self.env['ir.config_parameter'].get_param('web.base.url'),
-                    'action_id': self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_list')[1],
+                    'action_id': self.env['ir.model.data']._xmlid_to_res_id('nomin_tender', 'action_tender_list'),
                     'id': requist_obj[0].id,
                     'db_name': request.session.db, 
                     'sender': self.env['res.users'].browse(self.env.user.id).name,
@@ -174,7 +174,6 @@ class tender_tender_note(models.Model):
                     }
             self.env.context = data
             for user_id in user_ids:
-                if user_id != uid:
                     self.pool['mail.template'].send_mail(self.env.cr, 1, template_id, user_id.id, force_send=True, context=self.env.context)
         return True
     
@@ -279,17 +278,17 @@ class tender_request_note(models.TransientModel):
             self.write({'tender_id':active_id[0]})
             self.tender_id.write({'state':'contract_request'})
             self.tender_id.message_post(body=self.note)
-        notif_groups = self.env['ir.model.data'].get_object('nomin_base', 'group_holding_ceo')
+        notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_base.group_holding_ceo')
         if not self.tender_id.requirement_partner_ids:
             raise UserError(_(u'Шаардлага хангасан харилцагч сонгоно уу!'))
         if len(self.tender_id.requirement_partner_ids)>1 :
             raise UserError(_(u'Шаардлага хангасан 1 харилцагч сонгоно уу!'))
-        sel_user_ids = notif_groups.users
+        sel_user_ids = notif_groups
         
         # subject = u'"%s" дугаартай "%s" тендер гэрээ үүсгэх хүсэлт илгээсэн байна.'%( self.tender_id.name,self.tender_id.desc_name)
         # db_name = request.session.db
         # base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        # action_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_list')[1]
+        # action_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_list')[1]
         # if sel_user_ids:
         #     self.write({'state':'contract_request'})
         # else:

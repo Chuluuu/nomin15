@@ -32,8 +32,8 @@
             <field name="context">{}</field>
             <field name="domain">[('state','in',['sent_rfq','back','purchase','done','cancel'])]</field>
         </record>
-
-        <menuitem name="Худалдан авалт" id="portal_purchase_orders" parent="portal.portal_menu" groups="base.group_portal" sequence="31"/>
-        <menuitem name="Худалдан авалт" id="menu_portal_purchase_orders" parent="nomin_purchase.portal_purchase_orders" action="action_purchase_portal" groups="base.group_portal" sequence="32"/>
+        <!-- REMOVED  -->
+        <!-- <menuitem name="Худалдан авалт" id="portal_purchase_orders" parent="portal.portal_menu" groups="base.group_portal" sequence="31"/> -->
+        <!-- <menuitem name="Худалдан авалт" id="menu_portal_purchase_orders" parent="nomin_purchase.portal_purchase_orders" action="action_purchase_portal" groups="base.group_portal" sequence="32"/> -->
     </data>
 </odoo>

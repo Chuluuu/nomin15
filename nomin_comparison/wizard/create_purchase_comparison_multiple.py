@@ -187,7 +187,6 @@ class purchaseComparisonMultiple(models.TransientModel):
 			
 		# 	# return {
 		# 	# 	'name': 'Note',
-		# 	# 	'view_type': 'form',
 		# 	# 	'view_mode': 'form',
 		# 	# 	'res_model': 'partner.without.email',
 		# 	# 	# 'context':{'partners_without_emails':partners_without_emails},

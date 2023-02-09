@@ -106,7 +106,7 @@ class tender_date_extend(models.Model):
                   'done': u'батлагдсан',
                   }
         extend_obj=self
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_tender_date_extend_email_template2')[1]
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_tender_date_extend_email_template2')
         date = datetime.datetime.strptime(extend_obj.extend_date_end, '%Y-%m-%d %H:%M:%S')
         
         data = {
@@ -123,7 +123,7 @@ class tender_date_extend(models.Model):
                 'extend_date_end':date+timedelta(hours=8),
                 'model': 'tender.date.extend',
                 'base_url': self.env['ir.config_parameter'].get_param('web.base.url'),
-                'action_id': self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_extend_menu')[1],
+                'action_id': self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_extend_menu'),
                 'id': extend_obj[0].id,
                 'db_name': request.session.db, 
                 'extend_state': states[signal],
@@ -131,15 +131,15 @@ class tender_date_extend(models.Model):
                 }
         
         if states[signal] == u'илгээсэн':
-            notif_groups = self.env['ir.model.data'].get_object_reference('nomin_tender', 'group_tender_manager')
+            notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_manager')
             
         if states[signal] == u'батлагдсан':
-            notif_groups = self.env['ir.model.data'].get_object_reference('nomin_tender', 'group_tender_secretary')
+            notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_secretary')
         
         if notif_groups:   
             group_user_ids = []
             sel_user_ids = []
-            sel_user_obj = self.env['res.users'].search([('groups_id','in',[notif_groups[1]])])
+            sel_user_obj = self.env['res.users'].search([('groups_id','in',[notif_groups])])
                 
             for sel_user_line in sel_user_obj:
                 sel_user_ids.append(sel_user_line.id)
@@ -165,8 +165,8 @@ class tender_date_extend(models.Model):
                   }
         extend_obj=self
         tender_obj = self.env['tender.tender'].browse(extend_obj.tender_id.id)
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_extend_followers_email_template')[1]
-        template_id1 = self.env['ir.model.data'].get_object_reference('nomin_tender', 'invitation_receiver_email_template1')[1]
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_extend_followers_email_template')
+        template_id1 = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.invitation_receiver_email_template1')
         published_date = datetime.datetime.strptime(tender_obj.published_date, '%Y-%m-%d %H:%M:%S')
         date_end = datetime.datetime.strptime(tender_obj.date_end, '%Y-%m-%d %H:%M:%S')
         data = {
@@ -181,7 +181,7 @@ class tender_date_extend(models.Model):
                 'end_date': date_end+timedelta(hours=8),
                 'model': 'tender.tender',
                 'base_url': self.env['ir.config_parameter'].get_param('web.base.url'),
-                'action_id': self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_list')[1],
+                'action_id': self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_list'),
                 'id': tender_obj[0].id,
                 'db_name': request.session.db,
                 'extend_from_date':extend_obj.extend_date_start,
@@ -377,7 +377,7 @@ class tender_meeting(models.Model):
                   'cancel': u'цуцлагдсан',
                   }
         mail_obj = self.env['mail.followers']
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_meeting_email_template1')[1]
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_meeting_email_template1')
         meet_obj = self
         tender_obj=self.env['tender.tender'].browse(meet_obj.tender_id.id)
         date_from = datetime.datetime.strptime(meet_obj.meeting_from_date, '%Y-%m-%d %H:%M:%S')
@@ -396,7 +396,7 @@ class tender_meeting(models.Model):
                 'comment': meet_obj.comment,
                 'model': 'tender.meeting',
                 'base_url': self.env['ir.config_parameter'].get_param('web.base.url'),
-                'action_id': self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_schedule_meeting')[1],
+                'action_id': self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_schedule_meeting'),
                 'id': meet_obj[0].id,
                 'db_name': request.session.db, 
                 'sender': self.env['res.users'].browse(self.env.user.id).name,
@@ -442,7 +442,6 @@ class tender_meeting(models.Model):
     def action_cancel(self):
         """Товлогдсон хурал цуцлах"""
         mod_obj = self.env['ir.model.data']
-        res = mod_obj.get_object_reference('nomin_tender', 'action_tender_meet_note')
         
         return {
             'type': 'ir.actions.act_window',
@@ -496,7 +495,7 @@ class tender_meeting(models.Model):
                   'cancel': u'цуцлагдсан',
                   }
         mail_obj = self.env['mail.followers']
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_meeting_email_template1')[1]
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_meeting_email_template1')
         meet_obj = self
         tender_obj=self.env['tender.tender'].browse(meet_obj.tender_id.id)
         date_from = datetime.datetime.strptime(meet_obj.meeting_from_date, '%Y-%m-%d %H:%M:%S')
@@ -515,7 +514,7 @@ class tender_meeting(models.Model):
                 'comment': meet_obj.comment,
                 'model': 'tender.meeting',
                 'base_url': self.env['ir.config_parameter'].get_param('web.base.url'),
-                'action_id': self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_schedule_meeting')[1],
+                'action_id': self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_schedule_meeting'),
                 'id': meet_obj[0].id,
                 'db_name': request.session.db, 
                 'sender': self.env['res.users'].browse(self.env.user.id).name,

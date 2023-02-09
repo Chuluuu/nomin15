@@ -10,7 +10,7 @@ import logging
 _logger = logging.getLogger(__name__)
 class distributed_purchase_requisition(models.TransientModel):
     _name = 'distributed.purchase.requisition'
-    # TODO FIX LATER
+    # TODO FIX LATER inherited from l10_mn_report_base
     # _inherit = 'abstract.report.model'
     
     

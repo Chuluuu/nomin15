@@ -16,28 +16,27 @@ class CreateTenderRequest(models.TransientModel):
     
     def action_tender_request(self):
 
-    	active_id = self.env.context.get('active_id')
-    	if active_id:
-    		requisition_id = self.env['purchase.requisition'].browse(active_id)
-
-		requisition_id.write({'state':'tender_request'})
-		requisition_id.line_ids.write({'state':'tender_request'})
-		requisition_id.message_post(body=self.description)
-		groups = self.env['res.groups']
-		group_id= self.env['ir.model.data'].get_object_reference('nomin_base', 'group_holding_ceo')[1]
-		group = groups.search([('id','=',group_id)])
-		user_ids = []
-		user_emails=[]
-		base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-		action_id = self.env['ir.model.data'].get_object_reference('purchase_requisition', 'action_purchase_requisition')[1]
-		db_name = request.session.db
-		user_ids.append(requisition_id.user_id.id)
-		for user in group.users:
-				user_ids.append(user.id)
-		for email in  self.env['res.users'].browse(user_ids):
-			user_emails.append(email.login)
-			subject = u'"Шаардахын дугаар %s".'%(requisition_id.name)
-			body_html = u'''
+        active_id = self.env.context.get('active_id')
+        if active_id:
+            requisition_id = self.env['purchase.requisition'].browse(active_id)
+        requisition_id.write({'state':'tender_request'})
+        requisition_id.line_ids.write({'state':'tender_request'})
+        requisition_id.message_post(body=self.description)
+        groups = self.env['res.groups']
+        group_id= self.env['ir.model.data']._xmlid_to_res_id('nomin_base.group_holding_ceo')
+        group = groups.search([('id','=',group_id)])
+        user_ids = []
+        user_emails=[]
+        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        action_id = self.env['ir.model.data']._xmlid_to_res_id('purchase_requisition.action_purchase_requisition')
+        db_name = request.session.db
+        user_ids.append(requisition_id.user_id.id)
+        for user in group.users:
+            user_ids.append(user.id)
+        for email in  self.env['res.users'].browse(user_ids):
+            user_emails.append(email.login)
+            subject = u'"Шаардахын дугаар %s".'%(requisition_id.name)
+            body_html = u'''
                             <h4>Сайн байна уу, \n Таньд энэ өдрийн мэнд хүргье! </h4>
                             <p>
                                ERP системд %s салбарын %s (хэлтэс) дэх %s дугаартай шаардах %s төлөвт орлоо.                               
@@ -69,8 +68,8 @@ class CreateTenderRequest(models.TransientModel):
                             action_id
                             )
      
-			if email.login and email.login.strip():
-				email_template = self.env['mail.template'].create({
+            if email.login and email.login.strip():
+                email_template = self.env['mail.template'].create({
                     'name': _('Followup '),
                     'email_from': self.env.user.company_id.email or '',
                     'model_id': self.env['ir.model'].search([('model', '=', 'purchase.requisition')]).id,
@@ -81,9 +80,9 @@ class CreateTenderRequest(models.TransientModel):
                     'body_html':body_html,
                   #  'attachment_ids': [(6, 0, [attachment.id])],
 				})
-				email_template.send_mail(requisition_id.id)
-		email = u'' + 'Тендер зарлуулах хүсэлт' +u'\n Дараах хэрэглэгчид рүү имэйл илгээгдэв: ' + ('<b>' + ('</b>, <b>'.join(user_emails)) + '</b>')
-		requisition_id.message_post(body=email)        
+                email_template.send_mail(requisition_id.id)
+        email = u'' + 'Тендер зарлуулах хүсэлт' +u'\n Дараах хэрэглэгчид рүү имэйл илгээгдэв: ' + ('<b>' + ('</b>, <b>'.join(user_emails)) + '</b>')
+        requisition_id.message_post(body=email)        
 
 class CreateTenderRequestReturn(models.TransientModel):
     _name = "action.create.tender.request.return"
@@ -94,11 +93,10 @@ class CreateTenderRequestReturn(models.TransientModel):
 
     
     def action_tender_return(self):
+        active_id = self.env.context.get('active_id')
+        if active_id:
+            requisition_id = self.env['purchase.requisition'].browse(active_id)
 
-    	active_id = self.env.context.get('active_id')
-    	if active_id:
-    		requisition_id = self.env['purchase.requisition'].browse(active_id)
-
-		requisition_id.write({'state':'sent_to_supply'})
-		requisition_id.line_ids.write({'state':'sent_to_supply'})
-		requisition_id.message_post(body=self.description)
+        requisition_id.write({'state':'sent_to_supply'})
+        requisition_id.line_ids.write({'state':'sent_to_supply'})
+        requisition_id.message_post(body=self.description)

@@ -15,7 +15,7 @@
     "category" : "Mongolian Modules",
     "website": "asdasdas",
     "summary": "Odoo Base Module",
-    "depends" : ['base','hr'],
+    "depends" : ['base','hr','account'],
     "init": [],
     "data" : [
               'views/configure/integration.xml',
@@ -47,7 +47,7 @@
               'views/sod_matrix.xml',
               
             #   'report/report_res_users_view.xml',
-            #   'views/menu.xml',
+              'views/menu.xml',
               
     ],
     "demo_xml": [

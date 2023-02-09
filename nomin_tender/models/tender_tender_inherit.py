@@ -24,8 +24,8 @@ class TenderTender(models.Model):
         '''
         user_obj = self.env['res.users']
         emp_obj = self.env['hr.employee']
-        notif_groups = self.env['ir.model.data'].get_object_reference('nomin_tender', 'group_tender_wanter_manager')
-        sel_user_ids = user_obj.search([('groups_id','in',notif_groups[1])])
+        notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_wanter_manager')
+        sel_user_ids = user_obj.search([('groups_id','in',notif_groups)])
         for tender in self:
             tender.is_in_wanted_group = False
             if self._uid in sel_user_ids._ids:
@@ -42,8 +42,8 @@ class TenderTender(models.Model):
         '''
         user_obj = self.env['res.users']
         emp_obj = self.env['hr.employee']
-        notif_groups = self.env['ir.model.data'].get_object_reference('nomin_tender', 'group_tender_wanter_manager')
-        sel_user_ids = user_obj.search([('groups_id','in',notif_groups[1])])
+        notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_wanter_manager')
+        sel_user_ids = user_obj.search([('groups_id','in',notif_groups)])
         for tender in self:
             is_manager= self.env.user.has_group('nomin_tender.group_tender_manager')
             tender.is_tender_disabled_user = False
@@ -61,8 +61,8 @@ class TenderTender(models.Model):
         user_obj = self.env['res.users']
         employee_obj = self.env['hr.employee']
         
-        notif_groups = self.env['ir.model.data'].get_object_reference('nomin_tender', 'group_tender_branch_manager')
-        sel_user_ids = user_obj.search([('groups_id','in',notif_groups[1])])
+        notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_branch_manager')
+        sel_user_ids = user_obj.search([('groups_id','in',notif_groups)])
         # tender = self.env['tender.tender').browse(cr, uid, ids[0]]
         for tender in self:
             tender.is_in_branch_group = False
@@ -80,8 +80,8 @@ class TenderTender(models.Model):
         user_obj = self.env['res.users']
         tender_obj =  self.env['tender.tender']
         line_obj = self.env['tender.employee.line']
-        notif_groups = self.env['ir.model.data'].get_object_reference('nomin_tender', 'group_tender_requist_approval_leaders')
-        sel_user_ids = user_obj.search([('groups_id','in',notif_groups[1])])
+        notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_requist_approval_leaders')
+        sel_user_ids = user_obj.search([('groups_id','in',notif_groups)])
         sel_user = user_obj.browse(sel_user_ids)
         for tender in self:
             tender.is_in_confirmed_group = False
@@ -110,7 +110,6 @@ class TenderTender(models.Model):
                     where tender.state = 'published' and type.id = tender.type_id and child_type.id = tender.child_type_id"
         self.env.cr.execute(query)
         records = self.env.cr.dictfetchall()
-        # template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_tender_closed_state_email_template')[1]
         tender_obj=self.env['tender.tender']
         if records:
             for record in records:

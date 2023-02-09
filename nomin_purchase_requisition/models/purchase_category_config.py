@@ -18,8 +18,8 @@ class PurchaseCategoryConfig(models.Model):
 	before_accountant_id = fields.Many2one('res.users',string="Хуучин нягтлан",tracking=True)
 	new_accountant_id = fields.Many2one('res.users',string="Шинэ нягтлан",tracking=True)
 	team_id = fields.Many2one('team.registration',string="Team registration",tracking=True)
-	sector_ids = fields.Many2many(comodel_name='hr.department',string="Салбар",domain=[('is_sector','=',True)])
-	department_ids = fields.Many2many(comodel_name='hr.department',string="Хэлтэс")
+	sector_ids = fields.Many2many(comodel_name='hr.department',relation='purchase_category_config_sector_rel',string="Салбар",domain=[('is_sector','=',True)])
+	department_ids = fields.Many2many(comodel_name='hr.department',relation='purchase_category_config_department_rel',string="Хэлтэс")
 
 	
 	def action_change(self):

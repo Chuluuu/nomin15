@@ -11,7 +11,6 @@ from dateutil.relativedelta import relativedelta
 
 import requests
 import json
-import xmlrpclib
 from zeep import Client, Settings
 from odoo.exceptions import UserError #
 import base64

@@ -70,10 +70,18 @@
             </field>
         </record>
 
-        <act_window name="Харьцуулалт үүсгэх" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="purchase.comparison.creation.wizard" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" groups="nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_procurement_buyer" key2="client_action_multi" id="create_purchase_comparison"/>
+        <record id="action_create_purchase_comparison" model="ir.actions.act_window">
+            <field name="name">Харьцуулалт үүсгэх</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.comparison.creation.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="binding_model_id" ref="model_purchase_requisition_line"/>
+            <field name="groups_id" eval="[(4, ref('nomin_purchase_requisition.group_procurement_buyer')),(4, ref('nomin_purchase_requisition.group_complex_manager')),(4, ref('nomin_purchase_requisition.group_supply_import_manager'))]"/>
+            <field name="target">new</field>
+        </record>
+        <!-- <act_window name="Харьцуулалт үүсгэх" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="purchase.comparison.creation.wizard" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" groups="nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_procurement_buyer" key2="client_action_multi" id="create_purchase_comparison"/> -->
 
-
-        <act_window name="Харьцуулалт үүсгэх" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="purchase.comparison.creation.wizard" src_model="purchase.requisition.line" view_mode="form" target="new" groups="nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_procurement_buyer" id="form_create_purchase_comparison"/>
+        <!-- <act_window name="Харьцуулалт үүсгэх" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="purchase.comparison.creation.wizard" src_model="purchase.requisition.line" view_mode="form" target="new" groups="nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_procurement_buyer" id="form_create_purchase_comparison"/> -->
 
     </data>
 </odoo>

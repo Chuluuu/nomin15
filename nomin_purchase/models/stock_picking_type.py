@@ -33,20 +33,21 @@ class stock_picking(models.Model):
     
     
     def _set_sector(self):
-            department_ids = self.env['hr.department'].get_sector(self.env.user.department_id.id)
-            if department_ids :
-                return department_ids
-            else :      
-              return self.env.user.department_id.id
+            if self.env.user.department:
+                department_ids = self.env['hr.department'].get_sector(self.env.user.department_id.id)
+                if department_ids :
+                    return department_ids
+                else :      
+                    return self.env.user.department_id.id
             return None
     
     
     def _set_department(self):
         employee_id = self.env['hr.employee'].sudo().search([('user_id','=',self._uid)])
-        if employee_id:
+        if employee_id and employee_id.department_id:
             return employee_id.department_id.id
-        else:
-            raise UserError(_('Warning!'), _('You don\'t have related department. Please contact administrator.'))
+        # else:
+        #     raise UserError(_('Warning!'), _('You don\'t have related department. Please contact administrator.'))
         return None
     
     sector_id = fields.Many2one('hr.department',u'Гүйцэтгэгч салбар', domain="[('is_sector','=',True)]", default=_set_sector)

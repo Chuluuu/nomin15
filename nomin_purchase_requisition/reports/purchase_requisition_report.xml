@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <report string="Худалдан авалт шаардах" id="purchase_requisition.action_report_purchase_requisitions1" model="purchase.requisition" report_type="qweb-pdf" name="purchase_requisition.report_purchaserequisitions1" file="purchase_requisition.report_purchaserequisitions1" />
-
-        <template id="purchase_requisition.report_purchaserequisitions1">
+        <template id="nomin_purchase_requisition.report_purchaserequisitions1">
             <t t-foreach="docs" t-as="o">
                 <t t-call="report.layout">
                     <div class="page l10n_mn_base_report">
@@ -68,7 +66,6 @@
                             <tr style="border: 1px solid #000000;">
                                 <th align="center" style="width:10px; text-align: center; padding: 0px; border: 1px solid #000000;">№</th>
                                 <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Код</th>
-                                <!-- <th align="center" style=" text-align: center;  padding: 0px; border: 1px solid #000000;">Нэр</th> -->
                                 <th align="center" style="width:60px; text-align: center; padding: 0px; border: 1px solid #000000;">Нэр</th>
                                 <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Тодорхойлолт</th>
                                 <th align="center" style="width:60px; text-align: center;  padding: 0px; border: 1px solid #000000;">Хэмжих нэгж</th>
@@ -122,35 +119,9 @@
                         </p>
                         <p></p>
                         <p></p>
-                        <!--                 <table style="padding-top: 0px;padding-left: 0px;padding-right: 0px;padding-bottom: 0px; font-size: 10px;">
-                	<t t-foreach="emp_list" t-as="e">
-                		<tr>
-	                		<t t-if="len(e) > 1">
-								   	<td align="left" width="50%"><span t-field="e[0].job_id.name"/><span>: </span><img class="image" t-att-src="'data:image/png;base64,%s' %e[0].signature_image" style="height:70px;width:125px;"/><span> / </span><span t-field="e[0].name"/><span> / </span>
-				                       	</td>
-
-   
-				                    <td align="left" width="50%"><span t-field="e[1].job_id.name"/><span>: </span><img class="image" t-att-src="'data:image/png;base64,%s' %e[1].signature_image" style="height:70px;width:125px;"/><span> / </span> <span t-field="e[1].name"/> <span> / </span>
-				                       	</td>	
-	                		</t>
-	                		<t t-if="len(e) == 1">
-		                			<td align="left" width="50%"><span t-field="e[0].job_id.name"/><span>: </span><img class="image" t-att-src="'data:image/png;base64,%s' %e[0].signature_image" style="height:70px;width:125px;"/><span> / </span> <span t-field="e[0].name"/> <span> / </span>
-					                </td>
-					                <td align="left" width="50%">
-					                	<span></span>
-					                </td>
-	                		</t>
-                		</tr>
-                	</t>
-                </table> -->
-
-
 
                         <table style="padding-top: 0px;padding-left: 0px;padding-right: 0px;padding-bottom: 0px; font-size: 10px;">
-
                             <t t-foreach="emp_list" t-as="e">
-
-
                                 <tr>
                                     <t  >
                                         <div>
@@ -222,143 +193,17 @@
                 </t>
             </t>
         </template>
-        <!-- 
-<template id="purchase_requisition.report_purchaserequisitions">
-    <t t-name="">
-    <t t-call="report.html_container">
-        <t t-foreach="docs" t-as="o">
-            <t t-call="report.external_layout">
-                <div class="page">
-                    <div class="oe_structure"/>
-                    <table style="width:100%;" border="0">
-                        <tr>
-                            <td style="vertical-align:middle; padding-bottom: 3px;padding-top: 3px;" align="left"><span style="font-size: 13px">НХ Маягт №.............: </span></td>
-                            <td style="vertical-align:top; padding-bottom: 3px;padding-top: 3px;" align="center">Худалдан авалт шаардах №<span style="font-size: 13px" t-field="o.name"/></td>
-                            <td style="vertical-align:middle; padding-bottom: 3px;padding-top: 3px;" align="left"><span style="font-size: 13px"/></td>
-                        </tr>
-                        <tr>
-                            <td style="vertical-align:middle; padding-bottom: 3px;padding-top: 3px;" align="left">Зориулалт: <span style="font-size: 13px" t-field="o.comment"/></td>
-                            <td style="vertical-align:middle; padding-bottom: 3px;padding-top: 3px;" align="left"><span style="font-size: 13px"/></td>
-                            <td style="vertical-align:middle; padding-bottom: 3px;padding-top: 3px;" align="left"><span style="font-size: 13px"/></td>  
-                        </tr>
-                        <tr>
-                            <td>Захиалагч: <span style="font-size: 13px" t-field="o.sector_id.name"/></td>
-                            <td align="left"><span style="font-size: 13px" t-field="o.user_id.job_id.name"/></td>
-                            <td align="left"><span style="font-size: 13px" t-field="o.user_id.name"/></td>
-                            <td align="left"><span style="font-size: 13px">/...............        </span></td>  
-                            <td ><span style="font-size: 13px" t-field="o.ordering_date"/></td>
-                        </tr>
-                        
-                    </table>
-                    <br/>
-            
-            <t t-set="count" t-value="1"/>
-
-            <t t-if="o.line_ids">
-                <table style="width:100%;" border="0"> 
-                    <thead>
-                        <tr>
-                            <td rowspan="2" style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:center;">№</td>
-                            <td rowspan="2" style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;">Загвар</td>
-                            <td rowspan="2" style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;">Үзүүлэлт тайлбар</td>
-                            <td rowspan="2" style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;">Хэмжих нэгж</td>  
-                            <td rowspan="2" style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;">Хүссэн тоо</td>  
-                            <td rowspan="2" style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;">Зөвшөөрсөн тоо</td>  
-                            <td rowspan="2" style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;">Нэгжийн үнэ</td>  
-                            <td rowspan="2" style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;">Нийт үнэ</td>  
-                        </tr>       
-                    </thead>
-                    <tbody>
-                         
-                         <tr t-foreach="o.line_ids" t-as="line_ids">
-                            <td style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:center;" t-esc="count"> 
-                                
-                            </td>
-                         <td style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;"> 
-
-                                                    <span t-field="line_ids.product_id.name"/>
-                                                </td>
-                         <td style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;"> 
-
-                                                    <span t-field="line_ids.product_desc"/>
-                                                </td>
-                         <td style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;"> 
-
-                                                    <span t-field="line_ids.product_uom_id.name"/>
-                                                </td>
-                         <td style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;"> 
-
-                                                    <span t-field="line_ids.product_qty"/>
-                                                </td>
-                         <td style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;"> 
-
-                                                    <span t-field="line_ids.allowed_qty"/>
-                                                </td>
-                         <td style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;"> 
-                                                    <span t-field="line_ids.product_price"/>
-                                                </td>
-                         <td style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;"> 
-                                                    <span t-field="line_ids.amount"/>
-                            </td>    
-                        <t t-set="count" t-value="count+1"/>
-                        </tr>
-                    </tbody>                      
-                </table>
-           </t>
-       <br/>
-       <table style="width:100%; font-size: 13px; margin-top:1px; text-align:left;">
-                
-              <tr>
-                 <td style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;"> 
-                    <b>Баталсан дүн:</b>                    
-                    <span t-field="o.amount"/>
-                </td>   
-                 <td style="border: 1px solid #000000;padding-left: 1px;padding-top: 5px;padding-bottom: 5px;text-valign: center;vertical-align:middle;"> 
-                            <b>Зөвшөөрсөн дүн:</b>                                    
-                                <span t-field="o.allowed_amount"/>
-                </td>     
-              </tr>
-        </table>
-
-       <br/>
-
-        <t t-set="count" t-value="0"/>                           
-       <table style="width:100%; font-size: 13px; margin-top:1px; text-align:left;">
-                
-                <t t-foreach="employees" t-as="emp">
-                    <div>
-                        <tr>
-                            <div >
-                                <td >
-                                      <div class="col-xs-12" style="padding-top: 10px;">
-                                            <div class="col-xs-4" style="padding-left: 2px;" t-if="emp.job_id" valign="middle" align="left">
-                                                <span style="font-size: 13px" t-field="emp.job_id.name"/> 
-                                            </div>
-                                            <div class="col-xs-4" style="margin-top: -10%;margin-right: 30%;margin-bottom: -10%;margin-left: 42%;" t-if="o.state in ['confirmed']">
-                                                <img class="image" t-att-src="'data:image/png;base64,%s' %emp.signature_image" style="height:70px;width:125px;"/>
-                                            </div>
-                                            <div class="col-md-4" align="right" t-if="emp">
-                                                /<span style="font-size: 13px" t-field="emp.name"/>/
-                                            </div>
-                                        </div>
-                                </td>
-                            </div>
-                        </tr>
-                    </div>
-                    
-                    <div t-if="count%2!=0">
-                        <br/>
-                    </div>
-                    <t t-set="count" t-value="count+1"/>
-                </t>
-        </table>
 
 
-                </div>
-            </t>
-        </t>
-    </t>
-</t>
-</template> -->
+        <record id="action_report_purchase_requisitions" model="ir.actions.report">
+            <field name="name">Худалдан авалт шаардах</field>
+            <field name="model">purchase.requisition</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">nomin_purchase_requisition.report_purchaserequisitions1</field>
+            <field name="report_file">nomin_purchase_requisition.report_purchaserequisitions1</field>
+            <field name="print_report_name">'Худалдан авалт шаардах - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_purchase_requisition"/>
+            <field name="binding_type">report</field>
+        </record>
     </data>
 </odoo>

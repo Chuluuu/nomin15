@@ -31,3 +31,7 @@ access_request_history,request.history.user,model_request_history,base.group_use
 access_work_service_time,work.service.time.user,model_work_service_time,base.group_user,1,1,1,1
 access_work_service,work.service.user,model_work_service,base.group_user,1,0,0,0
 access_evaluation_indicators_users,evalution.indicators,model_evaluation_indicators,base.group_user,1,0,0,0
+
+access_request_config_purchase_user,request.config.line.user,model_request_config_purchase_line,base.group_user,1,0,0,0
+access_request_config_purchase_line_manager,request.config.line.manager,model_request_config_purchase_line,nomin_base.group_config_manager,1,1,1,1
+

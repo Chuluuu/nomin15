@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <odoo>
 	<data>
-		<menuitem id="menu_purchase_requisition" name="Purchase Requisition" parent="base.menu_purchase_root" sequence="0" groups="purchase.group_purchase_user"/>
+		<menuitem id="menu_purchase_requisition" name="Purchase Requisition" parent="purchase.menu_purchase_root" sequence="0" groups="purchase.group_purchase_user"/>
 
 		<record id="view_purchase_requisition_filter_nomin_filter" model="ir.ui.view">
 			<field name="name">purchase.requisition.filter</field>
@@ -20,25 +20,25 @@
 					<field name="state"/>
 					<field name="line_ids"/>
 					<field name="confirm_user_ids"/>
-					<field name="exclusive" />
+					<!-- <field name="exclusive" /> -->
 					<filter context="{'group_by':'sector_id'}" domain="[]" icon="terp-personal" name="group_sec" string="Sector"/>
 					<filter name="draft" string="New" domain="[('state','=','draft')]" help="New Call for Tenders"/>
 
-					<filter string="Confirmed" domain="[('state','=','confirmed')]" help="Call for Tenders in negotiation"/>
+					<filter string="Confirmed" name="connfirmed" domain="[('state','=','confirmed')]" help="Call for Tenders in negotiation"/>
 
 					<separator/>
 
 
 
 					<group expand="0" string="Group By">
-						<filter string="Responsible" domain="[]" context="{'group_by':'user_id'}"/>
-						<filter string="Source" domain="[]" context="{'group_by':'origin'}"/>
-						<filter string="Урьтамж" domain="[]" context="{'group_by':'priority'}"/>
-						<filter string="Хүлээн авах байршил" domain="[]" context="{'group_by':'location'}"/>
-						<filter string="Хэлтэс" domain="[]" context="{'group_by':'department_id'}"/>
+						<filter string="Responsible" name="responsible" domain="[]" context="{'group_by':'user_id'}"/>
+						<filter string="Source" name="origin" domain="[]" context="{'group_by':'origin'}"/>
+						<filter string="Урьтамж" name="priority" domain="[]" context="{'group_by':'priority'}"/>
+						<filter string="Хүлээн авах байршил" name="location" domain="[]" context="{'group_by':'location'}"/>
+						<filter string="Хэлтэс" name="department" domain="[]" context="{'group_by':'department_id'}"/>
 						<filter context="{'group_by':'state'}" domain="[]" icon="terp-stock_effects-object-colorize" name="group_status" string="Status"/>
 
-						<filter string="Ordering Date" domain="[]" context="{'group_by':'ordering_date'}"/>
+						<filter string="Ordering Date" name="ordering" domain="[]" context="{'group_by':'ordering_date'}"/>
 						<!-- <filter string="End Month" domain="[]" context="{'group_by':'date_end'}"/> -->
 					</group>
 				</search>
@@ -60,7 +60,7 @@
 			<field name="name">purchase.requsition</field>
 			<field name="model">purchase.requisition</field>
 			<field name="arch" type="xml">
-				<tree string="Purchase requisition tree" colors="grey:change_color=='grey';red:change_color=='red';">
+				<tree string="Purchase requisition tree">
 					<field name="name" string="Шаардахын дугаар" />
 					<field name="department_id"/>
 					<field name="sector_id"/>
@@ -127,12 +127,8 @@
 			<field name="model">purchase.requisition</field>
 			<field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
 			<field name="arch" type="xml">
-				<xpath expr="//header/button[@name='cancel_requisition']" position="replace"/>
-				<xpath expr="//header/button[@name='sent_suppliers']" position="replace">
-
-
-
-
+				<!-- <xpath expr="//header/button[@name='cancel_requisition']" position="replace"/> -->
+				<xpath expr="//header/button[@name='action_in_progress']" position="replace">
 					<button name="action_send" class="oe_highlight" type="object" string="Send" attrs="{'invisible':[('is_in_sent','=',False)]}"/>
 					<!-- <button name="action_get_val" class="oe_highlight" type="object" /> -->
 
@@ -143,9 +139,6 @@
 					<button name="action_reject" class="oe_highlight" string="Reject" type="object" attrs="{'invisible':[('is_in_approve','=',False)]}"/>
 					<button name="action_verify" class="oe_highlight" string="Verified" type="object" attrs="{'invisible':[('is_in_verify','=',False)]}"/>
 					<button name="action_reject" class="oe_highlight" string="Reject" type="object" attrs="{'invisible':[('is_in_verify','=',False)]}"/>
-
-
-
 
 					<button name="action_send" groups="nomin_purchase_requisition.group_supply_import_manager" class="oe_highlight" type="object" string="Send" attrs="{'invisible':[('state','!=','sent_to_supply_manager')]}" />
 
@@ -166,7 +159,7 @@
 					<button name="action_payment_request" groups="nomin_purchase_requisition.group_purchase_decide_sent_to_supply" class="oe_highlight" type="object" string="Payment request" attrs="{'invisible':['|',('payment_request_id','!=',False),('state','!=','confirmed')]}"/>
 
 					<button name="action_to_reject" groups="nomin_purchase_requisition.group_purchase_decide_sent_to_supply" class="oe_highlight" type="object" string="Буцаах" attrs="{'invisible':['|',('payment_request_id','!=',False),('state','!=','confirmed')]}"/>
-					<button name="set_to_done" class="oe_highlight" type="object" string="Дууссан төлөвт оруулах" invisible="1" attrs="{'invisible':[('state','not in',['confirmed','assigned','purchased'])]}"/>
+					<!-- <button name="set_to_done" class="oe_highlight" type="object" string="Дууссан төлөвт оруулах" invisible="1" attrs="{'invisible':[('state','not in',['confirmed','assigned','purchased'])]}"/> -->
 					<!-- <button name="action_approve1" invisible="1" class="oe_highlight" string="Approve1" type="object"/> -->
 					<!-- <button name="action_fulfil_request" class="oe_highlight" string="Батлах" type="object" attrs="{'invisible':[('is_in_sent_supply','=',False)]}" groups="nomin_purchase_requisition.group_haaa_head"/> -->
 					<!-- <button name="action_retrive_request" class="oe_highlight" string="Retrive request" type="object" attrs="{'invisible':[('is_in_sent_supply','=',False)]}" groups="nomin_purchase_requisition.group_haaa_head"/> -->
@@ -219,15 +212,15 @@
 					<field name="is_purchase" invisible="1"/>
 				</xpath>
 
-				<xpath expr="//sheet/group/group/field[@name='exclusive']" position="replace">
+				<!-- <xpath expr="//sheet/group/group/field[@name='exclusive']" position="replace">
 					<field name="exclusive" invisible="1"/>
-				</xpath>
-				<xpath expr="//sheet/group/group/field[@name='multiple_rfq_per_supplier']" position="replace">
+				</xpath> -->
+				<!-- <xpath expr="//sheet/group/group/field[@name='multiple_rfq_per_supplier']" position="replace">
 					<field name="multiple_rfq_per_supplier" invisible="1"/>
-				</xpath>
-				<xpath expr="//sheet/group/group/field[@name='account_analytic_id']" position="replace">
+				</xpath> -->
+				<!-- <xpath expr="//sheet/group/group/field[@name='account_analytic_id']" position="replace">
 					<field name="account_analytic_id" invisible="1"/>
-				</xpath>
+				</xpath> -->
 
 
 				<xpath expr="//sheet/group/group/field[@name='date_end']" position="replace">
@@ -251,7 +244,7 @@
 
 
 				</xpath>
-				<xpath expr="//sheet/group/group/field[@name='multiple_rfq_per_supplier']" position="after">
+				<xpath expr="//sheet/group/group/field[@name='currency_id']" position="after">
 					<div colspan="2">
 						<br />
 						<label for="goods_description" style="font-weight:bold;"/>
@@ -303,17 +296,17 @@
 					<field name="product_list" attrs="{'readonly':[('state','!=','draft')]}" options="{'no_create': True}"/>
 					<field name="is_new_requisition" readonly="1"/>
 				</xpath>
-				<xpath expr="//sheet/group/group/field[@name='picking_type_id']" position="replace">
+				<!-- <xpath expr="//sheet/group/group/field[@name='picking_type_id']" position="replace">
 					<field name="picking_type_id" widget="selection" invisible="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
 					<field name="warehouse_id" widget="selection" invisible="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
-				</xpath>
+				</xpath> -->
 
-				<xpath expr="//sheet/notebook/page/field/tree/field[@name='product_id']" position="replace">
-					<field name="product_id" on_change="onchange_product_id(product_id)"/>
-				</xpath>
-				<xpath expr="//sheet/notebook/page/field/tree/field[@name='product_id']" position="after">
+				<!-- <xpath expr="//sheet/notebook/page/field/tree/field[@name='product_id']" position="replace">
+					<field name="product_id" />
+				</xpath> -->
+				<!-- <xpath expr="//sheet/notebook/page/field/tree/field[@name='product_id']" position="after">
 					<field name="product_uom_id"/>
-				</xpath>
+				</xpath> -->
 
 				<field name="line_ids" position="replace">
 					<field name="line_ids" context="{'default_schedule_date': schedule_date,'control_budget_id':control_budget_id,'product_list_type':product_list_type,'is_new_requisition':is_new_requisition}" attrs="{'invisible':[('state','=','assigned')]}">
@@ -331,6 +324,7 @@
 							<field name="supplied_quantity"/>
 							<field name="supplied_amount"/>
 							<field name="received_qty"/>
+							<field name="product_uom_category_id"/>
 							<field name="product_uom_id" options="{'no_create': True}" groups="product.group_uom"/>
 							<field name="schedule_date" context="{'default_schedule_date': schedule_date}"/>
 							<field name="allowed_date"/>
@@ -500,6 +494,7 @@
 							<field name="supplied_amount" readonly="1"/>
 							<field name="supplied_partner_count"/>
 							<field name="received_qty" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+							<field name="product_uom_category_id"/>
 							<field name="product_uom_id" attrs="{'readonly':[('state','not in',['draft'])]}" options="{'no_create': True}" groups="product.group_uom"/>
 							<field name="schedule_date" attrs="{'readonly':[('state','not in',['draft'])]}" context="{'default_schedule_date': schedule_date}"/>
 							<field name="allowed_date" attrs="{'readonly':[('state','not in',['draft'])]}"/>
@@ -700,27 +695,17 @@
 					</group>
 				</xpath>
 
-				<xpath expr="//form/sheet/notebook/page/button" position="replace">
-					<!-- <field name="purchase_ids" readonly="1"/> -->
-				</xpath>
-
-				<xpath expr="//field[@name='purchase_ids']" position="replace">
+				<!-- <xpath expr="//form/sheet/notebook/page/button" position="replace">
 					<field name="purchase_ids" readonly="1"/>
-				</xpath>
-				<xpath expr="//separator" position="replace">
-				</xpath>
+				</xpath> -->
+
+				<!-- <xpath expr="//field[@name='purchase_ids']" position="replace">
+					<field name="purchase_ids" readonly="1"/>
+				</xpath> -->
 				<xpath expr="//separator" position="replace">
 					<separator string="Тодорхойлолт">
 					</separator>
 				</xpath>
-				<!--xpath expr="//sheet/notebook/page/div/button[@string='Request a Quotation']" position="before"-->
-				<!-- 		<xpath expr="//sheet/notebook/page/button[@='']" position="before">
-                    <button name="select_all" states="req_sent_to_order_manager" string="Select All" groups="nomin_purchase_requisition.group_order_manager" type="object"/>
-                    <button name="select_not_assigned" states="req_sent_to_order_manager" string="Select Not Assigned" groups="nomin_purchase_requisition.group_order_manager" type="object"/>
-                    <button name="deselect_all" states="req_sent_to_order_manager" string="Deselect All" groups="nomin_purchase_requisition.group_order_manager" type="object"/>
-                    <button name="%(action_purchase_requisition_assign)d" type="action" string="Assign" icon="gtk-execute" groups="nomin_purchase_requisition.group_order_manager" attrs="{'invisible': ['|',('line_ids','=',False),('state', 'not in', ['req_sent_to_order_manager'])]}"/>
-	            </xpath>
-		 -->
 			</field>
 
 		</record>

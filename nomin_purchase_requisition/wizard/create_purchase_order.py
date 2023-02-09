@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import time
-from odoo.osv import fields, osv
-from odoo import api
 from odoo.tools.translate import _
-from odoo import models,  api, _
+from odoo import models, fields, api, _
 from datetime import timedelta
 from datetime import datetime, date
 from odoo.exceptions import UserError, AccessError
@@ -37,14 +35,15 @@ class creat_stock_picking(models.TransientModel):
         sector_id = self.env['hr.department'].get_sector(self.env.user.department_id.id)
         for dep in self.env['hr.department'].browse(sector_id):
             department_name = dep.name
+            company_name = dep.company_id.name
 
         picking_type_ids = picking_type_obj.search([('code','=','outgoing'),('warehouse_id.department_of_id','=',sector_id)])
         picking_type_ids = picking_type_ids[0]
         if not picking_type_ids:
-             raise UserError(_('Warning !'), _(u"%s компани дээр %s салбар агуулах үүсгэнэ үү!",)%(company_name,department_name))
+             raise UserError( _(u"%s компани дээр %s салбар агуулах үүсгэнэ үү!",)%(company_name,department_name))
         
         if not  picking_type_ids.default_location_dest_id.id:
-                  raise UserError(_('Warning !'), _(u"%s агуулахын %s бэлтгэх төрөл дээр анхны эх хүргэх байрлал алга байна!",)%(picking_type_ids.warehouse_id.name,picking_type_ids.name))
+                  raise UserError( _(u"%s агуулахын %s бэлтгэх төрөл дээр анхны эх хүргэх байрлал алга байна!",)%(picking_type_ids.warehouse_id.name,picking_type_ids.name))
         for line in self.env['purchase.requisition.line'].sudo().browse(active_ids[0]):
           
             line_values = {
@@ -130,13 +129,13 @@ class creat_stock_picking(models.TransientModel):
                 'type': 'ir.actions.act_window',
             }
 
-class purchase_order_wizard(osv.osv_memory):
+class purchase_order_wizard(models.TransientModel):
     _name = "purchase.order.wizard"
     _description = "Purchase Order Creation Wizard"
 
-    _columns = {
-        'partners_ids' : fields.one2many('purchase.order.wizard.line','wizard_id','Supplier Lines'),
-    }
+    
+    partners_ids = fields.One2many('purchase.order.wizard.line','wizard_id','Supplier Lines')
+    
 
     
     def make_purchase_order(self, cr, uid, ids, data, context=None):
@@ -161,7 +160,7 @@ class purchase_order_wizard(osv.osv_memory):
 
         picking_ids = picking_obj.search(cr, 1, [('code','=','incoming'),('warehouse_id.department_of_id','=',sector_id)])
         if not picking_ids:
-             raise UserError(_('Warning !'), _(u"%s компани дээр %s салбар агуулах үүсгэнэ үү!",)%(company_name,department_name))
+             raise UserError( _(u"%s компани дээр %s салбар агуулах үүсгэнэ үү!",)%(company_name,department_name))
 
         picking_id = picking_obj.browse(cr, uid, picking_ids[0])
 
@@ -336,26 +335,22 @@ class purchase_order_wizard(osv.osv_memory):
         }
 
 
-class create_purchase_order_wizard_line(osv.osv_memory):
+class create_purchase_order_wizard_line(models.TransientModel):
     _name = "purchase.order.wizard.line"
     _description = "Create  Quotation Wizard"
-    _columns = {
      
-        'wizard_id' : fields.many2one('purchase.order.wizard','Wizard'),
-        'order_id' : fields.many2one('create.purchase.order.wizard','Wizard'),
-        'partner_id':fields.many2one('res.partner','Partner',required=True,domain=[('supplier', '=', True)],)
-#         'line_ids' : fields.one2many('purchase.requisition.line','po_create_wizard_id','Products to Purchase'),
-    }
-create_purchase_order_wizard_line()
+     
+    wizard_id = fields.Many2one('purchase.order.wizard','Wizard')
+    order_id = fields.Many2one('create.purchase.order.wizard','Wizard')
+    partner_id = fields.Many2one('res.partner','Partner',required=True,domain=[('supplier', '=', True)])
 
 
-class create_purchase_order_wizard(osv.osv_memory):
+class create_purchase_order_wizard(models.TransientModel):
     _name ='create.purchase.order.wizard'
 
-    _columns= {
-        'partner_id': fields.many2one('res.partner','Partner',domain=[('supplier', '=', True)]),
-        'partner_ids' : fields.one2many('purchase.order.wizard.line','order_id','Supplier Lines'),
-    }
+    partner_id = fields.Many2one('res.partner','Partner',domain=[('supplier', '=', True)])
+    partner_ids = fields.One2many('purchase.order.wizard.line','order_id','Supplier Lines')
+    
 
     # def default_get(self, cr, uid, fields, context=None):
     #     result = []
@@ -430,7 +425,7 @@ class create_purchase_order_wizard(osv.osv_memory):
                 }
                 self.env['purchase.order.line'].create(values)
                 values = {}
-        order_id.message_subscribe_users(users)
+        order_id._add_followers(users)
         if requisition.priority =='urgent':
             days = 5
         else:

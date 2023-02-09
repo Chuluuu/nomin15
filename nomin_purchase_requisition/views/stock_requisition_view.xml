@@ -154,7 +154,6 @@
     <record id="view_stock_requisition_filter" model="ir.ui.view">
       <field name="name">purchase.requisition.filter</field>
       <field name="model">stock.requisition</field>
-      <!--    <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_filter"></field>  -->
       <field name="arch" type="xml">
         <search string="Search Purchase requisition">
           <field name="name" string="Шаардахын дугаар"/>
@@ -171,8 +170,8 @@
 
           <separator/>
           <group expand="0" string="Group By">
-            <filter string="Хөрөнгө эзэмшигч" domain="[]" context="{'group_by':'user_id'}"/>
-            <filter string="Хэлтэс" domain="[]" context="{'group_by':'department_id'}"/>
+            <filter string="Хөрөнгө эзэмшигч" name="user" domain="[]" context="{'group_by':'user_id'}"/>
+            <filter string="Хэлтэс" name="department" domain="[]" context="{'group_by':'department_id'}"/>
             <filter context="{'group_by':'state'}" domain="[]" icon="terp-stock_effects-object-colorize" name="group_status" string="Төлөв"/>
 
 

@@ -73,7 +73,6 @@
         <record model="ir.actions.act_window" id="action_create_purchase_comparison_multiple">
             <field name="name">Харьцуулалт олноор үүсгэх</field>
             <field name="res_model">purchase.comparison.multiple.wizard</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="view_create_purchase_comparison_multiple"/>
             <field name="target">new</field>

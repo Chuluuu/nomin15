@@ -229,7 +229,6 @@ class PurchaseComparisonParticipationReport(models.TransientModel):
 
         return {
             'name': 'Export Result',
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'report.excel.output',
             'res_id': excel_id.id,

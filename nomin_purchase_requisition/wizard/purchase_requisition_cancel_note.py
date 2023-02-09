@@ -42,7 +42,7 @@ class purchase_requisition_cancel_note(models.TransientModel):
         if 'retrive_request' in self._context:
             state = 'retrive_request'
             active_sequence = requisition[0].active_sequence -1
-            notif_groups = self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_haaa_director')[1]
+            notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_purchase_requisition.group_haaa_director')
             group_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups])])
             if not group_user_ids:
                   raise UserError(_(u'Анхааруулга'), _(u'Хангамж аж ахуйн албаны захирал грүпд хэрэглэгч нар алга байна.')) 

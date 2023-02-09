@@ -148,7 +148,7 @@ class TransferUser(models.Model):
     
     @api.onchange('project_id')
     def onchange_evaluator(self):
-        group_id        = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.group_project_checker')[1]
+        group_id        = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.group_project_checker')
         sel_user_ids    = self.env['res.users'].sudo().search([('groups_id','in',group_id)])
         emp_ids         = self.env['hr.employee'].sudo().search([('user_id','in',sel_user_ids.ids)])
         project_checker_ids = []
@@ -1763,7 +1763,7 @@ class MainSpecificationn(models.Model):
                     raise UserError(_('Cannot send email: This project not choose partner.'))
                 for verifier in project.parent_project_id.project_verifier:
                     base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-                    action_id = self.env['ir.model.data']._xmlid_to_res_id('project.open_view_project_all')[1]
+                    action_id = self.env['ir.model.data']._xmlid_to_res_id('project.open_view_project_all')
                     db_name = request.session.db
                     email = verifier.work_email
                     subject = u'"%s" нэртэй төслийг батална уу.'%( project.parent_project_id.name)

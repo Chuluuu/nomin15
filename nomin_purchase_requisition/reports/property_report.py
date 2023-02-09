@@ -92,7 +92,7 @@ class PropertyReport(models.TransientModel):
 	employee_id = fields.Many2one('hr.employee', string='Ажилтны нэр')
 	location = fields.Char('Байршилын нэр')
 	asset_code = fields.Char('Хөрөнгийн код')
-	asset_type = fields.Many2one('fixed.assets.type', string='Хөрөнгийн бүлэг', domain="[('department_id', '=', department_id)]")
+	asset_type = fields.Many2one('fixed.assets.type', string='Хөрөнгийн бүлэг')
 
 	# description = fields.Text('Description')
 

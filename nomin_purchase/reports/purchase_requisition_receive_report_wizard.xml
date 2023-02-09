@@ -25,7 +25,8 @@
                     </notebook>
 
                     <footer>
-                        <button name="export_report" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/>
+                        <!-- TODO FIX LATER -->
+                        <!-- <button name="export_report" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/> -->
                         or
                         <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>

@@ -73,20 +73,22 @@ class purchase_requision_line(models.Model):
     
     def _is_in_supply_manager(self):
         for line in self:
-            notif_groups = self.env['ir.model.data'].get_object_reference( 'nomin_purchase_requisition', 'group_supply_import_manager')[1]
-            
+            line.is_in_supply_manager = False
+            line.is_in_supply_chiefs = False
+            notif_groups = self.env['ir.model.data']._xmlid_to_res_id( 'nomin_purchase_requisition.group_supply_import_manager')
+            print('\n\nnotif_grops',notif_groups)
             next_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups])])
             if line._uid in next_user_ids.ids:
                 line.is_in_supply_manager =True
             
-            notif_groups_ids = self.env['ir.model.data'].get_object_reference( 'nomin_purchase_requisition', 'group_haaa_head')[1]
+            notif_groups_ids = self.env['ir.model.data']._xmlid_to_res_id( 'nomin_purchase_requisition.group_haaa_head')
             
             supply_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups_ids])])
             if line.state in ['assigned']:
                 if line._uid in supply_user_ids.ids:
                     line.is_in_supply_chiefs = True
                     
-                notif_user_ids = self.env['ir.model.data'].get_object_reference( 'nomin_purchase_requisition', 'group_haaa_director')[1]        
+                notif_user_ids = self.env['ir.model.data']._xmlid_to_res_id( 'nomin_purchase_requisition.group_haaa_director')     
                 supply_ids = self.env['res.users'].search([('groups_id','in',[notif_user_ids])])
                 if line._uid in supply_ids.ids:
                     line.is_in_supply_chiefs = True
@@ -97,6 +99,11 @@ class purchase_requision_line(models.Model):
     def _compute_amount(self):
         
         for purchase in self:
+            purchase.is_buyer= False
+            purchase.is_user = False
+            purchase.is_receive_user = False
+            purchase.is_skip_user = False
+            purchase.is_comparison_user = False
             if purchase.state in ['confirmed','ready','assigned','done']:
                 if self._uid == purchase.buyer.id:
                     purchase.is_user = True
@@ -149,6 +156,7 @@ class purchase_requision_line(models.Model):
     
     def _is_accountant(self):
         for line in self:
+            line.is_accountant = False
             if line.state == 'sent_nybo':
                 user_ids = line.requisition_id._check_user_in_request('sent_nybo', True)
                 if user_ids:
@@ -167,10 +175,7 @@ class purchase_requision_line(models.Model):
     def _compute_purchase_users(self):
         purchase_user_ids = []
         group_ids=[]
-        group_ids.append(self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_procurement_buyer')[1])
-        group_ids.append(self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_complex_manager')[1])
-        group_ids.append(self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_nyrav_department')[1])
-        group_ids.append(self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_supply_import_manager')[1])
+        
 
         buyer_ids = self.env['res.users'].sudo().search([('groups_id','in',group_ids)])
         for line in self:
@@ -179,7 +184,7 @@ class purchase_requision_line(models.Model):
 
     received_qty = fields.Float(string='Received qty', compute= _compute_received_qty) #Хүлээн авсан тоо хэмжээ
     product_mark = fields.Char(string='Product rate', compute = _product_mark) #Барааны үзүүлэлт
-    purchase_user_ids = fields.Many2many(comodel_name='res.users',relation='purhase_requisition_line_res_users_rel', compute=_compute_purchase_users,string='Purchase user') #Худалдан авалт хийх хэрэглэгч
+    # purchase_user_ids = fields.Many2many(comodel_name='res.users',relation='purhase_requisition_line_res_users_rel', compute=_compute_purchase_users,string='Purchase user') #Худалдан авалт хийх хэрэглэгч
     amount = fields.Float(string='Amount', compute='_compute_amount')
     is_control = fields.Boolean(string='Is control', default= False)
     rate_percent = fields.Float(string='Percent') #Хувь
@@ -238,13 +243,13 @@ class purchase_requision_line(models.Model):
                         vals.update({'comparison_user_id':comparison_emp_id})
                         
             previous_buyer = ""
-            if vals.has_key('buyer') and line.requisition_id.state in ('assigned'):
+            if vals.get('buyer',False) and line.requisition_id.state in ('assigned'):
                 previous_buyer = line.buyer.name if line.buyer else "-"
         line_id = super(purchase_requision_line, self).write(vals)
 
         for line in self:
             if line.requisition_id:
-                line.requisition_id.message_subscribe_users(line.buyer.id)
+                line.requisition_id.message_subscribe(line.buyer.partner_id.id)
                 for req in line.requisition_id.line_ids:
                     if req.state not in states:
                         states.append(req.state)
@@ -270,7 +275,8 @@ class purchase_requision_line(models.Model):
                 if partner:
                     self.partner_id = partner
             self.deliver_product_id = self.product_id
-            group_ids        = self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_procurement_buyer')[1]
+            
+            group_ids        = self.env['ir.model.data']._xmlid_to_res_id('nomin_purchase_requisition.group_procurement_buyer')
             buyer_ids = self.env['res.users'].sudo().search([('groups_id','in',group_ids)])
             self.product_price = self.product_id.sudo().cost_price
             self.supplied_price = self.product_id.sudo().cost_price
@@ -353,10 +359,10 @@ class purchase_requision_line(models.Model):
     def onchange_purchase(self):
         purchase_user_ids = []
         group_ids=[]
-        group_ids.append(self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_procurement_buyer')[1])
-        group_ids.append(self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_complex_manager')[1])
-        group_ids.append(self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_nyrav_department')[1])
-        group_ids.append(self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_supply_import_manager')[1])
+        group_ids.append(self.env['ir.model.data']._xmlid_to_res_id('nomin_purchase_requisition.group_procurement_buyer'))
+        group_ids.append(self.env['ir.model.data']._xmlid_to_res_id('nomin_purchase_requisition.group_complex_manager'))
+        group_ids.append(self.env['ir.model.data']._xmlid_to_res_id('nomin_purchase_requisition.group_nyrav_department'))
+        group_ids.append(self.env['ir.model.data']._xmlid_to_res_id('nomin_purchase_requisition.group_supply_import_manager'))
 
         buyer_ids = self.env['res.users'].sudo().search([('groups_id','in',group_ids)])
         for line in self:
@@ -378,7 +384,7 @@ class purchase_requision_line(models.Model):
 
     @api.onchange('product_qty')
     def onchange_product_qty(self):
-        group_ids        = self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_procurement_buyer')[1]
+        group_ids        = self.env['ir.model.data']._xmlid_to_res_id('nomin_purchase_requisition.group_procurement_buyer')
         buyer_ids = self.env['res.users'].sudo().search([('groups_id','in',group_ids)])
         # self.product_price = self.product_id.standard_price
         self.allowed_qty = self.product_qty
@@ -443,7 +449,7 @@ class purchase_requision_line(models.Model):
         if not self.partner_id:
             raise UserError(u'Харилцагч талбарыг бөглөнө үү')
         if user_ids:
-            self.requisition_id.message_subscribe_users(user_ids)
+            self.requisition_id._add_followers(user_ids)
             self.write({'accountant_ids': [(6,0,user_ids)],
                         'state':'sent_nybo',
                         'product_delivery_date':time.strftime('%Y-%m-%d')
@@ -647,11 +653,16 @@ class purchase_requisition(models.Model):
                        ('sent_to_supply_manager','Бараа тодорхойлох'),#Хангамж импортын менежер
                        ('done','Дууссан'),
                                    ]
-    
+    def _add_followers(self,user_ids): 
+        '''Дагагч нэмнэ'''
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
     
     def _color_change(self):
         today = datetime.strptime(time.strftime('%Y-%m-%d'), "%Y-%m-%d")
         for purchase in self:
+            purchase.exceed_days = 0
+            purchase.change_color = 'grey' 
             if purchase.state in ['confirmed','tender_created','assigned']:
                 if purchase.ordering_date:
                     if datetime.strptime(purchase.ordering_date,'%Y-%m-%d') < today:
@@ -757,23 +768,23 @@ class purchase_requisition(models.Model):
                             if user_id :
                                 sel_user_ids.append( user_id)
                             else :
-                                raise UserError(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
+                                raise UserError( _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
         # if self.state=='sent_to_supply' or self.state=='fulfil_request':
         #     user_ids = sel_user_ids
         # else:
         user_ids = self.get_possible_users( sel_user_ids)
         if group_ids :
-            group_id= self.env['ir.model.data'].get_object_reference('nomin_base', 'group_financial_business_chief')[1]
+            group_id= self.env['ir.model.data']._xmlid_to_res_id('nomin_base.group_financial_business_chief')
             if group_id in group_ids:
                 group = groups.search([('id','=',group_id)])
                 for user in group.users:
                     user_ids.append(user.id)
-            group_id= self.env['ir.model.data'].get_object_reference('nomin_base', 'group_president')[1]
+            group_id= self.env['ir.model.data']._xmlid_to_res_id('nomin_base.group_president')
             if group_id in group_ids:        
                 group = groups.search([('id','=',group_id)])
                 for user in group.users:
                     user_ids.append(user.id)
-            group_id= self.env['ir.model.data'].get_object_reference('nomin_base', 'group_holding_ceo')[1]
+            group_id= self.env['ir.model.data']._xmlid_to_res_id('nomin_base.group_holding_ceo')
             if group_id in group_ids:        
                 group = groups.search([('id','=',group_id)])
                 for user in group.users:
@@ -975,7 +986,8 @@ class purchase_requisition(models.Model):
             
             return self.env.user.department_id.id
         else:
-            raise UserError(_('Warning!'), _('You don\'t have related employee. Please contact administrator.'))
+            return False
+            # raise UserError(_('You don\'t have related employee. Please contact administrator.'))
     
     # sector_id = fields.Many2one('hr.department', string='Sector'), #Салбар
 
@@ -985,12 +997,13 @@ class purchase_requisition(models.Model):
         if self.product_list_type == 'normalized':
             config_id = self.env['request.config'].search([('process','=','purchase.requisition'),('is_purchase_normalized','=',True)])
             if not config_id:
-                raise UserError(_('Warning !'), _(u"Нормчилогдсон барааны урсгал хийгдээгүй байна. Систем админтайгаа холбогдоно уу"))
+                raise UserError( _(u"Нормчилогдсон барааны урсгал хийгдээгүй байна. Систем админтайгаа холбогдоно уу"))
         else:
-            config_id = self.env['request.config'].search([('department_ids','=',self.env.user.department_id.id),('process','=','purchase.requisition')])
+            config_id = self.env['request.config'].search([('department_ids','=',self.env.user.department_id.id),('process','=','purchase.requisition')],limit = 1)
             if not config_id:
-                raise UserError(_('Warning !'), _(u"Хэлтэсийн дээр урсгал %s тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу")%(self.env.user.department_id.name))
-        return config_id[0]
+                return False
+                # raise UserError( _(u"Хэлтэсийн дээр урсгал %s тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу")%(self.env.user.department_id.name))
+        return config_id
 
 
     def _get_number_of_days(self, date_from, date_to):
@@ -1092,13 +1105,13 @@ class purchase_requisition(models.Model):
             if self.product_list_type == 'normalized':
                 config_id = self.env['request.config'].search([('process','=','purchase.requisition'),('is_purchase_normalized','=',True)])
                 if not config_id:
-                    raise UserError(_('Warning !'), _(u"Нормчилогдсон барааны урсгал хийгдээгүй байна. Систем админтайгаа холбогдоно уу"))
+                    raise UserError( _(u"Нормчилогдсон барааны урсгал хийгдээгүй байна. Систем админтайгаа холбогдоно уу"))
                 else:
                     self.request_id = config_id[0]
             else:
                 config_id = self.env['request.config'].search([('department_ids','=',self.env.user.department_id.id),('process','=','purchase.requisition')])
                 if not config_id:
-                    raise UserError(_('Warning !'), _(u"Хэлтэсийн дээр урсгал %s тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу")%(self.env.user.department_id.name))
+                    raise UserError( _(u"Хэлтэсийн дээр урсгал %s тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу")%(self.env.user.department_id.name))
                 else:
                     self.request_id = config_id[0]
 
@@ -1147,7 +1160,7 @@ class purchase_requisition(models.Model):
         if self.env.user.company_id:           
             return self.env.user.company_id.id
         else:
-            raise UserError(_('Warning!'), _('You don\'t have related employee. Please contact administrator.'))
+            raise UserError( _('You don\'t have related employee. Please contact administrator.'))
         return None
 
     
@@ -1170,7 +1183,7 @@ class purchase_requisition(models.Model):
 
         picking_ids = picking_obj.sudo().search([('code','=','incoming'),('warehouse_id.department_of_id','=',sector_id)])
         if not picking_ids:
-             raise UserError(_('Warning !'), _(u"%s салбар агуулах үүсгэнэ үү!",)%(department_name))
+             raise UserError( _(u"%s салбар агуулах үүсгэнэ үү!",)%(department_name))
         return picking_ids[0]
     _defaults = {
     
@@ -1222,7 +1235,6 @@ class purchase_requisition(models.Model):
 
     @api.onchange('department_id')
     def onchange_department(self):
-        self.employee_id = False
         # self.request_id = self.get_request(self.department_id.id)
         user_id = self.env['res.users'].sudo().search([('id','=',self._uid)])
         self.sector_id = self.env['hr.department'].get_sector(self.env.user.department_id.id)
@@ -1297,7 +1309,7 @@ class purchase_requisition(models.Model):
                     if user_id :
                         sel_user_ids.append( user_id)
                     else :
-                        raise UserError(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
+                        raise UserError( _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
         
         for his in self.confirm_history_lines:
             his_user_ids.append(his.user_id.id)
@@ -1357,7 +1369,7 @@ class purchase_requisition(models.Model):
     #     if self.state =='confirmed':
     #         self.write({'state': 'sent_to_supply', 'active_sequence':self.active_sequence})
     #         self.line_ids.write({'state':'sent_to_supply'})
-    #         notif_groups = self.env['ir.model.data'].get_object_reference( 'nomin_purchase_requisition', 'group_haaa_director')[1]
+    #         notif_groups = self.env['ir.model.data']._xmlid_to_res_id( 'nomin_purchase_requisition.group_haaa_director')
             
     #         next_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups])])
     #         if not next_user_ids:
@@ -1377,7 +1389,6 @@ class purchase_requisition(models.Model):
     
     def action_direct_purchase(self):
         mod_obj = self.env['ir.model.data']
-        res = mod_obj.get_object_reference('nomin_purchase_requisition', 'action_create_purchase_order')
         return {
             'name': 'Note',
             'view_mode': 'form',
@@ -1729,7 +1740,6 @@ class purchase_requisition(models.Model):
     
     def action_payment_request (self):
         model_obj = self.env['ir.model.data']
-        # res = mod_obj.get_object_reference('nomin_purchase_requisition', 'action_create_purchase_order')
         result = model_obj._get_id('nomin_budget', 'payment_request_form')
         view_id = model_obj.browse(result).res_id
 
@@ -1959,7 +1969,7 @@ class purchase_requisition(models.Model):
             self.write({'state':state,'active_sequence':sequence,'confirmed_date':today})
             self.line_ids.write({'state':state,'confirmed_date':today})
 
-        notif_groups = self.env['ir.model.data'].get_object_reference( 'nomin_purchase_requisition', 'group_purchase_decide_sent_to_supply')[1]
+        notif_groups = self.env['ir.model.data']._xmlid_to_res_id( 'nomin_purchase_requisition.group_purchase_decide_sent_to_supply')
         
         next_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups])])
         if not next_user_ids:
@@ -2019,14 +2029,14 @@ class purchase_requisition(models.Model):
     def action_to_assign(self):
         for line in self.line_ids:
             if not line.buyer:
-                raise UserError(_('Warning !'), _(u"Шаардахын мөр дээрх Худалдан авалтын ажилтан хоосон байна"))      
+                raise UserError( _(u"Шаардахын мөр дээрх Худалдан авалтын ажилтан хоосон байна"))      
         self.write({'state':'assigned'})
         self.line_ids.write({'state':'assigned'})
         next_user_ids = []
         for line in self.line_ids:
             next_user_ids.append(line.buyer.id)
     
-        self.message_subscribe_users(next_user_ids)
+        self._add_followers(next_user_ids)
         # self.action_send_email('assigned',next_user_ids)
 
     
@@ -2040,7 +2050,7 @@ class purchase_requisition(models.Model):
             config_id = request.request_id.id
             vals = {}
             if not config_id:
-                raise UserError(_('Warning !'), _("You don't have purchase requisition request configure !"))
+                raise UserError( _("You don't have purchase requisition request configure !"))
             user = request.user_id
             next_user_ids, next_seq, next_state = config_obj.purchase_forward('purchase.requistion',request.active_sequence, request.user_id.id,config_id,request.department_id.id)
             next_user_ids1, next_seq1, next_state1 = config_obj.purchase_forward('purchase.requistion',request.active_sequence+1, request.user_id.id,config_id,request.department_id.id)
@@ -2055,9 +2065,9 @@ class purchase_requisition(models.Model):
         if user_ids:
             next_user_ids1.extend(user_ids)
         if self._uid not in next_user_ids:
-            raise UserError(_('Warning !'), _(u"Таны эрх хүрэхгүй байна."))            
+            raise UserError( _(u"Таны эрх хүрэхгүй байна."))            
         if not next_user_ids1:
-            raise UserError(_('Warning !'), _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))            
+            raise UserError( _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))            
         # if self.state=='sent_to_supply':
         #     vals.update({'state':next_state1,'active_sequence':request.active_sequence+1})
         #     self.write(vals)
@@ -2070,7 +2080,7 @@ class purchase_requisition(models.Model):
         if next_user_ids:
             vals.update({'state':next_state,'active_sequence':request.active_sequence+1})
         else:
-            raise UserError(_('Warning !'), _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))
+            raise UserError( _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))
             
         self.write(vals)
         self.line_ids.write({'state':next_state})
@@ -2105,21 +2115,21 @@ class purchase_requisition(models.Model):
                             if user_id :
                                 sel_user_ids.append( user_id)
                             else :
-                                raise UserError(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
+                                raise UserError( _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
         # user_ids = self.get_possible_users( sel_user_ids)
         
         if group_ids :
-            group_id= self.env['ir.model.data'].get_object_reference('nomin_base', 'group_financial_business_chief')[1]
+            group_id= self.env['ir.model.data']._xmlid_to_res_id('nomin_base.group_financial_business_chief')
             if group_id in group_ids:
                 group = groups.search([('id','=',group_id)])
                 for user in group.users:
                     user_ids.append(user.id)
-            group_id= self.env['ir.model.data'].get_object_reference('nomin_base', 'group_president')[1]
+            group_id= self.env['ir.model.data']._xmlid_to_res_id('nomin_base.group_president')
             if group_id in group_ids:        
                 group = groups.search([('id','=',group_id)])
                 for user in group.users:
                     user_ids.append(user.id)
-            group_id= self.env['ir.model.data'].get_object_reference('nomin_base', 'group_holding_ceo')[1]
+            group_id= self.env['ir.model.data']._xmlid_to_res_id('nomin_base.group_holding_ceo')
             if group_id in group_ids:        
                 group = groups.search([('id','=',group_id)])
                 for user in group.users:
@@ -2154,20 +2164,20 @@ class purchase_requisition(models.Model):
                             if user_id :
                                 sel_user_ids.append( user_id)
                             else :
-                                raise UserError(_('Warning !'), _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
+                                raise UserError( _(u"Хэлтэсийн менежер дээр холбоотой хэрэглэгч талбар хоосон байна."))
         user_ids = self.get_possible_users( sel_user_ids)
         if group_ids :
-            group_id= self.env['ir.model.data'].get_object_reference('nomin_base', 'group_financial_business_chief')[1]
+            group_id= self.env['ir.model.data']._xmlid_to_res_id('nomin_base.group_financial_business_chief')
             if group_id in group_ids:
                 group = groups.search([('id','=',group_id)])
                 for user in group.users:
                     user_ids.append(user.id)
-            group_id= self.env['ir.model.data'].get_object_reference('nomin_base', 'group_president')[1]
+            group_id= self.env['ir.model.data']._xmlid_to_res_id('nomin_base.group_president')
             if group_id in group_ids:        
                 group = groups.search([('id','=',group_id)])
                 for user in group.users:
                     user_ids.append(user.id)
-            group_id= self.env['ir.model.data'].get_object_reference('nomin_base', 'group_holding_ceo')[1]
+            group_id= self.env['ir.model.data']._xmlid_to_res_id('nomin_base.group_holding_ceo')
             if group_id in group_ids:        
                 group = groups.search([('id','=',group_id)])
                 for user in group.users:
@@ -2195,17 +2205,17 @@ class purchase_requisition(models.Model):
             if active_sequence==0:
                 active_sequence = request.active_sequence,
             if not config_id:
-                raise UserError(_('Warning !'), _("You don't have purchase requisition request configure !"))
+                raise UserError( _("You don't have purchase requisition request configure !"))
             user = request.user_id
             next_user_ids, next_seq, next_state = config_obj.purchase_forward('purchase.requisition',request.active_sequence, request.user_id.id,config_id,request.department_id.id)
             next_user_ids1, next_seq1, next_state1 = config_obj.purchase_forward('purchase.requisition',active_sequence+1, request.user_id.id,config_id,request.department_id.id)
             # if not next_user_ids1:
-            #     raise UserError(_('Warning !'), _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))            
+            #     raise UserError( _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна."))            
 
         next_user_ids1 = self.get_possible_users(next_user_ids1)
         next_user_ids1 = self.group_users(active_sequence+1)
         if self._uid not in next_user_ids:
-            raise UserError(_('Warning !'), _(u"Таны эрх хүрэхгүй байна."))            
+            raise UserError( _(u"Таны эрх хүрэхгүй байна."))            
         _logger.info(u'\n\n\n\n\n-------------------------active_sequence ', active_sequence+1,next_user_ids1,'\n\n\n\n\n\n\n\n')
 
         # if user_ids:
@@ -2213,7 +2223,7 @@ class purchase_requisition(models.Model):
         if next_user_ids1:
             vals.update({'state':'next_confirm_user','active_sequence':active_sequence+1})
         else:
-            raise UserError(_('Warning !'), _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна.!"))
+            raise UserError( _(u"Дараагийн батлах хэрэглэгч олдсонгүй Таны батлах дүн хэтэрсэн эсвэл сарын батлах дүнгээс давсан байна.!"))
             
         self.write(vals)
         self.line_ids.write({'state':'next_confirm_user'})
@@ -2276,7 +2286,7 @@ class purchase_requisition(models.Model):
                 'name': self.name,
                 'base_url': self.env['ir.config_parameter'].get_param('web.base.url'),
     #                 'base_url': domain,
-                'action_id': self.env['ir.model.data'].get_object_reference( 'purchase_requisition', 'action_purchase_requisition')[1],
+                'action_id': self.env['ir.model.data']._xmlid_to_res_id( 'purchase_requisition.action_purchase_requisition'),
                 'id': self.id,
                 'db_name': request.session.db,
                 'state': states[state],
@@ -2284,7 +2294,7 @@ class purchase_requisition(models.Model):
             }  
         user_emails = []
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        action_id = self.env['ir.model.data'].get_object_reference('purchase_requisition', 'action_purchase_requisition')[1]
+        action_id = self.env['ir.model.data']._xmlid_to_res_id('purchase_requisition.action_purchase_requisition')
         db_name = request.session.db
         
 
@@ -2339,7 +2349,7 @@ class purchase_requisition(models.Model):
         email = u'' + states[state] +u'\n Дараах хэрэглэгчид рүү имэйл илгээгдэв: ' + ('<b>' + ('</b>, <b>'.join(user_emails)) + '</b>')
         
         self.write( {'confirm_user_ids':[(6,0,group_user_ids)]})
-        self.message_subscribe_users(group_user_ids)
+        self._add_followers(group_user_ids)
         self.message_post(body=email)
         
         return {
@@ -2355,12 +2365,12 @@ class purchase_requisition(models.Model):
 
     
     def send_notification(self, signal ,group_user_ids):
-        model_obj = openerp.pooler.get_pool(cr.dbname).get('ir.model.data')
+        model_obj = self.env['ir.model.data']
         
-        domain = self.env["ir.config_parameter"].get_param(cr, uid, "mail.catchall.domain", context=None)
+        domain = self.env["ir.config_parameter"].get_param("mail.catchall.domain")
    
         
-    #     template_id = self.pool.get('ir.model.data').get_object_reference('nomin_purchase_requisition', 'requisition_notif_cron_email_template1')[1]
+    #     template_id = self.pool.get('ir.model.data')._xmlid_to_res_id('nomin_purchase_requisition.requisition_notif_cron_email_template1')
     #     if group_user_ids:
     #         users = self.env['res.users'].browse( group_user_ids)
     #         user_emails = []
@@ -2373,7 +2383,7 @@ class purchase_requisition(models.Model):
     #         self.env['purchase.requisition'].write(cr, uid, ids, {'confirm_user_ids':[(6,0,group_user_ids)]}, context=None)
     #         self.env['purchase.requisition'].message_post(cr, uid, ids, body=email, context=None)
     #     else:
-    #         raise UserError(_('Warning!'), _(u'Хүлээн авах хүн олдсонгүй. Систем админтайгаа холбогдоно уу'))
+    #         raise UserError( _(u'Хүлээн авах хүн олдсонгүй. Систем админтайгаа холбогдоно уу'))
     #     return True
     # # 
     # def action_fulfil_request(self):
@@ -2416,7 +2426,7 @@ class purchase_requisition(models.Model):
     
     def action_retrived(self):
         context = {}
-        notif_groups = self.env['ir.model.data'].get_object_reference( 'nomin_purchase_requisition', 'group_purchase_decide_sent_to_supply')[1]
+        notif_groups = self.env['ir.model.data']._xmlid_to_res_id( 'nomin_purchase_requisition.group_purchase_decide_sent_to_supply')
         
         next_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups])])
         if not next_user_ids:
@@ -2521,7 +2531,6 @@ class purchase_order(models.Model):
     
     def action_payment_request (self):
         model_obj = self.env['ir.model.data']
-        # res = mod_obj.get_object_reference('nomin_purchase_requisition', 'action_create_purchase_order')
         result = model_obj._get_id('nomin_budget', 'payment_request_form')
         view_id = model_obj.browse(result).res_id
 
@@ -2624,7 +2633,8 @@ class stock_warehouse(models.Model):
     _inherit = 'stock.warehouse'
     
     company_id = fields.Many2one('res.company', string='Company', required=True, select=True)
-
+    # TODO FIX LATER added
+    department_of_id = fields.Many2one('hr.department', string='Department', required=True)
     
 class ir_attachment(models.Model):
     _inherit ='ir.attachment'

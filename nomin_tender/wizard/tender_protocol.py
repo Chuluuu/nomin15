@@ -97,7 +97,7 @@ class tender_protocol(models.Model):
         protocol_obj=self
         read_states={'unread':u'Танилцаагүй','read':u'Танилцсан'}
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        action_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_protocol_menu')[1],
+        action_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_protocol_menu'),
         body=""
         for employee in protocol_obj.committee_member_ids:
             body=body+"""<tr class="">
@@ -208,7 +208,7 @@ class tender_protocol(models.Model):
         
         
         mail_obj = self.env['mail.followers']
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_meeting_protocol_email_template')[1]
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_meeting_protocol_email_template')
         
         model_obj = self.env['ir.model.data']
         follower_ids = mail_obj.search([('res_model','=','tender.protocol'),('res_id','in',self._ids)])
@@ -230,7 +230,7 @@ class tender_protocol(models.Model):
                 'member_ids': members,
                 'model': 'tender.protocol',
                 'base_url': self.env['ir.config_parameter'].get_param('web.base.url'),
-                'action_id': self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_protocol_menu')[1],
+                'action_id': self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_protocol_menu'),
                 'id': protocol_obj[0].id,
                 'db_name': request.session.db, 
                 'sender': self.env['res.users'].browse(self.env.user.id).name,

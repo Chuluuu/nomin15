@@ -18,7 +18,16 @@
             </field>
         </record>
 
-        <act_window name="Харьцуулалт алгасах" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="skip.purchase.comparison" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" groups="purchase.group_purchase_user" key2="client_action_multi" id="action_skip_comparison"/>
+        <record id="action_skip_comparison" model="ir.actions.act_window">
+            <field name="name">Харьцуулалт алгасах</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">skip.purchase.comparison</field>
+            <field name="view_mode">form</field>
+            <field name="binding_model_id" ref="model_purchase_requisition_line"/>
+            <field name="groups_id" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+            <field name="target">new</field>
+        </record>
+        <!-- <act_window name="Харьцуулалт алгасах" context="{'search_default_draft': 1, 'search_default_approved': False}" res_model="skip.purchase.comparison" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" groups="purchase.group_purchase_user" key2="client_action_multi" id="action_skip_comparison"/> -->
 
     </data>
 </odoo>

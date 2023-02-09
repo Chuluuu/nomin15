@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo.tools.translate import _
-from odoo.addons.l10n_mn_report_base.report_helper import verbose_numeric, comma_me, convert_curr
+from odoo.addons.nomin_base.report_helper import verbose_numeric, comma_me, convert_curr
 from odoo import api, fields, models, _
 from datetime import datetime
 from operator import itemgetter

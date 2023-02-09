@@ -8,7 +8,7 @@
     "category" : "Mongolian Modules",
     "website": "http://www.asterisk-tech.mn",
     "summary": "Odoo Base Module",
-    "depends" : ['nomin_purchase'],
+    "depends" : ['nomin_base','purchase'],
     "init": [],
     "data" : [
               'security/security.xml',
@@ -24,19 +24,26 @@
               'report/report_purchase_comparison.xml',
               'report/report_purchase_comparison_participation.xml',
               'report/report_purchase_comparison_performance.xml',
-              'static/xml/purchase_comparison.xml',
               'security/ir.model.access.csv',
               'views/purchase_order_inherit.xml',
               'views/purchase_comparison_indicator_menu_view.xml',
 
     ],
+    'assets':{
+        "web.assets_backend":[
+            "/nomin_comparison/static/src/js/comparison.js",
+            "/nomin_comparison/static/src/css/comparison.css",
+        ],
+        'web.assets_qweb': [
+            "/nomin_comparison/static/src/xml/comparison.xml",
+        ]
+    },
     "demo_xml": [
     ],
     "active": False,
     "installable": True,
     'application': True,
-    'auto_install': False,
-    'js': ['static/src/js/comparison.js'],
+    'auto_install': False,    
     'icon': '/nomin_base/static/description/asterisk-tech.png',
-    'qweb': ['static/src/xml/comparison.xml',],
+    
 }

@@ -19,7 +19,7 @@
 """,
     "website" : False,
     "category" : "Purchase Requisition",
-    "depends" : ['purchase_requisition','nomin_project','nomin_comparison' ],
+    "depends" : ['purchase_requisition','nomin_comparison','nomin_purchase','nomin_project'],
     "init": [],
 #     "data": [],
     "data" : [

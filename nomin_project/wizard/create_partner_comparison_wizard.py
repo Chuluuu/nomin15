@@ -323,7 +323,7 @@ class CreatePartnerComparisonWizard(models.TransientModel):
         
         if self.employee_id:
             base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-            action_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.action_budget_partner_comparison')[1]
+            action_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.action_budget_partner_comparison')
             db_name = request.session.db
             body_html = """ <p>Сайн байна уу ?</p>
                             <p>Таньд "%s" үнийн харьцуулалтыг гүйцэтгэх захиалга ирлээ.</p>

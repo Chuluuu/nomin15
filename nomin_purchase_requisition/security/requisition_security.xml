@@ -144,7 +144,6 @@
             (4, ref('nomin_purchase_requisition.group_haaa_head')),
             (4, ref('nomin_purchase_requisition.group_haaa_director')),
             (4, ref('nomin_purchase_requisition.group_procurement_admin')),
-                        (4, ref('capitalLease.group_regular_accountant')),
             (4, ref('nomin_purchase_requisition.group_nyrav_department')),
 
             ]"/>
@@ -215,7 +214,6 @@
             (4, ref('nomin_purchase_requisition.group_haaa_head')),
             (4, ref('nomin_purchase_requisition.group_haaa_director')),
             (4, ref('nomin_purchase_requisition.group_procurement_admin')),
-            (4, ref('capitalLease.group_regular_accountant')),
             (4, ref('nomin_purchase_requisition.group_nyrav_department')),
             ]"/>
         </record>
@@ -240,11 +238,11 @@
             (4, ref('nomin_purchase_requisition.group_haaa_head')),
             (4, ref('nomin_purchase_requisition.group_haaa_director')),
             (4, ref('nomin_purchase_requisition.group_procurement_admin')),
-            (4, ref('capitalLease.group_regular_accountant')),
             (4, ref('nomin_purchase_requisition.group_nyrav_department')),
             ]"/>
         </record>
-
+        <!-- COMMENTED DUE TO ACCOUNT_INVOICE MODEL removed in odoo 15 -->
+        <!--         
         <record id="account_invoice_purchase_employee_rule" model="ir.rule">
             <field name="name">ХА-н ажилтан - Зөвшөөрөгдсөн салбараар</field>
             <field ref="account.model_account_invoice" name="model_id"/>
@@ -255,7 +253,7 @@
                                     (4, ref('nomin_purchase_requisition.group_complex_manager')),
                                     (4, ref('nomin_purchase_requisition.group_nyrav_department'))
                                     ]"/>
-        </record>
+        </record> -->
 
         <record id="purchase_comparison_user" model="ir.rule">
             <field name="name">User purchase comparison</field>
@@ -327,7 +325,7 @@
         <record id="asset_transfer_request_employee_followers" model="ir.rule">
             <field name="name">Followers see their followed </field>
             <field ref="model_asset_transfer_request" name="model_id"/>
-            <field name="domain_force">['|',('message_partner_ids','in',[user.partner_id.id]), ('message_channel_ids.channel_partner_ids', 'in', [user.partner_id.id])]</field>
+            <field name="domain_force">[('message_partner_ids','in',[user.partner_id.id])]</field>
             <field name="groups" eval="[(4, ref('base.group_user'))]"/>
         </record>
 
@@ -360,6 +358,17 @@
             <field name="groups" eval="[(4, ref('nomin_purchase_requisition.group_cycle_counter'))]"/>
         </record>
 
+        <!-- бүх үнийн санал болон захиалга харах мэргэжилтэн , ахлах менежер -->
+
+        <record id="rule_purchase_order_all_see" model="ir.rule">
+            <field name="name">All purchase order see </field>
+            <field ref="model_purchase_order" name="model_id"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[
+            (4, ref('nomin_purchase_requisition.group_procurement_buyer')),
+            (4, ref('nomin_purchase_requisition.group_supply_import_manager')),
+            ]"/>
+        </record>
 
     </data>
 </odoo>

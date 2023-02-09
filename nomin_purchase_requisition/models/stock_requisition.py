@@ -59,10 +59,11 @@ class StockRequisition(models.Model):
 	
 	def _set_request(self):
 		config_id = False
-		config_id = self.env['request.config'].search([('department_ids','=',self.env.user.department_id.id),('process','=','stock.requisition')])
+		config_id = self.env['request.config'].search([('department_ids','=',self.env.user.department_id.id),('process','=','stock.requisition')], limit = 1)
 		if not config_id:
-			raise UserError(_('Warning !'), _(u"Хэлтэс дээр урсгал %s тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу")%(self.env.user.department_id.name))
-		return config_id[0]
+			return False
+			# raise UserError((u"Хэлтэс дээр урсгал %s тохиргоо хийгдээгүй байна. Систем админтайгаа холбогдоно уу")%(self.env.user.department_id.name))
+		return config_id
 	
 	
 	def check_user(self):
@@ -234,7 +235,7 @@ class StockRequisition(models.Model):
 		subject = u'"%s" дугаартай хөрөнгийн шаардах ирлээ.'%( self.name)
 		db_name = request.session.db
 		base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-		action_id = self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'action_stock_requisition')[1]
+		action_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_purchase_requisition.action_stock_requisition')
 
 		body_html = u'''
 						<h4>Сайн байна уу?
@@ -261,8 +262,8 @@ class StockRequisition(models.Model):
 						    action_id)
 		
 		for user in sel_user_ids:
-		    email = user.login
-		    if email or email.strip():
+			email = user.login
+			if email or email.strip():
 				email_template = self.env['mail.template'].create({
 						'name': _('Followup '),
 						'email_from': self.env.user.company_id.email or '',
@@ -492,7 +493,7 @@ class StockRequisitionLine(models.Model):
 		subject = u'"%s" дугаартай хөрөнгийн шаардах ирлээ.'%( self.requisition_id.name)
 		db_name = request.session.db
 		base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-		action_id = self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'action_stock_requisition')[1]
+		action_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_purchase_requisition.action_stock_requisition')
        	
 		body_html = u'''
 						<h4>Сайн байна уу?
@@ -519,8 +520,8 @@ class StockRequisitionLine(models.Model):
 						    action_id)
 		
 		for user in sel_user_ids:
-		    email = user.login
-		    if email or email.strip():
+			email = user.login
+			if email or email.strip():
 				email_template = self.env['mail.template'].create({
 						'name': _('Followup '),
 						'email_from': self.env.user.company_id.email or '',

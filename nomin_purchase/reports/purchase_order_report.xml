@@ -31,7 +31,8 @@
                     </notebook>
 
                     <footer>
-                        <button name="export_report" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/>
+                        <!-- TODO FIX LATER  -->
+                        <!-- <button name="export_report" class ="oe_highlight" string="Export" type="object" icon="terp-graph"/> -->
                         or
                         <button string="Cancel" class="btn-default" special="cancel"/>
                     </footer>
@@ -47,7 +48,7 @@
             <field name="target">new</field>
         </record>
 
-        <menuitem name="Тайлан" id="parent_menu_purchase_report_wizard" parent="base.menu_purchase_root" sequence="5"/>
+        <menuitem name="Тайлан" id="parent_menu_purchase_report_wizard" parent="purchase.menu_purchase_root" sequence="5"/>
 
         <menuitem name="Худалдан авалтын захиалгын тайлан" id="menu_purchase_report_wizard" parent="nomin_purchase.parent_menu_purchase_report_wizard" action="action_purchase_order_report_wizard" sequence="1" />
 

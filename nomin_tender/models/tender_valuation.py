@@ -191,12 +191,12 @@ class TenderValuation(models.Model):
 	def send_tender_valuation(self):
 		'''Тендер шалгаруулалтын үр дүн гарахад имэйл илгээнэ'''
 		base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-		action_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_valuation_list_menu_action')[1]
+		action_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_valuation_list_menu_action')
 		db_name = request.session.db
-		group_user = self.env['ir.model.data'].get_object('nomin_tender', 'group_tender_manager')
+		group_user = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_manager')
 		
 		sel_user_ids = []
-		sel_user_ids = self.env['res.users'].search([('groups_id','in',group_user.ids)])
+		sel_user_ids = self.env['res.users'].search([('groups_id','in',group_user)])
 		state = u'Тендерийн хүсэлт'
 		if self.tender_id.state == 'published':
 			state =  u'Нийтлэгдсэн'
@@ -412,7 +412,7 @@ class TenderValuationPartner(models.Model):
 	
 	def send_tender_result(self):
 		'''Тендерийн үр дүн гарахад имэйл илгээнэ'''
-		template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_valuation_result_email_template')[1]
+		template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_valuation_result_email_template')
 		val_obj = self
 		tender_obj = self.env['tender.tender'].browse(val_obj.tender_id.id)
 		
@@ -468,8 +468,8 @@ class TenderValuationEmployeeValuation(models.Model):
 		'''Үнэлгээ өгөх комиссын гишүүн мөн эсэхийг шалгана'''
 		user_obj = self.env['res.users']
 		emp_obj = self.env['hr.employee']
-		notif_groups = self.env['ir.model.data'].get_object_reference('nomin_tender', 'group_tender_committee_members')
-		sel_user_ids = user_obj.search([('groups_id','in',notif_groups[1])])
+		notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_committee_members')
+		sel_user_ids = user_obj.search([('groups_id','in',notif_groups)])
 		for valuation in self:
 			valuation.is_in_commission = False
 			if self._uid in sel_user_ids._ids:

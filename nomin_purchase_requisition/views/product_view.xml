@@ -17,7 +17,7 @@
                     <field name="product_mark"/>
                     <!-- <field name="standard_price"/> -->
                     <field name="price" invisible="not context.get('pricelist',False)"/>
-                    <field name="state" invisible="1"/>
+                    <!-- <field name="state" invisible="1"/> -->
 
                     <!-- 
                     <field name="attribute_value_ids" widget="many2many_tags" groups="product.group_product_variant"/>
@@ -30,7 +30,7 @@
         </record>
 
 
-        <record id="stock.view_stock_product_tree" model="ir.ui.view">
+        <!-- <record id="stock.view_stock_product_tree" model="ir.ui.view">
             <field name="name">product.stock.tree.inherit</field>
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_product_tree_view"/>
@@ -44,7 +44,7 @@
                     <field name="virtual_available" invisible="1"/>
                 </field>
             </field>
-        </record>
+        </record> -->
 
 
         <menuitem id="menut_purchase_order_line" name="Захиалгын мөр" groups="nomin_purchase_requisition.group_procurement_admin" parent="purchase.menu_procurement_management" action="nomin_purchase.action_purchase_order_line" sequence="7" />

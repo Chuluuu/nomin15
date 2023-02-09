@@ -25,18 +25,10 @@
         <field name="arch" type="xml">
             <form string="Transfer">
                 <header>
-
-
-
-
                     <button name="%(action_reason_asker_purchase)d" string="Буцаах" type="action" class="oe_highlight" attrs="{'invisible':[('state','in',['draft','returned','approved'])]}"/>
-
                     <button name="%(action_sender_preparation)d" string="Илгээгчийн дансуудыг бэлтгэх" type="action" class="oe_highlight" attrs="{'invisible':['|',('state','not in',['draft','returned']),('role','not in','verifier')]}"/>
-
                     <button name="%(action_receiver_preparation)d" string="Хүлээн авагчийн дансуудыг бэлтгэх" type="action" class="oe_highlight" attrs="{'invisible':['|',('state','not in',['approve']),('role','not in','approver')]}"/>
-
                     <button name="%(action_prepare_transfer_request)d" string="Өөрийн хөрөнгийг бэлтгэх" type="action" class="oe_highlight" attrs="{'invisible':['|',('state','not in',['draft','returned']),('role','not in',['employee','verifier'])]}"/>
-
                     <!-- <button name="action_resend_" string="Дахин илгээх" type="object" class="oe_highlight" 
                         groups = "project.group_project_admin"/>
 
@@ -255,7 +247,7 @@
             <search string="Search transfer request">
                 <filter name="group_requested_employee" string="Боловсруулсан ажилтан" domain="[]" context="{'group_by':'requested_employee_id'}"/>
                 <filter name="group_approved_employee" string="Баталсан ажилтан" domain="[]" context="{'group_by':'approved_employee_id'}"/>
-                <filter name="group_state" string="Төлөв" domain="[]" context="{'group_by':['type','state']}"/>
+                <filter name="group_state" string="Төлөв" domain="[]" context="{'group_by':'state'}"/>
                 <filter string="Энэ сар" name="current_month" domain="[('create_date','&gt;=',(datetime.date.today()+relativedelta(day=1)).strftime('%Y-%m-%d'))]" help="Энэ сар"/>
                 <filter string="Өнгөрсөн сар" name="prev_month" domain="[('create_date','&gt;=',(datetime.date.today()-relativedelta(months=1)+relativedelta(day=1)).strftime('%Y-%m-%d')),('create_date','&lt;',(datetime.date.today()+relativedelta(day=1)).strftime('%Y-%m-%d'))]" help="Энэ сар"/>
                 <filter string="Сүүлийн 2 сар" name="last_2_month" domain="[('create_date','&gt;=',(datetime.date.today()-relativedelta(months=1)+relativedelta(day=1)).strftime('%Y-%m-%d'))]" help="Сүүлийн 2 сар"/>

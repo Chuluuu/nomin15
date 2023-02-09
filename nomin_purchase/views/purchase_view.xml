@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <report string="Худалдан авах захиалга дэлгэрэнгүй" id="action_purchase_order_report" model="purchase.order" report_type="qweb-pdf" name="nomin_purchase.report_purchaseorder_document" file="nomin_purchase.report_purchaseorder_document" />
-        <record id="purchase.view_purchase_order_filter" model="ir.ui.view">
+        <record id="view_purchase_order_filter_new" model="ir.ui.view">
             <field name="name">request.quotation.select</field>
             <field name="model">purchase.order</field>
             <field name="arch" type="xml">
@@ -16,14 +16,14 @@
                     <separator/>
                     <filter name="not_invoiced" string="Not Invoiced" domain="[('invoice_status','=', 'to invoice')]" help="Purchase orders that include lines not invoiced."/>
                     <filter name="invoiced" string="Invoiced" domain="[('invoice_status','=', 'invoiced')]" help="Purchase orders that include lines not invoiced."/>
-                    <filter string="New Mail" name="message_unread" domain="[('message_unread','=',True)]"/>
+                    <!-- <filter string="New Mail" name="message_unread" domain="[('message_unread','=',True)]"/> -->
                     <group expand="0" string="Group By">
-                        <filter string="Vendor" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Vendor" name="vendor" domain="[]" context="{'group_by':'partner_id'}"/>
                         <filter string="Салбар" name="sector" domain="[]" context="{'group_by':'sector_id'}"/>
                         <filter string="Хэлтэс" name="department" domain="[]" context="{'group_by':'department_id'}"/>
-                        <filter string="Хариуцагч" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Хариуцагч" name="partner" domain="[]" context="{'group_by':'partner_id'}"/>
                         <filter string="Төлөв" name="state" domain="[]" context="{'group_by':'state'}"/>
-                        <filter string="Order Date" domain="[]" context="{'group_by':'date_order'}"/>
+                        <filter string="Order Date" name="order" domain="[]" context="{'group_by':'date_order'}"/>
                         <!-- FORWARDPORT UP TO SAAS-10 -->
                     </group>
                 </search>
@@ -35,8 +35,8 @@
             <field name="name">purchase.order.tree</field>
             <field name="model">purchase.order</field>
             <field name="arch" type="xml">
-                <tree decoration-bf="message_unread==True" decoration-muted="state=='cancel'" decoration-info="state in ('wait','confirmed')" string="Purchase Order">
-                    <field name="message_unread" invisible="1"/>
+                <tree decoration-muted="state=='cancel'" decoration-info="state in ('wait','confirmed')" string="Purchase Order">
+                    <!-- <field name="message_unread" invisible="1"/> -->
                     <field name="name" string="Reference"/>
                     <field name="date_order" />
                     <field name="sector_id"/>
@@ -62,7 +62,7 @@
             <field name="context">{'search_default_group_state':1}</field>
             <field name="domain">[('state','in',('draft','sent_rfq','back','comparison_created','cancel', 'confirmed'))]</field>
             <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
-            <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="search_view_id" ref="view_purchase_order_filter_new"/>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to create a request for quotation.
@@ -88,7 +88,7 @@
             <field name="view_mode">tree,kanban,form,pivot,graph,calendar</field>
             <field name="context">{'search_default_todo':1, 'show_purchase': True}</field>
             <field name="domain">[('state','not in',('draft','sent_rfq','back','comparison_created','cancel', 'confirmed'))]</field>
-            <field name="search_view_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="search_view_id" ref="view_purchase_order_filter_new"/>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
                 Click to create a quotation that will be converted into a purchase order. 
@@ -105,16 +105,14 @@
 
         <record id="view_purchase_order_line_filter" model="ir.ui.view">
             <field name="name">request.quotation.select</field>
-            <field name="model">purchase.order</field>
+            <field name="model">purchase.order.line</field>
             <field name="arch" type="xml">
                 <search string="Search Purchase Order">
-
-
                     <group expand="0" string="Group By">
-                        <filter string="Vendor" domain="[]" context="{'group_by':'partner_id'}"/>
-                        <filter string="Бараа" domain="[]" context="{'group_by':'product_id'}"/>
-                        <filter string="Захиалгын дугаар" domain="[]" context="{'group_by':'order_id'}"/>
-                        <filter string="Төлөв" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Vendor" name="vendor" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Бараа" name="product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter string="Захиалгын дугаар" name="order" domain="[]" context="{'group_by':'order_id'}"/>
+                        <filter string="Төлөв" name="state" domain="[]" context="{'group_by':'state'}"/>
                         <!-- <filter string="Order Date" domain="[]" context="{'group_by':'date_order'}"/> -->
                         <!-- FORWARDPORT UP TO SAAS-10 -->
                     </group>
@@ -191,9 +189,9 @@
                         <button name="action_confirm" class="oe_highlight" type="object" string="Батлах" attrs="{'invisible':[('is_in_confirm','=',False)]}"/>
                         <button name="action_cancel" class="oe_highlight" type="object" string="Цуцлах" attrs="{'invisible':[('is_in_confirm','=',False)]}"/>
 
-                        <button name="action_view_picking" groups="purchase.group_purchase_user" string="Барааг хүлээн авах" type="object" attrs="{'invisible': ['|', ('state','not in', ('purchase','done')), ('picking_count', '=', 0)]}"/>
+                        <!-- <button name="action_view_picking" groups="purchase.group_purchase_user" string="Барааг хүлээн авах" type="object" attrs="{'invisible': ['|', ('state','not in', ('purchase','done')), ('picking_count', '=', 0)]}"/> -->
 
-                        <button name="action_payment_request" class="oe_highlight" type="object" groups="purchase.group_purchase_user" string="Төлбөрийн хүсэлт" attrs="{'invisible':['|',('payment_request_id','!=',False),('state','!=','purchase')]}"/>
+                        <!-- <button name="action_payment_request" class="oe_highlight" type="object" groups="purchase.group_purchase_user" string="Төлбөрийн хүсэлт" attrs="{'invisible':['|',('payment_request_id','!=',False),('state','!=','purchase')]}"/> -->
 
                         <button name="button_done" groups="purchase.group_purchase_user" type="object" string="Дууссан төлөвт оруулах" states="purchase" help="If a purchase order is done, you cannot modify it manually anymore. You will not be able to receive invoices anymore for this purchase order."/>
                         <!--   <button name="create_contract" groups="purchase.group_purchase_user" class="oe_highlight" type="object" string="Гэрээ үүсгэх" attrs="{'invisible':['|',('contract_id','!=',False),('state','!=','purchase')]}" /> -->
@@ -202,6 +200,7 @@
                 </xpath>
 
                 <xpath expr="//field[@name='partner_id']" position="replace">
+                    <field name="is_quantity_copy" invisible="1"/>
                     <field name="partner_id" attrs="{'readonly':[('state','!=','draft')]}"/>
                 </xpath>
 
@@ -209,10 +208,25 @@
                     <field name="date_order" attrs="{'readonly':[('state','!=','draft')]}"/>
                     <field name="rfq_date_term" attrs="{'readonly':[('state','not in',['draft','sent_rfq'])]}"/>
 
+                    <field name="is_rfq_closed" groups="purchase.group_purchase_user" attrs="{'readonly':[('state','!=','draft')]}"/>
+                    <field name="is_open_date" invisible="1"/>
+                    <field name="rfq_close_date" groups="purchase.group_purchase_user" attrs="{'required':[('is_rfq_closed','=',True)],'invisible':[('is_rfq_closed','=',False)],'readonly':[('state','!=','draft')]}"/>
+                    <field name="rfq_open_date" groups="purchase.group_purchase_user" attrs="{'required':[('is_rfq_closed','=',True)],'invisible':[('is_rfq_closed','=',False)],'readonly':[('state','!=','draft')]}"/>
+                    <field name="company_id" groups="purchase.group_purchase_user" readonly="1" required="1"/>
+                    <field name="sector_id" groups="purchase.group_purchase_user" readonly="1" required="1"/>
+                    <field name="department_id" groups="purchase.group_purchase_user" readonly="1" required="1"/>
+                    <field name="user_id" groups="purchase.group_purchase_user" readonly="1" required="1"/>
+                    <!-- BOOLEAN fields -->
+                    <field name="is_in_sent" invisible="1"/>
+                    <field name="is_in_approve" invisible="1"/>
+                    <field name="is_in_verify" invisible="1"/>
+                    <field name="is_in_confirm" invisible="1"/>
+                    <field name="active_sequence" invisible="1"/>
+
                 </xpath>
-                <xpath expr="//field[@name='origin']" position="replace">
+                <!-- <xpath expr="//field[@name='origin']" position="replace">
                     <field name="origin" groups="purchase.group_purchase_user" attrs="{'invisible': [('origin','=',False)]}"/>
-                </xpath>
+                </xpath> -->
 
                 <xpath expr="//field[@name='partner_ref']" position="replace">
                     <field name="partner_ref" string="Нийлүүлэгчийн дугаар" attrs="{'readonly':[('state','!=','draft')]}"/>
@@ -221,9 +235,9 @@
 
                 <xpath expr="//sheet/div[1]" position="replace">
                     <div class="oe_button_box" name="button_box" attrs="{'invisible': [('state', 'not in', ('purchase', 'done', 'cancel'))]}">
-                        <button type="object" name="action_view_picking" class="oe_stat_button" groups="purchase.group_purchase_user" icon="fa-truck">
+                        <!-- <button type="object" name="action_view_picking" class="oe_stat_button" groups="purchase.group_purchase_user" icon="fa-truck">
                             <field name="picking_count" widget="statinfo" string="Тээвэрлэлт" help="Incoming Shipments"/>
-                        </button>
+                        </button> -->
                         <button type="object" name="action_view_invoice" class="oe_stat_button" groups="purchase.group_purchase_user" icon="fa-pencil-square-o">
                             <field name="invoice_count" widget="statinfo" string="Нэхэмжлэлүүд"/>
                         </button>
@@ -233,8 +247,8 @@
 
                 <xpath expr="//sheet/div[2]" position="replace">
                     <div class="oe_title">
-                        <label string="Request for Quotation " attrs="{'invisible': [('state','not in',('draft','sent','bid'))]}"/>
-                        <label string="Purchase Order " attrs="{'invisible': [('state','in',('draft','sent','bid'))]}"/>
+                        <span class="o_form_label" attrs="{'invisible': [('state','not in',('draft','sent','bid'))]}">Request for Quotation</span>
+                        <span class="o_form_label" attrs="{'invisible': [('state','in',('draft','sent','bid'))]}">Purchase Order</span>
                         <h1>
                             <field name="name" readonly="1"/>
                         </h1>
@@ -250,24 +264,6 @@
                     <field name="is_portal_user" invisible="1"/>
                     <field name="is_created_in_sent" invisible="1"/>
                 </xpath>
-
-                <xpath expr="//sheet/group/group/field[@name='company_id']" position="replace">
-                    <field name="is_rfq_closed" groups="purchase.group_purchase_user" attrs="{'readonly':[('state','!=','draft')]}"/>
-                    <field name="is_open_date" invisible="1"/>
-                    <field name="rfq_close_date" groups="purchase.group_purchase_user" attrs="{'required':[('is_rfq_closed','=',True)],'invisible':[('is_rfq_closed','=',False)],'readonly':[('state','!=','draft')]}"/>
-                    <field name="rfq_open_date" groups="purchase.group_purchase_user" attrs="{'required':[('is_rfq_closed','=',True)],'invisible':[('is_rfq_closed','=',False)],'readonly':[('state','!=','draft')]}"/>
-                    <field name="company_id" groups="purchase.group_purchase_user" readonly="1" required="1"/>
-                    <field name="sector_id" groups="purchase.group_purchase_user" readonly="1" required="1"/>
-                    <field name="department_id" groups="purchase.group_purchase_user" readonly="1" required="1"/>
-                    <field name="user_id" groups="purchase.group_purchase_user" readonly="1" required="1"/>
-                    <!-- BOOLEAN fields -->
-                    <field name="is_in_sent" invisible="1"/>
-                    <field name="is_in_approve" invisible="1"/>
-                    <field name="is_in_verify" invisible="1"/>
-                    <field name="is_in_confirm" invisible="1"/>
-                    <field name="active_sequence" invisible="1"/>
-                </xpath>
-
 
 
             </field>
@@ -297,6 +293,7 @@
                                     <field name="warranty" attrs="{'readonly':[('is_portal','=',True)],'invisible':[('is_portal','=',True)]}" groups="purchase.group_purchase_user"/>
                                     <field name="qty_received" invisible="not context.get('show_purchase', False)"/>
                                     <field name="qty_invoiced" invisible="not context.get('show_purchase', False)"/>
+                                    <field name="product_uom_category_id" invisible="1"/>
                                     <field name="product_uom" groups="product.group_uom"/>
                                     <field name="price_unit"/>
                                     <field name="state" invisible="1"/>
@@ -315,6 +312,7 @@
                                                 <div>
                                                     <field name="product_qty" class="oe_inline"/>
                                                     <span class="oe_inline">&#160;</span>
+                                                    <field name="product_uom_category_id" invisible="1"/>
                                                     <field name="product_uom" groups="product.group_uom" class="oe_inline"/>
                                                 </div>
                                                 <field name="price_unit"/>
@@ -333,7 +331,7 @@
                                             </page>
                                             <page string="Invoices and Incoming Shipments" groups="purchase.group_purchase_user">
                                                 <field name="invoice_lines"/>
-                                                <field name="move_ids"/>
+                                                <!-- <field name="move_ids"/> -->
                                             </page>
 
                                             <page string="Худалдан авалт шаардахын дугаар" groups="purchase.group_purchase_user">
@@ -480,11 +478,11 @@
                                     <label for="date_planned"/>
                                     <div>
                                         <field name="date_planned" required="1" attrs="{'readonly': [('state', 'not in', ('draft', 'sent'))]}"/>
-                                        <button name="action_set_date_planned" context="{'date_planned': date_planned}" type="object" states="draft,sent" string="Set date to all order lines" help="This changes the scheduled date of all order lines to the given date" class="fa fa-calendar o_icon_button oe_edit_only"/>
+                                        <!-- <button name="action_set_date_planned" context="{'date_planned': date_planned}" type="object" states="draft,sent" string="Set date to all order lines" help="This changes the scheduled date of all order lines to the given date" class="fa fa-calendar o_icon_button oe_edit_only"/> -->
                                     </div>
-                                    <field name="picking_type_id" domain="[('code','=','incoming')]" options="{'no_create': True}" groups="stock.group_locations"/>
-                                    <field name="dest_address_id" groups="stock.group_locations" attrs="{'invisible': [('default_location_dest_id_usage', '!=', 'customer')], 'required': [('default_location_dest_id_usage', '=', 'customer')]}"/>
-                                    <field name="default_location_dest_id_usage" invisible="1"/>
+                                    <!-- <field name="picking_type_id" domain="[('code','=','incoming')]" options="{'no_create': True}" groups="stock.group_locations"/> -->
+                                    <field name="dest_address_id" groups="stock.group_locations" />
+                                    <!-- <field name="default_location_dest_id_usage" invisible="1"/> -->
                                     <field name="incoterm_id"/>
                                 </group>
                                 <group>

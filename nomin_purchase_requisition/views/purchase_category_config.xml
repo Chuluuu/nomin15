@@ -161,7 +161,7 @@
 					<field name="category_ids"/>
 					<filter string="Архивлагдсан" name="inactive" domain="[('active','=',False)]"/>
 					<group expand="0" string="Group By">
-						<filter string="Хэрэглэгч" context="{'group_by':'user_id'}"/>
+						<filter string="Хэрэглэгч" name="user" context="{'group_by':'user_id'}"/>
 					</group>
 				</search>
 			</field>
@@ -189,7 +189,6 @@
 		</record>
 
 
-    ---------------------------------------------------------------------------
 
 		<record id="view_team_registration_form" model="ir.ui.view">
 			<field name="name">team.registration</field>

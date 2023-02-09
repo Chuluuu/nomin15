@@ -185,17 +185,14 @@
         <record id="view_purchase_comparison_tree" model="ir.ui.view">
             <field name="name">purchase.comparison.tree</field>
             <field name="model">purchase.comparison</field>
-            <field name="view_type">tree</field>
-            <field name="view_mode">tree,form</field>
             <field name="arch" type="xml">
-                <tree fonts="bold:message_unread==True" string="Purchase Comparison" create="false">
+                <tree decoration-bf="message_unread==True" string="Purchase Comparison" create="false">
                     <field name="name"/>
                     <field name="user_id"/>
                     <field name="department_id"/>
                     <field name="date"/>
                     <field name="state"/>
                     <field name="message_unread"/>
-
                 </tree>
             </field>
         </record>
@@ -203,7 +200,6 @@
         <record id="action_purchase_comparison" model="ir.actions.act_window">
             <field name="name">Purchase Comparison</field>
             <field name="res_model">purchase.comparison</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="context">{}</field>
         </record>
@@ -228,13 +224,13 @@
         <record id="cancel_comparison_action" model="ir.actions.act_window">
             <field name="name">Cancel comparison</field>
             <field name="res_model">cancel.comparison</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_cancel_comparison_form"/>
             <field name="target">new</field>
         </record>
+        <!-- MOVED BELOW MENU TO nomin_purchase_requisition comparison_view.xml bcuz of dependency -->
+        <!-- <menuitem action="action_purchase_comparison" id="menu_purchase_comparison" groups="nomin_purchase_requisition.group_procurement_buyer,nomin_base.group_department_chief,nomin_base.group_department_chief1,nomin_base.group_business_development_chief,nomin_base.group_department_manager,nomin_base.group_division_chief,nomin_base.group_nomin_branch_economist,nomin_base.group_department_senior_manager,nomin_base.group_financial_account_user,nomin_purchase_requisition.group_supply_import_manager,nomin_base.group_president,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_nyrav_department" parent="purchase.menu_procurement_management"/> -->
 
-        <menuitem action="action_purchase_comparison" id="menu_purchase_comparison" groups="nomin_purchase_requisition.group_procurement_buyer,nomin_base.group_department_chief,nomin_base.group_department_chief1,nomin_base.group_business_development_chief,nomin_base.group_department_manager,nomin_base.group_division_chief,nomin_base.group_nomin_branch_economist,nomin_base.group_department_senior_manager,nomin_base.group_financial_account_user,nomin_purchase_requisition.group_supply_import_manager,nomin_base.group_president,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_nyrav_department,capitalLease.group_regular_accountant" parent="purchase.menu_procurement_management"/>
 
 
     </data>

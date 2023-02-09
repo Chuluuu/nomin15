@@ -33,14 +33,14 @@
         <record model="ir.actions.act_window" id="action_purchase_comparison_participation_report">
             <field name="name">Үнийн харьцуулалтанд оролцсон түүх</field>
             <field name="res_model">purchase.comparison.participation.report</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="purchase_comparison_participation_report_form"/>
             <field name="target">new</field>
         </record>
 
+        <!-- MOVED BELOW MENU TO nomin_purchase_requisition comparison_view.xml bcuz of dependency -->
+        <!-- <menuitem name="Үнийн харьцуулалтанд оролцсон түүх" id="menu_purchase_comparison_participation_report" parent="nomin_purchase.parent_menu_purchase_report_wizard" action="action_purchase_comparison_participation_report" sequence="105" groups="capitalLease.group_regular_accountant,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_buyer" /> -->
 
-        <menuitem name="Үнийн харьцуулалтанд оролцсон түүх" id="menu_purchase_comparison_participation_report" parent="nomin_purchase.parent_menu_purchase_report_wizard" action="action_purchase_comparison_participation_report" sequence="105" groups="capitalLease.group_regular_accountant,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_buyer" />
 
 
     </data>

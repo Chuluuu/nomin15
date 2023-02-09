@@ -48,8 +48,8 @@
 			<field name="domain">[]</field>
 			<field name="view_id" ref="view_purchase_priority_tree"/>
 		</record>
-
-		<menuitem id="menu_purchase_priority" action="action_purchase_priority" name="Purchase Priority menu" parent="purchase.menu_purchase_config" groups="nomin_purchase_requisition.group_procurement_admin"/>
+		<!-- MOVED To nomin_purchase_requisition bcuz of dependency -->
+		<!-- <menuitem id="menu_purchase_priority" action="action_purchase_priority" name="Purchase Priority menu" parent="purchase.menu_purchase_config" groups="nomin_purchase_requisition.group_procurement_admin"/> -->
 
 
 	</data>

@@ -512,7 +512,7 @@ class OrderPage (models.Model):
                     self.sudo()._add_followers(self.system_admin_id.user_id.id)
             self.message_post(cbody= body)
             self.write({'state':'allocated','assigned_date':time.strftime("%Y-%m-%d")})
-            template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.email_template_of_ordering')[1]
+            template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.email_template_of_ordering')
             title = unicode(' Захиалгын мэдэгдэл','utf-8')
             data = {
                         'email_title': title,
@@ -536,7 +536,7 @@ class OrderPage (models.Model):
                     self.sudo()._add_followers(self.project_manager_id.user_id.id)
             self.message_post(cbody= body)
             self.write({'state':'allocated','assigned_date':time.strftime("%Y-%m-%d")})
-            template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.email_template_of_ordering')[1]
+            template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_project.email_template_of_ordering')
             title = unicode(' Захиалгын мэдэгдэл','utf-8')
             data = {
                         'email_title': title,

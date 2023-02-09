@@ -77,8 +77,7 @@ class ReportTenderRequest(models.AbstractModel):
                 employees.append(emp.employee_id)
             
         
-        #manager_group_id = model_obj.get_object_reference(cr, 1, 'nomin_tender', 'group_tender_manager')
-        manager_group_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'group_tender_manager')[1]
+        manager_group_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_manager')
         _logger.info(u'Тендерийн хорооны дарга групп =  %s', manager_group_id)
         if manager_group_id:
             #user_ids=self.pool['res.users'].search(cr, 1, [('groups_id','=',manager_group_id[1])])
@@ -92,8 +91,7 @@ class ReportTenderRequest(models.AbstractModel):
                     tender_ceo = manager_empl[0]
                     _logger.info(u'Тендерийн хорооны дарга %s', tender_ceo)
         
-        #sec_group_id = model_obj.get_object_reference(cr, 1, 'nomin_tender', 'group_tender_secretary')
-        sec_group_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'group_tender_secretary')[1]
+        sec_group_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_secretary')
         _logger.info(u'Тендерийн нарийн бичиг групп =  %s', sec_group_id)
         if sec_group_id:
             #user_ids=self.pool['res.users'].search(cr, 1, [('groups_id','=',sec_group_id[1])])

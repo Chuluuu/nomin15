@@ -60,8 +60,8 @@ class TenderCommitteeMember(models.Model):
         context = self._context
         if self.type_id:
             ir_model_data = self.env['ir.model.data']
-            notif_groups=ir_model_data.get_object_reference('nomin_tender', 'group_tender_committee_members')
-            sel_user_ids = user_obj.search([('groups_id','in',notif_groups[1])])
+            notif_groups=ir_model_data._xmlid_to_res_id('nomin_tender.group_tender_committee_members')
+            sel_user_ids = user_obj.search([('groups_id','in',notif_groups)])
             employee_ids = self.env['hr.employee'].search([('user_id','in',sel_user_ids.ids)])
             #return {'domain':{'confirmed_member_ids':[('id','in',employee_ids.ids)]}}
             #dids = [x.id for x in employee_ids]
@@ -110,8 +110,8 @@ class TenderEmployeeLine(models.Model):
         context = self._context
         if self.type_id:
             ir_model_data = self.env['ir.model.data']
-            notif_groups=ir_model_data.get_object_reference('nomin_tender', 'group_tender_requist_approval_leaders')
-            sel_user_ids = user_obj.search([('groups_id','in',notif_groups[1])])
+            notif_groups=ir_model_data._xmlid_to_res_id('nomin_tender.group_tender_requist_approval_leaders')
+            sel_user_ids = user_obj.search([('groups_id','in',notif_groups)])
             employee_ids = self.env['hr.employee'].search([('user_id','in',sel_user_ids.ids)])
             #return {'domain':{'confirmed_member_ids':[('id','in',employee_ids.ids)]}}
             #dids = [x.id for x in employee_ids]
@@ -407,7 +407,8 @@ class TenderTender(models.Model):
     def action_allow_contract(self):
         self.write({'state':'contract_created','date_open_deadline':time.strftime('%Y-%m-%d %H:%M:%S'),'date_end':time.strftime('%Y-%m-%d %H:%M:%S')})
         
-        notif_groups = self.env['ir.model.data'].get_object('nomin_tender', 'group_tender_branch_manager')
+        notif_groups_res_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_branch_manager')
+        notif_groups = self.env['res.users'].sudo().browse(notif_groups_res_id)
         sel_user_ids = []
         for user in notif_groups.users:
             if self.sector_id.id in user.tender_allowed_departments.ids:
@@ -651,7 +652,7 @@ class TenderTender(models.Model):
                   }
         user = self.env['res.users'].browse(self.env.user.id)
         mail_obj = self.env['mail.followers']
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_state_change_followers_email_template')[1]
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_state_change_followers_email_template')
         
         
         followers = []
@@ -673,7 +674,7 @@ class TenderTender(models.Model):
                 'desc_name': requist_obj.desc_name,
                 'model': 'tender.tender',
                 'base_url': self.env['ir.config_parameter'].get_param('web.base.url'),
-                'action_id': self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_list')[1],
+                'action_id': self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_list'),
                 'id': requist_obj[0].id,
                 'db_name': request.session.db, 
                 'sender': self.env['res.users'].browse(self.env.user.id).name,
@@ -690,16 +691,16 @@ class TenderTender(models.Model):
     #Tsutslagdsan tenderees hudaldan avaltiin uniin sanal uusehed hamgamjiin HAAA bolon HIM groupd email ilgeeh heseg
     
     def send_mail_purchase_employees(self, l_id):        
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'send_mail_purchase_employees_email_template')[1]        
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender', 'send_mail_purchase_employees_email_template')      
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        action_id = self.env['ir.model.data'].get_object_reference('purchase', 'purchase_rfq')[1]
+        action_id = self.env['ir.model.data']._xmlid_to_res_id('purchase.purchase_rfq')
         db_name = request.session.db
         #Hangamj importiin menejeriin group
-        group_id = self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_supply_import_manager')[1]
+        group_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_purchase_requisition.group_supply_import_manager')
         user_obj = self.env['res.users'].search([('groups_id','in',group_id)])
         
         #XAAA darga group
-        group_id1 = self.env['ir.model.data'].get_object_reference('nomin_purchase_requisition', 'group_haaa_head')[1]
+        group_id1 = self.env['ir.model.data']._xmlid_to_res_id('nomin_purchase_requisition.group_haaa_head')[1]
         user_obj1 = self.env['res.users'].search([('groups_id','in',group_id1)])
         order_name = self.env['purchase.order'].search([('id','=',l_id)])
         
@@ -728,7 +729,7 @@ class TenderTender(models.Model):
         for participant in participant_ids:
             if participant.is_win == True:
                 result = u'шалгарсан'
-                template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_valuation_result_email_template')[1]
+                template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_valuation_result_email_template')
                 val_obj = self
                 # tender_obj = self.env['tender.tender'].browse(val_obj.tender_id.id)
                 
@@ -748,7 +749,7 @@ class TenderTender(models.Model):
                 # participant.send_tender_result(result)
             else:
                 result = u'шалгараагүй'
-                template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_valuation_result_email_template')[1]
+                template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_valuation_result_email_template')
                 val_obj = self
                 # tender_obj = self.env['tender.tender'].browse(val_obj.tender_id.id)
                 
@@ -776,10 +777,10 @@ class TenderTender(models.Model):
         '''
         extend_obj = self.env['tender.date.extend']
         tender_obj = self
-        notif_groups = self.env['ir.model.data'].get_object_reference('nomin_tender', 'group_tender_secretary')
+        notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_secretary')
         group_user_ids = []
         
-        sel_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups[1]])])
+        sel_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups])])
         group_user_ids = self.env['res.users'].search([('id','in',sel_user_ids)])
         if group_user_ids:
             users = self.env['res.users'].browse(group_user_ids)
@@ -801,7 +802,6 @@ class TenderTender(models.Model):
     
     def action_back(self):
         """Тендерийн хүсэлтийг тендерийн нарийн бичиг буцаах"""
-        res = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_tender_note')
         
         return {
             'type': 'ir.actions.act_window',
@@ -814,7 +814,7 @@ class TenderTender(models.Model):
        
     def send_to_manager(self):
         """Тендерийн хорооны даргад илгээх"""
-        notif_groups = self.env['ir.model.data'].get_object_reference('nomin_tender', 'group_tender_manager')
+        notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_manager')
         
         #tender_obj = self.browse(cr, uid, ids)
         for tender in self:
@@ -830,7 +830,7 @@ class TenderTender(models.Model):
         
             sel_user_ids = []
             group_user_ids = []
-            sel_user_obj = self.env['res.users'].search([('groups_id','in',[notif_groups[1]])])
+            sel_user_obj = self.env['res.users'].search([('groups_id','in',[notif_groups])])
             for sel_user_line in sel_user_obj:
                 sel_user_ids.append(sel_user_line.id)
             group_user_obj = self.env['res.users'].search([('id','in',sel_user_ids)])
@@ -886,7 +886,6 @@ class TenderTender(models.Model):
         """Тендерийн нарийн бичиг рүү тайлбар 
            бичиж тендерийн хорооны дарга буцаах
         """
-        res = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_tender_note')
         
         return {
             'type': 'ir.actions.act_window',
@@ -902,7 +901,6 @@ class TenderTender(models.Model):
     
     def action_to_extend(self):
         """Тендерийн хугацаа сунгах хүсэлт үүсгэх"""
-        res = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_extend_menu')
         context = self.env.context.copy()
         context.update({'tender_tender': self.id})
         return {
@@ -918,7 +916,6 @@ class TenderTender(models.Model):
     
     def action_to_protocol(self):
         """Тендерийн протокол"""
-        res = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_protocol_menu')
         self.env.context.update({'tender_tender': self.id})
         
         return {
@@ -1073,7 +1070,7 @@ class TenderTender(models.Model):
         subject = u'Таны оролцсон "%s" дугаар "%s" нэртэй тендер дээр сонгон шалгаруулалт хийгдэж эхэллээ.'%( self.name,self.desc_name)
         db_name = request.session.db
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        action_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_list')[1]
+        action_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_list')
        
         
         body_html = u'''
@@ -1115,7 +1112,7 @@ class TenderTender(models.Model):
         subject = u'Таны оролцсон "%s" дугаар "%s" нэртэй тендер хойшлогдлоо.'%( self.name,self.desc_name)
         db_name = request.session.db
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        action_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_list')[1]
+        action_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_list')
        
         
         body_html = u'''
@@ -1222,7 +1219,7 @@ class TenderTender(models.Model):
     def action_reject(self):
         """Тендерийн хүсэгч салбарын эрхлэгчийн удирдлага татгалзах"""
         #mod_obj = self.env['ir.model.data']
-        res = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_tender_note')
+        res = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_tender_note')
         
         for order in self:
             if not order.requirement_partner_ids:
@@ -1250,10 +1247,10 @@ class TenderTender(models.Model):
                         'target' : 'new',
                     }
                 
-        notif_groups = self.env['ir.model.data'].get_object_reference('nomin_base', 'group_holding_ceo')
+        notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_base.group_holding_ceo')
         group_user_ids = []
         
-        sel_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups[1]])])
+        sel_user_ids = self.env['res.users'].search([('groups_id','in',[notif_groups])])
         group_user_ids = self.env['res.users'].search([('id','in',sel_user_ids)])
         if group_user_ids:
             users = self.env['res.users'].browse(group_user_ids)
@@ -1268,7 +1265,7 @@ class TenderTender(models.Model):
     def action_disabled(self):
         """Тендерийн хүсэгч салбарын эрхлэгчийн удирдлага татгалзах"""
         #mod_obj = self.env['ir.model.data']
-        res = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_tender_note')
+        res = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_tender_note')
         
         for order in self:
             if not order.requirement_partner_ids:
@@ -1416,7 +1413,6 @@ class TenderTender(models.Model):
             хүсэлтийг буцааж ноорог болгох
         """
         # self.write({'date_open_deadline':time.strftime('%Y-%m-%d %H:%M:%S'),'date_end':time.strftime('%Y-%m-%d %H:%M:%S')})
-        res = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_tender_note')
         
         return {
             'type': 'ir.actions.act_window',
@@ -1461,7 +1457,6 @@ class TenderTender(models.Model):
     
     def action_cancel(self):
         """Тендерийн хүсэлт батлах удирдлагууд цуцлах"""
-        res = self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_tender_note')
         
         return {
             'type': 'ir.actions.act_window',
@@ -1729,7 +1724,7 @@ class MailSentPartners(models.Model):
         '''Урилга имэйл сонгогдсон харилцагч нарт илгээнэ
         '''
         
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_tender_invitation_email_template')[1]        
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_tender_invitation_email_template')
         invitation_obj = self.env['tender.invitation.guide'].browse(self.tender_id.invitation_id.id)
 
         published_date = datetime.datetime.strptime(self.tender_id.published_date, '%Y-%m-%d %H:%M:%S')
@@ -1746,7 +1741,7 @@ class MailSentPartners(models.Model):
             'invitation_detail': invitation_obj.invitation_detail,
             'model': 'tender.tender',
             'base_url': self.env['ir.config_parameter'].get_param('web.base.url'),
-            'action_id': self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_list')[1],
+            'action_id': self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_list'),
             'id': self.tender_id.id,
             'db_name': request.session.db, 
             'sender': self.env['res.users'].browse(self._uid).name,
@@ -1856,8 +1851,8 @@ class ChooseDepartment(models.TransientModel):
         context = self._context
         if self.department_ids:
             ir_model_data = self.env['ir.model.data']
-            notif_groups=ir_model_data.get_object_reference('nomin_tender', 'group_tender_branch_manager')
-            sel_user_ids = user_obj.sudo().search([('groups_id','in',notif_groups[1])])
+            notif_groups=ir_model_data._xmlid_to_res_id('nomin_tender.group_tender_branch_manager')
+            sel_user_ids = user_obj.sudo().search([('groups_id','in',notif_groups)])
             employee_ids = self.env['hr.employee'].sudo().search([('user_id','in',sel_user_ids.ids)])
             return {'domain':{'employee_id':[('id','in',employee_ids.ids),
                                              ('department_id','child_of',self.department_ids.id)]}}

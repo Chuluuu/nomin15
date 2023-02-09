@@ -15,6 +15,6 @@
 #    along with this program.  If not, see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-#import abstract_report_builder
-import nomin_report_style
-import report_res_users
+from . import abstract_report_builder
+# import nomin_report_style
+# import report_res_users

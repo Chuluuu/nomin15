@@ -1,34 +1,13 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-#    odoo, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+
 import time
-from odoo.osv import fields, osv
 from odoo.tools.translate import _
 from odoo import SUPERUSER_ID
 from datetime import datetime, timedelta
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-
-
                     
-class purchase_order_comparison_wizard(osv.osv_memory):
+class purchase_order_comparison_wizard(models.TransientModel):
     _name = "purchase.order.comparison.wizard"
     _description = "Purchase Order Comparison Creation Wizard"
     
@@ -131,7 +110,6 @@ class purchase_order_comparison_wizard(osv.osv_memory):
         return {
             'domain': "[('id','in', [" + str(comparison_id) + "])]",
             'name': _('Purchase Comparison'),
-            'view_type': 'form',
             'view_mode': 'tree,form',
             'res_model': 'purchase.comparison',
             'view_id': False,

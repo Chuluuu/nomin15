@@ -17,7 +17,7 @@
         <field name="dpi">90</field>
     </record>
 
-    <record id="nomin_purchase_requisition.action_report_fixed_assets" model="ir.actions.report.xml">
+    <record id="nomin_purchase_requisition.action_report_fixed_assets" model="ir.actions.report">
         <field name="paperformat_id" ref="nomin_purchase_requisition.paperformat_fixed_assets" />
     </record>
 
@@ -92,7 +92,7 @@
                             <div>
                                 <div>
                                     <field name="start_date" class="oe_inline" attrs="{'readonly':[('state','in',['draft','verified'])]}"/>
-                                    <label string="-" class="oe_inline" />
+                                    <span class="oe_form_label">-</span>
                                     <field name="end_date" class="oe_inline" attrs="{'readonly':[('state','in',['draft','verified'])]}"/>
 
                                 </div>
@@ -439,8 +439,8 @@
             <search string="Search transfer request">
                 <filter name="group_requested_employee" string="Боловсруулсан ажилтан" domain="[]" context="{'group_by':'requested_employee_id'}"/>
                 <!-- <filter name="group_approved_employee" string="Баталсан ажилтан" domain="[]" context="{'group_by':'approved_employee_id'}"/> -->
-                <filter name="group_department_id" string="Салбар" domain="[]" context="{'group_by':['department_id']}"/>
-                <filter name="group_name" string="Тооллого" domain="[]" context="{'group_by':['name','state']}"/>
+                <filter name="group_department_id" string="Салбар" domain="[]" context="{'group_by':'department_id'}"/>
+                <filter name="group_name" string="Тооллого" domain="[]" context="{'group_by':'name'}"/>
                 <filter string="Энэ сар" name="current_month" domain="[('create_date','&gt;=',(datetime.date.today()+relativedelta(day=1)).strftime('%Y-%m-%d'))]" help="Энэ сар"/>
                 <filter string="Өнгөрсөн сар" name="prev_month" domain="[('create_date','&gt;=',(datetime.date.today()-relativedelta(months=1)+relativedelta(day=1)).strftime('%Y-%m-%d')),('create_date','&lt;',(datetime.date.today()+relativedelta(day=1)).strftime('%Y-%m-%d'))]" help="Энэ сар"/>
                 <filter string="Сүүлийн 18 сар" name="last_2_month" domain="[('create_date','&gt;=',(datetime.date.today()-relativedelta(years=2)).strftime('%Y-%m-%d'))]" help="Сүүлийн 18 сар"/>

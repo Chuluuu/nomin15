@@ -19,7 +19,7 @@
         'views/purchase_cron.xml',
         'email_templates/purchase_mail.xml',
         'wizard/stock_picking_seperate.xml',
-        'views/stock_picking_type_view.xml',
+        # 'views/stock_picking_type_view.xml',
         'wizard/purchase_order_cancel_view.xml',
         'views/stock_report.xml',
         'reports/report_picking_all.xml',

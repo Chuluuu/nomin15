@@ -66,12 +66,13 @@
         <record id="purchase_evaluation_indicators_action" model="ir.actions.act_window">
             <field name="name">Evaluation Indicatorss</field>
             <field name="res_model">evaluation.indicators</field>
-            <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="purchase_evaluation_indicators_tree"/>
         </record>
 
-        <menuitem action="purchase_evaluation_indicators_action" id="menu_purchase_indicators" groups="nomin_purchase_requisition.group_haaa_director" parent="purchase.menu_purchase_config"/>
+
+        <!-- MOVED BELOW MENU TO nomin_purchase_requisition comparison_view.xml bcuz of dependency -->
+        <!-- <menuitem action="purchase_evaluation_indicators_action" id="menu_purchase_indicators" groups="nomin_purchase_requisition.group_haaa_director" parent="purchase.menu_purchase_config"/> -->
 
 
     </data>

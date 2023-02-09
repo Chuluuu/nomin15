@@ -16,7 +16,7 @@ class PurchaseRequisitionSetDone(models.TransientModel):
 	
 	def purchase_set_done(self):
 		active_ids = self.env.context.get('active_ids', [])
-		notif_groups_ids = self.env['ir.model.data'].get_object_reference( 'nomin_purchase_requisition', 'group_haaa_head')[1]
+		notif_groups_ids = self.env['ir.model.data']._xmlid_to_res_id( 'nomin_purchase_requisition.group_haaa_head')
 		group_ids = self.env['res.groups'].browse(notif_groups_ids)
 		users = []
 		for group in group_ids:
@@ -43,7 +43,7 @@ class PurchaseRequisitionSetDone(models.TransientModel):
 		
 		user_emails = []
 		base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-		action_id = self.env['ir.model.data'].get_object_reference('purchase_requisition', 'action_purchase_requisition')[1]
+		action_id = self.env['ir.model.data']._xmlid_to_res_id('purchase_requisition.action_purchase_requisition')
 		db_name = request.session.db        
 
 

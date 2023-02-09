@@ -38,14 +38,12 @@
         <record model="ir.actions.act_window" id="action_purchase_comparison_performance_wizard">
             <field name="name">Худалдан авалтын харьцуулалтын гүйцэтгэлийн тайлан</field>
             <field name="res_model">purchase.comparison.performance</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <!-- <field name="view_id" ref="form_purchase_order_supplier_report_wizard_view"/> -->
             <field name="target">new</field>
         </record>
 
-
-
-        <menuitem name="Харьцуулалтын гүйцэтгэлийн тайлан" id="menu_purchase_comparison_performace_wizard" parent="nomin_purchase.parent_menu_purchase_report_wizard" action="action_purchase_comparison_performance_wizard" sequence="105" />
+        <!-- TODO FIX LATER -->
+        <!-- <menuitem name="Харьцуулалтын гүйцэтгэлийн тайлан" id="menu_purchase_comparison_performace_wizard" parent="nomin_purchase.parent_menu_purchase_report_wizard" action="action_purchase_comparison_performance_wizard" sequence="105" /> -->
     </data>
 </odoo>

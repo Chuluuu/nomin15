@@ -18,8 +18,6 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-from fnmatch import translate
-from odoo.osv import osv
 import time
 from odoo.http import request    
 import requests 
@@ -50,18 +48,18 @@ class purchase_comparison(models.Model):
 	
 	def _set_department(self):
 		employee_id = self.env['hr.employee'].sudo().search([('user_id', '=', self._uid)])
-		if employee_id:
+		if employee_id and employee_id.department_id:
 			return employee_id.department_id.id
-		else:
-			raise UserError(_('Warning!'), _('You don\'t have related department. Please contact administrator.'))
+		# else:
+		# 	raise UserError(_('Warning!'), _('You don\'t have related department. Please contact administrator.'))
 		return None
 
 	
 	def set_request(self):
 		config_obj = self.env['request.config']
-		config_id = config_obj.sudo().search([('department_ids', '=', self.department_id.id), ('process', '=', 'purchase.comparison')])
+		config_id = config_obj.sudo().search([('department_ids', '=', self.department_id.id), ('process', '=', 'purchase.comparison')], limit= 1)
 		if config_id:
-			return config_id[0]
+			return config_id
 		else:
 			return False
     
@@ -136,10 +134,10 @@ class purchase_comparison(models.Model):
 
     
 
-	name = fields.Char(string='Name', readonly=True)
+	name = fields.Char(string='Name', readonly=True, default='New')
 	date = fields.Date(string="Date", tracking=True)
-	user_id = fields.Many2one('res.users', string="User" , readonly=True ,tracking=True)
-	department_id = fields.Many2one('hr.department', string="Department", domain="[('id','in',sector_id)]", required=True, readonly=True,tracking=True)
+	user_id = fields.Many2one('res.users', string="User" , readonly=True ,tracking=True, default = lambda self: self.env.user)
+	department_id = fields.Many2one('hr.department', string="Department", domain="[('id','in',sector_id)]", required=True, readonly=True,tracking=True, default=_set_department)
 	sector_id = fields.Many2one('hr.department', string="Sector", domain="[('is_sector','!=',False)]", tracking=True)
 	state = fields.Selection(STATE_SELECTION, string="State" , default='draft', tracking=True)
 	partner_ids = fields.One2many('purchase.partner.comparison', 'comparison_id', string='Partner comparisons')
@@ -157,17 +155,12 @@ class purchase_comparison(models.Model):
 	approved_person = fields.Many2one('hr.employee', string="Approved Person")
 	is_from_purchase = fields.Boolean(string="Is from purchase", default=False)
 
-	_defaults = {
-
-	'name': lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'purchase.comparison'),
-	'department_id': _set_department,
-	'user_id': lambda obj, cr, uid, c = {}:uid,
-	# 'request_id':set_request,
-	}
 
 	@api.model
 	def create(self, vals):
 		request_obj = self.env['ir.model'].search([('model', '=', 'purchase.comparison')])
+		if vals.get('name', 'New') == 'New':
+			vals['name'] = self.env['ir.sequence'].next_by_code('purchase.comparison') or '/'		
 		if request_obj:
 			line_ids = self.env['evaluation.indicators.line'].search([('is_default', '=', True), ('model_id', '=', request_obj.id)])
 		comparison_obj = super(purchase_comparison, self).create(vals) 	
@@ -400,8 +393,8 @@ class purchase_comparison(models.Model):
 				if partner.is_in_confirm_users:
 					if partner.is_winner:
 						count =count+1
-         	if not next_user_ids1:
-	         	if count > 1 or count ==0:
+			if not next_user_ids1:
+				if count > 1 or count ==0:
 					_logger.info(u'\n\n\n\n\n\nНийлүүлэгч тоо %s \n\n\n'%(count))
 					raise UserError(_(u'Warning !'), _(u"Та шалгаруулах нэг нийлүүлэгч чагталж өгнө үү  !"))
 			history_obj.create(
@@ -478,7 +471,6 @@ class purchase_comparison(models.Model):
 	def add_comparison_partner_action(self):
 		return {
 			'name': 'Note',
-			'view_type': 'form',
 			'view_mode': 'form',
 			'res_model': 'add.comparison.partner',
 			'context': self._context,
@@ -491,7 +483,6 @@ class purchase_comparison(models.Model):
 	def add_comparison_product_action(self):
 		return {
 			'name': 'Note',
-			'view_type': 'form',
 			'view_mode': 'form',
 			'res_model': 'add.comparison.product',
 			'context': self._context,
@@ -504,7 +495,6 @@ class purchase_comparison(models.Model):
 	def action_cancel_wizard(self):
 		return {
 			'name': 'Note',
-			'view_type': 'form',
 			'view_mode': 'form',
 			'res_model': 'cancel.comparison',
 			'context': self._context,
@@ -556,7 +546,7 @@ class purchase_comparison(models.Model):
 		user_obj = self.env['res.users']
 
 		base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-		action_id = self.env['ir.model.data'].get_object_reference('nomin_purchase', 'purchase_mail_template')[1]
+		action_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_purchase.purchase_mail_template')
 		db_name = request.session.db
 		user_emails = []
 		mail_user_ids = list(set(mail_user_ids))

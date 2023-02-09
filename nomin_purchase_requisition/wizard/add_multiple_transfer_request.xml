@@ -34,7 +34,16 @@
             </field>
         </record>
 
-        <act_window id="action_sender_preparation" name="Хөрөнгийг илгээгч дансны цонх" res_model="sender.preparation" view_mode="form" target="new" key2="client_action_multi"/>
+        <record id="action_sender_preparation" model="ir.actions.act_window">
+            <field name="name">Хөрөнгийг илгээгч дансны цонх</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sender.preparation</field>
+            <field name="view_mode">form</field>
+            <!-- <field name="binding_model_id" ref="model_fixed_asset_counting_line"/> -->
+            <!-- <field name="groups_id" eval="[(4, ref('nomin_purchase_requisition.group_supply_import_manager'))]"/> -->
+            <field name="target">new</field>
+        </record>
+        <!-- <act_window id="action_sender_preparation" name="Хөрөнгийг илгээгч дансны цонх" res_model="sender.preparation" view_mode="form" target="new" key2="client_action_multi"/> -->
 
 
 
@@ -54,8 +63,7 @@
                             <!-- <field name="transfer_date" readonly="1"/> -->
                             <field name="department_id" readonly="1"/>
                             <field name="type" readonly="1"/>
-                            <!-- 
-                        <field name="account_from" invisible="1"/> -->
+                            <!-- <field name="account_from" invisible="1"/> -->
 
                             <field name="receiver_department_id"/>
                             <field name="account_to" domain="[('department_id','=',receiver_department_id)]"/>
@@ -81,7 +89,17 @@
             </field>
         </record>
 
-        <act_window id="action_receiver_preparation" name="Хөрөнгийг хүлээн авагч дансны цонх" res_model="receiver.preparation" view_mode="form" target="new" key2="client_action_multi"/>
+        <record id="action_receiver_preparation" model="ir.actions.act_window">
+            <field name="name">Хөрөнгийг хүлээн авагч дансны цонх</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">receiver.preparation</field>
+            <field name="view_mode">form</field>
+            <!-- <field name="binding_model_id" ref="model_fixed_asset_counting_line"/> -->
+            <!-- <field name="groups_id" eval="[(4, ref('nomin_purchase_requisition.group_supply_import_manager'))]"/> -->
+            <field name="target">new</field>
+        </record>
+
+        <!-- <act_window id="action_receiver_preparation" name="Хөрөнгийг хүлээн авагч дансны цонх" res_model="receiver.preparation" view_mode="form" target="new" key2="client_action_multi"/> -->
 
 
 
@@ -110,7 +128,7 @@
                         <field name="search_type" colspan="8" />
                         <field name="search_string" colspan="8" attrs="{'invisible':[('search_type','in',['all','by_account'])]}"/>
                         <field name="account_from" colspan="8" attrs="{'invisible':[('search_type','not in','by_account')]}"/>
-                        <label string="Эд хөрөнгүүдийг бүгдийг нь эсвэл ихэнхийг нь" class="oe_inline" colspan="8"/>
+                        <!-- <label string="Эд хөрөнгүүдийг бүгдийг нь эсвэл ихэнхийг нь" class="oe_inline" colspan="8"/> -->
 
                         <field name="receiver_employee_id" options="{'no_quick_create': True, 'no_create_edit' : True,
                         'no_create':True}" colspan="8"/>
@@ -130,7 +148,16 @@
             </field>
         </record>
 
-        <act_window id="action_prepare_transfer_request" name="Хөрөнгийг шилжүүлэх цонх" res_model="prepare.transfer.request" view_mode="form" target="new" key2="client_action_multi"/>
+        <record id="action_prepare_transfer_request" model="ir.actions.act_window">
+            <field name="name">Хөрөнгийг шилжүүлэх цонх</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">prepare.transfer.request</field>
+            <field name="view_mode">form</field>
+            <!-- <field name="binding_model_id" ref="model_fixed_asset_counting_line"/> -->
+            <!-- <field name="groups_id" eval="[(4, ref('nomin_purchase_requisition.group_supply_import_manager'))]"/> -->
+            <field name="target">new</field>
+        </record>
+        <!-- <act_window id="action_prepare_transfer_request" name="Хөрөнгийг шилжүүлэх цонх" res_model="prepare.transfer.request" view_mode="form" target="new" key2="client_action_multi"/> -->
 
 
 

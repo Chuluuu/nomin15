@@ -24,7 +24,7 @@ class SubscribeUsers(models.Model):
     
     def send_tender_invitation_subusers(self,ids,tender):
         '''Урилга авах бүртгэл рүү имэйл илгээнэ'''
-        template_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_invitation_sub_users_email_template')[1]
+        template_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_invitation_sub_users_email_template')
         tender_obj = self.env['tender.tender'].browse(tender)
         invitation_obj = self.env['tender.invitation.guide'].browse(tender_obj.invitation_id.id)
         published_date = datetime.datetime.strptime(tender_obj.published_date, '%Y-%m-%d %H:%M:%S')
@@ -41,7 +41,7 @@ class SubscribeUsers(models.Model):
             'invitation_detail': invitation_obj.invitation_detail,
             'model': 'tender.tender',
             'base_url': self.env['ir.config_parameter'].get_param('web.base.url'),
-            'action_id': self.env['ir.model.data'].get_object_reference('nomin_tender', 'action_tender_list')[1],
+            'action_id': self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.action_tender_list'),
             'id': tender_obj[0].id,
             'db_name': request.session.db, 
             'sender': self.env['res.users'].browse(self.env.user.id).name,

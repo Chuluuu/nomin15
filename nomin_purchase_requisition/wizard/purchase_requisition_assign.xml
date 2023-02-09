@@ -20,15 +20,23 @@
             </field>
         </record>
 
-        <record id="action_purchase_requisition_assign" model="ir.actions.act_window">
+        <!-- <record id="action_purchase_requisition_assign" model="ir.actions.act_window">
             <field name="name">Худалдан авалт хувиарлалт</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">purchase.requisition.assign</field>
             <field name="view_mode">form</field>
             <field name="context">{'record_id' : active_id}</field>
             <field name="target">new</field>
+        </record> -->
+        <record id="action_purchase_requisition_assign" model="ir.actions.act_window">
+            <field name="name">Худалдан авалт хувиарлалт</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.requisition.assign</field>
+            <field name="view_mode">form</field>
+            <field name="binding_model_id" ref="model_purchase_requisition_line"/>
+            <field name="groups_id" eval="[(4, ref('nomin_purchase_requisition.group_supply_import_manager'))]"/>
+            <field name="target">new</field>
         </record>
-
-        <act_window name="Худалдан авалт хувиарлалт" res_model="purchase.requisition.assign" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" key2="client_action_multi" id="action_requisition_to_assign_wizard" groups="nomin_purchase_requisition.group_supply_import_manager" />
+        <!-- <act_window name="Худалдан авалт хувиарлалт" res_model="purchase.requisition.assign" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" key2="client_action_multi" id="action_requisition_to_assign_wizard" groups="nomin_purchase_requisition.group_supply_import_manager" /> -->
     </data>
 </odoo>

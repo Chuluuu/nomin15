@@ -36,8 +36,7 @@ class AddComparisonProduct(models.TransientModel):
                             'price_subtotal': product_line.price_subtotal,
                         })
                     else:
-					    raise UserError(u'Барааны тоо хэмжээ 0-ээс их байх ёстойг анхаарна уу.')
-
+                        raise UserError(u'Барааны тоо хэмжээ 0-ээс их байх ёстойг анхаарна уу.')
 
         if not is_product_created:
             raise UserError(u'Бүх харилцагчид бүртгэлтэй бараа байна.')

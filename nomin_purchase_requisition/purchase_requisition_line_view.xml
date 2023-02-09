@@ -60,7 +60,7 @@
 								<field name="product_type" invisible="1" attrs="{'readonly':[('state','not in',['draft'])]}"/>
 								<field name="c_budget_type" attrs="{'readonly':[('state','not in',['draft'])],'invisible':[('is_control','=',False)]}"/>
 								<field name="product_id" attrs="{'readonly':[('state','not in',['draft','sent_to_supply_manager'])]}" options="{'no_create': True}" />
-								<field name="category_id" options="{'no_create': True}" domain="[('is_new','=',True)]" attrs="{'required':[('is_new_requisition','=',True)],'invisible':[('is_new_requisition','=',False)],'readonly':[('state','not in',['sent_to_supply_manager','ready','compare','draft'])]}"/>
+								<field name="category_id" options="{'no_create': True}" attrs="{'required':[('is_new_requisition','=',True)],'invisible':[('is_new_requisition','=',False)],'readonly':[('state','not in',['sent_to_supply_manager','ready','compare','draft'])]}"/>
 								<field name="assign_cat" options="{'no_create': True}" attrs="{'readonly':['|',('is_purchase_manager','=',False),('state','not in',['sent_to_supply_manager','ready','compare'])],'invisible':[('is_new_requisition','=',True)]}"/>
 								<field name="product_mark"/>
 								<field name="product_price" readonly="1"/>
@@ -68,7 +68,8 @@
 								<field name="allowed_qty" attrs="{'readonly':[('is_in_supply_chiefs','=',False)]}"/>
 								<field name="allowed_amount" readonly="1"/>
 								<field name="amount" readonly="1"/>
-								<field name="purchase_user_ids" invisible="1" widget="many2many_tags" />
+								<!-- <field name="purchase_user_ids" invisible="1" widget="many2many_tags" /> -->
+								<field name="product_uom_category_id" invisible="1"/>
 								<field name="product_uom_id" options="{'no_create': True}" attrs="{'readonly':[('state','not in',['draft'])]}" />
 								<field name="supplied_quantity" invisible="1"/>
 								<field name="supplied_amount" invisible="1"/>
@@ -169,7 +170,7 @@
 			<field name="name">purchase.requisition.line.tree</field>
 			<field name="model">purchase.requisition.line</field>
 			<field name="arch" type="xml">
-				<tree string="Purchase Requisition Lines" create="false" editable="false">
+				<tree string="Purchase Requisition Lines" create="false" edit="false">
 					<field name="product_type" readonly="1"/>
 					<field name="product_id" readonly="1"/>
 					<field name="product_desc" readonly="1"/>

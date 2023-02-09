@@ -36,7 +36,6 @@
         <record id="action_wizard_rate" model="ir.actions.act_window">
             <field name="name">Purchase Comparison</field>
             <field name="res_model">wizard.rate.purchase.partner</field>
-            <field name="view_type">form</field>
             <field name="view_mode">form</field>
             <field name="view_id" ref="view_wizard_rate_purchase_partner"/>
             <field name="context">{'record_id' : active_id}</field>

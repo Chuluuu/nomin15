@@ -16,7 +16,7 @@
             <field name="dpi">90</field>
         </record>
 
-        <record id="nomin_comparison.action_report_purchase_comparison" model="ir.actions.report.xml">
+        <record id="nomin_comparison.action_report_purchase_comparison" model="ir.actions.report">
             <field name="paperformat_id" ref="nomin_comparison.paperformat_purchase_comparison" />
         </record>
 

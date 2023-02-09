@@ -36,6 +36,11 @@ class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
     
+    def _add_followers(self,user_ids): 
+        '''Дагагч нэмнэ'''
+        partner_ids = [user.partner_id.id for user in self.env['res.users'].browse(user_ids) if user.partner_id]
+        self.message_subscribe(partner_ids=partner_ids)
+
     def _set_sector(self):
             department_ids = self.env['hr.department'].get_sector(self.env.user.department_id.id)
             if department_ids :
@@ -310,10 +315,8 @@ class PurchaseOrder(models.Model):
         return super(PurchaseOrder, self).create(vals)
     
     
-    def action_cancel(self, cr, uid, ids, context=None):
+    def action_cancel(self):
         
-        mod_obj = self.pool.get('ir.model.data')
-        res = mod_obj.get_object_reference(cr, uid, 'nomin_purchase', 'action_purchase_order_cancel')
         # self.write(cr, uid, ids, {'state':'draft','active_sequence':0},context=context)
 #         self.send_notification(cr, uid, ids,'rejected',context=context)
         return {
@@ -321,7 +324,7 @@ class PurchaseOrder(models.Model):
             'view_mode': 'form',
             #'view_id': [res and res[1] or False],
             'res_model': 'purchase.order.cancel',
-            'context': context,
+            'context': self._context,
             'type': 'ir.actions.act_window',
             'nodestroy': True,
             'target': 'new',
@@ -377,15 +380,15 @@ class PurchaseOrder(models.Model):
         self.create_history(next_state)        
         self.write(vals)
 
-    
-    def _purchase_alarm(self, cr, uid):
+    @api.model
+    def _purchase_alarm(self):
         today = datetime.strptime(time.strftime('%Y-%m-%d %H:%M:%S'), "%Y-%m-%d %H:%M:%S")
-        cr.execute("select id from purchase_order where is_rfq_closed =True and is_open_date= False and rfq_open_date <'%s'" %today)
-        fetched =cr.fetchone()
+        self.env.cr.execute("select id from purchase_order where is_rfq_closed =True and is_open_date= False and rfq_open_date <'%s'" %today)
+        fetched =self.env.cr.fetchone()
         if fetched:
             for fetch in fetched:
-                cr.execute("update purchase_order set is_open_date =True ,state='back' where id =%s" %fetch)
-                cr.execute("update purchase_order_line set is_rfq_closed = False where order_id =%s" %fetch)
+                self.env.cr.execute("update purchase_order set is_open_date =True ,state='back' where id =%s" %fetch)
+                self.env.cr.execute("update purchase_order_line set is_rfq_closed = False where order_id =%s" %fetch)
 
     
     def print_quotation(self):
@@ -490,13 +493,13 @@ class PurchaseOrder(models.Model):
         ir_model_data = self.env['ir.model.data']
         try:
             if self.env.context.get('send_rfq', False):
-                template_id = ir_model_data.get_object_reference('purchase', 'email_template_edi_purchase')[1]
+                template_id = ir_model_data._xmlid_to_res_id('purchase.email_template_edi_purchase')
             else:
-                template_id = ir_model_data.get_object_reference('purchase', 'email_template_edi_purchase_done')[1]
+                template_id = ir_model_data._xmlid_to_res_id('purchase.email_template_edi_purchase_done')
         except ValueError:
             template_id = False
         try:
-            compose_form_id = ir_model_data.get_object_reference('mail', 'email_compose_message_wizard_form')[1]
+            compose_form_id = ir_model_data._xmlid_to_res_id('mail.bemail_compose_message_wizard_form')
         except ValueError:
             compose_form_id = False
         ctx = dict(self.env.context or {})
@@ -584,7 +587,7 @@ class PurchaseOrder(models.Model):
       
         user_emails = []
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        action_id = self.env['ir.model.data'].get_object_reference('nomin_purchase', 'purchase_mail_template')[1]
+        action_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_purchase.purchase_mail_template')
         db_name = request.session.db
         
 
@@ -711,31 +714,9 @@ class purchase_order_inherit(models.Model):
         newpo = super(purchase_order_inherit, self).copy(default=default)
 
         return newpo
-    
-    def _purchase_order_alarm(self, cr, uid):
+    @api.model
+    def _purchase_order_alarm(self):
         today = datetime.strptime(time.strftime('%Y-%m-%d %H:%M:%S'), "%Y-%m-%d %H:%M:%S")
-        template_id = self.pool.get('ir.model.data').get_object_reference(cr, SUPERUSER_ID, 'nomin_purchase', 'purchase_order_alert_mail_template')[1]
-        cr.execute("select id, user_id from purchase_order where state = 'purchase' and date_order <'%s'" %today)
-        records = cr.dictfetchall()
-        
-        # if records:
-        #     for record in records:
-        #         order = self.pool.get('purchase.order').browse(cr, SUPERUSER_ID, record['id'])
-        #         data = {
-        #                 'subject': u'%s салбарын  %s хэлтэсийн %s дугаартай захиалгын товлогдсон огноо өнгөрсөн байна'
-        #                             %(order.sector_id.name, order.department_id.name, order.name),
-        #                 'name': order.name,
-        #                 'sector': order.sector_id.name,
-        #                 'department': order.department_id.name,
-        #                 'state': order.state,
-        #                 'base_url': self.pool.get('ir.config_parameter').get_param(cr, uid, 'web.base.url'),
-        #                 'action_id': self.pool.get('ir.model.data').get_object_reference(cr, uid, 'purchase', 'purchase_form_action')[1],
-        #                 'id': order.id,
-        #                 'db_name': cr.dbname, #odoo.http.request.session.db
-        #                 'menu_path': u'Худалдан авалт / Худалдан авалт / Худалдан авах захиалгууд',
-        #                 }
-            
-        #         self.pool.get('mail.template').send_mail(cr, uid, template_id, order.user_id.id, force_send=True, context=data)
     
 class MailComposeMessage(models.TransientModel):
     _inherit = 'mail.compose.message'

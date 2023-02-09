@@ -75,13 +75,13 @@ class TenderParticipantsBid(models.Model):
     def send_bidding(self):
         '''Тендерт оролцох хүсэлт илгээх'''
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
-        action_id = self.env['ir.model.data'].get_object_reference('nomin_tender', 'tender_partner_bid_action')[1]
+        action_id = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.tender_partner_bid_action')
         db_name = request.session.db
         groups = []
-        notif_groups = self.env['ir.model.data'].get_object('nomin_tender', 'group_tender_manager')
-        groups.append(notif_groups.id)
-        notif_groups = self.env['ir.model.data'].get_object('nomin_tender', 'group_tender_secretary')
-        groups.append(notif_groups.id)
+        notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_manager')
+        groups.append(notif_groups)
+        notif_groups = self.env['ir.model.data']._xmlid_to_res_id('nomin_tender.group_tender_secretary')
+        groups.append(notif_groups)
         
         sel_user_ids = []
         sel_user_ids = self.env['res.users'].search([('groups_id','in',groups)])

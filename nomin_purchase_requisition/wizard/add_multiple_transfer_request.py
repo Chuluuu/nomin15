@@ -6,7 +6,6 @@ from odoo.exceptions import UserError, ValidationError, RedirectWarning
 
 import requests
 import json
-import xmlrpclib
 from zeep import Client
 import base64
 

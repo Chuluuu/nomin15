@@ -7,7 +7,6 @@ from odoo.exceptions import UserError, ValidationError, RedirectWarning
 
 import requests
 import json
-import xmlrpclib
 from zeep import Client
 import base64
 
@@ -81,8 +80,9 @@ class AssetPreparation(models.TransientModel):
     employee_id = fields.Many2one('hr.employee', string='Ажилтны нэр' ,domain="[('parent_department', '=', department_id)]")
     location = fields.Char('Байршилын нэр')
     asset_code = fields.Char('Хөрөнгийн код')
-    asset_type = fields.Many2one('fixed.assets.type', string='Хөрөнгийн бүлэг', domain="[('department_id', '=', department_id)]")
-
+    # TODO FIX LATER
+    # asset_type = fields.Many2one('fixed.assets.type', string='Хөрөнгийн бүлэг', domain="[('department_id', '=', department_id)]")
+    asset_type = fields.Many2one('fixed.assets.type', string='Хөрөнгийн бүлэг')
     description = fields.Char('Description', required=True)
 
 

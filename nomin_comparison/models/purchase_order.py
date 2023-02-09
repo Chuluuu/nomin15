@@ -21,12 +21,11 @@ from odoo.exceptions import UserError
 from fnmatch import translate
 from odoo.osv import osv
 
-
 class purchase_order(models.Model):
 	_inherit = 'purchase.order'
 
 	STATE_SELECTION = [
-					('draft', u'Ноорог PO'),
+	('draft', u'Ноорог PO'),
         ('sent', u'Илгээгдсэн'),
         ('sent_rfq', u'Үнийн санал авах'),
         ('back', u'Үнийн санал ирсэн'),
@@ -56,5 +55,24 @@ class purchase_order(models.Model):
 	state = fields.Selection(STATE_SELECTION, string='Status', readonly=True, select=True, copy=False, default='draft', tracking=True)
 	# comparison_id= fields.Many2one('purchase.comparison',string='Purchase Comparison')
 	comparison_id = fields.Many2one('purchase.comparison', string="Purchase comparison",tracking=True)
+	contract_id = fields.Many2one('contract.management', string="Contract" ,tracking=True) #Гэрээ
 
-
+	def create_contract(self):
+		vals = {
+           'customer_company':self.partner_id.id,
+           'agreed_currency':0.0,
+           'contract_content':self.name +" ",
+           'purchase_id':self.id,
+           'contract_amount':self.amount_total,
+                       }
+		contract_id = self.env['contract.management'].create(vals)
+		self.write({'contract_id':contract_id.id})
+		return {
+            'res_id': contract_id.id,
+            'name': _('New'),
+            'view_mode': 'tree,form',
+            'res_model': 'contract.management',
+            'view_id': False,
+            'views':[(False,'form')],
+            'type': 'ir.actions.act_window',
+        }

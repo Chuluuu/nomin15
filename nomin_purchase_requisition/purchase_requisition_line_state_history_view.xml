@@ -15,8 +15,8 @@
         </record>
 
 
-
-        <record id="view_crm_helpdesk_inherit1" model="ir.ui.view">
+        <!-- TODO FIX LATER inherit view from nomin_helpdesk -->
+        <!-- <record id="view_crm_helpdesk_inherit1" model="ir.ui.view">
             <field name="name">inherit.crm.helpdesk.form</field>
             <field name="model">crm.helpdesk</field>
             <field name="inherit_id" ref="nomin_helpdesk.view_helpdesk_form"/>
@@ -33,7 +33,7 @@
                     </page>
                 </xpath>
             </field>
-        </record>
+        </record> -->
 
     </data>
 </odoo>

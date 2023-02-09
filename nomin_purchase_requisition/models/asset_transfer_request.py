@@ -239,7 +239,7 @@ class AssetTransferRequest(models.Model):
 
         for obj in self:
             try:
-                obj.total_sale_price = sum([line.sale_price + line.sale_price * coefficient if line.receiver_employee_id.id <> 215 else 0.0 for line in obj.change_line_ids])
+                obj.total_sale_price = sum([line.sale_price + line.sale_price * coefficient if line.receiver_employee_id.id !=215 else 0.0 for line in obj.change_line_ids])
             except Exception as e:
                 obj.total_sale_price = 0
 
@@ -263,7 +263,7 @@ class AssetTransferRequest(models.Model):
 
         for obj in self:
             try:
-                obj.total_vat_amount = sum([line.sale_price * 0.1  if line.receiver_employee_id.id <> 215 else 0.0 for line in obj.change_line_ids])
+                obj.total_vat_amount = sum([line.sale_price * 0.1  if line.receiver_employee_id.id != 215 else 0.0 for line in obj.change_line_ids])
             except Exception as e:
                 obj.total_vat_amount = 0
 
@@ -302,7 +302,7 @@ class AssetTransferRequest(models.Model):
     
     def _compute_button_clickers(self):
         if self.state == 'verify':
-            group_id = self.env['ir.model.data'].sudo().get_object_reference('nomin_base', 'group_financial_account_user')[1]
+            group_id = self.env['ir.model.data'].sudo()._xmlid_to_res_id('nomin_base.group_financial_account_user')
             user_ids = self.env['res.groups'].browse(group_id).users
             users = []
             for user in user_ids:
@@ -310,7 +310,7 @@ class AssetTransferRequest(models.Model):
                     users.append(user.id)
             self.button_clickers = users
         elif self.state == 'approve':
-            group_id = self.env['ir.model.data'].sudo().get_object_reference('nomin_base', 'group_financial_account_user')[1]
+            group_id = self.env['ir.model.data'].sudo()._xmlid_to_res_id('nomin_base.group_financial_account_user')
             user_ids = self.env['res.groups'].browse(group_id).users
             users = []
             for user in user_ids:
@@ -580,7 +580,7 @@ class AssetTransferRequest(models.Model):
         #     raise UserError('Та зөвшөөрөх ажилтан биш байна!\nДараах ажилчид зөвшөөрөөгүй байна. [ %s]' % (receiver_employee_names))
 
         if self.type == 'asset':
-            if self.transaction_id and self.transaction_id <> '':
+            if self.transaction_id and self.transaction_id != '':
                 # print '\n\n\n\n\n\nself.transaction_id',self.transaction_id
                 self.cancel_assets()
             self.send_all_changes_to_diamond()
@@ -610,9 +610,7 @@ class AssetTransferRequest(models.Model):
             follower_ids = []
             all_filled_out = True
             for line in self.change_line_ids:
-                if line.receiver_asset_account_id and line.receiver_depreciation_account_id:
-                    print ''
-                else:
+                if not line.receiver_asset_account_id and not line.receiver_depreciation_account_id:
                     all_filled_out = False
 
             if not all_filled_out:
@@ -633,7 +631,7 @@ class AssetTransferRequest(models.Model):
             if is_same_employee:
 
                 if self.type == 'asset':
-                    if self.transaction_id and self.transaction_id <> '':
+                    if self.transaction_id and self.transaction_id != '':
                         # print '\n\n\n\n\n\nself.transaction_id',self.transaction_id
                         self.cancel_assets()
                     self.send_all_changes_to_diamond()
@@ -669,7 +667,6 @@ class AssetTransferRequest(models.Model):
         # if self.diamond_json:
         #     raise UserError(self.diamond_json)
         # else:
-        print 'aaaa',self.diamond_binary
         raise UserError(base64.decodestring(self.diamond_binary))
 
     
@@ -1021,7 +1018,7 @@ class AssetTransferRequest(models.Model):
                             })
 
                     else:
-                        if self.transaction_id and self.transaction_id <> '':
+                        if self.transaction_id and self.transaction_id != '':
                             self.cancel_assets()
                         raise UserError('Diamond-с ирсэн мэдээлэл1 - ' + response1 )
 

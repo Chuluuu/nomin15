@@ -10,7 +10,8 @@
                         <separator string="Миний хуваарилагдсан ажлууд"/>
                     </group>
                     <footer>
-                        <button name="export_report" string="Export" type="object" class="oe_highlight"/>
+                        <!-- TODO FIX LATER inherited from l10n_mn_report_base -->
+                        <!-- <button name="export_report" string="Export" type="object" class="oe_highlight"/> -->
                             or
                         <button string="Cancel" class="oe_link" special="cancel" />
                     </footer>
@@ -18,7 +19,16 @@
             </field>
         </record>
 
-        <act_window name="Хуваарилагдсан ажлын тайлан" context="{}" res_model="distributed.purchase.requisition" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" key2="client_action_multi" id="action_purchase_order_comparison_wizard"/>
+        <record id="action_purchase_requisition_distributed" model="ir.actions.act_window">
+            <field name="name">Хуваарилагдсан ажлын тайлан</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">distributed.purchase.requisition</field>
+            <field name="view_mode">form</field>
+            <field name="binding_model_id" ref="model_purchase_requisition_line"/>
+            <!-- <field name="groups_id" eval="[(4, ref('nomin_purchase_requisition.group_supply_import_manager'))]"/> -->
+            <field name="target">new</field>
+        </record>
+        <!-- <act_window name="Хуваарилагдсан ажлын тайлан" context="{}" res_model="distributed.purchase.requisition" src_model="purchase.requisition.line" view_mode="form" target="new" multi="True" key2="client_action_multi" id="action_purchase_order_comparison_wizard"/> -->
 
     </data>
 </odoo>

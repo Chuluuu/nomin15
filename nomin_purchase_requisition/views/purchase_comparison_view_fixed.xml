@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+
+        <menuitem name="Үнийн харьцуулалтанд оролцсон түүх" id="menu_purchase_comparison_participation_report" parent="nomin_purchase.parent_menu_purchase_report_wizard" action="nomin_comparison.action_purchase_comparison_participation_report" sequence="105" groups="capitalLease.group_regular_accountant,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_complex_manager,nomin_purchase_requisition.group_supply_import_manager,nomin_purchase_requisition.group_procurement_buyer" />
+        <menuitem action="nomin_comparison.purchase_evaluation_indicators_action" id="menu_purchase_indicators" groups="nomin_purchase_requisition.group_haaa_director" parent="purchase.menu_purchase_config"/>
+        <menuitem action="nomin_comparison.action_purchase_comparison" id="menu_purchase_comparison" groups="nomin_purchase_requisition.group_procurement_buyer,nomin_base.group_department_chief,nomin_base.group_department_chief1,nomin_base.group_business_development_chief,nomin_base.group_department_manager,nomin_base.group_division_chief,nomin_base.group_nomin_branch_economist,nomin_base.group_department_senior_manager,nomin_base.group_financial_account_user,nomin_purchase_requisition.group_supply_import_manager,nomin_base.group_president,nomin_purchase_requisition.group_haaa_head,nomin_purchase_requisition.group_haaa_director,nomin_purchase_requisition.group_procurement_admin,nomin_purchase_requisition.group_nyrav_department" parent="purchase.menu_procurement_management"/>
+
+        <!-- MOVED FROM nomin_purchase module -->
+        <menuitem id="menu_purchase_priority" action="action_purchase_priority" name="Purchase Priority menu" parent="purchase.menu_purchase_config" groups="nomin_purchase_requisition.group_procurement_admin"/>
+    </data>
+</odoo>
